@@ -1,134 +1,217 @@
-> 来源: [https://deepwiki.com/deepseek-ai/DeepSeek-VL/6-licensing](https://deepwiki.com/deepseek-ai/DeepSeek-VL/6-licensing)
-> DeepWiki deepseek-ai/DeepSeek-VL
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/DeepSeek-VL · page 6 Licensing · fetched 2026-10-30 -->
 
 # Licensing
 
-  Relevant source files 
- - [LICENSE-CODE](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/LICENSE-CODE)
- - [LICENSE-MODEL](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/LICENSE-MODEL)
- - [README.md](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1)
- 
-  This page documents the licensing model used by DeepSeek-Coder-V2, which employs a dual-licensing approach that distinguishes between the repository code and the model weights. Understanding these license terms is essential for both non-commercial and commercial usage of the codebase and models.
+<details>
+<summary>Relevant source files</summary>
 
- For more detailed information about commercial usage considerations, see [Commercial Considerations](https://deepwiki.com/deepseek-ai/DeepSeek-Coder-V2/7-commercial-considerations).
+The following files were used as context for generating this wiki page:
 
- 
-## 1. License Overview
+- [LICENSE-CODE](LICENSE-CODE)
+- [LICENSE-MODEL](LICENSE-MODEL)
+- [README.md](README.md)
 
- DeepSeek-Coder-V2 uses a dual-licensing approach:
+</details>
 
- 
- - **Repository Code**: Licensed under the MIT License
- - **Model Weights**: Licensed under the DeepSeek Model License
- 
- This separation allows for flexible use of the codebase while placing specific restrictions on the use of the trained models.
 
- Sources: [README.md344-345](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L344-L345)
 
- 
-## 2. License Structure
+This document describes the licensing terms that govern the use, modification, and distribution of DeepSeek-VL. DeepSeek-VL uses a dual licensing approach, with separate licenses for the code repository and the model weights.
 
- The following diagram illustrates the licensing structure of DeepSeek-Coder-V2:
+Sources: [README.md:208-210]()
 
- 
+## License Overview
+
+DeepSeek-VL employs a dual licensing structure:
+
+1. **Code License**: The source code, scripts, and other software components are licensed under the MIT License.
+2. **Model License**: The model weights and parameters are licensed under the DeepSeek Model License Agreement.
+
+This dual approach allows flexibility for different use cases while maintaining specific protections for the AI models themselves.
+
+```mermaid
+graph TD
+    subgraph "DeepSeek-VL Components"
+        Code["Source Code Repository"]
+        Models["Model Weights & Parameters"]
+        subgraph "Models"
+            Base1["DeepSeek-VL-1.3B-base"]
+            Chat1["DeepSeek-VL-1.3B-chat"]
+            Base7["DeepSeek-VL-7B-base"]
+            Chat7["DeepSeek-VL-7B-chat"]
+        end
+    end
+    
+    Code --> |"Governed by"| MIT["MIT License"]
+    Models --> |"Governed by"| DML["DeepSeek Model License"]
+    
+    subgraph "Key License Features"
+        MIT --> MIT1["Permissive"]
+        MIT --> MIT2["Few Restrictions"]
+        MIT --> MIT3["Commercial Use Allowed"]
+        
+        DML --> DML1["Commercial Use Allowed"]
+        DML --> DML2["Use-based Restrictions"]
+        DML --> DML3["Pass-through Requirements"]
+    end
 ```
 
+Sources: [README.md:40-45](), [README.md:208-210]()
+
+## Code License (MIT)
+
+The entire codebase of DeepSeek-VL, including all software, scripts, and documentation, is licensed under the MIT License. This is a permissive open-source license that places minimal restrictions on reuse.
+
+### Key Terms of the MIT License
+
+- **Permissions**:
+  - Commercial use
+  - Modification
+  - Distribution
+  - Private use
+
+- **Limitations**:
+  - No liability
+  - No warranty
+
+- **Requirements**:
+  - License and copyright notice must be included in all copies or substantial portions of the software
+
+### Full MIT License Text
+
+The complete MIT License can be found in the [LICENSE-CODE]() file in the repository root.
+
+Sources: [LICENSE-CODE:1-21](), [README.md:40-41]()
+
+## Model License (DeepSeek Model License)
+
+The DeepSeek-VL models (including base and chat variants) are licensed under the DeepSeek Model License Agreement. This license permits commercial use but includes specific use-based restrictions.
+
+### Key Terms of the DeepSeek Model License
+
+- **Permissions**:
+  - Perpetual, worldwide, non-exclusive license
+  - Commercial use is allowed
+  - Hosting for third-party access (e.g., SaaS)
+  - Creating derivatives of the model
+  - Finetuning and modifying the model
+
+- **Requirements**:
+  - Use-based restrictions must be passed through to end users
+  - Attribution must be maintained
+  - Modified files must indicate changes
+  - License must be included with any distribution
+
+- **Restrictions** (partial list):
+  - No use that violates laws or regulations
+  - No military use
+  - No exploitation or harm to minors
+  - No generation of false information to harm others
+  - No generation of inappropriate content
+  - No unauthorized use of personal identifiable information
+  - No defamation or harassment
+  - No fully automated decision-making that adversely impacts legal rights
+  - No discrimination against individuals or groups
+
+### License Applicability
+
+```mermaid
+flowchart TD
+    Start["Are you using\nDeepSeek-VL?"] --> CodeOrModel{"What are you\nusing?"}
+    
+    CodeOrModel -->|"Source Code Only"| CodePath["MIT License Applies"]
+    CodeOrModel -->|"Model Weights"| ModelPath["DeepSeek Model\nLicense Applies"]
+    CodeOrModel -->|"Both"| BothPath["Both Licenses Apply\nto Respective Components"]
+    
+    ModelPath --> Derivatives{"Creating Derivatives\nof the Model?"}
+    
+    Derivatives -->|"Yes"| DerivPath["DeepSeek Model License\nRestrictions Must Be\nPassed Through"]
+    Derivatives -->|"No"| UseCase["Ensure Compliance with\nUse-based Restrictions"]
+    
+    DerivPath --> UseCase
+    
+    UseCase --> Commercial{"Commercial\nUse?"}
+    
+    Commercial -->|"Yes"| CommYes["Allowed Under\nBoth Licenses"]
+    Commercial -->|"No"| CommNo["Allowed Under\nBoth Licenses"]
 ```
 
- Sources: [README.md39-40](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L39-L40) [README.md344-345](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L344-L345)
+Sources: [LICENSE-MODEL:1-91](), [README.md:44-45](), [README.md:208-210]()
 
- 
-## 3. Code License (MIT)
+## License Application to Model Variants
 
- The source code, scripts, examples, and documentation in the DeepSeek-Coder-V2 repository are licensed under the standard MIT License.
+All DeepSeek-VL model variants are subject to the same licensing terms. This includes:
 
- 
-### Key Provisions
+| Model | License | Commercial Use |
+|-------|---------|----------------|
+| DeepSeek-VL-1.3B-base | DeepSeek Model License | Allowed |
+| DeepSeek-VL-1.3B-chat | DeepSeek Model License | Allowed |
+| DeepSeek-VL-7B-base | DeepSeek Model License | Allowed |
+| DeepSeek-VL-7B-chat | DeepSeek Model License | Allowed |
 
- 
-| Provision | Description |
-|---|---|
-| Rights Granted | Permission to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software |
-| Conditions | The above copyright notice and permission notice must be included in all copies or substantial portions of the software |
-| Warranty | The software is provided "as is", without warranty of any kind |
-| Liability | In no event shall the authors or copyright holders be liable for any claim, damages or other liability |
+Sources: [README.md:91-104](), [README.md:210]()
 
- The complete MIT License text can be found in the [LICENSE-CODE](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/LICENSE-CODE) file in the repository root.
+## Output Ownership
 
- Sources: [LICENSE-CODE1-21](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/LICENSE-CODE#L1-L21)
+The DeepSeek Model License explicitly states that DeepSeek claims no rights in the output generated using the model. Users are accountable for the output they generate and its subsequent uses. However, no use of the output can contravene any provision stated in the license.
 
- 
-## 4. Model License (DeepSeek Model License)
+Sources: [LICENSE-MODEL:53-54]()
 
- The model weights, parameters, and any derivatives of the model are governed by the DeepSeek Model License.
+## License Enforcement and Updates
 
- 
-### 4.1 Grant of Rights
+DeepSeek reserves the right to restrict (remotely or otherwise) usage of the model that violates the license terms, to the maximum extent permitted by law.
 
- The DeepSeek Model License grants:
+Sources: [LICENSE-MODEL:57-58]()
 
- 
- - A perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable copyright license
- - A patent license for patents necessarily infringed by DeepSeek's contribution
- 
- 
-### 4.2 Distribution Conditions
+## Derivatives of the Model
 
- When distributing the model or derivatives:
+If you create derivatives of the DeepSeek-VL models, you must include the same use-based restrictions in your licensing terms. This ensures that the responsible use requirements flow through to all derivative works.
 
- 
- - Use-based restrictions in Attachment A must be included in any distribution agreement
- - Recipients must receive a copy of the license
- - Modified files must carry notices of changes
- - All copyright, patent, trademark, and attribution notices must be retained
- 
- 
-### 4.3 Use Restrictions
-
- The following diagram outlines the key use restrictions specified in Attachment A of the DeepSeek Model License:
-
- 
+```mermaid
+graph TD
+    subgraph "License Flow"
+        Original["Original DeepSeek-VL Model\n(DeepSeek Model License)"]
+        Derivative["Derivative Model"]
+        EndUser["End Users"]
+        
+        Original -->|"Modification\nor Fine-tuning"| Derivative
+        Derivative -->|"Must include same\nuse-based restrictions"| EndUser
+    end
 ```
 
-```
+Sources: [LICENSE-MODEL:44-49]()
 
- 
-### 4.4 Model Output Ownership
+## Disclaimer of Warranty and Limitation of Liability
 
- The license explicitly states that users own the output they generate using the model. However, uses of the output must not contravene any provisions stated in the license.
+Both licenses include standard disclaimers of warranty and limitations of liability. The model and code are provided "AS IS" without warranties of any kind. DeepSeek is not liable for damages arising from the use of the model or code.
 
- The complete DeepSeek Model License text can be found in the [LICENSE-MODEL](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/LICENSE-MODEL) file in the repository root.
+Sources: [LICENSE-CODE:15-21](), [LICENSE-MODEL:63-67]()
 
- Sources: [LICENSE-MODEL1-92](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/LICENSE-MODEL#L1-L92)
+## License Compliance Recommendations
 
- 
-## 5. Commercial Use
+To ensure compliance with the DeepSeek-VL licensing terms:
 
- DeepSeek-Coder-V2 series (including both Base and Instruct models) explicitly supports commercial use, subject to the terms and conditions specified in the respective licenses.
+1. For code-only usage:
+   - Include the MIT License notice in your distribution
+   - Maintain copyright notices
 
- Key considerations for commercial users:
+2. For model usage:
+   - Review the full list of use-based restrictions
+   - Include the DeepSeek Model License with any distribution
+   - Pass through use-based restrictions to end users
+   - Ensure your use case doesn't violate any specific restrictions
 
- 
- - The code (under MIT License) can be freely used, modified, and integrated into commercial products
- - The model weights can be used commercially as long as the use-based restrictions in the DeepSeek Model License are respected
- - When offering commercial services using the model, you may add additional warranty, indemnity, or support obligations, but these are your sole responsibility
- 
- Sources: [README.md345](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L345-L345)
+3. For commercial applications:
+   - Both licenses permit commercial use
+   - Ensure compliance with all other terms and restrictions
 
- 
-## 6. License Files
+Sources: [LICENSE-MODEL:44-51](), [LICENSE-CODE:9-14]()
 
- The repository contains two license files:
+## Full License Text
 
- 
- - **LICENSE-CODE** - Contains the full MIT License text
- - **LICENSE-MODEL** - Contains the full DeepSeek Model License text with Attachment A
- 
- These files should be preserved and included when distributing copies of the code or model.
+For the complete license texts, refer to:
+- [LICENSE-CODE]() for the MIT License
+- [LICENSE-MODEL]() for the DeepSeek Model License Agreement
 
- 
-```
+These files are included in the repository root.
 
-```
-
- Sources: [README.md33-38](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L33-L38) [LICENSE-CODE1-21](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/LICENSE-CODE#L1-L21) [LICENSE-MODEL1-92](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/LICENSE-MODEL#L1-L92)
+Sources: [README.md:40-45]()

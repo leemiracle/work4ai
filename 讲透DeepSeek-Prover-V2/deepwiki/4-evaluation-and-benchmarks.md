@@ -1,284 +1,194 @@
-> 来源: [https://deepwiki.com/deepseek-ai/DeepSeek-Prover-V2/4-evaluation-and-benchmarks](https://deepwiki.com/deepseek-ai/DeepSeek-Prover-V2/4-evaluation-and-benchmarks)
-> DeepWiki deepseek-ai/DeepSeek-Prover-V2
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/DeepSeek-Prover-V2 · page 4 Evaluation and Benchmarks · fetched 2026-10-30 -->
 
 # Evaluation and Benchmarks
 
-  Relevant source files 
- - [README.md](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/README.md?plain=1)
- - [evaluation/more_results.md](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/evaluation/more_results.md?plain=1)
- - [images/mathexam.png](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/images/mathexam.png)
- 
-  
-## Purpose and Scope
+<details>
+<summary>Relevant source files</summary>
 
- This page documents the comprehensive evaluation framework and benchmarking system used to assess DeepSeek-LLM models across various capabilities including language understanding, knowledge, reasoning, mathematics, coding, and multilingual proficiency. For detailed examination of specific benchmark scores, see [Benchmark Results](https://deepwiki.com/deepseek-ai/DeepSeek-LLM/4.1-benchmark-results), and for in-depth analysis of mathematical performance, see [Mathematical Problem Solving](https://deepwiki.com/deepseek-ai/DeepSeek-LLM/4.2-mathematical-problem-solving).
+The following files were used as context for generating this wiki page:
 
- 
-## Evaluation Framework Architecture
+- [README.md](README.md)
+- [figures/performance.png](figures/performance.png)
 
- The DeepSeek-LLM evaluation framework is organized as a modular system that measures model performance across multiple capability domains:
+</details>
 
- 
+
+
+This document provides a comprehensive overview of the evaluation methodologies and benchmarking approaches used to assess the DeepSeek-Prover-V2 models' performance in formal theorem proving. It covers the benchmark datasets, evaluation metrics, and performance results of the released models. For detailed information about the models themselves, see [Models](#3), and for information about the training pipeline, see [Training Pipeline](#3.1).
+
+## Evaluation Methodology
+
+DeepSeek-Prover-V2 models are evaluated on their ability to generate valid formal proofs in Lean 4. The evaluation process follows a standardized procedure to ensure consistency and reliability of results.
+
+```mermaid
+flowchart TD
+    A["Input: Mathematical Theorem"] --> B["Model Generates Formal Proof"]
+    B --> C["Lean 4 Verification"]
+    C --> D{Valid Proof?}
+    D -->|Yes| E["Pass: Increment Success Count"]
+    D -->|No| F["Fail: Increment Failure Count"]
+    E --> G["Calculate Pass Ratio"]
+    F --> G
+    G --> H["Final Benchmark Score"]
 ```
 
+The primary evaluation metric is the **pass ratio**, calculated as the percentage of problems for which the model can generate a formally verified proof. A proof is considered valid if it can be verified by the Lean 4 theorem prover without errors or timeouts.
+
+Sources: [README.md:44-48]()
+
+## Benchmark Datasets
+
+DeepSeek-Prover-V2 is evaluated on three main benchmark datasets, each testing different aspects of formal mathematical reasoning capabilities.
+
+### MiniF2F
+
+MiniF2F (Mini Formal to Formal) is a standard benchmark in the formal theorem proving community. It contains mathematical theorems formalized in Lean and serves as a key metric for comparing different theorem provers.
+
+### PutnamBench
+
+PutnamBench consists of 658 problems from the William Lowell Putnam Mathematical Competition, which is renowned for its challenging undergraduate-level mathematics problems. This benchmark tests the model's ability to solve complex, competition-level mathematical problems.
+
+### ProverBench
+
+ProverBench is a new benchmark dataset introduced alongside DeepSeek-Prover-V2, comprising 325 problems across various mathematical domains.
+
+```mermaid
+graph TD
+    subgraph "ProverBench Components"
+        A["ProverBench: 325 Problems"] --> B["Competition Problems: AIME 24&25"]
+        A --> C["Textbook Example Problems"]
+        
+        B --> B1["Number Theory & Algebra: 15 Problems"]
+        
+        C --> C1["Number Theory: 40 Problems"]
+        C --> C2["Elementary Algebra: 30 Problems"]
+        C --> C3["Linear Algebra: 50 Problems"]
+        C --> C4["Abstract Algebra: 40 Problems"]
+        C --> C5["Calculus: 90 Problems"]
+        C --> C6["Real Analysis: 30 Problems"]
+        C --> C7["Complex Analysis: 10 Problems"]
+        C --> C8["Functional Analysis: 10 Problems"]
+        C --> C9["Probability: 10 Problems"]
+    end
 ```
 
- Sources: [README.md104-119](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/README.md?plain=1#L104-L119)
+The breakdown of ProverBench problems by mathematical domain is as follows:
 
- 
-## Evaluation Methodologies
+| Domain | Number of Problems |
+|--------|-------------------|
+| AIME 24&25 | 15 |
+| Number Theory | 40 |
+| Elementary Algebra | 30 |
+| Linear Algebra | 50 |
+| Abstract Algebra | 40 |
+| Calculus | 90 |
+| Real Analysis | 30 |
+| Complex Analysis | 10 |
+| Functional Analysis | 10 |
+| Probability | 10 |
+| **Total** | **325** |
 
- The evaluation system implements multiple methodologies to assess model capabilities under different conditions:
+ProverBench is designed to enable comprehensive evaluation across both high-school competition problems and undergraduate-level mathematics, providing a diverse testing ground for formal proving capabilities.
 
- 
+Sources: [README.md:71-91]()
+
+## Performance Results
+
+The DeepSeek-Prover-V2 models demonstrate strong performance across all benchmark datasets, with the larger 671B parameter model achieving state-of-the-art results in neural theorem proving.
+
+```mermaid
+flowchart LR
+    subgraph "DeepSeek-Prover-V2 Models"
+        A["DeepSeek-Prover-V2-7B"]
+        B["DeepSeek-Prover-V2-671B"]
+    end
+    
+    subgraph "Benchmark Results"
+        C["MiniF2F-test: 88.9% Pass Ratio"]
+        D["PutnamBench: 49/658 Problems Solved"]
+        E["ProverBench: Performance metrics"]
+    end
+    
+    B --> C
+    B --> D
+    B --> E
+    A -.-> C
+    A -.-> D
+    A -.-> E
 ```
 
+### MiniF2F Results
+
+DeepSeek-Prover-V2-671B achieves a pass ratio of 88.9% on the MiniF2F-test, setting a new state-of-the-art for neural theorem provers. This significant improvement demonstrates the effectiveness of the reinforcement learning approach with subgoal decomposition.
+
+### PutnamBench Results
+
+On the challenging PutnamBench dataset, DeepSeek-Prover-V2-671B successfully solves 49 out of 658 problems, showcasing its ability to handle complex competition-level mathematical problems.
+
+The proofs generated by DeepSeek-Prover-V2 for the MiniF2F dataset are available for download as a ZIP archive in the repository.
+
+Sources: [README.md:67-68]()
+
+## Evaluation Interface
+
+The evaluation process uses the Hugging Face Transformers library for model inference, followed by verification in the Lean 4 environment. Here's how the evaluation flow is typically implemented:
+
+```mermaid
+sequenceDiagram
+    participant Benchmark as "Benchmark Dataset"
+    participant Tokenizer as "AutoTokenizer"
+    participant Model as "DeepSeek-Prover-V2 Model"
+    participant Lean4 as "Lean 4 Verifier"
+    participant Evaluator as "Evaluation Metrics Calculator"
+    
+    Benchmark->>Tokenizer: Format theorem as prompt
+    Tokenizer->>Model: Apply chat template & tokenize
+    Model->>Model: Generate proof (max_new_tokens=8192)
+    Model->>Tokenizer: Return generated tokens
+    Tokenizer->>Lean4: Decode tokens to formal proof
+    Lean4->>Evaluator: Verify proof validity
+    Evaluator->>Evaluator: Calculate pass ratio
 ```
 
- Sources: [README.md118-119](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/README.md?plain=1#L118-L119) [evaluation/more_results.md16-19](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/evaluation/more_results.md?plain=1#L16-L19)
-
- 
-## Standard Benchmark Suite
-
- The evaluation framework includes a comprehensive suite of benchmarks that assess different aspects of model capabilities:
-
- 
-### Language Understanding Benchmarks
-
- 
- - **HellaSwag**: Tests common sense reasoning through sentence completion tasks
- - **PIQA**: Physical Interaction Question Answering for physical commonsense reasoning
- - **WinoGrande**: Assesses pronoun resolution and common sense reasoning
- 
- 
-### Knowledge and Reasoning Benchmarks
-
- 
- - **MMLU** (Massive Multitask Language Understanding): Covers 57 subjects across STEM, humanities, social sciences, etc.
- - **ARC-Easy/Challenge**: Elementary/middle school science questions requiring reasoning
- - **TriviaQA**: Fact-based question answering dataset requiring world knowledge
- - **BBH** (Big Bench Hard): Collection of challenging language tasks
- 
- 
-### Mathematical Problem-Solving Benchmarks
-
- 
- - **GSM8K**: Grade school math word problems
- - **MATH**: Competition-level mathematics problems
- - **Hungarian National High-School Exam**: Real high school exam problems
- 
- 
-### Code Generation Benchmarks
-
- 
- - **HumanEval**: Hand-written programming problems for function synthesis
- - **MBPP**: Programming problems for Python code generation
- - **LeetCode Weekly Contest**: Recent competitive programming problems
- 
- 
-### Multilingual Benchmarks
-
- 
- - **CMMLU**: Chinese version of MMLU covering 67 topics
- - **CEval**: Comprehensive Chinese evaluation suite
- - **ChineseQA**: In-house Chinese question answering benchmark
- 
- Sources: [README.md110-166](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/README.md?plain=1#L110-L166) [evaluation/more_results.md1-14](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/evaluation/more_results.md?plain=1#L1-L14)
-
- 
-## Novel Evaluation Approaches
-
- DeepSeek-LLM introduces several novel evaluation approaches to address data contamination concerns and provide more robust assessment of model capabilities.
-
- 
-### Hungarian National High-School Exam Evaluation
-
- 
-```
+A standard evaluation prompt template for the model looks like:
 
 ```
+Complete the following Lean 4 code:
 
- This evaluation uses the Hungarian National High School Exam containing 33 mathematics problems. The process involves:
+```lean4
+import Mathlib
+import Aesop
 
- 
- - Extracting exam questions from the dataset repository
- - Prompting the model in a zero-shot setting
- - Collecting complete solution attempts
- - Human evaluation following the official scoring metric in the solution.pdf
- - Calculating total score across all problems
- 
- This approach provides assessment of mathematical reasoning capabilities on content models haven't encountered during training.
+set_option maxHeartbeats 0
 
- Sources: [README.md128-135](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/README.md?plain=1#L128-L135)
+open BigOperators Real Nat Topology Rat
 
- 
-### Instruction Following Evaluation (IFEval)
-
- 
+/-- [Problem statement] -/
+theorem [theorem_name] : [formal_statement] := by
+  sorry
 ```
 
+Before producing the Lean 4 code to formally prove the given theorem, provide a detailed proof plan outlining the main proof steps and strategies.
+The plan should highlight key ideas, intermediate lemmas, and proof structures that will guide the construction of the final formal proof.
 ```
 
- This evaluation uses Google's instruction following dataset released on November 15th, 2023. The system:
+This structured approach encourages the model to first develop a proof plan before generating the formal proof in Lean 4 syntax.
 
- 
- - Uses 25 types of verifiable instructions across approximately 500 prompts
- - Evaluates model responses using the prompt-level loose metric
- - Measures the model's ability to correctly follow explicit instructions
- - Produces a compliance score reflecting instruction following capability
- 
- Sources: [README.md139-143](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/README.md?plain=1#L139-L143)
+Sources: [README.md:115-163]()
 
- 
-### LeetCode Weekly Contest Evaluation
+## Benchmark Comparison and Significance
 
- 
-```
+The three benchmark datasets used for evaluation cover different aspects of mathematical reasoning:
 
-```
+| Benchmark | Focus | Difficulty Level | Size | Key Strength |
+|-----------|-------|------------------|------|--------------|
+| MiniF2F | Formalized mathematical theorems | Mixed | Standard test set | Industry standard for comparison |
+| PutnamBench | Competition problems | High (undergraduate competition) | 658 problems | Tests complex problem-solving ability |
+| ProverBench | Diverse mathematical domains | High school to undergraduate | 325 problems | Broad coverage of mathematical areas |
 
- This evaluation assesses coding proficiency using problems from recent LeetCode contests:
+Together, these benchmarks provide a comprehensive evaluation of the model's capabilities across different mathematical domains, problem types, and difficulty levels.
 
- 
- - Sources 126 problems from LeetCode Weekly Contests (351-372) and Bi-Weekly Contests (108-117)
- - Processes over 20 test cases for each problem
- - Executes model-generated solutions against all test cases
- - Considers a problem solved only if all test cases pass
- - Calculates a pass@1 score similar to HumanEval methodology
- 
- Sources: [README.md147-153](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/README.md?plain=1#L147-L153)
+Sources: [README.md:40-48](), [README.md:71-91]()
 
- 
-## Benchmark Results
+---
 
- 
-### Base Model Performance
-
- The following table summarizes DeepSeek-LLM base models compared to other base models across standard benchmarks:
-
- 
-| Model | HellaSwag | TriviaQA | MMLU | GSM8K | HumanEval | BBH | CEval | CMMLU | ChineseQA |
-|---|---|---|---|---|---|---|---|---|---|
-| LLaMA-2 7B | 75.6 | 63.8 | 45.8 | 15.5 | 14.6 | 38.5 | 33.9 | 32.6 | 21.5 |
-| LLaMA-2 70B | 84.0 | 79.5 | 69.0 | 58.4 | 28.7 | 62.9 | 51.4 | 53.1 | 50.2 |
-| DeepSeek LLM 7B Base | 75.4 | 59.7 | 48.2 | 17.4 | 26.2 | 39.5 | 45.0 | 47.2 | 78.0 |
-| DeepSeek LLM 67B Base | 84.0 | 78.9 | 71.3 | 63.4 | 42.7 | 68.7 | 66.1 | 70.8 | 87.6 |
-
- Sources: [README.md110-116](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/README.md?plain=1#L110-L116)
-
- 
-### Chat Model Performance
-
- Performance of DeepSeek-LLM chat models on standard benchmarks:
-
- 
-| Model | TriviaQA | MMLU | GSM8K | HumanEval | BBH | CEval | CMMLU | ChineseQA |
-|---|---|---|---|---|---|---|---|---|
-| DeepSeek LLM 7B Chat | 57.9 | 49.4 | 62.6 | 48.2 | 42.3 | 47.0 | 49.7 | 75.0 |
-| DeepSeek LLM 67B Chat | 81.5 | 71.1 | 84.1 | 73.8 | 71.7 | 65.2 | 67.8 | 85.1 |
-
- Sources: [README.md160-166](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/README.md?plain=1#L160-L166)
-
- 
-### Novel Evaluation Results
-
- 
-#### Hungarian National High-School Exam
-
- 
-| Model | Score (out of 100) |
-|---|---|
-| DeepSeek LLM 67B Chat | 58 |
-| Qwen-14B-Chat | 36.5 |
-| ChatGLM3-6B | 32 |
-| Baichuan2-Chat-13B | 19.5 |
-| Yi-Chat-34B | 39 |
-| GPT-3.5-Turbo | 41 |
-| Grok-1 | 59 |
-| Claude 2 | 55 |
-| GPT-4 | 68 |
-
- Sources: [README.md132-135](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/README.md?plain=1#L132-L135) [evaluation/more_results.md23-26](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/evaluation/more_results.md?plain=1#L23-L26)
-
- 
-#### Instruction Following Evaluation
-
- 
-| Model | Prompt-level Instruction Following |
-|---|---|
-| Qwen-14B-Chat | 48.9 |
-| ChatGLM3-6B | 35.0 |
-| Baichuan2-Chat-13B | 51.0 |
-| Yi-Chat-34B | 51.2 |
-| PaLM2 Small | 46.9 |
-| DeepSeek LLM 67B Chat | 59.1 |
-| GPT-4 | 79.3 |
-
- Sources: [README.md140-143](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/README.md?plain=1#L140-L143) [evaluation/more_results.md28-31](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/evaluation/more_results.md?plain=1#L28-L31)
-
- 
-#### LeetCode Weekly Contest
-
- 
-| Model | LeetCode Weekly Contest |
-|---|---|
-| Qwen-14B-Chat | 11.1 |
-| ChatGLM3-6B | 2.38 |
-| Baichuan2-Chat-13B | 1.58 |
-| Yi-Chat-34B | 7.9 |
-| GPT-3.5-Turbo | 20.6 |
-| Phind-CodeLlama-34B-v2 | 12.6 |
-| DeepSeek LLM 67B Chat | 17.5 |
-| DeepSeek Coder 33B | 31.7 |
-| GPT-4 | 48.4 |
-
- Sources: [README.md148-153](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/README.md?plain=1#L148-L153) [evaluation/more_results.md32-35](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/evaluation/more_results.md?plain=1#L32-L35)
-
- 
-## Mathematical Problem-Solving with Advanced Methods
-
- The evaluation system assessed mathematical problem-solving capabilities using different reasoning approaches:
-
- 
-| Inference Method | GSM8k | MATH | MGSM-zh | CMATH | Gaokao-MathCloze | Gaokao-MathQA |
-|---|---|---|---|---|---|---|
-| Chain-of-Thought | 84.1% | 32.6% | 74.0% | 80.3% | 16.9% | 20.2% |
-| Tool-Integrated Reasoning | 86.7% | 51.1% | 76.4% | 85.4% | 21.2% | 28.2% |
-
- Sources: [evaluation/more_results.md16-19](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/evaluation/more_results.md?plain=1#L16-L19)
-
- 
-## Multiple-Choice Question Benchmark Analysis
-
- The DeepSeek evaluation team found that performance on multiple-choice question benchmarks can be artificially enhanced. Adding Chinese multiple-choice questions to training data resulted in significant score improvements:
-
- 
-| Model | MMLU | C-Eval | CMMLU |
-|---|---|---|---|
-| DeepSeek LLM 7B Chat | 49.4 | 47.0 | 49.7 |
-| DeepSeek LLM 7B Chat + MC | 60.9 | 71.3 | 73.8 |
-
- However, this approach led to benchmark overfitting without improving actual model knowledge on other tasks. Consequently, the team chose not to incorporate multiple-choice data in the pre-training or fine-tuning process, prioritizing genuine capability development over benchmark optimization.
-
- Sources: [README.md170-178](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/README.md?plain=1#L170-L178)
-
- 
-## Comprehensive Evaluation Results
-
- The evaluation framework provides more extensive results for both base and chat models across dozens of standard benchmarks, including:
-
- 
- - HellaSwag, PIQA, WinoGrande (common sense reasoning)
- - RACE-Middle, RACE-High (reading comprehension)
- - TriviaQA, NaturalQuestions (question answering)
- - MMLU, ARC-Easy, ARC-Challenge (knowledge and reasoning)
- - GSM8K, MATH (mathematical reasoning)
- - HumanEval, MBPP (code generation)
- - DROP (reading comprehension with numerical reasoning)
- - OpenBookQA, Pile-test (general knowledge)
- - BBH, AGIEval (advanced reasoning)
- - CLUEWSC, CHID, CEval, CMMLU (Chinese language understanding)
- 
- For complete benchmark details, refer to the `evaluation/more_results.md` file.
-
- Sources: [evaluation/more_results.md1-14](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/evaluation/more_results.md?plain=1#L1-L14)

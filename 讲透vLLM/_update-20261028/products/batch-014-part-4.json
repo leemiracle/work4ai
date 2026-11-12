@@ -1,0 +1,389 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/structured_output/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/v1/structured_output/utils.py",
+   "summary": "结构化输出工具：spec-decode -1 哨兵剥离、带超时 regex 编译（防 ReDoS）、grammar bitmask 应用、outlines SQLite 磁盘缓存与词表归约、Lark 语法探测与 choice→grammar 转换。",
+   "tags": [
+    "structured-output",
+    "utils",
+    "regex-timeout",
+    "disk-cache"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/structured_output/utils.py:OutlinesVocabulary",
+   "type": "class",
+   "name": "OutlinesVocabulary",
+   "filePath": "vllm/v1/structured_output/utils.py",
+   "summary": "带 hash 的 outlines_core.Vocabulary 包装。",
+   "tags": [
+    "structured-output",
+    "outlines",
+    "vocabulary"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    197,
+    209
+   ]
+  },
+  {
+   "id": "class:vllm/v1/structured_output/utils.py:OutlinesDiskCache",
+   "type": "class",
+   "name": "OutlinesDiskCache",
+   "filePath": "vllm/v1/structured_output/utils.py",
+   "summary": "outlines Index 的 SQLite 磁盘缓存（Rust serde 二进制序列化）。",
+   "tags": [
+    "structured-output",
+    "outlines",
+    "sqlite-cache"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    236,
+    297
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/utils.py:strip_speculative_padding",
+   "type": "function",
+   "name": "strip_speculative_padding",
+   "filePath": "vllm/v1/structured_output/utils.py",
+   "summary": "剥掉 spec-decode 的 -1 哨兵填充（ngram 等后端的被拒草稿位）。",
+   "tags": [
+    "structured-output",
+    "spec-decode",
+    "padding"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    48,
+    59
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/utils.py:compile_regex_with_timeout",
+   "type": "function",
+   "name": "compile_regex_with_timeout",
+   "filePath": "vllm/v1/structured_output/utils.py",
+   "summary": "带超时的 regex 编译（线程池执行，防 ReDoS）。",
+   "tags": [
+    "regex",
+    "timeout",
+    "redos"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    62,
+    98
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/utils.py:apply_grammar_bitmask",
+   "type": "function",
+   "name": "apply_grammar_bitmask",
+   "filePath": "vllm/v1/structured_output/utils.py",
+   "summary": "用 xgrammar 函数把 grammar bitmask 应用到输出 logits。",
+   "tags": [
+    "grammar",
+    "bitmask",
+    "logits"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    101,
+    194
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/utils.py:get_outlines_cache_path",
+   "type": "function",
+   "name": "get_outlines_cache_path",
+   "filePath": "vllm/v1/structured_output/utils.py",
+   "summary": "取 outlines 索引缓存的磁盘路径。",
+   "tags": [
+    "outlines",
+    "cache",
+    "path"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    212,
+    233
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/utils.py:get_outlines_cache",
+   "type": "function",
+   "name": "get_outlines_cache",
+   "filePath": "vllm/v1/structured_output/utils.py",
+   "summary": "取用于 Index 缓存的 Cache 实例。",
+   "tags": [
+    "outlines",
+    "cache",
+    "instance"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    300,
+    318
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/utils.py:_reduced_vocabulary",
+   "type": "function",
+   "name": "_reduced_vocabulary",
+   "filePath": "vllm/v1/structured_output/utils.py",
+   "summary": "构建 token→等价 token id 列表的归约词表。",
+   "tags": [
+    "outlines",
+    "vocabulary",
+    "reduction"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    325,
+    392
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/utils.py:get_outlines_vocabulary",
+   "type": "function",
+   "name": "get_outlines_vocabulary",
+   "filePath": "vllm/v1/structured_output/utils.py",
+   "summary": "为 tokenizer 构建 outlines Vocabulary 对象。",
+   "tags": [
+    "outlines",
+    "vocabulary",
+    "factory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    395,
+    406
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/utils.py:grammar_is_likely_lark",
+   "type": "function",
+   "name": "grammar_is_likely_lark",
+   "filePath": "vllm/v1/structured_output/utils.py",
+   "summary": "启发式判断语法串是否为 Lark 语法。",
+   "tags": [
+    "grammar",
+    "lark",
+    "detection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    409,
+    438
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/utils.py:choice_as_grammar",
+   "type": "function",
+   "name": "choice_as_grammar",
+   "filePath": "vllm/v1/structured_output/utils.py",
+   "summary": "把 choice 列表转为等价 grammar 串。",
+   "tags": [
+    "grammar",
+    "choice",
+    "conversion"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    441,
+    458
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "class:vllm/v1/structured_output/utils.py:OutlinesVocabulary",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "class:vllm/v1/structured_output/utils.py:OutlinesDiskCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "function:vllm/v1/structured_output/utils.py:strip_speculative_padding",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "function:vllm/v1/structured_output/utils.py:compile_regex_with_timeout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "function:vllm/v1/structured_output/utils.py:apply_grammar_bitmask",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "function:vllm/v1/structured_output/utils.py:get_outlines_cache_path",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "function:vllm/v1/structured_output/utils.py:get_outlines_cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "function:vllm/v1/structured_output/utils.py:_reduced_vocabulary",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "function:vllm/v1/structured_output/utils.py:get_outlines_vocabulary",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "function:vllm/v1/structured_output/utils.py:grammar_is_likely_lark",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "function:vllm/v1/structured_output/utils.py:choice_as_grammar",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "class:vllm/v1/structured_output/utils.py:OutlinesVocabulary",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "class:vllm/v1/structured_output/utils.py:OutlinesDiskCache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "function:vllm/v1/structured_output/utils.py:strip_speculative_padding",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "function:vllm/v1/structured_output/utils.py:compile_regex_with_timeout",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "function:vllm/v1/structured_output/utils.py:apply_grammar_bitmask",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "function:vllm/v1/structured_output/utils.py:get_outlines_cache_path",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "function:vllm/v1/structured_output/utils.py:get_outlines_cache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "function:vllm/v1/structured_output/utils.py:get_outlines_vocabulary",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "function:vllm/v1/structured_output/utils.py:grammar_is_likely_lark",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/utils.py",
+   "target": "function:vllm/v1/structured_output/utils.py:choice_as_grammar",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

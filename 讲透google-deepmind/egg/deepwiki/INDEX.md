@@ -1,0 +1,32 @@
+# DeepWiki 索引 — google-deepmind/egg
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 169747 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Core Architecture and Design Principles](1.2-core-architecture-and-design-principles.md)
+- [2 Environments](2-environments.md)
+  - [2.1 Base Task Environments](2.1-base-task-environments.md)
+  - [2.2 Environment Wrappers](2.2-environment-wrappers.md)
+- [3 Actors](3-actors.md)
+  - [3.1 FixedBPS and FixedBPC Actors](3.1-fixedbps-and-fixedbpc-actors.md)
+  - [3.2 DreamerBPS Actor and Data Injection](3.2-dreamerbps-actor-and-data-injection.md)
+- [4 Networks](4-networks.md)
+  - [4.1 Transformer Architecture](4.1-transformer-architecture.md)
+  - [4.2 Noise and Quantization Modules](4.2-noise-and-quantization-modules.md)
+- [5 Loss Functions](5-loss-functions.md)
+  - [5.1 Standard RL Losses: REINFORCE, PPO, PMPO, XENT, OnlineStar](5.1-standard-rl-losses-reinforce-ppo-pmpo-xent-onlinestar.md)
+  - [5.2 Delightful Gradient (DG) and Kondo Gate Losses](5.2-delightful-gradient-dg-and-kondo-gate-losses.md)
+- [6 Trainers](6-trainers.md)
+  - [6.1 VanillaSyncTrainer](6.1-vanillasynctrainer.md)
+  - [6.2 VanillaAsyncTrainer and Parameter Lag Simulation](6.2-vanillaasynctrainer-and-parameter-lag-simulation.md)
+- [7 Experiments](7-experiments.md)
+  - [7.1 Baseline Experiment](7.1-baseline-experiment.md)
+  - [7.2 DPG and Kondo Experiments](7.2-dpg-and-kondo-experiments.md)
+  - [7.3 Distributed Experiment](7.3-distributed-experiment.md)
+- [8 Utility Libraries](8-utility-libraries.md)
+  - [8.1 Logging and Statistics](8.1-logging-and-statistics.md)
+  - [8.2 Autoregressive Sampling (ARSampler)](8.2-autoregressive-sampling-arsampler.md)
+- [9 Contributing and Project Governance](9-contributing-and-project-governance.md)
+- [10 Glossary](10-glossary.md)

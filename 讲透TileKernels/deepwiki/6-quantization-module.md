@@ -1,92 +1,105 @@
-> 来源: [https://deepwiki.com/deepseek-ai/TileKernels/6-quantization-module](https://deepwiki.com/deepseek-ai/TileKernels/6-quantization-module)
-> DeepWiki deepseek-ai/TileKernels
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/TileKernels · page 6 Quantization Module · fetched 2026-10-30 -->
 
 # Quantization Module
 
-  Relevant source files 
- - [tile_kernels/quant/__init__.py](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/__init__.py)
- - [tile_kernels/quant/common.py](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/common.py)
- 
-  The Quantization Module provides a comprehensive suite of high-performance kernels for converting between high-precision formats (BF16, FP32) and low-precision formats (FP8, FP4, E5M6). It supports various quantization granularities and scaling-factor (SF) layouts required for modern LLM inference and training, particularly targeting NVIDIA Hopper (SM90) and Blackwell architectures.
+<details>
+<summary>Relevant source files</summary>
 
- 
+The following files were used as context for generating this wiki page:
+
+- [tests/quant/test_cast.py](tests/quant/test_cast.py)
+- [tests/quant/test_per_token_cast.py](tests/quant/test_per_token_cast.py)
+- [tile_kernels/config.py](tile_kernels/config.py)
+
+</details>
+
+
+
+The Quantization Module (`tile_kernels/quant/`) provides a comprehensive suite of high-performance kernels for converting between high-precision formats (BF16, FP32) and low-precision formats (FP8 `e4m3`, FP4 `e2m1`) [tests/quant/test_per_token_cast.py:79-87](). It supports multiple quantization granularities (per-token, per-block, per-channel) and scaling-factor (SF) layouts required for modern LLM training and inference, targeting both NVIDIA GPUs and Ascend NPUs [tile_kernels/config.py:25-32]().
+
 ### Supported Formats and Granularities
 
- The module supports three primary low-precision formats defined in `BaseCastConfig`:
+The module supports key low-precision data types and granularities:
+*   **FP8 (`e4m3`):** Standard 8-bit floating-point format (`torch.float8_e4m3fn`) [tests/quant/test_cast.py:20-20]().
+*   **FP4 (`e2m1`):** 4-bit floating-point format packed into integer containers [tests/quant/test_per_token_cast.py:87-87]().
+*   **Granularities:**
+    *   **Per-Token:** Scaling factors calculated per row/token [tests/quant/test_per_token_cast.py:111-112]().
+    *   **Per-Block:** Scaling factors calculated over 2D blocks (e.g., `32x32` or `128x128`) [tests/quant/test_per_token_cast.py:82-86]().
+    *   **Per-Channel:** Scaling factors calculated across columns/channels [tests/quant/test_per_token_cast.py:111-112]().
 
- 
- - **FP8 (E4M3):** Standard `torch.float8_e4m3fn` [tile_kernels/quant/common.py22](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/common.py#L22-L22)
- - **FP4 (E2M1):** Packed into `torch.int8` containers [tile_kernels/quant/common.py29](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/common.py#L29-L29)
- - **E5M6:** A custom 11-bit format used for specific weight/activation storage [tile_kernels/quant/common.py101](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/common.py#L101-L101)
- 
- Quantization can be applied at different granularities:
+### Scaling Factor Layouts and Management
 
- 
- - **Per-Token:** Scaling factors are calculated for each row (token) [tile_kernels/quant/__init__.py8](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/__init__.py#L8-L8)
- - **Per-Block:** Scaling factors are calculated for 2D blocks (e.g., 1x128 or 128x128) [tile_kernels/quant/__init__.py9](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/__init__.py#L9-L9)
- - **Per-Channel:** Scaling factors are calculated for each column (channel) [tile_kernels/quant/__init__.py2-4](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/__init__.py#L2-L4)
- 
- 
-### Scaling Factor (SF) Management
+The module handles complex scaling factor layouts to satisfy hardware alignment requirements:
+*   **Row-Major and TMA-Aligned Col-Major:** Transposed layouts optimized for Tensor Memory Accelerator (TMA) loads [tests/quant/test_per_token_cast.py:24-24]().
+*   **Packed UE8M0:** Specialized packing format where scaling factors are packed into `int32` containers for hardware acceleration [tests/quant/test_per_token_cast.py:26-26]().
 
- The module handles complex scaling factor layouts to satisfy hardware requirements like Tensor Memory Accelerator (TMA) alignment.
+### Code Entity Mapping: Conceptual Quantization to Implementation
 
- 
- - **Row-Major:** Standard layout where `sf_shape` is `(num_block_m, num_block_k)` [tile_kernels/quant/common.py138](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/common.py#L138-L138)
- - **TMA-Aligned Col-Major:** Transposed layout optimized for TMA loads, requiring 16-byte alignment [tile_kernels/quant/common.py153-154](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/common.py#L153-L154)
- - **Packed UE8M0:** A specialized format where four factors are packed into a single `int32` for specific hardware acceleration paths [tile_kernels/quant/common.py135-137](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/common.py#L135-L137)
- 
- 
-### Code Entity Mapping
+The following diagram maps natural language quantization configurations and concepts to their corresponding code entities in `tile_kernels/quant/`.
 
- The following diagram maps the logical quantization configurations to their implementation structures and helper functions.
+**Diagram: Quantization Concepts to Code Entities**
+```mermaid
+graph TD
+    subgraph NaturalLanguageSpace ["Natural Language Space"]
+        CF[("FP8/FP4 Formats")]
+        GR[("Granularities: Per-Token/Block/Channel")]
+        SL[("Scaling Factor Layouts")]
+    end
 
- **Quantization Configuration Flow**
+    subgraph CodeEntitySpace ["Code Entity Space"]
+        DT["tile_kernels/config.py:_validate_quant_fmt"]
+        PT["tile_kernels/quant/per_token_cast"]
+        TC["tile_kernels/torch/cast"]
+        SC["tile_kernels/quant/common.py:BaseCastConfig"]
+    end
 
- 
+    CF --> DT
+    GR --> PT
+    GR --> TC
+    SL --> SC
 ```
+Sources: [tile_kernels/config.py:34-36](), [tests/quant/test_per_token_cast.py:109-116](), [tile_kernels/quant/common.py:20-61]()
 
+### Sub-Modules and Child Pages
+
+The Quantization Module delegates detailed kernel implementations and configurations to the following child pages:
+
+*   **[Cast and Dequantization Kernels](#6.1)** — Reference for `cast` (with stochastic rounding), `per_token_cast`, `per_block_cast`, `per_block_cast_lossless`, `per_channel_cast`, `cast_back`, and `per_token_cast_and_cast_back`; covers `quant/common.py` and `quant/types.py` config dataclasses and SF layouts.
+*   **[Fused SwiGLU and Norm Kernels](#6.2)** — Documents `swiglu_forward` / `swiglu_backward` fused with quantization, and `norm_forward` / `norm_backward` (RMSNorm with quantized output, see `quant/rstd.py`), explaining why fusing activation/normalization with casting reduces memory traffic.
+*   **[Batched Transpose of Weight Scaling Factors](#6.3)** — Covers `batched_transpose_weight_sf` kernels: layout conversion of block/channel scaling factors for GEMM consumption, on CUDA and Ascend.
+
+### Quantization Execution Pipeline
+
+The following diagram illustrates the execution flow from high-precision input tensors through quantization kernels to produce quantized outputs and scaling factors.
+
+**Diagram: Quantization Execution Pipeline**
+```mermaid
+graph LR
+    Input["Input Tensor (BF16/FP32)"_n] --> Kernel{"Cast / Per-Token Cast Kernel"_k}
+    
+    subgraph KernelInternals ["Kernel Internals"]
+        direction TB
+        Calc["Calculate AMAX"_c]
+        GSF["Compute Scaling Factors"_s]
+        Quant["Apply Quantization"_q]
+    end
+
+    Kernel --> Output["Quantized Tensor"_o]
+    Kernel --> SF["Scaling Factors"_sf]
+    
+    Output --> Post["Epilogue Processing"_ep]
+    SF --> Post
+    Post --> Final["QuantTensor (Data, SF)"_f]
 ```
+Sources: [tests/quant/test_cast.py:56-60](), [tests/quant/test_per_token_cast.py:109-117]()
 
- Sources: [tile_kernels/quant/common.py20-61](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/common.py#L20-L61) [tile_kernels/quant/common.py62-113](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/common.py#L62-L113) [tile_kernels/quant/common.py141-165](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/common.py#L141-L165) [tile_kernels/quant/common.py168-194](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/common.py#L168-L194)
-
- 
-### Sub-Modules
-
- 
-#### [Cast and Dequantization Kernels](https://deepwiki.com/deepseek-ai/TileKernels/6.1-cast-and-dequantization-kernels)
-
- This sub-module contains the core logic for converting tensors between formats. It includes forward cast kernels for per-token, per-block, and per-channel granularities, as well as dequantization kernels (`cast_back`) for returning to BF16. It also handles specialized "lossless" block casting.
-
- For details, see [Cast and Dequantization Kernels](https://deepwiki.com/deepseek-ai/TileKernels/6.1-cast-and-dequantization-kernels).
-
- 
-#### [Fused SwiGLU + Quantization Kernels](https://deepwiki.com/deepseek-ai/TileKernels/6.2-fused-swiglu-+-quantization-kernels)
-
- To minimize memory bandwidth bottlenecks, the module provides kernels that fuse the SwiGLU activation function with the subsequent quantization step. This prevents writing high-precision intermediate activations back to VRAM before they are quantized for the next layer.
-
- For details, see [Fused SwiGLU + Quantization Kernels](https://deepwiki.com/deepseek-ai/TileKernels/6.2-fused-swiglu-+-quantization-kernels).
-
- 
-### Quantization Pipeline Overview
-
- The following diagram illustrates how data flows from high-precision input through the quantization kernels to produce a `QuantTensor` (a tuple of the quantized data and its scaling factors).
-
- **Quantization Execution Pipeline**
-
- 
-```
-
-```
-
- Sources: [tile_kernels/quant/common.py168-194](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/common.py#L168-L194) [tile_kernels/quant/common.py196-205](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/common.py#L196-L205) [tile_kernels/quant/types.py9](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/types.py#L9-L9)
-
- 
 ### Key Files
+*   `tile_kernels/quant/common.py`: Contains base dataclasses (`BaseCastConfig`) and scaling factor allocation logic.
+*   `tile_kernels/quant/__init__.py`: Exports the primary API for all quantization operations.
+*   `tile_kernels/quant/types.py`: Defines type aliases like `QuantTensor`.
+*   `tile_kernels/config.py`: Runtime configuration settings, device checks (`is_ascend()`), and quantization clamp minimum values (`_clamp_min_values`) [tile_kernels/config.py:10-15]().
 
- 
- - `tile_kernels/quant/common.py`: Contains the base dataclasses (`BaseCastConfig`) and scaling factor allocation logic [tile_kernels/quant/common.py1-210](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/common.py#L1-L210)
- - `tile_kernels/quant/__init__.py`: Exports the primary API for all quantization operations [tile_kernels/quant/__init__.py1-11](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/__init__.py#L1-L11)
- - `tile_kernels/quant/types.py`: Defines the `QuantTensor` type alias [tile_kernels/quant/types.py1-10](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/types.py#L1-L10)
- 
- Sources: [tile_kernels/quant/common.py1-210](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/common.py#L1-L210) [tile_kernels/quant/__init__.py1-11](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/__init__.py#L1-L11) [tile_kernels/quant/types.py1-10](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/tile_kernels/quant/types.py#L1-L10)
+Sources: [tile_kernels/config.py:1-134](), [tests/quant/test_cast.py:1-146](), [tests/quant/test_per_token_cast.py:1-167]()
+
+---
+

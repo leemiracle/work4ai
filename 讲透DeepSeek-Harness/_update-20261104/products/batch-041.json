@@ -1,0 +1,2490 @@
+{
+ "nodes": [
+  {
+   "id": "document:packages/subagent/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/subagent/README.md",
+   "summary": "subagent 能力族组级 README：汇总抽象缝（dsh-subagent）与各 Service Provider（spawn/fork/acp/claude-code/codex/dsh-sdk）及 tool 消费者包的关系、相关文档与开发注记。",
+   "tags": [
+    "documentation",
+    "group-index",
+    "subagent"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/subagent/subagent/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/subagent/subagent/README.md",
+   "summary": "@deepseek-ai/dsh-subagent 主文档：delegation 开启与设置、激活容量、本地/外部子代理与子预设、消息/中断/后代发现、故障与恢复，附设计概念、源码地图与 Model Experience（结算通知、可续跑子代理返回指引、委托范围声明）。",
+   "tags": [
+    "documentation",
+    "subagent",
+    "delegation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/subagent/subagent/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/subagent/subagent/package.json",
+   "summary": "包清单 @deepseek-ai/dsh-subagent：声明 30+ 工作区依赖（agent/session/llm/tools/sandbox/persistence 等）与 zod，导出 ./client、./typert、./remote 子路径。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "subagent"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/subagent/subagent/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/subagent/subagent/tsconfig.json",
+   "summary": "包编译配置：extends tsconfig.base.json，rootDir src / outDir lib/types，引用 vendor（cosmokit/cordis/schemastery）与全部工作区依赖项目。",
+   "tags": [
+    "configuration",
+    "build-system",
+    "typescript"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/subagent/subagent/src/activation.ts",
+   "type": "file",
+   "name": "activation.ts",
+   "filePath": "packages/subagent/subagent/src/activation.ts",
+   "summary": "执行期激活记录与容量：ActivationPool 管理并发在驻子代理槽位、ChildLock 串行化每个子的输入接受与关闭、本地失败观察与结果捕获。",
+   "tags": [
+    "subagent",
+    "activation",
+    "capacity",
+    "lifecycle"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/subagent/subagent/src/archive-admission.ts",
+   "type": "file",
+   "name": "archive-admission.ts",
+   "filePath": "packages/subagent/subagent/src/archive-admission.ts",
+   "summary": "Workspace registry 归档准入的 subagent 侧规则：Session 随工作归档时哪些子代理后代仍在 turn 内、归档祖先（含已释放 Session）如何阻止后续模型步骤。",
+   "tags": [
+    "archive",
+    "admission",
+    "workspace",
+    "subagent"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/subagent/subagent/src/assistant-output.ts",
+   "type": "file",
+   "name": "assistant-output.ts",
+   "filePath": "packages/subagent/subagent/src/assistant-output.ts",
+   "summary": "子代理最终 assistant 输出的规范选择规则：取最后一条非空 assistant 消息；仅记录 usage 的空内容消息不替换早前输出，无任何非空消息时回退 accumulate 路径。",
+   "tags": [
+    "output",
+    "selection",
+    "session-events"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/subagent/subagent/src/catalog.ts",
+   "type": "file",
+   "name": "catalog.ts",
+   "filePath": "packages/subagent/subagent/src/catalog.ts",
+   "summary": "父持有的持久 subagent 目录事件及其 chunked 投影：扩展 SessionEventMap，定义 SubagentCatalogState 与 catalog 投影，提供本地/外部子条目的 establish 帮助函数。",
+   "tags": [
+    "catalog",
+    "session-events",
+    "projection",
+    "chunked-list"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/subagent/subagent/src/child-agent.ts",
+   "type": "file",
+   "name": "child-agent.ts",
+   "filePath": "packages/subagent/subagent/src/child-agent.ts",
+   "summary": "进程内子代理共享组合层：delegation 深度预算、持久会话元数据、解析后的子 AgentOptions、委托策略种子（sandbox 覆盖+审批固定）、模型可见的 SUBAGENT_DELEGATION_CONTEXT 范围声明。",
+   "tags": [
+    "child-agent",
+    "composition",
+    "policy",
+    "delegation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/subagent/subagent/src/client.ts",
+   "type": "file",
+   "name": "client.ts",
+   "filePath": "packages/subagent/subagent/src/client.ts",
+   "summary": "浏览器安全的 subagent 投影与控制词汇 barrel：仅重导出 control-types 与 projection-types，不含运行时代码。",
+   "tags": [
+    "barrel",
+    "client",
+    "type-reexport"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/subagent/subagent/src/continuation-messages.ts",
+   "type": "file",
+   "name": "continuation-messages.ts",
+   "filePath": "packages/subagent/subagent/src/continuation-messages.ts",
+   "summary": "可续跑子代理编排持有的模型可见消息：Agent 消息源类型、结果交付指引附加、结算摘要与 subagent/end 结算消息构造。",
+   "tags": [
+    "messages",
+    "continuation",
+    "model-visible"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/subagent/subagent/src/control-types.ts",
+   "type": "file",
+   "name": "control-types.ts",
+   "filePath": "packages/subagent/subagent/src/control-types.ts",
+   "summary": "client 安全的递归目录行与浏览器 continuation 请求/回执/失败类型（prompt 请求 id、目录行、地址与投递类型）。",
+   "tags": [
+    "type-definition",
+    "control",
+    "client-safe"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/subagent/subagent/src/control.ts",
+   "type": "file",
+   "name": "control.ts",
+   "filePath": "packages/subagent/subagent/src/control.ts",
+   "summary": "浏览器侧 prompt/interrupt 控制请求校验与 Remote surface 返回的稳定 prompt 失败码（rejectPrompt 映射）。",
+   "tags": [
+    "validation",
+    "control",
+    "typert",
+    "error-codes"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/subagent/subagent/src/descriptor.ts",
+   "type": "file",
+   "name": "descriptor.ts",
+   "filePath": "packages/subagent/subagent/src/descriptor.ts",
+   "summary": "持久子代理 descriptor：版本化、模型隐藏的 subagent/descriptor 会话事件，快照显式组合字段供冷恢复重建 continuable 子代理；含严格 parse（未知键拒绝）、snapshot 与 fold。",
+   "tags": [
+    "descriptor",
+    "session-events",
+    "serialization",
+    "cold-resume"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/subagent/subagent/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/subagent/subagent/src/index.ts",
+   "summary": "subagent 能力缝的 Service Definition（ctx.subagents）：SubagentRuntime 继承 TypertRemoteService 提供命名 provider 注册表与能力校验的异步 startActivation；注册 catalog/timing/identity 三个会话投影，注入 agents 后在子 fiber 创建 SubagentManager，并声明 subagent/start、subagent/end 作用域事件。",
+   "tags": [
+    "service-definition",
+    "subagent",
+    "typert-remote",
+    "entry-point",
+    "events"
+   ],
+   "complexity": "complex",
+   "languageNotes": "declare module 双接口合并注入 ctx.subagents 与 Events；Service.init 内 ctx.inject 延迟绑定 manager，fiber 释放时归还槽位。"
+  },
+  {
+   "id": "file:packages/subagent/subagent/src/lifecycle.ts",
+   "type": "file",
+   "name": "lifecycle.ts",
+   "filePath": "packages/subagent/subagent/src/lifecycle.ts",
+   "summary": "subagent 受控生命周期通知：createLifecycleEmitter 以 subagent 树根为键做 scoped 派发与监听者包含，epochStopReason 将 epoch 结束映射为停止原因。",
+   "tags": [
+    "lifecycle",
+    "events",
+    "scope"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/subagent/subagent/src/list-children.ts",
+   "type": "file",
+   "name": "list-children.ts",
+   "filePath": "packages/subagent/subagent/src/list-children.ts",
+   "summary": "从父持有目录发现直接子与递归后代：每次目录读取在下个分支前释放 Session 观察，外部条目作为无本地 Session 的叶子。",
+   "tags": [
+    "discovery",
+    "catalog",
+    "traversal"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/subagent/subagent/src/manager.ts",
+   "type": "file",
+   "name": "manager.ts",
+   "filePath": "packages/subagent/subagent/src/manager.ts",
+   "summary": "子代理启动、消息准入、冷恢复与执行生命周期的所有者：一个 ChildLock 排序输入接受与关闭，一个激活 map 跨全部 provider 持有容量、运行时所有权与资源释放；物化失败回滚未发布条目，自然结算监看器驱动 wake/settle。",
+   "tags": [
+    "manager",
+    "lifecycle",
+    "ownership",
+    "activation"
+   ],
+   "complexity": "complex",
+   "languageNotes": "MaterializeInputs 区分 local（可冷恢复，create 输入含 seed/meta/委托策略）与 external（单个执行 handle）两判别联合。"
+  },
+  {
+   "id": "file:packages/subagent/subagent/src/out-of-process.ts",
+   "type": "file",
+   "name": "out-of-process.ts",
+   "filePath": "packages/subagent/subagent/src/out-of-process.ts",
+   "summary": "进程外子代理后端的 provider 侧词汇：no-capabilities 广告、正有限时限校验、子工作目录校验、永不 reject 的结果结算与标准 subprocess run-handle 发布；后端与各自 wire driver 组合这些件。",
+   "tags": [
+    "out-of-process",
+    "provider",
+    "settlement",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/subagent/subagent/src/projection-types.ts",
+   "type": "file",
+   "name": "projection-types.ts",
+   "filePath": "packages/subagent/subagent/src/projection-types.ts",
+   "summary": "纯 client 安全的 subagent 投影词汇：catalog 条目字段、身份投影与活动 turn 时序投影类型，扩展 SessionProjectionMap。",
+   "tags": [
+    "type-definition",
+    "projection",
+    "client-safe"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/subagent/subagent/src/projection.ts",
+   "type": "file",
+   "name": "projection.ts",
+   "filePath": "packages/subagent/subagent/src/projection.ts",
+   "summary": "subagent 身份（mode/label）与活动 turn 时长的纯会话投影定义：zod schema 严格校验、以子自身 descriptor 为时序权威起点的 fold，身份投影 fold 永不抛（不可信载荷折叠为无值）。",
+   "tags": [
+    "projection",
+    "session",
+    "zod",
+    "fold"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/subagent/subagent/src/structured.ts",
+   "type": "file",
+   "name": "structured.ts",
+   "filePath": "packages/subagent/subagent/src/structured.ts",
+   "summary": "子代理作用域的结构化输出：STRUCTURED_OUTPUT_TOOL 工具注册、提示指令、终局守卫与权威结果捕获；schema 注册在子自身 scope，并发互不干扰且拆卸无全局残留。",
+   "tags": [
+    "structured-output",
+    "tool",
+    "capture",
+    "scope"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/subagent/subagent/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/subagent/subagent/src/types.ts",
+   "summary": "缝的消费者侧契约：SubagentProvider/SubagentStartRequest/SubagentResult/SubagentRun/能力类型与 subagent/start、subagent/end 事件载荷；内部控制接口归实现文件。",
+   "tags": [
+    "type-definition",
+    "contracts",
+    "provider"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "document:packages/subagent/subagent-acp/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/subagent/subagent-acp/README.md",
+   "summary": "dsh-subagent-acp 文档：何时选用 ACP 进程外后端、配置项、所得能力、停止原因映射、进程边界与安全诊断，附启动/所有权流与 Model Experience。",
+   "tags": [
+    "documentation",
+    "acp",
+    "subagent"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/subagent/subagent-acp/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/subagent/subagent-acp/package.json",
+   "summary": "包清单 @deepseek-ai/dsh-subagent-acp：外部依赖 @agentclientprotocol/sdk，工作区依赖 dsh-subagent/subprocess/timeout 等。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "acp"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/subagent/subagent/src/activation.ts:ActivationPool",
+   "type": "class",
+   "name": "ActivationPool",
+   "filePath": "packages/subagent/subagent/src/activation.ts",
+   "lineRange": [
+    15,
+    35
+   ],
+   "summary": "激活容量池：reserve 占用槽位，控制在驻 continuable 子代理并发上限（配置 maxActiveSubagents，默认 8）。",
+   "tags": [
+    "capacity",
+    "pool",
+    "subagent"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/subagent/subagent/src/activation.ts:ChildLock",
+   "type": "class",
+   "name": "ChildLock",
+   "filePath": "packages/subagent/subagent/src/activation.ts",
+   "lineRange": [
+    161,
+    182
+   ],
+   "summary": "每个子代理的输入准入与关闭互斥：run 串行化消息接受与 settle 决策，保证关闭语义有序。",
+   "tags": [
+    "lock",
+    "admission",
+    "concurrency"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/activation.ts:activationAgent",
+   "type": "function",
+   "name": "activationAgent",
+   "filePath": "packages/subagent/subagent/src/activation.ts",
+   "lineRange": [
+    101,
+    103
+   ],
+   "summary": "从激活记录取回在驻 Agent（仅本地激活有值）。",
+   "tags": [
+    "accessor",
+    "activation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/activation.ts:requireLocalActivation",
+   "type": "function",
+   "name": "requireLocalActivation",
+   "filePath": "packages/subagent/subagent/src/activation.ts",
+   "lineRange": [
+    111,
+    119
+   ],
+   "summary": "断言激活为本地驻留并收窄类型，否则抛 SubagentError。",
+   "tags": [
+    "assertion",
+    "activation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/activation.ts:observeLocalFailure",
+   "type": "function",
+   "name": "observeLocalFailure",
+   "filePath": "packages/subagent/subagent/src/activation.ts",
+   "lineRange": [
+    126,
+    139
+   ],
+   "summary": "记录本地激活失败并唤醒等待方，驱动失败路径的 settle。",
+   "tags": [
+    "failure",
+    "settlement"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/activation.ts:captureLocalResult",
+   "type": "function",
+   "name": "captureLocalResult",
+   "filePath": "packages/subagent/subagent/src/activation.ts",
+   "lineRange": [
+    146,
+    158
+   ],
+   "summary": "从本地激活捕获最终 SubagentResult（含停止原因与输出）。",
+   "tags": [
+    "result",
+    "capture"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/archive-admission.ts:installSubagentArchiveAdmission",
+   "type": "function",
+   "name": "installSubagentArchiveAdmission",
+   "filePath": "packages/subagent/subagent/src/archive-admission.ts",
+   "lineRange": [
+    25,
+    56
+   ],
+   "summary": "向 Workspace registry 安装 subagent 归档准入钩子：仍处 turn 内的后代会阻止归档。",
+   "tags": [
+    "archive",
+    "admission",
+    "install"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/subagent/subagent/src/assistant-output.ts:AssistantOutputFold",
+   "type": "class",
+   "name": "AssistantOutputFold",
+   "filePath": "packages/subagent/subagent/src/assistant-output.ts",
+   "lineRange": [
+    22,
+    60
+   ],
+   "summary": "折叠收集子代理 assistant 输出并实现“最后一条非空消息”选择规则。",
+   "tags": [
+    "fold",
+    "output",
+    "selection"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/assistant-output.ts:finalAssistantOutput",
+   "type": "function",
+   "name": "finalAssistantOutput",
+   "filePath": "packages/subagent/subagent/src/assistant-output.ts",
+   "lineRange": [
+    67,
+    75
+   ],
+   "summary": "从会话事件序列计算子代理最终输出块。",
+   "tags": [
+    "output",
+    "selection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/catalog.ts:establishCatalogChild",
+   "type": "function",
+   "name": "establishCatalogChild",
+   "filePath": "packages/subagent/subagent/src/catalog.ts",
+   "lineRange": [
+    133,
+    136
+   ],
+   "summary": "在父目录中登记一个子代理条目（本地 continuable）。",
+   "tags": [
+    "catalog",
+    "establish"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/catalog.ts:establishExternalCatalogChild",
+   "type": "function",
+   "name": "establishExternalCatalogChild",
+   "filePath": "packages/subagent/subagent/src/catalog.ts",
+   "lineRange": [
+    156,
+    164
+   ],
+   "summary": "登记外部后端执行的目录子条目；外部条目是无本地 Session 的叶子。",
+   "tags": [
+    "catalog",
+    "establish",
+    "external"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/subagent/subagent/src/child-agent.ts:SubagentDepthError",
+   "type": "class",
+   "name": "SubagentDepthError",
+   "filePath": "packages/subagent/subagent/src/child-agent.ts",
+   "lineRange": [
+    32,
+    37
+   ],
+   "summary": "超出委托深度预算时抛出的错误类型。",
+   "tags": [
+    "error",
+    "depth"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/child-agent.ts:resolveChildDepth",
+   "type": "function",
+   "name": "resolveChildDepth",
+   "filePath": "packages/subagent/subagent/src/child-agent.ts",
+   "lineRange": [
+    49,
+    58
+   ],
+   "summary": "解析子代理委托深度限制（父深度+1 与显式限制取小等策略）。",
+   "tags": [
+    "depth",
+    "policy"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/child-agent.ts:parentAgentOptionsForDelegation",
+   "type": "function",
+   "name": "parentAgentOptionsForDelegation",
+   "filePath": "packages/subagent/subagent/src/child-agent.ts",
+   "lineRange": [
+    68,
+    85
+   ],
+   "summary": "从父 Agent 派生委托所需的 AgentOptions 视图。",
+   "tags": [
+    "agent-options",
+    "delegation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/child-agent.ts:resolveChildAgentOptions",
+   "type": "function",
+   "name": "resolveChildAgentOptions",
+   "filePath": "packages/subagent/subagent/src/child-agent.ts",
+   "lineRange": [
+    98,
+    119
+   ],
+   "summary": "解析子代理最终 AgentOptions：组合模型、系统提示、工具与沙箱等配置。",
+   "tags": [
+    "agent-options",
+    "resolution"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/child-agent.ts:childSessionMeta",
+   "type": "function",
+   "name": "childSessionMeta",
+   "filePath": "packages/subagent/subagent/src/child-agent.ts",
+   "lineRange": [
+    135,
+    154
+   ],
+   "summary": "构造子代理会话的持久元数据（身份与祖先链）。",
+   "tags": [
+    "session",
+    "metadata"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/child-agent.ts:applyChildComposition",
+   "type": "function",
+   "name": "applyChildComposition",
+   "filePath": "packages/subagent/subagent/src/child-agent.ts",
+   "lineRange": [
+    187,
+    203
+   ],
+   "summary": "发布前组合子代理：显式选择则挂载命名 preset，省略则并入父当前代；随后应用历史 descriptor 覆盖。注册属于子自身 scope。",
+   "tags": [
+    "composition",
+    "preset",
+    "mount"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/child-agent.ts:applyChildOverrides",
+   "type": "function",
+   "name": "applyChildOverrides",
+   "filePath": "packages/subagent/subagent/src/child-agent.ts",
+   "lineRange": [
+    205,
+    219
+   ],
+   "summary": "恢复历史 descriptor 的 persona/toolFilter 覆盖（冷恢复路径）。",
+   "tags": [
+    "override",
+    "restore"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/child-agent.ts:captureDelegatedPolicyOverrides",
+   "type": "function",
+   "name": "captureDelegatedPolicyOverrides",
+   "filePath": "packages/subagent/subagent/src/child-agent.ts",
+   "lineRange": [
+    249,
+    256
+   ],
+   "summary": "委托时捕获父的策略覆盖：sandbox 覆盖加审批固定。",
+   "tags": [
+    "policy",
+    "capture"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/child-agent.ts:appendDelegatedPolicyOverrides",
+   "type": "function",
+   "name": "appendDelegatedPolicyOverrides",
+   "filePath": "packages/subagent/subagent/src/child-agent.ts",
+   "lineRange": [
+    267,
+    280
+   ],
+   "summary": "把委托策略覆盖写入子会话日志事件，冷恢复不重复捕获。",
+   "tags": [
+    "policy",
+    "session-events"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/continuation-messages.ts:createAgentMessage",
+   "type": "function",
+   "name": "createAgentMessage",
+   "filePath": "packages/subagent/subagent/src/continuation-messages.ts",
+   "lineRange": [
+    63,
+    74
+   ],
+   "summary": "构造子代理树内 steering 用的 agent 来源消息。",
+   "tags": [
+    "message",
+    "steering"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/continuation-messages.ts:withResultDeliveryGuidance",
+   "type": "function",
+   "name": "withResultDeliveryGuidance",
+   "filePath": "packages/subagent/subagent/src/continuation-messages.ts",
+   "lineRange": [
+    81,
+    94
+   ],
+   "summary": "向任务提示附加结果交付指引（可续跑子代理如何回报结果）。",
+   "tags": [
+    "prompt",
+    "guidance"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/continuation-messages.ts:settlementSummary",
+   "type": "function",
+   "name": "settlementSummary",
+   "filePath": "packages/subagent/subagent/src/continuation-messages.ts",
+   "lineRange": [
+    104,
+    127
+   ],
+   "summary": "将结算结果渲染为人类可读摘要文本。",
+   "tags": [
+    "settlement",
+    "render"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/continuation-messages.ts:createSettlementMessage",
+   "type": "function",
+   "name": "createSettlementMessage",
+   "filePath": "packages/subagent/subagent/src/continuation-messages.ts",
+   "lineRange": [
+    138,
+    172
+   ],
+   "summary": "构造 subagent/end 结算消息（模型可见的子结束报告）。",
+   "tags": [
+    "message",
+    "settlement",
+    "model-visible"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/control.ts:validateControlRequest",
+   "type": "function",
+   "name": "validateControlRequest",
+   "filePath": "packages/subagent/subagent/src/control.ts",
+   "lineRange": [
+    32,
+    40
+   ],
+   "summary": "校验浏览器控制请求载荷（prompt/interrupt 的 zod 结构）。",
+   "tags": [
+    "validation",
+    "control"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/control.ts:rejectPrompt",
+   "type": "function",
+   "name": "rejectPrompt",
+   "filePath": "packages/subagent/subagent/src/control.ts",
+   "lineRange": [
+    52,
+    99
+   ],
+   "summary": "按稳定失败码构造 prompt 拒绝响应（Remote surface 的错误词汇）。",
+   "tags": [
+    "rejection",
+    "error-codes",
+    "remote"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/descriptor.ts:parseSubagentDescriptor",
+   "type": "function",
+   "name": "parseSubagentDescriptor",
+   "filePath": "packages/subagent/subagent/src/descriptor.ts",
+   "lineRange": [
+    168,
+    222
+   ],
+   "summary": "解析并严格校验 descriptor 载荷：未知键拒绝、可选字符串/数组规范化、toolFilter 解析。",
+   "tags": [
+    "parse",
+    "validation",
+    "descriptor"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/descriptor.ts:snapshotSubagentDescriptor",
+   "type": "function",
+   "name": "snapshotSubagentDescriptor",
+   "filePath": "packages/subagent/subagent/src/descriptor.ts",
+   "lineRange": [
+    230,
+    249
+   ],
+   "summary": "从激活输入快照出持久 descriptor（只快照显式字段）。",
+   "tags": [
+    "snapshot",
+    "descriptor"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/descriptor.ts:foldSubagentDescriptor",
+   "type": "function",
+   "name": "foldSubagentDescriptor",
+   "filePath": "packages/subagent/subagent/src/descriptor.ts",
+   "lineRange": [
+    263,
+    269
+   ],
+   "summary": "折叠事件流得到最新 descriptor 状态。",
+   "tags": [
+    "fold",
+    "descriptor"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/subagent/subagent/src/index.ts:SubagentRuntime",
+   "type": "class",
+   "name": "SubagentRuntime",
+   "filePath": "packages/subagent/subagent/src/index.ts",
+   "lineRange": [
+    189,
+    555
+   ],
+   "summary": "subagent 能力缝的 Service Definition：命名 provider 注册表 + 能力校验的 startActivation；管理 sendMessage 树内 steering、interrupt、后代发现与深度策略，经 TypertRemoteService 暴露 Remote 面并声明 provider-added/removed 与 start/end 作用域事件。",
+   "tags": [
+    "service-definition",
+    "runtime",
+    "registry",
+    "typert-remote"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/lifecycle.ts:createLifecycleEmitter",
+   "type": "function",
+   "name": "createLifecycleEmitter",
+   "filePath": "packages/subagent/subagent/src/lifecycle.ts",
+   "lineRange": [
+    40,
+    63
+   ],
+   "summary": "创建以 subagent 树根为过滤键的生命周期事件发射器（scoped 派发+监听者包含）。",
+   "tags": [
+    "lifecycle",
+    "emitter",
+    "scope"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/lifecycle.ts:epochStopReason",
+   "type": "function",
+   "name": "epochStopReason",
+   "filePath": "packages/subagent/subagent/src/lifecycle.ts",
+   "lineRange": [
+    81,
+    107
+   ],
+   "summary": "将 epoch 结束状态映射为规范停止原因。",
+   "tags": [
+    "stop-reason",
+    "mapping"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/list-children.ts:listChildren",
+   "type": "function",
+   "name": "listChildren",
+   "filePath": "packages/subagent/subagent/src/list-children.ts",
+   "lineRange": [
+    31,
+    54
+   ],
+   "summary": "读取一个 Session 的直接子目录条目（读取后释放观察）。",
+   "tags": [
+    "discovery",
+    "catalog"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/list-children.ts:listDescendants",
+   "type": "function",
+   "name": "listDescendants",
+   "filePath": "packages/subagent/subagent/src/list-children.ts",
+   "lineRange": [
+    64,
+    126
+   ],
+   "summary": "递归枚举可达子目录的全部后代；外部条目作为叶子，取消时快速失败。",
+   "tags": [
+    "discovery",
+    "recursion",
+    "catalog"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/subagent/subagent/src/manager.ts:SubagentManager",
+   "type": "class",
+   "name": "SubagentManager",
+   "filePath": "packages/subagent/subagent/src/manager.ts",
+   "lineRange": [
+    133,
+    1258
+   ],
+   "summary": "激活管理器：startLocal/startExternal 物化（含冷恢复）、输入准入与投递、容量槽与资源释放、自然结算监看与拆卸失败上报；单锁排序、发布点即所有权转移点。",
+   "tags": [
+    "manager",
+    "activation",
+    "settlement",
+    "ownership"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/out-of-process.ts:assertPositiveFinite",
+   "type": "function",
+   "name": "assertPositiveFinite",
+   "filePath": "packages/subagent/subagent/src/out-of-process.ts",
+   "lineRange": [
+    70,
+    74
+   ],
+   "summary": "断言数值为正有限值（时限等配置）。",
+   "tags": [
+    "assertion",
+    "validation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/out-of-process.ts:assertUsableCwd",
+   "type": "function",
+   "name": "assertUsableCwd",
+   "filePath": "packages/subagent/subagent/src/out-of-process.ts",
+   "lineRange": [
+    104,
+    112
+   ],
+   "summary": "断言子代理工作目录存在且可进入。",
+   "tags": [
+    "assertion",
+    "filesystem"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/out-of-process.ts:settleRunResult",
+   "type": "function",
+   "name": "settleRunResult",
+   "filePath": "packages/subagent/subagent/src/out-of-process.ts",
+   "lineRange": [
+    151,
+    178
+   ],
+   "summary": "把后端运行结果结算为 SubagentResult：永不 reject，错误归入结果。",
+   "tags": [
+    "settlement",
+    "result"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/out-of-process.ts:subprocessRunHandle",
+   "type": "function",
+   "name": "subprocessRunHandle",
+   "filePath": "packages/subagent/subagent/src/out-of-process.ts",
+   "lineRange": [
+    204,
+    217
+   ],
+   "summary": "发布标准 subprocess run-handle（拆卸语义由进程管理层持有）。",
+   "tags": [
+    "run-handle",
+    "subprocess"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/projection.ts:descriptorIdentity",
+   "type": "function",
+   "name": "descriptorIdentity",
+   "filePath": "packages/subagent/subagent/src/projection.ts",
+   "lineRange": [
+    141,
+    158
+   ],
+   "summary": "解释单条 descriptor 事件的身份；不可信载荷折叠为无值（投影 fold 永不抛）。",
+   "tags": [
+    "identity",
+    "projection",
+    "fold"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/structured.ts:attachStructuredRuntime",
+   "type": "function",
+   "name": "attachStructuredRuntime",
+   "filePath": "packages/subagent/subagent/src/structured.ts",
+   "lineRange": [
+    56,
+    155
+   ],
+   "summary": "为进程内子代理挂接结构化输出运行时：scope 内注册工具、注入提示指令、终局守卫与权威 tools/result 提交后才落捕获。",
+   "tags": [
+    "structured-output",
+    "tool",
+    "capture"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/subagent/subagent/src/types.ts:SubagentRunId",
+   "type": "function",
+   "name": "SubagentRunId",
+   "filePath": "packages/subagent/subagent/src/types.ts",
+   "lineRange": [
+    24,
+    26
+   ],
+   "summary": "将字符串 brand 为 SubagentRunId（opaque id 规范）。",
+   "tags": [
+    "brand",
+    "utility"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "file:packages/subagent/subagent/src/assistant-output.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "file:packages/subagent/subagent/src/lifecycle.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "file:packages/subagent/subagent/src/error.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "file:packages/subagent/subagent/src/structured.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "file:packages/subagent/subagent/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/archive-admission.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/archive-admission.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/archive-admission.ts",
+   "target": "file:packages/workspace/workspace/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/archive-admission.ts",
+   "target": "file:packages/subagent/subagent/src/projection-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/assistant-output.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/assistant-output.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/catalog.ts",
+   "target": "file:packages/util/chunked-list/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/catalog.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/catalog.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/catalog.ts",
+   "target": "file:packages/subagent/subagent/src/projection-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "file:packages/core/system-prompt/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "file:packages/sandbox/sandbox-policy/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "file:packages/interaction/user-approval/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "file:packages/interaction/permission-presets/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "file:packages/subagent/subagent/src/depth.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "file:packages/subagent/subagent/src/error.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/client.ts",
+   "target": "file:packages/subagent/subagent/src/control-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/client.ts",
+   "target": "file:packages/subagent/subagent/src/projection-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/continuation-messages.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/continuation-messages.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/continuation-messages.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/continuation-messages.ts",
+   "target": "file:packages/subagent/subagent/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/control-types.ts",
+   "target": "file:packages/attachment/attachment/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/control-types.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/control-types.ts",
+   "target": "file:packages/llm/llm/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/control-types.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/control-types.ts",
+   "target": "file:packages/subagent/subagent/src/projection-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/control-types.ts",
+   "target": "file:packages/workspace/workspace/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/control.ts",
+   "target": "file:packages/attachment/attachment/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/control.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/control.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/control.ts",
+   "target": "file:packages/subagent/subagent/src/error.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/descriptor.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/descriptor.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/descriptor.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/descriptor.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/session/working-directory/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/attachment/attachment/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/core/scope/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/util/time/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/control.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/control-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/error.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/depth.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/lifecycle.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/manager.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/list-children.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/projection.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/catalog.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/out-of-process.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/assistant-output.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/descriptor.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/structured.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/child-agent.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/continuation-messages.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/projection-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/lifecycle.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/lifecycle.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/lifecycle.ts",
+   "target": "file:packages/subagent/subagent/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/list-children.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/list-children.ts",
+   "target": "file:packages/subagent/subagent/src/control-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/list-children.ts",
+   "target": "file:packages/subagent/subagent/src/error.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/list-children.ts",
+   "target": "file:packages/subagent/subagent/src/projection-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/session/working-directory/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/session/session-persistence/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/session-query/session-query/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/subagent/subagent/src/child-agent.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/subagent/subagent/src/continuation-messages.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/subagent/subagent/src/archive-admission.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/subagent/subagent/src/descriptor.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/subagent/subagent/src/catalog.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/subagent/subagent/src/error.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/subagent/subagent/src/lifecycle.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/subagent/subagent/src/projection-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/subagent/subagent/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/subagent/subagent/src/structured.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/subagent/subagent/src/control-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "file:packages/subagent/subagent/src/activation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/out-of-process.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/out-of-process.ts",
+   "target": "file:packages/subagent/subagent/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/projection-types.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/projection.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/projection.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/projection.ts",
+   "target": "file:packages/subagent/subagent/src/descriptor.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/projection.ts",
+   "target": "file:packages/subagent/subagent/src/projection-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/structured.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/structured.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/types.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/types.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/types.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/types.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/types.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "class:packages/subagent/subagent/src/activation.ts:ActivationPool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "class:packages/subagent/subagent/src/activation.ts:ActivationPool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "class:packages/subagent/subagent/src/activation.ts:ChildLock",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "class:packages/subagent/subagent/src/activation.ts:ChildLock",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "function:packages/subagent/subagent/src/activation.ts:activationAgent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "function:packages/subagent/subagent/src/activation.ts:activationAgent",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "function:packages/subagent/subagent/src/activation.ts:requireLocalActivation",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "function:packages/subagent/subagent/src/activation.ts:requireLocalActivation",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "function:packages/subagent/subagent/src/activation.ts:observeLocalFailure",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "function:packages/subagent/subagent/src/activation.ts:observeLocalFailure",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "function:packages/subagent/subagent/src/activation.ts:captureLocalResult",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/activation.ts",
+   "target": "function:packages/subagent/subagent/src/activation.ts:captureLocalResult",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/archive-admission.ts",
+   "target": "function:packages/subagent/subagent/src/archive-admission.ts:installSubagentArchiveAdmission",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/archive-admission.ts",
+   "target": "function:packages/subagent/subagent/src/archive-admission.ts:installSubagentArchiveAdmission",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/assistant-output.ts",
+   "target": "class:packages/subagent/subagent/src/assistant-output.ts:AssistantOutputFold",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/assistant-output.ts",
+   "target": "class:packages/subagent/subagent/src/assistant-output.ts:AssistantOutputFold",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/assistant-output.ts",
+   "target": "function:packages/subagent/subagent/src/assistant-output.ts:finalAssistantOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/assistant-output.ts",
+   "target": "function:packages/subagent/subagent/src/assistant-output.ts:finalAssistantOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/catalog.ts",
+   "target": "function:packages/subagent/subagent/src/catalog.ts:establishCatalogChild",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/catalog.ts",
+   "target": "function:packages/subagent/subagent/src/catalog.ts:establishCatalogChild",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/catalog.ts",
+   "target": "function:packages/subagent/subagent/src/catalog.ts:establishExternalCatalogChild",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/catalog.ts",
+   "target": "function:packages/subagent/subagent/src/catalog.ts:establishExternalCatalogChild",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "class:packages/subagent/subagent/src/child-agent.ts:SubagentDepthError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "class:packages/subagent/subagent/src/child-agent.ts:SubagentDepthError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "function:packages/subagent/subagent/src/child-agent.ts:resolveChildDepth",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "function:packages/subagent/subagent/src/child-agent.ts:resolveChildDepth",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "function:packages/subagent/subagent/src/child-agent.ts:parentAgentOptionsForDelegation",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "function:packages/subagent/subagent/src/child-agent.ts:parentAgentOptionsForDelegation",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "function:packages/subagent/subagent/src/child-agent.ts:resolveChildAgentOptions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "function:packages/subagent/subagent/src/child-agent.ts:resolveChildAgentOptions",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "function:packages/subagent/subagent/src/child-agent.ts:childSessionMeta",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "function:packages/subagent/subagent/src/child-agent.ts:childSessionMeta",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "function:packages/subagent/subagent/src/child-agent.ts:applyChildComposition",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "function:packages/subagent/subagent/src/child-agent.ts:applyChildComposition",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "function:packages/subagent/subagent/src/child-agent.ts:applyChildOverrides",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "function:packages/subagent/subagent/src/child-agent.ts:captureDelegatedPolicyOverrides",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "function:packages/subagent/subagent/src/child-agent.ts:captureDelegatedPolicyOverrides",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "function:packages/subagent/subagent/src/child-agent.ts:appendDelegatedPolicyOverrides",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/child-agent.ts",
+   "target": "function:packages/subagent/subagent/src/child-agent.ts:appendDelegatedPolicyOverrides",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/continuation-messages.ts",
+   "target": "function:packages/subagent/subagent/src/continuation-messages.ts:createAgentMessage",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/continuation-messages.ts",
+   "target": "function:packages/subagent/subagent/src/continuation-messages.ts:createAgentMessage",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/continuation-messages.ts",
+   "target": "function:packages/subagent/subagent/src/continuation-messages.ts:withResultDeliveryGuidance",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/continuation-messages.ts",
+   "target": "function:packages/subagent/subagent/src/continuation-messages.ts:withResultDeliveryGuidance",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/continuation-messages.ts",
+   "target": "function:packages/subagent/subagent/src/continuation-messages.ts:settlementSummary",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/continuation-messages.ts",
+   "target": "function:packages/subagent/subagent/src/continuation-messages.ts:createSettlementMessage",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/continuation-messages.ts",
+   "target": "function:packages/subagent/subagent/src/continuation-messages.ts:createSettlementMessage",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/control.ts",
+   "target": "function:packages/subagent/subagent/src/control.ts:validateControlRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/control.ts",
+   "target": "function:packages/subagent/subagent/src/control.ts:validateControlRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/control.ts",
+   "target": "function:packages/subagent/subagent/src/control.ts:rejectPrompt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/control.ts",
+   "target": "function:packages/subagent/subagent/src/control.ts:rejectPrompt",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/descriptor.ts",
+   "target": "function:packages/subagent/subagent/src/descriptor.ts:parseSubagentDescriptor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/descriptor.ts",
+   "target": "function:packages/subagent/subagent/src/descriptor.ts:snapshotSubagentDescriptor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/descriptor.ts",
+   "target": "function:packages/subagent/subagent/src/descriptor.ts:snapshotSubagentDescriptor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/descriptor.ts",
+   "target": "function:packages/subagent/subagent/src/descriptor.ts:foldSubagentDescriptor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/descriptor.ts",
+   "target": "function:packages/subagent/subagent/src/descriptor.ts:foldSubagentDescriptor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "class:packages/subagent/subagent/src/index.ts:SubagentRuntime",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "class:packages/subagent/subagent/src/index.ts:SubagentRuntime",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/lifecycle.ts",
+   "target": "function:packages/subagent/subagent/src/lifecycle.ts:createLifecycleEmitter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/lifecycle.ts",
+   "target": "function:packages/subagent/subagent/src/lifecycle.ts:createLifecycleEmitter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/lifecycle.ts",
+   "target": "function:packages/subagent/subagent/src/lifecycle.ts:epochStopReason",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/lifecycle.ts",
+   "target": "function:packages/subagent/subagent/src/lifecycle.ts:epochStopReason",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/list-children.ts",
+   "target": "function:packages/subagent/subagent/src/list-children.ts:listChildren",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/list-children.ts",
+   "target": "function:packages/subagent/subagent/src/list-children.ts:listChildren",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/list-children.ts",
+   "target": "function:packages/subagent/subagent/src/list-children.ts:listDescendants",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/list-children.ts",
+   "target": "function:packages/subagent/subagent/src/list-children.ts:listDescendants",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "class:packages/subagent/subagent/src/manager.ts:SubagentManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "class:packages/subagent/subagent/src/manager.ts:SubagentManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/out-of-process.ts",
+   "target": "function:packages/subagent/subagent/src/out-of-process.ts:assertPositiveFinite",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/out-of-process.ts",
+   "target": "function:packages/subagent/subagent/src/out-of-process.ts:assertPositiveFinite",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/out-of-process.ts",
+   "target": "function:packages/subagent/subagent/src/out-of-process.ts:assertUsableCwd",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/out-of-process.ts",
+   "target": "function:packages/subagent/subagent/src/out-of-process.ts:assertUsableCwd",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/out-of-process.ts",
+   "target": "function:packages/subagent/subagent/src/out-of-process.ts:settleRunResult",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/out-of-process.ts",
+   "target": "function:packages/subagent/subagent/src/out-of-process.ts:settleRunResult",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/out-of-process.ts",
+   "target": "function:packages/subagent/subagent/src/out-of-process.ts:subprocessRunHandle",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/out-of-process.ts",
+   "target": "function:packages/subagent/subagent/src/out-of-process.ts:subprocessRunHandle",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/projection.ts",
+   "target": "function:packages/subagent/subagent/src/projection.ts:descriptorIdentity",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/structured.ts",
+   "target": "function:packages/subagent/subagent/src/structured.ts:attachStructuredRuntime",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/structured.ts",
+   "target": "function:packages/subagent/subagent/src/structured.ts:attachStructuredRuntime",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/types.ts",
+   "target": "function:packages/subagent/subagent/src/types.ts:SubagentRunId",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/types.ts",
+   "target": "function:packages/subagent/subagent/src/types.ts:SubagentRunId",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "class:packages/subagent/subagent/src/manager.ts:SubagentManager",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "function:packages/subagent/subagent/src/control.ts:rejectPrompt",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/index.ts",
+   "target": "function:packages/subagent/subagent/src/control.ts:validateControlRequest",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "function:packages/subagent/subagent/src/catalog.ts:establishCatalogChild",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "function:packages/subagent/subagent/src/catalog.ts:establishExternalCatalogChild",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "function:packages/subagent/subagent/src/activation.ts:captureLocalResult",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "function:packages/subagent/subagent/src/activation.ts:observeLocalFailure",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "function:packages/subagent/subagent/src/child-agent.ts:applyChildComposition",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "function:packages/subagent/subagent/src/continuation-messages.ts:createSettlementMessage",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent/src/manager.ts",
+   "target": "function:packages/subagent/subagent/src/archive-admission.ts:installSubagentArchiveAdmission",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "document:packages/subagent/README.md",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/subagent/subagent/README.md",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  }
+ ]
+}

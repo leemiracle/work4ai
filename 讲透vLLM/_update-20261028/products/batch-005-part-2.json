@@ -1,0 +1,1442 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "summary": "EAGLE 系草稿模型加载工具：加载后按需共享 target 的 embed_tokens/lm_head（含 draft_lm_head_quantization 拷贝、MTP per-layer shared_head 修复与 topk_indices_buffer 引用同步）。",
+   "tags": [
+    "model-loading",
+    "eagle",
+    "weight-sharing",
+    "mtp"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/extract_hidden_states.py",
+   "type": "file",
+   "name": "extract_hidden_states.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/extract_hidden_states.py",
+   "summary": "采集型 speculator：草稿 token 恒取 last_sampled（必被接受），同时把 target 各 aux hidden state 堆叠写入预分配缓冲并前向单层 ExtractHiddenStatesModel，用于缓存目标隐状态。",
+   "tags": [
+    "spec-decode",
+    "hidden-states",
+    "debugging"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py",
+   "type": "file",
+   "name": "speculator.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py",
+   "summary": "Gemma4 MTP speculator：Q-only 草稿层跨模型共享 target KV cache（按层类型映射到最后一个非共享 target 层并拷贝 FP8 KV scale），保持 target 强制的 TRITON_ATTN backend 与常数 position。",
+   "tags": [
+    "spec-decode",
+    "gemma4",
+    "kv-sharing",
+    "mtp"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/lilicorr/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/lilicorr/__init__.py",
+   "summary": "lilicorr speculator 包标记文件，仅含 SPDX 头。",
+   "tags": [
+    "package-marker",
+    "spec-decode",
+    "python-package"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/lilicorr/speculator.py",
+   "type": "file",
+   "name": "speculator.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/lilicorr/speculator.py",
+   "summary": "LiLiCorr speculator：继承 DFlash2 候选链机制，额外维护上下文 anchor 隐状态（hidden_norm 归一化 + 拒绝计数截断），并用 target embedding 与 checkpoint LM head 对候选打分。",
+   "tags": [
+    "spec-decode",
+    "lilicorr",
+    "candidate-tree",
+    "anchor"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/mtp/speculator.py",
+   "type": "file",
+   "name": "speculator.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/mtp/speculator.py",
+   "summary": "MTP speculator：复用 load_eagle_model 加载；当 checkpoint 声明 index_share_for_mtp_iteration 时，prefill 步计算一次 DSA top-k 索引并压缩到各请求末 token，draft 步 1+ 复用共享 buffer 跳过 indexer。",
+   "tags": [
+    "spec-decode",
+    "mtp",
+    "deepseek",
+    "topk-reuse"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "type": "file",
+   "name": "speculator.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "summary": "多模块 MTP speculator（多 MTP 头串联）：一组 Triton kernel 准备每模块输入缓冲、拼接 target 隐状态与 embedding、缓存上一步输入以便重新 prefill 陈旧 KV 槽位，支持 chunked-prefill 草稿 token 覆盖。",
+   "tags": [
+    "spec-decode",
+    "mtp",
+    "multi-module",
+    "triton"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/ngram/speculator.py",
+   "type": "file",
+   "name": "speculator.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/ngram/speculator.py",
+   "summary": "GPU n-gram speculator：无需草稿模型，两个 Triton kernel 在全量 token 历史中扫描最长后缀匹配（MIN_N..MAX_N 打包为单分数取最长最右），再从匹配位置 gather K 个草稿 token。",
+   "tags": [
+    "spec-decode",
+    "ngram",
+    "triton",
+    "prompt-lookup"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "type": "file",
+   "name": "rejection_sampler.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "summary": "拒绝采样验证器：按 1GB logits 上限把请求切成最大化打包的 chunk，逐 chunk 应用采样参数、调用 rejection_sample kernel 验证草稿，产出 logprobs/sampling mask 与 num_sampled/num_rejected 统计。",
+   "tags": [
+    "spec-decode",
+    "rejection-sampling",
+    "verification",
+    "chunking"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/spec_decode/extract_hidden_states.py:ExtractHiddenStatesSpeculator",
+   "type": "class",
+   "name": "ExtractHiddenStatesSpeculator",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/extract_hidden_states.py",
+   "summary": "恒接受草稿 token 的隐状态采集 speculator：把 target aux hidden states 写入缓冲并前向单层模型。",
+   "tags": [
+    "spec-decode",
+    "hidden-states",
+    "speculator"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    18,
+    155
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py:Gemma4Speculator",
+   "type": "class",
+   "name": "Gemma4Speculator",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py",
+   "summary": "Gemma4 MTP speculator：跨模型 KV 共享、target KV scale 拷贝、TRITON_ATTN backend 保留与常数 draft position。",
+   "tags": [
+    "spec-decode",
+    "gemma4",
+    "kv-sharing"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    48,
+    187
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/spec_decode/lilicorr/speculator.py:LiLiCorrSpeculator",
+   "type": "class",
+   "name": "LiLiCorrSpeculator",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/lilicorr/speculator.py",
+   "summary": "LiLiCorr speculator：anchor 隐状态维护 + target embedding 候选打分。",
+   "tags": [
+    "spec-decode",
+    "lilicorr",
+    "anchor"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    13,
+    102
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/spec_decode/mtp/speculator.py:MTPSpeculator",
+   "type": "class",
+   "name": "MTPSpeculator",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/mtp/speculator.py",
+   "summary": "MTP speculator：支持 DSA top-k 索引跨 draft step 复用（prefill 计算并压缩、decode 步复用）。",
+   "tags": [
+    "spec-decode",
+    "mtp",
+    "topk"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    12,
+    59
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:MultiModuleMTPSpeculator",
+   "type": "class",
+   "name": "MultiModuleMTPSpeculator",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "summary": "多模块 MTP speculator：逐模块准备输入、缓存与重 prefill 陈旧 KV，全部 Triton kernel 覆盖。",
+   "tags": [
+    "spec-decode",
+    "mtp",
+    "multi-module"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    28,
+    481
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/spec_decode/ngram/speculator.py:NgramGPUSpeculator",
+   "type": "class",
+   "name": "NgramGPUSpeculator",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/ngram/speculator.py",
+   "summary": "V2 GPU n-gram speculator：纯 Triton 后缀匹配起草，无需草稿模型。",
+   "tags": [
+    "spec-decode",
+    "ngram",
+    "prompt-lookup"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    151,
+    279
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py:RejectionSampler",
+   "type": "class",
+   "name": "RejectionSampler",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "summary": "拒绝采样验证器：chunk 化 logits 处理 + rejection_sample 调用 + logprobs/采样 mask 产出。",
+   "tags": [
+    "rejection-sampling",
+    "verification",
+    "spec-decode"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    147,
+    484
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/eagle/utils.py:_should_share",
+   "type": "function",
+   "name": "_should_share",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "summary": "判断草稿是否与 target 共享权重：声明 has_own_* 且两个权重张量相等才保留草稿自有副本（量化打包权重不可比较时保留）。",
+   "tags": [
+    "weight-sharing",
+    "comparison",
+    "eagle"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    18,
+    40
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/eagle/utils.py:get_target_lm_head",
+   "type": "function",
+   "name": "get_target_lm_head",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "summary": "取 target lm_head：ForConditionalGeneration 目标走 language_model，否则顶层模块。",
+   "tags": [
+    "weight-sharing",
+    "lm-head",
+    "eagle"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    43,
+    48
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/eagle/utils.py:maybe_share_target_embed",
+   "type": "function",
+   "name": "maybe_share_target_embed",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "summary": "按需把 target embed_tokens 共享给草稿（剥离 LoRA 包装与 PPMissingLayer，PP 下校验可用性）。",
+   "tags": [
+    "weight-sharing",
+    "embedding",
+    "eagle"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    51,
+    83
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/eagle/utils.py:load_eagle_model",
+   "type": "function",
+   "name": "load_eagle_model",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "summary": "加载 EAGLE/MTP 草稿模型并共享 embed/lm_head/topk buffer（含 draft lm_head 量化拷贝与 MTP per-layer shared_head 修复）。",
+   "tags": [
+    "model-loading",
+    "weight-sharing",
+    "eagle"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    86,
+    153
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py:_copy_target_kv_scales",
+   "type": "function",
+   "name": "_copy_target_kv_scales",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py",
+   "summary": "拷贝 target KV scale 到草稿层，保留草稿层原有的注册表示形式（Parameter/buffer）。",
+   "tags": [
+    "kv-sharing",
+    "quantization",
+    "gemma4"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    27,
+    45
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/ngram/speculator.py:_ngram_scan_kernel",
+   "type": "function",
+   "name": "_ngram_scan_kernel",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/ngram/speculator.py",
+   "summary": "Triton kernel 分块扫描 token 历史寻找最长最右 n-gram 后缀匹配，(n,pos) 打包为单一分数。",
+   "tags": [
+    "triton",
+    "ngram",
+    "matching"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    21,
+    87
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/ngram/speculator.py:_ngram_finalize_kernel",
+   "type": "function",
+   "name": "_ngram_finalize_kernel",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/ngram/speculator.py",
+   "summary": "归约各块分数并从匹配位置 gather K 个草稿 token（无效槽回退 last sampled token）。",
+   "tags": [
+    "triton",
+    "ngram",
+    "gather"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    91,
+    148
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py:_iter_request_chunks",
+   "type": "function",
+   "name": "_iter_request_chunks",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "summary": "按 logits 行上限生成最大化打包的请求区间迭代器（不拆分单个请求）。",
+   "tags": [
+    "chunking",
+    "scheduler",
+    "logits"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    42,
+    54
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py:_flatten_sampled_kernel",
+   "type": "function",
+   "name": "_flatten_sampled_kernel",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "summary": "Triton kernel 把每请求 sampled token 展平到 logits 行布局。",
+   "tags": [
+    "triton",
+    "flatten",
+    "spec-decode"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    58,
+    74
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py:_gather_draft_sampled_kernel",
+   "type": "function",
+   "name": "_gather_draft_sampled_kernel",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "summary": "gather 每 logits 行的输入 token/position，仍在 prefill 内的草稿槽置 -1 使其被拒绝。",
+   "tags": [
+    "triton",
+    "gather",
+    "verification"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    78,
+    112
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py:gather_draft_sampled",
+   "type": "function",
+   "name": "gather_draft_sampled",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "summary": "_gather_draft_sampled_kernel 的 Python 封装。",
+   "tags": [
+    "triton",
+    "wrapper",
+    "kernel-launcher"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    115,
+    144
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:_prepare_input_buffers_kernel",
+   "type": "function",
+   "name": "_prepare_input_buffers_kernel",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "summary": "Triton kernel 准备多模块 MTP 每模块输入缓冲（采样索引/位置/映射列）。",
+   "tags": [
+    "triton",
+    "input-preparation",
+    "mtp"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    485,
+    618
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:prepare_input_buffers",
+   "type": "function",
+   "name": "prepare_input_buffers",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "summary": "输入缓冲准备 kernel 的 Python 封装。",
+   "tags": [
+    "triton",
+    "wrapper",
+    "kernel-launcher"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    621,
+    664
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:_prepare_input_hidden_states_and_embeddings_kernel",
+   "type": "function",
+   "name": "_prepare_input_hidden_states_and_embeddings_kernel",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "summary": "Triton kernel 拼接 target 隐状态与 embedding 输入喂给各 MTP 模块。",
+   "tags": [
+    "triton",
+    "hidden-states",
+    "mtp"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    668,
+    768
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:prepare_input_hidden_states_and_embeddings",
+   "type": "function",
+   "name": "prepare_input_hidden_states_and_embeddings",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "summary": "隐状态/embedding 拼接 kernel 的 Python 封装。",
+   "tags": [
+    "triton",
+    "wrapper",
+    "kernel-launcher"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    771,
+    829
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:_pad_trailing_draft_slots_kernel",
+   "type": "function",
+   "name": "_pad_trailing_draft_slots_kernel",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "summary": "Triton kernel 把尾部草稿槽补齐到固定形状（CUDA graph 捕获用）。",
+   "tags": [
+    "triton",
+    "padding",
+    "mtp"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    833,
+    852
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:pad_trailing_draft_slots",
+   "type": "function",
+   "name": "pad_trailing_draft_slots",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "summary": "尾部补齐 kernel 的 Python 封装。",
+   "tags": [
+    "triton",
+    "wrapper",
+    "kernel-launcher"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    855,
+    872
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:_cache_inputs_kernel",
+   "type": "function",
+   "name": "_cache_inputs_kernel",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "summary": "Triton kernel 缓存本步输入 id/embedding/隐状态，供后续模块重 prefill 陈旧 KV。",
+   "tags": [
+    "triton",
+    "cache",
+    "mtp"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    876,
+    952
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:cache_inputs",
+   "type": "function",
+   "name": "cache_inputs",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "summary": "输入缓存 kernel 的 Python 封装。",
+   "tags": [
+    "triton",
+    "wrapper",
+    "kernel-launcher"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    955,
+    1002
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:_shift_input_ids_kernel",
+   "type": "function",
+   "name": "_shift_input_ids_kernel",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "summary": "Triton kernel 步间移位输入 id。",
+   "tags": [
+    "triton",
+    "shift",
+    "mtp"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1006,
+    1034
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:_shift_input_embeds_kernel",
+   "type": "function",
+   "name": "_shift_input_embeds_kernel",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "summary": "Triton kernel 步间移位输入 embedding。",
+   "tags": [
+    "triton",
+    "shift",
+    "mtp"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1038,
+    1091
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:update_draft_inputs",
+   "type": "function",
+   "name": "update_draft_inputs",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "summary": "步间推进草稿输入的 Python 编排。",
+   "tags": [
+    "triton",
+    "wrapper",
+    "kernel-launcher"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1094,
+    1128
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "target": "file:vllm/compilation/backends.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "target": "file:vllm/lora/layers/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/online/lm_head.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "target": "file:vllm/model_executor/model_loader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "target": "file:vllm/model_executor/model_loader/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/compilation/backends.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/model_executor/model_loader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/v1/worker/gpu/dp_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py",
+   "target": "file:vllm/compilation/backends.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py",
+   "target": "file:vllm/model_executor/model_loader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py",
+   "target": "file:vllm/model_executor/model_loader/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/target_dependent_ar/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/lilicorr/speculator.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/lilicorr/speculator.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/lilicorr/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/lilicorr/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/mtp/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/mtp/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/target_dependent_ar/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/attn_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/dp_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/target_dependent_ar/cudagraph_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "file:vllm/v1/worker/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/ngram/speculator.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/ngram/speculator.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/ngram/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/ngram/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "file:vllm/config/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "file:vllm/v1/spec_decode/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "file:vllm/v1/watermarking/gpu_sampler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "file:vllm/v1/worker/gpu/metrics/logits.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "file:vllm/v1/worker/gpu/sample/logprob.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "file:vllm/v1/worker/gpu/sample/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "file:vllm/v1/worker/gpu/sample/states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/extract_hidden_states.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/extract_hidden_states.py:ExtractHiddenStatesSpeculator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py:Gemma4Speculator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py:_copy_target_kv_scales",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/lilicorr/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/lilicorr/speculator.py:LiLiCorrSpeculator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/mtp/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/mtp/speculator.py:MTPSpeculator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:MultiModuleMTPSpeculator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:_prepare_input_buffers_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:prepare_input_buffers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:_prepare_input_hidden_states_and_embeddings_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:prepare_input_hidden_states_and_embeddings",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:_pad_trailing_draft_slots_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:pad_trailing_draft_slots",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:_cache_inputs_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:cache_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:_shift_input_ids_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:_shift_input_embeds_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:update_draft_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/ngram/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/ngram/speculator.py:NgramGPUSpeculator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/ngram/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/ngram/speculator.py:_ngram_scan_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/ngram/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/ngram/speculator.py:_ngram_finalize_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py:RejectionSampler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py:_iter_request_chunks",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py:_flatten_sampled_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py:_gather_draft_sampled_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py:gather_draft_sampled",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/utils.py:_should_share",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/utils.py:get_target_lm_head",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/utils.py:maybe_share_target_embed",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/utils.py:load_eagle_model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/extract_hidden_states.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/extract_hidden_states.py:ExtractHiddenStatesSpeculator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py:Gemma4Speculator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/lilicorr/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/lilicorr/speculator.py:LiLiCorrSpeculator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/mtp/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/mtp/speculator.py:MTPSpeculator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:MultiModuleMTPSpeculator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:prepare_input_buffers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:prepare_input_hidden_states_and_embeddings",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:pad_trailing_draft_slots",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:cache_inputs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:update_draft_inputs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/ngram/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/ngram/speculator.py:NgramGPUSpeculator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py:RejectionSampler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py:gather_draft_sampled",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/utils.py:get_target_lm_head",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/utils.py:maybe_share_target_embed",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/utils.py:load_eagle_model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/lilicorr/speculator.py:LiLiCorrSpeculator",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py:DFlash2Speculator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/mtp/speculator.py:MTPSpeculator",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/target_dependent_ar/speculator.py:TargetDependentARSpeculator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py:Gemma4Speculator",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/target_dependent_ar/speculator.py:TargetDependentARSpeculator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/extract_hidden_states.py:ExtractHiddenStatesSpeculator",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/speculator.py:DraftModelSpeculator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:MultiModuleMTPSpeculator",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/speculator.py:DraftModelSpeculator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/ngram/speculator.py:NgramGPUSpeculator",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/speculator.py:BaseSpeculator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/mtp/speculator.py:MTPSpeculator",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/utils.py:load_eagle_model",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/lilicorr/speculator.py:LiLiCorrSpeculator",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/utils.py:get_target_lm_head",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py:RejectionSampler",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/rejection_sampler_utils.py:rejection_sample",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py:RejectionSampler",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/rejection_sampler.py:gather_draft_sampled",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py:MultiModuleMTPSpeculator",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/utils.py:load_eagle_model",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

@@ -1,0 +1,2927 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/entrypoints/serve/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/entrypoints/serve/__init__.py",
+   "summary": "serve 子包入口：register_vllm_serve_api_routers 注册生产路由（instrumentator/lora/profile/tokenize），register_vllm_dev_api_routers 注册开发路由（cache/rpc/server_info/sleep，附安全告警）。",
+   "tags": [
+    "entry-point",
+    "router-registration",
+    "barrel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/__init__.py:register_vllm_serve_api_routers",
+   "type": "function",
+   "name": "register_vllm_serve_api_routers",
+   "filePath": "vllm/entrypoints/serve/__init__.py",
+   "lineRange": [
+    19,
+    40
+   ],
+   "summary": "向 FastAPI app 挂生产级路由：metrics/instrumentator、LoRA 动态加载、profiling、tokenize。",
+   "tags": [
+    "router-registration",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/__init__.py:register_vllm_dev_api_routers",
+   "type": "function",
+   "name": "register_vllm_dev_api_routers",
+   "filePath": "vllm/entrypoints/serve/__init__.py",
+   "lineRange": [
+    43,
+    65
+   ],
+   "summary": "向 app 挂开发态路由（cache/rpc/server_info/sleep），打 SECURITY WARNING。",
+   "tags": [
+    "router-registration",
+    "dev-only"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/checkpoint/api_router.py",
+   "type": "file",
+   "name": "api_router.py",
+   "filePath": "vllm/entrypoints/serve/checkpoint/api_router.py",
+   "summary": "checkpoint 端点路由：/checkpoint/prepare、/checkpoint/restore、/checkpoint/status 三端点，委托 EngineClient 的 CheckpointState/PauseMode 机制（引擎级权重/状态快照）。",
+   "tags": [
+    "api-router",
+    "checkpoint",
+    "persistence"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/checkpoint/api_router.py:CheckpointStateResponse",
+   "type": "class",
+   "name": "CheckpointStateResponse",
+   "filePath": "vllm/entrypoints/serve/checkpoint/api_router.py",
+   "lineRange": [
+    21,
+    23
+   ],
+   "summary": "checkpoint 状态响应模型：state 与可选 error 字段。",
+   "tags": [
+    "protocol",
+    "checkpoint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/checkpoint/api_router.py:checkpoint_prepare",
+   "type": "function",
+   "name": "checkpoint_prepare",
+   "filePath": "vllm/entrypoints/serve/checkpoint/api_router.py",
+   "lineRange": [
+    46,
+    57
+   ],
+   "summary": "/checkpoint/prepare handler：请求引擎准备 checkpoint（排空并落盘）。",
+   "tags": [
+    "endpoint",
+    "checkpoint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/checkpoint/api_router.py:checkpoint_restore",
+   "type": "function",
+   "name": "checkpoint_restore",
+   "filePath": "vllm/entrypoints/serve/checkpoint/api_router.py",
+   "lineRange": [
+    67,
+    77
+   ],
+   "summary": "/checkpoint/restore handler：从 checkpoint 恢复引擎状态。",
+   "tags": [
+    "endpoint",
+    "checkpoint",
+    "restore"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/checkpoint/api_router.py:checkpoint_status",
+   "type": "function",
+   "name": "checkpoint_status",
+   "filePath": "vllm/entrypoints/serve/checkpoint/api_router.py",
+   "lineRange": [
+    88,
+    98
+   ],
+   "summary": "/checkpoint/status handler：查询当前 checkpoint 状态机。",
+   "tags": [
+    "endpoint",
+    "checkpoint",
+    "status"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/dev/cache/api_router.py",
+   "type": "file",
+   "name": "api_router.py",
+   "filePath": "vllm/entrypoints/serve/dev/cache/api_router.py",
+   "summary": "开发态缓存管理端点：reset_prefix_cache（前缀 KV cache）、reset_mm_cache、reset_encoder_cache 三端点，均直通 EngineClient。",
+   "tags": [
+    "api-router",
+    "cache",
+    "dev-only"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/dev/cache/api_router.py:reset_prefix_cache",
+   "type": "function",
+   "name": "reset_prefix_cache",
+   "filePath": "vllm/entrypoints/serve/dev/cache/api_router.py",
+   "lineRange": [
+    21,
+    44
+   ],
+   "summary": "/reset_prefix_cache handler：清空前缀 KV cache 并回报成功/失败。",
+   "tags": [
+    "endpoint",
+    "cache"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/dev/rpc/api_router.py",
+   "type": "file",
+   "name": "api_router.py",
+   "filePath": "vllm/entrypoints/serve/dev/rpc/api_router.py",
+   "summary": "开发态 RPC 透传端点：collective_rpc 把任意方法名+参数广播到引擎 worker 执行（调试利器，生产禁用）。",
+   "tags": [
+    "api-router",
+    "rpc",
+    "dev-only"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/dev/rpc/api_router.py:collective_rpc",
+   "type": "function",
+   "name": "collective_rpc",
+   "filePath": "vllm/entrypoints/serve/dev/rpc/api_router.py",
+   "lineRange": [
+    24,
+    59
+   ],
+   "summary": "/collective_rpc handler：解析 method/params 并收集各 worker 的 RPC 结果。",
+   "tags": [
+    "endpoint",
+    "rpc",
+    "debug"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/dev/sleep/api_router.py",
+   "type": "file",
+   "name": "api_router.py",
+   "filePath": "vllm/entrypoints/serve/dev/sleep/api_router.py",
+   "summary": "开发态 sleep 模式端点：/sleep(level 1-2, mode)、/wake_up、/release_kv_cache_memory、/is_sleeping——KV cache 与权重分级卸载以腾出显存（与 CheckpointState 联动），各操作带耗时指标。",
+   "tags": [
+    "api-router",
+    "sleep-mode",
+    "memory",
+    "dev-only"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/dev/sleep/api_router.py:sleep",
+   "type": "function",
+   "name": "sleep",
+   "filePath": "vllm/entrypoints/serve/dev/sleep/api_router.py",
+   "lineRange": [
+    27,
+    34
+   ],
+   "summary": "/sleep handler：level 1 卸 KV cache、level 2 连权重一起卸（PauseMode abort/keep）。",
+   "tags": [
+    "endpoint",
+    "sleep-mode"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/dev/sleep/api_router.py:release_kv_cache_memory",
+   "type": "function",
+   "name": "release_kv_cache_memory",
+   "filePath": "vllm/entrypoints/serve/dev/sleep/api_router.py",
+   "lineRange": [
+    38,
+    41
+   ],
+   "summary": "/release_kv_cache_memory handler：显式释放 KV cache 显存。",
+   "tags": [
+    "endpoint",
+    "memory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/dev/sleep/api_router.py:wake_up",
+   "type": "function",
+   "name": "wake_up",
+   "filePath": "vllm/entrypoints/serve/dev/sleep/api_router.py",
+   "lineRange": [
+    45,
+    55
+   ],
+   "summary": "/wake_up handler：从 sleep 状态恢复权重与 KV cache。",
+   "tags": [
+    "endpoint",
+    "wake-up"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/dev/sleep/metrics.py",
+   "type": "file",
+   "name": "metrics.py",
+   "filePath": "vllm/entrypoints/serve/dev/sleep/metrics.py",
+   "summary": "sleep 模式操作指标：SleepModeOperationMetrics 记录 sleep/wake_up 各操作的耗时直方图，经 contextlib 上下文挂到 metrics endpoint。",
+   "tags": [
+    "metrics",
+    "sleep-mode",
+    "observability"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/dev/sleep/metrics.py:SleepModeOperationMetrics",
+   "type": "class",
+   "name": "SleepModeOperationMetrics",
+   "filePath": "vllm/entrypoints/serve/dev/sleep/metrics.py",
+   "lineRange": [
+    17,
+    44
+   ],
+   "summary": "按操作名记录耗时的指标上下文管理器（record() 包裹操作段）。",
+   "tags": [
+    "metrics",
+    "context-manager",
+    "timing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/dev/sleep/metrics.py:sleep_mode_operation_metrics",
+   "type": "function",
+   "name": "sleep_mode_operation_metrics",
+   "filePath": "vllm/entrypoints/serve/dev/sleep/metrics.py",
+   "lineRange": [
+    51,
+    57
+   ],
+   "summary": "惰性构造共享的 SleepModeOperationMetrics 单例。",
+   "tags": [
+    "metrics",
+    "singleton",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/elastic_ep/api_router.py",
+   "type": "file",
+   "name": "api_router.py",
+   "filePath": "vllm/entrypoints/serve/elastic_ep/api_router.py",
+   "summary": "弹性专家并行（Elastic EP）伸缩端点：/scale_elastic_ep（改 DP size，drain 超时控制）与 /is_scaling_elastic_ep 查询；伸缩期经 ScalingMiddleware 挡请求，外部编排器可重试探测。",
+   "tags": [
+    "api-router",
+    "elastic-ep",
+    "autoscaling"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/elastic_ep/api_router.py:scale_elastic_ep",
+   "type": "function",
+   "name": "scale_elastic_ep",
+   "filePath": "vllm/entrypoints/serve/elastic_ep/api_router.py",
+   "lineRange": [
+    38,
+    81
+   ],
+   "summary": "/scale_elastic_ep handler：解析 new_data_parallel_size/drain_timeout，触发引擎弹性伸缩并在期间协调 rank 退役。",
+   "tags": [
+    "endpoint",
+    "elastic-ep",
+    "scaling"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/elastic_ep/api_router.py:is_scaling_elastic_ep",
+   "type": "function",
+   "name": "is_scaling_elastic_ep",
+   "filePath": "vllm/entrypoints/serve/elastic_ep/api_router.py",
+   "lineRange": [
+    85,
+    114
+   ],
+   "summary": "/is_scaling_elastic_ep handler：查询当前是否处于伸缩中（供编排器 503 重试）。",
+   "tags": [
+    "endpoint",
+    "elastic-ep",
+    "status"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/elastic_ep/middleware.py",
+   "type": "file",
+   "name": "middleware.py",
+   "filePath": "vllm/entrypoints/serve/elastic_ep/middleware.py",
+   "summary": "弹性 EP 伸缩协调中间件：ScalingMiddleware 在伸缩期间对受影响 rank 的请求快速返回 503；ContextVar 存取 scaling 状态与 rank 退役标志。",
+   "tags": [
+    "middleware",
+    "elastic-ep",
+    "backpressure"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/elastic_ep/middleware.py:ScalingMiddleware",
+   "type": "class",
+   "name": "ScalingMiddleware",
+   "filePath": "vllm/entrypoints/serve/elastic_ep/middleware.py",
+   "lineRange": [
+    35,
+    65
+   ],
+   "summary": "纯 ASGI 中间件：伸缩期或本 rank 已退役时返回 503 JSON，否则放行。",
+   "tags": [
+    "middleware",
+    "asgi",
+    "load-shedding"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "file",
+   "name": "protocol.py",
+   "filePath": "vllm/entrypoints/serve/engine/protocol.py",
+   "summary": "serve 层共享协议基座：OpenAIBaseModel（camelCase 别名+随机 id 的基模型）、ErrorResponse/ErrorInfo、模型卡（ModelCard/ModelList/ModelPermission）与 UsageInfo token 用量信息——被全部生成/池化端点协议复用。",
+   "tags": [
+    "protocol",
+    "base-model",
+    "openai-api",
+    "shared"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/engine/protocol.py:OpenAIBaseModel",
+   "type": "class",
+   "name": "OpenAIBaseModel",
+   "filePath": "vllm/entrypoints/serve/engine/protocol.py",
+   "lineRange": [
+    37,
+    76
+   ],
+   "summary": "全部 OpenAI 兼容协议的 pydantic 基类：camelCase 序列化别名与随机 request id。",
+   "tags": [
+    "protocol",
+    "base-class",
+    "openai-api"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/engine/protocol.py:ModelCard",
+   "type": "class",
+   "name": "ModelCard",
+   "filePath": "vllm/entrypoints/serve/engine/protocol.py",
+   "lineRange": [
+    105,
+    113
+   ],
+   "summary": "/v1/models 单卡响应：id/created/owned_by/permission。",
+   "tags": [
+    "protocol",
+    "models-api"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/engine/protocol.py:UsageInfo",
+   "type": "class",
+   "name": "UsageInfo",
+   "filePath": "vllm/entrypoints/serve/engine/protocol.py",
+   "lineRange": [
+    135,
+    140
+   ],
+   "summary": "token 用量统计（prompt/completion/total + 缓存命中细分），全部响应共享。",
+   "tags": [
+    "protocol",
+    "usage",
+    "statistics"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/engine/serving.py",
+   "type": "file",
+   "name": "serving.py",
+   "filePath": "vllm/entrypoints/serve/engine/serving.py",
+   "summary": "全部在线 Serving 类的公共基座：BaseServing 持模型注册表/请求日志器，提供 trace header 提取、模型与 LoRA 解析校验、prompt 预处理（extract_prompt_components）与请求体日志等共享方法。",
+   "tags": [
+    "serving",
+    "base-class",
+    "shared"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/engine/serving.py:BaseServing",
+   "type": "class",
+   "name": "BaseServing",
+   "filePath": "vllm/entrypoints/serve/engine/serving.py",
+   "lineRange": [
+    31,
+    213
+   ],
+   "summary": "服务基类：_check_model/_validate_request/_log_inputs 等共享钩子，被 chat/completions/pooling/tokenize 各 Serving 继承。",
+   "tags": [
+    "base-class",
+    "serving",
+    "model-resolution"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/engine/typing.py",
+   "type": "file",
+   "name": "typing.py",
+   "filePath": "vllm/entrypoints/serve/engine/typing.py",
+   "summary": "serve 层请求类型枢纽：RendererRequest/RendererChatRequest Protocol（build_tok_params/build_chat_params 鸭子接口）与聚合全部端点请求类型的 AnyRequest 联合别名（chat/completion/responses/derender/transcription/tokenize 等）。",
+   "tags": [
+    "type-definition",
+    "protocol",
+    "shared"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/engine/typing.py:RendererRequest",
+   "type": "class",
+   "name": "RendererRequest",
+   "filePath": "vllm/entrypoints/serve/engine/typing.py",
+   "lineRange": [
+    40,
+    42
+   ],
+   "summary": "渲染请求 Protocol：任何能 build_tok_params(ModelConfig) 的请求对象。",
+   "tags": [
+    "protocol",
+    "type-definition"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/engine/typing.py:RendererChatRequest",
+   "type": "class",
+   "name": "RendererChatRequest",
+   "filePath": "vllm/entrypoints/serve/engine/typing.py",
+   "lineRange": [
+    45,
+    51
+   ],
+   "summary": "chat 渲染请求 Protocol：在 RendererRequest 上追加 build_chat_params（模板与内容格式）。",
+   "tags": [
+    "protocol",
+    "type-definition",
+    "chat"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/exception_handling/error_response.py",
+   "type": "file",
+   "name": "error_response.py",
+   "filePath": "vllm/entrypoints/serve/exception_handling/error_response.py",
+   "summary": "统一错误响应构造：create_error_response 把异常映射为 ErrorResponse（含 traceback 日志、消息脱敏），支持 HTTP status/error code 双层语义。",
+   "tags": [
+    "error-handling",
+    "response-builder"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/exception_handling/error_response.py:create_error_response",
+   "type": "function",
+   "name": "create_error_response",
+   "filePath": "vllm/entrypoints/serve/exception_handling/error_response.py",
+   "lineRange": [
+    14,
+    105
+   ],
+   "summary": "从 status/异常构造 ErrorResponse（脱敏消息、按需记 traceback），是全部 handler 的兜底出口。",
+   "tags": [
+    "error-handling",
+    "factory"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py",
+   "type": "file",
+   "name": "vllm_error.py",
+   "filePath": "vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py",
+   "summary": "vLLM 专属异常 handler：vllm_error_handler（生命周期异常映射）、engine_error_handler（EngineDeadError 触发服务器关闭）、generation_error_handler（流中异步异常）三种 ExceptionHandler。",
+   "tags": [
+    "error-handling",
+    "exception-handler",
+    "lifecycle"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py:vllm_error_handler",
+   "type": "function",
+   "name": "vllm_error_handler",
+   "filePath": "vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py",
+   "lineRange": [
+    18,
+    25
+   ],
+   "summary": "注册为 FastAPI exception handler：把 vLLM 校验/运行时异常转为统一错误响应。",
+   "tags": [
+    "exception-handler",
+    "error-handling"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py:engine_error_handler",
+   "type": "function",
+   "name": "engine_error_handler",
+   "filePath": "vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py",
+   "lineRange": [
+    28,
+    66
+   ],
+   "summary": "EngineDeadError 处理：请求 failover 信号后调用 launcher 关闭服务器。",
+   "tags": [
+    "exception-handler",
+    "engine-crash",
+    "shutdown"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py:generation_error_handler",
+   "type": "function",
+   "name": "generation_error_handler",
+   "filePath": "vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py",
+   "lineRange": [
+    69,
+    77
+   ],
+   "summary": "流式生成中的异步异常处理（generator 内抛错转错误事件）。",
+   "tags": [
+    "exception-handler",
+    "streaming"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/exception_handling/register.py",
+   "type": "file",
+   "name": "register.py",
+   "filePath": "vllm/entrypoints/serve/exception_handling/register.py",
+   "summary": "异常 handler 注册入口：init_exception_handler 向 app 注册 http/validation/exception/vllm_error 全套 handler。",
+   "tags": [
+    "error-handling",
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/exception_handling/register.py:init_exception_handler",
+   "type": "function",
+   "name": "init_exception_handler",
+   "filePath": "vllm/entrypoints/serve/exception_handling/register.py",
+   "lineRange": [
+    26,
+    42
+   ],
+   "summary": "统一注册点：按序挂接各层异常 handler 到 FastAPI app。",
+   "tags": [
+    "registration",
+    "error-handling"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/exception_handling/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/entrypoints/serve/exception_handling/utils.py",
+   "summary": "异常工具：sanitize_message 清洗错误消息中可能泄露的内部信息。",
+   "tags": [
+    "error-handling",
+    "sanitization",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/exception_handling/utils.py:sanitize_message",
+   "type": "function",
+   "name": "sanitize_message",
+   "filePath": "vllm/entrypoints/serve/exception_handling/utils.py",
+   "lineRange": [
+    7,
+    15
+   ],
+   "summary": "脱敏异常消息（去内部路径/堆栈细节）后用于对外错误响应。",
+   "tags": [
+    "sanitization",
+    "security"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/instrumentator/basic.py",
+   "type": "file",
+   "name": "basic.py",
+   "filePath": "vllm/entrypoints/serve/instrumentator/basic.py",
+   "summary": "基础观测路由：/health、/version（vLLM 版本）、/load（当前服务器负载指标：运行中请求数/GPU 利用率快照）与 KV event sources 元数据端点。",
+   "tags": [
+    "observability",
+    "health-check",
+    "metrics"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/instrumentator/basic.py:base",
+   "type": "function",
+   "name": "base",
+   "filePath": "vllm/entrypoints/serve/instrumentator/basic.py",
+   "lineRange": [
+    17,
+    19
+   ],
+   "summary": "依赖注入：复用 app.state.serving_tokenization 实例。",
+   "tags": [
+    "dependency-injection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/instrumentator/basic.py:get_server_load_metrics",
+   "type": "function",
+   "name": "get_server_load_metrics",
+   "filePath": "vllm/entrypoints/serve/instrumentator/basic.py",
+   "lineRange": [
+    31,
+    50
+   ],
+   "summary": "/load handler：聚合各生成端点的在途请求计数等负载指标。",
+   "tags": [
+    "endpoint",
+    "load-metrics"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/instrumentator/metrics.py",
+   "type": "file",
+   "name": "metrics.py",
+   "filePath": "vllm/entrypoints/serve/instrumentator/metrics.py",
+   "summary": "/metrics 端点：patch prometheus instrumentator 的 route walk 以暴露 vLLM 自定义指标，PrometheusResponse 直接吐 Prometheus 文本格式。",
+   "tags": [
+    "metrics",
+    "prometheus",
+    "observability"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/instrumentator/metrics.py:_patch_instrumentator_route_walk",
+   "type": "function",
+   "name": "_patch_instrumentator_route_walk",
+   "filePath": "vllm/entrypoints/serve/instrumentator/metrics.py",
+   "lineRange": [
+    17,
+    46
+   ],
+   "summary": "monkey-patch instrumentator 的路由遍历，注入 vLLM prometheus 指标收集。",
+   "tags": [
+    "monkey-patch",
+    "metrics"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/instrumentator/metrics.py:attach_router",
+   "type": "function",
+   "name": "attach_router",
+   "filePath": "vllm/entrypoints/serve/instrumentator/metrics.py",
+   "lineRange": [
+    56,
+    81
+   ],
+   "summary": "挂接 /metrics 路由并返回 PrometheusResponse 内容类型。",
+   "tags": [
+    "router-registration",
+    "metrics"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/instrumentator/metrics.py:PrometheusResponse",
+   "type": "class",
+   "name": "PrometheusResponse",
+   "filePath": "vllm/entrypoints/serve/instrumentator/metrics.py",
+   "lineRange": [
+    52,
+    53
+   ],
+   "summary": "Prometheus 文本格式的 Response 声明（供 OpenAPI schema 用）。",
+   "tags": [
+    "response",
+    "prometheus"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/lora/api_router.py",
+   "type": "file",
+   "name": "api_router.py",
+   "filePath": "vllm/entrypoints/serve/lora/api_router.py",
+   "summary": "LoRA 动态加载端点：/v1/load_lora_adapter 与 /v1/unload_lora_adapter，仅 VLLM_ALLOW_RUNTIME_LORA_UPDATING 开启时挂载（本地开发用途），attach 时做 logging handler 级别快照/恢复。",
+   "tags": [
+    "api-router",
+    "lora",
+    "dynamic-loading"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/lora/api_router.py:attach_router",
+   "type": "function",
+   "name": "attach_router",
+   "filePath": "vllm/entrypoints/serve/lora/api_router.py",
+   "lineRange": [
+    23,
+    48
+   ],
+   "summary": "按环境开关决定是否挂载 LoRA 动态路由，并保护日志级别不被三方库重配。",
+   "tags": [
+    "router-registration",
+    "feature-flag"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/lora/api_router.py:_attach_router",
+   "type": "function",
+   "name": "_attach_router",
+   "filePath": "vllm/entrypoints/serve/lora/api_router.py",
+   "lineRange": [
+    51,
+    99
+   ],
+   "summary": "实际挂载逻辑：load/unload 两端点委托 OpenAIServingModels 的适配器增删。",
+   "tags": [
+    "endpoint",
+    "lora",
+    "adapter-management"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/middleware/authenticate.py",
+   "type": "file",
+   "name": "authenticate.py",
+   "filePath": "vllm/entrypoints/serve/middleware/authenticate.py",
+   "summary": "API Key 鉴权中间件：AuthenticationMiddleware 校验 Authorization Bearer 与配置 token（sha256 比对防时序侧信道），仅守卫 /v1 /v2 /inference /cohere 前缀，OPTIONS 与健康检查放行。",
+   "tags": [
+    "middleware",
+    "authentication",
+    "security"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/middleware/authenticate.py:AuthenticationMiddleware",
+   "type": "class",
+   "name": "AuthenticationMiddleware",
+   "filePath": "vllm/entrypoints/serve/middleware/authenticate.py",
+   "lineRange": [
+    14,
+    62
+   ],
+   "summary": "纯 ASGI 鉴权中间件：token 以 sha256 摘要存储+常数时间比较，未授权返回 401。",
+   "tags": [
+    "middleware",
+    "asgi",
+    "security"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/middleware/log_response.py",
+   "type": "file",
+   "name": "log_response.py",
+   "filePath": "vllm/entrypoints/serve/middleware/log_response.py",
+   "summary": "响应日志中间件：SSEDecoder 稳健解析流式 chunk，从 chat/completion 流与非流响应抽取生成内容并记日志（VLLM_LOG_RESPONSE_LEVEL 开关）。",
+   "tags": [
+    "middleware",
+    "logging",
+    "streaming"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/middleware/log_response.py:SSEDecoder",
+   "type": "class",
+   "name": "SSEDecoder",
+   "filePath": "vllm/entrypoints/serve/middleware/log_response.py",
+   "lineRange": [
+    12,
+    62
+   ],
+   "summary": "容错的 SSE 解码器：跨 chunk 缓冲、处理 [DONE]/坏 UTF-8/CRLF，输出结构化事件。",
+   "tags": [
+    "sse",
+    "decoder",
+    "streaming"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/middleware/log_response.py:_extract_content_from_chunk",
+   "type": "function",
+   "name": "_extract_content_from_chunk",
+   "filePath": "vllm/entrypoints/serve/middleware/log_response.py",
+   "lineRange": [
+    65,
+    92
+   ],
+   "summary": "从 chat/completion chunk JSON 抽取增量文本内容。",
+   "tags": [
+    "parsing",
+    "streaming"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/middleware/log_response.py:_log_streaming_response",
+   "type": "function",
+   "name": "_log_streaming_response",
+   "filePath": "vllm/entrypoints/serve/middleware/log_response.py",
+   "lineRange": [
+    95,
+    134
+   ],
+   "summary": "消费流式响应体：逐 chunk 解码拼内容并在结束时记日志（不破坏原流）。",
+   "tags": [
+    "logging",
+    "streaming",
+    "tee"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/middleware/log_response.py:log_response",
+   "type": "function",
+   "name": "log_response",
+   "filePath": "vllm/entrypoints/serve/middleware/log_response.py",
+   "lineRange": [
+    146,
+    161
+   ],
+   "summary": "中间件工厂：按请求路径与内容类型分流流式/非流式日志。",
+   "tags": [
+    "middleware",
+    "factory",
+    "logging"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/middleware/x_request_id.py",
+   "type": "file",
+   "name": "x_request_id.py",
+   "filePath": "vllm/entrypoints/serve/middleware/x_request_id.py",
+   "summary": "X-Request-ID 中间件：为每个入站请求生成/透传请求 id 并回写到响应头，串联分布式追踪。",
+   "tags": [
+    "middleware",
+    "tracing",
+    "request-id"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/middleware/x_request_id.py:XRequestIdMiddleware",
+   "type": "class",
+   "name": "XRequestIdMiddleware",
+   "filePath": "vllm/entrypoints/serve/middleware/x_request_id.py",
+   "lineRange": [
+    10,
+    36
+   ],
+   "summary": "纯 ASGI 中间件：取 header 的 X-Request-ID 或生成随机 id，注入响应头。",
+   "tags": [
+    "middleware",
+    "asgi",
+    "tracing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/profile/api_router.py",
+   "type": "file",
+   "name": "api_router.py",
+   "filePath": "vllm/entrypoints/serve/profile/api_router.py",
+   "summary": "性能剖析端点：/start_profile（PyTorch profiler 参数：activities/profile_by_stage/cpu mirroring）与 /stop_profile，直通 EngineClient。",
+   "tags": [
+    "api-router",
+    "profiling",
+    "observability"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/profile/api_router.py:StartProfileRequest",
+   "type": "class",
+   "name": "StartProfileRequest",
+   "filePath": "vllm/entrypoints/serve/profile/api_router.py",
+   "lineRange": [
+    20,
+    31
+   ],
+   "summary": "profiler 启动参数模型：activities/dir_stride/with_stack 等透传字段。",
+   "tags": [
+    "protocol",
+    "profiling"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/profile/api_router.py:start_profile",
+   "type": "function",
+   "name": "start_profile",
+   "filePath": "vllm/entrypoints/serve/profile/api_router.py",
+   "lineRange": [
+    39,
+    48
+   ],
+   "summary": "/start_profile handler：下发 profiler 配置给引擎。",
+   "tags": [
+    "endpoint",
+    "profiling"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/sagemaker/api_router.py",
+   "type": "file",
+   "name": "api_router.py",
+   "filePath": "vllm/entrypoints/serve/sagemaker/api_router.py",
+   "summary": "SageMaker 兼容层：attach_router 把 /invocations（推理）与 /ping（健康）端点桥接到 vLLM 各 Serving（生成/池化），导入 model_hosting_container_standards 前后做日志级别快照恢复，bootstrap 函数供容器标准入口调用。",
+   "tags": [
+    "sagemaker",
+    "deployment",
+    "api-router",
+    "compatibility"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/sagemaker/api_router.py:_snapshot_handler_levels",
+   "type": "function",
+   "name": "_snapshot_handler_levels",
+   "filePath": "vllm/entrypoints/serve/sagemaker/api_router.py",
+   "lineRange": [
+    30,
+    42
+   ],
+   "summary": "快照 root/vllm 两个 logger 的全部 handler 级别（防三方库导入副作用）。",
+   "tags": [
+    "logging",
+    "defensive"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/sagemaker/api_router.py:attach_router",
+   "type": "function",
+   "name": "attach_router",
+   "filePath": "vllm/entrypoints/serve/sagemaker/api_router.py",
+   "lineRange": [
+    53,
+    67
+   ],
+   "summary": "挂 SageMaker 端点（快照-挂载-恢复日志级别三段式）。",
+   "tags": [
+    "router-registration",
+    "sagemaker"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/sagemaker/api_router.py:_attach_router",
+   "type": "function",
+   "name": "_attach_router",
+   "filePath": "vllm/entrypoints/serve/sagemaker/api_router.py",
+   "lineRange": [
+    70,
+    142
+   ],
+   "summary": "实际挂载：按 supported_tasks 组装 /invocations handler（生成 or 池化 invocation types）与 /ping。",
+   "tags": [
+    "endpoint",
+    "sagemaker",
+    "wiring"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/sagemaker/api_router.py:sagemaker_standards_bootstrap",
+   "type": "function",
+   "name": "sagemaker_standards_bootstrap",
+   "filePath": "vllm/entrypoints/serve/sagemaker/api_router.py",
+   "lineRange": [
+    145,
+    159
+   ],
+   "summary": "SageMaker 容器标准启动钩子：初始化模型托管容器 standards 再挂路由。",
+   "tags": [
+    "sagemaker",
+    "bootstrap",
+    "deployment"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/tokenize/api_router.py",
+   "type": "file",
+   "name": "api_router.py",
+   "filePath": "vllm/entrypoints/serve/tokenize/api_router.py",
+   "summary": "/tokenize 与 /detokenize 端点路由：薄壳 handler 委托 ServingTokenization。",
+   "tags": [
+    "api-router",
+    "tokenization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/tokenize/api_router.py:tokenize",
+   "type": "function",
+   "name": "tokenize",
+   "filePath": "vllm/entrypoints/serve/tokenize/api_router.py",
+   "lineRange": [
+    46,
+    58
+   ],
+   "summary": "/tokenize handler：completion/chat 形态请求转 token id 列表。",
+   "tags": [
+    "endpoint",
+    "tokenization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/tokenize/api_router.py:detokenize",
+   "type": "function",
+   "name": "detokenize",
+   "filePath": "vllm/entrypoints/serve/tokenize/api_router.py",
+   "lineRange": [
+    71,
+    83
+   ],
+   "summary": "/detokenize handler：token id 列表转文本。",
+   "tags": [
+    "endpoint",
+    "detokenization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/tokenize/protocol.py",
+   "type": "file",
+   "name": "protocol.py",
+   "filePath": "vllm/entrypoints/serve/tokenize/protocol.py",
+   "summary": "tokenize 端点协议：TokenizeCompletionRequest/TokenizeChatRequest（chat 版含 response_format/tools 校验与模板参数透传）、TokenizeResponse、DetokenizeRequest/Response 与 /tokenizer_info 元数据响应。",
+   "tags": [
+    "protocol",
+    "tokenization",
+    "request-model"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/tokenize/protocol.py:TokenizeCompletionRequest",
+   "type": "class",
+   "name": "TokenizeCompletionRequest",
+   "filePath": "vllm/entrypoints/serve/tokenize/protocol.py",
+   "lineRange": [
+    24,
+    47
+   ],
+   "summary": "文本 tokenize 请求：prompt/add_special_tokens/return_token_strs，build_tok_params 构建渲染参数。",
+   "tags": [
+    "protocol",
+    "tokenization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/tokenize/protocol.py:TokenizeChatRequest",
+   "type": "class",
+   "name": "TokenizeChatRequest",
+   "filePath": "vllm/entrypoints/serve/tokenize/protocol.py",
+   "lineRange": [
+    50,
+    183
+   ],
+   "summary": "chat tokenize 请求：messages+chat_template 选项+response_format/tools 兼容校验，normalize 为 completion 请求或独立渲染。",
+   "tags": [
+    "protocol",
+    "tokenization",
+    "chat"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/tokenize/protocol.py:DetokenizeRequest",
+   "type": "class",
+   "name": "DetokenizeRequest",
+   "filePath": "vllm/entrypoints/serve/tokenize/protocol.py",
+   "lineRange": [
+    196,
+    208
+   ],
+   "summary": "detokenize 请求：token id 列表 + skip_special_tokens 选项。",
+   "tags": [
+    "protocol",
+    "detokenization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/tokenize/serving.py",
+   "type": "file",
+   "name": "serving.py",
+   "filePath": "vllm/entrypoints/serve/tokenize/serving.py",
+   "summary": "tokenize/detokenize 服务：ServingTokenization 用 OnlineRenderer 做请求→token 流水线（与生成路径同模板语义），TokenizerInfo 暴露 /tokenizer_info 元数据。",
+   "tags": [
+    "serving",
+    "tokenization",
+    "renderer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/tokenize/serving.py:ServingTokenization",
+   "type": "class",
+   "name": "ServingTokenization",
+   "filePath": "vllm/entrypoints/serve/tokenize/serving.py",
+   "lineRange": [
+    32,
+    171
+   ],
+   "summary": "tokenize 服务类：tokenize_completion/chat 与 detokenize 三个入口，复用渲染器保证与推理一致的 tokenization。",
+   "tags": [
+    "serving",
+    "tokenization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/tokenize/serving.py:TokenizerInfo",
+   "type": "class",
+   "name": "TokenizerInfo",
+   "filePath": "vllm/entrypoints/serve/tokenize/serving.py",
+   "lineRange": [
+    175,
+    206
+   ],
+   "summary": "tokenizer 元数据服务：词表大小/特殊 token 等只读信息端点实现。",
+   "tags": [
+    "metadata",
+    "tokenization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "type": "file",
+   "name": "api_utils.py",
+   "filePath": "vllm/entrypoints/serve/utils/api_utils.py",
+   "summary": "HTTP 层共享工具箱：orjson 快速 JSON 响应（numpy 原生序列化）、客户端断连监听+协作取消装饰器、JSON/SSE 双模式响应分发、load_aware_call 服务器过载降速执行、max_tokens 推导与 LoRA 模块解析。",
+   "tags": [
+    "utility",
+    "http",
+    "async",
+    "overload-control"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/utils/api_utils.py:create_json_response",
+   "type": "function",
+   "name": "create_json_response",
+   "filePath": "vllm/entrypoints/serve/utils/api_utils.py",
+   "lineRange": [
+    26,
+    50
+   ],
+   "summary": "orjson 编码 JSON 响应（OPT_SERIALIZE_NUMPY 原生 numpy，超 int64 回退 JSONResponse）。",
+   "tags": [
+    "serialization",
+    "orjson",
+    "response-builder"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/utils/api_utils.py:listen_for_disconnect",
+   "type": "function",
+   "name": "listen_for_disconnect",
+   "filePath": "vllm/entrypoints/serve/utils/api_utils.py",
+   "lineRange": [
+    53,
+    65
+   ],
+   "summary": "监听客户端断连（http.disconnect），用于提前取消生成任务。",
+   "tags": [
+    "async",
+    "cancellation",
+    "lifecycle"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/utils/api_utils.py:with_cancellation",
+   "type": "function",
+   "name": "with_cancellation",
+   "filePath": "vllm/entrypoints/serve/utils/api_utils.py",
+   "lineRange": [
+    68,
+    111
+   ],
+   "summary": "装饰器：handler 与断连监听任务竞争执行，客户端断开即取消内层协程。",
+   "tags": [
+    "decorator",
+    "cancellation",
+    "async"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/utils/api_utils.py:json_or_sse_responses",
+   "type": "function",
+   "name": "json_or_sse_responses",
+   "filePath": "vllm/entrypoints/serve/utils/api_utils.py",
+   "lineRange": [
+    146,
+    179
+   ],
+   "summary": "OpenAPI 层的 JSON/SSE 双 schema 声明工具（流式与非流式同端点）。",
+   "tags": [
+    "openapi",
+    "sse",
+    "schema"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/utils/api_utils.py:load_aware_call",
+   "type": "function",
+   "name": "load_aware_call",
+   "filePath": "vllm/entrypoints/serve/utils/api_utils.py",
+   "lineRange": [
+    186,
+    231
+   ],
+   "summary": "负载感知执行：按当前服务器负载注入延迟（过载时降低新请求处理速率）。",
+   "tags": [
+    "overload-control",
+    "backpressure",
+    "scheduling"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/utils/api_utils.py:get_max_tokens",
+   "type": "function",
+   "name": "get_max_tokens",
+   "filePath": "vllm/entrypoints/serve/utils/api_utils.py",
+   "lineRange": [
+    234,
+    270
+   ],
+   "summary": "推导请求 max_tokens：显式值校验或按剩余上下文自动补全。",
+   "tags": [
+    "validation",
+    "max-tokens"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/utils/api_utils.py:process_lora_modules",
+   "type": "function",
+   "name": "process_lora_modules",
+   "filePath": "vllm/entrypoints/serve/utils/api_utils.py",
+   "lineRange": [
+    288,
+    306
+   ],
+   "summary": "解析请求里的 LoRA 字段（name/path 映射为 LoRARequest 或报未启用错误）。",
+   "tags": [
+    "lora",
+    "parsing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/utils/orca_metrics.py",
+   "type": "file",
+   "name": "orca_metrics.py",
+   "filePath": "vllm/entrypoints/serve/utils/orca_metrics.py",
+   "summary": "ORCA（Open Request Cost Aggregation）负载上报：从 Prometheus 指标快照抽取 named_metrics 并按 TEXT/JSON 格式生成 endpoint-load-metrics 响应头（服务网格负载均衡用）。",
+   "tags": [
+    "orca",
+    "load-balancing",
+    "metrics",
+    "headers"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/utils/orca_metrics.py:create_orca_header",
+   "type": "function",
+   "name": "create_orca_header",
+   "filePath": "vllm/entrypoints/serve/utils/orca_metrics.py",
+   "lineRange": [
+    14,
+    67
+   ],
+   "summary": "按格式（TEXT/JSON）构造 ORCA endpoint-load-metrics 响应头。",
+   "tags": [
+    "orca",
+    "header-builder"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/utils/orca_metrics.py:get_named_metrics_from_prometheus",
+   "type": "function",
+   "name": "get_named_metrics_from_prometheus",
+   "filePath": "vllm/entrypoints/serve/utils/orca_metrics.py",
+   "lineRange": [
+    70,
+    96
+   ],
+   "summary": "从 metrics snapshot 抽取 ORCA 关注的命名指标（utilization/qps 等）。",
+   "tags": [
+    "metrics",
+    "prometheus"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/utils/orca_metrics.py:metrics_header",
+   "type": "function",
+   "name": "metrics_header",
+   "filePath": "vllm/entrypoints/serve/utils/orca_metrics.py",
+   "lineRange": [
+    99,
+    119
+   ],
+   "summary": "组合入口：拉快照→抽指标→产 ORCA 头（None 表示不支持时跳过）。",
+   "tags": [
+    "orca",
+    "factory"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/entrypoints/serve/__init__.py",
+   "target": "file:vllm/entrypoints/serve/dev/cache/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/__init__.py",
+   "target": "file:vllm/entrypoints/serve/dev/rpc/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/__init__.py",
+   "target": "file:vllm/entrypoints/serve/dev/server_info/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/__init__.py",
+   "target": "file:vllm/entrypoints/serve/dev/sleep/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/__init__.py",
+   "target": "file:vllm/entrypoints/serve/exception_handling/error_response.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/__init__.py",
+   "target": "file:vllm/entrypoints/serve/instrumentator/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/__init__.py",
+   "target": "file:vllm/entrypoints/serve/lora/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/__init__.py",
+   "target": "file:vllm/entrypoints/serve/profile/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/__init__.py",
+   "target": "file:vllm/entrypoints/serve/tokenize/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/__init__.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/__init__.py",
+   "target": "function:vllm/entrypoints/serve/__init__.py:register_vllm_serve_api_routers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/__init__.py",
+   "target": "function:vllm/entrypoints/serve/__init__.py:register_vllm_dev_api_routers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/__init__.py",
+   "target": "function:vllm/entrypoints/serve/__init__.py:register_vllm_serve_api_routers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/__init__.py",
+   "target": "function:vllm/entrypoints/serve/__init__.py:register_vllm_dev_api_routers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/checkpoint/api_router.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/checkpoint/api_router.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/checkpoint/api_router.py",
+   "target": "class:vllm/entrypoints/serve/checkpoint/api_router.py:CheckpointStateResponse",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/checkpoint/api_router.py",
+   "target": "function:vllm/entrypoints/serve/checkpoint/api_router.py:checkpoint_prepare",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/checkpoint/api_router.py",
+   "target": "function:vllm/entrypoints/serve/checkpoint/api_router.py:checkpoint_restore",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/checkpoint/api_router.py",
+   "target": "function:vllm/entrypoints/serve/checkpoint/api_router.py:checkpoint_status",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/dev/cache/api_router.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/dev/cache/api_router.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/dev/cache/api_router.py",
+   "target": "function:vllm/entrypoints/serve/dev/cache/api_router.py:reset_prefix_cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/dev/rpc/api_router.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/dev/rpc/api_router.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/dev/rpc/api_router.py",
+   "target": "function:vllm/entrypoints/serve/dev/rpc/api_router.py:collective_rpc",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/dev/sleep/api_router.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/dev/sleep/api_router.py",
+   "target": "file:vllm/entrypoints/serve/dev/sleep/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/dev/sleep/api_router.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/dev/sleep/api_router.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/dev/sleep/api_router.py",
+   "target": "function:vllm/entrypoints/serve/dev/sleep/api_router.py:sleep",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/dev/sleep/api_router.py",
+   "target": "function:vllm/entrypoints/serve/dev/sleep/api_router.py:release_kv_cache_memory",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/dev/sleep/api_router.py",
+   "target": "function:vllm/entrypoints/serve/dev/sleep/api_router.py:wake_up",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/dev/sleep/metrics.py",
+   "target": "class:vllm/entrypoints/serve/dev/sleep/metrics.py:SleepModeOperationMetrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/dev/sleep/metrics.py",
+   "target": "function:vllm/entrypoints/serve/dev/sleep/metrics.py:sleep_mode_operation_metrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/dev/sleep/metrics.py",
+   "target": "function:vllm/entrypoints/serve/dev/sleep/metrics.py:sleep_mode_operation_metrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/elastic_ep/api_router.py",
+   "target": "file:vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/elastic_ep/api_router.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/elastic_ep/api_router.py",
+   "target": "file:vllm/entrypoints/serve/elastic_ep/middleware.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/elastic_ep/api_router.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/elastic_ep/api_router.py",
+   "target": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/elastic_ep/api_router.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/elastic_ep/api_router.py",
+   "target": "function:vllm/entrypoints/serve/elastic_ep/api_router.py:scale_elastic_ep",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/elastic_ep/api_router.py",
+   "target": "function:vllm/entrypoints/serve/elastic_ep/api_router.py:is_scaling_elastic_ep",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/elastic_ep/middleware.py",
+   "target": "class:vllm/entrypoints/serve/elastic_ep/middleware.py:ScalingMiddleware",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/elastic_ep/middleware.py",
+   "target": "class:vllm/entrypoints/serve/elastic_ep/middleware.py:ScalingMiddleware",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "target": "class:vllm/entrypoints/serve/engine/protocol.py:OpenAIBaseModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "target": "class:vllm/entrypoints/serve/engine/protocol.py:ModelCard",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "target": "class:vllm/entrypoints/serve/engine/protocol.py:UsageInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "target": "class:vllm/entrypoints/serve/engine/protocol.py:OpenAIBaseModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/serving.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/serving.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/serving.py",
+   "target": "file:vllm/entrypoints/openai/models/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/serving.py",
+   "target": "file:vllm/entrypoints/pooling/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/serving.py",
+   "target": "file:vllm/entrypoints/serve/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/serving.py",
+   "target": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/serving.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/serving.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/serving.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/serving.py",
+   "target": "file:vllm/renderers/inputs/preprocess.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/serving.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/serving.py",
+   "target": "file:vllm/tracing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/serving.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/serving.py",
+   "target": "class:vllm/entrypoints/serve/engine/serving.py:BaseServing",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/serving.py",
+   "target": "class:vllm/entrypoints/serve/engine/serving.py:BaseServing",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/typing.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/typing.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/typing.py",
+   "target": "file:vllm/entrypoints/openai/completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/typing.py",
+   "target": "file:vllm/entrypoints/openai/responses/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/typing.py",
+   "target": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/typing.py",
+   "target": "file:vllm/entrypoints/serve/tokenize/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/typing.py",
+   "target": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/typing.py",
+   "target": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/typing.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/typing.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/typing.py",
+   "target": "class:vllm/entrypoints/serve/engine/typing.py:RendererRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/typing.py",
+   "target": "class:vllm/entrypoints/serve/engine/typing.py:RendererChatRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/typing.py",
+   "target": "class:vllm/entrypoints/serve/engine/typing.py:RendererRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/engine/typing.py",
+   "target": "class:vllm/entrypoints/serve/engine/typing.py:RendererChatRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/entrypoints/serve/engine/typing.py:RendererChatRequest",
+   "target": "class:vllm/entrypoints/serve/engine/typing.py:RendererRequest",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/error_response.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/error_response.py",
+   "target": "file:vllm/entrypoints/serve/exception_handling/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/error_response.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/error_response.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/error_response.py",
+   "target": "file:vllm/v1/engine/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/error_response.py",
+   "target": "function:vllm/entrypoints/serve/exception_handling/error_response.py:create_error_response",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/error_response.py",
+   "target": "function:vllm/entrypoints/serve/exception_handling/error_response.py:create_error_response",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py",
+   "target": "file:vllm/entrypoints/launchers/launcher.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py",
+   "target": "file:vllm/entrypoints/serve/exception_handling/error_response.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py",
+   "target": "file:vllm/entrypoints/serve/exception_handling/handlers/exception.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py",
+   "target": "file:vllm/v1/engine/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py",
+   "target": "function:vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py:vllm_error_handler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py",
+   "target": "function:vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py:engine_error_handler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py",
+   "target": "function:vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py:generation_error_handler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/register.py",
+   "target": "file:vllm/entrypoints/serve/exception_handling/handlers/exception.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/register.py",
+   "target": "file:vllm/entrypoints/serve/exception_handling/handlers/http.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/register.py",
+   "target": "file:vllm/entrypoints/serve/exception_handling/handlers/validation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/register.py",
+   "target": "file:vllm/entrypoints/serve/exception_handling/handlers/vllm_error.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/register.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/register.py",
+   "target": "function:vllm/entrypoints/serve/exception_handling/register.py:init_exception_handler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/register.py",
+   "target": "function:vllm/entrypoints/serve/exception_handling/register.py:init_exception_handler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/utils.py",
+   "target": "function:vllm/entrypoints/serve/exception_handling/utils.py:sanitize_message",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/exception_handling/utils.py",
+   "target": "function:vllm/entrypoints/serve/exception_handling/utils.py:sanitize_message",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/instrumentator/basic.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/instrumentator/basic.py",
+   "target": "file:vllm/entrypoints/serve/tokenize/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/instrumentator/basic.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/instrumentator/basic.py",
+   "target": "file:vllm/version.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/instrumentator/basic.py",
+   "target": "function:vllm/entrypoints/serve/instrumentator/basic.py:base",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/instrumentator/basic.py",
+   "target": "function:vllm/entrypoints/serve/instrumentator/basic.py:get_server_load_metrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/instrumentator/metrics.py",
+   "target": "file:vllm/v1/metrics/prometheus.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/instrumentator/metrics.py",
+   "target": "function:vllm/entrypoints/serve/instrumentator/metrics.py:_patch_instrumentator_route_walk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/instrumentator/metrics.py",
+   "target": "function:vllm/entrypoints/serve/instrumentator/metrics.py:attach_router",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/instrumentator/metrics.py",
+   "target": "class:vllm/entrypoints/serve/instrumentator/metrics.py:PrometheusResponse",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/instrumentator/metrics.py",
+   "target": "function:vllm/entrypoints/serve/instrumentator/metrics.py:attach_router",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/lora/api_router.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/lora/api_router.py",
+   "target": "file:vllm/entrypoints/openai/models/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/lora/api_router.py",
+   "target": "file:vllm/entrypoints/openai/models/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/lora/api_router.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/lora/api_router.py",
+   "target": "file:vllm/entrypoints/serve/lora/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/lora/api_router.py",
+   "target": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/lora/api_router.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/lora/api_router.py",
+   "target": "function:vllm/entrypoints/serve/lora/api_router.py:attach_router",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/lora/api_router.py",
+   "target": "function:vllm/entrypoints/serve/lora/api_router.py:_attach_router",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/lora/api_router.py",
+   "target": "function:vllm/entrypoints/serve/lora/api_router.py:attach_router",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/middleware/authenticate.py",
+   "target": "class:vllm/entrypoints/serve/middleware/authenticate.py:AuthenticationMiddleware",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/middleware/authenticate.py",
+   "target": "class:vllm/entrypoints/serve/middleware/authenticate.py:AuthenticationMiddleware",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/middleware/log_response.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/middleware/log_response.py",
+   "target": "file:vllm/entrypoints/openai/completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/middleware/log_response.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/middleware/log_response.py",
+   "target": "class:vllm/entrypoints/serve/middleware/log_response.py:SSEDecoder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/middleware/log_response.py",
+   "target": "function:vllm/entrypoints/serve/middleware/log_response.py:_extract_content_from_chunk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/middleware/log_response.py",
+   "target": "function:vllm/entrypoints/serve/middleware/log_response.py:_log_streaming_response",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/middleware/log_response.py",
+   "target": "function:vllm/entrypoints/serve/middleware/log_response.py:log_response",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/middleware/log_response.py",
+   "target": "function:vllm/entrypoints/serve/middleware/log_response.py:log_response",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/middleware/x_request_id.py",
+   "target": "class:vllm/entrypoints/serve/middleware/x_request_id.py:XRequestIdMiddleware",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/middleware/x_request_id.py",
+   "target": "class:vllm/entrypoints/serve/middleware/x_request_id.py:XRequestIdMiddleware",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/profile/api_router.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/profile/api_router.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/profile/api_router.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/profile/api_router.py",
+   "target": "class:vllm/entrypoints/serve/profile/api_router.py:StartProfileRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/profile/api_router.py",
+   "target": "function:vllm/entrypoints/serve/profile/api_router.py:start_profile",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/sagemaker/api_router.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/sagemaker/api_router.py",
+   "target": "file:vllm/entrypoints/generate/factories.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/sagemaker/api_router.py",
+   "target": "file:vllm/entrypoints/pooling/factories.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/sagemaker/api_router.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/sagemaker/api_router.py",
+   "target": "file:vllm/entrypoints/serve/engine/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/sagemaker/api_router.py",
+   "target": "file:vllm/entrypoints/serve/instrumentator/basic.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/sagemaker/api_router.py",
+   "target": "file:vllm/entrypoints/serve/instrumentator/health.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/sagemaker/api_router.py",
+   "target": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/sagemaker/api_router.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/sagemaker/api_router.py",
+   "target": "function:vllm/entrypoints/serve/sagemaker/api_router.py:_snapshot_handler_levels",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/sagemaker/api_router.py",
+   "target": "function:vllm/entrypoints/serve/sagemaker/api_router.py:attach_router",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/sagemaker/api_router.py",
+   "target": "function:vllm/entrypoints/serve/sagemaker/api_router.py:_attach_router",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/sagemaker/api_router.py",
+   "target": "function:vllm/entrypoints/serve/sagemaker/api_router.py:sagemaker_standards_bootstrap",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/sagemaker/api_router.py",
+   "target": "function:vllm/entrypoints/serve/sagemaker/api_router.py:attach_router",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/api_router.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/api_router.py",
+   "target": "file:vllm/entrypoints/serve/tokenize/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/api_router.py",
+   "target": "file:vllm/entrypoints/serve/tokenize/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/api_router.py",
+   "target": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/api_router.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/api_router.py",
+   "target": "function:vllm/entrypoints/serve/tokenize/api_router.py:tokenize",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/api_router.py",
+   "target": "function:vllm/entrypoints/serve/tokenize/api_router.py:detokenize",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/protocol.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/protocol.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/protocol.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/protocol.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/protocol.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/protocol.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/protocol.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/protocol.py",
+   "target": "class:vllm/entrypoints/serve/tokenize/protocol.py:TokenizeCompletionRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/protocol.py",
+   "target": "class:vllm/entrypoints/serve/tokenize/protocol.py:TokenizeChatRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/protocol.py",
+   "target": "class:vllm/entrypoints/serve/tokenize/protocol.py:DetokenizeRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/protocol.py",
+   "target": "class:vllm/entrypoints/serve/tokenize/protocol.py:TokenizeChatRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/serving.py",
+   "target": "file:vllm/entrypoints/openai/models/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/serving.py",
+   "target": "file:vllm/entrypoints/serve/tokenize/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/serving.py",
+   "target": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/serving.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/serving.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/serving.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/serving.py",
+   "target": "file:vllm/renderers/online_renderer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/serving.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/serving.py",
+   "target": "class:vllm/entrypoints/serve/tokenize/serving.py:ServingTokenization",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/serving.py",
+   "target": "class:vllm/entrypoints/serve/tokenize/serving.py:TokenizerInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/tokenize/serving.py",
+   "target": "class:vllm/entrypoints/serve/tokenize/serving.py:ServingTokenization",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/entrypoints/serve/tokenize/serving.py:ServingTokenization",
+   "target": "class:vllm/entrypoints/serve/engine/serving.py:BaseServing",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "target": "file:vllm/entrypoints/openai/models/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "target": "file:vllm/entrypoints/openai/models/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "target": "function:vllm/entrypoints/serve/utils/api_utils.py:create_json_response",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "target": "function:vllm/entrypoints/serve/utils/api_utils.py:listen_for_disconnect",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "target": "function:vllm/entrypoints/serve/utils/api_utils.py:with_cancellation",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "target": "function:vllm/entrypoints/serve/utils/api_utils.py:json_or_sse_responses",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "target": "function:vllm/entrypoints/serve/utils/api_utils.py:load_aware_call",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "target": "function:vllm/entrypoints/serve/utils/api_utils.py:get_max_tokens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "target": "function:vllm/entrypoints/serve/utils/api_utils.py:process_lora_modules",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "target": "function:vllm/entrypoints/serve/utils/api_utils.py:create_json_response",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "target": "function:vllm/entrypoints/serve/utils/api_utils.py:with_cancellation",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "target": "function:vllm/entrypoints/serve/utils/api_utils.py:load_aware_call",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/orca_metrics.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/orca_metrics.py",
+   "target": "file:vllm/v1/metrics/reader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/orca_metrics.py",
+   "target": "function:vllm/entrypoints/serve/utils/orca_metrics.py:create_orca_header",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/orca_metrics.py",
+   "target": "function:vllm/entrypoints/serve/utils/orca_metrics.py:get_named_metrics_from_prometheus",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/orca_metrics.py",
+   "target": "function:vllm/entrypoints/serve/utils/orca_metrics.py:metrics_header",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/orca_metrics.py",
+   "target": "function:vllm/entrypoints/serve/utils/orca_metrics.py:metrics_header",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

@@ -1,0 +1,1425 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py",
+   "type": "file",
+   "name": "nixl_ep.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py",
+   "summary": "NIXL EP 的 MoE prepare/finalize：NixlEPPrepareAndFinalize（17 方法）用 NIXL EP kernel 做输入量化/分发与输出收集（DP+EP 路径）。",
+   "tags": [
+    "moe",
+    "nixl",
+    "prepare-finalize",
+    "ep"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py",
+   "type": "file",
+   "name": "no_dp_ep.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py",
+   "summary": "无 DP 的 EP prepare/finalize 双实现：Modular（组合式）与 Monolithic（单 kernel）两条路，共用输入量化 helper。",
+   "tags": [
+    "moe",
+    "prepare-finalize",
+    "ep",
+    "modular"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/passthrough.py",
+   "type": "file",
+   "name": "passthrough.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/prepare_finalize/passthrough.py",
+   "summary": "直通 prepare/finalize：激活与路由直接交给自带 EP 通信的专家实现。",
+   "tags": [
+    "moe",
+    "prepare-finalize",
+    "passthrough"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/prepare_megamoe.py",
+   "type": "file",
+   "name": "prepare_megamoe.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/prepare_megamoe.py",
+   "summary": "DeepGEMM MegaMoE 输入准备（Triton）：隐藏态 FP8/NVFP4 组量化+top-k 路由重打包（int64 id+fp32 权重，pad 到 8 行 tile）。",
+   "tags": [
+    "megamoe",
+    "deepgemm",
+    "quantization",
+    "triton"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "type": "file",
+   "name": "routed_experts.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "summary": "RoutedExperts（1455 行，34 方法）：路由专家权重容器与执行逻辑——专家权重参数所有权、EPLB 逻辑→物理映射、量化方法分发与权重加载。",
+   "tags": [
+    "moe",
+    "routed-experts",
+    "weights",
+    "eplb"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "type": "file",
+   "name": "routed_experts_capturer.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "summary": "路由专家捕获器：worker 侧 GPU 捕获器 + 层侧 sink（缓冲与回调），把单体 kernel 实际路由到的专家 id 暴露给外部。",
+   "tags": [
+    "moe",
+    "capture",
+    "experts",
+    "hooks"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/router/aiter_shared_routed_fused_moe_router.py",
+   "type": "file",
+   "name": "aiter_shared_routed_fused_moe_router.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/aiter_shared_routed_fused_moe_router.py",
+   "summary": "ROCm AITER 融合共享专家路由器（Qwen3-MoE 类）：AITER topk_softmax kernel 可用时把共享专家并进路由。",
+   "tags": [
+    "router",
+    "aiter",
+    "shared-experts",
+    "rocm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "type": "file",
+   "name": "base_router.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "summary": "路由器基类 BaseRouter：温度/EP/EPLB 公共设施——logical→physical 映射与 i32 记录 Triton kernel、CUDA graph/DP padding 掩码。",
+   "tags": [
+    "router",
+    "base-class",
+    "eplb",
+    "padding-mask"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py",
+   "type": "file",
+   "name": "bf16x3_router_gemm_rocm.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py",
+   "summary": "ROCm BF16x3 router GEMM：fp32 权重拆成三个 bf16 项之和（可复现），Triton 归约三项得 fp32 logits。",
+   "tags": [
+    "router",
+    "gemm",
+    "bf16x3",
+    "rocm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py:NixlEPPrepareAndFinalize",
+   "type": "class",
+   "name": "NixlEPPrepareAndFinalize",
+   "filePath": "vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py",
+   "summary": "NIXL EP kernel 的 prepare/finalize（17 方法）：DP+EP 输入分发与输出收集。",
+   "tags": [
+    "nixl",
+    "ep",
+    "prepare-finalize"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    48,
+    396
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py:MoEPrepareAndFinalizeNoDPEPModular",
+   "type": "class",
+   "name": "MoEPrepareAndFinalizeNoDPEPModular",
+   "filePath": "vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py",
+   "summary": "无 DP 的 EP 组合式 prepare/finalize（8 方法）。",
+   "tags": [
+    "prepare-finalize",
+    "modular",
+    "ep"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    41,
+    103
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py:MoEPrepareAndFinalizeNoDPEPMonolithic",
+   "type": "class",
+   "name": "MoEPrepareAndFinalizeNoDPEPMonolithic",
+   "filePath": "vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py",
+   "summary": "无 DP 的 EP 单 kernel prepare/finalize（8 方法）。",
+   "tags": [
+    "prepare-finalize",
+    "monolithic",
+    "ep"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    106,
+    140
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/prepare_finalize/passthrough.py:PassThroughPrepareAndFinalize",
+   "type": "class",
+   "name": "PassThroughPrepareAndFinalize",
+   "filePath": "vllm/model_executor/layers/fused_moe/prepare_finalize/passthrough.py",
+   "summary": "直通实现：专家自带 EP 通信。",
+   "tags": [
+    "passthrough",
+    "prepare-finalize",
+    "ep-comm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    18,
+    41
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/routed_experts.py:FusedMoeWeightScaleSupported",
+   "type": "class",
+   "name": "FusedMoeWeightScaleSupported",
+   "filePath": "vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "summary": "权重 scale 支持类型枚举。",
+   "tags": [
+    "weights",
+    "scales",
+    "enum"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    65,
+    69
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/routed_experts.py:RoutedExperts",
+   "type": "class",
+   "name": "RoutedExperts",
+   "filePath": "vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "summary": "路由专家容器（34 方法）：权重所有权/EPLB 映射/量化分发/权重加载。",
+   "tags": [
+    "routed-experts",
+    "weights",
+    "eplb"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    73,
+    1450
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py:RoutedExpertsCapturer",
+   "type": "class",
+   "name": "RoutedExpertsCapturer",
+   "filePath": "vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "summary": "worker 侧专家路由捕获器（GPU 常驻，4 方法）。",
+   "tags": [
+    "capture",
+    "experts",
+    "worker"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    45,
+    163
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py:RoutedExpertsSink",
+   "type": "class",
+   "name": "RoutedExpertsSink",
+   "filePath": "vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "summary": "层侧缓冲+回调：暴露单体 kernel 路由到的专家 id。",
+   "tags": [
+    "sink",
+    "capture",
+    "callback"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    166,
+    180
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/router/aiter_shared_routed_fused_moe_router.py:AiterSharedRoutedFusedMoERouter",
+   "type": "class",
+   "name": "AiterSharedRoutedFusedMoERouter",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/aiter_shared_routed_fused_moe_router.py",
+   "summary": "ROCm AITER 融合共享专家路由器。",
+   "tags": [
+    "aiter",
+    "shared-experts",
+    "router"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    18,
+    147
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/router/base_router.py:BaseRouter",
+   "type": "class",
+   "name": "BaseRouter",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "summary": "路由器基类（7 方法）：EPLB 映射+记录、padding 掩码等公共设施。",
+   "tags": [
+    "base-class",
+    "router",
+    "eplb"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    174,
+    320
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py:dequant_fp8",
+   "type": "function",
+   "name": "dequant_fp8",
+   "filePath": "vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py",
+   "summary": "fp8 张量反量化为 fp32。",
+   "tags": [
+    "dequantization",
+    "fp8",
+    "helper"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    33,
+    45
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py:_quantize_input",
+   "type": "function",
+   "name": "_quantize_input",
+   "filePath": "vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py",
+   "summary": "按 MoE 方法要求量化输入。",
+   "tags": [
+    "quantization",
+    "input",
+    "helper"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    14,
+    38
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py:make_moe_prepare_and_finalize_no_dp_ep",
+   "type": "function",
+   "name": "make_moe_prepare_and_finalize_no_dp_ep",
+   "filePath": "vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py",
+   "summary": "构建无 DP EP 的 prepare/finalize 实现。",
+   "tags": [
+    "factory",
+    "prepare-finalize",
+    "factory-main"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    143,
+    150
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/prepare_megamoe.py:_store_topk",
+   "type": "function",
+   "name": "_store_topk",
+   "filePath": "vllm/model_executor/layers/fused_moe/prepare_megamoe.py",
+   "summary": "top-k 路由重打包为 int64 id+fp32 权重（pad 到 tile）。",
+   "tags": [
+    "top-k",
+    "repack",
+    "megamoe"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    76,
+    138
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/prepare_megamoe.py:_prepare_megamoe_inputs_kernel",
+   "type": "function",
+   "name": "_prepare_megamoe_inputs_kernel",
+   "filePath": "vllm/model_executor/layers/fused_moe/prepare_megamoe.py",
+   "summary": "MegaMoE FP8 输入准备 Triton kernel。",
+   "tags": [
+    "triton",
+    "megamoe",
+    "fp8"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    142,
+    264
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/prepare_megamoe.py:_prepare_megamoe_nvfp4_inputs_kernel",
+   "type": "function",
+   "name": "_prepare_megamoe_nvfp4_inputs_kernel",
+   "filePath": "vllm/model_executor/layers/fused_moe/prepare_megamoe.py",
+   "summary": "MegaMoE NVFP4 输入准备 Triton kernel。",
+   "tags": [
+    "triton",
+    "megamoe",
+    "nvfp4"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    268,
+    415
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/prepare_megamoe.py:_resolve_hidden_quant",
+   "type": "function",
+   "name": "_resolve_hidden_quant",
+   "filePath": "vllm/model_executor/layers/fused_moe/prepare_megamoe.py",
+   "summary": "隐藏态 QuantKey→kernel 的量化分组参数映射。",
+   "tags": [
+    "quantization",
+    "mapping",
+    "resolver"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    418,
+    436
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/prepare_megamoe.py:prepare_megamoe_inputs",
+   "type": "function",
+   "name": "prepare_megamoe_inputs",
+   "filePath": "vllm/model_executor/layers/fused_moe/prepare_megamoe.py",
+   "summary": "DeepGEMM MegaMoE 输入准备入口（FP8）。",
+   "tags": [
+    "megamoe",
+    "inputs",
+    "entry-point"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    439,
+    564
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/prepare_megamoe.py:prepare_megamoe_nvfp4_inputs",
+   "type": "function",
+   "name": "prepare_megamoe_nvfp4_inputs",
+   "filePath": "vllm/model_executor/layers/fused_moe/prepare_megamoe.py",
+   "summary": "NVFP4 动态 token 量化的 MegaMoE 输入准备。",
+   "tags": [
+    "megamoe",
+    "nvfp4",
+    "inputs"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    567,
+    682
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/routed_experts.py:_index_expert_mapping",
+   "type": "function",
+   "name": "_index_expert_mapping",
+   "filePath": "vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "summary": "按逻辑 checkpoint ID 索引 expert mapping（保序）。",
+   "tags": [
+    "mapping",
+    "indexing",
+    "experts"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    43,
+    62
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py:_get_routed_experts_shape",
+   "type": "function",
+   "name": "_get_routed_experts_shape",
+   "filePath": "vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "summary": "捕获专家张量形状。",
+   "tags": [
+    "shape",
+    "capture",
+    "shape-main"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    31,
+    42
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py:bind_routed_experts_capturer",
+   "type": "function",
+   "name": "bind_routed_experts_capturer",
+   "filePath": "vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "summary": "把捕获回调绑定到目标模型的 MoE 路由层。",
+   "tags": [
+    "bind",
+    "hooks",
+    "capture"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    183,
+    230
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/base_router.py:_eplb_map_and_record_i32_kernel",
+   "type": "function",
+   "name": "_eplb_map_and_record_i32_kernel",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "summary": "logical→physical 映射+记录的 i32 Triton kernel。",
+   "tags": [
+    "eplb",
+    "triton",
+    "mapping"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    21,
+    95
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/base_router.py:_eplb_map_and_record_triton",
+   "type": "function",
+   "name": "_eplb_map_and_record_triton",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "summary": "映射+记录的 Triton 封装。",
+   "tags": [
+    "eplb",
+    "triton",
+    "wrapper"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    97,
+    129
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/base_router.py:eplb_map_to_physical_and_record",
+   "type": "function",
+   "name": "eplb_map_to_physical_and_record",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "summary": "EPLB 逻辑→物理映射并记录（公开入口）。",
+   "tags": [
+    "eplb",
+    "mapping",
+    "public"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    150,
+    158
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/base_router.py:get_moe_padding_mask",
+   "type": "function",
+   "name": "get_moe_padding_mask",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "summary": "CUDA graph/DP padding 行掩码。",
+   "tags": [
+    "padding",
+    "mask",
+    "batch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    161,
+    171
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py:split_bf16x3",
+   "type": "function",
+   "name": "split_bf16x3",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py",
+   "summary": "fp32 权重拆三个 bf16 项（和可复现）。",
+   "tags": [
+    "bf16x3",
+    "split",
+    "decomposition"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    42,
+    63
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py:platform_supported",
+   "type": "function",
+   "name": "platform_supported",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py",
+   "summary": "平台是否有基准过的 bf16x3 路由配置。",
+   "tags": [
+    "platform",
+    "predicate",
+    "platform-main"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    66,
+    75
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py:is_supported",
+   "type": "function",
+   "name": "is_supported",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py",
+   "summary": "该路径能否服务 x@W.T→fp32。",
+   "tags": [
+    "predicate",
+    "support",
+    "predicate-main"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    78,
+    96
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py:bf16x3_router_gemm",
+   "type": "function",
+   "name": "bf16x3_router_gemm",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py",
+   "summary": "bf16 激活×bf16x3 权重→fp32 router logits。",
+   "tags": [
+    "gemm",
+    "bf16x3",
+    "logits"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    125,
+    163
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/modular_kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py",
+   "target": "file:vllm/v1/worker/ubatching.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/modular_kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/passthrough.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/passthrough.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/modular_kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/passthrough.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_megamoe.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_megamoe.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "target": "file:vllm/distributed/eplb/eplb_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/expert_map_manager.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/fused_moe_method_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/moe_output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "target": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/layer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/modular_kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "target": "file:vllm/v1/worker/ubatching.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/aiter_shared_routed_fused_moe_router.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/aiter_shared_routed_fused_moe_router.py",
+   "target": "file:vllm/distributed/eplb/eplb_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/aiter_shared_routed_fused_moe_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/aiter_shared_routed_fused_moe_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/aiter_shared_routed_fused_moe_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "target": "file:vllm/distributed/eplb/eplb_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/fused_moe_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "target": "file:vllm/v1/worker/ubatching.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py:NixlEPPrepareAndFinalize",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py:dequant_fp8",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py:MoEPrepareAndFinalizeNoDPEPModular",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py:MoEPrepareAndFinalizeNoDPEPMonolithic",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py:_quantize_input",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py:make_moe_prepare_and_finalize_no_dp_ep",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/passthrough.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/prepare_finalize/passthrough.py:PassThroughPrepareAndFinalize",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/routed_experts.py:FusedMoeWeightScaleSupported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/routed_experts.py:RoutedExperts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/routed_experts.py:_index_expert_mapping",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py:RoutedExpertsCapturer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py:RoutedExpertsSink",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py:_get_routed_experts_shape",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py:bind_routed_experts_capturer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/aiter_shared_routed_fused_moe_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/aiter_shared_routed_fused_moe_router.py:AiterSharedRoutedFusedMoERouter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/base_router.py:BaseRouter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/base_router.py:_eplb_map_and_record_i32_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/base_router.py:_eplb_map_and_record_triton",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/base_router.py:eplb_map_to_physical_and_record",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/base_router.py:get_moe_padding_mask",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_megamoe.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/prepare_megamoe.py:_store_topk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_megamoe.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/prepare_megamoe.py:_prepare_megamoe_inputs_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_megamoe.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/prepare_megamoe.py:_prepare_megamoe_nvfp4_inputs_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_megamoe.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/prepare_megamoe.py:_resolve_hidden_quant",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_megamoe.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/prepare_megamoe.py:prepare_megamoe_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_megamoe.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/prepare_megamoe.py:prepare_megamoe_nvfp4_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py:split_bf16x3",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py:platform_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py:is_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py:bf16x3_router_gemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py:NixlEPPrepareAndFinalize",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py:dequant_fp8",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py:MoEPrepareAndFinalizeNoDPEPModular",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py:MoEPrepareAndFinalizeNoDPEPMonolithic",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py:make_moe_prepare_and_finalize_no_dp_ep",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/passthrough.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/prepare_finalize/passthrough.py:PassThroughPrepareAndFinalize",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/routed_experts.py:FusedMoeWeightScaleSupported",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/routed_experts.py:RoutedExperts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py:RoutedExpertsCapturer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py:RoutedExpertsSink",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py:bind_routed_experts_capturer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/aiter_shared_routed_fused_moe_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/aiter_shared_routed_fused_moe_router.py:AiterSharedRoutedFusedMoERouter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/base_router.py:BaseRouter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/base_router.py:eplb_map_to_physical_and_record",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/base_router.py:get_moe_padding_mask",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_megamoe.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/prepare_megamoe.py:prepare_megamoe_inputs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/prepare_megamoe.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/prepare_megamoe.py:prepare_megamoe_nvfp4_inputs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py:split_bf16x3",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py:platform_supported",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py:is_supported",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py:bf16x3_router_gemm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/prepare_finalize/passthrough.py:PassThroughPrepareAndFinalize",
+   "target": "class:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py:MoEPrepareAndFinalizeNoDPEPModular",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/router/aiter_shared_routed_fused_moe_router.py:AiterSharedRoutedFusedMoERouter",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/base_router.py:BaseRouter",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/router/base_router.py:BaseRouter",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/fused_moe_router.py:FusedMoERouter",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/router/base_router.py:BaseRouter",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/base_router.py:eplb_map_to_physical_and_record",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/layers/fused_moe/prepare_megamoe.py:prepare_megamoe_inputs",
+   "target": "function:vllm/model_executor/layers/fused_moe/prepare_megamoe.py:_prepare_megamoe_inputs_kernel",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/layers/fused_moe/prepare_megamoe.py:prepare_megamoe_nvfp4_inputs",
+   "target": "function:vllm/model_executor/layers/fused_moe/prepare_megamoe.py:_prepare_megamoe_nvfp4_inputs_kernel",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py:bind_routed_experts_capturer",
+   "target": "class:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py:RoutedExpertsCapturer",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/prepare_finalize/nixl_ep.py:NixlEPPrepareAndFinalize",
+   "target": "class:vllm/model_executor/layers/fused_moe/modular_kernel.py:FusedMoEPrepareAndFinalizeModular",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py:MoEPrepareAndFinalizeNoDPEPModular",
+   "target": "class:vllm/model_executor/layers/fused_moe/modular_kernel.py:FusedMoEPrepareAndFinalizeModular",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/prepare_finalize/no_dp_ep.py:MoEPrepareAndFinalizeNoDPEPMonolithic",
+   "target": "class:vllm/model_executor/layers/fused_moe/modular_kernel.py:FusedMoEPrepareAndFinalizeMonolithic",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

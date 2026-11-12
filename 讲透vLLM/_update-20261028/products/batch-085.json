@@ -1,0 +1,1689 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/lora/layers/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/lora/layers/__init__.py",
+   "summary": "lora layers 包 barrel：全部 WithLoRA 层 re-export。",
+   "tags": [
+    "barrel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/lora/layers/base.py",
+   "type": "file",
+   "name": "base.py",
+   "filePath": "vllm/lora/layers/base.py",
+   "summary": "BaseLayerWithLoRA：全部 LoRA 层包装的根 ABC（13 方法：adapter 生命周期/punica 指针/forward 钩子）。",
+   "tags": [
+    "base",
+    "abc"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/lora/layers/base_linear.py",
+   "type": "file",
+   "name": "base_linear.py",
+   "filePath": "vllm/lora/layers/base_linear.py",
+   "summary": "BaseLinearLayerWithLoRA：线性层 LoRA 基座（13 方法：apply 默认实现、shrink/expand 分派、多流与 noop adapter 快路径）。",
+   "tags": [
+    "base",
+    "linear"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/lora/layers/classifier.py",
+   "type": "file",
+   "name": "classifier.py",
+   "filePath": "vllm/lora/layers/classifier.py",
+   "summary": "分类头 LoRA：序列/token 分类（继承 Replicated 路线）。",
+   "tags": [
+    "classifier",
+    "head"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/lora/layers/column_parallel_linear.py",
+   "type": "file",
+   "name": "column_parallel_linear.py",
+   "filePath": "vllm/lora/layers/column_parallel_linear.py",
+   "summary": "列并行线性 LoRA 全家（757 行、9 类）：普通/Merged/QKV/MergedQKV 四型 × 普通/ShardedLoRA(S-LoRA r 维切分) 两轴 + VariableSlice 变体。",
+   "tags": [
+    "column-parallel",
+    "s-lora",
+    "qkv"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/lora/layers/custom_layer.py",
+   "type": "file",
+   "name": "custom_layer.py",
+   "filePath": "vllm/lora/layers/custom_layer.py",
+   "summary": "模型特化层 LoRA：Step5 FusedQKVIndexer/SparseIndexerW。",
+   "tags": [
+    "custom",
+    "step5"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/lora/layers/fused_moe.py",
+   "type": "file",
+   "name": "fused_moe.py",
+   "filePath": "vllm/lora/layers/fused_moe.py",
+   "summary": "FusedMoEWithLoRA（29 方法）：MoE LoRA 完整包装（slice/apply/预测量 embedding norm），FusedMoE3DWithLoRA 三维变体；对接批 57 的 MoELoRAContext/LoRAExpertsMixin。",
+   "tags": [
+    "moe",
+    "lora",
+    "context"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/lora/layers/logits_processor.py",
+   "type": "file",
+   "name": "logits_processor.py",
+   "filePath": "vllm/lora/layers/logits_processor.py",
+   "summary": "LogitsProcessorWithLoRA：lm_head 侧 LoRA（16 方法，logits 追加修正）。",
+   "tags": [
+    "logits",
+    "lm-head"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/lora/layers/replicated_linear.py",
+   "type": "file",
+   "name": "replicated_linear.py",
+   "filePath": "vllm/lora/layers/replicated_linear.py",
+   "summary": "ReplicatedLinearWithLoRA：复制线性层包装。",
+   "tags": [
+    "replicated"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/lora/layers/row_parallel_linear.py",
+   "type": "file",
+   "name": "row_parallel_linear.py",
+   "filePath": "vllm/lora/layers/row_parallel_linear.py",
+   "summary": "行并行线性 LoRA：普通+ShardedLoRA（B 沿 output 维切分）。",
+   "tags": [
+    "row-parallel",
+    "s-lora"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/lora/layers/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/lora/layers/utils.py",
+   "summary": "层工具：LoRAMapping、LoRA 放置设备决策、fully/not-fully-sharded can_replace 装饰器与 MoE LoRA 调优配置。",
+   "tags": [
+    "utils",
+    "mapping",
+    "sharding"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/lora/layers/vocab_parallel_embedding.py",
+   "type": "file",
+   "name": "vocab_parallel_embedding.py",
+   "filePath": "vllm/lora/layers/vocab_parallel_embedding.py",
+   "summary": "VocabParallelEmbeddingWithLoRA：词表嵌入 LoRA（padding 侧追加）。",
+   "tags": [
+    "embedding",
+    "vocab"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/lora/layers/base.py:BaseLayerWithLoRA",
+   "type": "class",
+   "name": "BaseLayerWithLoRA",
+   "filePath": "vllm/lora/layers/base.py",
+   "summary": "全部 LoRA 层包装根 ABC（13 个方法）",
+   "tags": [
+    "base",
+    "abc"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    17,
+    109
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/base_linear.py:BaseLinearLayerWithLoRA",
+   "type": "class",
+   "name": "BaseLinearLayerWithLoRA",
+   "filePath": "vllm/lora/layers/base_linear.py",
+   "summary": "线性层 LoRA 基座（13 个方法：apply/shrink/expand 分派与 noop 快路径）",
+   "tags": [
+    "base",
+    "linear"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    70,
+    331
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/classifier.py:BaseClassificationHeadWithLoRA",
+   "type": "class",
+   "name": "BaseClassificationHeadWithLoRA",
+   "filePath": "vllm/lora/layers/classifier.py",
+   "summary": "分类头 LoRA 基类",
+   "tags": [
+    "classifier",
+    "base"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    14,
+    68
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/classifier.py:ClassificationHeadWithLoRA",
+   "type": "class",
+   "name": "ClassificationHeadWithLoRA",
+   "filePath": "vllm/lora/layers/classifier.py",
+   "summary": "序列分类头 LoRA",
+   "tags": [
+    "classifier"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    71,
+    129
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/classifier.py:TokenClassificationHeadWithLoRA",
+   "type": "class",
+   "name": "TokenClassificationHeadWithLoRA",
+   "filePath": "vllm/lora/layers/classifier.py",
+   "summary": "token 分类头 LoRA",
+   "tags": [
+    "classifier",
+    "token"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    132,
+    174
+   ]
+  },
+  {
+   "id": "function:vllm/lora/layers/column_parallel_linear.py:_mcp_apply",
+   "type": "function",
+   "name": "_mcp_apply",
+   "filePath": "vllm/lora/layers/column_parallel_linear.py",
+   "summary": "S-LoRA 全分片列并行 apply 路径",
+   "tags": [
+    "s-lora",
+    "apply"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    24,
+    82
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/column_parallel_linear.py:ColumnParallelLinearWithLoRA",
+   "type": "class",
+   "name": "ColumnParallelLinearWithLoRA",
+   "filePath": "vllm/lora/layers/column_parallel_linear.py",
+   "summary": "列并行 LoRA（B 沿 TP 切分，两种策略）",
+   "tags": [
+    "column-parallel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    85,
+    181
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/column_parallel_linear.py:MergedColumnParallelLinearWithLoRA",
+   "type": "class",
+   "name": "MergedColumnParallelLinearWithLoRA",
+   "filePath": "vllm/lora/layers/column_parallel_linear.py",
+   "summary": "双子层合并列并行（gate+up 型，sturm 切片管理）",
+   "tags": [
+    "merged",
+    "column-parallel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    184,
+    385
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/column_parallel_linear.py:QKVParallelLinearWithLoRA",
+   "type": "class",
+   "name": "QKVParallelLinearWithLoRA",
+   "filePath": "vllm/lora/layers/column_parallel_linear.py",
+   "summary": "QKV 专用（chatglm3/baichuan 类 kv head 分组切分）",
+   "tags": [
+    "qkv"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    388,
+    450
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/column_parallel_linear.py:MergedQKVParallelLinearWithLoRA",
+   "type": "class",
+   "name": "MergedQKVParallelLinearWithLoRA",
+   "filePath": "vllm/lora/layers/column_parallel_linear.py",
+   "summary": "三子层 QKV 合并型",
+   "tags": [
+    "qkv",
+    "merged"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    453,
+    511
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/column_parallel_linear.py:ColumnParallelLinearWithShardedLoRA",
+   "type": "class",
+   "name": "ColumnParallelLinearWithShardedLoRA",
+   "filePath": "vllm/lora/layers/column_parallel_linear.py",
+   "summary": "S-LoRA：A 沿 r 维再切分",
+   "tags": [
+    "s-lora"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    519,
+    556
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/column_parallel_linear.py:MergedColumnParallelLinearWithShardedLoRA",
+   "type": "class",
+   "name": "MergedColumnParallelLinearWithShardedLoRA",
+   "filePath": "vllm/lora/layers/column_parallel_linear.py",
+   "summary": "Merged 的 S-LoRA 变体",
+   "tags": [
+    "s-lora",
+    "merged"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    559,
+    598
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/column_parallel_linear.py:QKVParallelLinearWithShardedLoRA",
+   "type": "class",
+   "name": "QKVParallelLinearWithShardedLoRA",
+   "filePath": "vllm/lora/layers/column_parallel_linear.py",
+   "summary": "QKV 的 S-LoRA 变体",
+   "tags": [
+    "s-lora",
+    "qkv"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    601,
+    633
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/column_parallel_linear.py:MergedQKVParallelLinearWithShardedLoRA",
+   "type": "class",
+   "name": "MergedQKVParallelLinearWithShardedLoRA",
+   "filePath": "vllm/lora/layers/column_parallel_linear.py",
+   "summary": "MergedQKV 的 S-LoRA 变体",
+   "tags": [
+    "s-lora",
+    "qkv",
+    "merged"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    636,
+    682
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/column_parallel_linear.py:MergedColumnParallelLinearVariableSliceWithLoRA",
+   "type": "class",
+   "name": "MergedColumnParallelLinearVariableSliceWithLoRA",
+   "filePath": "vllm/lora/layers/column_parallel_linear.py",
+   "summary": "可变子层数（3+）合并型（checkpoint 特殊分组）",
+   "tags": [
+    "variable-slices"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    685,
+    757
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/custom_layer.py:Step5FusedQKVIndexerWithLoRA",
+   "type": "class",
+   "name": "Step5FusedQKVIndexerWithLoRA",
+   "filePath": "vllm/lora/layers/custom_layer.py",
+   "summary": "Step5 FusedQKVIndexer 专用 LoRA（indexer q/k/z/g 切片）",
+   "tags": [
+    "step5",
+    "custom"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    16,
+    71
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/custom_layer.py:Step5SparseIndexerWWithLoRA",
+   "type": "class",
+   "name": "Step5SparseIndexerWWithLoRA",
+   "filePath": "vllm/lora/layers/custom_layer.py",
+   "summary": "Step5 SparseIndexerW 专用 LoRA",
+   "tags": [
+    "step5",
+    "custom"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    74,
+    82
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/fused_moe.py:FusedMoEWithLoRA",
+   "type": "class",
+   "name": "FusedMoEWithLoRA",
+   "filePath": "vllm/lora/layers/fused_moe.py",
+   "summary": "MoE LoRA 完整包装（29 个方法：slice/embedding norm 预测量/apply/上下文）",
+   "tags": [
+    "moe",
+    "lora"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    30,
+    483
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/fused_moe.py:FusedMoE3DWithLoRA",
+   "type": "class",
+   "name": "FusedMoE3DWithLoRA",
+   "filePath": "vllm/lora/layers/fused_moe.py",
+   "summary": "三维 LoRA MoE 变体（10 个方法）",
+   "tags": [
+    "moe",
+    "3d"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    486,
+    647
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/logits_processor.py:LogitsProcessorWithLoRA",
+   "type": "class",
+   "name": "LogitsProcessorWithLoRA",
+   "filePath": "vllm/lora/layers/logits_processor.py",
+   "summary": "lm_head LoRA（16 个方法，logits 修正）",
+   "tags": [
+    "logits"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    20,
+    227
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/replicated_linear.py:ReplicatedLinearWithLoRA",
+   "type": "class",
+   "name": "ReplicatedLinearWithLoRA",
+   "filePath": "vllm/lora/layers/replicated_linear.py",
+   "summary": "复制线性层 LoRA（6 个方法）",
+   "tags": [
+    "replicated"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    16,
+    78
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/row_parallel_linear.py:RowParallelLinearWithLoRA",
+   "type": "class",
+   "name": "RowParallelLinearWithLoRA",
+   "filePath": "vllm/lora/layers/row_parallel_linear.py",
+   "summary": "行并行 LoRA",
+   "tags": [
+    "row-parallel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    22,
+    94
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/row_parallel_linear.py:RowParallelLinearWithShardedLoRA",
+   "type": "class",
+   "name": "RowParallelLinearWithShardedLoRA",
+   "filePath": "vllm/lora/layers/row_parallel_linear.py",
+   "summary": "S-LoRA：B 沿 output 维再切分",
+   "tags": [
+    "s-lora",
+    "row-parallel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    102,
+    177
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/utils.py:LoRAMappingType",
+   "type": "class",
+   "name": "LoRAMappingType",
+   "filePath": "vllm/lora/layers/utils.py",
+   "summary": "映射类型枚举",
+   "tags": [
+    "enum"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    27,
+    30
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/utils.py:LoRAMapping",
+   "type": "class",
+   "name": "LoRAMapping",
+   "filePath": "vllm/lora/layers/utils.py",
+   "summary": "LoRA index 映射",
+   "tags": [
+    "mapping"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    34,
+    42
+   ]
+  },
+  {
+   "id": "function:vllm/lora/layers/utils.py:_get_lora_device",
+   "type": "function",
+   "name": "_get_lora_device",
+   "filePath": "vllm/lora/layers/utils.py",
+   "summary": "LoRA 张量放置设备决策（与 base 同机/独立）",
+   "tags": [
+    "device"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    45,
+    73
+   ]
+  },
+  {
+   "id": "function:vllm/lora/layers/utils.py:_not_fully_sharded_can_replace",
+   "type": "function",
+   "name": "_not_fully_sharded_can_replace",
+   "filePath": "vllm/lora/layers/utils.py",
+   "summary": "非全分片条件装饰器（包 can_replace_layer）",
+   "tags": [
+    "decorator"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    76,
+    86
+   ]
+  },
+  {
+   "id": "function:vllm/lora/layers/utils.py:_fully_sharded_can_replace",
+   "type": "function",
+   "name": "_fully_sharded_can_replace",
+   "filePath": "vllm/lora/layers/utils.py",
+   "summary": "全分片条件装饰器",
+   "tags": [
+    "decorator"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    89,
+    99
+   ]
+  },
+  {
+   "id": "function:vllm/lora/layers/utils.py:try_get_optimal_moe_lora_config",
+   "type": "function",
+   "name": "try_get_optimal_moe_lora_config",
+   "filePath": "vllm/lora/layers/utils.py",
+   "summary": "MoE LoRA 调优配置获取",
+   "tags": [
+    "config",
+    "moe"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    102,
+    138
+   ]
+  },
+  {
+   "id": "class:vllm/lora/layers/vocab_parallel_embedding.py:VocabParallelEmbeddingWithLoRA",
+   "type": "class",
+   "name": "VocabParallelEmbeddingWithLoRA",
+   "filePath": "vllm/lora/layers/vocab_parallel_embedding.py",
+   "summary": "词表嵌入 LoRA（7 个方法）",
+   "tags": [
+    "embedding"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    20,
+    132
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/lora/layers/base.py",
+   "target": "class:vllm/lora/layers/base.py:BaseLayerWithLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/base.py",
+   "target": "class:vllm/lora/layers/base.py:BaseLayerWithLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/base_linear.py",
+   "target": "class:vllm/lora/layers/base_linear.py:BaseLinearLayerWithLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/base_linear.py",
+   "target": "class:vllm/lora/layers/base_linear.py:BaseLinearLayerWithLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/classifier.py",
+   "target": "class:vllm/lora/layers/classifier.py:BaseClassificationHeadWithLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/classifier.py",
+   "target": "class:vllm/lora/layers/classifier.py:BaseClassificationHeadWithLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/classifier.py",
+   "target": "class:vllm/lora/layers/classifier.py:ClassificationHeadWithLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/classifier.py",
+   "target": "class:vllm/lora/layers/classifier.py:ClassificationHeadWithLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/classifier.py",
+   "target": "class:vllm/lora/layers/classifier.py:TokenClassificationHeadWithLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/classifier.py",
+   "target": "class:vllm/lora/layers/classifier.py:TokenClassificationHeadWithLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "function:vllm/lora/layers/column_parallel_linear.py:_mcp_apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:ColumnParallelLinearWithLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:ColumnParallelLinearWithLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:MergedColumnParallelLinearWithLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:MergedColumnParallelLinearWithLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:QKVParallelLinearWithLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:QKVParallelLinearWithLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:MergedQKVParallelLinearWithLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:MergedQKVParallelLinearWithLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:ColumnParallelLinearWithShardedLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:ColumnParallelLinearWithShardedLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:MergedColumnParallelLinearWithShardedLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:MergedColumnParallelLinearWithShardedLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:QKVParallelLinearWithShardedLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:QKVParallelLinearWithShardedLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:MergedQKVParallelLinearWithShardedLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:MergedQKVParallelLinearWithShardedLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:MergedColumnParallelLinearVariableSliceWithLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:MergedColumnParallelLinearVariableSliceWithLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/custom_layer.py",
+   "target": "class:vllm/lora/layers/custom_layer.py:Step5FusedQKVIndexerWithLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/custom_layer.py",
+   "target": "class:vllm/lora/layers/custom_layer.py:Step5FusedQKVIndexerWithLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/custom_layer.py",
+   "target": "class:vllm/lora/layers/custom_layer.py:Step5SparseIndexerWWithLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/custom_layer.py",
+   "target": "class:vllm/lora/layers/custom_layer.py:Step5SparseIndexerWWithLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/fused_moe.py",
+   "target": "class:vllm/lora/layers/fused_moe.py:FusedMoEWithLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/fused_moe.py",
+   "target": "class:vllm/lora/layers/fused_moe.py:FusedMoEWithLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/fused_moe.py",
+   "target": "class:vllm/lora/layers/fused_moe.py:FusedMoE3DWithLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/fused_moe.py",
+   "target": "class:vllm/lora/layers/fused_moe.py:FusedMoE3DWithLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/logits_processor.py",
+   "target": "class:vllm/lora/layers/logits_processor.py:LogitsProcessorWithLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/logits_processor.py",
+   "target": "class:vllm/lora/layers/logits_processor.py:LogitsProcessorWithLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/replicated_linear.py",
+   "target": "class:vllm/lora/layers/replicated_linear.py:ReplicatedLinearWithLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/replicated_linear.py",
+   "target": "class:vllm/lora/layers/replicated_linear.py:ReplicatedLinearWithLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/row_parallel_linear.py",
+   "target": "class:vllm/lora/layers/row_parallel_linear.py:RowParallelLinearWithLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/row_parallel_linear.py",
+   "target": "class:vllm/lora/layers/row_parallel_linear.py:RowParallelLinearWithLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/row_parallel_linear.py",
+   "target": "class:vllm/lora/layers/row_parallel_linear.py:RowParallelLinearWithShardedLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/row_parallel_linear.py",
+   "target": "class:vllm/lora/layers/row_parallel_linear.py:RowParallelLinearWithShardedLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/utils.py",
+   "target": "class:vllm/lora/layers/utils.py:LoRAMappingType",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/utils.py",
+   "target": "class:vllm/lora/layers/utils.py:LoRAMappingType",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/utils.py",
+   "target": "class:vllm/lora/layers/utils.py:LoRAMapping",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/utils.py",
+   "target": "class:vllm/lora/layers/utils.py:LoRAMapping",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/utils.py",
+   "target": "function:vllm/lora/layers/utils.py:_get_lora_device",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/utils.py",
+   "target": "function:vllm/lora/layers/utils.py:_not_fully_sharded_can_replace",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/utils.py",
+   "target": "function:vllm/lora/layers/utils.py:_fully_sharded_can_replace",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/utils.py",
+   "target": "function:vllm/lora/layers/utils.py:try_get_optimal_moe_lora_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/utils.py",
+   "target": "function:vllm/lora/layers/utils.py:try_get_optimal_moe_lora_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/vocab_parallel_embedding.py",
+   "target": "class:vllm/lora/layers/vocab_parallel_embedding.py:VocabParallelEmbeddingWithLoRA",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/layers/vocab_parallel_embedding.py",
+   "target": "class:vllm/lora/layers/vocab_parallel_embedding.py:VocabParallelEmbeddingWithLoRA",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/layers/__init__.py",
+   "target": "file:vllm/lora/layers/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/__init__.py",
+   "target": "file:vllm/lora/layers/classifier.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/__init__.py",
+   "target": "file:vllm/lora/layers/column_parallel_linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/__init__.py",
+   "target": "file:vllm/lora/layers/custom_layer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/__init__.py",
+   "target": "file:vllm/lora/layers/fused_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/__init__.py",
+   "target": "file:vllm/lora/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/__init__.py",
+   "target": "file:vllm/lora/layers/replicated_linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/__init__.py",
+   "target": "file:vllm/lora/layers/row_parallel_linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/__init__.py",
+   "target": "file:vllm/lora/layers/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/__init__.py",
+   "target": "file:vllm/lora/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/base.py",
+   "target": "file:vllm/config/lora.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/base.py",
+   "target": "file:vllm/lora/punica_wrapper/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/base.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/base_linear.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/base_linear.py",
+   "target": "file:vllm/config/lora.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/base_linear.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/base_linear.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/base_linear.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/base_linear.py",
+   "target": "file:vllm/lora/layers/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/base_linear.py",
+   "target": "file:vllm/lora/layers/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/base_linear.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/base_linear.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/base_linear.py",
+   "target": "file:vllm/utils/multi_stream_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/base_linear.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/classifier.py",
+   "target": "file:vllm/config/lora.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/classifier.py",
+   "target": "file:vllm/lora/layers/replicated_linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/classifier.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "file:vllm/config/lora.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "file:vllm/lora/layers/base_linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "file:vllm/lora/layers/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/column_parallel_linear.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/custom_layer.py",
+   "target": "file:vllm/lora/layers/base_linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/custom_layer.py",
+   "target": "file:vllm/lora/layers/column_parallel_linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/fused_moe.py",
+   "target": "file:vllm/config/lora.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/fused_moe.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/fused_moe.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/fused_moe.py",
+   "target": "file:vllm/lora/layers/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/fused_moe.py",
+   "target": "file:vllm/lora/layers/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/fused_moe.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/fused_moe.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/fused_moe.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/lora_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/fused_moe.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/lora_experts_mixin.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/fused_moe.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/fused_moe_modular_method.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/fused_moe.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/modular_kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/fused_moe.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/logits_processor.py",
+   "target": "file:vllm/config/lora.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/logits_processor.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/logits_processor.py",
+   "target": "file:vllm/lora/layers/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/logits_processor.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/logits_processor.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/logits_processor.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/replicated_linear.py",
+   "target": "file:vllm/config/lora.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/replicated_linear.py",
+   "target": "file:vllm/lora/layers/base_linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/replicated_linear.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/replicated_linear.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/row_parallel_linear.py",
+   "target": "file:vllm/config/lora.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/row_parallel_linear.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/row_parallel_linear.py",
+   "target": "file:vllm/lora/layers/base_linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/row_parallel_linear.py",
+   "target": "file:vllm/lora/layers/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/row_parallel_linear.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/row_parallel_linear.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/row_parallel_linear.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/utils.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/fused_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/utils.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/vocab_parallel_embedding.py",
+   "target": "file:vllm/config/lora.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/vocab_parallel_embedding.py",
+   "target": "file:vllm/lora/layers/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/vocab_parallel_embedding.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/vocab_parallel_embedding.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/layers/vocab_parallel_embedding.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/lora/layers/base_linear.py:BaseLinearLayerWithLoRA",
+   "target": "class:vllm/lora/layers/base.py:BaseLayerWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/classifier.py:BaseClassificationHeadWithLoRA",
+   "target": "class:vllm/lora/layers/replicated_linear.py:ReplicatedLinearWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/classifier.py:ClassificationHeadWithLoRA",
+   "target": "class:vllm/lora/layers/classifier.py:BaseClassificationHeadWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/classifier.py:TokenClassificationHeadWithLoRA",
+   "target": "class:vllm/lora/layers/classifier.py:BaseClassificationHeadWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/column_parallel_linear.py:ColumnParallelLinearWithLoRA",
+   "target": "class:vllm/lora/layers/base_linear.py:BaseLinearLayerWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/column_parallel_linear.py:MergedColumnParallelLinearWithLoRA",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:ColumnParallelLinearWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/column_parallel_linear.py:QKVParallelLinearWithLoRA",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:ColumnParallelLinearWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/column_parallel_linear.py:MergedQKVParallelLinearWithLoRA",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:MergedColumnParallelLinearWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/column_parallel_linear.py:ColumnParallelLinearWithShardedLoRA",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:ColumnParallelLinearWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/column_parallel_linear.py:MergedColumnParallelLinearWithShardedLoRA",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:MergedColumnParallelLinearWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/column_parallel_linear.py:QKVParallelLinearWithShardedLoRA",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:QKVParallelLinearWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/column_parallel_linear.py:MergedQKVParallelLinearWithShardedLoRA",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:MergedQKVParallelLinearWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/column_parallel_linear.py:MergedColumnParallelLinearVariableSliceWithLoRA",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:MergedColumnParallelLinearWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/custom_layer.py:Step5FusedQKVIndexerWithLoRA",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:MergedColumnParallelLinearWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/custom_layer.py:Step5SparseIndexerWWithLoRA",
+   "target": "class:vllm/lora/layers/column_parallel_linear.py:ColumnParallelLinearWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/fused_moe.py:FusedMoEWithLoRA",
+   "target": "class:vllm/lora/layers/base.py:BaseLayerWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/fused_moe.py:FusedMoE3DWithLoRA",
+   "target": "class:vllm/lora/layers/fused_moe.py:FusedMoEWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/logits_processor.py:LogitsProcessorWithLoRA",
+   "target": "class:vllm/lora/layers/base.py:BaseLayerWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/replicated_linear.py:ReplicatedLinearWithLoRA",
+   "target": "class:vllm/lora/layers/base_linear.py:BaseLinearLayerWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/row_parallel_linear.py:RowParallelLinearWithLoRA",
+   "target": "class:vllm/lora/layers/base_linear.py:BaseLinearLayerWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/row_parallel_linear.py:RowParallelLinearWithShardedLoRA",
+   "target": "class:vllm/lora/layers/row_parallel_linear.py:RowParallelLinearWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/lora/layers/vocab_parallel_embedding.py:VocabParallelEmbeddingWithLoRA",
+   "target": "class:vllm/lora/layers/base.py:BaseLayerWithLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

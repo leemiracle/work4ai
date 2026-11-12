@@ -1,0 +1,821 @@
+---
+hide:
+  - navigation
+---
+
+# Raw Ethernet Benchmarking
+
+DAQIRI provides raw Ethernet benchmark applications that use the DPDK or ibverbs engine to drive an NVIDIA NIC directly. This page walks through `daqiri_bench_raw_gpudirect`, the TX/RX loopback config, and the raw Ethernet checks needed before interpreting throughput results.
+
+Make sure to [build the DAQIRI library](../getting-started.md#build-the-daqiri-library) beforehand.
+
+**Not sure which stream type to benchmark?** Start with the [Benchmarking overview](index.md). Use this page after you have chosen the raw Ethernet stream type. Use [Socket and RDMA Benchmarking](socket_benchmarking.md) for TCP, UDP, and RoCE/RDMA runs.
+
+!!! note "Prerequisites"
+
+    Before running the benchmarking application, ensure your system has been fully configured per the [System Configuration](../tutorials/system_configuration.md) page.
+
+## Configure hugepages first
+
+Size the hugepage pool to your YAML's `memory_regions` plus DPDK overhead before running. DAQIRI's preflight aborts with an actionable error (and the exact `echo N | sudo tee …` to fix it) if the pool is too small, so the simplest workflow is: run once, copy-paste the recommendation. To check current state:
+
+```bash
+grep Huge /proc/meminfo
+```
+
+For a persistent allocation across reboots, use the grub recipe in [Step 4 of System Configuration](../tutorials/system_configuration.md#step-4-enable-huge-pages).
+
+## Running the DAQIRI container
+
+If you built DAQIRI using the container approach, use the following command to launch the container with Raw Ethernet (DPDK) and GPU support. The host system must be fully configured (see [System Configuration](../tutorials/system_configuration.md)) before the container can access the NIC and GPU hardware.
+
+```bash
+docker run --rm -it --privileged \
+  --runtime=nvidia \
+  --network=host \
+  -v /dev/hugepages:/dev/hugepages \
+  daqiri:local bash
+```
+
+??? info "Explanation of container flags"
+
+    | Flag | Purpose |
+    |------|---------|
+    | `--privileged` | DPDK requires raw access to NIC hardware, PCI devices, and hugepage files. |
+    | `--runtime=nvidia` | Makes the host GPU visible inside the container via the NVIDIA Container Toolkit |
+    | `--network=host` | Shares the host network namespace so DPDK can discover the physical NIC interfaces and their PCIe topology |
+    | `-v /dev/hugepages:/dev/hugepages` | Mounts the hugepage filesystem for DPDK memory allocation (`--privileged` alone does not cover mounted filesystems) |
+
+!!! warning "Hybrid iGPU + dGPU hosts (IGX Thor)"
+
+    Select the discrete GPU by UUID in both visibility variables:
+
+    ```bash
+    nvidia-smi --query-gpu=index,name,uuid --format=csv   # on the host
+
+    docker run --rm -it --privileged \
+      --runtime=nvidia \
+      --network=host \
+      -e NVIDIA_VISIBLE_DEVICES=GPU-<uuid> \
+      -e CUDA_VISIBLE_DEVICES=GPU-<uuid> \
+      -v /dev/hugepages:/dev/hugepages \
+      daqiri:local bash
+    ```
+
+    The selected GPU becomes CUDA ordinal **0**, so set `memory_regions[*].affinity: 0` regardless of its host-wide index.
+
+## Update the loopback configuration
+
+!!! tip "DGX Spark"
+
+    Start with [`daqiri_bench_raw_tx_rx.yaml`](https://github.com/nvidia/daqiri/blob/main/examples/daqiri_bench_raw_tx_rx.yaml) to see how the TX and RX configuration fits together. On a system configured per the [DGX Spark profile](../tutorials/system_configuration.md#dgx-spark-profile), adapt the NIC addresses, use `host_pinned` memory, place the queue and application workers on the high-frequency cores, and set the destination MAC to the receiving port. [Generate a raw-Ethernet pair](../config-generation.md#generate-a-raw-ethernet-pair) can apply those system parameters and produce the concrete loopback. The `rx_port` is `0002:01:00.1` (physical port p1), so read its MAC with `cat /sys/class/net/enP2p1s0f1np1/address`.
+
+    For multiple queues, [`daqiri_bench_raw_tx_rx_4q.yaml`](https://github.com/nvidia/daqiri/blob/main/examples/daqiri_bench_raw_tx_rx_4q.yaml) shows how queues, memory regions, flow steering, and application workers relate. [`run_cabled_loopback_bench.sh`](https://github.com/nvidia/daqiri/blob/main/examples/run_cabled_loopback_bench.sh) generates each single-queue benchmark cell from detected platform defaults, while [`run_spark_mq_bench.sh`](https://github.com/nvidia/daqiri/blob/main/examples/run_spark_mq_bench.sh) generates the Spark-specific `(TX, RX)` multi-queue combinations.
+
+#### Cross-host two-DGX-Spark loopback
+
+If you have two DGX Sparks cross-cabled p0↔p0 instead of a chassis QSFP loop on one machine, generate independent TX and RX files with `raw-pair --role both`. Each host runs only its own role, so the YAML on each side configures one port instead of two. Both hosts must already be set up per the [DGX Spark profile](../tutorials/system_configuration.md#dgx-spark-profile), with one adjustment: the `daqiri-tx` (`1.1.1.1/24`) and `daqiri-rx` (`2.2.2.2/24`) nmcli profiles are *split across* the two hosts. Bring up `daqiri-tx` on the TX host's p0 and `daqiri-rx` on the RX host's p0, instead of both on one box.
+
+**Network setup.** Assigning `/24` addresses on each host is not enough for the kernel to reach the peer over a direct cable. Install a host route on the cabled port by running [`scripts/setup_spark_xhost_net.sh`](https://github.com/nvidia/daqiri/blob/main/scripts/setup_spark_xhost_net.sh) on **both** hosts after bringing up the nmcli profile. RDMA-CM uses that route; raw ibverbs can also use it with Linux ARP when `eth_dst_addr` is omitted. The generated raw pair below supplies the RX port MAC explicitly. See the [cross-host variant](../tutorials/system_configuration.md#cross-host-variant-two-sparks) in System Configuration for the full steps.
+
+```bash
+# TX host
+sudo scripts/setup_spark_xhost_net.sh --role tx
+
+# RX host
+sudo scripts/setup_spark_xhost_net.sh --role rx
+
+# Verify on each host before starting benches
+ping -c 3 <peer-ip>    # 2.2.2.2 on TX, 1.1.1.1 on RX
+ip route get <peer-ip> # must name enp1s0f0np0, not lo
+```
+
+**Raw GPUDirect.** Start the RX side first so the flow rule is installed before any traffic arrives:
+
+```bash
+# RX host
+sudo ./daqiri_bench_raw_gpudirect generated/raw-xhost/rx.yaml --seconds 30
+
+# TX host; supply the RX port MAC when generating this file
+sudo ./daqiri_bench_raw_gpudirect generated/raw-xhost/tx.yaml --seconds 30
+```
+
+Verify both sides report non-zero packet counts and no `NO_FREE_BURST_BUFFERS` / `NO_FREE_PACKET_BUFFERS` errors.
+
+For a measured cabled run, capture the sender's TX PHY counters and receiver's
+RX PHY counters before and after the active window. Require their packet deltas
+to agree, and check DAQIRI's per-queue packet, error, missed, and no-buffer
+counters for loss. Report application payload throughput separately from the
+physical wire rate. For a multi-queue scaling result, retain the queue-to-core
+mapping and per-queue counters so the result shows that traffic reached every
+intended queue.
+
+**RDMA.** Start the server side first:
+
+```bash
+# RX (server) host
+sudo ./daqiri_bench_rdma generated/roce/rx.yaml --mode server --seconds 30
+
+# TX (client) host
+sudo ./daqiri_bench_rdma generated/roce/tx.yaml --mode client --seconds 30
+```
+
+Verify both sides report non-zero send/receive completions and no `CQ error` / `RETRY_EXC_ERR` lines in the client log.
+
+The benchmark executables and example YAML configurations are located at:
+
+| | Binaries | YAML configs |
+|---|---|---|
+| **Container** | `/opt/daqiri/bin/` | `/opt/daqiri/bin/` |
+| **From source** | `./build/examples/` | `./examples/` |
+
+The fields in the YAML configs will be explained in more detail in [Understanding the Configuration File](../tutorials/configuration-walkthrough.md). For now, we'll stick to modifying the strict minimum required fields to run the application as-is on your system.
+
+### Hardware reorder benchmark
+
+`daqiri_bench_raw_reorder_seq` can exercise ibverbs hardware direct placement on ConnectX-7 or
+newer NICs. The `*_reorder_seq_*.yaml` hardware examples select `engine: "ibverbs"`, set
+`reorder_engine: "hw"` and `cyclic_sequence: true`, and make the benchmark TX sequence wrap with
+`sequence_number_modulus`. The reorder output memory region may use `kind: device` for GPUDirect
+placement or a CPU-addressable kind.
+
+The current hardware path uses the mlx5 flex parser and private receive queues; a host CPU polls
+CQEs and releases complete aggregates or configured timeout passthroughs to the application. It
+does not use DPA and it does not launch the software reorder kernel. Successful output includes a non-zero
+`direct_placed_batches` count. Always free each received burst promptly, because its fixed output
+slots are rearmed only by `free_rx_burst()`.
+
+Before running, set `PROG_PARSE_GRAPH=1` and `FLEX_PARSER_PROFILE_ENABLE=4` persistently on the
+receiving adapter and cold reboot it. See
+[Enable programmable flex parsing](../tutorials/system_configuration.md#enable-programmable-flex-parsing)
+for the complete `mlxconfig` procedure and verification command.
+
+If initialization reports the following capability failure, the settings are disabled or have
+not taken effect on the receiving adapter:
+
+```text
+HCA hardware-reorder caps (mlx5_0): flex(max/current)=false/false rx_ft(max/current)=true/true ... -> not supported
+Hardware reorder requires FLEX_PARSE_GRAPH RX steering
+```
+
+Apply both settings with `mlxconfig` and cold reboot the adapter; changing the next-boot values
+without rebooting does not alter the `current` capability reported above. If the probe still
+reports `flex(max/current)=false/false` after reboot, confirm that `mlxconfig` targeted the same
+adapter as the reported `mlx5_N` device and that its NIC firmware supports programmable parse
+graphs.
+
+For deterministic loss testing, set `bench_tx.sequence_drop_every` to a non-zero N, set the RX
+queue's `timeout_us`, and select `missing_action: drop` or `passthrough`. With
+`DAQIRI_BENCH_CHECK_REORDER_INFO=1`, the final summary reports `missing_packets` and metadata
+errors. Restore `sequence_drop_every: 0` for throughput measurements.
+
+Use `mlnx_perf -i <rx-netdev> -t 1` during a run of at least 10 seconds and report stable RX
+samples after discarding startup and shutdown. For a cabled test, report the physical receive
+rate. For single-port hardware loopback, report `vport_loopback_bytes` as described below and do
+not add TX and RX for the same returned traffic.
+
+Physical-port counters include traffic later discarded by the NIC. Check receive-drop
+counters alongside application throughput before treating a wire-rate measurement as loss-free
+delivery.
+
+### Runtime named endpoints example
+
+The raw-ibverbs-only `daqiri_example_named_endpoints` application demonstrates
+runtime Ethernet/IPv4/UDP destinations and payload-only TX buffers. Start with
+[`daqiri_example_named_endpoints_tx_rx.yaml`](https://github.com/nvidia/daqiri/blob/main/examples/daqiri_example_named_endpoints_tx_rx.yaml),
+replace its PCIe, CPU-core, MAC, and IP placeholders, then run:
+
+```bash
+sudo ./build/examples/daqiri_example_named_endpoints \
+  ./examples/daqiri_example_named_endpoints_tx_rx.yaml --seconds 10
+```
+
+For each `bench_tx` entry, the application adds a named endpoint, verifies name
+resolution to an `EndpointId`, and submits bursts on the configured queue. The
+packet buffers contain only the UDP payload; DAQIRI inserts the cached header
+inline in the mlx5 send WQE. Named endpoints support up to four TX memory regions;
+each segment must fit its region's TX slot, and the endpoint MTU bounds the combined
+payload and inline header. This example uses one region; custom applications can
+gather CPU application headers and a GPU payload from separate regions.
+
+The checked-in config deliberately uses 8192 TX slots and a 256-packet batch.
+Raw ibverbs may need two send work requests per TX slot, and a provider can
+reject a QP request at the exact advertised `max_qp_wr`; these values leave
+headroom on a device reporting `max_qp_wr: 32768`. Larger TX regions require
+correspondingly greater device capacity, and both TX batch-size settings must
+fit within the engine's effective TX capacity.
+
+See [Runtime Named Endpoints](../concepts.md#runtime-named-endpoints) for the
+concept and [C++ API Usage](../api-reference/cpp.md#runtime-named-endpoints-raw-ibverbs)
+for lifecycle and ownership details.
+
+### Hardware tunnel transform examples
+
+Raw DPDK and raw ibverbs builds can program hardware flow actions that push or
+encapsulate on TX and pop or decapsulate on RX. The application packet buffers
+remain pre-encap on TX and post-decap on RX; DAQIRI accounts for outer-header
+overhead when sizing MTU/wire frames.
+
+Generate each variant with the same raw-pair command and one of
+`--transform vlan`, `--transform vxlan`, `--transform gre`, or
+`--transform nvgre`; see [configuration generation](../config-generation.md#generate-a-raw-ethernet-pair).
+All four outputs run on `daqiri_bench_raw_gpudirect`.
+
+##### Identify your NIC's PCIe addresses
+
+Retrieve the PCIe addresses of both ports of your NIC. We'll arbitrarily use the first for Tx and the second for Rx here:
+
+=== "ibdev2netdev"
+
+    ```bash
+    sudo ibdev2netdev -v | awk '{print $1}'
+    ```
+
+=== "lspci"
+
+    ```bash
+    # `0200` is the PCI-SIG class code for NICs
+    # `15b3` is the Vendor ID for Mellanox
+    lspci -n | awk '$2 == "0200:" && $3 ~ /^15b3:/ {print $1}'
+    ```
+
+??? abstract "See an example output"
+
+    ```
+    0005:03:00.0
+    0005:03:00.1
+    ```
+
+##### Configure the NIC for Tx and Rx
+
+Set the NIC addresses in the `interfaces` section of the `daqiri` configuration, making sure to remove the template brackets `< >`. This configures your NIC independently of your application:
+
+- Set the `address` field of the `tx_port` interface to one of these addresses. That interface will be able to transmit ethernet packets.
+- Set the `address` field of the `rx_port` interface to the other address. This interface will be able to receive ethernet packets.
+
+```yaml hl_lines="3 7"
+interfaces:
+    - name: "tx_port"
+    address: <0000:00:00.0>       # The BUS address of the interface doing Tx
+    tx:
+        ...
+    - name: "rx_port"
+    address: <0000:00:00.0>       # The BUS address of the interface doing Rx
+    rx:
+        ...
+```
+
+???+ abstract "See an example yaml"
+
+    ```yaml hl_lines="3 7"
+    interfaces:
+        - name: "tx_port"
+        address: 0005:03:00.0       # The BUS address of the interface doing Tx
+        tx:
+            ...
+        - name: "rx_port"
+        address: 0005:03:00.1       # The BUS address of the interface doing Rx
+        rx:
+            ...
+    ```
+
+##### Configure the application
+
+To run the benchmarking application to run a loopback on your system, you'll need to modify the `bench_tx` section which configures the application itself, to create the packet headers, pin the application TX worker, and direct the packets to the NIC. Make sure to remove the template brackets `< >`.
+
+- `eth_dst_addr` with the MAC address (and not the PCIe address) of the NIC interface you want to use for Rx. You can get the MAC address of your `if_name` interface with `#!bash cat /sys/class/net/$if_name/address`. Keep this field for DPDK and loopback configurations. A cross-host raw ibverbs configuration may omit it when the TX netdev has a usable IPv4 address and route; the benchmark then resolves `ip_dst_addr` through Linux routing and ARP once before its TX loop:
+- `cpu_core` with the CPU core for the benchmark application's TX thread. This is separate from the DAQIRI TX queue `cpu_core`; use a different isolated core when you have one, or deliberately share when the machine has a tight core budget.
+
+```yaml hl_lines="3 5"
+bench_tx:
+- interface_name: "tx_port" # Name of the TX port from the daqiri config
+  cpu_core: 10              # Benchmark application TX thread affinity
+  ...
+  eth_dst_addr: <00:00:00:00:00:00> # Explicit MAC for DPDK or loopback
+  ...
+```
+
+???+ abstract "See an example yaml"
+
+    ```yaml hl_lines="3 5"
+    bench_tx:
+    - interface_name: "tx_port" # Name of the TX port from the daqiri config
+      cpu_core: 10              # Benchmark application TX thread affinity
+      ...
+      eth_dst_addr: 48:b0:2d:ee:83:ad # Explicit MAC for DPDK or loopback
+      ...
+    ```
+
+??? info "Show explanation"
+
+    - `eth_dst_addr` - when present, this destination Ethernet MAC is embedded in packet headers without a route or neighbor lookup. When it is absent on raw ibverbs, the benchmark resolves the next-hop MAC from `ip_dst_addr` once before sending. Raw userspace TX does not otherwise invoke Linux routing or ARP because the application supplies complete Ethernet frames. If the interface also has DAQIRI RX queues, use `rx.flow_isolation: true` so ARP remains on the kernel path. A TX-only interface with no `rx.queues` needs no `rx` section.
+    - The benchmark reuses the resolved MAC for the entire run; it does not monitor Linux neighbor changes. Long-running applications should define their own refresh policy and call `resolve_ipv4_mac()` again when a peer, gateway, route, link, or namespace may have changed. See [Destination MAC resolution](../concepts.md#destination-mac-resolution).
+    - `cpu_core` - the benchmark application's own TX worker thread affinity. Set the matching `bench_rx.cpu_core` for RX workers too. These app-thread fields are distinct from the DAQIRI queue `cpu_core` values that poll the NIC.
+    - We ignore the IP fields (`ip_src_addr`, `ip_dst_addr`) for now, as we are testing on a layer 2 network by just connecting a cable between the two interfaces on our system, therefore having mock values has no impact.
+    - You might have noted the lack of an `eth_src_addr` field in this `bench_tx` section. The DPDK `tx_eth_src` egress flow rewrites the source MAC from the TX interface. For an ibverbs benchmark profile, supply the TX port MAC as `eth_src_addr` because the benchmark copies a complete packet-header template into its buffers.
+
+## Run the loopback test
+
+After having modified the configuration file, ensure you have connected an SFP cable between the two interfaces of your NIC, then run the application with the command below:
+
+=== "Containerized"
+
+    [Launch the DAQIRI container](#running-the-daqiri-container), then inside:
+
+    ```bash
+    /opt/daqiri/bin/daqiri_bench_raw_gpudirect /opt/daqiri/bin/daqiri_bench_raw_tx_rx.yaml
+    ```
+
+=== "From source"
+
+    This assumes you have built DAQIRI and its dependencies locally on your system.
+
+    ```bash
+    sudo ./build/examples/daqiri_bench_raw_gpudirect examples/daqiri_bench_raw_tx_rx.yaml
+    ```
+
+By default the application runs for 10 seconds and then exits. You can change the duration by passing `--seconds <N>` after the YAML path, or stop it gracefully at any time with `Ctrl-C`.
+
+### Direct-polling latency sweep
+
+`daqiri_bench_raw_latency` measures the raw ibverbs path with one packet
+outstanding at a time. Its template, `daqiri_bench_raw_latency_ibverbs.yaml`, configures both TX
+and RX with `poll_mode: direct`, enables per-packet RX hardware timestamps, and uses host-pinned
+buffers by default. The benchmark also supports `huge` and `device` packet memory: packet setup and
+identity checking use `cudaMemcpyDefault`, with both copies deliberately outside the reported
+`send_tx_burst()` call to `get_rx_burst()` return interval. It
+sweeps 64, 128, 256, ..., 8192-byte L2 frames; sizes exclude the Ethernet FCS added by the NIC.
+
+Replace the TX/RX PCI BDFs, master/application cores, destination MAC, and RX port's
+`ptp_device` in the template. The destination MAC must be the receiving port's MAC. Connect the
+physical loopback path, then run:
+
+```bash
+sudo ./build/examples/daqiri_bench_raw_latency \
+  examples/daqiri_bench_raw_latency_ibverbs.yaml \
+  --samples 10000 --warmup 1000 --csv latency.csv \
+  --realtime-priority 90
+```
+
+For a single-port internal comparison, merge the TX and RX queues under one interface, set both
+`bench_latency` interface names to it, use that port's MAC and PTP device, and set
+`daqiri.cfg.loopback: "hw"`. This retains the same timing boundaries while replacing the physical
+cable/peer-port return with the mlx5 hardware self-loopback path.
+
+`--realtime-priority N` locks current and future mappings with `mlockall()` and verifies that the
+latency thread is running under `SCHED_FIFO` at priority `N`. It requires the corresponding
+realtime scheduling and memory-lock privileges; omit it to retain normal `SCHED_OTHER` behavior.
+
+For each packet, the measured path follows this timeline:
+
+```text
+t0  Application timestamps immediately before send_tx_burst()
+t1  send_tx_burst() returns
+t2  NIC records the packet's RX hardware timestamp
+t3  get_rx_burst() returns the matching packet to the application
+```
+
+The summary and optional per-sample CSV combine those points into these boundaries:
+
+| Column | Start | End | What it includes |
+|--------|-------|-----|------------------|
+| `tx_call_to_return_ns` | `t0` | `t1` | Direct WQE construction and SQ doorbell submission |
+| `tx_call_to_rx_hw_ns` | `t0` | `t2` | TX submission, NIC transmit, physical or hardware-loopback return, and NIC receive |
+| `rx_hw_to_app_ns` | `t2` | `t3` | CQ visibility, direct polling, and API return |
+| `tx_call_to_app_ns` | `t0` | `t3` | Complete measured application round trip |
+
+For indirect polling, set both queues to `poll_mode: indirect` and add `batch_size: 1`
+and a separate isolated `cpu_core` to each. The same timing boundaries then include TX worker
+handoff and RX worker delivery; TX call-to-return measures enqueue time. To generate resolved
+configs and compare both modes in host-pinned and GPU memory, run
+the existing benchmark harness inside the privileged project container as root:
+
+```bash
+REPEATS=3 examples/run_cabled_loopback_bench.sh --platform igx-thor ibverbs latency
+```
+
+Use `--platform dgx-spark` on Spark. See the script header for optional settings.
+
+`tx_call_to_rx_hw_ns` is a loopback-ingress proxy, not an actual TX egress timestamp: DAQIRI does
+not currently expose a TX hardware timestamp, so this value also contains the cable and NIC RX
+latency. When `ptp_device` is set, the benchmark uses Linux's non-mutating extended
+PHC/system cross-timestamp ioctl before and after each size and interpolates the offset for every
+sample. It prints the maximum measured cross-clock uncertainty. Without `ptp_device`, the NIC PHC
+must be synchronized with `CLOCK_REALTIME`; negative or implausibly large values indicate a clock
+problem. Pin the application core to an isolated physical core, use the performance governor, and
+save the raw CSV when investigating tails.
+
+### Single-port hardware loopback without a cable
+
+On mlx5 systems where the NIC remains available without a cable, DAQIRI can send packets back to
+the same port internally. Start from
+`daqiri_bench_raw_hw_loopback_ibverbs.yaml`, replace its PCI/core placeholders, and set
+`bench_tx.eth_dst_addr` to the configured port's own MAC:
+
+```bash
+cat /sys/bus/pci/devices/<BDF>/net/*/address
+sudo ./build/examples/daqiri_bench_raw_gpudirect \
+  examples/daqiri_bench_raw_hw_loopback_ibverbs.yaml --seconds 10
+```
+
+The template exercises two TX and two RX queues: UDP port 4096 steers to RX queue 0,
+and UDP port 4097 steers to RX queue 1.
+
+This mode uses the normal receive flow rules and queue selection. Physical-network counters should
+remain flat while the DAQIRI TX and RX queue counters increase. It does not help on platforms such
+as DGX Spark that remove the NIC when no cable is detected.
+
+#### Performance testing in hardware-loopback mode
+
+Hardware-loopback throughput is not the same as throughput over a cable. Traffic stays inside the
+local NIC, so the test does not include a cable, another NIC, or a second host. When the packet
+buffers are in GPU memory (`kind: device`), the test also includes moving each packet from the GPU
+to the NIC and back to the GPU. The result measures this complete local path. It can differ from,
+or exceed, the speed of the physical network port and should not be presented as cabled network
+performance.
+
+Run the benchmark for at least 10 seconds and monitor the network interface at the same time:
+
+```bash
+sudo mlnx_perf -i <netdev> -t 1
+```
+
+For `loopback: "hw"`, report `vport_loopback_bytes`. This is the total loopback rate across all
+queues. Do not add the TX and RX rates because they represent the same packets and would count the
+traffic twice. Ignore the partial readings while the benchmark starts and stops; use the stable
+one-second readings in the middle of the run. The `*_bytes_phy` and `*_packets_phy` counters should
+remain flat, confirming that the traffic did not cross a cable. Use DAQIRI's per-queue counters to
+check that packets reached the expected queues and that no packets were dropped.
+
+When publishing results, label them **hardware-loopback throughput** and record the packet size,
+queue count, buffer memory type, NIC/GPU model, and whether a post-processing workload was enabled.
+Compare hardware-loopback runs only with runs using the same setup. Use a cabled TX/RX test when
+the goal is physical port speed or end-to-end network performance.
+
+`daqiri_bench_raw_gpudirect` and `daqiri_bench_raw_hds` also accept `--workload none|fft|gemm|gemm_fp16`, which runs a representative GPU workload once per received reorder window on the **actual received packet data**: `fft` (batched cuFFT C2C transform), `gemm` (FP32 `cublasSgemm`), or `gemm_fp16` (the same-size mixed-precision FP16/tensor-core matmul that models inference). Each received burst's payloads are first reordered by sequence number into a contiguous GPU buffer (`examples/bench_pipeline.{h,cu}`) that the compute then consumes. `--workload-gemm-dim N` (default 1024) pins the square GEMM side length and `--workload-fft-len N` (default 1024) the 1-D FFT transform length, so the FLOP count per call stays constant as the I/O unit is swept. The same flags are honoured by the RoCE bench (`daqiri_bench_rdma`, in-order gather) and the socket bench (`daqiri_bench_socket`, host→device stage then UDP reorder / TCP gather). See the [DGX Spark GPU-workload results](performance-dgx-spark.md#two-link-receive-throughput-with-gpu-workloads).
+
+## Flow programming smoke test
+
+Raw Ethernet flow rules are programmed into the NIC during `daqiri_init()`. Software loopback
+(`loopback: "sw"`) skips NIC init entirely, so it is a build/runtime smoke test only, not a
+flow programming test.
+
+| Step | Command / action | Expected |
+|------|------------------|----------|
+| Build smoke | `daqiri_bench_raw_sw_loopback.yaml --seconds 5` | Init succeeds, no NIC flows created |
+| Cable-free NIC flow smoke | `daqiri_bench_raw_hw_loopback_ibverbs.yaml --seconds 5` (filled placeholders, NIC still enumerated) | TX and RX complete through one mlx5 port; physical-link counters remain flat |
+| Good NIC config | `daqiri_bench_raw_tx_rx.yaml` (filled placeholders, cabled NIC) | Init succeeds; RX and `tx_eth_src` flows programmed |
+| Dynamic RX flow config | `daqiri_example_dynamic_rx_flow.yaml` with `daqiri_example_dynamic_rx_flow` | Starts with `flow_isolation: true` and no `rx.flows`, drops unmatched traffic, tests scalar queue rules, then varies UDP source ports and verifies one `[0, 1]` RSS rule reaches both queues with the expected flow ID and tolerance |
+| Dynamic resource lifecycle | Any ibverbs config with an RX queue and a single-region TX queue plus `daqiri_example_dynamic_resource` | Initializes without RX queues, creates the first RX queue, repeatedly adds and removes its steering flow, adds a TX queue, then drains and removes the queues and owned regions |
+| Bad queue target | Copy `daqiri_bench_raw_tx_rx.yaml`; try `flows[0].action.id: 99`, `ids: []`, duplicate/unknown IDs, or both `id` and `ids` | Fails validation before NIC initialization |
+| Static RSS flow | Change a standard IPv4/UDP flow action to `{type: queue, ids: [0, 1]}` and generate many distinct five tuples | Both queues receive packets; an unchanged tuple remains on one queue. Validate per-queue rates with `mlnx_perf` |
+| Mixed flows (optional) | On one interface, add two of the three flow classes (standard UDP/IP, flex-item (see `rx.flex_items`), or eCPRI (`match.ecpri`)) in the [configuration reference](../api-reference/configuration.md) | Fails in `validate_config()` with `mixes standard (UDP/IP), flex-item and/or eCPRI` |
+| eCPRI flow (optional) | On a cabled NIC, add a flow with `match: { ecpri: { msg_type: 0, pc_id: 1 } }` (see the [configuration reference](../api-reference/configuration.md)) | Init succeeds. eCPRI-over-Ethernet (EtherType 0xAEFE) frames matching the message type and pc_id steer to the flow's queue |
+
+## Cap the transmit rate with packet pacing
+
+To meter the transmit side at a fixed rate in hardware, set a per-queue `pacing_mbps` cap
+on the TX queue. [`daqiri_bench_raw_tx_rx_pacing.yaml`](https://github.com/nvidia/daqiri/blob/main/examples/daqiri_bench_raw_tx_rx_pacing.yaml)
+is the loopback config above with `pacing_mbps: 10000` (10 Gbps) on the TX queue. Pacing is
+supported by both raw engines on ConnectX-7 or later. The example uses the default ibverbs
+engine; add `engine: "dpdk"` beside `stream_type: "raw"` to exercise the DPDK path. The NIC
+meters the queue out so its average TX rate stays at or below the configured value. The ibverbs
+path uses the mlx5 packet-pacing rate table rather than per-packet WAIT WQEs; firmware defaults determine
+the allowed burst size unless configured outside DAQIRI.
+
+```bash
+/opt/daqiri/bin/daqiri_bench_raw_gpudirect /opt/daqiri/bin/daqiri_bench_raw_tx_rx_pacing.yaml --seconds 10
+```
+
+Validate the cap from the `RX complete:` line: `Gbps = bytes * 8 / seconds / 1e9`. With
+`pacing_mbps: 10000` the achieved rate should sit at or just below 10 Gbps regardless of
+link speed. Change `pacing_mbps` (or set it to `0` to disable pacing and send at line rate)
+and re-run to see the cap move.
+
+The DPDK path requires ConnectX-7 or later native wait-on-time `SEND_ON_TIMESTAMP` support; if unavailable,
+it logs a warning and runs at line rate. The ibverbs path requires ConnectX-7 or later plus
+packet-pacing support for RAW_PACKET QPs and, when the driver reports a supported range, a rate
+within that range. Older drivers that omit the range defer the check to the provider when applying
+the rate; unsupported requests still fail initialization instead of silently ignoring the cap.
+
+## Tune RDMA SEND completion signaling
+
+The RDMA engine signals every SEND work request by default. For `daqiri_bench_rdma`
+runs where CQ polling overhead is part of the bottleneck investigation, set
+`DAQIRI_RDMA_SEND_SIGNAL_EVERY=N` to request one signaled SEND every `N` posts:
+
+```bash
+DAQIRI_RDMA_SEND_SIGNAL_EVERY=16 \
+  /opt/daqiri/bin/daqiri_bench_rdma /opt/daqiri/bin/daqiri_bench_rdma_tx_rx.yaml
+```
+
+Larger values reduce SEND completion traffic, but completions also drive
+application credits and buffer recycling in the benchmark. Keep the variable
+unset, or set it to `1`, for baseline measurements.
+
+## Watch live OpenTelemetry metrics in Grafana
+
+DAQIRI can expose the raw benchmark counters through OpenTelemetry when metrics
+support is enabled at build time. The Grafana example uses the same benchmark
+binary and YAML files as the loopback test above, then starts Prometheus and
+Grafana beside the benchmark process.
+
+Build the container with metrics enabled:
+
+```bash
+DAQIRI_ENABLE_OTEL_METRICS=ON DAQIRI_ENGINE="dpdk ibverbs" scripts/build-container.sh
+```
+
+Before starting the stack, fill in the required `<placeholders>` in the benchmark
+YAML you plan to run. You can also pass a machine-local copy through
+`DAQIRI_CONFIG` so the tracked example YAML keeps its placeholder syntax.
+
+```bash
+cd examples/grafana
+DAQIRI_CONFIG=/workspace/daqiri/examples/daqiri_bench_raw_tx_rx.yaml \
+DAQIRI_SECONDS=60 \
+docker compose up
+```
+
+Prometheus scrapes `http://localhost:9464/metrics`, and Grafana serves the
+`DAQIRI OpenTelemetry Metrics` dashboard at `http://localhost:3000`. The
+throughput panel reports payload counter rates in `Gb/s` for each active
+interface and queue.
+
+??? abstract "See an example output"
+
+    This is an illustrative excerpt. Source line numbers and pointer values vary by build.
+
+    ```log
+    [INFO] /workspace/daqiri/src/../include/daqiri/common.h:1045: Finished reading DAQIRI configuration
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1732: Attempting to use 2 ports for high-speed network
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1741: Setting DPDK log level to: Info
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1775: DPDK EAL arguments: operator --file-prefix=vwcrlqhfkb -l 3,11,9 --log-level=error --log-level=pmd.net.mlx5:info --iova-mode=va -a 0005:03:00.0,txq_inline_max=0,dv_flow_en=2 -a 0005:03:00.1,txq_inline_max=0,dv_flow_en=2 
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1799: tx_port (0005:03:00.0): identified as port 0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1799: rx_port (0005:03:00.1): identified as port 1
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1809: Creating dummy RX and TX queues
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1591: Port 0 has no RX queues. Creating dummy queue.
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1624: Port 1 has no TX queues. Creating dummy queue.
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1542: Adjusting buffer size to 9228 for headroom
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1542: Adjusting buffer size to 9228 for headroom
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1542: Adjusting buffer size to 8192 for headroom
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1542: Adjusting buffer size to 8192 for headroom
+    [INFO] /workspace/daqiri/src/engine.cpp:175: Registering memory regions
+    [INFO] /workspace/daqiri/src/engine.cpp:236: Successfully allocated memory region MR_Unused_TX_P1 at 0x16d9bf580 type 2 with 9100 bytes (32768 elements @ 9228 bytes total 302383104)
+    [INFO] /workspace/daqiri/src/engine.cpp:236: Successfully allocated memory region MR_Unused_P0 at 0x15b95f500 type 2 with 9100 bytes (32768 elements @ 9228 bytes total 302383104)
+    [INFO] /workspace/daqiri/src/engine.cpp:236: Successfully allocated memory region Data_RX_GPU at 0xffff34000000 type 3 with 8064 bytes (32768 elements @ 8192 bytes total 268435456)
+    [INFO] /workspace/daqiri/src/engine.cpp:236: Successfully allocated memory region Data_TX_GPU at 0xffff24000000 type 3 with 8064 bytes (32768 elements @ 8192 bytes total 268435456)
+    [INFO] /workspace/daqiri/src/engine.cpp:249: Finished allocating memory regions
+    [INFO] /workspace/daqiri/src/engine.cpp:314: dma-buf supported for device 0
+    [INFO] /workspace/daqiri/src/engine.cpp:324: dma-buf GPU buffer address at 0xffff24000000 aligned at 0xffff24000000 with aligned size 268435456
+    [INFO] /workspace/daqiri/src/engine.cpp:364: Successfully registered external memory for Data_TX_GPU
+    [INFO] /workspace/daqiri/src/engine.cpp:314: dma-buf supported for device 0
+    [INFO] /workspace/daqiri/src/engine.cpp:324: dma-buf GPU buffer address at 0xffff34000000 aligned at 0xffff34000000 with aligned size 268435456
+    [INFO] /workspace/daqiri/src/engine.cpp:364: Successfully registered external memory for Data_RX_GPU
+    [INFO] /workspace/daqiri/src/engine.cpp:277: Mapped external memory descriptor for 0xffff34000000 to device 0
+    [INFO] /workspace/daqiri/src/engine.cpp:277: Mapped external memory descriptor for 0xffff24000000 to device 0
+    [INFO] /workspace/daqiri/src/engine.cpp:277: Mapped external memory descriptor for 0xffff34000000 to device 1
+    [INFO] /workspace/daqiri/src/engine.cpp:277: Mapped external memory descriptor for 0xffff24000000 to device 1
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1850: DPDK init (0005:03:00.0) -- RX: ENABLED TX: ENABLED
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1863: Configuring RX queue: UNUSED_P0_Q0 (0) on port 0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1896: Created mempool RXP_P0_Q0_MR0 : mbufs=32768 elsize=9228 ptr=0x17fca4380
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1955: Configuring TX queue: tx_q_0 (0) on port 0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1981: Created mempool TXP_P0_Q0_MR0 : mbufs=32768 elsize=8064 ptr=0x148cdc980
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1995: Max frame needed - RX: 0 TX: 8064
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2012: Setting port config for port 0 mtu:8046
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2026: Enabling RX scatter offload for single-segment RX queues (min buffer size: 9100)
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2062: Initializing port 0 with 1 RX queues and 1 TX queues...
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2079: Successfully configured ethdev
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2091: Successfully set descriptors to 8192/8192
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2106: Port 0 not in isolation mode
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2115: Setting up port:0, queue:0, Num scatter:1 pool:0x17fca4380
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2136: Successfully setup RX port 0 queue 0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2158: Successfully set up TX queue 0/0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2163: Enabling promiscuous mode for port 0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2177: Successfully started port 0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2180: Port 0, MAC address: 48:B0:2D:F4:04:23
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2891: Applying tx_eth_src offload for port 0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1850: DPDK init (0005:03:00.1) -- RX: ENABLED TX: ENABLED
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1863: Configuring RX queue: rq_q_0 (0) on port 1
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1896: Created mempool RXP_P1_Q0_MR0 : mbufs=32768 elsize=8192 ptr=0x147d6a980
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1908: Max packet size needed for RX: 8064
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1955: Configuring TX queue: UNUSED_TX_P1_Q0 (0) on port 1
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1981: Created mempool TXP_P1_Q0_MR0 : mbufs=32768 elsize=9100 ptr=0x1470e9e00
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:1995: Max frame needed - RX: 8064 TX: 0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2012: Setting port config for port 1 mtu:8046
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2026: Enabling RX scatter offload for single-segment RX queues (min buffer size: 8064)
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2062: Initializing port 1 with 1 RX queues and 1 TX queues...
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2079: Successfully configured ethdev
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2091: Successfully set descriptors to 8192/8192
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2103: Port 1 in isolation mode
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2115: Setting up port:1, queue:0, Num scatter:1 pool:0x147d6a980
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2136: Successfully setup RX port 1 queue 0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2158: Successfully set up TX queue 1/0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2166: Not enabling promiscuous mode on port 1 since flow isolation is enabled
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2177: Successfully started port 1
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2180: Port 1, MAC address: 48:B0:2D:F4:04:24
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2192: Adding RX flow flow_0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2670: Adding UDP port match for src 4096
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2677: Adding UDP port match for dst 4096
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2246: Setting up RX burst pool with 8191 batches of size 81920
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2265: Setting up RX burst pool with 8191 batches of size 20480
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2284: Setting up RX meta pool with 256 buffers
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2307: Setting up TX ring TX_RING_P0_Q0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2333: Setting up TX burst pool TX_BURST_POOL_P0_Q0 with 10240 pointers at 0x14703e380
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2307: Setting up TX ring TX_RING_P1_Q0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2333: Setting up TX burst pool TX_BURST_POOL_P1_Q0 with 10240 pointers at 0x1848bf700
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2340: Setting up TX meta pool with 256 buffers
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_stats.cpp:34: Initializing DPDK stats
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_stats.cpp:55: Port 0, Queue 0: Memory regions: MR_Unused_P0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_stats.cpp:55: Port 1, Queue 0: Memory regions: Data_RX_GPU
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_stats.cpp:130: Found rx_q0_errors counter at index 10
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_stats.cpp:152: Initialized DPDK xstats for port 0, found 70 stats
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_stats.cpp:154: Found rx_missed counter at index 4
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_stats.cpp:160: Found mbuf allocation counter at index 7
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_stats.cpp:130: Found rx_q0_errors counter at index 10
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_stats.cpp:152: Initialized DPDK xstats for port 1, found 70 stats
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_stats.cpp:154: Found rx_missed counter at index 4
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_stats.cpp:160: Found mbuf allocation counter at index 7
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_stats.cpp:169: Initialized DPDK stats
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:3169: Config validated successfully
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:3182: Starting DAQIRI workers
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_stats.cpp:201: Starting stats thread on core 3
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:3287: Flushing packet on port 1
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:3525: Starting RX Core 9, port 1, queue 0, socket 0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:3762: Starting TX Core 11, port 0, queue 0 socket 0 using burst pool 0x14703e380 ring 0x1852c8700
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:3277: Done starting workers
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:4239: daqiri DPDK engine stats
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2913: Port 0:
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2915:  - Received packets:    0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2916:  - Transmit packets:    45722624
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2917:  - Received bytes:      0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2918:  - Transmit bytes:      368707239936
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2919:  - Missed packets:      0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2920:  - Errored packets:     0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2921:  - RX out of buffers:   0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2923:    ** Extended Stats **
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2953:       tx_good_packets:		45728768
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2953:       tx_good_bytes:		368756785152
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2953:       tx_q0_packets:		45728768
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2953:       tx_q0_bytes:		368756785152
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2953:       tx_unicast_bytes:		368681991552
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2953:       tx_unicast_packets:		45719493
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2953:       tx_phy_packets:		45719292
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2953:       tx_phy_bytes:		368863334632
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2913: Port 1:
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2915:  - Received packets:    45720948
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2916:  - Transmit packets:    0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2917:  - Received bytes:      368693724672
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2918:  - Transmit bytes:      0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2919:  - Missed packets:      0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2920:  - Errored packets:     0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2921:  - RX out of buffers:   0
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2923:    ** Extended Stats **
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2953:       rx_good_packets:		45726554
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2953:       rx_good_bytes:		368738931456
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2953:       rx_q0_packets:		45726554
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2953:       rx_q0_bytes:		368738931456
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2953:       rx_unicast_bytes:		368729399808
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2953:       rx_unicast_packets:		45725372
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2953:       rx_phy_packets:		45725224
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:2953:       rx_phy_bytes:		368911131436
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:4226: daqiri DPDK engine shutdown called 1
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:4229: daqiri DPDK engine shutting down
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:3676: Total packets received by application (port/queue 1/0): 45726776
+    [INFO] /workspace/daqiri/src/engines/dpdk/daqiri_dpdk_engine.cpp:3814: Total packets transmitted by application (port/queue 0/0): 45731840
+    RX complete: packets=45711360 bytes=368616407040 bursts=4464
+    ```
+
+To inspect the speed the data is moving through the NIC, run `mlnx_perf` on one of the interfaces in a separate terminal, concurrently with the application running:
+
+```bash
+sudo mlnx_perf -i $if_name
+```
+
+The `*_packets_phy` and `*_bytes_phy` counters measure traffic that crosses a physical network cable. Some same-machine tests keep traffic inside the NIC, so the internal counters may rise while the physical counters stay flat. For single-port hardware loopback, follow the [hardware-loopback performance methodology](#performance-testing-in-hardware-loopback-mode) and use `vport_loopback_bytes` instead.
+
+??? abstract "See an example output"
+
+    On IGX with RTX 6000 Ada Generation, we saturate the 100 Gbps linerate with this configuration:
+    ```log
+          rx_vport_unicast_packets: 1,562,203
+            rx_vport_unicast_bytes: 12,597,604,992 Bps   = 100,780.83 Mbps
+                    rx_packets_phy: 1,562,198
+                      rx_bytes_phy: 12,603,813,464 Bps   = 100,830.50 Mbps
+         rx_4096_to_8191_bytes_phy: 1,562,186
+                    rx_prio0_bytes: 12,603,256,772 Bps   = 100,826.5 Mbps
+                  rx_prio0_packets: 1,562,128
+    ```
+
+!!! warning "Check flow control before trusting a throughput number"
+
+    If the measured rate plateaus well below line rate with **zero** drops, suspect 802.3x pause before you suspect the transmitter. A paused link idles instead of dropping, so nothing in the counter set above distinguishes it from a sender that cannot go faster.
+
+    DAQIRI reports this itself. Pause is not exposed through DPDK's xstats, so the raw engines read it from the kernel netdev: a warning at init when pause is enabled on a port, and the `rx_pause_ctrl_phy` / `tx_pause_ctrl_phy` frames exchanged **during that run** alongside the shutdown stats dump.
+
+    ```log
+    [WARN] Flow control: port 0 (ens15f0np0) has 802.3x pause enabled (rx on, tx on). A paused
+    link idles instead of dropping, so this can prevent achieving higher rates ...
+          rx_pause_ctrl_phy:            34293
+          tx_pause_ctrl_phy:            0
+    [WARN] Flow control: port 0 (ens15f0np0) exchanged 34293 pause frames during this run
+    (received 34293, sent 0), so the link spent time paused ... The link partner asserted
+    pause, throttling this port's transmit. ...
+    ```
+
+    `rx_pause_ctrl_phy` counts frames **received**, so it is the peer throttling this port's transmit. `tx_pause_ctrl_phy` counts frames **sent**, so it points at this host's receive path. Because these are per-run deltas, a non-zero value means flow control throttled *this* measurement.
+
+    Pause frames are not automatically a misconfiguration: shallow-buffer peers can use them as intended backpressure. Establish which end is asserting pause, and whether the peer can absorb line rate at all, before disabling it. To check a host before running anything, use `sudo ./python/tune_system.py --check pause`; see [Step 10 of System Configuration](../tutorials/system_configuration.md#step-10-disable-ethernet-flow-control-pause) for disablement guidance.
+
+??? tip "Troubleshooting"
+
+    ??? failure "Cannot create HWS action since HWS is not supported"
+
+        Example error:
+
+        ```log
+        mlx5_net: [mlx5dr_action_create_generic_bulk]: Cannot create HWS action since HWS is not supported
+        mlx5_net: Failed to start port 0 0005:03:00.0: fail to configure port
+        [CRITICAL] Cannot start device err=-95, port=0
+        ```
+
+        Raw Ethernet (DPDK-backed) uses Hardware Steering (HWS) via the `dv_flow_en=2` mlx5 device argument. HWS requires compatible versions of both the NIC firmware and the host's MLNX_OFED kernel modules. Per the [DPDK mlx5 documentation](https://doc.dpdk.org/guides/nics/mlx5.html), the minimum requirements are ConnectX-6 Dx or later with firmware `xx.35.1012`+, but the host's OFED/kernel driver must also support the HWS features expected by the DPDK version in use.
+
+        Check your OFED and firmware versions:
+
+        ```bash
+        cat /sys/module/mlx5_core/version   # Host OFED kernel module version
+        ethtool -i <interface_name> | grep firmware  # NIC firmware version
+        ```
+
+        To resolve, update your NIC firmware and OFED drivers, or contact the DAQIRI team for guidance on compatible version combinations.
+
+    ??? failure "EAL: failed to parse device"
+
+        Make sure to set valid PCIe addresses in the `address` fields in `interfaces`, per [instructions above](#configure-the-nic-for-tx-and-rx).
+
+    ??? failure "Invalid MAC address format"
+
+        Make sure to set a valid MAC address in the `eth_dst_addr` field in `bench_tx`, per [instructions above](#configure-the-application).
+
+    ??? failure "mlx5_common: Fail to create MR for address [...] Could not DMA map EXT memory"
+
+        Example error:
+
+        ```log
+        mlx5_common: Fail to create MR for address (0xffff2fc00000)
+        mlx5_common: Device 0005:03:00.0 unable to DMA map
+        [critical] [adv_network_dpdk_mgr.cpp:188] Could not DMA map EXT memory: -1 err=Invalid argument
+        [critical] [adv_network_dpdk_mgr.cpp:430] Failed to map MRs
+        ```
+
+        Check the [GPUDirect setup](../tutorials/system_configuration.md#enable-gpudirect) for your
+        deployment. Some host builds use `nvidia-peermem`; the container path uses
+        dma-buf support from the patched DPDK build.
+
+    ??? failure "EAL: Couldn't get fd on hugepage file [..] error allocating rte services array"
+
+        Example error:
+
+        ```log
+        EAL: get_seg_fd(): open '/mnt/huge/nwlrbbmqbhmap_0' failed: Permission denied
+        EAL: Couldn't get fd on hugepage file
+        EAL: error allocating rte services array
+        EAL: FATAL: rte_service_init() failed
+        EAL: rte_service_init() failed
+        ```
+
+        Ensure you run as root, using `sudo`.
+
+    ??? failure "EAL: Cannot get hugepage information."
+
+        ```log
+        EAL: x hugepages of size x reserved, no mounted hugetlbfs found for that size
+        ```
+
+        Ensure your [hugepages are mounted](../tutorials/system_configuration.md#step-4-enable-huge-pages).
+
+        ```log
+        EAL: No free x kB hugepages reported on node 0
+        ```
+
+        Reachable only when the in-process preflight is bypassed (e.g. running an older binary against a host with hugepages reserved but not mounted). Mount per [System Configuration: Step 4](../tutorials/system_configuration.md#step-4-enable-huge-pages) and re-run.
+
+    ??? failure "Stale `<file-prefix>map_*` files in /dev/hugepages after a SIGKILL"
+
+        Init- and shutdown-path cleanup is automatic. Files only leak if the process is `SIGKILL`ed (OOM, container hard-stop). Symptom: `HugePages_Free: 0` with no bench running.
+
+        ```bash
+        pgrep -af daqiri_bench   # confirm nothing is running
+        sudo rm -f /dev/hugepages/*map_* /mnt/huge/*map_*
+        ```
+
+    ??? failure "Could not allocate x MB of GPU memory [...] Failed to allocate GPU memory"
+
+        Check your GPU utilization:
+
+        ```bash
+        nvidia-smi pmon -c 1
+        ```
+
+        You might need to kill some of the listed processes to free up GPU VRAM.

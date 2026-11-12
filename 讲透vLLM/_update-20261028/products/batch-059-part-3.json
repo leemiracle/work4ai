@@ -1,0 +1,1207 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "type": "file",
+   "name": "grouped_topk_router.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "summary": "分组 top-k 路由（DeepSeek V2/V3）：GroupedTopk CustomOp + 融合分组 top-k kernel。",
+   "tags": [
+    "router",
+    "grouped-topk",
+    "deepseek"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py",
+   "type": "file",
+   "name": "rocm_fp32_router_gemm.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py",
+   "summary": "ROCm gfx950 FP32 router GEMM（Triton）：MI355 扫参的 launch 配置，FP32 累加 router logits 快路径。",
+   "tags": [
+    "router",
+    "gemm",
+    "fp32",
+    "rocm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "type": "file",
+   "name": "router_factory.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "summary": "路由器工厂：create_fused_moe_router 按路由方法类型/平台/模型特性（融合共享专家/零专家/自定义路由/模拟）选择实现。",
+   "tags": [
+    "router",
+    "factory",
+    "selection"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "type": "file",
+   "name": "routing_simulator_router.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "summary": "路由模拟器（测试/调试）：可配置分布的随机路由策略 + 多策略对比框架，包装成 BaseRouter。",
+   "tags": [
+    "router",
+    "simulator",
+    "testing",
+    "distributions"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/router/zero_expert_router.py",
+   "type": "file",
+   "name": "zero_expert_router.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/zero_expert_router.py",
+   "summary": "零专家路由器：真实专家+零专家一起路由（零专家表示无计算直通）。",
+   "tags": [
+    "router",
+    "zero-expert",
+    "routing"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "type": "file",
+   "name": "moe_runner.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "summary": "MoERunner（1043 行，41 方法）：标准 MoE 执行器——路由→专家 forward→finalize 全链路，注册 _moe_forward/_moe_forward_shared 自定义 op（含 fake 实现）。",
+   "tags": [
+    "moe",
+    "runner",
+    "custom-op",
+    "orchestration"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner_interface.py",
+   "type": "file",
+   "name": "moe_runner_interface.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/runner/moe_runner_interface.py",
+   "summary": "MoERunnerInterface 抽象（18 方法）：所有 MoE runner 的接口契约（PluggableLayer+ABC）。",
+   "tags": [
+    "moe",
+    "runner",
+    "interface"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py:GroupedTopk",
+   "type": "class",
+   "name": "GroupedTopk",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "summary": "分组 top-k CustomOp（DeepSeek V2/V3）。",
+   "tags": [
+    "grouped-topk",
+    "custom-op",
+    "deepseek"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    167,
+    244
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py:GroupedTopKRouter",
+   "type": "class",
+   "name": "GroupedTopKRouter",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "summary": "分组 top-k 路由器。",
+   "tags": [
+    "grouped-topk",
+    "router",
+    "deepseek-v3"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    247,
+    362
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py:RoutingStrategy",
+   "type": "class",
+   "name": "RoutingStrategy",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "summary": "token→专家路由策略抽象。",
+   "tags": [
+    "strategy",
+    "abc",
+    "routing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    17,
+    47
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py:DistributionBasedRouting",
+   "type": "class",
+   "name": "DistributionBasedRouting",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "summary": "可配置分布的随机路由策略（10 方法）。",
+   "tags": [
+    "distribution",
+    "random",
+    "routing"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    50,
+    241
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py:RoutingSimulator",
+   "type": "class",
+   "name": "RoutingSimulator",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "summary": "多策略路由模拟框架（测试/对比）。",
+   "tags": [
+    "simulator",
+    "testing",
+    "framework"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    244,
+    328
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py:RoutingSimulatorRouter",
+   "type": "class",
+   "name": "RoutingSimulatorRouter",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "summary": "模拟策略包装成 BaseRouter（7 方法）。",
+   "tags": [
+    "simulator",
+    "router",
+    "testing"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    331,
+    400
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/router/zero_expert_router.py:ZeroExpertRouter",
+   "type": "class",
+   "name": "ZeroExpertRouter",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/zero_expert_router.py",
+   "summary": "真实+零专家联合路由器（4 方法）。",
+   "tags": [
+    "zero-expert",
+    "router",
+    "zero-expert-main"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    17,
+    104
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:MoERunner",
+   "type": "class",
+   "name": "MoERunner",
+   "filePath": "vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "summary": "标准 MoE runner（41 方法）：路由→专家→finalize 与自定义 op 注册。",
+   "tags": [
+    "runner",
+    "moe",
+    "orchestration"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    228,
+    1042
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/runner/moe_runner_interface.py:MoERunnerInterface",
+   "type": "class",
+   "name": "MoERunnerInterface",
+   "filePath": "vllm/model_executor/layers/fused_moe/runner/moe_runner_interface.py",
+   "summary": "MoE runner 接口抽象（18 方法）。",
+   "tags": [
+    "interface",
+    "runner",
+    "abc"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    19,
+    137
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py:fused_grouped_topk",
+   "type": "function",
+   "name": "fused_grouped_topk",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "summary": "融合分组 top-k kernel 封装。",
+   "tags": [
+    "grouped-topk",
+    "fused",
+    "grouped-topk-main"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    29,
+    72
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py:grouped_topk",
+   "type": "function",
+   "name": "grouped_topk",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "summary": "分组 top-k（DeepSeek 语义）。",
+   "tags": [
+    "grouped-topk",
+    "deepseek",
+    "grouped-topk-main"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    81,
+    162
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py:_launch_config",
+   "type": "function",
+   "name": "_launch_config",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py",
+   "summary": "(BLOCK_M, BLOCK_K, warps)：MI355 扫参结果。",
+   "tags": [
+    "launch-config",
+    "tuning",
+    "mi355"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    70,
+    93
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py:can_use_rocm_fp32_router_gemm",
+   "type": "function",
+   "name": "can_use_rocm_fp32_router_gemm",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py",
+   "summary": "gfx950 快路径可用性。",
+   "tags": [
+    "predicate",
+    "gfx950",
+    "predicate-main"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    96,
+    105
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py:rocm_fp32_router_gemm",
+   "type": "function",
+   "name": "rocm_fp32_router_gemm",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py",
+   "summary": "FP32 累加的 hidden@W.T（gfx950 快路径）。",
+   "tags": [
+    "gemm",
+    "fp32",
+    "rocm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    144,
+    175
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/router_factory.py:create_fused_moe_router",
+   "type": "function",
+   "name": "create_fused_moe_router",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "summary": "按路由方法/平台/模型特性创建路由器（工厂）。",
+   "tags": [
+    "factory",
+    "router",
+    "selection"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    42,
+    275
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:register_layer_for_moe_forward_op",
+   "type": "function",
+   "name": "register_layer_for_moe_forward_op",
+   "filePath": "vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "summary": "注册 _moe_forward 自定义 op 的层。",
+   "tags": [
+    "custom-op",
+    "registration",
+    "custom-op-main"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    59,
+    69
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:get_layer_from_name",
+   "type": "function",
+   "name": "get_layer_from_name",
+   "filePath": "vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "summary": "按名解析层（op 分发用）。",
+   "tags": [
+    "layer",
+    "lookup",
+    "layer-main"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    72,
+    88
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:_moe_forward",
+   "type": "function",
+   "name": "_moe_forward",
+   "filePath": "vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "summary": "MoE forward 自定义 op 实现。",
+   "tags": [
+    "custom-op",
+    "forward",
+    "impl"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    117,
+    134
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:_moe_forward_shared",
+   "type": "function",
+   "name": "_moe_forward_shared",
+   "filePath": "vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "summary": "含共享专家的 forward op 实现。",
+   "tags": [
+    "custom-op",
+    "shared",
+    "impl"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    154,
+    171
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "file:vllm/distributed/eplb/eplb_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/rocm_aiter_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "target": "file:vllm/distributed/eplb/eplb_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/aiter_shared_routed_fused_moe_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/cpu_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/custom_routing_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/fused_moe_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/zero_expert_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "target": "file:vllm/distributed/eplb/eplb_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/zero_expert_router.py",
+   "target": "file:vllm/distributed/eplb/eplb_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/zero_expert_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/zero_expert_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/fused_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/zero_expert_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/zero_expert_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "file:vllm/config/parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "file:vllm/distributed/eplb/eplb_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/fused_moe_method_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/moe_output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/fused_moe_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/zero_expert_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/runner/shared_experts.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "file:vllm/model_executor/layers/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner_interface.py",
+   "target": "file:vllm/config/parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner_interface.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner_interface.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner_interface.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/fused_moe_method_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner_interface.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/runner/shared_experts.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py:GroupedTopk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py:GroupedTopKRouter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py:fused_grouped_topk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py:grouped_topk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py:RoutingStrategy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py:DistributionBasedRouting",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py:RoutingSimulator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py:RoutingSimulatorRouter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/zero_expert_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/zero_expert_router.py:ZeroExpertRouter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:MoERunner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:register_layer_for_moe_forward_op",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:get_layer_from_name",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:_moe_forward",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:_moe_forward_shared",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner_interface.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/runner/moe_runner_interface.py:MoERunnerInterface",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py:_launch_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py:can_use_rocm_fp32_router_gemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py:rocm_fp32_router_gemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/router_factory.py:create_fused_moe_router",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py:GroupedTopk",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py:GroupedTopKRouter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py:fused_grouped_topk",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py:grouped_topk",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py:RoutingStrategy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py:DistributionBasedRouting",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py:RoutingSimulator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py:RoutingSimulatorRouter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/zero_expert_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/zero_expert_router.py:ZeroExpertRouter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:MoERunner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:register_layer_for_moe_forward_op",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:get_layer_from_name",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:_moe_forward",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner_interface.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/runner/moe_runner_interface.py:MoERunnerInterface",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py:can_use_rocm_fp32_router_gemm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py:rocm_fp32_router_gemm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/router_factory.py:create_fused_moe_router",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py:GroupedTopKRouter",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/base_router.py:BaseRouter",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py:RoutingSimulatorRouter",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/base_router.py:BaseRouter",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/router/zero_expert_router.py:ZeroExpertRouter",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/base_router.py:BaseRouter",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:MoERunner",
+   "target": "class:vllm/model_executor/layers/fused_moe/runner/moe_runner_interface.py:MoERunnerInterface",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py:GroupedTopk",
+   "target": "class:vllm/model_executor/custom_op.py:CustomOp",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:MoERunner",
+   "target": "class:vllm/model_executor/layers/fused_moe/routed_experts.py:RoutedExperts",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/layers/fused_moe/router/router_factory.py:create_fused_moe_router",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py:FusedTopKRouter",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/layers/fused_moe/router/router_factory.py:create_fused_moe_router",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py:FusedTopKBiasRouter",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/layers/fused_moe/router/router_factory.py:create_fused_moe_router",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/grouped_topk_router.py:GroupedTopKRouter",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/layers/fused_moe/router/router_factory.py:create_fused_moe_router",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/cpu_router.py:CPURouter",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/layers/fused_moe/router/router_factory.py:create_fused_moe_router",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/routing_simulator_router.py:RoutingSimulatorRouter",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:MoERunner",
+   "target": "class:vllm/model_executor/layers/fused_moe/runner/shared_experts.py:SharedExperts",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

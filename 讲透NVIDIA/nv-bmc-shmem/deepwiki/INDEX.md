@@ -1,0 +1,33 @@
+# DeepWiki 索引 — NVIDIA/nv-bmc-shmem
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 178216 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started: Build and Configuration](1.1-getting-started-build-and-configuration.md)
+  - [1.2 Configuration Files Reference](1.2-configuration-files-reference.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 Shared Memory Segments: ManagedShmem and Map](2.1-shared-memory-segments-managedshmem-and-map.md)
+  - [2.2 ShmSensorMapIntf: Namespace Management Layer](2.2-shmsensormapintf-namespace-management-layer.md)
+  - [2.3 Data Structures and Type System](2.3-data-structures-and-type-system.md)
+- [3 Producer API](3-producer-api.md)
+  - [3.1 AggregationService: Public Producer Interface](3.1-aggregationservice-public-producer-interface.md)
+  - [3.2 SHMSensorAggregator: Path Resolution and SHM Lifecycle](3.2-shmsensoraggregator-path-resolution-and-shm-lifecycle.md)
+- [4 Client API](4-client-api.md)
+  - [4.1 Client Functions: getAllMRDValues and getAllKeyValuePair](4.1-client-functions-getallmrdvalues-and-getallkeyvaluepair.md)
+  - [4.2 ConfigReader: Namespace Lookup and JSON Parsing](4.2-configreader-namespace-lookup-and-json-parsing.md)
+- [5 Metric Translation and Redfish URI Generation](5-metric-translation-and-redfish-uri-generation.md)
+  - [5.1 generateURI: Redfish URI Construction](5.1-generateuri-redfish-uri-construction.md)
+  - [5.2 Value Translation: PDI-to-Redfish Mapping Tables](5.2-value-translation-pdi-to-redfish-mapping-tables.md)
+  - [5.3 Port and Time Utilities](5.3-port-and-time-utilities.md)
+- [6 Developer Tools](6-developer-tools.md)
+  - [6.1 nv_shmem_tool: CLI for Shared Memory Inspection](6.1-nv-shmem-tool-cli-for-shared-memory-inspection.md)
+  - [6.2 aggregation_service_tester: Producer Integration Smoke Test](6.2-aggregation-service-tester-producer-integration-smoke-test.md)
+- [7 Testing](7-testing.md)
+  - [7.1 Unit Tests: Producer, Client, and SHM Map](7.1-unit-tests-producer-client-and-shm-map.md)
+  - [7.2 Unit Tests: Utilities (Metric, Port, Time)](7.2-unit-tests-utilities-metric-port-time.md)
+  - [7.3 Configuration Reader Tests and Branch Coverage](7.3-configuration-reader-tests-and-branch-coverage.md)
+- [8 Error Handling and Logging](8-error-handling-and-logging.md)
+  - [8.1 ErrorLogger: Suppression and Rate Limiting](8.1-errorlogger-suppression-and-rate-limiting.md)
+  - [8.2 Exception Types and Lock Safety](8.2-exception-types-and-lock-safety.md)
+- [9 Glossary](9-glossary.md)

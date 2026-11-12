@@ -1,0 +1,231 @@
+# NVIDIA Setup Package
+
+A NodeWright package that applies node setup steps for selected (service, accelerator) combinations. It runs **after** the machine is up (NodeWright on a live node). **Currently** it controls **kernel** (optional install or version check) and **EFA driver install** only; Lustre, chrony, and local disk setup are present in the codebase but commented out in `apply.sh`.
+
+## Overview
+
+- **Opinionated:** Each (service, accelerator) has very specific baked-in configuration (exact kernel, lustre, EFA versions) in `defaults/*.conf`.
+- **Override via environment variables:** You can override kernel, EFA, lustre (and ofi if added) with `NVIDIA_KERNEL`, `NVIDIA_EFA`
+- **Configmap:** Only `service` and `accelerator` are required. Unsupported combinations fail with a clear error.
+
+## Assumptions:
+
+- OS: `ubuntu` 24.04
+
+## Supported Combinations
+
+See [VERSION_OVERVIEW.md](VERSION_OVERVIEW.md) for more information about what is set in each version of the package.
+
+| service | accelerator | default kernel      |  default efa |
+|---------|-------------|---------------------|--------------|
+| eks     | h100        | 6.17.0-1019-aws     |  1.48.0      |
+| eks     | gb200       | 6.17.0-1019-aws     |  1.48.0      |
+| eks     | gb300       | 6.17.0-1019-aws     |  1.48.0      |
+| aks     | h100        | (AKS-managed)       |  n/a         |
+| bcm     | h100        | n/a                 |  n/a         |
+| bcm     | gb200       | n/a                 |  n/a         |
+| bcm     | vr200       | n/a                 |  n/a         |
+
+Defaults are defined in `skyhook_dir/defaults/eks-h100.conf`, `eks-gb200.conf`, `eks-gb300.conf`, and `aks-h100.conf`. The `bcm-*` defaults files are intentionally empty: the `bcm` service only runs the kernel-headers alias and does not bake in any kernel/EFA/lustre versions. Keep this table in sync when adding or changing defaults.
+
+## Configuration
+
+**ConfigMap (required):**
+
+- `service` – e.g. `eks`
+- `accelerator` – e.g. `h100`, `gb200`
+
+**Environment variables (optional overrides):**
+
+Set these on the package spec in the NodeWright Custom Resource (`spec.packages.<name>.env`):
+
+- `NVIDIA_SETUP_INSTALL_KERNEL` – `true` or `false` (default: `false`). If `true`, apply **only** installs the exact kernel from the defaults file (via `steps/install_kernel.sh`) and then exits; a reboot is required. When the node is already running that exact kernel (flavor included, so `-64k` on arm64) and its image, headers, modules and modules-extra packages are installed, apt is skipped; the GRUB default is still set to the target kernel. After reboot, the **post-interrupt-check** verifies the running kernel matches the expected version. If `false`, apply verifies the current kernel meets the requirement (see `NVIDIA_SETUP_KERNEL_ALLOW_NEWER`) and errors otherwise, then continues with the full apply.
+- `NVIDIA_SETUP_KERNEL_ALLOW_NEWER` – `true` or `false` (default: `false`). When `NVIDIA_SETUP_INSTALL_KERNEL=false`, this controls the kernel check: if `false`, the running kernel must match the required upstream version exactly; if `true`, the running kernel may be newer (current >= required).
+- `NVIDIA_PIN_KERNEL` - `true` or `false` (defaults: `false`). If `true`, pin the kernel to the exact version in the package so that it will not upgrade in future.
+- `NVIDIA_SETUP_APT_UPGRADE` – `true` or `false` (default: `false`). Controls the blanket `apt-get upgrade` in the **upgrade** step. Off by default because that upgrade installs whatever the distro has queued, which can include the container runtime: upgrading containerd restarts it and kills the pod running the step, taking the node NotReady mid-apply and interrupting dpkg partway through a transaction. The targeted `apt-get install` of `curl git wget gpg` in the same step is unaffected and always runs. Set to `true` on nodes where you do want the full distro upgrade.
+- `NVIDIA_KERNEL` – kernel version (overrides default from defaults file)
+- `NVIDIA_EFA` – EFA installer version
+
+## BCM Service
+
+For `service=bcm`, this package does a single thing in the apply stage: it aliases the upstream-style kernel source-tree path to Ubuntu's headers tree so that consumers (gpu-operator `nvidia-driver-daemonset`, NVIDIA DRA driver) which read `/usr/src/linux-$(uname -r)/.config` find it.
+
+On Ubuntu the file only exists at `/usr/src/linux-headers-$(uname -r)/.config`. Without this alias, `aicr validate` stalls (DRA pod `Init:0/1`, driver daemonset unhealthy). See [AICR #1093](https://github.com/NVIDIA/aicr/issues/1093).
+
+What this step does (full-directory symlink, idempotent across reboots and kernel upgrades):
+
+```
+ln -s linux-headers-$(uname -r) /usr/src/linux-$(uname -r)
+```
+
+For `service=bcm` the apply stage skips the kernel/EFA pipeline and runs only this step; `apply-check` verifies the symlink resolves. Because the script keys off `uname -r` at runtime, the alias is recreated by re-applying the package after a kernel upgrade.
+
+Example SCR fragment:
+
+```yaml
+packages:
+  nvidia-setup-bcm:
+    image: ghcr.io/nvidia/skyhook-packages/nvidia-setup
+    version: 0.3.0
+    configMap:
+      service: bcm
+      accelerator: h100
+```
+
+## Apply Steps (EKS)
+
+For `service=eks` the apply step currently runs, in order:
+
+1. **ensure_kernel** – if `NVIDIA_SETUP_INSTALL_KERNEL=false`: verify running kernel meets requirement (exact match by default; allow newer if `NVIDIA_SETUP_KERNEL_ALLOW_NEWER=true`); if `true`: install exact kernel only (then exit; reboot required), skipping apt when that exact kernel is already running with its packages installed.
+2. **upgrade** – `apt-get update && apt-get upgrade -y`
+3. **install-efa-driver** – download and run AWS EFA installer
+
+The following steps exist in the codebase but are **commented out** in `apply.sh` for now: **install-lustre** Re-enable them in `apply.sh` when needed.
+
+OFI, hardening, and system-node-settings are **not** included.
+
+## Apply Steps (AKS)
+
+For `service=aks` the apply step currently runs:
+
+1. **configure_ib_rdma** – writes IB module-load config (`/etc/modules-load.d/ib-umad.conf`), memlock limits (`/etc/security/limits.d/99-ib-memlock.conf`), and containerd/kubelet systemd drop-ins setting `LimitMEMLOCK=infinity`. Loads the `ib_umad` kernel module (and best-effort `rdma_ucm`, `ib_ucm`). Does **not** run `systemctl daemon-reload` or restart any services; see the AKS usage example below for how Skyhook handles that via a service interrupt.
+
+Kernel install/upgrade, EFA, Lustre, chrony, and local disks do not apply to AKS today (AKS ships its own Ubuntu kernel; IB/RDMA is handled by the step above).
+
+## Apply-Check
+
+When `NVIDIA_SETUP_INSTALL_KERNEL=true` is set, apply-check (and **post-interrupt-check**) only verify that the running kernel matches the expected version from defaults/env. When the env var is false or unset, apply-check runs upgrade (apt update ok) and EFA present; Lustre are commented out in `apply_check.sh` to match `apply.sh`. Re-enable them in both when adding those steps back.
+
+## Post-Interrupt-Check
+
+When `NVIDIA_SETUP_INSTALL_KERNEL=true` is set, the kernel install step may trigger a reboot. After the interrupt (reboot), **post-interrupt-check** runs (with the same env var) and verifies the running kernel matches the expected version from defaults/env; it fails if not.
+
+## Kernel install with interrupt reboot + full setup (two packages)
+
+When you need to install the exact default kernel and then run the rest of the setup (EFA, and when re-enabled: Lustre), use two nvidia-setup packages:
+
+1. **First package** – kernel only, with **interrupt: reboot**. Apply runs only the kernel install (and may reboot); after reboot, post-interrupt-check verifies the kernel.
+2. **Second package** – full setup, with **dependsOn** the first. Apply runs the normal steps (upgrade, EFA, and when uncommented: Lustre) and will see the correct running kernel (no kernel install, just the “current kernel >= required” check).
+
+Both packages use the same `service` and `accelerator` configMap; only the first sets `NVIDIA_SETUP_INSTALL_KERNEL=true`. The first package must declare an interrupt (e.g. reboot) so the node reboots into the new kernel before the second package runs.
+
+Example (adjust `dependsOn` / interrupt keys to match your NodeWright API):
+
+```yaml
+apiVersion: skyhook.nvidia.com/v1alpha1
+kind: Skyhook
+metadata:
+  name: nvidia-setup-eks
+spec:
+  nodeSelectors:
+    matchLabels:
+      nvidia.com/gpu: "true"
+  packages:
+    # 1) Install exact kernel only; reboot required
+    nvidia-setup-kernel:
+      image: ghcr.io/nvidia/skyhook-packages/nvidia-setup
+      version: 0.1.0
+      configMap:
+        service: eks
+        accelerator: h100
+      env:
+        - name: NVIDIA_SETUP_INSTALL_KERNEL
+          value: "true"
+      # Declare reboot interrupt so the node reboots after kernel install
+      interrupt:
+        type: reboot
+
+    # 2) Full setup after kernel is in place
+    nvidia-setup-full:
+      image: ghcr.io/nvidia/skyhook-packages/nvidia-setup
+      version: 0.1.0
+      resources:
+        cpuLimit: 4000m
+        cpuRequest: 2000m
+        memoryLimit: 8192Mi
+        memoryRequest: 4096Mi
+      configMap:
+        service: eks
+        accelerator: h100
+      env:
+        - name: NVIDIA_SETUP_INSTALL_KERNEL
+          value: "false"
+      dependsOn:
+        nvidia-setup-kernel: 0.1.0
+```
+
+Flow: apply `nvidia-setup-kernel` → kernel install → reboot (interrupt) → post-interrupt-check verifies kernel → apply `nvidia-setup-full` (kernel check passes, then upgrade, EFA, and when uncommented: Lustre, chrony, local disks).
+
+## Usage Example
+
+```yaml
+apiVersion: skyhook.nvidia.com/v1alpha1
+kind: Skyhook
+metadata:
+  name: nvidia-setup-eks
+spec:
+  nodeSelectors:
+    matchLabels:
+      nvidia.com/gpu: "true"
+  packages:
+    nvidia-setup:
+      image: ghcr.io/nvidia/skyhook-packages/nvidia-setup
+      version: 0.1.0
+      resources:
+        cpuLimit: 4000m
+        cpuRequest: 2000m
+        memoryLimit: 8192Mi
+        memoryRequest: 4096Mi
+      configMap:
+        service: eks
+        accelerator: h100
+      # Optional overrides:
+      env:
+        - name: NVIDIA_EFA
+          value: "1.31.0"
+```
+
+## AKS Usage Example
+
+On AKS, containerd and kubelet need `LimitMEMLOCK=infinity` for IB/RDMA workloads. The package writes the drop-in files; Skyhook restarts the services via a `service` interrupt.
+
+```yaml
+apiVersion: skyhook.nvidia.com/v1alpha1
+kind: Skyhook
+metadata:
+  name: nvidia-setup-aks
+spec:
+  nodeSelectors:
+    matchLabels:
+      # Only run on IB-capable nodes (label set by NFD's network rule on AKS ND-series).
+      feature.node.kubernetes.io/pci-15b3.present: "true"
+  packages:
+    nvidia-setup:
+      image: ghcr.io/nvidia/skyhook-packages/nvidia-setup
+      version: 0.5.0
+      resources:
+        cpuLimit: 1000m
+        cpuRequest: 500m
+        memoryLimit: 1024Mi
+        memoryRequest: 512Mi
+      configMap:
+        service: aks
+        accelerator: h100
+      # Skyhook runs `systemctl daemon-reload` then restarts containerd and kubelet
+      # after the apply step completes. The package script does not perform the
+      # restart itself.
+      interrupt:
+        type: service
+        services:
+          - containerd
+          - kubelet
+```
+
+This replaces the equivalent privileged DaemonSet (`ib-node-config-aks.yaml`) that aicr currently ships under `recipes/components/network-operator/manifests/`.
+
+## Adding a New (service, accelerator)
+
+1. Add `skyhook_dir/defaults/<service>-<accelerator>.conf` with `kernel=`, `lustre=`, `efa=`.
+2. In `apply.sh`, add a `run_<service>_<accelerator>()` function that runs the step scripts for that combination, and add a case branch: `<service>-<accelerator>) run_<service>_<accelerator> ;;`.
+3. In `apply_check.sh`, add `check_<service>_<accelerator>()` and the same case branch.
+4. Rebuild the image and update this README’s supported combinations table.

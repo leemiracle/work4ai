@@ -1,0 +1,30 @@
+# DeepWiki 索引 — google-deepmind/alphagenome_research
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 387950 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+  - [2.1 Installation](2.1-installation.md)
+  - [2.2 Quick Start Tutorial](2.2-quick-start-tutorial.md)
+  - [2.3 Model Weights and Distribution](2.3-model-weights-and-distribution.md)
+- [3 Data I/O System](3-data-i-o-system.md)
+  - [3.1 Bundle Definitions](3.1-bundle-definitions.md)
+  - [3.2 TFRecord Dataset Loading](3.2-tfrecord-dataset-loading.md)
+  - [3.3 FASTA File Operations](3.3-fasta-file-operations.md)
+  - [3.4 Variant and Genome Operations](3.4-variant-and-genome-operations.md)
+  - [3.5 Splice Site Annotations](3.5-splice-site-annotations.md)
+- [4 Model Architecture](4-model-architecture.md)
+  - [4.1 DNA Model API](4.1-dna-model-api.md)
+- [5 Evaluation System](5-evaluation-system.md)
+  - [5.1 Regression Metrics](5.1-regression-metrics.md)
+  - [5.2 Track Prediction Evaluation](5.2-track-prediction-evaluation.md)
+  - [5.3 Variant Evaluation Examples](5.3-variant-evaluation-examples.md)
+- [6 Development Guide](6-development-guide.md)
+  - [6.1 Contributing Guidelines](6.1-contributing-guidelines.md)
+  - [6.2 Build and Package Configuration](6.2-build-and-package-configuration.md)
+  - [6.3 Testing Infrastructure](6.3-testing-infrastructure.md)
+  - [6.4 Code Quality and CI/CD](6.4-code-quality-and-ci-cd.md)
+- [7 API Reference](7-api-reference.md)
+  - [7.1 I/O Module Reference](7.1-i-o-module-reference.md)
+  - [7.2 Evaluation Module Reference](7.2-evaluation-module-reference.md)

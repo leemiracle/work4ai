@@ -1,0 +1,30 @@
+# DeepWiki 索引 — NVIDIA/NeMo-text-processing
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 349839 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Core Concepts](1.1-core-concepts.md)
+  - [1.2 System Architecture](1.2-system-architecture.md)
+- [2 Getting Started](2-getting-started.md)
+  - [2.1 Quick Start Guide](2.1-quick-start-guide.md)
+- [3 Core Text Processing Systems](3-core-text-processing-systems.md)
+  - [3.1 Text Normalization](3.1-text-normalization.md)
+  - [3.2 Inverse Text Normalization](3.2-inverse-text-normalization.md)
+  - [3.3 Audio-Enhanced Normalization](3.3-audio-enhanced-normalization.md)
+  - [3.4 FST Alignment System](3.4-fst-alignment-system.md)
+- [4 Language Support](4-language-support.md)
+  - [4.1 English](4.1-english.md)
+  - [4.2 Hindi](4.2-hindi.md)
+  - [4.3 German](4.3-german.md)
+  - [4.4 Spanish](4.4-spanish.md)
+  - [4.5 Italian](4.5-italian.md)
+  - [4.6 French](4.6-french.md)
+  - [4.7 Japanese](4.7-japanese.md)
+- [5 Development and Testing](5-development-and-testing.md)
+  - [5.1 CI/CD Pipeline](5.1-ci-cd-pipeline.md)
+  - [5.2 Grammar Development](5.2-grammar-development.md)
+  - [5.3 Testing Framework](5.3-testing-framework.md)
+- [6 Deployment and Production](6-deployment-and-production.md)
+  - [6.1 Grammar Compilation](6.1-grammar-compilation.md)
+  - [6.2 Sparrowhawk Runtime](6.2-sparrowhawk-runtime.md)

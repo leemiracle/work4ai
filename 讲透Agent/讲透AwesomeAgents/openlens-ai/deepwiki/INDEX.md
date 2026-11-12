@@ -1,0 +1,33 @@
+# DeepWiki 索引 — jarrycyx/openlens-ai
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 255339 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 System Architecture](1.1-system-architecture.md)
+- [2 Getting Started](2-getting-started.md)
+  - [2.1 Configuration](2.1-configuration.md)
+  - [2.2 Installation](2.2-installation.md)
+- [3 Multi-Agent System](3-multi-agent-system.md)
+  - [3.1 Supervisor Agent](3.1-supervisor-agent.md)
+  - [3.2 Literature Reviewer Agent](3.2-literature-reviewer-agent.md)
+  - [3.3 Data Analyzer Agent](3.3-data-analyzer-agent.md)
+  - [3.4 Coder Agent](3.4-coder-agent.md)
+  - [3.5 LaTeX Writer Agent](3.5-latex-writer-agent.md)
+- [4 LLM Router Infrastructure](4-llm-router-infrastructure.md)
+  - [4.1 Model Configuration](4.1-model-configuration.md)
+  - [4.2 vLLM Deployment](4.2-vllm-deployment.md)
+  - [4.3 Performance Testing](4.3-performance-testing.md)
+- [5 Evaluation Framework](5-evaluation-framework.md)
+  - [5.1 Evaluation Datasets](5.1-evaluation-datasets.md)
+  - [5.2 Quality Assessment](5.2-quality-assessment.md)
+  - [5.3 Parallel Testing](5.3-parallel-testing.md)
+  - [5.4 Experiment Tracking](5.4-experiment-tracking.md)
+- [6 Development Environment](6-development-environment.md)
+  - [6.1 OpenHands Integration](6.1-openhands-integration.md)
+  - [6.2 Editor Configuration](6.2-editor-configuration.md)
+  - [6.3 GitHub Configuration](6.3-github-configuration.md)
+- [7 Reference](7-reference.md)
+  - [7.1 Configuration Reference](7.1-configuration-reference.md)
+  - [7.2 Repository Structure](7.2-repository-structure.md)
+  - [7.3 License and Legal](7.3-license-and-legal.md)

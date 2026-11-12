@@ -1,0 +1,31 @@
+# DeepWiki 索引 — microsoft/Recognizers-Text
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 473466 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Architecture Overview](1.1-architecture-overview.md)
+  - [1.2 Supported Languages](1.2-supported-languages.md)
+  - [1.3 Platform Support](1.3-platform-support.md)
+- [2 Entity Recognition Domains](2-entity-recognition-domains.md)
+  - [2.1 DateTime Recognition](2.1-datetime-recognition.md)
+  - [2.2 Number Recognition](2.2-number-recognition.md)
+  - [2.3 NumberWithUnit Recognition](2.3-numberwithunit-recognition.md)
+  - [2.4 Sequence Recognition](2.4-sequence-recognition.md)
+  - [2.5 Choice Recognition](2.5-choice-recognition.md)
+- [3 Language-Specific Implementations](3-language-specific-implementations.md)
+  - [3.1 English Implementation](3.1-english-implementation.md)
+  - [3.2 Chinese Implementation](3.2-chinese-implementation.md)
+  - [3.3 Spanish and Portuguese Implementation](3.3-spanish-and-portuguese-implementation.md)
+  - [3.4 French and Italian Implementation](3.4-french-and-italian-implementation.md)
+  - [3.5 German Implementation](3.5-german-implementation.md)
+  - [3.6 Japanese and Korean Implementation](3.6-japanese-and-korean-implementation.md)
+- [4 Platform Implementations](4-platform-implementations.md)
+  - [4.1 .NET Implementation](4.1-.net-implementation.md)
+  - [4.2 JavaScript Implementation](4.2-javascript-implementation.md)
+  - [4.3 Python Implementation](4.3-python-implementation.md)
+  - [4.4 Java Implementation](4.4-java-implementation.md)
+- [5 Development Guide](5-development-guide.md)
+  - [5.1 Pattern Definition System](5.1-pattern-definition-system.md)
+  - [5.2 Code Generation Process](5.2-code-generation-process.md)
+  - [5.3 Testing Framework](5.3-testing-framework.md)

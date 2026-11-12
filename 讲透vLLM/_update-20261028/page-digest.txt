@@ -1,0 +1,221 @@
+### 1-overview.md | Overview | 14KB
+This page introduces vLLM’s major components, the V1 engine’s high-level request path, and the repository areas an engineer will encounter. It is an orientation page; detailed installation, usage, and deployment guidance is covered by the child pages. The V1 engine’s `EngineCore` coordinates model execution, KV-cache initialization, and scheduler setup [vllm/v1/engine/core.py:117-184](). `VllmConf
+
+### 1.1-getting-started-and-installation.md | Getting Started and Installation | 20KB
+This page describes the installation options represented in the supplied build and dependency files: platform-specific Python dependencies, source-build configuration, and Docker build inputs. It also identifies what those files do—and do not—establish about hardware requirements, quickstart usage, and platform-specific instructions. [setup.py:61-121](), [requirements/common.txt:1-59](), [requirem
+
+### 1.2-examples-and-usage-patterns.md | Examples and Usage Patterns | 25KB
+This section provides a comprehensive technical tour of the `examples/` directory and key usage patterns in the vLLM codebase. It bridges user workflows such as batch offline inference, online API serving, disaggregated prefill-decode serving, pooling/embedding, RL weight transfer, speech-to-text, tool calling, and observability dashboards with their corresponding code entities, classes, and data 
+
+### 1.3-model-recipes-and-deployment-guides.md | Model Recipes and Deployment Guides | 17KB
+This page explains how to distinguish model deployment recipes from vLLM’s model-support and test registries, and how those concepts connect to configuration and benchmarking. The available code references establish the support, configuration, and test-registry side of that relationship; they do not expose the contents or implementation details of `recipes/models/` or `tools/recipes`, so this page
+
+### 2-configuration-and-initialization.md | Configuration and Initialization | 7KB
+This page gives a high-level map of vLLM’s configuration system: how inputs relate to the root `VllmConfig`, how configuration is divided among specialized objects, and where compilation and environment settings fit. It is a parent page; detailed option references and behavior belong in the child pages. - [Argument Parsing and EngineArgs](#2.1) — `EngineArgs`, `AsyncEngineArgs`, CLI parsing, and c
+
+### 2.1-argument-parsing-and-engineargs.md | Argument Parsing and EngineArgs | 19KB
+This page details the argument parsing and configuration assembly system used in vLLM, emphasizing the `EngineArgs` dataclass and related mechanisms. It covers how command-line and Python API inputs are parsed, validated, and transformed into internal configuration dataclasses culminating in the unified `VllmConfig` used by the engine. Key components include:
+
+### 2.2-vllmconfig-and-specialized-configuration-objects.md | VllmConfig and Specialized Configuration Objects | 19KB
+This page documents the configuration architecture of vLLM, centered around the `VllmConfig` root object and its specialized sub-configurations. It covers the structure, key fields, and validation logic of `ModelConfig`, `ParallelConfig`, `CacheConfig`, `SchedulerConfig`, `PoolerConfig`, `MultiModalConfig`, and other specialized objects located in `vllm/config/`. For the CLI/YAML argument parsing 
+
+### 2.3-environment-variables-system.md | Environment Variables System | 28KB
+This page documents `vllm/envs.py`, vLLM's centralized environment variable registry [vllm/envs.py:1-13](). It covers the module's structure, the access mechanism, helper utilities, and a detailed technical reference of `VLLM_*` variables. For information on how these variables feed into strongly-typed configuration objects at engine startup, see [VllmConfig and Specialized Configuration Objects](
+
+### 2.4-compilation-configuration-and-optimization-levels.md | Compilation Configuration and Optimization Levels | 21KB
+This page explains the compilation controls shown in the supplied source: `CompilationMode`, `CUDAGraphMode`, `PassConfig`, compiler selection and caching, Inductor graph passes, and the use of vLLM IR operations in model layers. It also distinguishes those controls from optimization-level presets: the supplied source excerpts do not show the definitions or mappings for `O0`–`O3`, so their exact s
+
+### 3-engine-architecture.md | Engine Architecture | 10KB
+This page provides a high-level overview of the core engine components in the vLLM v1 inference engine. It describes central abstractions such as the `EngineCore` that runs the inner model execution loop, various client API layers, the request lifecycle and scheduling mechanism, KV cache management including prefix caching, input and output processing logic, and observability features. Each subsec
+
+### 3.1-enginecore-and-client-apis.md | EngineCore and Client APIs | 21KB
+This document explains the design and implementation of **EngineCore** and the **EngineCoreClient** abstraction, which are foundational to vLLM's V1 engine. The `EngineCore` is the central execution engine responsible for scheduling requests, managing KV cache, invoking the model executor, and producing outputs. The `EngineCoreClient` interface abstracts various IPC strategies enabling the engine 
+
+### 3.2-request-lifecycle-and-state-management.md | Request Lifecycle and State Management | 18KB
+This page describes how requests are represented and routed through the vLLM V1 engine, from frontend input processing to engine-core submission and output handling. It focuses on the `EngineCoreRequest` transport object, the visible `EngineCore` setup, the `InputProcessor` boundary, and the client interfaces. The supplied source excerpts do not include the `Request` definition, scheduler implemen
+
+### 3.3-scheduler-and-resource-allocation.md | Scheduler and Resource Allocation | 18KB
+This page describes the vLLM V1 scheduler’s configuration and its resource-allocation boundaries: request admission limits, per-iteration token budgets, KV-cache management, and the async scheduler variant. The available source excerpts show the `Scheduler` constructor and configuration fields, but not the scheduler’s full scheduling loop or the `AsyncScheduler` implementation. Accordingly, this p
+
+### 3.4-kv-cache-management-and-prefix-caching.md | KV Cache Management and Prefix Caching | 22KB
+This section describes the V1 KV cache subsystem: how `KVCacheManager` connects the scheduler to cache coordination, how cache groups and block metadata are represented, how prefix hashes support cache lookup, and where KV cache event publishing fits into scheduler initialization. The available source excerpts expose the main types and setup paths, but not the implementations of `BlockPool`’s allo
+
+### 3.5-input-and-output-processing.md | Input and Output Processing | 21KB
+This page describes how vLLM prepares requests for the engine and turns engine outputs into user-facing results. It covers the `InputProcessor`, renderer configuration and prompt handling, per-request output state, logprob data representation, and asynchronous collection of streamed responses. [vllm/v1/engine/input_processor.py:41-84](), [vllm/v1/engine/output_processor.py:53-93]() The input path 
+
+### 3.6-metrics-and-observability.md | Metrics and Observability | 18KB
+This page describes the observability interfaces visible in the provided code: engine statistics and logger initialization, tracing setup, profiling interfaces, and the Prometheus lifecycle hooks. It focuses on how the engine-facing code connects to those interfaces; details of individual metric definitions and exporter implementations are not included in the supplied file contents. [vllm/v1/engin
+
+### 4-model-execution-on-gpu.md | Model Execution on GPU | 14KB
+This page gives a high-level map of GPU model execution in vLLM: how worker-side execution connects scheduled batches to model computation and outputs. It introduces `GPUModelRunner`, `Worker`, and the main execution stages, then links to child pages for implementation detail. The stable runner file explicitly aims to keep shared logic minimal and move model-specific behavior elsewhere. [vllm/v1/w
+
+### 4.1-gpumodelrunner.md | GPUModelRunner | 27KB
+`GPUModelRunner` coordinates GPU-side model execution: preparing batches, invoking model-forward and attention infrastructure, managing KV-cache-related state, and routing outputs into sampling or pooling paths. The V1 GPU runner imports dedicated components for these responsibilities, including `InputBatch`, `BlockTables`, `Sampler`, `PoolingRunner`, model-state initialization, and CUDA-graph man
+
+### 4.2-worker-and-executor-architecture.md | Worker and Executor Architecture | 19KB
+This page describes how vLLM’s v1 executors coordinate worker initialization and execution, and how the GPU `Worker` participates in device setup and memory profiling. It covers `UniProcExecutor` and the visible initialization path for `MultiprocExecutor`; Ray coverage is limited to what the supplied `RayExecutorV2` integration tests establish. [vllm/v1/executor/uniproc_executor.py:51-75](), [vllm
+
+### 4.3-inputbatch-and-request-state-management.md | InputBatch and Request State Management | 24KB
+This page explains the request and batch data structures used by the V1 GPU worker, how per-request state relates to the batch prepared for execution, and how KV block-table and execution-shape concerns fit into that flow. The primary focus is `CachedRequestState` and `InputBatch` in `vllm/v1/worker/gpu_input_batch.py`; the distinct GPU-runner batch representation in `vllm/v1/worker/gpu/input_batc
+
+### 4.4-sampling-and-token-generation.md | Sampling and Token Generation | 25KB
+This page describes the V1 GPU sampling path: how the worker’s `Sampler` registers per-request sampling state, prepares logits processors, selects a platform-appropriate top-k/top-p implementation, and exposes logprob-related state. It also covers structured-output parameters and the engine-level manager that prepares grammar constraints. The supplied source excerpts do not include the complete `S
+
+### 4.5-speculative-decoding.md | Speculative Decoding | 28KB
+Speculative decoding lets a target model verify token proposals made by a drafter, so a decoding step can produce more than one output token when proposals are accepted. This page describes the proposer and verifier roles, the methods identifiable in the provided code, token and probability data passed to verification, rejection-sampling concepts, and the acceptance signals exposed by the implemen
+
+### 4.6-determinism-and-batch-invariance.md | Determinism and Batch Invariance | 17KB
+This page describes vLLM’s batch-invariance mode, the deterministic execution measures documented for it, the visible Triton kernel implementation and tuned matmul configuration structures, and the determinism tests shown in `tests/v1/determinism/`. Batch invariance aims to make a request’s output independent of the batch size and request order. It is currently documented as beta. [docs/features/b
+
+### 5-model-support-and-registration.md | Model Support and Registration | 11KB
+This page gives a high-level view of how vLLM connects a model identifier and its Hugging Face configuration to a model implementation, runtime configuration, and supported task. It also introduces the main model-support areas without detailing their internal mechanisms. For details, see the child pages listed below. [vllm/config/model.py:150-168]() [vllm/model_executor/models/registry.py:46-69]()
+
+### 5.1-model-registry-and-architecture-detection.md | Model Registry and Architecture Detection | 19KB
+This page explains how vLLM associates Hugging Face (HF) architecture names with model implementation entries, how model configuration and architecture-specific configuration registries fit into that process, and which capability-query interfaces are exposed by the model registry. The implementation references below are limited to the code excerpts available here. [vllm/model_executor/models/regis
+
+### 5.2-configuration-loading-and-weight-loading.md | Configuration Loading and Weight Loading | 25KB
+This page describes the path from model configuration and checkpoint selection to model initialization, weight loading, post-load processing, layerwise reload, and optional IPC weight caching. It focuses on the parser and loader entities that connect model configuration to runtime tensors. [vllm/model_executor/model_loader/default_loader.py:55-183]() Sources: [vllm/model_executor/model_loader/defa
+
+### 5.3-transformers-modeling-backend.md | Transformers Modeling Backend | 26KB
+Section 5.3 describes the Transformers modeling backend: a wrapper around Hugging Face models that vLLM can use when the model does not have a dedicated native vLLM implementation. The backend is composed from task-specific mixins for causal generation, MoE, multimodal inputs, embeddings, and sequence classification. It also adapts model layers and attention interfaces for vLLM execution, and appl
+
+### 5.4-multimodal-model-support.md | Multimodal Model Support | 29KB
+This page describes the multimodal model interfaces and implementation patterns visible in the supplied code excerpts. It covers the `SupportsMultiModal` interface, selected vision-language and omni implementations, encoder CUDA Graph support, and how these concepts connect to code entities. The requested model-family scope also includes LLaVA, Pixtral, Whisper, Voxtral, and Ultravox; the excerpts
+
+### 5.5-multimodal-data-processing.md | Multimodal Data Processing | 27KB
+This page follows multimodal request data from its public input representation through parsing and model-specific processing, media decoding, and encoder execution. It covers `MultiModalDataDict`, modality item abstractions, the multimodal processor framework, video-loader registration and audio decoding, processor and encoder caching concepts, prompt updates, and chat-message input formats. [docs
+
+### 5.6-vendor-model-implementations-vllm-models.md | Vendor Model Implementations (vllm/models) | 29KB
+This page describes vendor- and hardware-specialized model implementation patterns in `vllm/models/`, focusing on the supplied DeepSeek V3.2, DeepSeek V4/V4.1, Kimi K3, and MiniMax M3 implementation excerpts. The requested family scope also includes `qwen4_exp`, `glm5next`, `inkling`, `hy_v4`, `dots3_note`, and `step5`; their implementation details are not established by the supplied file excerpts
+
+### 5.7-hybrid-and-linear-attention-models.md | Hybrid and Linear-Attention Models | 25KB
+This page documents vLLM’s hybrid State Space Model (SSM) and linear-attention implementation: model-layer integration, Gated DeltaNet (GDN), Mamba and Mamba2 components, short-convolution operations, recurrent-state cache management, and attention metadata builders. The available code excerpts show these components connecting model definitions such as Qwen3.5 and Nemotron-H to the Mamba/GDN layer
+
+### 5.8-pooling-embedding-and-classification-models.md | Pooling, Embedding and Classification Models | 23KB
+This page documents vLLM’s pooling-model support: sequence-wise and token-wise tasks, pooler behavior, model and request configuration concepts, scoring and reranking inputs, execution flow, and correctness testing. Pooling models produce representations or class outputs rather than requiring generated text. The supported task names include `embed`, `classify`, `token_embed`, and `token_classify`.
+
+### 6-serving-apis.md | Serving APIs | 13KB
+The serving layer provides HTTP-facing interfaces between clients and vLLM inference components. This page summarizes the server entrypoints, request-rendering path, and related serving features; detailed implementation belongs in the child pages listed below. The legacy `vllm.entrypoints.openai.api_server` module re-exports launcher functions and is deprecated in favor of the launcher entrypoints
+
+### 6.1-openai-compatible-api-server.md | OpenAI-Compatible API Server | 28KB
+This page describes the Python HTTP serving layer: how request and response protocol models relate to serving handlers, how handlers connect to the engine and renderer, and what the provided source establishes about server entry points. It also maps the endpoint families in scope. The supplied excerpts do not include the FastAPI app builder, route-registration implementation, or server lifecycle i
+
+### 6.2-chat-utilities-and-message-processing.md | Chat Utilities and Message Processing | 18KB
+This page describes the chat-message and prompt-rendering path: the `parse_chat_messages` interface, chat-template configuration, tokenizer selection, multimodal processing, and the `BaseRenderer` system. The available source excerpt shows where chat parsing is imported and used, but does not include the parser’s implementation; parser internals not visible in the excerpt are therefore not specifi
+
+### 6.3-tool-calling-reasoning-parsers-and-structured-output.md | Tool Calling, Reasoning Parsers and Structured Output | 28KB
+This page explains how vLLM parses model output into content, reasoning, and tool calls; how tool and reasoning parsers are registered and composed; how Responses serving handles Harmony and MCP tool flows; and how V1 structured-output requests are compiled into grammar constraints used during decoding. [vllm/parser/abstract_parser.py:66-115](), [vllm/parser/engine/parser_engine.py:111-169](), [vl
+
+### 6.4-lora-adapter-management.md | LoRA Adapter Management | 20KB
+This page describes vLLM’s LoRA adapter configuration and runtime management: how the documented serving API exposes loading and unloading, how `WorkerLoRAManager` prepares adapters for a `LoRAModelManager`, how supported model layers are selected for LoRA wrapping, and how Punica and fused MoE LoRA fit into the execution path. The API endpoint behavior described here is documented in the LoRA fea
+
+### 6.5-rust-frontend-vllm-frontend-rs.md | Rust Frontend (vllm-frontend-rs) | 25KB
+Section 6.5 documents the Rust frontend’s HTTP and gRPC serving layers, the crates that make up its request path, and how that path connects to an engine through `EngineCoreClient`. The workspace includes separate crates for serving, chat, text, LLM access, tokenization, parsing, engine-core transport, mock-engine support, and metrics. [rust/Cargo.toml:1-18]() Sources: [rust/Cargo.toml:1-18]()
+
+### 6.6-scale-out-and-token-in-token-out-serving.md | Scale-Out and Token-in-Token-out Serving | 22KB
+This page documents the scale-out serving paths for separating request rendering, token generation, and response postprocessing. It focuses on token-in-token-out generation through `ServingTokens`, and on derendering generated tokens back into chat or completion responses through `ServingDerender` and `OnlineDerenderer`. [vllm/entrypoints/scale_out/token_in_token_out/serving.py:114-181]() [vllm/en
+
+### 7-quantization-and-moe-optimizations.md | Quantization and MoE Optimizations | 12KB
+This page outlines how vLLM connects quantization configurations to layer methods and kernel selection, and how its `FusedMoE` pipeline combines routing with expert execution. It is a parent-page overview; implementation details belong in the linked child pages. Sources: [vllm/model_executor/layers/quantization/fp8.py:92-105](), [vllm/model_executor/layers/fused_moe/layer.py:92-159]()
+
+### 7.1-quantization-methods-overview.md | Quantization Methods Overview | 36KB
+This page introduces vLLM’s quantization concepts and implementation entry points. It covers the quantization-method registry, FP8 and INT8 quantization descriptors and kernels, GPTQ and AWQ method identifiers, compressed-tensors and Quark configuration, online quantization entry points, and the linear-kernel import layer under `vllm/model_executor/kernels/linear`. It also describes how routed MoE
+
+### 7.2-fp8-and-low-precision-quantization.md | FP8 and Low-Precision Quantization | 33KB
+This page describes the code paths and kernel interfaces available in the supplied source for FP8 quantization, block and group scaling, MXFP4, NVFP4, DeepGEMM integration, and low-precision linear-kernel selection. It focuses on the quantization operation, scale representation, backend interfaces, and build/runtime integration. [vllm/model_executor/layers/quantization/input_quant_fp8.py:28-80]() 
+
+### 7.3-fusedmoe-layer-architecture.md | FusedMoE Layer Architecture | 26KB
+This page describes vLLM’s fused Mixture-of-Experts execution architecture: the modular kernel interfaces, expert computation, backend selection, routing, and the roles of the `experts/`, `oracle/`, `runner/`, and prepare/finalize components. It focuses on code entities visible in the provided source excerpts; backend-specific behavior is described only where those excerpts show it. [vllm/model_ex
+
+### 7.4-moe-quantization-and-backend-selection.md | MoE Quantization and Backend Selection | 26KB
+This page describes how MoE quantization methods connect to routed-expert execution, how the FP8 and MXFP4 backend oracles choose kernel families, and how backend choice interacts with expert parallelism (EP). It covers the code paths evidenced here for FP8, MXFP4, NVFP4, ModelOpt, and Quark, along with CUTLASS, DeepGemm, FlashInfer/TRTLLM, and ROCm AITER backend families. [vllm/model_executor/lay
+
+### 7.5-custom-kernels-and-c-cuda-extensions.md | Custom Kernels and C++/CUDA Extensions | 22KB
+This page describes the native extension boundary in vLLM: the visible `csrc/` organization, PyTorch operator registration and stable ABI, Python-side operator wrappers, the CMake build entry point, external and JIT-oriented kernel libraries, and model-execution kernel warmup. The code paths shown here include CUDA/ROCm-oriented native ops and Intel XPU wrappers. [csrc/torch_bindings.cpp:1-10](), 
+
+### 8-attention-backends.md | Attention Backends | 11KB
+Attention backends provide alternative implementations of attention for different hardware platforms, attention patterns, and model configurations. vLLM exposes backend names through `AttentionBackendEnum`; the registry maps many of those names to implementation classes, including standard attention, MLA, sparse attention, and platform-specific backends. [vllm/v1/attention/backends/registry.py:34-
+
+### 8.1-attention-backend-selection.md | Attention Backend Selection | 24KB
+This page describes how vLLM represents and selects attention backends, how hardware and model properties constrain that choice, and how the `Attention` layer connects model execution to backend implementations. Backend-specific kernel details are out of scope here. [docs/design/attention_backends.md:1-6](), [vllm/model_executor/layers/attention/attention.py:41-47]() Sources: [docs/design/attentio
+
+### 8.2-flashattention-flashinfer-and-flexattention.md | FlashAttention, FlashInfer and FlexAttention | 25KB
+This page describes the FlashAttention, FlashInfer, Triton Attention, and FlexAttention implementations in vLLM. It focuses on their backend interfaces, metadata and KV-cache handling, kernel dispatch and compilation, and configuration points visible in the supplied code. It does not cover backend selection policy or specialized MLA implementations. Sources: [vllm/v1/attention/backend.py:59-86](),
+
+### 8.3-mla-and-specialized-attention.md | MLA and Specialized Attention | 26KB
+This page explains vLLM’s Multi-Latent Attention (MLA) computation paths, sparse MLA and DeepSeek V3.2/V4 indexer components, and the attention configuration boundary relevant to hybrid models. It focuses on the code entities and data flow visible in the provided source excerpts; those excerpts do not include Mamba-specific metadata-builder implementations. [vllm/model_executor/layers/attention/ml
+
+### 8.4-rocm-and-platform-specific-attention.md | ROCm and Platform-Specific Attention | 24KB
+This page documents ROCm attention backends and AITER integration, platform-specific attention selection concepts, and CPU attention—including the Python metadata path and C++ kernel interfaces. The available code excerpts also identify an XPU sparse MLA backend in the registry, but do not include its implementation; they do not provide TPU attention implementation details. Accordingly, XPU and TP
+
+### 9-distributed-execution.md | Distributed Execution | 10KB
+This page introduces how vLLM organizes distributed execution: parallel process groups, device communication, and the adjacent subsystems for multi-process serving, cache movement, offloading, and weight updates. It is a parent-page overview; follow the child-page links for implementation details. In the distributed-state lifecycle, `init_distributed_environment` establishes the distributed enviro
+
+### 9.1-parallelism-strategies.md | Parallelism Strategies | 22KB
+This page describes how vLLM represents distributed process groups and uses them for Tensor Parallelism (TP), Pipeline Parallelism (PP), Expert Parallelism (EP), Data Parallelism (DP), and Context Parallelism (CP). It also covers Expert Parallel Load Balancing (EPLB) and Elastic EP, which rebalance or reconfigure expert placement. [vllm/distributed/parallel_state.py:8-23](), [vllm/distributed/eplb
+
+### 9.2-communication-infrastructure.md | Communication Infrastructure | 23KB
+This page describes the communication mechanisms represented in the supplied vLLM source: distributed group state, CUDA device communication, MoE all2all dispatch and combine, symmetric-memory integration, shared-memory broadcast, and all-reduce/RMSNorm fusion. The available source excerpts establish some CUDA and PyTorch-distributed behavior, but do not expose enough implementation to document XC
+
+### 9.3-multi-process-engine-management.md | Multi-Process Engine Management | 19KB
+This page describes how vLLM connects frontend clients to engine-core processes, how local worker processes and Ray-related infrastructure fit into execution, and how data-parallel (DP) clients and coordination support request routing. It focuses on the V1 engine process and client boundaries, request-wave metadata, and the load-balancing modes visible in the supplied implementation. [vllm/v1/engi
+
+### 9.4-kv-cache-transfer-and-disaggregated-serving.md | KV Cache Transfer and Disaggregated Serving | 34KB
+This page documents vLLM’s v1 KV connector interface and the connector implementations and data flows relevant to KV transfer and prefill–decode disaggregation. It covers scheduler/worker responsibilities, `MultiConnector`, encoder-cache transfer context, NIXL, LMCache, Mooncake, MoRIIO, `hf3fs`, `flexkv`, and connector metrics. KV block allocation and CPU/disk KV tiering are separate topics; see 
+
+### 9.5-kv-offloading-and-tiering.md | KV Offloading and Tiering | 30KB
+This page describes vLLM’s KV offloading subsystem: how the offloading scheduler and managers coordinate block lookup and transfer, how CPU and multi-tier specifications configure storage, how `simple_kv_offload` provides a separate CPU/disk path, and how cache policies govern retention. The focus is the V1 offloading implementation and the code entities that connect it to scheduler and worker rol
+
+### 9.6-weight-transfer-and-rl-integration.md | Weight Transfer and RL Integration | 17KB
+This page describes vLLM’s weight-transfer engines for updating inference weights, the layerwise reload mechanism that applies incoming weights, and how these pieces fit into RL and training workflows. The available implementation details cover the reload lifecycle, the dense NCCL engine, and an asynchronous RL example; IPC and sparse NCCL are identified through the backend test suite and are desc
+
+### 10-platform-support.md | Platform Support | 10KB
+vLLM’s platform layer provides a shared `Platform` interface alongside hardware-specific implementations. The interface represents platform identity and common runtime properties, including device type, dispatch key, device-control environment variable, distributed backend, supported data types, and supported quantization methods [vllm/platforms/interface.py:138-180](). Platform implementations sp
+
+### 10.1-platform-abstraction-layer.md | Platform Abstraction Layer | 22KB
+The Platform Abstraction Layer provides a shared `Platform` type and platform-specific implementations for hardware-dependent behavior. This page describes the interface and capability types visible in the supplied source, plus the CUDA, ROCm, XPU, and CPU implementation details shown. The supplied excerpts do not include the platform package initializer or plugin-loading implementation, so runtim
+
+### 10.2-cuda-platform.md | CUDA Platform | 18KB
+This page describes the CUDA-specific implementation visible in `vllm/platforms/cuda.py`, including NVML setup, stateless device counting, compute-capability-dependent attention backend priorities, and the CUDA-oriented `CuMemAllocator` used for tagged memory pools. It also explains how the GPU worker imports the allocator interface. The supplied source excerpts do not include the rest of the CUDA
+
+### 10.3-rocm-platform.md | ROCm Platform | 17KB
+This page documents the ROCm-specific platform code visible in the supplied source excerpts: device-visibility handling, AMD GPU identification, GCN architecture queries, AITER initialization and configuration, and the ROCm Docker and AMD CI entry points. It focuses on the code entities that connect those concerns. [vllm/platforms/rocm.py:16-26](), [vllm/_aiter_ops.py:13-20](), [docker/Dockerfile.
+
+### 10.4-xpu-cpu-and-tpu-platforms.md | XPU, CPU, and TPU Platforms | 32KB
+This page covers Intel XPU execution, CPU platform kernels and worker-related infrastructure across supported processor architectures, and the available TPU code pointers. It focuses on the implementation details evidenced by the cited code: XPU worker device assignment and kernel integration, CPU build-time ISA configuration and attention execution, and the TPU-specific compile-backend condition 
+
+### 11-build-system-and-deployment.md | Build System and Deployment | 10KB
+This page gives a high-level overview of how vLLM is built, packaged, installed, and published. It connects the Docker build, dependency and platform variants, installation paths, and runtime kernel preparation; detailed explanations are in the child pages below. [docker/Dockerfile:1-6](), [docs/getting_started/installation/gpu.cuda.inc.md:17-27]() For runtime environment variables, see [Environme
+
+### 11.1-docker-multi-stage-build.md | Docker Multi-Stage Build | 21KB
+This page describes the Docker build structure visible in the supplied repository files: the CUDA-oriented `docker/Dockerfile`, the CPU `docker/Dockerfile.cpu`, and the XPU `docker/Dockerfile.xpu`. It focuses on named stages, artifact handoffs, image variants, and build-time optimization. The supplied CUDA Dockerfile excerpt covers only its global arguments and `base` stage, so details of its late
+
+### 11.2-dependency-management.md | Dependency Management | 20KB
+This page describes how vLLM declares runtime and test dependencies, checks PyTorch compatibility during native builds, detects precompiled Rust extensions, and connects Python packaging to CMake. The available build configuration shows the supported Python versions and expected CUDA/ROCm PyTorch versions; these must remain aligned with dependency declarations and platform build inputs. [CMakeList
+
+### 11.3-build-variants-and-configuration.md | Build Variants and Configuration | 24KB
+This page describes the build variants and configuration inputs evidenced in the provided build and installation files: CUDA, ROCm, XPU, and CPU; CPU nightly PyTorch builds; ARM64 and s390x targets; and selected Docker build options. It focuses on how build inputs select dependencies, target architectures, and build stages. [pyproject.toml:1-14](), [requirements/xpu.txt:1-23](), [docker/Dockerfile
+
+### 11.4-runtime-jit-compilation.md | Runtime JIT Compilation | 23KB
+This page describes the runtime kernel-compilation and warmup mechanisms evidenced in the supplied code: FlashInfer availability checks and kernel provisioning, DeepGEMM’s extension build integration and runtime-JIT constraint, and the worker-level warmup entry point. It also covers how vLLM prepares inputs and weights for the FlashInfer CuteDSL NVFP4 MoE path. The supplied code does not establish
+
+### 12-testing-and-ci-cd.md | Testing and CI/CD | 12KB
+This page summarizes vLLM’s test coverage, CI organization, hardware-aware execution, and correctness validation. Buildkite test-area configuration shows suites for engine behavior, kernels, distributed execution, models, API entrypoints, and evaluation; many jobs declare file dependencies and run after image-build steps. [.buildkite/test_areas/engine.yaml:1-29](), [.buildkite/test_areas/kernels.y
+
+### 12.1-test-organization-and-infrastructure.md | Test Organization and Infrastructure | 19KB
+This page describes how vLLM’s tests are organized, how shared pytest infrastructure supports tests, how `VllmRunner` and `HfRunner` are used for model comparisons, and how model-specific test settings are registered. It focuses on the test code and harnesses, not CI pipeline design or benchmark methodology. [tests/utils.py:89-104](), [tests/models/registry.py:16-120](), [tests/models/multimodal/g
+
+### 12.2-buildkite-ci-pipelines.md | Buildkite CI Pipelines | 25KB
+This page documents the Buildkite test configuration represented in the supplied `.buildkite` files: functional test-area groups, step settings, source-file triggers, sharding, AMD mirrors, and representative pipeline relationships. The provided files show configuration inputs and test commands; they do not show the external pipeline-generation implementation or the complete Buildkite upload/dispa
+
+### 12.3-hardware-specific-testing.md | Hardware-Specific Testing | 19KB
+This page documents vLLM's hardware-specific CI test infrastructure, including execution scripts, test definitions, command processing, and platform-specific test overrides for AMD/ROCm, Intel XPU, and CPU hardware. For general test organization and directory structure, see [12.1 Test Organization and Infrastructure](). For Buildkite CI pipeline structure and the modular `test_areas/` YAML system,
+
+### 12.4-model-correctness-validation-and-benchmarking.md | Model Correctness Validation and Benchmarking | 20KB
+This page describes the correctness checks and benchmark entry points visible in the supplied codebase excerpts. It covers the Buildkite `LM Eval` jobs, GSM8K-based checks, model and engine correctness jobs, and the online serving benchmark implemented in `vllm/benchmarks/serve.py`. The shown CI configuration does not define a universal numeric accuracy threshold; it specifies test commands, model
+
+### 12.5-developer-tooling-and-governance.md | Developer Tooling and Governance | 13KB
+This page documents the developer tooling, automated checks, review assignments, agent instructions, and governance processes within the vLLM project. It covers pre-commit hooks, `mypy` static type checking, GitHub Actions workflows, Mergify automation, the `CODEOWNERS` file, agent skills (`.agents/`, `.claude/`), and the contribution and governance model. vLLM utilizes `pre-commit` hooks configur
+
+### 13-glossary.md | Glossary | 21KB
+This wiki page defines codebase-specific terms, jargon, abbreviations, and domain concepts essential for onboarding engineers working on vLLM. It bridges high-level architectural concepts with concrete code entities, files, and classes across the repository. - **Implementation**: Managed via the `AttentionBackend` and metadata builders such as `CommonAttentionMetadata` [vllm/v1/worker/gpu_model_ru

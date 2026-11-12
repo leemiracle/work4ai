@@ -1,0 +1,30 @@
+# DeepWiki 索引 — anthropics/defending-code-reference-harness
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 179540 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 System Architecture](1.2-system-architecture.md)
+- [2 Autonomous Pipeline](2-autonomous-pipeline.md)
+  - [2.1 CLI Orchestration](2.1-cli-orchestration.md)
+  - [2.2 Reconnaissance and Find Agents](2.2-reconnaissance-and-find-agents.md)
+  - [2.3 Grading and Verification](2.3-grading-and-verification.md)
+  - [2.4 Deduplication and Judging](2.4-deduplication-and-judging.md)
+  - [2.5 Exploitability Reporting](2.5-exploitability-reporting.md)
+  - [2.6 Patch Generation and Verification](2.6-patch-generation-and-verification.md)
+- [3 Interactive Claude Code Skills](3-interactive-claude-code-skills.md)
+  - [3.1 Threat Modeling Skill](3.1-threat-modeling-skill.md)
+  - [3.2 Vulnerability Scan Skill](3.2-vulnerability-scan-skill.md)
+  - [3.3 Triage Skill](3.3-triage-skill.md)
+  - [3.4 Patch Skill and Customize Skill](3.4-patch-skill-and-customize-skill.md)
+- [4 Sandbox and Infrastructure](4-sandbox-and-infrastructure.md)
+  - [4.1 Sandbox Setup and Configuration](4.1-sandbox-setup-and-configuration.md)
+  - [4.2 Runtime Sandbox and Docker Operations](4.2-runtime-sandbox-and-docker-operations.md)
+  - [4.3 Agent Runner](4.3-agent-runner.md)
+- [5 Targets](5-targets.md)
+  - [5.1 Canary Target](5.1-canary-target.md)
+  - [5.2 Real-World Targets](5.2-real-world-targets.md)
+- [6 Data Models and Artifacts](6-data-models-and-artifacts.md)
+- [7 Testing](7-testing.md)
+- [8 Glossary](8-glossary.md)

@@ -1,0 +1,31 @@
+# DeepWiki 索引 — Unity-Technologies/ml-agents
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-30
+> 结构 26 页 · 全文 297916 字符
+
+- [1 ML-Agents Overview](1-ml-agents-overview.md)
+  - [1.1 Key Components and Structure](1.1-key-components-and-structure.md)
+- [2 Unity SDK Components](2-unity-sdk-components.md)
+  - [2.1 Academy and Training Environment](2.1-academy-and-training-environment.md)
+  - [2.2 Agent and Behavior Parameters](2.2-agent-and-behavior-parameters.md)
+  - [2.3 Sensors and Observations](2.3-sensors-and-observations.md)
+  - [2.4 Inference and Model Running](2.4-inference-and-model-running.md)
+- [3 Python Training System](3-python-training-system.md)
+  - [3.1 Training Pipeline](3.1-training-pipeline.md)
+  - [3.2 Trainers and Algorithms](3.2-trainers-and-algorithms.md)
+  - [3.3 Policies and Optimization](3.3-policies-and-optimization.md)
+  - [3.4 Experience Collection and Buffers](3.4-experience-collection-and-buffers.md)
+  - [3.5 Environment Management](3.5-environment-management.md)
+- [4 Unity-Python Communication](4-unity-python-communication.md)
+  - [4.1 gRPC and Protobuf Layer](4.1-grpc-and-protobuf-layer.md)
+  - [4.2 Side Channels](4.2-side-channels.md)
+- [5 Project Setup and Usage](5-project-setup-and-usage.md)
+  - [5.1 Installation and Configuration](5.1-installation-and-configuration.md)
+  - [5.2 Training Configuration Files](5.2-training-configuration-files.md)
+  - [5.3 Testing and CI/CD](5.3-testing-and-ci-cd.md)
+- [6 Advanced Topics](6-advanced-topics.md)
+  - [6.1 Example Environments and Multi-Agent Training](6.1-example-environments-and-multi-agent-training.md)
+  - [6.2 Docker and Cloud Training](6.2-docker-and-cloud-training.md)
+  - [6.3 Analytics and Monitoring](6.3-analytics-and-monitoring.md)
+  - [6.4 Contributing and Development](6.4-contributing-and-development.md)
+- [7 Glossary](7-glossary.md)

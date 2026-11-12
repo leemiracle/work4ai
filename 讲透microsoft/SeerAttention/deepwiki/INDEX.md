@@ -1,0 +1,32 @@
+# DeepWiki 索引 — microsoft/SeerAttention
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 545585 字符
+
+- [1 Home](1-home.md)
+- [2 Getting Started](2-getting-started.md)
+- [3 Core Architecture](3-core-architecture.md)
+  - [3.1 SeerAttention Mechanism](3.1-seerattention-mechanism.md)
+  - [3.2 AttnGates](3.2-attngates.md)
+  - [3.3 Sparsity Methods](3.3-sparsity-methods.md)
+  - [3.4 Cache Management](3.4-cache-management.md)
+- [4 Model Implementations](4-model-implementations.md)
+  - [4.1 Sparse Prefill Models](4.1-sparse-prefill-models.md)
+  - [4.2 Sparse Decode Models (SeerAttention-R)](4.2-sparse-decode-models-seerattention-r.md)
+  - [4.3 Model Configuration](4.3-model-configuration.md)
+- [5 Training and Distillation](5-training-and-distillation.md)
+  - [5.1 Self-Distillation Process](5.1-self-distillation-process.md)
+  - [5.2 Training Scripts and Data](5.2-training-scripts-and-data.md)
+- [6 Kernels and Performance](6-kernels-and-performance.md)
+  - [6.1 Triton Kernels](6.1-triton-kernels.md)
+  - [6.2 CUDA and Flash Decode Kernels](6.2-cuda-and-flash-decode-kernels.md)
+  - [6.3 Performance Optimizations](6.3-performance-optimizations.md)
+- [7 Evaluation Framework](7-evaluation-framework.md)
+  - [7.1 Reasoning Tasks Evaluation](7.1-reasoning-tasks-evaluation.md)
+  - [7.2 Long-Context Benchmarks](7.2-long-context-benchmarks.md)
+  - [7.3 Efficiency Benchmarks](7.3-efficiency-benchmarks.md)
+  - [7.4 Running Evaluations](7.4-running-evaluations.md)
+- [8 Advanced Topics](8-advanced-topics.md)
+  - [8.1 Quest Attention Baseline](8.1-quest-attention-baseline.md)
+  - [8.2 Batch Generation Utilities](8.2-batch-generation-utilities.md)
+  - [8.3 Extending SeerAttention](8.3-extending-seerattention.md)

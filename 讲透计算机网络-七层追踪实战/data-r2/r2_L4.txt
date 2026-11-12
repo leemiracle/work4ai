@@ -1,0 +1,33 @@
+### L4 传输层 —— TCP/UDP 端口 / socket 状态 / 段头
+
+-- ss -ltnp（监听中的 TCP 端口——服务在哪个门牌营业）
+State Recv-Q Send-Q Local Address:Port Peer Address:PortProcess
+
+-- ss -s（TCP 状态机总览：established/time-wait/...各多少条）
+Total: 2
+TCP:   55 (estab 0, closed 55, orphaned 0, timewait 0)
+
+Transport Total     IP        IPv6
+RAW	  0         0         0        
+UDP	  0         0         0        
+TCP	  0         0         0        
+INET	  0         0         0        
+FRAG	  0         0         0        
+
+
+-- /proc/net/tcp（内核 socket 表十六进制；state=0A 是 LISTEN）
+  sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode                                                     
+
+-- 本轮 TCP 段样本（sniffer：seq/ack/flags/window）
+ts=1793881602.240 172.17.0.3:58450→172.17.0.4:8443 [SYN] seq=3785258291 ack=0 win=64240 mss=1460
+ts=1793881602.241 172.17.0.4:8443→172.17.0.3:58450 [SYN/ACK] seq=924995198 ack=3785258292 win=65160 mss=1460
+ts=1793881602.241 172.17.0.3:58450→172.17.0.4:8443 [ACK] seq=3785258292 ack=924995199 win=502
+ts=1793881602.242 172.17.0.3:58450→172.17.0.4:8443 [PSH/ACK] seq=3785258292 ack=924995199 win=502
+ts=1793881602.242 172.17.0.4:8443→172.17.0.3:58450 [ACK] seq=924995199 ack=3785258809 win=506
+ts=1793881602.242 172.17.0.4:8443→172.17.0.3:58450 [PSH/ACK] seq=924995199 ack=3785258809 win=506
+ts=1793881602.242 172.17.0.3:58450→172.17.0.4:8443 [ACK] seq=3785258809 ack=924996573 win=501
+ts=1793881602.243 172.17.0.3:58450→172.17.0.4:8443 [PSH/ACK] seq=3785258809 ack=924996573 win=501
+ts=1793881602.243 172.17.0.3:58450→172.17.0.4:8443 [PSH/ACK] seq=3785258889 ack=924996573 win=501
+ts=1793881602.243 172.17.0.4:8443→172.17.0.3:58450 [PSH/ACK] seq=924996573 ack=3785259043 win=505
+ts=1793881602.284 172.17.0.3:58450→172.17.0.4:8443 [ACK] seq=3785259043 ack=924996828 win=501
+ts=1793881602.284 172.17.0.4:8443→172.17.0.3:58450 [PSH/ACK] seq=924996828 ack=3785259043 win=505

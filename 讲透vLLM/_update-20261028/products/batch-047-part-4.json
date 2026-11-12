@@ -1,0 +1,946 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py",
+   "type": "file",
+   "name": "sync.py",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py",
+   "summary": "跨 GPU/CTA/wave 同步原语（FlyDSL，基于 LLVM AMDGPU 内存模型）：release/acquire fence、wave/CTA 同步、边界 load128 与 Mailbox 标签对。",
+   "tags": [
+    "flydsl",
+    "synchronization",
+    "memory-model",
+    "mailbox"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/__init__.py",
+   "summary": "runtime 包 barrel（1 导入）。",
+   "tags": [
+    "barrel",
+    "runtime",
+    "specialized-decode"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py",
+   "type": "file",
+   "name": "caches.py",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py",
+   "summary": "KV 缓存绑定：tensor 身份校验 + CacheBinding（张量↔层绑定）与全绑定校验。",
+   "tags": [
+    "caches",
+    "binding",
+    "kv-cache"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "type": "file",
+   "name": "decode.py",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "summary": "SpecializedDecode（AMD 版）：权重加载后构建、不替换 stock 模块；KernelExecutor 协议 + Step 数据类。",
+   "tags": [
+    "specialized-decode",
+    "executor",
+    "protocol"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py",
+   "type": "file",
+   "name": "executor.py",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py",
+   "summary": "FfnExecutor：集合式构建（每 TP rank 同点构建，失败相位全 rank 一致）；RESET_LAUNCHES 周期集合重置（远早于 16 位 tag 上限）+ MonoHealth。",
+   "tags": [
+    "executor",
+    "ffn",
+    "collective",
+    "health"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/guards.py",
+   "type": "file",
+   "name": "guards.py",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/guards.py",
+   "summary": "静态部署拒绝清单：model_refusals 汇总全部已知不可用原因。",
+   "tags": [
+    "guards",
+    "refusals",
+    "eligibility"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/routing.py",
+   "type": "file",
+   "name": "routing.py",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/routing.py",
+   "summary": "步路由：decide_step 判定该 forward 走 mono 还是 stock 层。",
+   "tags": [
+    "routing",
+    "decision",
+    "forward"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/spec.py",
+   "type": "file",
+   "name": "spec.py",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/spec.py",
+   "summary": "DecodeConfig：专用 decode 的静态配置与 specialized_decode_config 解析。",
+   "tags": [
+    "config",
+    "decode",
+    "specialized-decode"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py",
+   "type": "file",
+   "name": "weights.py",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py",
+   "summary": "MonoLayerWeights：monokernel 需要的层权重视图（AITER MXFP4 (16,16) shuffle + e8m0_shuffle 尺度），EffectiveActivationMode 枚举。",
+   "tags": [
+    "weights",
+    "mxfp4",
+    "shuffle",
+    "views"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py:Mailbox",
+   "type": "class",
+   "name": "Mailbox",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py",
+   "summary": "单次 launch 的标签对邮箱（每地址一个 Addr，10 方法）。",
+   "tags": [
+    "mailbox",
+    "tagged",
+    "synchronization"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    231,
+    333
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py:CacheBinding",
+   "type": "class",
+   "name": "CacheBinding",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py",
+   "summary": "张量↔层缓存绑定。",
+   "tags": [
+    "cache",
+    "binding",
+    "tensor-identity"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    35,
+    59
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py:KernelExecutor",
+   "type": "class",
+   "name": "KernelExecutor",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "summary": "kernel 执行器协议（8 方法）。",
+   "tags": [
+    "protocol",
+    "executor",
+    "decode"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    32,
+    52
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py:Step",
+   "type": "class",
+   "name": "Step",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "summary": "专用 decode 步数据类。",
+   "tags": [
+    "step",
+    "decode",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    62,
+    74
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py:SpecializedDecode",
+   "type": "class",
+   "name": "SpecializedDecode",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "summary": "AMD 专用 decode 执行器：权重加载后构建、不替换 stock 模块（7 方法）。",
+   "tags": [
+    "specialized-decode",
+    "executor",
+    "amd"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    77,
+    216
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py:MonoHealth",
+   "type": "class",
+   "name": "MonoHealth",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py",
+   "summary": "mono 健康状态 dataclass。",
+   "tags": [
+    "health",
+    "data-model",
+    "executor"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    31,
+    35
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py:FfnExecutor",
+   "type": "class",
+   "name": "FfnExecutor",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py",
+   "summary": "FFN launch 执行器：集合式构建、周期性 epoch 重置与失败一致（13 方法）。",
+   "tags": [
+    "executor",
+    "collective",
+    "epoch"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    44,
+    212
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/spec.py:DecodeConfig",
+   "type": "class",
+   "name": "DecodeConfig",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/spec.py",
+   "summary": "专用 decode 静态配置。",
+   "tags": [
+    "config",
+    "decode",
+    "config-detail"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    13,
+    96
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py:MonoLayerWeights",
+   "type": "class",
+   "name": "MonoLayerWeights",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py",
+   "summary": "monokernel 层权重视图（AITER MXFP4 shuffle 布局）。",
+   "tags": [
+    "weights",
+    "mxfp4",
+    "views"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    81,
+    273
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py:load128",
+   "type": "function",
+   "name": "load128",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py",
+   "summary": "4 dword 的 load-visible 加载（i 为 4 的倍数）。",
+   "tags": [
+    "load128",
+    "memory-model",
+    "flydsl"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    109,
+    122
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py:wave_sync",
+   "type": "function",
+   "name": "wave_sync",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py",
+   "summary": "wave 内每 lane 的 acquire/release 同步。",
+   "tags": [
+    "wave",
+    "synchronization",
+    "memory-model"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    171,
+    192
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py:cta_sync",
+   "type": "function",
+   "name": "cta_sync",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py",
+   "summary": "workgroup barrier：release fence+s_barrier+acquire。",
+   "tags": [
+    "cta",
+    "barrier",
+    "fence"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    195,
+    200
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py:_spin",
+   "type": "function",
+   "name": "_spin",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py",
+   "summary": "有界自旋等待（10s 上限，超时置错误字）。",
+   "tags": [
+    "spin-wait",
+    "bounded",
+    "timeout"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    212,
+    222
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py:cache_binding",
+   "type": "function",
+   "name": "cache_binding",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py",
+   "summary": "构建张量↔层绑定（含身份校验）。",
+   "tags": [
+    "cache",
+    "binding",
+    "factory"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    62,
+    122
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py:checked_cache_bindings",
+   "type": "function",
+   "name": "checked_cache_bindings",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py",
+   "summary": "全绑定一致性校验。",
+   "tags": [
+    "validation",
+    "bindings",
+    "validation-detail"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    125,
+    137
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/runtime/guards.py:model_refusals",
+   "type": "function",
+   "name": "model_refusals",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/guards.py",
+   "summary": "汇总静态部署的全部已知拒绝原因。",
+   "tags": [
+    "refusals",
+    "guards",
+    "diagnostics"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    15,
+    56
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/runtime/routing.py:decide_step",
+   "type": "function",
+   "name": "decide_step",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/routing.py",
+   "summary": "判定该 forward 走 mono 还是 stock 层。",
+   "tags": [
+    "routing",
+    "decision",
+    "forward"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    23,
+    56
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/runtime/spec.py:specialized_decode_config",
+   "type": "function",
+   "name": "specialized_decode_config",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/spec.py",
+   "summary": "解析专用 decode 配置。",
+   "tags": [
+    "config",
+    "parsing",
+    "config-detail"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    102,
+    112
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py:effective_activation_mode",
+   "type": "function",
+   "name": "effective_activation_mode",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py",
+   "summary": "层实际生效的激活模式。",
+   "tags": [
+    "activation",
+    "mode",
+    "enum"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    30,
+    40
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/sync.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/__init__.py",
+   "target": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/spec.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/peer_memory.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/guards.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/routing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/spec.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/peer_memory.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/peer_memory.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py",
+   "target": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py",
+   "target": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/runner.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py",
+   "target": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/guards.py",
+   "target": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/spec.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/guards.py",
+   "target": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/guards.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/guards.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/routing.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/routing.py",
+   "target": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/spec.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/routing.py",
+   "target": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/spec.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/rocm_aiter_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/oracle/mxfp4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py:Mailbox",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py:load128",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py:wave_sync",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py:cta_sync",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py:_spin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py:CacheBinding",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py:cache_binding",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py:checked_cache_bindings",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py:KernelExecutor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py:Step",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py:SpecializedDecode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py:MonoHealth",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py:FfnExecutor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/spec.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/spec.py:DecodeConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/spec.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/runtime/spec.py:specialized_decode_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py:MonoLayerWeights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py:effective_activation_mode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/guards.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/runtime/guards.py:model_refusals",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/routing.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/runtime/routing.py:decide_step",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py:Mailbox",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py:load128",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py:wave_sync",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py:cta_sync",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py:CacheBinding",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py:cache_binding",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/runtime/caches.py:checked_cache_bindings",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py:KernelExecutor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py:Step",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py:SpecializedDecode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py:MonoHealth",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py:FfnExecutor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/spec.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/spec.py:DecodeConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/spec.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/runtime/spec.py:specialized_decode_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py:MonoLayerWeights",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py:effective_activation_mode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/guards.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/runtime/guards.py:model_refusals",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/routing.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/runtime/routing.py:decide_step",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py:FfnExecutor",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/mono/runner.py:FfnRunner",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py:FfnExecutor",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/weights.py:MonoLayerWeights",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/decode.py:SpecializedDecode",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/runtime/executor.py:FfnExecutor",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

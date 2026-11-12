@@ -1,0 +1,30 @@
+# DeepWiki 索引 — google-deepmind/alphageometry
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 372311 字符
+
+- [1 Overview](1-overview.md)
+- [2 System Architecture](2-system-architecture.md)
+  - [2.1 Execution Modes](2.1-execution-modes.md)
+  - [2.2 Module Dependencies](2.2-module-dependencies.md)
+- [3 Geometric Representation](3-geometric-representation.md)
+  - [3.1 Numerical Geometry Engine](3.1-numerical-geometry-engine.md)
+  - [3.2 Problem Definition Format](3.2-problem-definition-format.md)
+- [4 DD+AR Solver](4-dd-ar-solver.md)
+  - [4.1 Deductive Database (DD)](4.1-deductive-database-dd.md)
+  - [4.2 Algebraic Reasoning (AR)](4.2-algebraic-reasoning-ar.md)
+  - [4.3 Integration and Proof Search](4.3-integration-and-proof-search.md)
+- [5 Language Model Component](5-language-model-component.md)
+  - [5.1 Model Architecture](5.1-model-architecture.md)
+  - [5.2 Beam Search Decoding](5.2-beam-search-decoding.md)
+  - [5.3 Auxiliary Construction Generation](5.3-auxiliary-construction-generation.md)
+- [6 Usage Guide](6-usage-guide.md)
+  - [6.1 Installation and Setup](6.1-installation-and-setup.md)
+  - [6.2 Running the Solvers](6.2-running-the-solvers.md)
+- [7 Development and Testing](7-development-and-testing.md)
+  - [7.1 Testing Framework](7.1-testing-framework.md)
+  - [7.2 Contributing Guidelines](7.2-contributing-guidelines.md)
+- [8 Reference](8-reference.md)
+  - [8.1 Construction Definitions Reference](8.1-construction-definitions-reference.md)
+  - [8.2 Example Problems](8.2-example-problems.md)
+  - [8.3 License](8.3-license.md)

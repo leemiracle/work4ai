@@ -1,0 +1,1 @@
+A way to connect external apps to internal evaluations in a way that keeps sensitive data private

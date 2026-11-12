@@ -1,0 +1,32 @@
+# DeepWiki 索引 — OpenDCAI/DataFlex
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-11-02
+> 结构 27 页 · 全文 194074 字符
+
+- [1 DataFlex Overview](1-dataflex-overview.md)
+  - [1.1 Architecture & Design Principles](1.1-architecture-design-principles.md)
+  - [1.2 Installation & Dependencies](1.2-installation-dependencies.md)
+- [2 CLI & Entry Points](2-cli-entry-points.md)
+  - [2.1 dataflex-cli Command](2.1-dataflex-cli-command.md)
+  - [2.2 Configuration Reference](2.2-configuration-reference.md)
+- [3 Core Infrastructure](3-core-infrastructure.md)
+  - [3.1 Registry & Component System](3.1-registry-component-system.md)
+  - [3.2 Data Loading & MixedProportionManager](3.2-data-loading-mixedproportionmanager.md)
+- [4 Dynamic Data Selection](4-dynamic-data-selection.md)
+  - [4.1 SelectTrainer](4.1-selecttrainer.md)
+  - [4.2 Gradient-Based Selectors (LESS & NICE)](4.2-gradient-based-selectors-less-nice.md)
+  - [4.3 Loss-Based Selectors (Loss & Delta Loss)](4.3-loss-based-selectors-loss-delta-loss.md)
+  - [4.4 Distribution-Based & Offline Selectors (TSDS, NEAR, Random)](4.4-distribution-based-offline-selectors-tsds-near-random.md)
+  - [4.5 Custom Selectors](4.5-custom-selectors.md)
+- [5 Dynamic Data Mixing](5-dynamic-data-mixing.md)
+  - [5.1 MixTrainer](5.1-mixtrainer.md)
+  - [5.2 DoReMi Mixer](5.2-doremi-mixer.md)
+  - [5.3 ODM & Other Mixers (Online Data Mixing, Static, Random, Dynamic MoE)](5.3-odm-other-mixers-online-data-mixing-static-random-dynamic-moe.md)
+- [6 Dynamic Sample Reweighting](6-dynamic-sample-reweighting.md)
+  - [6.1 WeightTrainer](6.1-weighttrainer.md)
+  - [6.2 LossWeighter & Custom Weighters](6.2-lossweighter-custom-weighters.md)
+- [7 Examples & Recipes](7-examples-recipes.md)
+  - [7.1 Selector Examples (LoRA Fine-Tuning)](7.1-selector-examples-lora-fine-tuning.md)
+  - [7.2 Mixer & Weighter Examples](7.2-mixer-weighter-examples.md)
+- [8 CI/CD & Project Tooling](8-ci-cd-project-tooling.md)
+- [9 Glossary](9-glossary.md)

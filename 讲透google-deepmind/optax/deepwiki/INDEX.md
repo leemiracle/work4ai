@@ -1,0 +1,43 @@
+# DeepWiki 索引 — google-deepmind/optax
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 32 页 · 全文 278714 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Example Gallery](1.2-example-gallery.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 GradientTransformation Protocol](2.1-gradienttransformation-protocol.md)
+  - [2.2 Tree Utilities](2.2-tree-utilities.md)
+  - [2.3 Optimizer Composition](2.3-optimizer-composition.md)
+- [3 Optimizers](3-optimizers.md)
+  - [3.1 Standard Optimizers](3.1-standard-optimizers.md)
+  - [3.2 Adaptive and Second-Order Optimizers](3.2-adaptive-and-second-order-optimizers.md)
+  - [3.3 Contributed Optimizers](3.3-contributed-optimizers.md)
+- [4 Learning Rate Schedules](4-learning-rate-schedules.md)
+  - [4.1 Schedule Functions](4.1-schedule-functions.md)
+  - [4.2 Line Search Methods](4.2-line-search-methods.md)
+  - [4.3 Hyperparameter Injection](4.3-hyperparameter-injection.md)
+- [5 Loss Functions](5-loss-functions.md)
+  - [5.1 Classification Losses](5.1-classification-losses.md)
+  - [5.2 Self-Supervised Losses](5.2-self-supervised-losses.md)
+  - [5.3 Regression, Ranking, Segmentation and Fenchel-Young Losses](5.3-regression-ranking-segmentation-and-fenchel-young-losses.md)
+- [6 Gradient Transformations](6-gradient-transformations.md)
+  - [6.1 Core Transformations](6.1-core-transformations.md)
+  - [6.2 Transformation Wrappers](6.2-transformation-wrappers.md)
+  - [6.3 Gradient Accumulation and Microbatching](6.3-gradient-accumulation-and-microbatching.md)
+- [7 Utilities and Supporting Infrastructure](7-utilities-and-supporting-infrastructure.md)
+  - [7.1 Utility Functions](7.1-utility-functions.md)
+  - [7.2 Linear Algebra Operations](7.2-linear-algebra-operations.md)
+  - [7.3 Projections](7.3-projections.md)
+  - [7.4 Perturbations and Assignment](7.4-perturbations-and-assignment.md)
+- [8 Development Guide](8-development-guide.md)
+  - [8.1 Testing Infrastructure](8.1-testing-infrastructure.md)
+  - [8.2 Documentation System](8.2-documentation-system.md)
+- [9 Glossary](9-glossary.md)
+
+## 附：结构清单外的页
+- [ADOPT and Muon Optimizers](x1-adopt-and-muon-optimizers.md)
+- [AdEMAMix and Momentum Variants](x2-ademamix-and-momentum-variants.md)
+- [Optimizer State Introspection](x3-optimizer-state-introspection.md)
+- [Other Contrib Optimizers](x4-other-contrib-optimizers.md)

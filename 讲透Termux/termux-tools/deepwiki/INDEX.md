@@ -1,0 +1,31 @@
+# DeepWiki 索引 — termux/termux-tools
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 427876 字符
+
+- [1 Overview](1-overview.md)
+- [2 Mirror Infrastructure](2-mirror-infrastructure.md)
+  - [2.1 Mirror Organization and Deployment](2.1-mirror-organization-and-deployment.md)
+  - [2.2 Mirror Configuration Format](2.2-mirror-configuration-format.md)
+  - [2.3 Geographic Distribution and Mirror List](2.3-geographic-distribution-and-mirror-list.md)
+- [3 Package Management](3-package-management.md)
+  - [3.1 pkg Command Reference](3.1-pkg-command-reference.md)
+  - [3.2 Mirror Selection Algorithm](3.2-mirror-selection-algorithm.md)
+  - [3.3 termux-change-repo](3.3-termux-change-repo.md)
+- [4 Build System](4-build-system.md)
+  - [4.1 Build Configuration](4.1-build-configuration.md)
+  - [4.2 Makefile Structure](4.2-makefile-structure.md)
+  - [4.3 Script Generation](4.3-script-generation.md)
+- [5 Session and Environment Management](5-session-and-environment-management.md)
+  - [5.1 Login Process](5.1-login-process.md)
+  - [5.2 Shell Configuration (chsh)](5.2-shell-configuration-chsh.md)
+  - [5.3 Environment Initialization](5.3-environment-initialization.md)
+  - [5.4 MOTD System](5.4-motd-system.md)
+- [6 User Utilities](6-user-utilities.md)
+  - [6.1 System Information (termux-info)](6.1-system-information-termux-info.md)
+  - [6.2 Backup and Restore](6.2-backup-and-restore.md)
+  - [6.3 Android Integration Utilities](6.3-android-integration-utilities.md)
+  - [6.4 Settings and Reset](6.4-settings-and-reset.md)
+  - [6.5 System Binary Wrappers and Utilities](6.5-system-binary-wrappers-and-utilities.md)
+- [7 User Configuration (termux.properties)](7-user-configuration-termux.properties.md)
+- [8 Development and Contributing](8-development-and-contributing.md)

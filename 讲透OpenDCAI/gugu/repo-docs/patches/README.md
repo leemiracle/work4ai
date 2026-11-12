@@ -1,0 +1,3 @@
+# Dependency patches
+
+`ssh2@1.17.0.patch` fixes how an SSH channel resumes writes that waited for the peer's window. Upstream kept the resumed stdout chunk and, once stderr also waited, wrote that old stdout chunk again instead of the stderr data. On the remote tunnel's embedded SSH server this repeated bytes inside the device link's frame stream, and the desktop dropped the link with `frame too large`. The patch clears both waiting writes before resuming them and resumes stdout and stderr. Remove it when a published ssh2 contains the same fix, after `ssh2WindowResume.test.ts` passes without it.

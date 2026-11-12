@@ -1,0 +1,328 @@
+# Configuration
+
+AutoDiscovery is configured through **environment variables**. This page documents every
+variable the application reads, grouped by the concern it configures, along with whether it is
+required and its default.
+
+## How configuration is supplied
+
+- **Local development** (`docker compose`): variables are read from a `.env` file at the repo
+  root. Copy [`.env.example`](https://github.com/allenai/asta-autodiscovery/blob/main/.env.example)
+  to `.env` and fill in the values. The `api` service loads the whole `.env` file; a curated
+  subset is also passed explicitly in `docker-compose.yaml`.
+- **Deployed services**: variables (and secrets) are injected into the container environment by
+  the deployment platform.
+- **The frontend** (`ui`, Vite) reads its own set of variables at build time. Variables
+  prefixed with `VITE_` are embedded in the browser bundle and are therefore **not
+  secret**.
+
+Unless noted otherwise, "Default" is the value used by the code when the variable is unset. A
+value of *(required)* means the relevant feature fails or is disabled when the variable is
+missing.
+
+---
+
+## Core service
+
+| Variable | Required | Default | Description |
+| --- | --- | --- | --- |
+| `LOG_LEVEL` | No | `INFO` | Python logging level for the API (e.g. `DEBUG`, `INFO`, `WARNING`). |
+| `LOG_FORMAT` | No | *(plain)* | When set to `google:json`, logs are emitted as structured JSON that Google Cloud can parse. Any other value (or unset) uses plain logging. |
+
+The API is served by gunicorn bound to `0.0.0.0:8000`; the port is fixed in the entrypoint
+scripts (`api/start.sh`, `api/dev.sh`) and is not configurable via environment.
+
+## Authentication
+
+The backend is selected with `AUTH_PROVIDER` (`none` default, or `auth0` /
+`password_file`). See [Authentication](authentication.md) for how to set up and operate
+each provider; the table below is the variable reference.
+
+| Variable | Required | Default | Description |
+| --- | --- | --- | --- |
+| `AUTH_PROVIDER` | No | `none` | Active auth backend: `none` (zero-config, unauthenticated local user), `auth0`, or `password_file`. Set explicitly for any real deployment. |
+| `AUTH0_DOMAIN` | auth0 | *(none)* | Auth0 tenant domain used to validate tokens and look up user info. Compose default: `auth0.allenai.org`. |
+| `AUTH0_AUDIENCE` | auth0 | *(none)* | Expected audience (API identifier) for incoming access tokens. Compose default: `https://asta-core.allen.ai`. |
+| `AUTH0_CLIENT_ID` | No | *(none)* | Public SPA client id, served to the UI via `/api/auth/config`. |
+| `AUTH_PASSWORD_DIR` | password_file | *(none)* | Directory holding the user store (fixed filename `passwddb.json`), managed with `api/scripts/auth_admin.py`. Mounted as a directory so edits are picked up live. |
+| `AUTH_SESSION_SECRET` | password_file | *(none)* | Secret used to sign HS256 session tokens (use ≥ 32 random bytes). |
+| `AUTH_SESSION_TTL` | No | `43200` | `password_file` session lifetime in seconds (default 12h). |
+
+## Persistence
+
+Run metadata, uploaded datasets, results, and user profiles are held in a swappable
+**object store**, selected with `STORAGE_BACKEND`:
+
+- `local` (default) — a directory on the host, bind-mounted into the containers. No cloud
+  account, bucket, or credentials required; the stack persists real data out of the box.
+  Required by `JOB_BACKEND=docker`, which bind-mounts each run's directory into its job
+  container.
+- `gcs` — a Google Cloud Storage bucket. Required by `JOB_BACKEND=gcp` and
+  `CODE_EXECUTION_BACKEND=modal` (see [Choosing a workable
+  combination](#choosing-a-workable-combination)).
+
+Both backends use the same key layout, so a bucket and a data directory are
+interchangeable (`gsutil rsync` moves data either way). See
+[Swappable Persistence Backends](design/storage-backends.md) for the design.
+
+> **Using other storage without writing code.** `local` is a POSIX-directory backend, not a
+> local-disk-only one. If you can *mount* your storage — NFS, s3fs, Azure Files, JuiceFS, a
+> SAN — point `STORAGE_DIR` at the mount and everything works, job containers included. You
+> trade away presigned uploads, single-request prefix listings, and server-side copy; see
+> [Using other storage](design/storage-backends.md#using-other-storage) for whether
+> that matters at your scale.
+
+| Variable | Required | Default | Description |
+| --- | --- | --- | --- |
+| `STORAGE_BACKEND` | No | `local` | Persistence backend: `local` (host directory) or `gcs` (Cloud Storage bucket). Each job backend needs one: `docker` requires `local`, `gcp` requires `gcs`. Set explicitly for any deployment that keeps data in GCS. |
+| `STORAGE_DIR` | No | `/mnt/data` | **local backend.** Root directory of the store as the process sees it. In `.env` this is the **host** directory to keep run data in (default `./data`); compose mounts it at `/mnt/data`. Use an **absolute** path: the docker job backend bind-mounts each run's subtree into its job container and the host daemon needs an absolute bind source. |
+| `STORAGE_HOST_DIR` | No | *(unset)* | **local backend.** Host path of the store, used as the bind source for job containers. Set automatically by `docker-compose.yaml`; when unset, `STORAGE_DIR` is assumed to already be a host path. |
+
+> **Uploads.** With `gcs`, the browser uploads datasets straight to a presigned URL and the
+> bytes never reach the API. With `local` there is no such capability URL, so uploads are
+> streamed through the API (`POST /api/runs/upload-dataset`) — which is why the proxy's
+> `client_max_body_size` for `/api` matters for this backend.
+
+### Google Cloud
+
+Required when `STORAGE_BACKEND=gcs`, `JOB_BACKEND=gcp`, or `CODE_EXECUTION_BACKEND=modal`.
+
+| Variable | Required | Default | Description |
+| --- | --- | --- | --- |
+| `GCP_PROJECT` | gcs / gcp | *(none)* | Google Cloud project id. Required for GCS and Cloud Run job execution. |
+| `GCS_BUCKET` | gcs | `autodiscovery` | Name of the bucket holding run data/results/metadata. `AUTODISCOVERY_BUCKET` is accepted as an alias if `GCS_BUCKET` is unset. |
+| `GCP_REGION` | No | `us-west1` | Region used for job execution. |
+| `GOOGLE_APPLICATION_CREDENTIALS` | gcs / gcp | *(none)* | Path to the Google service-account key file used by the Google client libraries. In local dev this is bind-mounted into the container. Use an **absolute** path when running the docker job backend against `gcs`: the backend re-mounts this file into each job container and the host daemon needs an absolute bind source. |
+| `GOOGLE_ACCESS_KEY_ID` | No | *(none)* | HMAC access key id, used when generating presigned URLs for direct browser uploads to GCS. |
+| `GOOGLE_ACCESS_KEY_SECRET` | No | *(none)* | HMAC secret paired with `GOOGLE_ACCESS_KEY_ID`. |
+| `GCS_ENDPOINT_URL` | No | `https://storage.googleapis.com` | Storage endpoint the Modal sandbox uses to read dataset files. Override to point at an alternative/compatible endpoint. |
+
+## Job execution
+
+Each AutoDiscovery run is launched by a swappable **job backend**, selected with `JOB_BACKEND`:
+
+- `docker` (default) — runs the job as a local Docker container on the host daemon. Keeps the
+  out-of-the-box experience infra-agnostic; intended for local development and
+  single-user/on-prem deployments.
+- `gcp` — runs the job as a Google Cloud Run job execution. Deployments that run jobs on Cloud
+  Run must set `JOB_BACKEND=gcp` explicitly.
+
+| Variable | Required | Default | Description |
+| --- | --- | --- | --- |
+| `JOB_BACKEND` | No | `docker` | Job backend: `docker` (local containers) or `gcp` (Cloud Run). |
+| `AUTODISCOVERY_IMAGE` | docker | `autodiscovery:dev` | **docker backend.** Image the backend launches per job. Build it locally with `docker compose build autodiscovery`. |
+| `CLOUDRUN_JOB_NAME` | No | `autodiscovery-job` | **gcp backend.** Name of the Cloud Run job to execute. Compose sets `autodiscovery-job-dev` for local dev. |
+
+When `GOOGLE_APPLICATION_CREDENTIALS` is set, the docker backend bind-mounts that key into each
+job container so Google-hosted models (Vertex AI) can authenticate. It uses the **host** path
+(compose forwards it internally as `GCP_KEY_HOST_PATH`), which is why the variable must be an
+absolute path. Leave it unset if your jobs use no Google models. `GITHUB_COPILOT_TOKEN_DIR` is
+handled the same way for `github_copilot/` models (forwarded as
+`GITHUB_COPILOT_TOKEN_HOST_DIR`). API keys (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`,
+`AZURE_API_*`) are forwarded as environment variables.
+
+### Docker backend (default)
+
+With the default backend, `docker compose up` launches each run as a local container. The compose
+stack mounts the host Docker socket into the API so it can start those containers
+(docker-out-of-docker). Build the job image once first:
+
+```sh
+docker compose build autodiscovery
+docker compose up
+```
+
+`make dev` from the repository root runs both, and is what the README points at — the job image
+is behind compose's `jobs` profile, so a plain `docker compose up --build` never rebuilds it.
+
+The job container gets the run's data as a bind mount of the run's directory under
+`STORAGE_HOST_DIR`, at `/mnt/data/users/<uid>/jobs/<jid>` (the same path Cloud Run's GCS
+volume provides). This is why the docker backend requires `STORAGE_BACKEND=local`: it can only
+bind-mount a host directory, not a bucket. The mount is scoped to the run's own prefix, so a job
+container never sees other users' data — see
+[Code-execution backend](#code-execution-backend) for why that matters.
+
+To run jobs on Cloud Run instead, set `JOB_BACKEND=gcp` (the Docker socket mount is then
+unused). That requires `STORAGE_BACKEND=gcs`, since Cloud Run cannot mount a directory on
+your host.
+
+> **Security note.** The docker backend gives the API access to the host Docker socket, which is
+> effectively root on the host. This is fine for local/single-user use, but for a shared,
+> multi-user deployment (e.g. `AUTH_PROVIDER=password_file`) prefer `JOB_BACKEND=gcp`, where the
+> API only holds scoped cloud credentials.
+
+## Code-execution backend
+
+The AD job runs the LLM-generated experiment code through a configurable executor, selected with
+`CODE_EXECUTION_BACKEND` and forwarded to the job's `--backend` flag:
+
+| Variable | Required | Default | Description |
+| --- | --- | --- | --- |
+| `CODE_EXECUTION_BACKEND` | No | `process` | `process` (isolated subprocess in the job container), `local` (subprocess sharing the job's own environment), or `modal` (remote sandbox). |
+
+- `process` (default) — runs code in an isolated subprocess inside the job container, in a separate
+  sandbox venv; per-cell package installs are discarded, and no state carries across cells. No cloud
+  dependency (Modal is not required). Reads the dataset from the job's data mount.
+- `local` — runs code in a subprocess that shares the job's own Python environment, with no separate
+  sandbox venv. Lowest overhead, least isolated: generated code sees, and installs into, the packages
+  the job itself runs on.
+- `modal` — runs code in a remote Modal sandbox that mounts **only** the per-job data prefix,
+  read-only. Requires the [Modal](#modal-code-execution-sandbox-backend) variables and
+  `STORAGE_BACKEND=gcs` (the sandbox mounts the dataset from `gs://`).
+
+All three return the figures a run produced as structured outputs, which the job then interprets
+with `--vision_model` in its own process. No backend needs model credentials inside the execution
+environment, and every backend persists its figures to `rich_outputs/` for the HTML report.
+
+### Choosing a workable combination
+
+Each job backend is tied to one store, and the Modal sandbox needs the run's data reachable from
+outside the API process, which only `gcs` offers. The API **fails to start** on any mismatch
+rather than running against data the job or sandbox cannot see:
+
+| Setting | Works with `STORAGE_BACKEND=local` | Works with `STORAGE_BACKEND=gcs` |
+| --- | --- | --- |
+| `JOB_BACKEND=docker` | ✅ | ❌ local job containers bind-mount a host directory, not a bucket |
+| `JOB_BACKEND=gcp` | ❌ Cloud Run cannot mount a host directory | ✅ |
+| `CODE_EXECUTION_BACKEND=process` / `local` | ✅ | ✅ |
+| `CODE_EXECUTION_BACKEND=modal` | ❌ the sandbox mounts the dataset from `gs://` | ✅ |
+
+### Choosing a safe combination
+
+`process`/`local` execute untrusted, generated code **inside the job container**, so that code can
+read whatever run data the container mounts. `modal` instead runs it on a separate machine with only
+the per-job data mounted read-only. Whether in-process execution is safe therefore depends on the
+job backend (how the mount is scoped) and on whether the deployment is multi-user:
+
+| Job backend | Code backend | Single user (`AUTH_PROVIDER=none`) | Multi-user (`auth0` / `password_file`) |
+| --- | --- | --- | --- |
+| `docker` | `process` / `local` | ✅ safe | ✅ safe — mount is scoped to the job's own prefix |
+| `gcp` | `process` / `local` | ✅ safe | ⚠️ **unsafe** — Cloud Run mounts the whole bucket; executed code can read every user's data |
+| `gcp` | `modal` | ✅ safe | ✅ safe — scoped, read-only per-job data mount |
+
+The unsafe combination arises because Cloud Run's GCS mount is fixed per job (it cannot be scoped
+per execution), while the docker backend re-mounts only the current job's prefix each run. The API
+logs a loud warning at startup for the unsafe combination; set `CODE_EXECUTION_BACKEND=modal` for
+multi-user Cloud Run deployments.
+
+> Within a single job, `process`/`local` mount the job's own data read-write (the run also writes its
+> output there), so generated code could overwrite that job's own inputs. This is within-tenant only;
+> `modal` mounts the data read-only.
+
+## Modal (code-execution sandbox backend)
+
+Used only when `CODE_EXECUTION_BACKEND=modal`. With the default `process` (or `local`) backend the
+`MODAL_*` variables are unused.
+
+| Variable | Required | Default | Description |
+| --- | --- | --- | --- |
+| `MODAL_TOKEN_ID` | modal | *(none)* | Modal API token id. |
+| `MODAL_TOKEN_SECRET` | modal | *(none)* | Modal API token secret. |
+| `MODAL_ENVIRONMENT` | modal | *(none)* | Modal environment name to run sandboxes in. |
+| `MODAL_IMAGE_BUILDER_VERSION` | No | *(Modal default)* | Pins the Modal image builder version used to build sandbox images. |
+| `MODAL_APP_NAME` | No | `asta-autodiscovery` | Modal app name the sandboxes are associated with. Created on demand if it doesn't exist. |
+| `MODAL_BUCKET_SECRET` | modal | `example-bucket-secret` | Name of the Modal [secret](https://modal.com/docs/guide/secrets) holding the GCS credentials the sandbox uses to mount dataset files. The default is a **placeholder that does not exist** — you must set this to the name of a real secret in your `MODAL_ENVIRONMENT`, or every run fails at sandbox creation with `Secret '…' not found`. |
+
+## Model and LLM providers
+
+Which model the discovery agents use, and how it is reached. **There is no default
+model**: `AUTODISCOVERY_MODEL` is the one required setting in the whole configuration, and
+both `make dev` and the API refuse to start without it. The [Quick start](quickstart.md)
+has a complete `.env` per provider.
+
+| Variable | Required | Default | Description |
+| --- | --- | --- | --- |
+| `AUTODISCOVERY_MODEL` | **Yes** | *(none)* | Model for every run, as litellm's `<provider>/<model>` (e.g. `openai/gpt-5.4-mini`, `anthropic/claude-sonnet-5`, `azure/<deployment>`, `vertex_ai/gemini-3.7-flash`, `github_copilot/claude-haiku-4.5`). The provider prefix is required. The API passes it to each job as `--model`. |
+| `AUTODISCOVERY_BELIEF_MODEL` | No | `AUTODISCOVERY_MODEL` | Model for belief elicitation (the job's `--belief_model`). |
+| `AUTODISCOVERY_VISION_MODEL` | No | `AUTODISCOVERY_MODEL` | Model for interpreting plots (the job's `--vision_model`). Must accept image input. |
+| `AUTODISCOVERY_EMBEDDING_MODEL` | No | *(none)* | Embedding model for hypothesis deduplication (the job's `--embedding_model`). Only used, and only required, with the standalone CLI's `--dedupe`. |
+
+Provider variables follow litellm's conventions. The job checks the chosen provider's at
+startup so a missing one is a named error rather than an auth failure mid-run; with the
+docker job backend the API checks them at *its* startup too, since its environment is what
+jobs receive.
+
+| Variable | Required | Default | Description |
+| --- | --- | --- | --- |
+| `OPENAI_API_KEY` | openai | *(none)* | OpenAI API key. |
+| `ANTHROPIC_API_KEY` | anthropic | *(none)* | Anthropic API key. Anthropic has no embedding models, so `--dedupe` needs `AUTODISCOVERY_EMBEDDING_MODEL` from another provider. |
+| `AZURE_API_KEY` | azure | *(none)* | Azure OpenAI key. The model is `azure/<deployment name>`; name deployments after the model they serve so reasoning-model handling applies. |
+| `AZURE_API_BASE` | azure | *(none)* | Azure OpenAI endpoint, `https://<resource>.openai.azure.com`. |
+| `AZURE_API_VERSION` | No | *(litellm default)* | Azure OpenAI API version. |
+| `VERTEXAI_PROJECT` | vertex_ai | *(none)* | Google Vertex AI project id, checked at startup; it is not inferred from the Application Default Credentials project. Read by litellm itself — this is litellm's own variable name, not one this package defines. |
+| `VERTEXAI_LOCATION` | vertex_ai | *(none)* | Vertex AI location/region, checked at startup alongside `VERTEXAI_PROJECT`. Use `global` unless you have a reason not to: it serves current Gemini models, and litellm's own fallback, `us-central1`, does not. Also litellm's variable. |
+| `GOOGLE_APPLICATION_CREDENTIALS` | vertex_ai | *(none)* | Service-account key for Vertex. With the docker job backend it must be an absolute host path (it is bind-mounted into each job). Outside containers, `gcloud auth application-default login` works instead. |
+| `GITHUB_COPILOT_TOKEN_DIR` | github_copilot | `~/.config/litellm/github_copilot` | Directory holding litellm's cached GitHub OAuth token (`access-token`). Interactive runs obtain and cache it via device-code login; pre-seed it for non-interactive runs, which otherwise block on a device prompt. With the docker job backend it must be an absolute host path: compose forwards it as `GITHUB_COPILOT_TOKEN_HOST_DIR` and the backend bind-mounts it read-write into each job (litellm writes a derived, short-lived key beside the token). |
+| `ASTA_AGENTS_MODEL` | No | `openai/gpt-5-mini` | Model used by the `agents` package (LiteLLM model string). |
+
+Any other [litellm provider](https://docs.litellm.ai/docs/providers) can be named; its
+variables are then yours to supply, and with the docker job backend must be added to the
+forwarding list in `backends/docker.py` to reach job containers.
+
+`VERTEX_ACCESS_TOKEN`, `GOOGLE_OAUTH_ACCESS_TOKEN` and `VERTEX_OPENAI_BASE_URL`
+are no longer read. Vertex traffic goes through litellm's Vertex client, which
+authenticates with ADC and refreshes tokens itself, so a raw bearer token and a
+hand-set OpenAI-compatible base URL no longer have a place.
+
+### LLM retry / backoff
+
+Controls the client-side retry behavior when LLM calls fail.
+
+| Variable | Required | Default | Description |
+| --- | --- | --- | --- |
+| `LLM_RETRY_MAX_RETRIES` | No | `5` | Maximum number of retries per LLM call. |
+| `LLM_RETRY_INITIAL_DELAY_SECONDS` | No | `1.0` | Initial backoff delay before the first retry. |
+| `LLM_RETRY_MAX_DELAY_SECONDS` | No | `20.0` | Maximum backoff delay between retries. |
+
+## Maintenance jobs (email & user lookup)
+
+Used by the completion-email maintenance job to notify users when runs finish.
+
+| Variable | Required | Default | Description |
+| --- | --- | --- | --- |
+| `SMTP_SERVER` | Yes* | *(none)* | Mail server hostname. Required to send completion emails. |
+| `SENDER_EMAIL` | Yes* | *(none)* | From-address for outgoing email. Required to send completion emails. |
+| `SMTP_PORT` | No | `25` | Mail server port. |
+| `AUTH0_MGMT_DOMAIN` | Yes* | *(none)* | Auth0 tenant domain for the Management API, used to look up user email addresses. |
+| `AUTH0_MGMT_CLIENT_ID` | Yes* | *(none)* | Auth0 Management API client id. |
+| `AUTH0_MGMT_CLIENT_SECRET` | Yes* | *(none)* | Auth0 Management API client secret. |
+
+<small>\* Required only for the email maintenance job; not needed to run the API or jobs.</small>
+
+## Asta integration
+
+Configures the "dig deeper" handoff that sends an experiment's context to Asta.
+
+Both `ASTA_CONTEXT_SERVICE_URL` and `ASTA_CONTEXT_SERVICE_API_KEY` must be set to enable it. With
+either missing the feature is off: the UI hides the "Continue exploring with Asta" entry points and
+the API returns `503` from the handoff endpoint. The rest of the app is unaffected.
+
+| Variable | Required | Default | Description |
+| --- | --- | --- | --- |
+| `AUTODISCOVERY_BASE_URL` | No | `https://autodiscovery.allen.ai` | Base URL of this app, used to build the AutoDiscovery run link included in the Asta handoff. |
+| `ASTA_BASE_URL` | No | `https://asta.allen.ai` | Base URL used to build Asta chat links returned to the UI. |
+| `ASTA_CONTEXT_SERVICE_URL` | No | *(empty — feature disabled)* | URL of the context service that stores handoff artifacts and metadata. |
+| `ASTA_CONTEXT_SERVICE_API_KEY` | No | *(empty — feature disabled)* | API key for the context service. |
+| `ASTA_BUCKET` | No | `example-workspaces-project` | Bucket the handoff copies dataset files into for Asta to load. |
+
+## Frontend (UI)
+
+Read by the Vite frontend. `VITE_*` variables are compiled into the browser bundle and
+are **not secret**.
+
+| Variable | Required | Default | Description |
+| --- | --- | --- | --- |
+| `VITE_AUTH_PROVIDER` | No | `none` | Build-time fallback for the active auth provider (`auth0` / `password_file` / `none`) if `/api/auth/config` is unreachable. |
+| `VITE_AUTH0_DOMAIN` | No | `auth0.allenai.org` | Auth0 tenant domain for the browser login flow. |
+| `VITE_AUTH0_CLIENT_ID` | No | *(built-in public client id)* | Public Auth0 application (client) id for the SPA. Public by design. |
+| `VITE_AUTH0_AUDIENCE` | No | `https://asta-core.allen.ai` | Auth0 API audience requested by the browser. |
+
+The `VITE_AUTH*` values are build-time fallbacks; at runtime the UI prefers the
+provider and settings served by `GET /api/auth/config`.
+
+### Testing / CI (UI)
+
+| Variable | Required | Default | Description |
+| --- | --- | --- | --- |
+| `E2E_BASE_URL` | No | `http://localhost:8080` | Base URL Playwright end-to-end tests target. |
+| `CI` | No | *(unset)* | When set, Playwright enables CI behavior (retries, single worker, `forbidOnly`). |

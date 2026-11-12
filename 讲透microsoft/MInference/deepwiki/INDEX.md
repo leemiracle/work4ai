@@ -1,0 +1,31 @@
+# DeepWiki 索引 — microsoft/MInference
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 326017 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 MInference Introduction](1.1-minference-introduction.md)
+  - [1.2 SCBench Introduction](1.2-scbench-introduction.md)
+  - [1.3 System Architecture](1.3-system-architecture.md)
+- [2 MInference Core](2-minference-core.md)
+  - [2.1 Model Patching System](2.1-model-patching-system.md)
+  - [2.2 Sparse Attention Mechanisms](2.2-sparse-attention-mechanisms.md)
+  - [2.3 Forward Pass Implementation](2.3-forward-pass-implementation.md)
+- [3 KV Cache Optimizations](3-kv-cache-optimizations.md)
+  - [3.1 KV Compression Techniques](3.1-kv-compression-techniques.md)
+  - [3.2 Quantized and Retrieval-Augmented Attention](3.2-quantized-and-retrieval-augmented-attention.md)
+  - [3.3 Quest and Other KV Cache Types](3.3-quest-and-other-kv-cache-types.md)
+- [4 SCBench Benchmark](4-scbench-benchmark.md)
+  - [4.1 Tasks and Datasets](4.1-tasks-and-datasets.md)
+  - [4.2 Evaluation Modes](4.2-evaluation-modes.md)
+  - [4.3 Running Benchmarks](4.3-running-benchmarks.md)
+- [5 Experimental Setup](5-experimental-setup.md)
+  - [5.1 Benchmarking Methods](5.1-benchmarking-methods.md)
+  - [5.2 Model Configuration](5.2-model-configuration.md)
+  - [5.3 Running Experiments](5.3-running-experiments.md)
+- [6 Usage Examples](6-usage-examples.md)
+  - [6.1 Streaming Inference](6.1-streaming-inference.md)
+  - [6.2 Integration with Other Frameworks](6.2-integration-with-other-frameworks.md)
+- [7 Contributing and Development](7-contributing-and-development.md)
+  - [7.1 Building and Installation](7.1-building-and-installation.md)
+  - [7.2 Release Process](7.2-release-process.md)

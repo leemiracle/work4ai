@@ -1,0 +1,871 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/worker/gpu_model_runner.py",
+   "type": "file",
+   "name": "gpu_model_runner.py",
+   "filePath": "vllm/v1/worker/gpu_model_runner.py",
+   "summary": "V1 GPU model runner 主体（7192 行）：GPUModelRunner 聚合 LoRA/KVConnector/ECConnector mixin，覆盖输入准备、注意力元数据构建、MM 编码器、前向执行、采样、CUDA graph 捕获、profiling 与 spec decode 草稿全链路。",
+   "tags": [
+    "model-runner",
+    "core",
+    "gpu",
+    "cudagraph"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu_model_runner.py:AsyncGPUModelRunnerOutput",
+   "type": "class",
+   "name": "AsyncGPUModelRunnerOutput",
+   "filePath": "vllm/v1/worker/gpu_model_runner.py",
+   "summary": "异步生成输出：设备事件 + 异步拷贝延迟取回 sampled tokens 与 logprobs。",
+   "tags": [
+    "async-output",
+    "sampling",
+    "model-runner"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    269,
+    368
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu_model_runner.py:AsyncGPUPoolingModelRunnerOutput",
+   "type": "class",
+   "name": "AsyncGPUPoolingModelRunnerOutput",
+   "filePath": "vllm/v1/worker/gpu_model_runner.py",
+   "summary": "pooling 模型的异步输出等价物（延迟拷贝 pooler 输出）。",
+   "tags": [
+    "async-output",
+    "pooling",
+    "model-runner"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    416,
+    456
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu_model_runner.py:ExecuteModelState",
+   "type": "class",
+   "name": "ExecuteModelState",
+   "filePath": "vllm/v1/worker/gpu_model_runner.py",
+   "summary": "execute_model 与 sample_tokens 之间传递的瞬态执行状态 NamedTuple。",
+   "tags": [
+    "state",
+    "executor",
+    "namedtuple"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    459,
+    472
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu_model_runner.py:GPUModelRunner",
+   "type": "class",
+   "name": "GPUModelRunner",
+   "filePath": "vllm/v1/worker/gpu_model_runner.py",
+   "summary": "V1 GPU model runner 主体（110 方法）：输入准备/注意力元数据/MM 编码/前向/采样/graph 捕获/profiling/spec 草稿全链路，混入 LoRA、KVConnector、ECConnector 三个 mixin。",
+   "tags": [
+    "model-runner",
+    "gpu",
+    "core"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    475,
+    7192
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu_model_runner.py:nans_to_dict",
+   "type": "function",
+   "name": "nans_to_dict",
+   "filePath": "vllm/v1/worker/gpu_model_runner.py",
+   "summary": "NaN logits 行计数转请求 id 字典。",
+   "tags": [
+    "diagnostics",
+    "nan",
+    "logits"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    256,
+    265
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu_model_runner.py:_copy_pooler_output_to_cpu",
+   "type": "function",
+   "name": "_copy_pooler_output_to_cpu",
+   "filePath": "vllm/v1/worker/gpu_model_runner.py",
+   "summary": "pooling 输出经异步拷贝流复制到 CPU（pinned 缓冲 + 事件同步）。",
+   "tags": [
+    "pooling",
+    "async-copy",
+    "model-runner"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    371,
+    413
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/compilation/counter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/compilation/cuda_graph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/compilation/monitor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/config/ec_manager_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/config/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/distributed/ec_transfer/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/distributed/eplb/eplb_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/distributed/kv_transfer/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/lora/layers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/model_executor/layers/attention_layer_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/all2all_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/model_executor/model_loader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/model_executor/model_loader/reload/inplace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/model_executor/models/interfaces_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/model_executor/offloader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/multimodal/encoder_budget.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/multimodal/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/pooling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/tracing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/utils/gc_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/utils/gpu_sync_debug.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/utils/mem_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/utils/nvtx_pytorch_hooks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/attention/backends/gdn_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/attention/backends/linear_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/attention/backends/mamba2_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/cudagraph_dispatcher.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/kv_cache_spec_registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/pool/late_interaction_runner.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/pool/metadata.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/sample/logits_processor/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/sample/metadata.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/sample/rejection_sampler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/sample/sampler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/spec_decode/custom_class_proposer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/spec_decode/dflash.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/spec_decode/draft_model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/spec_decode/eagle.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/spec_decode/extract_hidden_states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/spec_decode/gemma4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/spec_decode/metadata.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/spec_decode/step3p5.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/spec_decode/suffix_decoding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/spec_decode/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/structured_output/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/worker/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/worker/block_table.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/worker/cp_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/worker/dp_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/worker/ec_connector_model_runner_mixin.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/worker/gpu/eplb_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/worker/gpu_input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/worker/gpu_ubatch_wrapper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/worker/kv_connector_model_runner_mixin.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/worker/lora_model_runner_mixin.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/worker/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/worker/ubatch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/worker/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "class:vllm/v1/worker/gpu_model_runner.py:AsyncGPUModelRunnerOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "class:vllm/v1/worker/gpu_model_runner.py:AsyncGPUPoolingModelRunnerOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "class:vllm/v1/worker/gpu_model_runner.py:ExecuteModelState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "class:vllm/v1/worker/gpu_model_runner.py:GPUModelRunner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "function:vllm/v1/worker/gpu_model_runner.py:nans_to_dict",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "function:vllm/v1/worker/gpu_model_runner.py:_copy_pooler_output_to_cpu",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "class:vllm/v1/worker/gpu_model_runner.py:AsyncGPUModelRunnerOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "class:vllm/v1/worker/gpu_model_runner.py:AsyncGPUPoolingModelRunnerOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "class:vllm/v1/worker/gpu_model_runner.py:ExecuteModelState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "class:vllm/v1/worker/gpu_model_runner.py:GPUModelRunner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_model_runner.py",
+   "target": "function:vllm/v1/worker/gpu_model_runner.py:nans_to_dict",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu_model_runner.py:GPUModelRunner",
+   "target": "class:vllm/v1/worker/lora_model_runner_mixin.py:LoRAModelRunnerMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu_model_runner.py:GPUModelRunner",
+   "target": "class:vllm/v1/worker/kv_connector_model_runner_mixin.py:KVConnectorModelRunnerMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu_model_runner.py:GPUModelRunner",
+   "target": "class:vllm/v1/worker/ec_connector_model_runner_mixin.py:ECConnectorModelRunnerMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu_model_runner.py:AsyncGPUModelRunnerOutput",
+   "target": "class:vllm/vllm/v1/outputs.py:AsyncModelRunnerOutput",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu_model_runner.py:AsyncGPUPoolingModelRunnerOutput",
+   "target": "class:vllm/vllm/v1/outputs.py:AsyncModelRunnerOutput",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

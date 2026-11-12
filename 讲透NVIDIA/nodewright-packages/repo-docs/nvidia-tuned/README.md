@@ -1,0 +1,566 @@
+# NVIDIA Tuned Package
+
+A NodeWright package that extends the base `tuned` package with NVIDIA-specific performance profiles for GPU and DGX systems.
+
+## Overview
+
+This package inherits from the base `tuned` package and adds pre-configured tuned profiles optimized for NVIDIA hardware. The profiles are organized by:
+
+- **Common base profiles**: Foundational settings deployed to the tuned profiles dir (`/etc/tuned/profiles` on tuned >= 2.23, else `/etc/tuned`)
+- **OS-specific workload profiles**: Profiles that may vary by OS version
+- **Service profiles**: Service-specific settings (eks, GCP, etc.)
+
+The configmap uses an **intent-based** model where you specify **what** you want (intent + accelerator) rather than a specific profile name. The profile name `nvidia-{accelerator}-{intent}` is constructed automatically. When `accelerator=generic`, the self-contained `nvidia-generic` profile is used instead, providing safe baseline tuning for any NVIDIA GPU without requiring accelerator-specific or intent-specific configuration.
+
+## Supported Operating Systems
+
+This package requires **tuned >= 2.19**. The following operating systems are supported:
+
+> **vr200:** The `vr200` accelerator is supported on **Ubuntu 26.04 only**. Its
+> profiles live under `profiles/os/ubuntu/26.04/`. The base profiles keep the
+> reboot-requiring `[bootloader]` tuning (same as gb200); with `service=bcm`, vr200
+> uses a bootloader-free profile chain (`nvidia-vr200-noreboot-base`) so the tuning
+> applies without a reboot. Use `service=rke2` instead to keep that tuning and take a
+> reboot for it. There is no `service=eks` vr200 profile.
+
+| OS | Version | Status | Notes |
+|----|---------|--------|-------|
+| **Ubuntu** | 22.04 (Jammy) | ✅ Tested | Uses a min of OS-specific and common profiles |
+| **Ubuntu** | 24.04 (Noble) | ✅ Tested | Uses common profiles |
+| **Debian** | 11 (Bullseye) | ❌ | Default tuned version is too old (2.15) |
+| **Debian** | 12 (Bookworm) | ⚠️ verified tuned package version but not fully tested| Uses common profiles |
+| **RHEL** | 9 | ⚠️ verified tuned package version but not fully tested| Uses common profiles |
+| **SLES** | 15 SP7, 16.0 | ⚠️ verified tuned package version and the `rke2` bootloader step on hosts, but not fully tested | Uses common profiles |
+| **openSUSE Leap** | 15.6, 16.0 | ⚠️ not tested | Uses common profiles; same bootloader mechanism as SLES |
+| **Other** | Any | ⚠️ Fallback | Falls back to `os/common/` profiles (untested, requires tuned >= 2.19) |
+
+### Notes
+
+- **Tested OS versions**: These have been validated with the package and use OS-specific profile configurations
+- **Fallback behavior**: For untested OS versions, the package will automatically fall back to the `os/common/` profiles. This fallback is **untested** and requires the system to have **tuned >= 2.19** installed
+- **Tuned version requirement**: All systems must have tuned version 2.19 or later. Check your system's tuned version with `tuned --version`
+- **OS detection**: The package automatically detects the OS from `/etc/os-release` and selects the appropriate profiles
+
+## Directory Structure
+
+```text
+profiles/
+├── common/                  # Base profiles → tuned profiles dir
+│   ├── nvidia-base/
+│   └── nvidia-acs-disable/
+├── os/
+│   ├── common/              # Default workload profiles (fallback for untested OS)
+│   │   ├── nvidia-generic/             # Self-contained baseline (accelerator=generic)
+│   │   ├── nvidia-h100-performance/
+│   │   ├── nvidia-h100-inference/
+│   │   ├── nvidia-h100-multiNodeTraining/
+│   │   ├── nvidia-gb200-performance/
+│   │   ├── nvidia-gb200-inference/
+│   │   ├── nvidia-gb200-multiNodeTraining/
+│   │   ├── nvidia-gb300-performance/
+│   │   ├── nvidia-gb300-noreboot-base/  # Bootloader-free chain used by service=oci
+│   │   ├── nvidia-gb300-inference/             # Shim: includes nvidia-gb300-performance
+│   │   └── nvidia-gb300-multiNodeTraining/     # Shim: includes nvidia-gb300-performance
+│   ├── ubuntu/
+│   │   ├── 22.04/          # Mix of symlinks and OS-specific overrides
+│   │   └── 24.04/          # Symlinks to os/common/ (override when needed)
+│   ├── debian/
+│   │   ├── 11/             # Mix of symlinks and OS-specific overrides
+│   │   └── 12/             # Symlinks to os/common/ (override when needed)
+│   └── rhel/
+│       └── 9/              # Symlinks to os/common/ (override when needed)
+└── service/
+    ├── common/                  # Shared helpers copied into every service's final profile dir
+    │   ├── mac-address-policy.sh
+    │   └── bootloader.sh
+    ├── eks/
+    │   ├── tuned.conf.template  # Service template (include= added dynamically)
+    │   ├── script.sh            # Sources common/mac-address-policy.sh, invokes common/bootloader.sh
+    │   ├── nvidia-h100-inference.conf   # AWS-compatible inference override
+    │   └── nvidia-gb200-inference.conf
+    ├── aks/
+    │   ├── tuned.conf.template
+    │   ├── script.sh            # Sources common/mac-address-policy.sh, invokes common/bootloader.sh
+    │   └── nvidia-h100-inference.conf   # AKS-compatible inference override (drops kernel-6.8 EEVDF sysctls)
+    ├── rke2/
+    │   ├── tuned.conf.template  # No [script], no overrides: accelerators fall through with [bootloader] intact
+    │   └── bootloader.enabled   # Opts the service in to the configure-bootloader lifecycle step
+    └── oci/
+        ├── tuned.conf.template  # RDMA IPv6 defaults for OCI's IPv6/SLAAC RoCE fabric
+        ├── script.sh            # Re-enables IPv6 on existing mlx5 RDMA VFs
+        ├── nvidia-gb300-performance.conf   # Re-roots gb300 onto the bootloader-free base
+        ├── nvidia-gb300-inference.conf     # Shim: same re-root for intent=inference
+        ├── nvidia-gb300-multiNodeTraining.conf  # Shim: same re-root for intent=multiNodeTraining
+        ├── nccl-topo-gb300.xml  # Installed to ${TOPO_PATH} by the write-nccl-topo config step
+        ├── pcie-acs-gb300.enabled          # Opts gb300 in to the configure-pcie-acs config step
+        ├── rdma-vfs-ready-gb300/           # Installed by the install-rdma-vfs-ready config step
+        │   ├── rdma-vfs-ready.service
+        │   └── wait-rdma-vfs.sh
+        └── spcx-cc-gb300/                  # Installed by the configure-spcx-cc config step
+            ├── doca-spcx-cc@.service
+            └── 99-doca-spcx-cc.rules
+```
+
+Note: Profiles are stored in `profiles/` (not `root_dir/`) to avoid polluting the host filesystem during package extraction. The prepare scripts explicitly copy profiles to the appropriate tuned directories.
+
+## How It Works
+
+1. **Prepare stage**: `prepare_nvidia_profiles.sh` runs:
+   - Reads `intent` and `accelerator` from the configmap
+   - Constructs the profile name as `nvidia-{accelerator}-{intent}`
+   - Deploys common base profiles to the resolved tuned profiles dir
+   - Detects OS from `/etc/os-release`
+   - Copies the appropriate OS-specific workload profiles to the resolved tuned profiles dir (`/etc/tuned/profiles` on tuned >= 2.23, else `/etc/tuned`)
+   - If a `service` is specified, creates service profile with dynamic `include=` pointing to the workload profile
+
+2. **Host setup steps**: three steps run between `prepare` and the profile apply. Each
+   resolves a bundled asset from the configured `service` and `accelerator` and is a
+   no-op when that pair ships nothing, so they cost nothing for pairs that do not use
+   them:
+   - `write-nccl-topo` installs `profiles/service/{service}/nccl-topo-{accelerator}.xml`
+     to `${TOPO_PATH}`
+   - `install-rdma-vfs-ready` installs and enables the systemd unit in
+     `profiles/service/{service}/rdma-vfs-ready-{accelerator}/`
+   - `configure-pcie-acs` runs the node's `rdma_topo` tool when
+     `profiles/service/{service}/pcie-acs-{accelerator}.enabled` is present
+   - `configure-spcx-cc` installs the DOCA Spectrum-X congestion control template unit
+     and udev rule from `profiles/service/{service}/spcx-cc-{accelerator}/`
+
+3. **Config stage**: The inherited `tuned` package applies the configured profile
+
+### Profile Name Construction
+
+The profile name is built from the configmap fields:
+
+```
+nvidia-{accelerator}-{intent}
+```
+
+Examples:
+| `accelerator` | `intent` | Constructed Profile |
+|---------------|----------|---------------------|
+| `generic` | *(ignored)* | `nvidia-generic` |
+| `h100` | `performance` | `nvidia-h100-performance` |
+| `h100` | `inference` | `nvidia-h100-inference` |
+| `h100` | `multiNodeTraining` | `nvidia-h100-multiNodeTraining` |
+| `gb200` | `performance` | `nvidia-gb200-performance` |
+| `gb200` | `inference` | `nvidia-gb200-inference` |
+| `gb200` | `multiNodeTraining` | `nvidia-gb200-multiNodeTraining` |
+| `gb300` | `performance` | `nvidia-gb300-performance` |
+| `gb300` | `inference` | `nvidia-gb300-inference` *(shim onto `nvidia-gb300-performance`)* |
+| `gb300` | `multiNodeTraining` | `nvidia-gb300-multiNodeTraining` *(shim onto `nvidia-gb300-performance`)* |
+| `vr200` | `performance` | `nvidia-vr200-performance` |
+| `vr200` | `inference` | `nvidia-vr200-inference` |
+| `vr200` | `multiNodeTraining` | `nvidia-vr200-multiNodeTraining` |
+
+When `accelerator=generic`, the `nvidia-generic` profile is selected directly. The `intent` and `service` fields are ignored. This profile is self-contained (no include chain) and provides universally safe GPU tuning suitable for any NVIDIA GPU.
+
+### Inheritance Chain
+
+When you specify `intent: inference`, `accelerator: h100`, and `service: eks`:
+
+```
+eks (active profile)
+  └── includes: nvidia-h100-inference
+        └── includes: nvidia-h100-performance
+              └── includes: nvidia-acs-disable
+                    └── includes: nvidia-base
+```
+
+## Usage
+
+**Generic tuning** (any NVIDIA GPU, no accelerator-specific or intent-specific config):
+
+```yaml
+apiVersion: skyhook.nvidia.com/v1alpha1
+kind: Skyhook
+metadata:
+  name: nvidia-tuned-generic
+spec:
+  nodeSelectors:
+    matchLabels:
+      nvidia.com/gpu.present: "true"
+  packages:
+    nvidia-tuned:
+      image: ghcr.io/nvidia/skyhook-packages/nvidia-tuned
+      version: 0.3.0
+      interrupt:
+        type: reboot
+      env:
+        - name: INTERRUPT
+          value: "true"
+      configMap:
+        accelerator: generic
+```
+
+**Accelerator-specific tuning** (with intent and service):
+
+```yaml
+apiVersion: skyhook.nvidia.com/v1alpha1
+kind: Skyhook
+metadata:
+  name: nvidia-tuned-eks
+spec:
+  nodeSelectors:
+    matchLabels:
+      nvidia.com/dgx: "true"
+  packages:
+    nvidia-tuned:
+      image: ghcr.io/nvidia/skyhook-packages/nvidia-tuned
+      version: 0.3.0
+      interrupt:
+        type: reboot
+      configInterrupts:
+        intent:
+          type: reboot
+      env:
+        - name: INTERRUPT
+          value: "true"
+      configMap:
+        intent: inference
+        accelerator: h100
+        service: eks
+```
+
+**AKS tuning** (H100 on Azure Kubernetes Service, Ubuntu 24.04):
+
+```yaml
+apiVersion: skyhook.nvidia.com/v1alpha1
+kind: Skyhook
+metadata:
+  name: nvidia-tuned-aks
+spec:
+  nodeSelectors:
+    matchLabels:
+      nvidia.com/gpu.present: "true"
+  packages:
+    nvidia-tuned:
+      image: ghcr.io/nvidia/skyhook-packages/nvidia-tuned
+      version: 0.3.0
+      interrupt:
+        type: reboot
+      configInterrupts:
+        intent:
+          type: reboot
+      env:
+        - name: INTERRUPT
+          value: "true"
+      configMap:
+        intent: inference
+        accelerator: h100
+        service: aks
+```
+
+**OCI tuning** (GB300 on OCI: NCCL topology, PCIe ACS, RDMA VF gate, congestion control):
+
+```yaml
+apiVersion: skyhook.nvidia.com/v1alpha1
+kind: Skyhook
+metadata:
+  name: nvidia-tuned-oci
+spec:
+  nodeSelectors:
+    matchLabels:
+      nvidia.com/gpu.present: "true"
+  packages:
+    nvidia-tuned:
+      image: ghcr.io/nvidia/nodewright-packages/nvidia-tuned
+      version: 0.8.0
+      interrupt:
+        type: reboot
+      env:
+        - name: TOPO_PATH
+          value: /etc/nccl/gb300-topo.xml
+      configMap:
+        intent: performance
+        accelerator: gb300
+        service: oci
+        spcx_cc: "on"
+      configInterrupts:
+        spcx_cc:
+          type: service
+          services:
+            - doca-spcx-cc@mlx5_bond_0
+            - doca-spcx-cc@mlx5_bond_1
+            - doca-spcx-cc@mlx5_bond_2
+            - doca-spcx-cc@mlx5_bond_3
+```
+
+`interrupt: {type: reboot}` is required as of 0.6.0, and stays required even with
+`CONFIGURE_PCIE_ACS=false`, because the RDMA VF gate is a boot-ordering unit. The tuned
+profile chain itself still carries no `[bootloader]` settings and applies live, but two
+host-level steps do need a reboot:
+
+- **PCIe ACS correction.** GB300 nodes ship with ACS enabled on the RoCE NIC root
+  ports, which blocks peer-to-peer DMA. The `configure-pcie-acs` step runs the node's
+  `rdma_topo` tool to generate a `pci=config_acs=...` bootloader drop-in, which only
+  takes effect on the next boot. Correcting it raised measured all_reduce peak busbw
+  from 360 GB/s to 426 GB/s on a two-node, eight-GPU RoCE run and made DMA-BUF work, which
+  removes the need for `nvidia_peermem` and `NCCL_DMABUF_ENABLE=0` on nodes where the
+  correction takes effect. It only takes effect on kernels that honour
+  `pci=config_acs=`; on a node whose kernel does not, set `CONFIGURE_PCIE_ACS=false`
+  (see the environment variables below), keep `nvidia_peermem` loaded, and keep
+  `NCCL_DMABUF_ENABLE=0` set.
+- **IOMMU passthrough on old kernels.** Needed to run ACS + DMA-BUF on kernels older
+  than 6.11. OCI ships `iommu.passthrough=1`, and arm-smmu-v3 before 6.11 cannot attach
+  a PASID to an identity domain, so `nvidia_uvm`'s ATS/SVA bind fails with `-E2BIG` and
+  **no CUDA context can be created at all**: `cudaMalloc` reports the GPUs as busy on an
+  idle node. The `configure-iommu-passthrough` step writes a
+  `/etc/default/grub.d/99-iommu-passthrough.cfg` drop-in setting `iommu.passthrough=0`,
+  restoring translating domains and with them CUDA, GPUDirect RDMA and DMA-BUF. Defaults
+  to `auto` (apply below 6.11). When the policy stops applying, because the node was
+  switched off or its kernel was upgraded past the threshold, the drop-in is removed and
+  GRUB regenerated, so passthrough comes back on the next boot. It is scoped to affected
+  kernels rather than applied everywhere because translating domains cost DMA performance,
+  which is why passthrough is set in the first place; on a kernel with the fix there is no
+  benefit to pay for. Independent of the ACS correction; both can be active.
+- **RDMA VF boot gate.** The `install-rdma-vfs-ready` step installs a
+  `rdma-vfs-ready.service` unit that orders before `kubelet.service` and waits for the
+  Oracle Cloud Agent to create the RDMA VFs. It is a boot-ordering gate, so it only has
+  an effect from the next boot.
+- **Spectrum-X congestion control.** The `configure-spcx-cc` step installs a
+  `doca-spcx-cc@.service` template plus a udev rule, running one `doca_spcx_cc` process
+  per RDMA bond (`mlx5_bond_*`). It is enabled by default; set `spcx_cc: "off"` in the
+  configMap to disable it. Binding the units to devices through udev is what makes the
+  state survive both a reboot and an mlx5 driver reload; started by hand with
+  `systemd-run`, the units are transient and vanish on reboot.
+  When it runs the units itself, the step requires `USER_PROGRAMMABLE_CC` to be enabled
+  in the NIC firmware, since a
+  programmable congestion control algorithm cannot take effect without it, and fails
+  with the `mlxconfig` command to fix it otherwise. Setting firmware stays manual.
+  A node with `spcx_cc: "off"` is never checked.
+  When congestion control is already run by persistent systemd units from elsewhere,
+  the step defers to them. That needs at least one rail (`mlx5_bond_*` or `rdma_railN`,
+  not VFs or front-end NICs), each rail to have exactly one `doca_spcx_cc` process from
+  such a unit, as its main process or from its command, and every instance of that
+  unit's template to be active. The step then removes this
+  package's own units, stopping any still running, and the check verifies the other
+  units report ready in their current run. Oracle Cloud Agent 1.64 does this on GB300
+  with its own `doca_spcx_cc@rdma_railN` units. When it defers, the step does not check
+  for DOCA or `USER_PROGRAMMABLE_CC`, which are the other owner's to need. Transient
+  units, bare processes and strays left in an unrelated unit are still refused.
+
+Both steps are no-ops for every other `service`/`accelerator` pair, so existing `eks`,
+`aks`, and `bcm` deployments are unaffected and still need no `interrupt`.
+
+**RKE2 tuning** (VR200 on RKE2: keeps the profile's kernel command line, takes a reboot):
+
+```yaml
+apiVersion: skyhook.nvidia.com/v1alpha1
+kind: Skyhook
+metadata:
+  name: nvidia-tuned-rke2
+spec:
+  nodeSelectors:
+    matchLabels:
+      nvidia.com/gpu.present: "true"
+  packages:
+    nvidia-tuned:
+      image: ghcr.io/nvidia/nodewright-packages/nvidia-tuned
+      version: 0.9.0
+      interrupt:
+        type: reboot
+      configInterrupts:
+        intent:
+          type: reboot
+        accelerator:
+          type: reboot
+      configMap:
+        intent: performance
+        accelerator: vr200
+        service: rke2
+```
+
+`interrupt: {type: reboot}` is required. Where `bcm` re-roots vr200 onto a
+bootloader-free base so nothing needs a reboot, `rke2` is the opposite trade: it ships no
+profile overrides at all, so each accelerator falls through to its own workload profile
+with the `[bootloader]` stanza intact, and the node reboots to pick it up.
+
+Keeping the stanza is not enough on its own. tuned resolves it to
+`/etc/tuned/bootcmdline` and then rewrites `/etc/default/grub`, but Ubuntu assembles
+`GRUB_CMDLINE_LINUX_DEFAULT` from `/etc/default/grub.d/` instead, so that rewrite is
+ignored and the cmdline silently never applies. The `configure-bootloader` step closes
+that gap: on Debian-family distributions it writes a `/etc/default/grub.d/99-nvidia-tuned-cmdline.cfg`
+drop-in sourcing tuned's file, then regenerates grub. It appends to
+`GRUB_CMDLINE_LINUX_DEFAULT` rather than replacing it, so the platform's own arguments
+(serial console, most importantly) survive. The step is gated on
+`profiles/service/{service}/bootloader.enabled` and is a no-op for every service that
+does not ship the marker, so `eks`, `aks`, `bcm`, and `oci` are unaffected. It uses its
+own filename rather than the `99_tuned.cfg` the `eks` and `aks` profiles write, and only
+ever removes a file carrying its own marker line, so it cannot disturb theirs.
+
+On SLES and openSUSE Leap tuned's own grub2 integration does the work, so the step writes
+no drop-in. SUSE's `grub2-mkconfig` reads `/etc/default/grub`, where tuned adds a
+`$tuned_params` reference to `GRUB_CMDLINE_LINUX_DEFAULT`, and tuned ships
+`/etc/grub.d/00_tuned`, which sets `tuned_params` from `/etc/tuned/bootcmdline`. What
+tuned does not do reliably is regenerate `grub.cfg`: on SLES 15 SP7 it left a config that
+set `tuned_params` but passed it on no `linux` line, so the node rebooted without the
+arguments. The step requires `LOADER_TYPE` `grub2` or `grub2-efi` in
+`/etc/sysconfig/bootloader` and the `$tuned_params` reference in `/etc/default/grub`,
+then runs `update-bootloader --refresh`. `configure-bootloader-check` reads the generated
+`/boot/grub2/grub.cfg` and fails unless it sets `tuned_params` to exactly the profile's
+cmdline and a `linux` line passes it. `grub2-bls` and `systemd-boot` build the kernel
+command line from boot entries instead, so the step fails on them; set
+`CONFIGURE_BOOTLOADER=false` there.
+
+After the reboot, `post-interrupt-bootloader-check` asserts every argument in
+`/etc/tuned/bootcmdline` is present in `/proc/cmdline`. This is the check worth having:
+grub quietly failing to pick the drop-in up is invisible from the config stage, and
+without it a node comes up labelled as tuned while running none of the tuning.
+
+Uninstalling removes the drop-in and regenerates grub, so the cmdline goes away on the
+next boot rather than outliving the package. On SUSE there is no drop-in. tuned rolls
+back its bootloader settings when the daemon is stopped, but only if it is running at
+that point and not set to `rollback = not_on_exit`, so the step does that rollback
+itself: it empties `TUNED_BOOT_CMDLINE` and `TUNED_BOOT_INITRD_ADD` in `/etc/tuned/bootcmdline` and runs
+`update-bootloader --refresh`. `uninstall-bootloader-check` fails while `grub.cfg` still
+sets a non-empty `tuned_params` or `tuned_initrd`. Both act only when `LOADER_TYPE` is `grub2` or
+`grub2-efi`; any other loader does not boot from `grub.cfg`, so there is nothing to clear.
+
+The step supports **Debian-family distributions and SLES/openSUSE Leap**, and fails on
+anything else rather than passing quietly. Sourcing `/etc/default/grub.d/*.cfg` is a
+Debian-family patch to `grub-mkconfig`; RHEL-family `grub2-mkconfig` reads
+`/etc/default/grub` and `/etc/grub.d/` and ignores that directory entirely. On a
+RHEL-family node the drop-in would be written, GRUB would regenerate without error, and
+none of the arguments would reach the kernel, so the node would report success while
+running none of its tuning. Because the package falls back to `os/common` profiles on
+untested distributions, the step cannot assume an OS gate happened upstream and checks
+`ID`/`ID_LIKE` itself. openSUSE Tumbleweed and Slowroll and the transactional SUSE
+variants (openSUSE MicroOS, Leap Micro, SLE Micro) are not supported. On such a node, either use `service=bcm` (same accelerators,
+bootloader-free chain, no reboot) or set `CONFIGURE_BOOTLOADER=false` and set the kernel
+arguments by another route.
+
+> **Accelerator support:** the service ships no accelerator-specific files, so support is
+> exactly whatever workload profiles exist. `gb200` and `vr200` work across all three
+> intents. `gb300` works across all three as well, but `inference` and
+> `multiNodeTraining` are shim profiles that resolve to `nvidia-gb300-performance`: the
+> intent is accepted and applies the performance tuning rather than failing, and there is
+> no gb300-specific inference or training delta yet. `vr200` remains Ubuntu 26.04 only.
+>
+> | Accelerator | `performance` | `inference` | `multiNodeTraining` |
+> |---|---|---|---|
+> | `gb200` | yes | yes | yes |
+> | `gb300` | yes | shim (= `performance`) | shim (= `performance`) |
+> | `vr200` | yes | yes | yes |
+
+### ConfigMap Fields
+
+| Field | Required | Default | Description |
+|-------|----------|---------|-------------|
+| `accelerator` | Yes | — | GPU/accelerator type (e.g., `h100`, `gb200`, `generic`). When set to `generic`, intent and service are ignored |
+| `intent` | No | `performance` | Workload intent (e.g., `inference`, `performance`, `multiNodeTraining`). Ignored when `accelerator=generic` |
+| `service` | No | — | Service name (e.g., `eks`). If specified, service profile wraps the workload profile. Ignored when `accelerator=generic` |
+| `spcx_cc` | No | `on` | DOCA Spectrum-X congestion control. Set to `off` (or `false`, `0`, `no`) to disable it and tear down any units this package installed. Only relevant to a `service`/`accelerator` pair that ships the assets (today `oci` + `gb300`). A node with `spcx_cc: off` does not need DOCA installed. Changing this key re-runs the step, so it can be toggled without a package version bump. |
+
+> **gb300 / oci:** `gb300` ships real tuning for `performance` only; `inference` and
+> `multiNodeTraining` are shims onto it, and `oci` carries matching shims so all three
+> intents stay on the bootloader-free chain. The base
+> `nvidia-gb300-performance` profile keeps the reboot-requiring `[bootloader]` tuning
+> (same as gb200); with `service=oci`, gb300 uses a bootloader-free profile chain
+> (`nvidia-gb300-noreboot-base`) so the tuning itself applies without a reboot. The
+> `oci` service also sets the RDMA IPv6 defaults that OCI's IPv6/SLAAC RoCE fabric
+> needs, and installs the bundled NCCL topology file (see `TOPO_PATH` below).
+> As of 0.6.0 the pair also runs the PCIe ACS correction and installs the RDMA VF boot
+> gate, both of which require `interrupt: {type: reboot}` on the custom resource. As of
+> 0.7.0 it also runs DOCA Spectrum-X congestion control, controlled by `spcx_cc`.
+
+## Available Profiles
+
+### Intents (specify in `intent`)
+
+| Intent | Description |
+|--------|-------------|
+| `performance` | General GPU performance optimization |
+| `inference` | Optimized for inference workloads (CPU isolation, hugepages) |
+| `multiNodeTraining` | Optimized for distributed training (network buffers, TCP tuning) |
+
+### Accelerators (specify in `accelerator`)
+
+| Accelerator | Description |
+|-------------|-------------|
+| `generic` | Baseline tuning for any NVIDIA GPU (self-contained, no intent/service required) |
+| `h100` | NVIDIA H100 GPU |
+| `gb200` | NVIDIA GB200 GPU |
+| `gb300` | NVIDIA GB300 GPU (`inference` and `multiNodeTraining` resolve to the `performance` profile) |
+| `vr200` | NVIDIA VR200 GPU (Ubuntu 26.04 only) |
+
+### Services (specify in `service`)
+
+| Service | Description |
+|---------|-------------|
+| `eks` | eks-specific settings (MAC address policy for CNI) |
+| `aks` | aks-specific settings (MAC address policy, grub.d bootloader workaround for Ubuntu) |
+| `bcm` | bcm-specific settings (bootloader-free vr200 chain, applies without a reboot) |
+| `rke2` | rke2-specific settings (keeps the accelerator's `[bootloader]` tuning and lands it on the host through grub.d on Debian-family distributions or tuned's grub2 integration on SUSE; requires `interrupt: {type: reboot}`) |
+| `oci` | oci-specific settings (RDMA IPv6 defaults, NCCL topology file, PCIe ACS correction, RDMA VF boot gate, and Spectrum-X congestion control on gb300; requires `interrupt: {type: reboot}`) |
+
+### Environment Variables
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `TOPO_PATH` | No | `/etc/nccl/topo.xml` | Absolute host path the bundled NCCL topology file is written to. Only used when the configured `service`/`accelerator` pair ships one (today `oci` + `gb300`); otherwise the step is a no-op. Point `NCCL_TOPO_FILE` at the same path in your workloads. |
+| `CONFIGURE_PCIE_ACS` | No | `true` | Set to `false` to skip the PCIe ACS correction and its checks. Only relevant to a `service`/`accelerator` pair that opts in (today `oci` + `gb300`). Use this on nodes whose kernel does not honour `pci=config_acs=`, where the correction cannot take effect and the post-interrupt check would otherwise fail the node. |
+| `CONFIGURE_IOMMU_PASSTHROUGH` | No | `auto` | Controls the IOMMU passthrough workaround for kernels whose arm-smmu-v3 cannot attach a PASID to an identity domain. `auto` applies it only when the running kernel is older than 6.11; `true` always applies it; `false` never does and skips the checks. Only relevant to a `service`/`accelerator` pair that opts in (today `oci` + `gb300`). Set `false` on a node whose kernel carries a backported fix that the version check cannot see. |
+| `CONFIGURE_BOOTLOADER` | No | `true` | Set to `false` to skip the bootloader drop-in step and all three of its checks. Only relevant to a service that ships `bootloader.enabled` (today `rke2`). Use it on a node whose kernel arguments are owned by something else, on any RHEL-family node, and on a SUSE node booting `grub2-bls` or `systemd-boot`, where the step fails by design (see the RKE2 tuning section above). |
+| `APT_ALLOW_INDEX_FAILURE` | No | `true` | Inherited from the `tuned` base package. Lets `apt update` fail without failing the install step, so one unreachable third-party repo in `/etc/apt/sources.list.d` cannot block the package. Set to `false` to restore strict behavior. The `apt install` that follows is unaffected and still fails if the package is genuinely unavailable. |
+
+## Adding OS-Specific Overrides
+
+By default, OS version directories contain symlinks to `os/common/`. To add OS-specific settings:
+
+1. Remove the symlink: `rm profiles/os/ubuntu/24.04/nvidia-h100-inference`
+2. Create directory: `mkdir profiles/os/ubuntu/24.04/nvidia-h100-inference`
+3. Add custom `tuned.conf` with OS-specific settings
+
+## Verification
+
+After deployment, verify the profile is active:
+
+```bash
+# List available profiles (should include nvidia-* profiles)
+tuned-adm list
+
+# Check active profile
+tuned-adm active
+
+# Verify tuning is applied
+tuned-adm verify
+```
+
+On `service: oci` with `accelerator: gb300`, also verify the two host-level steps after
+the node has rebooted:
+
+```bash
+# PCIe ACS values are correct on the RoCE NIC root ports
+rdma_topo check
+
+# The kernel booted with the generated ACS argument
+grep -o 'pci=config_acs=[^ ]*' /proc/cmdline
+
+# The RDMA VF gate ran ahead of kubelet
+systemctl status rdma-vfs-ready.service
+journalctl -u rdma-vfs-ready.service
+
+# The VFs the gate waited for are present
+ls -d /sys/class/net/*/device/physfn | wc -l
+```
+
+## Inheritance
+
+This package inherits all functionality from the base `tuned` package:
+
+- Multi-distribution support (Ubuntu/Debian, CentOS/RHEL/Amazon Linux)
+- Custom profile deployment via configmaps
+- Script deployment for complex tuning logic
+- Full lifecycle management (install, configure, uninstall)
+
+See the [tuned package README](../tuned/README.md) for complete documentation on all features.
+
+## Version
+
+- **Package Version**: 0.9.0
+- **Base Package**: tuned (latest via preprocess.sh)
+- **Schema Version**: v1
+
+## Additional documentation
+- [NVIDIA Grace Performance Tuning Guide](https://docs.nvidia.com/dccpu/grace-perf-tuning-guide/os-settings.html#operating-system-settings)

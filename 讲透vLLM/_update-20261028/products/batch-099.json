@@ -1,0 +1,2839 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/multimodal/cache/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/multimodal/cache/__init__.py",
+   "summary": "multimodal cache 包入口：再导出缓存基类与实现。",
+   "tags": [
+    "barrel",
+    "cache"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/multimodal/cache/base.py",
+   "type": "file",
+   "name": "base.py",
+   "filePath": "vllm/multimodal/cache/base.py",
+   "summary": "MM 缓存基座（498 行）：BaseMultiModalCache(ABC)/BaseMultiModalProcessorCache/BaseMultiModalReceiverCache 三层抽象+MultiModalProcessorCacheItem/Metadata+MissError——处理器端与接收端（引擎/worker）双缓存体系。",
+   "tags": [
+    "cache",
+    "base-class",
+    "multimodal"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/multimodal/cache/base.py:BaseMultiModalProcessorCache",
+   "type": "class",
+   "name": "BaseMultiModalProcessorCache",
+   "filePath": "vllm/multimodal/cache/base.py",
+   "lineRange": [
+    312,
+    392
+   ],
+   "summary": "处理器缓存基类（8 方法：get/mount/序列化）。",
+   "tags": [
+    "cache",
+    "processor"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/multimodal/cache/base.py:BaseMultiModalReceiverCache",
+   "type": "class",
+   "name": "BaseMultiModalReceiverCache",
+   "filePath": "vllm/multimodal/cache/base.py",
+   "lineRange": [
+    446,
+    498
+   ],
+   "summary": "接收端缓存基类（2 方法）。",
+   "tags": [
+    "cache",
+    "receiver"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/multimodal/cache/factories.py",
+   "type": "file",
+   "name": "factories.py",
+   "filePath": "vllm/multimodal/cache/factories.py",
+   "summary": "MM 缓存工厂：processor_cache_from_config 等 4 工厂按配置（shm/lru/auto）构造各级缓存。",
+   "tags": [
+    "cache",
+    "factory",
+    "multimodal"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/multimodal/cache/factories.py:_get_cache_type",
+   "type": "function",
+   "name": "_get_cache_type",
+   "filePath": "vllm/multimodal/cache/factories.py",
+   "lineRange": [
+    23,
+    46
+   ],
+   "summary": "缓存类型解析（shm/lru/auto 分派）。",
+   "tags": [
+    "dispatch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/multimodal/cache/factories.py:engine_receiver_cache_from_config",
+   "type": "function",
+   "name": "engine_receiver_cache_from_config",
+   "filePath": "vllm/multimodal/cache/factories.py",
+   "lineRange": [
+    77,
+    87
+   ],
+   "summary": "引擎接收缓存工厂。",
+   "tags": [
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/multimodal/cache/lru.py",
+   "type": "file",
+   "name": "lru.py",
+   "filePath": "vllm/multimodal/cache/lru.py",
+   "summary": "LRU 键复制缓存：LruKeyReplicatedSenderCache/ReceiverCache——处理器结果按 key 复制到接收端（不走 shm）。",
+   "tags": [
+    "cache",
+    "lru",
+    "replication"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/multimodal/cache/lru.py:LruKeyReplicatedSenderCache",
+   "type": "class",
+   "name": "LruKeyReplicatedSenderCache",
+   "filePath": "vllm/multimodal/cache/lru.py",
+   "lineRange": [
+    22,
+    83
+   ],
+   "summary": "LRU 发送缓存（7 方法）。",
+   "tags": [
+    "cache",
+    "sender"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/multimodal/cache/lru.py:LruKeyReplicatedReceiverCache",
+   "type": "class",
+   "name": "LruKeyReplicatedReceiverCache",
+   "filePath": "vllm/multimodal/cache/lru.py",
+   "lineRange": [
+    86,
+    142
+   ],
+   "summary": "LRU 接收缓存（4 方法）。",
+   "tags": [
+    "cache",
+    "receiver"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/multimodal/cache/shm.py",
+   "type": "file",
+   "name": "shm.py",
+   "filePath": "vllm/multimodal/cache/shm.py",
+   "summary": "共享内存缓存（324 行）：ShmObjectStoreSenderCache（12 方法：对象序列化入 shm+句柄分发）/ReceiverCache——跨进程 MM 预处理结果传递。",
+   "tags": [
+    "cache",
+    "shm",
+    "ipc"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/multimodal/cache/shm.py:ShmObjectStoreSenderCache",
+   "type": "class",
+   "name": "ShmObjectStoreSenderCache",
+   "filePath": "vllm/multimodal/cache/shm.py",
+   "lineRange": [
+    64,
+    245
+   ],
+   "summary": "shm 发送缓存（12 方法）。",
+   "tags": [
+    "cache",
+    "shm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/multimodal/cache/shm.py:ShmObjectStoreReceiverCache",
+   "type": "class",
+   "name": "ShmObjectStoreReceiverCache",
+   "filePath": "vllm/multimodal/cache/shm.py",
+   "lineRange": [
+    248,
+    324
+   ],
+   "summary": "shm 接收缓存（5 方法）。",
+   "tags": [
+    "cache",
+    "shm",
+    "receiver"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/multimodal/encoder_budget.py",
+   "type": "file",
+   "name": "encoder_budget.py",
+   "filePath": "vllm/multimodal/encoder_budget.py",
+   "summary": "MultiModalBudget（221 行，6 方法）：多模态 token 预算仲裁——每项最大 token 数推导与批预算分配（get_mm_max_toks_per_item），全部 MM 处理器的预算基座。",
+   "tags": [
+    "budget",
+    "multimodal",
+    "scheduling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/multimodal/encoder_budget.py:MultiModalBudget",
+   "type": "class",
+   "name": "MultiModalBudget",
+   "filePath": "vllm/multimodal/encoder_budget.py",
+   "lineRange": [
+    43,
+    221
+   ],
+   "summary": "预算主体（6 方法）。",
+   "tags": [
+    "budget"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/multimodal/encoder_budget.py:get_mm_max_toks_per_item",
+   "type": "function",
+   "name": "get_mm_max_toks_per_item",
+   "filePath": "vllm/multimodal/encoder_budget.py",
+   "lineRange": [
+    20,
+    40
+   ],
+   "summary": "单项最大 token 数推导。",
+   "tags": [
+    "budget"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/multimodal/gpu_ipc_memory.py",
+   "type": "file",
+   "name": "gpu_ipc_memory.py",
+   "filePath": "vllm/multimodal/gpu_ipc_memory.py",
+   "summary": "MM GPU IPC 内存池：MultiModalGPUMemoryLease/Pool+reserve_mm_ipc_gpu_memory（113 行预留算法）——多模态张量的 GPU 间零拷贝传递池。",
+   "tags": [
+    "ipc",
+    "gpu-memory",
+    "multimodal"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/multimodal/gpu_ipc_memory.py:MultiModalGPUMemoryPool",
+   "type": "class",
+   "name": "MultiModalGPUMemoryPool",
+   "filePath": "vllm/multimodal/gpu_ipc_memory.py",
+   "lineRange": [
+    54,
+    110
+   ],
+   "summary": "GPU IPC 内存池（5 方法：lease 分配/回收）。",
+   "tags": [
+    "ipc",
+    "pool"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/multimodal/gpu_ipc_memory.py:reserve_mm_ipc_gpu_memory",
+   "type": "function",
+   "name": "reserve_mm_ipc_gpu_memory",
+   "filePath": "vllm/multimodal/gpu_ipc_memory.py",
+   "lineRange": [
+    155,
+    267
+   ],
+   "summary": "按最大形状预留 GPU IPC 内存（113 行布局算法）。",
+   "tags": [
+    "ipc",
+    "reserve"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/multimodal/hasher.py",
+   "type": "file",
+   "name": "hasher.py",
+   "filePath": "vllm/multimodal/hasher.py",
+   "summary": "MultiModalHasher（237 行）：多模态输入内容哈希（hashlib 工厂+图像 id 提取）——MM 缓存的 key 生成器。",
+   "tags": [
+    "hashing",
+    "cache-key",
+    "multimodal"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/multimodal/hasher.py:MultiModalHasher",
+   "type": "class",
+   "name": "MultiModalHasher",
+   "filePath": "vllm/multimodal/hasher.py",
+   "lineRange": [
+    85,
+    237
+   ],
+   "summary": "内容哈希器（4 方法）。",
+   "tags": [
+    "hashing"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/multimodal/image.py",
+   "type": "file",
+   "name": "image.py",
+   "filePath": "vllm/multimodal/image.py",
+   "summary": "图像工具：rescale_image_size/rgba_to_rgb/convert_image_mode 等 PIL 操作封装。",
+   "tags": [
+    "image",
+    "utility",
+    "pil"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/multimodal/inputs.py",
+   "type": "file",
+   "name": "inputs.py",
+   "filePath": "vllm/multimodal/inputs.py",
+   "summary": "MM 输入核心类型（1029 行）：PlaceholderRange/MultiModalFeatureSpec/BaseMultiModalField 三态（Batched/Flat/Shared）/MultiModalFieldConfig——预处理输出到引擎的字段体系（与 rust 批 080 的 protocol/multimodal.rs 跨语言对应）。",
+   "tags": [
+    "multimodal",
+    "inputs",
+    "data-model",
+    "core"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/multimodal/inputs.py:PlaceholderRange",
+   "type": "class",
+   "name": "PlaceholderRange",
+   "filePath": "vllm/multimodal/inputs.py",
+   "lineRange": [
+    122,
+    217
+   ],
+   "summary": "占位范围（5 方法）。",
+   "tags": [
+    "placeholder"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/multimodal/inputs.py:BaseMultiModalField",
+   "type": "class",
+   "name": "BaseMultiModalField",
+   "filePath": "vllm/multimodal/inputs.py",
+   "lineRange": [
+    426,
+    501
+   ],
+   "summary": "字段基类（4 方法，ABC）。",
+   "tags": [
+    "field",
+    "base-class"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/multimodal/inputs.py:MultiModalFieldConfig",
+   "type": "class",
+   "name": "MultiModalFieldConfig",
+   "filePath": "vllm/multimodal/inputs.py",
+   "lineRange": [
+    655,
+    867
+   ],
+   "summary": "字段配置（5 方法：typed dict schema 推导）。",
+   "tags": [
+    "field",
+    "config"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/multimodal/media/connector.py",
+   "type": "file",
+   "name": "connector.py",
+   "filePath": "vllm/multimodal/media/connector.py",
+   "summary": "MediaConnector（682 行，23 方法）：媒体获取/下载/IO 参数合并/错误包装——全部图像视频音频 IO 的总入口（与 vllm/connections.py HTTP 层衔接）。",
+   "tags": [
+    "media",
+    "io",
+    "connector"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/multimodal/media/connector.py:MediaConnector",
+   "type": "class",
+   "name": "MediaConnector",
+   "filePath": "vllm/multimodal/media/connector.py",
+   "lineRange": [
+    156,
+    682
+   ],
+   "summary": "媒体连接器（23 方法：load/fetch/resize/base64 全链）。",
+   "tags": [
+    "media",
+    "connector"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/multimodal/media/image.py",
+   "type": "file",
+   "name": "image.py",
+   "filePath": "vllm/multimodal/media/image.py",
+   "summary": "图像 IO：ImageMediaIO（加载/缩放/转模式）+ImageEmbeddingMediaIO（嵌入直载）。",
+   "tags": [
+    "image",
+    "io",
+    "media"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/multimodal/media/image.py:ImageMediaIO",
+   "type": "class",
+   "name": "ImageMediaIO",
+   "filePath": "vllm/multimodal/media/image.py",
+   "lineRange": [
+    25,
+    136
+   ],
+   "summary": "图像 IO（6 方法）。",
+   "tags": [
+    "image",
+    "io"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/multimodal/media/image.py:ImageEmbeddingMediaIO",
+   "type": "class",
+   "name": "ImageEmbeddingMediaIO",
+   "filePath": "vllm/multimodal/media/image.py",
+   "lineRange": [
+    139,
+    178
+   ],
+   "summary": "图像嵌入 IO（7 方法）。",
+   "tags": [
+    "image",
+    "embedding"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/multimodal/media/video.py",
+   "type": "file",
+   "name": "video.py",
+   "filePath": "vllm/multimodal/media/video.py",
+   "summary": "视频 IO：VideoMediaIO（233 行）+VideoEmbeddingMediaIO。",
+   "tags": [
+    "video",
+    "io",
+    "media"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/multimodal/media/video.py:VideoMediaIO",
+   "type": "class",
+   "name": "VideoMediaIO",
+   "filePath": "vllm/multimodal/media/video.py",
+   "lineRange": [
+    30,
+    232
+   ],
+   "summary": "视频 IO（6 方法）。",
+   "tags": [
+    "video",
+    "io"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/multimodal/parse.py",
+   "type": "file",
+   "name": "parse.py",
+   "filePath": "vllm/multimodal/parse.py",
+   "summary": "MM 数据解析（890 行）：ModalityDataItems(ABC) 派生的各模态 items（Processor/Embedding×Audio/Image/Video）+MultiModalDataParser——原始请求媒体到 items 的规范化。",
+   "tags": [
+    "parsing",
+    "items",
+    "multimodal"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/multimodal/parse.py:ModalityDataItems",
+   "type": "class",
+   "name": "ModalityDataItems",
+   "filePath": "vllm/multimodal/parse.py",
+   "lineRange": [
+    60,
+    112
+   ],
+   "summary": "模态 items 基类（11 方法，ABC）。",
+   "tags": [
+    "items",
+    "base-class"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/multimodal/parse.py:DictEmbeddingItems",
+   "type": "class",
+   "name": "DictEmbeddingItems",
+   "filePath": "vllm/multimodal/parse.py",
+   "lineRange": [
+    250,
+    334
+   ],
+   "summary": "字典嵌入 items（5 方法）。",
+   "tags": [
+    "items",
+    "embedding"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/multimodal/parse.py:VideoProcessorItems",
+   "type": "class",
+   "name": "VideoProcessorItems",
+   "filePath": "vllm/multimodal/parse.py",
+   "lineRange": [
+    396,
+    449
+   ],
+   "summary": "视频处理器 items（5 方法）。",
+   "tags": [
+    "items",
+    "video"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/multimodal/processing/context.py",
+   "type": "file",
+   "name": "context.py",
+   "filePath": "vllm/multimodal/processing/context.py",
+   "summary": "处理上下文（686 行）：InputProcessingContext（13 方法：tokenizer/单模态数据访问）+BaseProcessingInfo（21 方法：分辨率/网格/预算策略接口）——各模型 ProcessingInfo 的契约。",
+   "tags": [
+    "processing",
+    "context",
+    "base-class"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/multimodal/processing/context.py:InputProcessingContext",
+   "type": "class",
+   "name": "InputProcessingContext",
+   "filePath": "vllm/multimodal/processing/context.py",
+   "lineRange": [
+    214,
+    447
+   ],
+   "summary": "输入处理上下文（13 方法）。",
+   "tags": [
+    "context"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/multimodal/processing/context.py:BaseProcessingInfo",
+   "type": "class",
+   "name": "BaseProcessingInfo",
+   "filePath": "vllm/multimodal/processing/context.py",
+   "lineRange": [
+    450,
+    686
+   ],
+   "summary": "处理信息基类（21 方法：全部模型 ProcessingInfo 的父抽象）。",
+   "tags": [
+    "processing-info",
+    "base-class"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/multimodal/processing/dummy_inputs.py",
+   "type": "file",
+   "name": "dummy_inputs.py",
+   "filePath": "vllm/multimodal/processing/dummy_inputs.py",
+   "summary": "BaseDummyInputsBuilder（156 行，6 方法）：profiling 用虚拟输入构造基类。",
+   "tags": [
+    "dummy-inputs",
+    "profiling",
+    "base-class"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/multimodal/processing/dummy_inputs.py:BaseDummyInputsBuilder",
+   "type": "class",
+   "name": "BaseDummyInputsBuilder",
+   "filePath": "vllm/multimodal/processing/dummy_inputs.py",
+   "lineRange": [
+    27,
+    156
+   ],
+   "summary": "虚拟输入构造器（6 方法，ABC）。",
+   "tags": [
+    "dummy-inputs"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/multimodal/processing/inputs.py",
+   "type": "file",
+   "name": "inputs.py",
+   "filePath": "vllm/multimodal/processing/inputs.py",
+   "summary": "ProcessorInputs（109 行）：处理器输入封装。",
+   "tags": [
+    "processing",
+    "inputs"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/multimodal/processing/processor.py",
+   "type": "file",
+   "name": "processor.py",
+   "filePath": "vllm/multimodal/processing/processor.py",
+   "summary": "MM 处理器核心（1925 行，本批最大）：PromptUpdate 家族（Insertion/Replacement）+token 匹配队列编译+计划/应用（_plan_prompt_updates）+BaseMultiModalProcessor/EncDecMultiModalProcessor——占位符替换引擎的多模态总处理器。",
+   "tags": [
+    "processing",
+    "processor",
+    "prompt-update",
+    "core"
+   ],
+   "complexity": "complex",
+   "languageNotes": "PromptUpdate 双态（Insertion/Replacement）经队列编译后按 _GetMatchIndex 协议匹配替换——多模态 token 注入的核心状态机。"
+  },
+  {
+   "id": "class:vllm/multimodal/processing/processor.py:PromptUpdate",
+   "type": "class",
+   "name": "PromptUpdate",
+   "filePath": "vllm/multimodal/processing/processor.py",
+   "lineRange": [
+    247,
+    305
+   ],
+   "summary": "更新基类（5 方法，ABC）。",
+   "tags": [
+    "prompt-update",
+    "base-class"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/multimodal/processing/processor.py:PromptReplacement",
+   "type": "class",
+   "name": "PromptReplacement",
+   "filePath": "vllm/multimodal/processing/processor.py",
+   "lineRange": [
+    377,
+    429
+   ],
+   "summary": "占位替换（2 方法）。",
+   "tags": [
+    "prompt-update",
+    "replacement"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/multimodal/processing/processor.py:_plan_prompt_updates",
+   "type": "function",
+   "name": "_plan_prompt_updates",
+   "filePath": "vllm/multimodal/processing/processor.py",
+   "lineRange": [
+    785,
+    795
+   ],
+   "summary": "更新计划入口（调度 _plan_prompt_updates_with）。",
+   "tags": [
+    "plan"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/multimodal/processing/processor.py:BaseMultiModalProcessor",
+   "type": "class",
+   "name": "BaseMultiModalProcessor",
+   "filePath": "vllm/multimodal/processing/processor.py",
+   "lineRange": [
+    900,
+    1700
+   ],
+   "summary": "处理器基类（apply/预处理/token 匹配全链）。",
+   "tags": [
+    "processor",
+    "base-class"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/multimodal/registry.py",
+   "type": "file",
+   "name": "registry.py",
+   "filePath": "vllm/multimodal/registry.py",
+   "summary": "MultiModalRegistry（197 行）：ProcessingInfo/DummyInputs/Processor 三工厂注册表+MultiModalTimingRegistry——模型 MM 处理三件套的登记中心。",
+   "tags": [
+    "registry",
+    "factory",
+    "multimodal"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/multimodal/registry.py:MultiModalRegistry",
+   "type": "class",
+   "name": "MultiModalRegistry",
+   "filePath": "vllm/multimodal/registry.py",
+   "lineRange": [
+    79,
+    166
+   ],
+   "summary": "注册表（6 方法：register/create_processor）。",
+   "tags": [
+    "registry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/multimodal/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/multimodal/utils.py",
+   "summary": "MM 工具集（428 行）：audio/image/video base64 编码、get_mm_features_in_window（调度窗口内 MM 特征过滤）、批判定。",
+   "tags": [
+    "utility",
+    "encoding",
+    "multimodal"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/multimodal/utils.py:get_mm_features_in_window",
+   "type": "function",
+   "name": "get_mm_features_in_window",
+   "filePath": "vllm/multimodal/utils.py",
+   "lineRange": [
+    122,
+    142
+   ],
+   "summary": "调度窗口内 MM 特征选择（chunked prefill 配合）。",
+   "tags": [
+    "window",
+    "scheduling"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/multimodal/video.py",
+   "type": "file",
+   "name": "video.py",
+   "filePath": "vllm/multimodal/video.py",
+   "summary": "视频加载器全家（1642 行）：VideoLoaderRegistry(ExtensionManager)+VideoBackend 基类与 12 个模型特定后端（Qwen3VL/Qwen2VL/GLM46V/Glm5Next/EmbeddingGemma2/Dynamic 等）——各模型视频解码差异的中心化收容。",
+   "tags": [
+    "video",
+    "loader",
+    "backend",
+    "registry"
+   ],
+   "complexity": "complex",
+   "languageNotes": "VideoBackend 家族按模型分化（帧采样/时间戳/rope 位置各不相同）；ExtensionManager 支持外部注册。"
+  },
+  {
+   "id": "class:vllm/multimodal/video.py:VideoLoaderRegistry",
+   "type": "class",
+   "name": "VideoLoaderRegistry",
+   "filePath": "vllm/multimodal/video.py",
+   "lineRange": [
+    36,
+    91
+   ],
+   "summary": "加载器注册表（6 方法，ExtensionManager 扩展）。",
+   "tags": [
+    "registry",
+    "extension"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/multimodal/video.py:VideoBackend",
+   "type": "class",
+   "name": "VideoBackend",
+   "filePath": "vllm/multimodal/video.py",
+   "lineRange": [
+    202,
+    325
+   ],
+   "summary": "后端基类（2 方法）。",
+   "tags": [
+    "backend",
+    "base-class"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/multimodal/video.py:Glm5NextVideoBackend",
+   "type": "class",
+   "name": "Glm5NextVideoBackend",
+   "filePath": "vllm/multimodal/video.py",
+   "lineRange": [
+    908,
+    1063
+   ],
+   "summary": "GLM-5-Next 视频后端（3 方法）。",
+   "tags": [
+    "backend",
+    "glm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/multimodal/video.py:Qwen3VLVideoBackend",
+   "type": "class",
+   "name": "Qwen3VLVideoBackend",
+   "filePath": "vllm/multimodal/video.py",
+   "lineRange": [
+    366,
+    421
+   ],
+   "summary": "Qwen3-VL 视频后端（3 方法）。",
+   "tags": [
+    "backend",
+    "qwen"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/multimodal/video_decoders/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/multimodal/video_decoders/__init__.py",
+   "summary": "视频解码器入口：resolve_video_backend_kwargs/decode_video——按后端名分派解码。",
+   "tags": [
+    "video",
+    "decoder",
+    "dispatch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/multimodal/video_decoders/opencv.py",
+   "type": "file",
+   "name": "opencv.py",
+   "filePath": "vllm/multimodal/video_decoders/opencv.py",
+   "summary": "OpenCV 视频解码 mixin（342 行，8 方法）：CPU 软解。",
+   "tags": [
+    "video",
+    "opencv",
+    "decoder"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/multimodal/video_decoders/opencv.py:OpenCVVideoBackendMixin",
+   "type": "class",
+   "name": "OpenCVVideoBackendMixin",
+   "filePath": "vllm/multimodal/video_decoders/opencv.py",
+   "lineRange": [
+    56,
+    342
+   ],
+   "summary": "OpenCV 解码 mixin。",
+   "tags": [
+    "decoder",
+    "opencv"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/multimodal/video_decoders/pynvvideocodec.py",
+   "type": "file",
+   "name": "pynvvideocodec.py",
+   "filePath": "vllm/multimodal/video_decoders/pynvvideocodec.py",
+   "summary": "PyNvVideoCodec 硬解（605 行）：DecoderSlot（6 方法）+解码器池+GPU 显存预算校验——NVIDIA 硬件视频解码。",
+   "tags": [
+    "video",
+    "nvcodec",
+    "gpu-decoder"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/multimodal/video_decoders/pynvvideocodec.py:PyNvVideoCodecDecoderSlot",
+   "type": "class",
+   "name": "PyNvVideoCodecDecoderSlot",
+   "filePath": "vllm/multimodal/video_decoders/pynvvideocodec.py",
+   "lineRange": [
+    132,
+    225
+   ],
+   "summary": "解码槽（6 方法）。",
+   "tags": [
+    "decoder",
+    "slot"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/multimodal/video_decoders/pynvvideocodec.py:PyNvVideoCodecVideoBackendMixin",
+   "type": "class",
+   "name": "PyNvVideoCodecVideoBackendMixin",
+   "filePath": "vllm/multimodal/video_decoders/pynvvideocodec.py",
+   "lineRange": [
+    257,
+    605
+   ],
+   "summary": "硬解 mixin（9 方法）。",
+   "tags": [
+    "decoder",
+    "mixin"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/multimodal/video_decoders/torchcodec.py",
+   "type": "file",
+   "name": "torchcodec.py",
+   "filePath": "vllm/multimodal/video_decoders/torchcodec.py",
+   "summary": "TorchCodec 解码 mixin（133 行）。",
+   "tags": [
+    "video",
+    "torchcodec",
+    "decoder"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/multimodal/video_prune/evs.py",
+   "type": "file",
+   "name": "evs.py",
+   "filePath": "vllm/multimodal/video_prune/evs.py",
+   "summary": "EVS（Efficient Video Sampling）剪枝（355 行）：retention mask 计算+mrope 位置重算——batch-041 MultiModalPruner 的算法侧。",
+   "tags": [
+    "video-prune",
+    "evs",
+    "mrope"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/multimodal/video_prune/evs.py:compute_retention_mask",
+   "type": "function",
+   "name": "compute_retention_mask",
+   "filePath": "vllm/multimodal/video_prune/evs.py",
+   "lineRange": [
+    38,
+    92
+   ],
+   "summary": "保留掩码计算（按采样率/重要性）。",
+   "tags": [
+    "prune",
+    "mask"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/multimodal/video_prune/evs.py:recompute_mrope_positions",
+   "type": "function",
+   "name": "recompute_mrope_positions",
+   "filePath": "vllm/multimodal/video_prune/evs.py",
+   "lineRange": [
+    154,
+    355
+   ],
+   "summary": "剪枝后 M-RoPE 位置重算（202 行）。",
+   "tags": [
+    "mrope",
+    "recompute"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/multimodal/video_prune/vidcom2.py",
+   "type": "file",
+   "name": "vidcom2.py",
+   "filePath": "vllm/multimodal/video_prune/vidcom2.py",
+   "summary": "VidCom2 剪枝（123 行）：retention mask 计算变体。",
+   "tags": [
+    "video-prune",
+    "vidcom2"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/multimodal/video_prune/vidcom2.py:compute_retention_mask",
+   "type": "function",
+   "name": "compute_retention_mask",
+   "filePath": "vllm/multimodal/video_prune/vidcom2.py",
+   "lineRange": [
+    33,
+    117
+   ],
+   "summary": "VidCom2 保留掩码（85 行）。",
+   "tags": [
+    "prune",
+    "mask"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/outputs.py",
+   "type": "file",
+   "name": "outputs.py",
+   "filePath": "vllm/outputs.py",
+   "summary": "输出类型大全（487 行）：RequestOutput/CompletionOutput（生成路径）+PoolingRequestOutput 族（Embedding/Classification/Scoring）+LateChunkingMetadata——LLM API 与池化 API 的统一输出层。",
+   "tags": [
+    "outputs",
+    "data-model",
+    "core"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/outputs.py:RequestOutput",
+   "type": "class",
+   "name": "RequestOutput",
+   "filePath": "vllm/outputs.py",
+   "lineRange": [
+    137,
+    272
+   ],
+   "summary": "生成请求输出（3 方法）。",
+   "tags": [
+    "output",
+    "generation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/outputs.py:PoolingRequestOutput",
+   "type": "class",
+   "name": "PoolingRequestOutput",
+   "filePath": "vllm/outputs.py",
+   "lineRange": [
+    302,
+    344
+   ],
+   "summary": "池化请求输出基类（2 方法）。",
+   "tags": [
+    "output",
+    "pooling"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/outputs.py:LateChunkingMetadata",
+   "type": "class",
+   "name": "LateChunkingMetadata",
+   "filePath": "vllm/outputs.py",
+   "lineRange": [
+    295,
+    299
+   ],
+   "summary": "late chunking 元数据（batch-019 的 token 边界透传类型）。",
+   "tags": [
+    "late-chunking"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/multimodal/cache/__init__.py",
+   "target": "file:vllm/multimodal/cache/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/__init__.py",
+   "target": "file:vllm/multimodal/cache/factories.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/__init__.py",
+   "target": "file:vllm/multimodal/cache/lru.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/__init__.py",
+   "target": "file:vllm/multimodal/cache/shm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/base.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/base.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/base.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/base.py",
+   "target": "file:vllm/multimodal/processing/processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/base.py",
+   "target": "file:vllm/utils/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/base.py",
+   "target": "file:vllm/utils/jsontree.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/base.py",
+   "target": "file:vllm/utils/mem_constants.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/base.py",
+   "target": "file:vllm/utils/mem_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/base.py",
+   "target": "class:vllm/multimodal/cache/base.py:BaseMultiModalProcessorCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/cache/base.py",
+   "target": "class:vllm/multimodal/cache/base.py:BaseMultiModalProcessorCache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/cache/base.py",
+   "target": "class:vllm/multimodal/cache/base.py:BaseMultiModalReceiverCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/cache/base.py",
+   "target": "class:vllm/multimodal/cache/base.py:BaseMultiModalReceiverCache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/cache/factories.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/factories.py",
+   "target": "file:vllm/multimodal/cache/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/factories.py",
+   "target": "file:vllm/multimodal/cache/lru.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/factories.py",
+   "target": "file:vllm/multimodal/cache/shm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/factories.py",
+   "target": "function:vllm/multimodal/cache/factories.py:_get_cache_type",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/cache/factories.py",
+   "target": "function:vllm/multimodal/cache/factories.py:engine_receiver_cache_from_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/cache/factories.py",
+   "target": "function:vllm/multimodal/cache/factories.py:engine_receiver_cache_from_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/cache/lru.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/lru.py",
+   "target": "file:vllm/multimodal/cache/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/lru.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/lru.py",
+   "target": "file:vllm/utils/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/lru.py",
+   "target": "class:vllm/multimodal/cache/lru.py:LruKeyReplicatedSenderCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/cache/lru.py",
+   "target": "class:vllm/multimodal/cache/lru.py:LruKeyReplicatedSenderCache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/cache/lru.py",
+   "target": "class:vllm/multimodal/cache/lru.py:LruKeyReplicatedReceiverCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/cache/lru.py",
+   "target": "class:vllm/multimodal/cache/lru.py:LruKeyReplicatedReceiverCache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/multimodal/cache/lru.py:LruKeyReplicatedSenderCache",
+   "target": "class:vllm/multimodal/cache/base.py:BaseMultiModalProcessorCache",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/multimodal/cache/lru.py:LruKeyReplicatedReceiverCache",
+   "target": "class:vllm/multimodal/cache/base.py:BaseMultiModalReceiverCache",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/multimodal/cache/shm.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/shm.py",
+   "target": "file:vllm/distributed/device_communicators/shm_object_storage.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/shm.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/shm.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/shm.py",
+   "target": "file:vllm/multimodal/cache/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/shm.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/shm.py",
+   "target": "file:vllm/multimodal/processing/processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/shm.py",
+   "target": "file:vllm/utils/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/shm.py",
+   "target": "file:vllm/utils/mem_constants.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/cache/shm.py",
+   "target": "class:vllm/multimodal/cache/shm.py:ShmObjectStoreSenderCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/cache/shm.py",
+   "target": "class:vllm/multimodal/cache/shm.py:ShmObjectStoreSenderCache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/cache/shm.py",
+   "target": "class:vllm/multimodal/cache/shm.py:ShmObjectStoreReceiverCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/cache/shm.py",
+   "target": "class:vllm/multimodal/cache/shm.py:ShmObjectStoreReceiverCache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/multimodal/cache/shm.py:ShmObjectStoreSenderCache",
+   "target": "class:vllm/multimodal/cache/base.py:BaseMultiModalProcessorCache",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/multimodal/cache/shm.py:ShmObjectStoreReceiverCache",
+   "target": "class:vllm/multimodal/cache/base.py:BaseMultiModalReceiverCache",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/multimodal/encoder_budget.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/encoder_budget.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/encoder_budget.py",
+   "target": "file:vllm/multimodal/cache/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/encoder_budget.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/encoder_budget.py",
+   "target": "file:vllm/multimodal/processing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/encoder_budget.py",
+   "target": "file:vllm/multimodal/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/encoder_budget.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/encoder_budget.py",
+   "target": "file:vllm/v1/core/encoder_cache_manager.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/encoder_budget.py",
+   "target": "class:vllm/multimodal/encoder_budget.py:MultiModalBudget",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/encoder_budget.py",
+   "target": "class:vllm/multimodal/encoder_budget.py:MultiModalBudget",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/encoder_budget.py",
+   "target": "function:vllm/multimodal/encoder_budget.py:get_mm_max_toks_per_item",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/encoder_budget.py",
+   "target": "function:vllm/multimodal/encoder_budget.py:get_mm_max_toks_per_item",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/gpu_ipc_memory.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/gpu_ipc_memory.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/gpu_ipc_memory.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/gpu_ipc_memory.py",
+   "target": "file:vllm/multimodal/video_decoders/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/gpu_ipc_memory.py",
+   "target": "file:vllm/multimodal/video_decoders/pynvvideocodec.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/gpu_ipc_memory.py",
+   "target": "file:vllm/utils/mem_constants.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/gpu_ipc_memory.py",
+   "target": "file:vllm/utils/mem_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/gpu_ipc_memory.py",
+   "target": "class:vllm/multimodal/gpu_ipc_memory.py:MultiModalGPUMemoryPool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/gpu_ipc_memory.py",
+   "target": "class:vllm/multimodal/gpu_ipc_memory.py:MultiModalGPUMemoryPool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/gpu_ipc_memory.py",
+   "target": "function:vllm/multimodal/gpu_ipc_memory.py:reserve_mm_ipc_gpu_memory",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/gpu_ipc_memory.py",
+   "target": "function:vllm/multimodal/gpu_ipc_memory.py:reserve_mm_ipc_gpu_memory",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/hasher.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/hasher.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/hasher.py",
+   "target": "file:vllm/multimodal/media/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/hasher.py",
+   "target": "class:vllm/multimodal/hasher.py:MultiModalHasher",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/hasher.py",
+   "target": "class:vllm/multimodal/hasher.py:MultiModalHasher",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/inputs.py",
+   "target": "file:vllm/multimodal/media/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/inputs.py",
+   "target": "file:vllm/multimodal/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/inputs.py",
+   "target": "file:vllm/utils/collection_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/inputs.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/inputs.py",
+   "target": "file:vllm/utils/jsontree.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/inputs.py",
+   "target": "class:vllm/multimodal/inputs.py:PlaceholderRange",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/inputs.py",
+   "target": "class:vllm/multimodal/inputs.py:PlaceholderRange",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/inputs.py",
+   "target": "class:vllm/multimodal/inputs.py:BaseMultiModalField",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/inputs.py",
+   "target": "class:vllm/multimodal/inputs.py:BaseMultiModalField",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/inputs.py",
+   "target": "class:vllm/multimodal/inputs.py:MultiModalFieldConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/inputs.py",
+   "target": "class:vllm/multimodal/inputs.py:MultiModalFieldConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/multimodal/inputs.py:MultiModalBatchedField",
+   "target": "class:vllm/multimodal/inputs.py:BaseMultiModalField",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/multimodal/inputs.py:MultiModalFlatField",
+   "target": "class:vllm/multimodal/inputs.py:BaseMultiModalField",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/multimodal/inputs.py:MultiModalSharedField",
+   "target": "class:vllm/multimodal/inputs.py:BaseMultiModalField",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/multimodal/media/connector.py",
+   "target": "file:vllm/connections.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/connector.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/connector.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/connector.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/connector.py",
+   "target": "file:vllm/multimodal/media/audio.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/connector.py",
+   "target": "file:vllm/multimodal/media/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/connector.py",
+   "target": "file:vllm/multimodal/media/image.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/connector.py",
+   "target": "file:vllm/multimodal/media/video.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/connector.py",
+   "target": "file:vllm/multimodal/video.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/connector.py",
+   "target": "file:vllm/utils/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/connector.py",
+   "target": "class:vllm/multimodal/media/connector.py:MediaConnector",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/media/connector.py",
+   "target": "class:vllm/multimodal/media/connector.py:MediaConnector",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/media/image.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/image.py",
+   "target": "file:vllm/multimodal/image.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/image.py",
+   "target": "file:vllm/multimodal/media/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/image.py",
+   "target": "file:vllm/utils/serial_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/image.py",
+   "target": "file:vllm/utils/sparse_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/image.py",
+   "target": "class:vllm/multimodal/media/image.py:ImageMediaIO",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/media/image.py",
+   "target": "class:vllm/multimodal/media/image.py:ImageMediaIO",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/media/image.py",
+   "target": "class:vllm/multimodal/media/image.py:ImageEmbeddingMediaIO",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/media/image.py",
+   "target": "class:vllm/multimodal/media/image.py:ImageEmbeddingMediaIO",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/media/video.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/video.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/video.py",
+   "target": "file:vllm/multimodal/media/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/video.py",
+   "target": "file:vllm/multimodal/media/image.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/video.py",
+   "target": "file:vllm/multimodal/video.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/video.py",
+   "target": "file:vllm/multimodal/video_decoders/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/video.py",
+   "target": "file:vllm/utils/serial_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/video.py",
+   "target": "file:vllm/utils/sparse_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/media/video.py",
+   "target": "class:vllm/multimodal/media/video.py:VideoMediaIO",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/media/video.py",
+   "target": "class:vllm/multimodal/media/video.py:VideoMediaIO",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/parse.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/parse.py",
+   "target": "file:vllm/multimodal/audio.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/parse.py",
+   "target": "file:vllm/multimodal/image.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/parse.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/parse.py",
+   "target": "file:vllm/multimodal/media/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/parse.py",
+   "target": "file:vllm/multimodal/video.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/parse.py",
+   "target": "file:vllm/utils/collection_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/parse.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/parse.py",
+   "target": "class:vllm/multimodal/parse.py:ModalityDataItems",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/parse.py",
+   "target": "class:vllm/multimodal/parse.py:ModalityDataItems",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/parse.py",
+   "target": "class:vllm/multimodal/parse.py:DictEmbeddingItems",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/parse.py",
+   "target": "class:vllm/multimodal/parse.py:DictEmbeddingItems",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/parse.py",
+   "target": "class:vllm/multimodal/parse.py:VideoProcessorItems",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/parse.py",
+   "target": "class:vllm/multimodal/parse.py:VideoProcessorItems",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/processing/context.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/context.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/context.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/context.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/context.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/context.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/context.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/context.py",
+   "target": "file:vllm/transformers_utils/processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/context.py",
+   "target": "file:vllm/utils/func_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/context.py",
+   "target": "file:vllm/utils/jsontree.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/context.py",
+   "target": "file:vllm/utils/mistral.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/context.py",
+   "target": "class:vllm/multimodal/processing/context.py:InputProcessingContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/processing/context.py",
+   "target": "class:vllm/multimodal/processing/context.py:InputProcessingContext",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/processing/context.py",
+   "target": "class:vllm/multimodal/processing/context.py:BaseProcessingInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/processing/context.py",
+   "target": "class:vllm/multimodal/processing/context.py:BaseProcessingInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/processing/dummy_inputs.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/dummy_inputs.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/dummy_inputs.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/dummy_inputs.py",
+   "target": "file:vllm/multimodal/processing/context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/dummy_inputs.py",
+   "target": "class:vllm/multimodal/processing/dummy_inputs.py:BaseDummyInputsBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/processing/dummy_inputs.py",
+   "target": "class:vllm/multimodal/processing/dummy_inputs.py:BaseDummyInputsBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/processing/inputs.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/inputs.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/inputs.py",
+   "target": "file:vllm/multimodal/cache/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/inputs.py",
+   "target": "file:vllm/multimodal/hasher.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/inputs.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/processor.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/processor.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/processor.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/processor.py",
+   "target": "file:vllm/multimodal/cache/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/processor.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/processor.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/processor.py",
+   "target": "file:vllm/multimodal/processing/context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/processor.py",
+   "target": "file:vllm/multimodal/processing/dummy_inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/processor.py",
+   "target": "file:vllm/multimodal/processing/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/processor.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/processor.py",
+   "target": "file:vllm/utils/collection_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/processing/processor.py",
+   "target": "class:vllm/multimodal/processing/processor.py:PromptUpdate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/processing/processor.py",
+   "target": "class:vllm/multimodal/processing/processor.py:PromptUpdate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/processing/processor.py",
+   "target": "class:vllm/multimodal/processing/processor.py:PromptReplacement",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/processing/processor.py",
+   "target": "class:vllm/multimodal/processing/processor.py:PromptReplacement",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/processing/processor.py",
+   "target": "function:vllm/multimodal/processing/processor.py:_plan_prompt_updates",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/processing/processor.py",
+   "target": "class:vllm/multimodal/processing/processor.py:BaseMultiModalProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/processing/processor.py",
+   "target": "class:vllm/multimodal/processing/processor.py:BaseMultiModalProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/multimodal/processing/processor.py:PromptInsertion",
+   "target": "class:vllm/multimodal/processing/processor.py:PromptUpdate",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/multimodal/processing/processor.py:PromptReplacement",
+   "target": "class:vllm/multimodal/processing/processor.py:PromptUpdate",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/multimodal/registry.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/registry.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/registry.py",
+   "target": "file:vllm/model_executor/model_loader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/registry.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/registry.py",
+   "target": "file:vllm/multimodal/processing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/registry.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/registry.py",
+   "target": "class:vllm/multimodal/registry.py:MultiModalRegistry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/registry.py",
+   "target": "class:vllm/multimodal/registry.py:MultiModalRegistry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/utils.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/utils.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/utils.py",
+   "target": "file:vllm/multimodal/media/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/utils.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/utils.py",
+   "target": "function:vllm/multimodal/utils.py:get_mm_features_in_window",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/utils.py",
+   "target": "function:vllm/multimodal/utils.py:get_mm_features_in_window",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/video.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/video.py",
+   "target": "file:vllm/multimodal/video_decoders/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/video.py",
+   "target": "file:vllm/multimodal/video_decoders/opencv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/video.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/video.py",
+   "target": "file:vllm/utils/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/video.py",
+   "target": "class:vllm/multimodal/video.py:VideoLoaderRegistry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/video.py",
+   "target": "class:vllm/multimodal/video.py:VideoLoaderRegistry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/video.py",
+   "target": "class:vllm/multimodal/video.py:VideoBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/video.py",
+   "target": "class:vllm/multimodal/video.py:VideoBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/video.py",
+   "target": "class:vllm/multimodal/video.py:Glm5NextVideoBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/video.py",
+   "target": "class:vllm/multimodal/video.py:Glm5NextVideoBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/video.py",
+   "target": "class:vllm/multimodal/video.py:Qwen3VLVideoBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/video.py",
+   "target": "class:vllm/multimodal/video.py:Qwen3VLVideoBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/multimodal/video.py:VideoBackend",
+   "target": "class:vllm/multimodal/video.py:VideoLoader",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/multimodal/video.py:PyNvVideoCodecVideoBackend",
+   "target": "class:vllm/multimodal/video.py:VideoBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/multimodal/video.py:Qwen3VLVideoBackend",
+   "target": "class:vllm/multimodal/video.py:VideoBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/multimodal/video.py:Qwen2VLVideoBackend",
+   "target": "class:vllm/multimodal/video.py:VideoBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/multimodal/video.py:DynamicVideoBackend",
+   "target": "class:vllm/multimodal/video.py:VideoBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/multimodal/video.py:GLM46VVideoBackend",
+   "target": "class:vllm/multimodal/video.py:VideoBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/multimodal/video.py:Glm5NextVideoBackend",
+   "target": "class:vllm/multimodal/video.py:VideoBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/multimodal/video.py:EmbeddingGemma2VideoBackend",
+   "target": "class:vllm/multimodal/video.py:VideoBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/multimodal/video_decoders/__init__.py",
+   "target": "file:vllm/multimodal/video_decoders/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/video_decoders/opencv.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/video_decoders/opencv.py",
+   "target": "file:vllm/multimodal/video_decoders/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/video_decoders/opencv.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/video_decoders/opencv.py",
+   "target": "class:vllm/multimodal/video_decoders/opencv.py:OpenCVVideoBackendMixin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/video_decoders/opencv.py",
+   "target": "class:vllm/multimodal/video_decoders/opencv.py:OpenCVVideoBackendMixin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/video_decoders/pynvvideocodec.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/video_decoders/pynvvideocodec.py",
+   "target": "file:vllm/multimodal/gpu_ipc_memory.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/video_decoders/pynvvideocodec.py",
+   "target": "file:vllm/multimodal/video_decoders/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/video_decoders/pynvvideocodec.py",
+   "target": "file:vllm/utils/mem_constants.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/video_decoders/pynvvideocodec.py",
+   "target": "class:vllm/multimodal/video_decoders/pynvvideocodec.py:PyNvVideoCodecDecoderSlot",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/video_decoders/pynvvideocodec.py",
+   "target": "class:vllm/multimodal/video_decoders/pynvvideocodec.py:PyNvVideoCodecDecoderSlot",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/video_decoders/pynvvideocodec.py",
+   "target": "class:vllm/multimodal/video_decoders/pynvvideocodec.py:PyNvVideoCodecVideoBackendMixin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/video_decoders/pynvvideocodec.py",
+   "target": "class:vllm/multimodal/video_decoders/pynvvideocodec.py:PyNvVideoCodecVideoBackendMixin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/video_decoders/torchcodec.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/video_decoders/torchcodec.py",
+   "target": "file:vllm/multimodal/video_decoders/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/video_decoders/torchcodec.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/video_decoders/torchcodec.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/multimodal/video_prune/evs.py",
+   "target": "function:vllm/multimodal/video_prune/evs.py:compute_retention_mask",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/video_prune/evs.py",
+   "target": "function:vllm/multimodal/video_prune/evs.py:compute_retention_mask",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/video_prune/evs.py",
+   "target": "function:vllm/multimodal/video_prune/evs.py:recompute_mrope_positions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/video_prune/evs.py",
+   "target": "function:vllm/multimodal/video_prune/evs.py:recompute_mrope_positions",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/multimodal/video_prune/vidcom2.py",
+   "target": "function:vllm/multimodal/video_prune/vidcom2.py:compute_retention_mask",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/multimodal/video_prune/vidcom2.py",
+   "target": "function:vllm/multimodal/video_prune/vidcom2.py:compute_retention_mask",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/outputs.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/outputs.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/outputs.py",
+   "target": "file:vllm/logprobs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/outputs.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/outputs.py",
+   "target": "file:vllm/v1/metrics/stats.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/outputs.py",
+   "target": "class:vllm/outputs.py:RequestOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/outputs.py",
+   "target": "class:vllm/outputs.py:RequestOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/outputs.py",
+   "target": "class:vllm/outputs.py:PoolingRequestOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/outputs.py",
+   "target": "class:vllm/outputs.py:PoolingRequestOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/outputs.py",
+   "target": "class:vllm/outputs.py:LateChunkingMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/outputs.py",
+   "target": "class:vllm/outputs.py:LateChunkingMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

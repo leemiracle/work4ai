@@ -1,0 +1,1298 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/metrics/perf.py",
+   "type": "file",
+   "name": "perf.py",
+   "filePath": "vllm/v1/metrics/perf.py",
+   "summary": "性能指标建模（1828 行）：Parser 责任链从 VllmConfig 解析 base/attention/MLA/SWA/FFN/MoE 配置，派生 Attention/MLA/FFN/Unembed 的 FLOPs 与字节估算（ComponentMetrics），提供调试日志、结构化日志与 Prometheus（TFLOPS/MFU）三种输出。",
+   "tags": [
+    "metrics",
+    "performance",
+    "parser-chain",
+    "component-model"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/metrics/prometheus.py",
+   "type": "file",
+   "name": "prometheus.py",
+   "filePath": "vllm/v1/metrics/prometheus.py",
+   "summary": "Prometheus 注册表工具：multiprocess 目录设置、按配置取 registry、测试用 vLLM 指标注销与关闭。",
+   "tags": [
+    "metrics",
+    "prometheus",
+    "registry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/metrics/ray_wrappers.py",
+   "type": "file",
+   "name": "ray_wrappers.py",
+   "filePath": "vllm/v1/metrics/ray_wrappers.py",
+   "summary": "Ray metrics 适配层：把 prometheus_client 的 Gauge/Counter/Histogram API 包装到 ray.util.metrics，并为 SpecDecoding/KVConnector/PerfMetrics 提供 Ray 版指标类与 RayPrometheusStatLogger。",
+   "tags": [
+    "metrics",
+    "ray",
+    "adapters",
+    "prometheus"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/metrics/reader.py",
+   "type": "file",
+   "name": "reader.py",
+   "filePath": "vllm/v1/metrics/reader.py",
+   "summary": "进程内 Prometheus 指标快照 API：Metric/Counter/Vector/Gauge/Histogram 数据类与 get_metrics_snapshot（digest 直方图与 spec-decode 按位接受向量），供 LLM API 用户读取。",
+   "tags": [
+    "metrics",
+    "reader",
+    "snapshot",
+    "api"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/metrics/perf.py:InvalidComponent",
+   "type": "class",
+   "name": "InvalidComponent",
+   "filePath": "vllm/v1/metrics/perf.py",
+   "summary": "表示某 ComponentMetrics 不适用于当前 VllmConfig 的异常。",
+   "tags": [
+    "metrics",
+    "performance",
+    "exception"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    33,
+    38
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/perf.py:ExecutionContext",
+   "type": "class",
+   "name": "ExecutionContext",
+   "filePath": "vllm/v1/metrics/perf.py",
+   "summary": "一批请求的执行上下文统计：分开跟踪 prefill/decode 的 batch/token/时间。",
+   "tags": [
+    "metrics",
+    "performance",
+    "context"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    98,
+    197
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/perf.py:Parser",
+   "type": "class",
+   "name": "Parser",
+   "filePath": "vllm/v1/metrics/perf.py",
+   "summary": "解析器协议（Protocol）：输入 ParsedArgs，从 VllmConfig 提取字段。",
+   "tags": [
+    "metrics",
+    "parser",
+    "protocol"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    223,
+    228
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/perf.py:ParserChain",
+   "type": "class",
+   "name": "ParserChain",
+   "filePath": "vllm/v1/metrics/perf.py",
+   "summary": "按序应用解析器链，后序解析器可覆盖先前结果。",
+   "tags": [
+    "metrics",
+    "parser-chain",
+    "parsing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    231,
+    249
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/perf.py:BaseConfigParser",
+   "type": "class",
+   "name": "BaseConfigParser",
+   "filePath": "vllm/v1/metrics/perf.py",
+   "summary": "基础模型配置解析器：vocab/hidden/heads/layers/权重与激活字节/DP。",
+   "tags": [
+    "metrics",
+    "parser",
+    "config"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    334,
+    381
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/perf.py:ComponentMetrics",
+   "type": "class",
+   "name": "ComponentMetrics",
+   "filePath": "vllm/v1/metrics/perf.py",
+   "summary": "组件指标抽象基类：字段经 pydantic 校验，按执行上下文派生 FLOPs/字节。",
+   "tags": [
+    "metrics",
+    "performance",
+    "component"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    255,
+    328
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/perf.py:AttentionMetrics",
+   "type": "class",
+   "name": "AttentionMetrics",
+   "filePath": "vllm/v1/metrics/perf.py",
+   "summary": "标准注意力指标：按 prefill/decode 上下文估算 KV 读写与注意力 FLOPs（SWA/量化感知）。",
+   "tags": [
+    "metrics",
+    "attention",
+    "flops"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    492,
+    730
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/perf.py:MLAAttentionMetrics",
+   "type": "class",
+   "name": "MLAAttentionMetrics",
+   "filePath": "vllm/v1/metrics/perf.py",
+   "summary": "MLA 注意力指标：潜压缩 KV（kv_lora_rank+RoPE）与解压投影的专用估算。",
+   "tags": [
+    "metrics",
+    "mla",
+    "flops"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    774,
+    1005
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/perf.py:FfnMetrics",
+   "type": "class",
+   "name": "FfnMetrics",
+   "filePath": "vllm/v1/metrics/perf.py",
+   "summary": "FFN/MoE 指标：专家数/共享专家/中间维度的权重与 FLOPs 估算（含 FFN TP/EP 划分）。",
+   "tags": [
+    "metrics",
+    "ffn",
+    "moe",
+    "flops"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1135,
+    1392
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/perf.py:UnembedMetrics",
+   "type": "class",
+   "name": "UnembedMetrics",
+   "filePath": "vllm/v1/metrics/perf.py",
+   "summary": "lm_head unembedding 指标：采样与 logits 的字节/FLOPs 估算。",
+   "tags": [
+    "metrics",
+    "unembed",
+    "flops"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1398,
+    1460
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/perf.py:ModelMetrics",
+   "type": "class",
+   "name": "ModelMetrics",
+   "filePath": "vllm/v1/metrics/perf.py",
+   "summary": "整模型指标组装：解析器链 + 各组件指标聚合，输出总 FLOPs/字节。",
+   "tags": [
+    "metrics",
+    "model",
+    "aggregation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1466,
+    1592
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/perf.py:PerfMetricsDebugLogging",
+   "type": "class",
+   "name": "PerfMetricsDebugLogging",
+   "filePath": "vllm/v1/metrics/perf.py",
+   "summary": "性能指标的调试日志输出。",
+   "tags": [
+    "metrics",
+    "debug-logging",
+    "performance"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1598,
+    1670
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/perf.py:PerfMetricsLogging",
+   "type": "class",
+   "name": "PerfMetricsLogging",
+   "filePath": "vllm/v1/metrics/perf.py",
+   "summary": "性能指标的结构化日志输出。",
+   "tags": [
+    "metrics",
+    "logging",
+    "performance"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1673,
+    1735
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/perf.py:PerfMetricsProm",
+   "type": "class",
+   "name": "PerfMetricsProm",
+   "filePath": "vllm/v1/metrics/perf.py",
+   "summary": "性能指标 Prometheus 记录（TFLOPS/MFU 可经 PromQL rate 查询）。",
+   "tags": [
+    "metrics",
+    "prometheus",
+    "mfu"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1741,
+    1808
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/ray_wrappers.py:RayPrometheusMetric",
+   "type": "class",
+   "name": "RayPrometheusMetric",
+   "filePath": "vllm/v1/metrics/ray_wrappers.py",
+   "summary": "Ray 指标包装基类：ReplicaId 标签与 ray.util.metrics 生命周期。",
+   "tags": [
+    "metrics",
+    "ray",
+    "wrapper"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    32,
+    81
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/ray_wrappers.py:RayGaugeWrapper",
+   "type": "class",
+   "name": "RayGaugeWrapper",
+   "filePath": "vllm/v1/metrics/ray_wrappers.py",
+   "summary": "ray.util.metrics.Gauge 的 prometheus_client.Gauge 兼容包装。",
+   "tags": [
+    "metrics",
+    "ray",
+    "gauge"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    84,
+    115
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/ray_wrappers.py:RayCounterWrapper",
+   "type": "class",
+   "name": "RayCounterWrapper",
+   "filePath": "vllm/v1/metrics/ray_wrappers.py",
+   "summary": "ray.util.metrics.Counter 的兼容包装。",
+   "tags": [
+    "metrics",
+    "ray",
+    "counter"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    118,
+    140
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/ray_wrappers.py:RayHistogramWrapper",
+   "type": "class",
+   "name": "RayHistogramWrapper",
+   "filePath": "vllm/v1/metrics/ray_wrappers.py",
+   "summary": "ray.util.metrics.Histogram 的兼容包装。",
+   "tags": [
+    "metrics",
+    "ray",
+    "histogram"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    143,
+    167
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/ray_wrappers.py:RaySpecDecodingProm",
+   "type": "class",
+   "name": "RaySpecDecodingProm",
+   "filePath": "vllm/v1/metrics/ray_wrappers.py",
+   "summary": "spec decode 指标的 Ray 版（继承 SpecDecodingProm）。",
+   "tags": [
+    "metrics",
+    "ray",
+    "spec-decode"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    170,
+    176
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/ray_wrappers.py:RayKVConnectorProm",
+   "type": "class",
+   "name": "RayKVConnectorProm",
+   "filePath": "vllm/v1/metrics/ray_wrappers.py",
+   "summary": "KV connector 指标的 Ray 版。",
+   "tags": [
+    "metrics",
+    "ray",
+    "kv-connector"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    179,
+    187
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/ray_wrappers.py:RayPerfMetricsProm",
+   "type": "class",
+   "name": "RayPerfMetricsProm",
+   "filePath": "vllm/v1/metrics/ray_wrappers.py",
+   "summary": "性能 MFU 指标的 Ray 版。",
+   "tags": [
+    "metrics",
+    "ray",
+    "performance"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    190,
+    196
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/ray_wrappers.py:RayPrometheusStatLogger",
+   "type": "class",
+   "name": "RayPrometheusStatLogger",
+   "filePath": "vllm/v1/metrics/ray_wrappers.py",
+   "summary": "用 Ray metrics 替代 Prometheus 的统计日志器。",
+   "tags": [
+    "metrics",
+    "ray",
+    "stat-logger"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    199,
+    212
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/reader.py:Metric",
+   "type": "class",
+   "name": "Metric",
+   "filePath": "vllm/v1/metrics/reader.py",
+   "summary": "Prometheus 指标快照基类（name + labels）。",
+   "tags": [
+    "metrics",
+    "reader",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    12,
+    21
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/reader.py:Counter",
+   "type": "class",
+   "name": "Counter",
+   "filePath": "vllm/v1/metrics/reader.py",
+   "summary": "单调递增整数计数器快照。",
+   "tags": [
+    "metrics",
+    "reader",
+    "counter"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    25,
+    28
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/reader.py:Vector",
+   "type": "class",
+   "name": "Vector",
+   "filePath": "vllm/v1/metrics/reader.py",
+   "summary": "有序整数计数器数组（Prometheus 没有的类型，专用于按位 spec decode 接受数）。",
+   "tags": [
+    "metrics",
+    "reader",
+    "vector"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    32,
+    39
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/reader.py:Gauge",
+   "type": "class",
+   "name": "Gauge",
+   "filePath": "vllm/v1/metrics/reader.py",
+   "summary": "可增减数值快照。",
+   "tags": [
+    "metrics",
+    "reader",
+    "gauge"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    43,
+    46
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/reader.py:Histogram",
+   "type": "class",
+   "name": "Histogram",
+   "filePath": "vllm/v1/metrics/reader.py",
+   "summary": "桶化观测快照（count/sum/buckets，+Inf 恒存在）。",
+   "tags": [
+    "metrics",
+    "reader",
+    "histogram"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    50,
+    67
+   ]
+  },
+  {
+   "id": "function:vllm/v1/metrics/prometheus.py:setup_multiprocess_prometheus",
+   "type": "function",
+   "name": "setup_multiprocess_prometheus",
+   "filePath": "vllm/v1/metrics/prometheus.py",
+   "summary": "未配置时创建 PROMETHEUS_MULTIPROC_DIR 临时目录。",
+   "tags": [
+    "prometheus",
+    "multiprocess",
+    "setup"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    17,
+    36
+   ]
+  },
+  {
+   "id": "function:vllm/v1/metrics/prometheus.py:get_prometheus_registry",
+   "type": "function",
+   "name": "get_prometheus_registry",
+   "filePath": "vllm/v1/metrics/prometheus.py",
+   "summary": "按 multiprocess 配置返回合适的 prometheus registry。",
+   "tags": [
+    "prometheus",
+    "registry",
+    "multiprocess"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    39,
+    53
+   ]
+  },
+  {
+   "id": "function:vllm/v1/metrics/prometheus.py:unregister_vllm_metrics",
+   "type": "function",
+   "name": "unregister_vllm_metrics",
+   "filePath": "vllm/v1/metrics/prometheus.py",
+   "summary": "注销已注册的 vLLM collector（测试/重启用）。",
+   "tags": [
+    "prometheus",
+    "unregister",
+    "testing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    56,
+    69
+   ]
+  },
+  {
+   "id": "function:vllm/v1/metrics/prometheus.py:shutdown_prometheus",
+   "type": "function",
+   "name": "shutdown_prometheus",
+   "filePath": "vllm/v1/metrics/prometheus.py",
+   "summary": "关闭 prometheus 指标。",
+   "tags": [
+    "prometheus",
+    "shutdown",
+    "cleanup"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    72,
+    82
+   ]
+  },
+  {
+   "id": "function:vllm/v1/metrics/reader.py:get_metrics_snapshot",
+   "type": "function",
+   "name": "get_metrics_snapshot",
+   "filePath": "vllm/v1/metrics/reader.py",
+   "summary": "读取进程内 Prometheus 指标的快照 API（LLM.get_metrics 底层）。",
+   "tags": [
+    "metrics",
+    "snapshot",
+    "api"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    70,
+    144
+   ]
+  },
+  {
+   "id": "function:vllm/v1/metrics/reader.py:_digest_histogram",
+   "type": "function",
+   "name": "_digest_histogram",
+   "filePath": "vllm/v1/metrics/reader.py",
+   "summary": "把 Prometheus 直方图样本转为 Histogram 快照。",
+   "tags": [
+    "metrics",
+    "histogram",
+    "digest"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    158,
+    215
+   ]
+  },
+  {
+   "id": "function:vllm/v1/metrics/reader.py:_digest_num_accepted_by_pos_samples",
+   "type": "function",
+   "name": "_digest_num_accepted_by_pos_samples",
+   "filePath": "vllm/v1/metrics/reader.py",
+   "summary": "按位 spec decode 接受样本转 Vector 快照。",
+   "tags": [
+    "metrics",
+    "spec-decode",
+    "digest"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    218,
+    258
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "file:vllm/v1/metrics/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/prometheus.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "file:vllm/v1/metrics/loggers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "file:vllm/v1/metrics/perf.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "file:vllm/v1/spec_decode/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:InvalidComponent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:ExecutionContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:Parser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:ParserChain",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:BaseConfigParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:ComponentMetrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:AttentionMetrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:MLAAttentionMetrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:FfnMetrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:UnembedMetrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:ModelMetrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:PerfMetricsDebugLogging",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:PerfMetricsLogging",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:PerfMetricsProm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "class:vllm/v1/metrics/ray_wrappers.py:RayPrometheusMetric",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "class:vllm/v1/metrics/ray_wrappers.py:RayGaugeWrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "class:vllm/v1/metrics/ray_wrappers.py:RayCounterWrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "class:vllm/v1/metrics/ray_wrappers.py:RayHistogramWrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "class:vllm/v1/metrics/ray_wrappers.py:RaySpecDecodingProm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "class:vllm/v1/metrics/ray_wrappers.py:RayKVConnectorProm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "class:vllm/v1/metrics/ray_wrappers.py:RayPerfMetricsProm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "class:vllm/v1/metrics/ray_wrappers.py:RayPrometheusStatLogger",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/reader.py",
+   "target": "class:vllm/v1/metrics/reader.py:Metric",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/reader.py",
+   "target": "class:vllm/v1/metrics/reader.py:Counter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/reader.py",
+   "target": "class:vllm/v1/metrics/reader.py:Vector",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/reader.py",
+   "target": "class:vllm/v1/metrics/reader.py:Gauge",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/reader.py",
+   "target": "class:vllm/v1/metrics/reader.py:Histogram",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/reader.py",
+   "target": "function:vllm/v1/metrics/reader.py:get_metrics_snapshot",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/reader.py",
+   "target": "function:vllm/v1/metrics/reader.py:_digest_histogram",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/reader.py",
+   "target": "function:vllm/v1/metrics/reader.py:_digest_num_accepted_by_pos_samples",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/prometheus.py",
+   "target": "function:vllm/v1/metrics/prometheus.py:setup_multiprocess_prometheus",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/prometheus.py",
+   "target": "function:vllm/v1/metrics/prometheus.py:get_prometheus_registry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/prometheus.py",
+   "target": "function:vllm/v1/metrics/prometheus.py:unregister_vllm_metrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/prometheus.py",
+   "target": "function:vllm/v1/metrics/prometheus.py:shutdown_prometheus",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:InvalidComponent",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:ExecutionContext",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:Parser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:ParserChain",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:BaseConfigParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:ComponentMetrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:AttentionMetrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:MLAAttentionMetrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:FfnMetrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:UnembedMetrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:ModelMetrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:PerfMetricsDebugLogging",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:PerfMetricsLogging",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/perf.py",
+   "target": "class:vllm/v1/metrics/perf.py:PerfMetricsProm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "class:vllm/v1/metrics/ray_wrappers.py:RayPrometheusMetric",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "class:vllm/v1/metrics/ray_wrappers.py:RayGaugeWrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "class:vllm/v1/metrics/ray_wrappers.py:RayCounterWrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "class:vllm/v1/metrics/ray_wrappers.py:RayHistogramWrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "class:vllm/v1/metrics/ray_wrappers.py:RaySpecDecodingProm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "class:vllm/v1/metrics/ray_wrappers.py:RayKVConnectorProm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "class:vllm/v1/metrics/ray_wrappers.py:RayPerfMetricsProm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/ray_wrappers.py",
+   "target": "class:vllm/v1/metrics/ray_wrappers.py:RayPrometheusStatLogger",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/reader.py",
+   "target": "class:vllm/v1/metrics/reader.py:Metric",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/reader.py",
+   "target": "class:vllm/v1/metrics/reader.py:Counter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/reader.py",
+   "target": "class:vllm/v1/metrics/reader.py:Vector",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/reader.py",
+   "target": "class:vllm/v1/metrics/reader.py:Gauge",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/reader.py",
+   "target": "class:vllm/v1/metrics/reader.py:Histogram",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/reader.py",
+   "target": "function:vllm/v1/metrics/reader.py:get_metrics_snapshot",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/prometheus.py",
+   "target": "function:vllm/v1/metrics/prometheus.py:setup_multiprocess_prometheus",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/prometheus.py",
+   "target": "function:vllm/v1/metrics/prometheus.py:get_prometheus_registry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/prometheus.py",
+   "target": "function:vllm/v1/metrics/prometheus.py:unregister_vllm_metrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/prometheus.py",
+   "target": "function:vllm/v1/metrics/prometheus.py:shutdown_prometheus",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/metrics/perf.py:AttentionMetrics",
+   "target": "class:vllm/v1/metrics/perf.py:ComponentMetrics",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/perf.py:MLAAttentionMetrics",
+   "target": "class:vllm/v1/metrics/perf.py:ComponentMetrics",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/perf.py:FfnMetrics",
+   "target": "class:vllm/v1/metrics/perf.py:ComponentMetrics",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/perf.py:UnembedMetrics",
+   "target": "class:vllm/v1/metrics/perf.py:ComponentMetrics",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/perf.py:BaseConfigParser",
+   "target": "class:vllm/typing.py:Parser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/ray_wrappers.py:RayGaugeWrapper",
+   "target": "class:vllm/v1/metrics/ray_wrappers.py:RayPrometheusMetric",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/ray_wrappers.py:RayCounterWrapper",
+   "target": "class:vllm/v1/metrics/ray_wrappers.py:RayPrometheusMetric",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/ray_wrappers.py:RayHistogramWrapper",
+   "target": "class:vllm/v1/metrics/ray_wrappers.py:RayPrometheusMetric",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/ray_wrappers.py:RaySpecDecodingProm",
+   "target": "class:vllm/v1/spec_decode/metrics.py:SpecDecodingProm",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/ray_wrappers.py:RayKVConnectorProm",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/metrics.py:KVConnectorProm",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/ray_wrappers.py:RayPerfMetricsProm",
+   "target": "class:vllm/v1/metrics/perf.py:PerfMetricsProm",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/ray_wrappers.py:RayPrometheusStatLogger",
+   "target": "class:vllm/v1/metrics/loggers.py:PrometheusStatLogger",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/reader.py:Counter",
+   "target": "class:vllm/v1/metrics/reader.py:Metric",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/reader.py:Vector",
+   "target": "class:vllm/v1/metrics/reader.py:Metric",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/reader.py:Gauge",
+   "target": "class:vllm/v1/metrics/reader.py:Metric",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/reader.py:Histogram",
+   "target": "class:vllm/v1/metrics/reader.py:Metric",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/perf.py:BaseConfigParser",
+   "target": "class:vllm/v1/metrics/perf.py:Parser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

@@ -1,0 +1,3373 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/kv_offload/base.py",
+   "type": "file",
+   "name": "base.py",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "KV cache offload 子系统的核心抽象：OffloadKey 编解码、OffloadingManager/OffloadingWorker/OffloadingSpec 三大接口、LoadStoreSpec 家族与 Canonical（并行无关）KV 页布局数据模型（RFC #42082 标准化布局）。",
+   "tags": [
+    "kv-offload",
+    "abstractions",
+    "protocol",
+    "canonical-layout"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/kv_offload/config.py",
+   "type": "file",
+   "name": "config.py",
+   "filePath": "vllm/v1/kv_offload/config.py",
+   "summary": "原生 offload 后端消费的规范化配置：组/模型/缓存/并行四类 frozen dataclass 聚合为 OffloadingConfig，含 replicated_layout/canonical_layout 布局决策开关。",
+   "tags": [
+    "config",
+    "data-model",
+    "kv-offload"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/kv_offload/cpu/common.py",
+   "type": "file",
+   "name": "common.py",
+   "filePath": "vllm/v1/kv_offload/cpu/common.py",
+   "summary": "CPU offload 层公共定义：CPUOffloadingMetrics 指标名、CPULoadStoreSpec（chunk 索引语义）与 CPUOffloadingInfo 静态事实标签。",
+   "tags": [
+    "cpu-tier",
+    "common",
+    "spec"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "type": "file",
+   "name": "gpu_worker.py",
+   "filePath": "vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "summary": "CPU↔GPU 传输执行层：SingleDirectionOffloadingHandler 用独立 CUDA 流按提交序执行单方向传输，CPUOffloadingWorker 组合双向 handler；含 canonical 布局 CopyPlan 预展开、子块指针计算与 mmap 区域 pin 注册。",
+   "tags": [
+    "gpu-transfer",
+    "cuda-streams",
+    "copy-plan",
+    "worker"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/kv_offload/cpu/host_register.py",
+   "type": "file",
+   "name": "host_register.py",
+   "filePath": "vllm/v1/kv_offload/cpu/host_register.py",
+   "summary": "经 cudart（cuda_wrapper 加载）把既有 host 内存注册为 pinned DMA 内存：SharedOffloadRegion 的 mmap 不能走加速器 pinned 分配器，只能显式 hostRegister/hostUnregister。",
+   "tags": [
+    "pinned-memory",
+    "cudart",
+    "dma"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/kv_offload/cpu/manager.py",
+   "type": "file",
+   "name": "manager.py",
+   "filePath": "vllm/v1/kv_offload/cpu/manager.py",
+   "summary": "CPU offload 管理器：引用计数、事件发射、chunk 池管理与 prepare/complete_store 骨架全在此层，逐出与组织策略委托给可插拔 CachePolicy（经 CachePolicyFactory 按名解析，内置 lru/arc，支持 out-of-tree 模块加载）。",
+   "tags": [
+    "cpu-tier",
+    "manager",
+    "ref-counting",
+    "eviction"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/kv_offload/cpu/policies/arc.py",
+   "type": "file",
+   "name": "arc.py",
+   "filePath": "vllm/v1/kv_offload/cpu/policies/arc.py",
+   "summary": "ARC（Adaptive Replacement Cache）策略：T1/T2 双队列 + B1/B2 幽灵链表与自适应 target_t1_size，兼顾新近与频繁 chunk。",
+   "tags": [
+    "arc",
+    "cache-policy",
+    "eviction"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/kv_offload/cpu/policies/base.py",
+   "type": "file",
+   "name": "base.py",
+   "filePath": "vllm/v1/kv_offload/cpu/policies/base.py",
+   "summary": "缓存策略抽象：ChunkStatus（ctypes 共享内存结构，含 ref_cnt/-1 未就绪语义）与 CachePolicy ABC（组织+替换决策一体），order_request_keys 提供跨组头到尾排序。",
+   "tags": [
+    "cache-policy",
+    "abc",
+    "chunk-status"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/kv_offload/cpu/policies/factory.py",
+   "type": "file",
+   "name": "factory.py",
+   "filePath": "vllm/v1/kv_offload/cpu/policies/factory.py",
+   "summary": "CachePolicy 注册工厂：内置 lru/arc 预注册，外部策略可 register_cache_policy 或经 cache_policy_module_path out-of-tree 加载（镜像 OffloadingSpecFactory 模式）。",
+   "tags": [
+    "factory",
+    "registry",
+    "extensibility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/kv_offload/cpu/policies/lru.py",
+   "type": "file",
+   "name": "lru.py",
+   "filePath": "vllm/v1/kv_offload/cpu/policies/lru.py",
+   "summary": "LRU 策略：逻辑最近性与传输 pin 解耦——可逐出 chunk 放在懒失效最小堆中，pin 期间仍可更新 recency，解除 pin 后按新 recency 入堆。",
+   "tags": [
+    "lru",
+    "cache-policy",
+    "lazy-heap"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/kv_offload/cpu/shared_offload_region.py",
+   "type": "file",
+   "name": "shared_offload_region.py",
+   "filePath": "vllm/v1/kv_offload/cpu/shared_offload_region.py",
+   "summary": "单 vLLM 实例全 worker 共享的 mmap 区域：首个 O_EXCL 打开者成为 creator 并 ftruncate，其余 worker 等文件尺寸后映射；含 madvise 预故障与按需回退选择。",
+   "tags": [
+    "shared-memory",
+    "mmap",
+    "filesystem-coordination"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/kv_offload/cpu/spec.py",
+   "type": "file",
+   "name": "spec.py",
+   "filePath": "vllm/v1/kv_offload/cpu/spec.py",
+   "summary": "CPU offload 的 OffloadingSpec 实现：组装 SharedOffloadRegion（gloo barrier 对齐各 worker 映射）、CPUOffloadingManager/Worker，并声明 CPU 层指标定义（pin 占用 gauge、分配尺寸 histogram、store_threshold 跳过计数）。",
+   "tags": [
+    "cpu-tier",
+    "spec",
+    "wiring",
+    "metrics"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/kv_offload/file_mapper.py",
+   "type": "file",
+   "name": "file_mapper.py",
+   "filePath": "vllm/v1/kv_offload/file_mapper.py",
+   "summary": "FileMapper：把 KV 块哈希映射到文件名（hash→file 的确定性分片规则），配合 canonical_format_id 供文件型 offload 后端定位数据。",
+   "tags": [
+    "file-mapping",
+    "hashing",
+    "utilities"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/kv_offload/tiering/async_lookup.py",
+   "type": "file",
+   "name": "async_lookup.py",
+   "filePath": "vllm/v1/kv_offload/tiering/async_lookup.py",
+   "summary": "二级层异步 lookup 管理器：每 tier 内嵌一个 AsyncLookupManager 维护存在性探测的 cache/queue 状态机（LookupPhase 生命周期），实现非阻塞命中检查。",
+   "tags": [
+    "async-lookup",
+    "tiering",
+    "state-machine"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/kv_offload/tiering/backpressure.py",
+   "type": "file",
+   "name": "backpressure.py",
+   "filePath": "vllm/v1/kv_offload/tiering/backpressure.py",
+   "summary": "背压组件：BackpressurePolicy 决定压力下的动作（DropStore 直接丢弃 / ThrottledDrop 按 EMA 超出水位比例丢弃），EMABackpressureDetector 以 s/MiB 归一化的 store 时延 EMA 判定压力。",
+   "tags": [
+    "backpressure",
+    "ema",
+    "drop-policy"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/kv_offload/tiering/base.py",
+   "type": "file",
+   "name": "base.py",
+   "filePath": "vllm/v1/kv_offload/tiering/base.py",
+   "summary": "二级 tiering 层抽象与数据类型：SecondaryTierManager 定义单非主 tier 接口（数据必须经 CPU 主 tier 级联 GPU→CPU→secondary）、TransferJob/JobResult 异步任务模型与 ParentManager 回调接口。",
+   "tags": [
+    "tiering",
+    "abc",
+    "cascade-transfer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/kv_offload/tiering/example/manager.py",
+   "type": "file",
+   "name": "manager.py",
+   "filePath": "vllm/v1/kv_offload/tiering/example/manager.py",
+   "summary": "参考实现：ExampleSecondaryTierManager 用字典存 chunk、同步立即完成，是编写自定义二级 tier 的最小模板。",
+   "tags": [
+    "example",
+    "reference-impl",
+    "tiering"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/kv_offload/tiering/kvcr/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/v1/kv_offload/tiering/kvcr/__init__.py",
+   "summary": "空包初始化文件，仅标记 kvcr 适配器子包。",
+   "tags": [
+    "package",
+    "empty"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "type": "file",
+   "name": "manager.py",
+   "filePath": "vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "summary": "KVCR（KV P2P 框架）的 vLLM 二级 tier 适配器：_VllmKeyAdapter 转换本地键格式、_FrameworkPinAdapter 桥接框架 pin 回调到主 tier store 任务，并桥接指标定义与背压检测。",
+   "tags": [
+    "kvcr",
+    "adapter",
+    "tiering",
+    "p2p"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/base.py:make_offload_key",
+   "type": "function",
+   "name": "make_offload_key",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "把块哈希与组索引打包为 OffloadKey。",
+   "tags": [
+    "key",
+    "codec"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    30,
+    32
+   ]
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/base.py:get_offload_block_hash",
+   "type": "function",
+   "name": "get_offload_block_hash",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "从 OffloadKey 中取出块哈希。",
+   "tags": [
+    "key",
+    "codec"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    35,
+    37
+   ]
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/base.py:get_offload_group_idx",
+   "type": "function",
+   "name": "get_offload_group_idx",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "从 OffloadKey 中取出组索引。",
+   "tags": [
+    "key",
+    "codec"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    40,
+    42
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:Medium",
+   "type": "class",
+   "name": "Medium",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "offload tier 的存储介质枚举（CPU/文件等）。",
+   "tags": [
+    "enum",
+    "medium"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    48,
+    52
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:Locality",
+   "type": "class",
+   "name": "Locality",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "tier 存储相对发布实例的局部性枚举。",
+   "tags": [
+    "enum",
+    "locality"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    55,
+    59
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:TierMatcher",
+   "type": "class",
+   "name": "TierMatcher",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "tier 匹配器 NamedTuple：决定请求参与哪些 tier。",
+   "tags": [
+    "matcher",
+    "namedtuple"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    62,
+    71
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:TierFilter",
+   "type": "class",
+   "name": "TierFilter",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "每请求过滤器：控制哪些 tier 参与本次 offload。",
+   "tags": [
+    "filter",
+    "request"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    75,
+    85
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:ReqContext",
+   "type": "class",
+   "name": "ReqContext",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "每请求 offload 状态（含可选 token 计数）：调度器结束请求前计数保持 live，之后冻结。",
+   "tags": [
+    "request-context",
+    "state"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    92,
+    143
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:LookupResult",
+   "type": "class",
+   "name": "LookupResult",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "OffloadingManager.lookup() 的结果枚举：HIT/MISS/HIT_PENDING/RETRY。",
+   "tags": [
+    "enum",
+    "lookup"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    146,
+    152
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:OffloadPolicy",
+   "type": "class",
+   "name": "OffloadPolicy",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "offload 粒度枚举：CHUNK_LEVEL 只卸载新算 chunk，REQUEST_LEVEL 含前缀命中全量卸载（供需要完整 KV 上下文的 tier）。",
+   "tags": [
+    "enum",
+    "policy"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    155,
+    161
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:RequestOffloadingContext",
+   "type": "class",
+   "name": "RequestOffloadingContext",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "请求级 offload 上下文（携带 OffloadPolicy）。",
+   "tags": [
+    "context",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    165,
+    166
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:ScheduleEndContext",
+   "type": "class",
+   "name": "ScheduleEndContext",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "传给 on_schedule_end() 的每步调度信息：本步新调度/被抢占的请求 ID。",
+   "tags": [
+    "scheduler",
+    "context",
+    "namedtuple"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    169,
+    175
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:LoadStoreSpec",
+   "type": "class",
+   "name": "LoadStoreSpec",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "允许 worker 加载（可选同时存储）KV 块的元数据基类。",
+   "tags": [
+    "spec",
+    "abc"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    178,
+    181
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:PrepareStoreOutput",
+   "type": "class",
+   "name": "PrepareStoreOutput",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "prepare_store 的输出：待存键、store_spec 与被逐出键。",
+   "tags": [
+    "data-model",
+    "store"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    185,
+    188
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:OffloadingEvent",
+   "type": "class",
+   "name": "OffloadingEvent",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "KV 事件：键集合+介质+removed/存储语义，含二级 tier ownership 与 metadata_only（分配失败只释放元数据不公告逐出）。",
+   "tags": [
+    "kv-events",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    192,
+    202
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:OffloadingMetricMetadata",
+   "type": "class",
+   "name": "OffloadingMetricMetadata",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "offload 指标元数据基类。",
+   "tags": [
+    "metrics",
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    243,
+    245
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:OffloadingCounterMetadata",
+   "type": "class",
+   "name": "OffloadingCounterMetadata",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "Counter 型指标元数据。",
+   "tags": [
+    "metrics",
+    "counter"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    249,
+    250
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:OffloadingGaugeMetadata",
+   "type": "class",
+   "name": "OffloadingGaugeMetadata",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "Gauge 型指标元数据。",
+   "tags": [
+    "metrics",
+    "gauge"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    254,
+    260
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:OffloadingHistogramMetadata",
+   "type": "class",
+   "name": "OffloadingHistogramMetadata",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "Histogram 型指标元数据（含桶定义）。",
+   "tags": [
+    "metrics",
+    "histogram"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    264,
+    265
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:OffloadingKVEventsConfig",
+   "type": "class",
+   "name": "OffloadingKVEventsConfig",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "offload KV 事件配置。",
+   "tags": [
+    "kv-events",
+    "config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    269,
+    275
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:ConfigInfo",
+   "type": "class",
+   "name": "ConfigInfo",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "组件发布在 vllm:kv_offload_config_info 上的静态事实（每字段一个标签）：Spec 用 config_info_keys() 声明名字，Manager 用 as_config_info() 填值。",
+   "tags": [
+    "config-info",
+    "labels"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    283,
+    305
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:OffloadingManager",
+   "type": "class",
+   "name": "OffloadingManager",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "管理器 ABC（18 个方法）：lookup/prepare_load/prepare_store 等核心协议，lock 属性提供独占访问语义（默认 nullcontext，可被后台线程实现替换为真锁）。",
+   "tags": [
+    "abc",
+    "manager",
+    "protocol"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    308,
+    535
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:BlockIDsLoadStoreSpec",
+   "type": "class",
+   "name": "BlockIDsLoadStoreSpec",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "按块号加载/存储的 spec 抽象：GPU 子类 block_ids 为 GPU 块索引，CPU 子类为 CPU cache chunk 索引。",
+   "tags": [
+    "spec",
+    "block-ids"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    538,
+    549
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:GPULoadStoreSpec",
+   "type": "class",
+   "name": "GPULoadStoreSpec",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "GPU 显存块加载/存储 spec：多组时按组序排列，group_sizes 给出每组块数。",
+   "tags": [
+    "spec",
+    "gpu"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    552,
+    582
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:CanonicalKVCacheTensor",
+   "type": "class",
+   "name": "CanonicalKVCacheTensor",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "规范化 KV 张量：首维恒为 num_blocks（RFC #42082 标准布局）。",
+   "tags": [
+    "canonical",
+    "layout"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    586,
+    596
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:CopyRun",
+   "type": "class",
+   "name": "CopyRun",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "worker 物理页与 canonical 页之间的跨步字节对应关系（fragment 循环展开）。",
+   "tags": [
+    "canonical",
+    "copy-run"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    600,
+    611
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:CanonicalPageMapping",
+   "type": "class",
+   "name": "CanonicalPageMapping",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "worker 页到 canonical（并行无关）页的映射：仅进程内使用不序列化；持有相同字节的 rank 轮流写入。",
+   "tags": [
+    "canonical",
+    "page-mapping"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    615,
+    638
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:CanonicalKVCacheRef",
+   "type": "class",
+   "name": "CanonicalKVCacheRef",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "每层（或层组）对某个 CanonicalKVCacheTensor 的按索引引用，并记录该层未 padding 的页大小。",
+   "tags": [
+    "canonical",
+    "reference"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    642,
+    652
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:CanonicalKVCaches",
+   "type": "class",
+   "name": "CanonicalKVCaches",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "块级规范化 KV 表示：唯一张量列表（num_blocks×page_size_in_bytes int8）+ 每组数据引用。",
+   "tags": [
+    "canonical",
+    "kv-repr"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    656,
+    671
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:TransferResult",
+   "type": "class",
+   "name": "TransferResult",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "传输结果数据。",
+   "tags": [
+    "transfer",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    675,
+    679
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:OffloadingWorker",
+   "type": "class",
+   "name": "OffloadingWorker",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "worker 进程内运行的传输执行者 ABC：面向单一介质，方向经 submit_store/submit_load 显式化。",
+   "tags": [
+    "abc",
+    "worker",
+    "transfer"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    682,
+    714
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/base.py:OffloadingSpec",
+   "type": "class",
+   "name": "OffloadingSpec",
+   "filePath": "vllm/v1/kv_offload/base.py",
+   "summary": "offload connector 的 spec ABC（5 个方法）：声明配置键、指标定义并构建 manager/worker。",
+   "tags": [
+    "abc",
+    "spec",
+    "connector"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    717,
+    781
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/config.py:OffloadingGroupConfig",
+   "type": "class",
+   "name": "OffloadingGroupConfig",
+   "filePath": "vllm/v1/kv_offload/config.py",
+   "summary": "组配置：跨 worker 的每块 token 跨度（含 context parallelism）、层名、组 id 与可选滑窗 chunk 数。",
+   "tags": [
+    "config",
+    "group"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    11,
+    21
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/config.py:OffloadingModelConfig",
+   "type": "class",
+   "name": "OffloadingModelConfig",
+   "filePath": "vllm/v1/kv_offload/config.py",
+   "summary": "模型配置：名称、KV dtype 与 max_model_len。",
+   "tags": [
+    "config",
+    "model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    25,
+    31
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/config.py:OffloadingCacheConfig",
+   "type": "class",
+   "name": "OffloadingCacheConfig",
+   "filePath": "vllm/v1/kv_offload/config.py",
+   "summary": "缓存配置（chunk 数量等）。",
+   "tags": [
+    "config",
+    "cache"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    35,
+    39
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/config.py:OffloadingParallelConfig",
+   "type": "class",
+   "name": "OffloadingParallelConfig",
+   "filePath": "vllm/v1/kv_offload/config.py",
+   "summary": "并行配置：TP/PP/CP 等并行度事实。",
+   "tags": [
+    "config",
+    "parallelism"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    43,
+    67
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/config.py:OffloadingConfig",
+   "type": "class",
+   "name": "OffloadingConfig",
+   "filePath": "vllm/v1/kv_offload/config.py",
+   "summary": "聚合配置：groups、每块 worker 字节数、KV 事件开关、extra_config、engine_id 与 replicated_layout/canonical_layout/kv_cache_layout 布局决策。",
+   "tags": [
+    "config",
+    "aggregate",
+    "layout"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    71,
+    95
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/cpu/common.py:CPUOffloadingMetrics",
+   "type": "class",
+   "name": "CPUOffloadingMetrics",
+   "filePath": "vllm/v1/kv_offload/cpu/common.py",
+   "summary": "CPU 层指标名常量（pin 占用 gauge、分配尺寸 histogram 等）。",
+   "tags": [
+    "metrics",
+    "constants"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    12,
+    17
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/cpu/common.py:CPULoadStoreSpec",
+   "type": "class",
+   "name": "CPULoadStoreSpec",
+   "filePath": "vllm/v1/kv_offload/cpu/common.py",
+   "summary": "CPU chunk 加载/存储 spec：继承的 block_ids 语义为 CPU cache chunk 索引，chunk_ids 别名供 tiering 层使用。",
+   "tags": [
+    "spec",
+    "cpu-tier"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    20,
+    30
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/cpu/common.py:CPUOffloadingInfo",
+   "type": "class",
+   "name": "CPUOffloadingInfo",
+   "filePath": "vllm/v1/kv_offload/cpu/common.py",
+   "summary": "CPU tier 的静态事实标签（ConfigInfo 实现）。",
+   "tags": [
+    "config-info",
+    "cpu-tier"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    34,
+    56
+   ]
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/cpu/common.py:_kv_cache_size_tokens",
+   "type": "function",
+   "name": "_kv_cache_size_tokens",
+   "filePath": "vllm/v1/kv_offload/cpu/common.py",
+   "summary": "计算该 tier 在 max_model_len 下持有的 KV token 数（对齐 GPU kv_cache_size_tokens 口径）。",
+   "tags": [
+    "capacity",
+    "calculation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    59,
+    72
+   ]
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/cpu/gpu_worker.py:_select_swap_blocks_fn",
+   "type": "function",
+   "name": "_select_swap_blocks_fn",
+   "filePath": "vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "summary": "初始化时为 handler 解析 swap_blocks 实现（Triton/自定义 ops 按可用性选择）。",
+   "tags": [
+    "swap-blocks",
+    "dispatch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    39,
+    65
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/cpu/gpu_worker.py:Transfer",
+   "type": "class",
+   "name": "Transfer",
+   "filePath": "vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "summary": "单次传输的描述数据。",
+   "tags": [
+    "transfer",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    69,
+    77
+   ]
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/cpu/gpu_worker.py:compute_sub_block_ptrs",
+   "type": "function",
+   "name": "compute_sub_block_ptrs",
+   "filePath": "vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "summary": "计算给定块 ID 的子块字节指针：每块含 blocks_per_chunk 个子块，按 row_stride 与 block_page_size 展开。",
+   "tags": [
+    "pointers",
+    "sub-blocks"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    80,
+    127
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/cpu/gpu_worker.py:CopyPlan",
+   "type": "class",
+   "name": "CopyPlan",
+   "filePath": "vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "summary": "canonical CPU 布局下单数据引用的预展开 fragment 拷贝模板（从映射 runs 展开，偏移相对两侧每块基指针）。",
+   "tags": [
+    "copy-plan",
+    "canonical"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    130,
+    142
+   ]
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/cpu/gpu_worker.py:_build_copy_plan",
+   "type": "function",
+   "name": "_build_copy_plan",
+   "filePath": "vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "summary": "把一个数据引用的映射 runs 展开为逐 fragment 的 CopyPlan。",
+   "tags": [
+    "copy-plan",
+    "unroll"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    145,
+    163
+   ]
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/cpu/gpu_worker.py:_canonical_page_ids",
+   "type": "function",
+   "name": "_canonical_page_ids",
+   "filePath": "vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "summary": "与 compute_sub_block_ptrs 枚举一致的全局 canonical 页 id（跨 rank 一致，驱动 CanonicalPageMapping 的 writer 轮换）。",
+   "tags": [
+    "canonical",
+    "page-ids"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    166,
+    177
+   ]
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/cpu/gpu_worker.py:_canonical_block_sizes",
+   "type": "function",
+   "name": "_canonical_block_sizes",
+   "filePath": "vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "summary": "从各引用映射取每张量 canonical CPU 每块字节数（要求所有引用都带映射）。",
+   "tags": [
+    "canonical",
+    "block-size"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    180,
+    194
+   ]
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/cpu/gpu_worker.py:pin_mmap_region",
+   "type": "function",
+   "name": "pin_mmap_region",
+   "filePath": "vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "summary": "按行对齐 chunk 注册本 worker 槽位的 host 内存，失败时回滚。",
+   "tags": [
+    "pinned-memory",
+    "register"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    203,
+    268
+   ]
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/cpu/gpu_worker.py:_new_descriptor_buffers",
+   "type": "function",
+   "name": "_new_descriptor_buffers",
+   "filePath": "vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "summary": "创建传输描述符缓冲区。",
+   "tags": [
+    "buffers",
+    "descriptor"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    271,
+    281
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/cpu/gpu_worker.py:SingleDirectionOffloadingHandler",
+   "type": "class",
+   "name": "SingleDirectionOffloadingHandler",
+   "filePath": "vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "summary": "单方向（CPU→GPU 或 GPU→CPU）传输处理器：按提交顺序保证执行，每次传输用独立 CUDA 流且仅在前序流结束后启动。",
+   "tags": [
+    "cuda-streams",
+    "transfer",
+    "ordering"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    284,
+    790
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/cpu/gpu_worker.py:CPUOffloadingWorker",
+   "type": "class",
+   "name": "CPUOffloadingWorker",
+   "filePath": "vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "summary": "CPU offload 的 OffloadingWorker：组合两个单方向 handler，经 submit_store/submit_load 显式 API 暴露。",
+   "tags": [
+    "worker",
+    "cpu-tier",
+    "composition"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    793,
+    932
+   ]
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/cpu/host_register.py:_load_cudart",
+   "type": "function",
+   "name": "_load_cudart",
+   "filePath": "vllm/v1/kv_offload/cpu/host_register.py",
+   "summary": "懒加载 cudart 库（经 CudaRTLibrary 包装）。",
+   "tags": [
+    "cudart",
+    "lazy-load"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    28,
+    37
+   ]
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/cpu/host_register.py:host_register",
+   "type": "function",
+   "name": "host_register",
+   "filePath": "vllm/v1/kv_offload/cpu/host_register.py",
+   "summary": "把 host 地址区间注册为 device 可访问 pinned 内存；返回是否需要后续 host_unregister。",
+   "tags": [
+    "pinned-memory",
+    "cudart",
+    "register"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    40,
+    83
+   ]
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/cpu/host_register.py:host_unregister",
+   "type": "function",
+   "name": "host_unregister",
+   "filePath": "vllm/v1/kv_offload/cpu/host_register.py",
+   "summary": "释放先前 host_register 注册的区间。",
+   "tags": [
+    "pinned-memory",
+    "unregister"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    86,
+    104
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/cpu/manager.py:CPUOffloadingManager",
+   "type": "class",
+   "name": "CPUOffloadingManager",
+   "filePath": "vllm/v1/kv_offload/cpu/manager.py",
+   "summary": "CPU 层管理器（22 个方法）：引用计数/事件发射/chunk 池/prepare_store 骨架自持，逐出与组织委托 CachePolicy；store_threshold≥2 时维护 Ordered 计数以复用去重。",
+   "tags": [
+    "cpu-tier",
+    "manager",
+    "ref-counting"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    49,
+    520
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/cpu/policies/arc.py:ARCCachePolicy",
+   "type": "class",
+   "name": "ARCCachePolicy",
+   "filePath": "vllm/v1/kv_offload/cpu/policies/arc.py",
+   "summary": "ARC 自适应替换缓存：T1（近期一次访问）/T2（频繁）+ B1/B2 幽灵链表，按命中侧动态调整 target_t1_size。",
+   "tags": [
+    "arc",
+    "adaptive",
+    "eviction"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    16,
+    214
+   ]
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/cpu/policies/base.py:order_request_keys",
+   "type": "function",
+   "name": "order_request_keys",
+   "filePath": "vllm/v1/kv_offload/cpu/policies/base.py",
+   "summary": "跨全部 KV 组产生一个头到尾的 key 顺序。",
+   "tags": [
+    "ordering",
+    "keys"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    10,
+    22
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/cpu/policies/base.py:ChunkStatus",
+   "type": "class",
+   "name": "ChunkStatus",
+   "filePath": "vllm/v1/kv_offload/cpu/policies/base.py",
+   "summary": "单 chunk 的 offload 状态（ctypes 共享内存结构）：ref_cnt（-1 表示写入未就绪）、chunk_id 等。",
+   "tags": [
+    "chunk-status",
+    "ctypes",
+    "shared-memory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    25,
+    45
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/cpu/policies/base.py:CachePolicy",
+   "type": "class",
+   "name": "CachePolicy",
+   "filePath": "vllm/v1/kv_offload/cpu/policies/base.py",
+   "summary": "缓存策略 ABC（12 个方法）：同时封装 chunk 组织与替换决策——LRU 与 ARC 在两个维度都不同（ARC 的幽灵链表正处于存储与逐出的交集）。",
+   "tags": [
+    "abc",
+    "cache-policy"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    48,
+    160
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/cpu/policies/factory.py:CachePolicyFactory",
+   "type": "class",
+   "name": "CachePolicyFactory",
+   "filePath": "vllm/v1/kv_offload/cpu/policies/factory.py",
+   "summary": "策略注册工厂：内置 lru/arc 预注册，外部可 register_cache_policy 注册或按 cache_policy_module_path 加载 out-of-tree 实现。",
+   "tags": [
+    "factory",
+    "registry"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    12,
+    82
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/cpu/policies/lru.py:LRUCachePolicy",
+   "type": "class",
+   "name": "LRUCachePolicy",
+   "filePath": "vllm/v1/kv_offload/cpu/policies/lru.py",
+   "summary": "LRU 策略：逻辑 recency 与传输 pin 解耦，可逐出 chunk 放懒失效最小堆；pin 期间可更新 recency，解 pin 后按新 recency 重新入堆。",
+   "tags": [
+    "lru",
+    "lazy-invalidation",
+    "heap"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    26,
+    233
+   ]
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/cpu/shared_offload_region.py:_wait_for_file_size",
+   "type": "function",
+   "name": "_wait_for_file_size",
+   "filePath": "vllm/v1/kv_offload/cpu/shared_offload_region.py",
+   "summary": "自旋等待文件达到期望尺寸（creator 已 ftruncate）。",
+   "tags": [
+    "mmap",
+    "sync"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    33,
+    47
+   ]
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/cpu/shared_offload_region.py:_get_populate_write_fn",
+   "type": "function",
+   "name": "_get_populate_write_fn",
+   "filePath": "vllm/v1/kv_offload/cpu/shared_offload_region.py",
+   "summary": "为该 mmap 一次性选定预故障方法（madvise 或回退实现）。",
+   "tags": [
+    "madvise",
+    "prefault"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    70,
+    84
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/cpu/shared_offload_region.py:SharedOffloadRegion",
+   "type": "class",
+   "name": "SharedOffloadRegion",
+   "filePath": "vllm/v1/kv_offload/cpu/shared_offload_region.py",
+   "summary": "vLLM 实例全 worker 共享的单个 mmap 区域：首个以 O_EXCL 打开者成为 creator 并 ftruncate，其余等待后映射既有文件；提供块对齐槽位分配。",
+   "tags": [
+    "shared-memory",
+    "mmap",
+    "leader-election"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    87,
+    455
+   ]
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/cpu/spec.py:_all_workers_barrier",
+   "type": "function",
+   "name": "_all_workers_barrier",
+   "filePath": "vllm/v1/kv_offload/cpu/spec.py",
+   "summary": "gloo CPU 组上的全 worker 屏障：一旦释放，共享区域文件的每个 worker 都已完成映射。",
+   "tags": [
+    "barrier",
+    "gloo"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    30,
+    44
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/cpu/spec.py:CPUOffloadingSpec",
+   "type": "class",
+   "name": "CPUOffloadingSpec",
+   "filePath": "vllm/v1/kv_offload/cpu/spec.py",
+   "summary": "CPU offload 的 OffloadingSpec 实现：声明 CPU 层指标定义（pin 占用/分配尺寸/store_threshold 跳过计数），组装 SharedOffloadRegion、CPUOffloadingManager 与 CPUOffloadingWorker。",
+   "tags": [
+    "cpu-tier",
+    "spec",
+    "wiring"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    47,
+    228
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/file_mapper.py:FileMapper",
+   "type": "class",
+   "name": "FileMapper",
+   "filePath": "vllm/v1/kv_offload/file_mapper.py",
+   "summary": "把 KV 块哈希确定性映射到文件名（配合 canonical_format_id），供文件型 offload 后端定位数据。",
+   "tags": [
+    "file-mapping",
+    "hashing"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    21,
+    144
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/tiering/async_lookup.py:AsyncLookupManager",
+   "type": "class",
+   "name": "AsyncLookupManager",
+   "filePath": "vllm/v1/kv_offload/tiering/async_lookup.py",
+   "summary": "每 tier 的异步存在性探测管理器：内嵌 cache/queue 状态机（LookupPhase 生命周期），为二级 tier 提供非阻塞 lookup。",
+   "tags": [
+    "async-lookup",
+    "state-machine",
+    "tiering"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    70,
+    290
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/tiering/backpressure.py:BackpressurePolicy",
+   "type": "class",
+   "name": "BackpressurePolicy",
+   "filePath": "vllm/v1/kv_offload/tiering/backpressure.py",
+   "summary": "压力信号下的动作策略 ABC。",
+   "tags": [
+    "abc",
+    "backpressure"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    9,
+    24
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/tiering/backpressure.py:DropAccountingPolicy",
+   "type": "class",
+   "name": "DropAccountingPolicy",
+   "filePath": "vllm/v1/kv_offload/tiering/backpressure.py",
+   "summary": "丢弃计数基类：统一 on_store_skipped/pop_stores_dropped/reset 会计，子类只实现 should_store。",
+   "tags": [
+    "drop-accounting",
+    "base-policy"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    27,
+    52
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/tiering/backpressure.py:ThrottledDropPolicy",
+   "type": "class",
+   "name": "ThrottledDropPolicy",
+   "filePath": "vllm/v1/kv_offload/tiering/backpressure.py",
+   "summary": "按压力严重度比例丢弃：drop_rate 随 EMA 超出高水位比例 (ema-high_water)/high_water 缩放，而非一压就全丢。",
+   "tags": [
+    "throttle",
+    "drop-rate"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    62,
+    116
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/tiering/backpressure.py:BackpressureDetector",
+   "type": "class",
+   "name": "BackpressureDetector",
+   "filePath": "vllm/v1/kv_offload/tiering/backpressure.py",
+   "summary": "观察 store 完成信号并判定压力状态的检测器 ABC。",
+   "tags": [
+    "abc",
+    "detector"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    119,
+    186
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/tiering/backpressure.py:EMABackpressureDetector",
+   "type": "class",
+   "name": "EMABackpressureDetector",
+   "filePath": "vllm/v1/kv_offload/tiering/backpressure.py",
+   "summary": "以传输尺寸归一化的 store 时延 EMA（秒/MiB）判定压力：指标与块数/块大小无关，水位同单位，跨任务可比。",
+   "tags": [
+    "ema",
+    "latency",
+    "detector"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    189,
+    451
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/tiering/base.py:TieringOffloadingMetrics",
+   "type": "class",
+   "name": "TieringOffloadingMetrics",
+   "filePath": "vllm/v1/kv_offload/tiering/base.py",
+   "summary": "TieringOffloadingManager 的指标名集合。",
+   "tags": [
+    "metrics",
+    "constants"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    43,
+    68
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/tiering/base.py:TransferJob",
+   "type": "class",
+   "name": "TransferJob",
+   "filePath": "vllm/v1/kv_offload/tiering/base.py",
+   "summary": "在途异步传输任务的元数据。",
+   "tags": [
+    "job",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    72,
+    80
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/tiering/base.py:JobResult",
+   "type": "class",
+   "name": "JobResult",
+   "filePath": "vllm/v1/kv_offload/tiering/base.py",
+   "summary": "异步传输任务的结果。",
+   "tags": [
+    "job",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    84,
+    95
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/tiering/base.py:ParentManager",
+   "type": "class",
+   "name": "ParentManager",
+   "filePath": "vllm/v1/kv_offload/tiering/base.py",
+   "summary": "二级 tier 回调 tiering 管理器的接口（经 serve_external_requests 每步下发，包装器自动排除调用 tier 自身）。",
+   "tags": [
+    "interface",
+    "callback"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    98,
+    132
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/tiering/base.py:SecondaryTierManager",
+   "type": "class",
+   "name": "SecondaryTierManager",
+   "filePath": "vllm/v1/kv_offload/tiering/base.py",
+   "summary": "单非主 tier 管理器 ABC（21 个方法）：不能直接访问 GPU，一切传输经 CPU 主 tier 级联（store: GPU→CPU→secondary；load 反向），并集成背压检测与异步 lookup。",
+   "tags": [
+    "abc",
+    "tiering",
+    "cascade"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    135,
+    423
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/tiering/example/manager.py:ExampleTierInfo",
+   "type": "class",
+   "name": "ExampleTierInfo",
+   "filePath": "vllm/v1/kv_offload/tiering/example/manager.py",
+   "summary": "示例 tier 的 ConfigInfo 事实标签（tier 名由 tier 标签区分，无需自带名字）。",
+   "tags": [
+    "config-info",
+    "example"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    41,
+    48
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/tiering/example/manager.py:ExampleSecondaryTierManager",
+   "type": "class",
+   "name": "ExampleSecondaryTierManager",
+   "filePath": "vllm/v1/kv_offload/tiering/example/manager.py",
+   "summary": "最小二级 tier 参考实现：字典存 chunk、同步立即完成，作为自定义 tier 的编写模板。",
+   "tags": [
+    "example",
+    "reference-impl"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    51,
+    205
+   ]
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/tiering/kvcr/manager.py:_resolve_policy",
+   "type": "function",
+   "name": "_resolve_policy",
+   "filePath": "vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "summary": "解析 KVCR 策略配置（含 qualname 动态加载）。",
+   "tags": [
+    "policy",
+    "resolution"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    102,
+    118
+   ]
+  },
+  {
+   "id": "function:vllm/v1/kv_offload/tiering/kvcr/manager.py:_kvcr_metric_definitions",
+   "type": "function",
+   "name": "_kvcr_metric_definitions",
+   "filePath": "vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "summary": "把 KVCR 指标定义桥接为 vLLM OffloadingMetricMetadata。",
+   "tags": [
+    "metrics",
+    "bridge"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    125,
+    143
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/tiering/kvcr/manager.py:_FrameworkPinAdapter",
+   "type": "class",
+   "name": "_FrameworkPinAdapter",
+   "filePath": "vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "summary": "把 KVCR 框架的 pin 回调适配为主 tier store 任务。",
+   "tags": [
+    "adapter",
+    "pin"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    146,
+    244
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/tiering/kvcr/manager.py:_VllmKeyAdapter",
+   "type": "class",
+   "name": "_VllmKeyAdapter",
+   "filePath": "vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "summary": "把 vLLM 本地键格式适配为 KVCR 键。",
+   "tags": [
+    "adapter",
+    "keys"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    247,
+    257
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_offload/tiering/kvcr/manager.py:KVCRSecondaryTierManager",
+   "type": "class",
+   "name": "KVCRSecondaryTierManager",
+   "filePath": "vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "summary": "KVCR KV P2P API 的二级 tier 封装（19 个方法）：键适配、pin 桥接、指标与背压对接。",
+   "tags": [
+    "kvcr",
+    "adapter",
+    "p2p"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    270,
+    709
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "function:vllm/v1/kv_offload/base.py:make_offload_key",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "function:vllm/v1/kv_offload/base.py:make_offload_key",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "function:vllm/v1/kv_offload/base.py:get_offload_block_hash",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "function:vllm/v1/kv_offload/base.py:get_offload_block_hash",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "function:vllm/v1/kv_offload/base.py:get_offload_group_idx",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "function:vllm/v1/kv_offload/base.py:get_offload_group_idx",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:Medium",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:Medium",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:Locality",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:Locality",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:TierMatcher",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:TierMatcher",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:TierFilter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:TierFilter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:ReqContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:ReqContext",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:LookupResult",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:LookupResult",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadPolicy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadPolicy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:RequestOffloadingContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:RequestOffloadingContext",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:ScheduleEndContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:ScheduleEndContext",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:LoadStoreSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:LoadStoreSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:PrepareStoreOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:PrepareStoreOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingEvent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingEvent",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingMetricMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingMetricMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingCounterMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingCounterMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingGaugeMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingGaugeMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingHistogramMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingHistogramMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingKVEventsConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingKVEventsConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:ConfigInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:ConfigInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:BlockIDsLoadStoreSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:BlockIDsLoadStoreSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:GPULoadStoreSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:GPULoadStoreSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:CanonicalKVCacheTensor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:CanonicalKVCacheTensor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:CopyRun",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:CopyRun",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:CanonicalPageMapping",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:CanonicalPageMapping",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:CanonicalKVCacheRef",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:CanonicalKVCacheRef",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:CanonicalKVCaches",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:CanonicalKVCaches",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:TransferResult",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:TransferResult",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingWorker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingWorker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/config.py",
+   "target": "class:vllm/v1/kv_offload/config.py:OffloadingGroupConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/config.py",
+   "target": "class:vllm/v1/kv_offload/config.py:OffloadingGroupConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/config.py",
+   "target": "class:vllm/v1/kv_offload/config.py:OffloadingModelConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/config.py",
+   "target": "class:vllm/v1/kv_offload/config.py:OffloadingModelConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/config.py",
+   "target": "class:vllm/v1/kv_offload/config.py:OffloadingCacheConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/config.py",
+   "target": "class:vllm/v1/kv_offload/config.py:OffloadingCacheConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/config.py",
+   "target": "class:vllm/v1/kv_offload/config.py:OffloadingParallelConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/config.py",
+   "target": "class:vllm/v1/kv_offload/config.py:OffloadingParallelConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/config.py",
+   "target": "class:vllm/v1/kv_offload/config.py:OffloadingConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/config.py",
+   "target": "class:vllm/v1/kv_offload/config.py:OffloadingConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/common.py",
+   "target": "class:vllm/v1/kv_offload/cpu/common.py:CPUOffloadingMetrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/common.py",
+   "target": "class:vllm/v1/kv_offload/cpu/common.py:CPUOffloadingMetrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/common.py",
+   "target": "class:vllm/v1/kv_offload/cpu/common.py:CPULoadStoreSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/common.py",
+   "target": "class:vllm/v1/kv_offload/cpu/common.py:CPULoadStoreSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/common.py",
+   "target": "class:vllm/v1/kv_offload/cpu/common.py:CPUOffloadingInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/common.py",
+   "target": "class:vllm/v1/kv_offload/cpu/common.py:CPUOffloadingInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/common.py",
+   "target": "function:vllm/v1/kv_offload/cpu/common.py:_kv_cache_size_tokens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "function:vllm/v1/kv_offload/cpu/gpu_worker.py:_select_swap_blocks_fn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "class:vllm/v1/kv_offload/cpu/gpu_worker.py:Transfer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "class:vllm/v1/kv_offload/cpu/gpu_worker.py:Transfer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "function:vllm/v1/kv_offload/cpu/gpu_worker.py:compute_sub_block_ptrs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "function:vllm/v1/kv_offload/cpu/gpu_worker.py:compute_sub_block_ptrs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "class:vllm/v1/kv_offload/cpu/gpu_worker.py:CopyPlan",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "class:vllm/v1/kv_offload/cpu/gpu_worker.py:CopyPlan",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "function:vllm/v1/kv_offload/cpu/gpu_worker.py:_build_copy_plan",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "function:vllm/v1/kv_offload/cpu/gpu_worker.py:_canonical_page_ids",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "function:vllm/v1/kv_offload/cpu/gpu_worker.py:_canonical_block_sizes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "function:vllm/v1/kv_offload/cpu/gpu_worker.py:pin_mmap_region",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "function:vllm/v1/kv_offload/cpu/gpu_worker.py:pin_mmap_region",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "function:vllm/v1/kv_offload/cpu/gpu_worker.py:_new_descriptor_buffers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "class:vllm/v1/kv_offload/cpu/gpu_worker.py:SingleDirectionOffloadingHandler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "class:vllm/v1/kv_offload/cpu/gpu_worker.py:SingleDirectionOffloadingHandler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "class:vllm/v1/kv_offload/cpu/gpu_worker.py:CPUOffloadingWorker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "class:vllm/v1/kv_offload/cpu/gpu_worker.py:CPUOffloadingWorker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/host_register.py",
+   "target": "function:vllm/v1/kv_offload/cpu/host_register.py:_load_cudart",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/host_register.py",
+   "target": "function:vllm/v1/kv_offload/cpu/host_register.py:host_register",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/host_register.py",
+   "target": "function:vllm/v1/kv_offload/cpu/host_register.py:host_register",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/host_register.py",
+   "target": "function:vllm/v1/kv_offload/cpu/host_register.py:host_unregister",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/host_register.py",
+   "target": "function:vllm/v1/kv_offload/cpu/host_register.py:host_unregister",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/manager.py",
+   "target": "class:vllm/v1/kv_offload/cpu/manager.py:CPUOffloadingManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/manager.py",
+   "target": "class:vllm/v1/kv_offload/cpu/manager.py:CPUOffloadingManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/policies/arc.py",
+   "target": "class:vllm/v1/kv_offload/cpu/policies/arc.py:ARCCachePolicy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/policies/arc.py",
+   "target": "class:vllm/v1/kv_offload/cpu/policies/arc.py:ARCCachePolicy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/policies/base.py",
+   "target": "function:vllm/v1/kv_offload/cpu/policies/base.py:order_request_keys",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/policies/base.py",
+   "target": "function:vllm/v1/kv_offload/cpu/policies/base.py:order_request_keys",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/policies/base.py",
+   "target": "class:vllm/v1/kv_offload/cpu/policies/base.py:ChunkStatus",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/policies/base.py",
+   "target": "class:vllm/v1/kv_offload/cpu/policies/base.py:ChunkStatus",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/policies/base.py",
+   "target": "class:vllm/v1/kv_offload/cpu/policies/base.py:CachePolicy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/policies/base.py",
+   "target": "class:vllm/v1/kv_offload/cpu/policies/base.py:CachePolicy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/policies/factory.py",
+   "target": "class:vllm/v1/kv_offload/cpu/policies/factory.py:CachePolicyFactory",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/policies/factory.py",
+   "target": "class:vllm/v1/kv_offload/cpu/policies/factory.py:CachePolicyFactory",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/policies/lru.py",
+   "target": "class:vllm/v1/kv_offload/cpu/policies/lru.py:LRUCachePolicy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/policies/lru.py",
+   "target": "class:vllm/v1/kv_offload/cpu/policies/lru.py:LRUCachePolicy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/shared_offload_region.py",
+   "target": "function:vllm/v1/kv_offload/cpu/shared_offload_region.py:_wait_for_file_size",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/shared_offload_region.py",
+   "target": "function:vllm/v1/kv_offload/cpu/shared_offload_region.py:_get_populate_write_fn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/shared_offload_region.py",
+   "target": "class:vllm/v1/kv_offload/cpu/shared_offload_region.py:SharedOffloadRegion",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/shared_offload_region.py",
+   "target": "class:vllm/v1/kv_offload/cpu/shared_offload_region.py:SharedOffloadRegion",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/spec.py",
+   "target": "function:vllm/v1/kv_offload/cpu/spec.py:_all_workers_barrier",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/spec.py",
+   "target": "class:vllm/v1/kv_offload/cpu/spec.py:CPUOffloadingSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/spec.py",
+   "target": "class:vllm/v1/kv_offload/cpu/spec.py:CPUOffloadingSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/file_mapper.py",
+   "target": "class:vllm/v1/kv_offload/file_mapper.py:FileMapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/file_mapper.py",
+   "target": "class:vllm/v1/kv_offload/file_mapper.py:FileMapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/async_lookup.py",
+   "target": "class:vllm/v1/kv_offload/tiering/async_lookup.py:AsyncLookupManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/async_lookup.py",
+   "target": "class:vllm/v1/kv_offload/tiering/async_lookup.py:AsyncLookupManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/backpressure.py",
+   "target": "class:vllm/v1/kv_offload/tiering/backpressure.py:BackpressurePolicy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/backpressure.py",
+   "target": "class:vllm/v1/kv_offload/tiering/backpressure.py:BackpressurePolicy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/backpressure.py",
+   "target": "class:vllm/v1/kv_offload/tiering/backpressure.py:DropAccountingPolicy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/backpressure.py",
+   "target": "class:vllm/v1/kv_offload/tiering/backpressure.py:DropAccountingPolicy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/backpressure.py",
+   "target": "class:vllm/v1/kv_offload/tiering/backpressure.py:ThrottledDropPolicy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/backpressure.py",
+   "target": "class:vllm/v1/kv_offload/tiering/backpressure.py:ThrottledDropPolicy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/backpressure.py",
+   "target": "class:vllm/v1/kv_offload/tiering/backpressure.py:BackpressureDetector",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/backpressure.py",
+   "target": "class:vllm/v1/kv_offload/tiering/backpressure.py:BackpressureDetector",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/backpressure.py",
+   "target": "class:vllm/v1/kv_offload/tiering/backpressure.py:EMABackpressureDetector",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/backpressure.py",
+   "target": "class:vllm/v1/kv_offload/tiering/backpressure.py:EMABackpressureDetector",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/base.py",
+   "target": "class:vllm/v1/kv_offload/tiering/base.py:TieringOffloadingMetrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/base.py",
+   "target": "class:vllm/v1/kv_offload/tiering/base.py:TieringOffloadingMetrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/base.py",
+   "target": "class:vllm/v1/kv_offload/tiering/base.py:TransferJob",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/base.py",
+   "target": "class:vllm/v1/kv_offload/tiering/base.py:TransferJob",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/base.py",
+   "target": "class:vllm/v1/kv_offload/tiering/base.py:JobResult",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/base.py",
+   "target": "class:vllm/v1/kv_offload/tiering/base.py:JobResult",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/base.py",
+   "target": "class:vllm/v1/kv_offload/tiering/base.py:ParentManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/base.py",
+   "target": "class:vllm/v1/kv_offload/tiering/base.py:ParentManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/base.py",
+   "target": "class:vllm/v1/kv_offload/tiering/base.py:SecondaryTierManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/base.py",
+   "target": "class:vllm/v1/kv_offload/tiering/base.py:SecondaryTierManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/example/manager.py",
+   "target": "class:vllm/v1/kv_offload/tiering/example/manager.py:ExampleTierInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/example/manager.py",
+   "target": "class:vllm/v1/kv_offload/tiering/example/manager.py:ExampleTierInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/example/manager.py",
+   "target": "class:vllm/v1/kv_offload/tiering/example/manager.py:ExampleSecondaryTierManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/example/manager.py",
+   "target": "class:vllm/v1/kv_offload/tiering/example/manager.py:ExampleSecondaryTierManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "target": "function:vllm/v1/kv_offload/tiering/kvcr/manager.py:_resolve_policy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "target": "function:vllm/v1/kv_offload/tiering/kvcr/manager.py:_kvcr_metric_definitions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "target": "class:vllm/v1/kv_offload/tiering/kvcr/manager.py:_FrameworkPinAdapter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "target": "class:vllm/v1/kv_offload/tiering/kvcr/manager.py:_VllmKeyAdapter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "target": "class:vllm/v1/kv_offload/tiering/kvcr/manager.py:KVCRSecondaryTierManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "target": "class:vllm/v1/kv_offload/tiering/kvcr/manager.py:KVCRSecondaryTierManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/offloading/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "file:vllm/v1/kv_hints/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "file:vllm/v1/kv_offload/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/base.py",
+   "target": "file:vllm/v1/metrics/cache_hit_source.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/common.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/common.py",
+   "target": "file:vllm/v1/kv_offload/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/common.py",
+   "target": "file:vllm/v1/kv_offload/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "file:vllm/v1/kv_offload/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "file:vllm/v1/kv_offload/cpu/host_register.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "file:vllm/v1/kv_offload/cpu/shared_offload_region.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "target": "file:vllm/v1/kv_offload/cpu/swap_blocks_triton.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/host_register.py",
+   "target": "file:vllm/distributed/device_communicators/cuda_wrapper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/host_register.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/host_register.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/manager.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/offloading/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/manager.py",
+   "target": "file:vllm/v1/kv_offload/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/manager.py",
+   "target": "file:vllm/v1/kv_offload/cpu/common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/manager.py",
+   "target": "file:vllm/v1/kv_offload/cpu/policies/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/manager.py",
+   "target": "file:vllm/v1/kv_offload/cpu/policies/factory.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/manager.py",
+   "target": "file:vllm/v1/metrics/cache_hit_source.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/policies/arc.py",
+   "target": "file:vllm/v1/kv_offload/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/policies/arc.py",
+   "target": "file:vllm/v1/kv_offload/cpu/policies/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/policies/base.py",
+   "target": "file:vllm/v1/kv_offload/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/policies/factory.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/policies/factory.py",
+   "target": "file:vllm/v1/kv_offload/cpu/policies/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/policies/lru.py",
+   "target": "file:vllm/v1/kv_offload/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/policies/lru.py",
+   "target": "file:vllm/v1/kv_offload/cpu/policies/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/shared_offload_region.py",
+   "target": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/shared_offload_region.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/shared_offload_region.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/shared_offload_region.py",
+   "target": "file:vllm/v1/kv_offload/cpu/host_register.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/spec.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/spec.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/spec.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/spec.py",
+   "target": "file:vllm/v1/kv_offload/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/spec.py",
+   "target": "file:vllm/v1/kv_offload/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/spec.py",
+   "target": "file:vllm/v1/kv_offload/cpu/common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/spec.py",
+   "target": "file:vllm/v1/kv_offload/cpu/gpu_worker.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/spec.py",
+   "target": "file:vllm/v1/kv_offload/cpu/manager.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/cpu/spec.py",
+   "target": "file:vllm/v1/kv_offload/cpu/shared_offload_region.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/file_mapper.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/offloading/canonical_mapping.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/file_mapper.py",
+   "target": "file:vllm/v1/kv_offload/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/async_lookup.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/async_lookup.py",
+   "target": "file:vllm/v1/kv_offload/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/base.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/offloading/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/base.py",
+   "target": "file:vllm/v1/kv_offload/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/base.py",
+   "target": "file:vllm/v1/kv_offload/tiering/backpressure.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/base.py",
+   "target": "file:vllm/v1/metrics/cache_hit_source.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/example/manager.py",
+   "target": "file:vllm/v1/kv_offload/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/example/manager.py",
+   "target": "file:vllm/v1/kv_offload/tiering/backpressure.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/example/manager.py",
+   "target": "file:vllm/v1/kv_offload/tiering/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/offloading/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "target": "file:vllm/v1/core/kv_cache_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "target": "file:vllm/v1/kv_offload/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "target": "file:vllm/v1/kv_offload/cpu/policies/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "target": "file:vllm/v1/kv_offload/tiering/backpressure.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_offload/tiering/kvcr/manager.py",
+   "target": "file:vllm/v1/kv_offload/tiering/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/base.py:OffloadingCounterMetadata",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingMetricMetadata",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/base.py:OffloadingGaugeMetadata",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingMetricMetadata",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/base.py:OffloadingHistogramMetadata",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingMetricMetadata",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/base.py:BlockIDsLoadStoreSpec",
+   "target": "class:vllm/v1/kv_offload/base.py:LoadStoreSpec",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/base.py:GPULoadStoreSpec",
+   "target": "class:vllm/v1/kv_offload/base.py:BlockIDsLoadStoreSpec",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/cpu/common.py:CPULoadStoreSpec",
+   "target": "class:vllm/v1/kv_offload/base.py:BlockIDsLoadStoreSpec",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/cpu/common.py:CPUOffloadingInfo",
+   "target": "class:vllm/v1/kv_offload/base.py:ConfigInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/cpu/manager.py:CPUOffloadingManager",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingManager",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/cpu/gpu_worker.py:CPUOffloadingWorker",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingWorker",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/cpu/spec.py:CPUOffloadingSpec",
+   "target": "class:vllm/v1/kv_offload/base.py:OffloadingSpec",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/cpu/policies/arc.py:ARCCachePolicy",
+   "target": "class:vllm/v1/kv_offload/cpu/policies/base.py:CachePolicy",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/cpu/policies/lru.py:LRUCachePolicy",
+   "target": "class:vllm/v1/kv_offload/cpu/policies/base.py:CachePolicy",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/tiering/backpressure.py:DropAccountingPolicy",
+   "target": "class:vllm/v1/kv_offload/tiering/backpressure.py:BackpressurePolicy",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/tiering/backpressure.py:ThrottledDropPolicy",
+   "target": "class:vllm/v1/kv_offload/tiering/backpressure.py:DropAccountingPolicy",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/tiering/backpressure.py:EMABackpressureDetector",
+   "target": "class:vllm/v1/kv_offload/tiering/backpressure.py:BackpressureDetector",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/tiering/example/manager.py:ExampleSecondaryTierManager",
+   "target": "class:vllm/v1/kv_offload/tiering/base.py:SecondaryTierManager",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/tiering/example/manager.py:ExampleTierInfo",
+   "target": "class:vllm/v1/kv_offload/base.py:ConfigInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/tiering/kvcr/manager.py:KVCRSecondaryTierManager",
+   "target": "class:vllm/v1/kv_offload/tiering/base.py:SecondaryTierManager",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/cpu/spec.py:CPUOffloadingSpec",
+   "target": "class:vllm/v1/kv_offload/cpu/manager.py:CPUOffloadingManager",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/cpu/spec.py:CPUOffloadingSpec",
+   "target": "class:vllm/v1/kv_offload/cpu/shared_offload_region.py:SharedOffloadRegion",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/cpu/spec.py:CPUOffloadingSpec",
+   "target": "class:vllm/v1/kv_offload/cpu/gpu_worker.py:CPUOffloadingWorker",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/cpu/manager.py:CPUOffloadingManager",
+   "target": "class:vllm/v1/kv_offload/cpu/policies/factory.py:CachePolicyFactory",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/kv_offload/tiering/kvcr/manager.py:KVCRSecondaryTierManager",
+   "target": "function:vllm/v1/kv_offload/cpu/policies/base.py:order_request_keys",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

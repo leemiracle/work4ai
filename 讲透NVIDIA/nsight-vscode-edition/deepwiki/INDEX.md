@@ -1,0 +1,30 @@
+# DeepWiki 索引 — NVIDIA/nsight-vscode-edition
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 207409 字符
+
+- [1 Overview](1-overview.md)
+- [2 Architecture](2-architecture.md)
+  - [2.1 Extension Structure](2.1-extension-structure.md)
+  - [2.2 Debug Adapter Protocol](2.2-debug-adapter-protocol.md)
+  - [2.3 CUDA Protocol Extensions](2.3-cuda-protocol-extensions.md)
+- [3 Core Components](3-core-components.md)
+  - [3.1 Debug Sessions](3.1-debug-sessions.md)
+  - [3.2 Debug Controller](3.2-debug-controller.md)
+  - [3.3 Task Providers](3.3-task-providers.md)
+- [4 CUDA Features](4-cuda-features.md)
+  - [4.1 Focus Management](4.1-focus-management.md)
+  - [4.2 Data Types](4.2-data-types.md)
+  - [4.3 Remote Debugging](4.3-remote-debugging.md)
+- [5 Development](5-development.md)
+  - [5.1 Testing Framework](5.1-testing-framework.md)
+  - [5.2 Build System](5.2-build-system.md)
+  - [5.3 Development Environment](5.3-development-environment.md)
+- [6 Test Programs](6-test-programs.md)
+  - [6.1 Variables Test](6.1-variables-test.md)
+  - [6.2 Driver APIs Test](6.2-driver-apis-test.md)
+  - [6.3 Environment Variables Test](6.3-environment-variables-test.md)
+- [7 Reference](7-reference.md)
+  - [7.1 Dependencies](7.1-dependencies.md)
+  - [7.2 Changelog](7.2-changelog.md)
+  - [7.3 License](7.3-license.md)

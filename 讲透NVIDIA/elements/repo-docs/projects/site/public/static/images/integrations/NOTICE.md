@@ -1,0 +1,29 @@
+# Third-Party Logos Notice
+
+The logo files in this directory are trademarks or registered trademarks of their respective owners. They are used here solely for identification purposes to indicate compatibility or integration support, and their inclusion does not imply endorsement by or affiliation with the trademark holders.
+
+These logos are **not** covered by this project's Apache 2.0 license.
+
+| File | Owner |
+|------|-------|
+| angular.svg | Google LLC |
+| claude.svg | Anthropic PBC |
+| codex.svg | OpenAI |
+| cursor.svg | Anysphere Inc. |
+| eleventy.svg | Zach Leatherman |
+| go.svg | Google LLC |
+| htmx.svg | Big Sky Software |
+| hugo.svg | The Hugo Authors |
+| javascript.svg | Oracle Corporation (pending community usage) |
+| nextjs.svg | Vercel Inc. |
+| nuxt.svg | NuxtJS |
+| react.svg | Meta Platforms Inc. |
+| remix.svg | Shopify Inc. |
+| solidjs.svg | Ryan Carniato |
+| sphinx.svg | Sphinx contributors (BSD-2-Clause) |
+| svelte.svg | Svelte Contributors |
+| typescript.svg | Microsoft Corporation |
+| vite.svg | Evan You |
+| vue.svg | Evan You |
+
+The Sphinx mark comes from the [Sphinx 9.1.0 documentation assets](https://github.com/sphinx-doc/sphinx/blob/v9.1.0/doc/_static/favicon.svg).

@@ -1,0 +1,32 @@
+# DeepWiki 索引 — microsoft/Tutel
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 300630 字符
+
+- [1 Overview](1-overview.md)
+- [2 Core Components](2-core-components.md)
+  - [2.1 MOE Layer](2.1-moe-layer.md)
+  - [2.2 Fast Dispatch](2.2-fast-dispatch.md)
+  - [2.3 Gates](2.3-gates.md)
+  - [2.4 Experts](2.4-experts.md)
+- [3 System Infrastructure](3-system-infrastructure.md)
+  - [3.1 Custom CUDA Kernels](3.1-custom-cuda-kernels.md)
+  - [3.2 JIT Compilation](3.2-jit-compilation.md)
+  - [3.3 Communication Primitives](3.3-communication-primitives.md)
+  - [3.4 Installation and Setup](3.4-installation-and-setup.md)
+- [4 DeepSeek Integration](4-deepseek-integration.md)
+  - [4.1 DeepSeek Operations](4.1-deepseek-operations.md)
+  - [4.2 Quantization Support](4.2-quantization-support.md)
+- [5 Examples and Usage](5-examples-and-usage.md)
+  - [5.1 Basic Usage](5.1-basic-usage.md)
+  - [5.2 Automatic Mixed Precision](5.2-automatic-mixed-precision.md)
+  - [5.3 Distributed Training](5.3-distributed-training.md)
+  - [5.4 Custom Experts and Gates](5.4-custom-experts-and-gates.md)
+  - [5.5 Framework Integration](5.5-framework-integration.md)
+- [6 Advanced Features](6-advanced-features.md)
+  - [6.1 Checkpointing](6.1-checkpointing.md)
+  - [6.2 NCCL Communication Optimization](6.2-nccl-communication-optimization.md)
+  - [6.3 Model Parallelism](6.3-model-parallelism.md)
+- [7 Testing and Performance](7-testing-and-performance.md)
+  - [7.1 Testing Framework](7.1-testing-framework.md)
+  - [7.2 Benchmarking](7.2-benchmarking.md)

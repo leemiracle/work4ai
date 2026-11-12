@@ -1,0 +1,3448 @@
+{
+ "project": {
+  "name": "rea-agents",
+  "languages": [
+   "typescript",
+   "javascript",
+   "python",
+   "swift",
+   "c",
+   "java",
+   "shell",
+   "markdown",
+   "yaml",
+   "json"
+  ],
+  "frameworks": [
+   "Node.js",
+   "Model Context Protocol (MCP)",
+   "Vitest",
+   "Turborepo",
+   "VitePress",
+   "Playwright"
+  ],
+  "description": "REA (Reverse Engineer Anything) — 逆向工程 MCP server + CLI：二进制 / JS·Electron / .NET / 网站分析，本地运行，结论带证据。",
+  "analyzedAt": "2026-10-09T07:40:20.413185+00:00",
+  "gitCommitHash": "441813c0708dbee82ef554c91e973ae02964bf2e"
+ },
+ "stats": {
+  "nodes": 7060,
+  "edges": 16505,
+  "layers": 14,
+  "tour": 14
+ },
+ "layers": [
+  {
+   "id": "layer:domain",
+   "name": "领域模型层（Domain）",
+   "description": "provider 中立的核心域模型与纯函数规范：Evidence 证据与 completion ledger、canonical digest/ordering、JavaScript Application Graph 与浏览器观测 schema、artifact 图、比对语义及 AnalysisError 错误分类体系，是全仓所有上层共同依赖的地基。",
+   "totalNodes": 409,
+   "representatives": [
+    {
+     "id": "file:src/domain/evidence.ts",
+     "name": "evidence.ts",
+     "filePath": "src/domain/evidence.ts",
+     "summary": "Evidence 领域核心：定义 provider/evidenceLocation/evidenceEnvelope/evidenceRecord 等 schema，parseEvidence 校验语义 ID 防篡改，immutableEvidence 冻结密封快照，createEvidence+normalizeE",
+     "type": "file",
+     "degree": 270
+    },
+    {
+     "id": "file:src/domain/result.ts",
+     "name": "result.ts",
+     "filePath": "src/domain/result.ts",
+     "summary": "Result<T,E> 判别联合与 ok/err 构造器：期望式错误通道的最小类型基建，供各输入边界复用。",
+     "type": "file",
+     "degree": 270
+    },
+    {
+     "id": "file:src/domain/jsonValue.ts",
+     "name": "jsonValue.ts",
+     "filePath": "src/domain/jsonValue.ts",
+     "summary": "共享 JSON 值契约：MAX_JSON_DEPTH=1000 深度上限、jsonValueValidationSteps 以有界步进迭代校验（每 4096 步让出一次），并用 WeakMap 缓存已认证不可变快照的校验结果。",
+     "type": "file",
+     "degree": 253
+    },
+    {
+     "id": "file:src/domain/analysisErrorCore.ts",
+     "name": "analysisErrorCore.ts",
+     "filePath": "src/domain/analysisErrorCore.ts",
+     "summary": "十个核心分析错误类：不支持目标、资源约束、协议、输入/输出、能力不可用、取消、超时、访问拒绝、artifact 变更——全部继承 AnalysisError 并以 _tag 判别，附 AnalysisInputIssue 秘密安全的参数纠错元数据。",
+     "type": "file",
+     "degree": 218
+    },
+    {
+     "id": "file:src/domain/analysisErrorBase.ts",
+     "name": "analysisErrorBase.ts",
+     "filePath": "src/domain/analysisErrorBase.ts",
+     "summary": "分析错误体系基座：定义 27 个稳定 AnalysisErrorTag、捕获输出/清理观察/部分观察等 provider 中性上下文接口，以及抽象基类 AnalysisError（携带 capturedOutput、cleanup、partialObservation）。",
+     "type": "file",
+     "degree": 158
+    },
+    {
+     "id": "file:src/domain/analysisErrorProjection.ts",
+     "name": "analysisErrorProjection.ts",
+     "filePath": "src/domain/analysisErrorProjection.ts",
+     "summary": "把预期失败投影为穷尽且秘密安全的调用方字段：稳定 code/category/message/retryable/remediation 与 per-family details（请求、artifact 状态、provider 诊断、浏览器首要失败原因、生命周期），cleanup 不完整时以 cleanup_incom",
+     "type": "file",
+     "degree": 111
+    },
+    {
+     "id": "file:src/domain/binaryTarget.ts",
+     "name": "binaryTarget.ts",
+     "filePath": "src/domain/binaryTarget.ts",
+     "summary": "无 I/O 的可执行文件头解析域：按 magic 分派到 ELF/Mach-O(thin/fat)/DOS MZ/PE 解析器，产出 provider 中立的格式与 CPU 架构元数据；PE 额外提取 COFF executableRole 与 CLI header（managed）判定。",
+     "type": "file",
+     "degree": 93
+    },
+    {
+     "id": "file:src/domain/javascript/javascriptStaticAnalysisHelpers.ts",
+     "name": "javascriptStaticAnalysisHelpers.ts",
+     "filePath": "src/domain/javascript/javascriptStaticAnalysisHelpers.ts",
+     "summary": "静态分析共享工具集（38 个函数）：静态路径解析与文件系统表达式判定、callee 命名、源范围/切片、sha256、vendor 检测与排序去重，是 bundler/calls/主编排共用的底座。",
+     "type": "file",
+     "degree": 88
+    },
+    {
+     "id": "file:src/domain/browserObservation.ts",
+     "name": "browserObservation.ts",
+     "filePath": "src/domain/browserObservation.ts",
+     "summary": "浏览器观测输入域：定义 exact HTTP(S) origin、loopback-only CDP endpoint、allowedOrigins 策略等 zod schema，并提供 sanitizeBrowserUrl/removeUrlUserInfo 无凭据 URL 净化工具；同时 re-export bro",
+     "type": "file",
+     "degree": 85
+    },
+    {
+     "id": "file:src/domain/javascript/javascriptApplicationGraph.ts",
+     "name": "javascriptApplicationGraph.ts",
+     "filePath": "src/domain/javascript/javascriptApplicationGraph.ts",
+     "summary": "JavaScript Application Graph 核心：节点/边/图的创建与规范化（semantic-content-sha256 确定性 ID 策略）、observation-identity 匹配、全图不变量校验（证据规范化、边端点存在、排序唯一）、canonical JSON 序列化与 sha256，以及",
+     "type": "file",
+     "degree": 83
+    },
+    {
+     "id": "file:src/domain/evidenceBundle.ts",
+     "name": "evidenceBundle.ts",
+     "filePath": "src/domain/evidenceBundle.ts",
+     "summary": "Evidence bundle 构建与认证：createEvidenceBundle 生成确定性排序的密封 bundle，evidenceBundleForTarget 按目标投影；validateUnknownGraph/validateVerifiedResolution/validateResidualUnkno",
+     "type": "file",
+     "degree": 77
+    },
+    {
+     "id": "file:src/domain/javascript/javascriptSemanticAnalysis.ts",
+     "name": "javascriptSemanticAnalysis.ts",
+     "filePath": "src/domain/javascript/javascriptSemanticAnalysis.ts",
+     "summary": "JavaScript 语义分析主编排器：解析源码后构建作用域/绑定状态机（createState、collectDefinitions、bindPattern 系列），聚合模块链接、成员变更、引用、返回与派生语义，输出 JavaScriptSemanticIr。",
+     "type": "file",
+     "degree": 67
+    },
+    {
+     "id": "file:src/domain/canonicalOrdering.ts",
+     "name": "canonicalOrdering.ts",
+     "filePath": "src/domain/canonicalOrdering.ts",
+     "summary": "全仓共享的 Unicode 码点序工具：compareCodePoints 提供与 locale 无关的稳定比较，uniqueSorted 去重并排序，用于图谱排序、指纹与确定性平局裁决。",
+     "type": "file",
+     "degree": 65
+    },
+    {
+     "id": "file:src/domain/process/processCapture.ts",
+     "name": "processCapture.ts",
+     "filePath": "src/domain/process/processCapture.ts",
+     "summary": "进程捕获域的核心聚合文件：定义 TerminalFrame / RenderedTerminalFrame / InteractionEvent / FileState / ProcessSample / FilesystemCheckpoint 等接口与 680 行的 processCaptureShapeSchem",
+     "type": "file",
+     "degree": 63
+    },
+    {
+     "id": "file:src/domain/digests.ts",
+     "name": "digests.ts",
+     "filePath": "src/domain/digests.ts",
+     "summary": "全仓统一的 canonical digest 形状定义：SHA256_PATTERN 正则、digestSchema 与带前缀的 prefixedDigestSchema 工厂，收敛了此前散落在约 30 个模块里的手抄正则。",
+     "type": "file",
+     "degree": 61
+    },
+    {
+     "id": "file:src/domain/javascript/javascriptSemanticGraph.ts",
+     "name": "javascriptSemanticGraph.ts",
+     "filePath": "src/domain/javascript/javascriptSemanticGraph.ts",
+     "summary": "JavaScript 语义关系图构建与校验：以 zod schema 为边界创建 node/relation/unknown/fingerprint 实体（digest 型 ID），经十余项不变量检查（覆盖族完整性、canonical 序、悬挂引用、指纹一致性）后冻结为不可变图。",
+     "type": "file",
+     "degree": 61
+    },
+    {
+     "id": "file:src/domain/hopperValues.ts",
+     "name": "hopperValues.ts",
+     "filePath": "src/domain/hopperValues.ts",
+     "summary": "Hopper 协议值解析与校验核心：用 zod 定义 procedures/names/segments/documents/functionDossier 等 wire 格式 schema（含 BigInt 地址区间 superRefine 校验），并提供 Result 风格解析器族。",
+     "type": "file",
+     "degree": 56
+    },
+    {
+     "id": "file:src/domain/javascript/javascriptSemanticProjection.ts",
+     "name": "javascriptSemanticProjection.ts",
+     "filePath": "src/domain/javascript/javascriptSemanticProjection.ts",
+     "summary": "语义收集的主投影层：识别 callable（函数/方法/类）、ESM import/export 与 CommonJS require/exports 模块链接、绑定引用角色判定（声明 vs 读 vs 写前读），最后把可变构造状态投影为不可变 IR。",
+     "type": "file",
+     "degree": 54
+    },
+    {
+     "id": "file:src/domain/analysisSnapshot.ts",
+     "name": "analysisSnapshot.ts",
+     "filePath": "src/domain/analysisSnapshot.ts",
+     "summary": "分析快照核心：provider/profile 精确绑定的不可变成功分析调用缓存——目标/绑定/entry/workflow entry 的 Zod schema、query_id 摘要、Evidence 索引与双向匹配（entry↔Evidence、workflow entry↔workflow Evidence）、",
+     "type": "file",
+     "degree": 53
+    },
+    {
+     "id": "file:src/domain/providerAdapterError.ts",
+     "name": "providerAdapterError.ts",
+     "filePath": "src/domain/providerAdapterError.ts",
+     "summary": "定义 ProviderAdapterError：provider adapter 在更精确类型变体之外失败时的通用错误类，继承 AnalysisError，携带 providerId/operation 与可选 diagnostics（structuredClone 深拷贝防引用外泄），以 _tag 做判别。",
+     "type": "file",
+     "degree": 53
+    },
+    {
+     "id": "file:src/domain/javascript/javascriptSemanticIr.ts",
+     "name": "javascriptSemanticIr.ts",
+     "filePath": "src/domain/javascript/javascriptSemanticIr.ts",
+     "summary": "定义 JavaScript 语义 IR 的核心只读数据结构：词法作用域 JavaScriptSemanticScope、绑定定义、callable、模块链接与 fail-closed 的绑定 provenance 判别联合，并导出按行列定位引用/绑定的查询助手和构造失败 IR 的工厂函数。",
+     "type": "file",
+     "degree": 49
+    },
+    {
+     "id": "file:src/domain/analysisProfile.ts",
+     "name": "analysisProfile.ts",
+     "filePath": "src/domain/analysisProfile.ts",
+     "summary": "分析 profile 承诺：committedProviderSchema + 参数对象经 RFC 8785 canonical JSON 与 SHA-256 digest 绑定，superRefine 校验 digest 一致性，提供创建与不解释参数的相等比较。",
+     "type": "file",
+     "degree": 48
+    },
+    {
+     "id": "file:src/domain/javascript/javascriptApplicationAnalysis.ts",
+     "name": "javascriptApplicationAnalysis.ts",
+     "filePath": "src/domain/javascript/javascriptApplicationAnalysis.ts",
+     "summary": "JavaScript 应用静态分析的公共契约层：定义 target-free 请求 schema（input_path + asar/directory/auto 格式）与结果 schema，内含 Electron 边界摘要计数（browser_windows、preload_entrypoints、context_b",
+     "type": "file",
+     "degree": 42
+    },
+    {
+     "id": "file:src/domain/comparisonSemantics.ts",
+     "name": "comparisonSemantics.ts",
+     "filePath": "src/domain/comparisonSemantics.ts",
+     "summary": "比较语义的共享门面：absenceClaimable 判断覆盖率是否支持\"缺失声明\"，canonicalDigest/canonicalJson 统一委托 digestCanonicalValue 与 canonicalize 库，收敛全仓摘要入口。",
+     "type": "file",
+     "degree": 41
+    },
+    {
+     "id": "file:src/domain/evidenceErrors.ts",
+     "name": "evidenceErrors.ts",
+     "filePath": "src/domain/evidenceErrors.ts",
+     "summary": "Evidence 域错误类型集：EvidenceIntegrityError（完整性校验失败）、AnalysisSnapshotMismatchError（快照不匹配）、EvidenceReferenceError（引用悬空）、EvidenceFileError（文件 IO），均带 _tag 判别与用户可读 userM",
+     "type": "file",
+     "degree": 40
+    }
+   ]
+  },
+  {
+   "id": "layer:tool-contracts",
+   "name": "MCP 工具契约层（Contracts）",
+   "description": "TOOL_CONTRACTS 工具契约总账：按 group 声明每个 MCP/CLI 工具的 input/output schema、边界与限制声明，并以 PUBLISHED_TOOL_NAME_FLOOR 下限防止已发布工具被静默移除。",
+   "totalNodes": 61,
+   "representatives": [
+    {
+     "id": "file:src/contracts/toolContracts.ts",
+     "name": "toolContracts.ts",
+     "filePath": "src/contracts/toolContracts.ts",
+     "summary": "工具契约聚合中枢：按固定顺序展开 19 个 group（official/enhanced/native/managed/session 等）为 TOOL_CONTRACTS 总清单，并提供按名精确检索且类型级保留 schema 的 toolContract()。",
+     "type": "file",
+     "degree": 112
+    },
+    {
+     "id": "file:src/contracts/toolOutputSchemaGroups.ts",
+     "name": "toolOutputSchemaGroups.ts",
+     "filePath": "src/contracts/toolOutputSchemaGroups.ts",
+     "summary": "输出 schema 分组总汇：officialOutputSchemas/enhanced/native/artifact/managed/managedWorkflow/session 七组，把 domain 层约 40 个结果 schema 映射到工具名，供 requireOutputSchema 强制对账。",
+     "type": "file",
+     "degree": 37
+    },
+    {
+     "id": "file:src/contracts/contractSnapshot.test.ts",
+     "name": "contractSnapshot.test.ts",
+     "filePath": "src/contracts/contractSnapshot.test.ts",
+     "summary": "合约表面快照测试：断言 compare_web_captures 的对象根 schema 与示例配对语义、二十组工具契约名称与 TOOL_EFFECTS 审计表一一对应且无启发式兜底，以及关键工具 effects/annotations 的保守标注。",
+     "type": "file",
+     "degree": 32
+    },
+    {
+     "id": "file:src/contracts/toolOutputSchemaPrimitives.ts",
+     "name": "toolOutputSchemaPrimitives.ts",
+     "filePath": "src/contracts/toolOutputSchemaPrimitives.ts",
+     "summary": "输出 schema 原语库：evidenceResultOf/lifecycleResultOf 包装器、requireOutputSchema 防漂移守卫，以及 targetFormat/providerIdentity/toolAvailability/graphNode 等 20 余个共享 zod schema ",
+     "type": "file",
+     "degree": 32
+    },
+    {
+     "id": "file:src/contracts/toolEffects.ts",
+     "name": "toolEffects.ts",
+     "filePath": "src/contracts/toolEffects.ts",
+     "summary": "工具副作用审计表：TOOL_EFFECTS 为每个公开工具显式声明 8 维 effects（mutatesTarget/writesFilesystem/accessesNetwork 等），annotationsFromEffects 纯函数推导 MCP annotations，杜绝按工具名猜测的启发式。",
+     "type": "file",
+     "degree": 27
+    },
+    {
+     "id": "file:src/contracts/toolContracts.test.ts",
+     "name": "toolContracts.test.ts",
+     "filePath": "src/contracts/toolContracts.test.ts",
+     "summary": "工具契约总账测试：按 19 个 group 对账 TOOL_CONTRACTS 全量清单、PUBLISHED_TOOL_NAME_FLOOR 防止工具被静默移除（下限而非相等），并校验契约结构不变量。",
+     "type": "file",
+     "degree": 26
+    },
+    {
+     "id": "file:src/contracts/officialToolContracts.ts",
+     "name": "officialToolContracts.ts",
+     "filePath": "src/contracts/officialToolContracts.ts",
+     "summary": "official-proxy 类工具契约：official() 工厂把 Ghidra/Hopper bridge 语义操作（annotate_native_function 等）包装为带 strict 输入、审计 effects 与示例的 ToolContract。",
+     "type": "file",
+     "degree": 24
+    },
+    {
+     "id": "file:src/contracts/artifactToolContracts.ts",
+     "name": "artifactToolContracts.ts",
+     "filePath": "src/contracts/artifactToolContracts.ts",
+     "summary": "定义 artifact-provider 的六个 MCP 工具契约（inspect/extract_artifact、decode_interface_builder、inspect_keyed_archive、inspect_asset_catalog、trace_dylib_resolution），通过 artif",
+     "type": "file",
+     "degree": 21
+    },
+    {
+     "id": "file:src/contracts/native/nativeToolContracts.ts",
+     "name": "nativeToolContracts.ts",
+     "filePath": "src/contracts/native/nativeToolContracts.ts",
+     "summary": "native-provider 类工具契约工厂：native() helper 生成 inspect_macho/demangle_swift/observe_native_calls 等 provider 中立语义操作契约，附 swiftSymbolsSchema 单行 Swift 符号校验。",
+     "type": "file",
+     "degree": 20
+    },
+    {
+     "id": "file:src/contracts/toolOutputSchemas.ts",
+     "name": "toolOutputSchemas.ts",
+     "filePath": "src/contracts/toolOutputSchemas.ts",
+     "summary": "contracts 输出 schema 的 barrel 文件，re-export toolOutputSchemaPrimitives 与 toolOutputSchemaGroups 两组 schema 构建原语。",
+     "type": "file",
+     "degree": 20
+    },
+    {
+     "id": "file:src/contracts/sessionToolSchemas.ts",
+     "name": "sessionToolSchemas.ts",
+     "filePath": "src/contracts/sessionToolSchemas.ts",
+     "summary": "session 工具输入 schema 汇编：聚合 domain 层 comparison/callPath/changedBehavior/residualUnknown/reconstructionVerification 等 schema，并定义 evidence bundle 获取/导入、地址上下文等约 20 ",
+     "type": "file",
+     "degree": 18
+    },
+    {
+     "id": "file:src/contracts/toolContractTypes.ts",
+     "name": "toolContractTypes.ts",
+     "filePath": "src/contracts/toolContractTypes.ts",
+     "summary": "工具契约核心类型：ToolContract<Name,Input,Output> 接口（name/title/kind/schemas/effects/annotations/examples）与 TOOL_KINDS 12 个 adapter 家族常量，是全部契约文件的公共类型基准。",
+     "type": "file",
+     "degree": 17
+    },
+    {
+     "id": "file:src/contracts/investigationExamples.ts",
+     "name": "investigationExamples.ts",
+     "filePath": "src/contracts/investigationExamples.ts",
+     "summary": "构造对比组合调查契约的规范化输入样例：函数对比 Evidence、进程捕获 reference/reconstruction 对与对比证据，以及 compare_process_captures、find_changed_behavior、build_call_path、correlate_static_and_run",
+     "type": "file",
+     "degree": 16
+    },
+    {
+     "id": "file:src/contracts/managed/managedWorkflowToolContracts.ts",
+     "name": "managedWorkflowToolContracts.ts",
+     "filePath": "src/contracts/managed/managedWorkflowToolContracts.ts",
+     "summary": "定义 managed workflow 类 MCP 工具（compare_managed_members、managed reconstruction、native 验证、application graph）的输入 schema 与 ToolContract 契约，复用 domain 层 managed schema ",
+     "type": "file",
+     "degree": 16
+    },
+    {
+     "id": "file:src/contracts/javascript/javascriptRuntimeReconciliationExample.ts",
+     "name": "javascriptRuntimeReconciliationExample.ts",
+     "filePath": "src/contracts/javascript/javascriptRuntimeReconciliationExample.ts",
+     "summary": "构造运行时调和契约的最小有效样例：静态应用图 Evidence（内容寻址资产与语义图节点）配 Electron CDP 页面检查运行时 Evidence，组成 static_layers 与 runtime_observations 输入对。",
+     "type": "file",
+     "degree": 15
+    },
+    {
+     "id": "file:src/contracts/managed/managedToolContracts.ts",
+     "name": "managedToolContracts.ts",
+     "filePath": "src/contracts/managed/managedToolContracts.ts",
+     "summary": "定义三个 execution-free 的托管 PE/CLI 静态检查契约（程序集身份清单、成员与 CIL 哈希、managed/native 边界），要求显式绝对本地路径或复用已选目标，并提供 isManagedToolName 类型谓词。",
+     "type": "file",
+     "degree": 15
+    },
+    {
+     "id": "file:src/contracts/managed/managedWorkflowExamples.ts",
+     "name": "managedWorkflowExamples.ts",
+     "filePath": "src/contracts/managed/managedWorkflowExamples.ts",
+     "summary": "Managed（.NET）工作流工具契约的示例数据工厂：emptyManagedMembers/runtimeMembers/boundaryEvidence/nativeExportEvidence 等 helper 构造带 Evidence 溯源的成员清点、应用图、重建导入与 native 验证示例常量，供 man",
+     "type": "file",
+     "degree": 15
+    },
+    {
+     "id": "file:src/contracts/sessionToolContracts.ts",
+     "name": "sessionToolContracts.ts",
+     "filePath": "src/contracts/sessionToolContracts.ts",
+     "summary": "session 类工具契约：session() 工厂生成 open_binary/close_binary、evidence bundle 导入导出、unknown 记录/更新等长生命周期 MCP 适配器专属工具的完整 ToolContract。",
+     "type": "file",
+     "degree": 15
+    },
+    {
+     "id": "file:src/contracts/applicationToolContracts.ts",
+     "name": "applicationToolContracts.ts",
+     "filePath": "src/contracts/applicationToolContracts.ts",
+     "summary": "APPLICATION_TOOL_CONTRACTS：九个 provider 中立的应用图工作流工具契约（特征/语义追踪、版本与 source-to-bundle 与导出形状比对、重建义务账本与覆盖评估、Android/Apple 应用图投影），MCP 与 CLI 适配器共享；附按名解析的强类型 application",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "file:src/contracts/browserToolContracts.ts",
+     "name": "browserToolContracts.ts",
+     "filePath": "src/contracts/browserToolContracts.ts",
+     "summary": "定义八个被动浏览器逆向工具契约（list_browser_targets、inspect_web_page、analyze_web_bundle、observe_web_session、discover_webmcp_tools、compare_web_captures、capture_web_screenshot、c",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "file:src/contracts/enhancedToolContracts.ts",
+     "name": "enhancedToolContracts.ts",
+     "filePath": "src/contracts/enhancedToolContracts.ts",
+     "summary": "定义十余个由 provider 操作组合而成的 enhanced 工作流工具契约（符号发现、批量反编译、调用图、trace_feature/trace_call_path/trace_native_ui_action/trace_native_values 等），经 enhanced() 工厂统一装配输入/输出 sch",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "file:src/contracts/toolSchemaMetadata.ts",
+     "name": "toolSchemaMetadata.ts",
+     "filePath": "src/contracts/toolSchemaMetadata.ts",
+     "summary": "为 MCP tool 契约的输入/输出 Zod schema 附加面向 SDK wire projection 的元数据：属性 description 补全（精确词条表+命名后缀启发式）、根级 anyOf 联合摊平、按 target memoize 的 JSON Schema 广告。",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "file:src/contracts/functionComparisonExample.ts",
+     "name": "functionComparisonExample.ts",
+     "filePath": "src/contracts/functionComparisonExample.ts",
+     "summary": "构造规范化的函数分析 Evidence 对（left/right）：dossier() 生成过程档案，observe() 以 analyze_function 参数包装成 shipped-artifact 权威证据，供函数对比与调查工作流示例复用。",
+     "type": "file",
+     "degree": 13
+    },
+    {
+     "id": "file:src/contracts/javascript/electronToolContracts.ts",
+     "name": "electronToolContracts.ts",
+     "filePath": "src/contracts/javascript/electronToolContracts.ts",
+     "summary": "定义五个 Electron provider 契约：file:// 页目标发现与被动检查、ASAR 应用图静态重建、静态图与运行时 Evidence 的调和，以及 REA 拥有生命周期的受控 Electron 场景捕获。",
+     "type": "file",
+     "degree": 12
+    },
+    {
+     "id": "file:src/contracts/errorSchemas.ts",
+     "name": "errorSchemas.ts",
+     "filePath": "src/contracts/errorSchemas.ts",
+     "summary": "定义全 CLI 与 MCP 错误面共享的稳定判别联合 analysisErrorProjectionSchema（二十个错误码加 artifact 完整性专档）、CLI 错误信封 schema 与供生成文档使用的 JSON Schema 文档。",
+     "type": "file",
+     "degree": 12
+    }
+   ]
+  },
+  {
+   "id": "layer:application",
+   "name": "应用编排层（Application）",
+   "description": "用例编排与 provider 选择：分析会话与 AnalysisContext 查询、binary 诊断、investigation 调查工作流、browser observation 场景服务与 doctor 健康检查等应用服务的组合与投影。",
+   "totalNodes": 240,
+   "representatives": [
+    {
+     "id": "file:src/application/AnalysisProvider.ts",
+     "name": "AnalysisProvider.ts",
+     "filePath": "src/application/AnalysisProvider.ts",
+     "summary": "应用层分析契约中枢：AnalysisOperation（official/enhanced/native/artifact/managed/health 封闭联合）、AnalysisExecution、ProviderIdentity、AnalysisClient/Port 等类型与 createAnalysisExe",
+     "type": "file",
+     "degree": 185
+    },
+    {
+     "id": "file:src/application/javascript/JavaScriptApplicationService.ts",
+     "name": "JavaScriptApplicationService.ts",
+     "filePath": "src/application/javascript/JavaScriptApplicationService.ts",
+     "summary": "JavaScript 应用静态分析主入口：safeParse 输入 → 协作式重建 artifact → 解析自有分析步骤 → 协作式构造 Evidence，含结果 schema 失败的 JSON Pointer 诊断与文件系统错误分类。",
+     "type": "file",
+     "degree": 61
+    },
+    {
+     "id": "file:src/application/binary/BinarySession.ts",
+     "name": "BinarySession.ts",
+     "filePath": "src/application/binary/BinarySession.ts",
+     "summary": "二进制分析会话门面：BinarySession 继承 BinarySessionRecords 并实现 BinarySessionPort，负责 provider 路由选择、目标打开/关闭（含快照落盘）、执行调用记账与状态投影。",
+     "type": "file",
+     "degree": 58
+    },
+    {
+     "id": "file:src/application/ClientConfigurationDocument.ts",
+     "name": "ClientConfigurationDocument.ts",
+     "filePath": "src/application/ClientConfigurationDocument.ts",
+     "summary": "MCP 客户端配置文档（JSON/JSONC/TOML，含 OpenCode V2 方言）的解析、编辑与序列化核心：保留无关设置与注释，支持 Grok 内联表 upsert、禁用服务器列表编辑与 JSON 属性带注释删除。",
+     "type": "file",
+     "degree": 53
+    },
+    {
+     "id": "file:src/application/DirectAnalysis.ts",
+     "name": "DirectAnalysis.ts",
+     "filePath": "src/application/DirectAnalysis.ts",
+     "summary": "直接分析执行引擎：按工具名路由 native/managed/artifact/enhanced 操作，驱动 BinarySession 生命周期、分析快照读写与重放判定、进程取消与 evidence 生成，是 MCP 工具调用到 provider 会话的核心编排层。",
+     "type": "file",
+     "degree": 51
+    },
+    {
+     "id": "file:src/application/Doctor.ts",
+     "name": "Doctor.ts",
+     "filePath": "src/application/Doctor.ts",
+     "summary": "doctor 诊断编排器：定义 DoctorHost/DoctorCheck 契约与 systemDoctorHost 生产实现（探测 home/PATH/Hopper/技能安装/客户端注册），组装身份信息与检查报告，输出健康结论与逐项恢复建议。",
+     "type": "file",
+     "degree": 46
+    },
+    {
+     "id": "file:src/application/javascript/JavaScriptArtifactGraphContext.ts",
+     "name": "JavaScriptArtifactGraphContext.ts",
+     "filePath": "src/application/javascript/JavaScriptArtifactGraphContext.ts",
+     "summary": "图构建共享上下文与边工厂：artifact/AST contains 边与静态推断边构造、Electron 角色节点创建与资产链接、artifact-local 身份、制品路径解析与 module/chunk 查找键。",
+     "type": "file",
+     "degree": 44
+    },
+    {
+     "id": "file:src/application/javascript/JavaScriptArtifactReconstruction.ts",
+     "name": "JavaScriptArtifactReconstruction.ts",
+     "filePath": "src/application/javascript/JavaScriptArtifactReconstruction.ts",
+     "summary": "应用层 ASAR/目录重建编排入口 reconstructJavaScriptArtifact：校验输入、探测格式、扫描 canonical 清单、读取 artifact 文件、驱动语义图投影与不可变 artifact 图构建，并在各阶段上报进度、响应 AbortSignal 与检查点。",
+     "type": "file",
+     "degree": 42
+    },
+    {
+     "id": "file:src/application/BinaryTargetResolver.ts",
+     "name": "BinaryTargetResolver.ts",
+     "filePath": "src/application/BinaryTargetResolver.ts",
+     "summary": "核心二进制目标解析器：parseBinaryTarget 将用户输入路径解析为规范 BinaryTarget，通过文件魔数与扩展名双通道检测 ELF/Mach-O/PE/zip 等工件格式，读取可执行元数据并计算 sha256 摘要。",
+     "type": "file",
+     "degree": 41
+    },
+    {
+     "id": "file:src/application/javascript/JavaScriptApplicationWorkflowService.ts",
+     "name": "JavaScriptApplicationWorkflowService.ts",
+     "filePath": "src/application/javascript/JavaScriptApplicationWorkflowService.ts",
+     "summary": "应用对比工作流服务：feature 追踪、版本对比、source-bundle 对比、export shape 对比四个入口，统一走 safeParse 输入 → parseApplicationGraphEvidence → 领域对比 → Evidence 构造，workflowFailure 统一错误投影。",
+     "type": "file",
+     "degree": 41
+    },
+    {
+     "id": "file:src/application/javascript/JavaScriptSemanticGraphConstruction.ts",
+     "name": "JavaScriptSemanticGraphConstruction.ts",
+     "filePath": "src/application/javascript/JavaScriptSemanticGraphConstruction.ts",
+     "summary": "语义图构造原语集：投影状态（nodes/relations/unknowns/roots + 单文件节点预算）、构造/保留/添加节点、添加关系与 unknown、fallback root，以及应用图节点按 artifact+路径+range 的位置索引绑定。",
+     "type": "file",
+     "degree": 38
+    },
+    {
+     "id": "file:src/application/investigation/InvestigationRecordPort.ts",
+     "name": "InvestigationRecordPort.ts",
+     "filePath": "src/application/investigation/InvestigationRecordPort.ts",
+     "summary": "定义调查记录的端口接口族：EvidenceReader（分离式只读）、EvidenceWriter（幂等写入）、EvidenceUnknownWriter（原子 Evidence+Unknown 写入）、UnknownRegistryPort（乐观修订与查询）及聚合的 InvestigationRecordPort，把",
+     "type": "file",
+     "degree": 37
+    },
+    {
+     "id": "file:src/application/SetupHost.ts",
+     "name": "SetupHost.ts",
+     "filePath": "src/application/SetupHost.ts",
+     "summary": "生产宿主效果层：systemSetupHost 绑定 Doctor、Hopper 安装器、客户端配置与 skill 安装的真实实现；另提供注册命令选择、需配置客户端过滤、初始 provider 环境等纯函数。",
+     "type": "file",
+     "degree": 37
+    },
+    {
+     "id": "file:src/application/binary/SessionProviderRouter.ts",
+     "name": "SessionProviderRouter.ts",
+     "filePath": "src/application/binary/SessionProviderRouter.ts",
+     "summary": "provider 路由器：SessionProviderRouter 维护注册表与辅助 provider 的能力路由，single/selectable 两种构造，resolve 按目标选择 provider 并解析分析画像，附唯一性与不相交断言。",
+     "type": "file",
+     "degree": 36
+    },
+    {
+     "id": "file:src/application/BrowserObservationService.ts",
+     "name": "BrowserObservationService.ts",
+     "filePath": "src/application/BrowserObservationService.ts",
+     "summary": "浏览器观测应用服务：八个导出函数逐一包装 BrowserObservationPort 能力，统一 requireBrowser 就绪校验、Result 包装与 createBrowserEvidence 证据生成。",
+     "type": "file",
+     "degree": 35
+    },
+    {
+     "id": "file:src/application/javascript/JavaScriptArtifactPathResolution.ts",
+     "name": "JavaScriptArtifactPathResolution.ts",
+     "filePath": "src/application/javascript/JavaScriptArtifactPathResolution.ts",
+     "summary": "实现 Node 风格的 artifact 内路径解析器 resolveArtifactPathByContext：处理 package-entrypoint/module-specifier/html-reference/url-reference 等上下文，覆盖 package.json exports 条件展开、裸",
+     "type": "file",
+     "degree": 35
+    },
+    {
+     "id": "file:src/application/ReferenceSourceImport.ts",
+     "name": "ReferenceSourceImport.ts",
+     "filePath": "src/application/ReferenceSourceImport.ts",
+     "summary": "参考源码导入编排入口：将 caller 选定的目录确定性导入为已提交的 HistoricalSourceGraph——并行读取目录树与 VCS 元数据、应用排除/秘密策略、解析条目与 import 关系、去重排序后建图；全程不执行源码、hooks、git 子进程或网络请求，且支持 AbortSignal 中止。",
+     "type": "file",
+     "degree": 35
+    },
+    {
+     "id": "file:src/application/javascript/JavaScriptSemanticGraphBuilder.ts",
+     "name": "JavaScriptSemanticGraphBuilder.ts",
+     "filePath": "src/application/javascript/JavaScriptSemanticGraphBuilder.ts",
+     "summary": "语义图构建核心：buildJavaScriptSemanticGraph 驱动 createJavaScriptSemanticGraphProjection 逐文件投影（绑定、定义/引用、调用、返回/调用站点），再汇聚全部专题投影（values/objects/flow/events/timers/child-pro",
+     "type": "file",
+     "degree": 34
+    },
+    {
+     "id": "file:src/application/process/ProcessCli.ts",
+     "name": "ProcessCli.ts",
+     "filePath": "src/application/process/ProcessCli.ts",
+     "summary": "进程工作流的 CLI 适配层：读取 scenario/evidence/traceSpec JSON 文件（严格 UTF-8 解码）、zod 校验后执行捕获与双证据对比，并把错误投影为带 category 的 ProcessCliFailure 安全输出。",
+     "type": "file",
+     "degree": 32
+    },
+    {
+     "id": "file:src/application/EnhancedTools.ts",
+     "name": "EnhancedTools.ts",
+     "filePath": "src/application/EnhancedTools.ts",
+     "summary": "EnhancedTools 适配器类：把 zod 校验后的增强工具调用（函数档案、ObjC/Swift 符号发现、native dispatch/value trace 等）分派到 AnalysisOperationPort，统一错误投影与取消处理。",
+     "type": "file",
+     "degree": 30
+    },
+    {
+     "id": "file:src/application/javascript/JavaScriptApplicationEvidenceGraph.ts",
+     "name": "JavaScriptApplicationEvidenceGraph.ts",
+     "filePath": "src/application/javascript/JavaScriptApplicationEvidenceGraph.ts",
+     "summary": "自有应用图证据的登记与解析核心：模块级 ownedApplicationSources 注册表按 provider 记忆认证图，parseApplicationGraphEvidence 分派到 static/staticRuntime/managed 三类源并逐一 zod schema 严格校验。",
+     "type": "file",
+     "degree": 30
+    },
+    {
+     "id": "file:src/application/javascript/JavaScriptArtifactAnalysis.ts",
+     "name": "JavaScriptArtifactAnalysis.ts",
+     "filePath": "src/application/javascript/JavaScriptArtifactAnalysis.ts",
+     "summary": "JavaScript 制品静态分析引擎：逐文件解析源码（AST+语义 IR）、package.json、HTML script、source map（嵌套 sections 摊平与 originals 内容提取），聚合 findings/limitations，支持协作式逐文件步进与语义投影替换。",
+     "type": "file",
+     "degree": 30
+    },
+    {
+     "id": "file:src/application/LinuxHopper.ts",
+     "name": "LinuxHopper.ts",
+     "filePath": "src/application/LinuxHopper.ts",
+     "summary": "Hopper Disassembler 官方 Linux 包的受控安装器：解析 /etc/os-release 识别发行版家族（deb/rpm/arch），从 hopperapp.com 下载预登记 sha1/长度的包，生成 apt/dnf/pacman 命令安装并校验 launcher sha256 与动态库可用性；",
+     "type": "file",
+     "degree": 30
+    },
+    {
+     "id": "file:src/application/SupportedClients.ts",
+     "name": "SupportedClients.ts",
+     "filePath": "src/application/SupportedClients.ts",
+     "summary": "受支持 agent 客户端注册表：Claude Code/Desktop、Codex、Cursor、Gemini CLI、Windsurf、Devin、OpenCode、Antigravity、Copilot CLI、Grok 等的平台相关配置路径、标记目录与配置格式（json/toml/grok/opencode）解",
+     "type": "file",
+     "degree": 29
+    },
+    {
+     "id": "file:src/application/InvestigationProviders.ts",
+     "name": "InvestigationProviders.ts",
+     "filePath": "src/application/InvestigationProviders.ts",
+     "summary": "集中定义 REA 全部内部 provider 身份常量（组合 workflow、artifact graph、托管 .NET 静态分析、Apple/Android/JavaScript 应用、三类比较、变更行为、调用路径、静态-运行时关联、重构验证等 17 个），并提供 workflowAnalysisProfile ",
+     "type": "file",
+     "degree": 28
+    }
+   ]
+  },
+  {
+   "id": "layer:browser-js-observation",
+   "name": "浏览器与 JS 运行时观测层",
+   "description": "Playwright/CDP 浏览器观测与场景捕获 diff、V8 Inspector 端点授权、source map codec 子进程与 Wakaru JavaScript 恢复，覆盖网页/Electron 运行时证据采集。",
+   "totalNodes": 130,
+   "representatives": [
+    {
+     "id": "file:src/browser/CdpBrowserProvider.ts",
+     "name": "CdpBrowserProvider.ts",
+     "filePath": "src/browser/CdpBrowserProvider.ts",
+     "summary": "基于 Chrome DevTools Protocol 的被动浏览器观察 provider，实现 BrowserObservationPort：目标列举、页面检查、bundle 分析（含 source map）、会话观察、WebMCP 工具发现、截图与截图/捕获对比九大能力，统一 CDP 域启用/清理与错误包装。",
+     "type": "file",
+     "degree": 64
+    },
+    {
+     "id": "file:src/inspector/V8InspectorProvider.ts",
+     "name": "V8InspectorProvider.ts",
+     "filePath": "src/inspector/V8InspectorProvider.ts",
+     "summary": "被动 V8 Inspector provider 主体：实现 JavaScriptRuntimeObservationPort，经 CDP WebSocket 连接目标、订阅 Debugger 事件采集 script/context，受 payload 与保留元数据字节预算约束，并负责连接清理与错误归一。",
+     "type": "file",
+     "degree": 43
+    },
+    {
+     "id": "file:src/browser/CdpConnection.ts",
+     "name": "CdpConnection.ts",
+     "filePath": "src/browser/CdpConnection.ts",
+     "summary": "CDP WebSocket 连接封装：命令收发与 pending promise 管理（支持 AbortSignal）、事件/断连/协议失败三类监听器、优雅 close 与超时 terminate，二进制帧统一转文本解析。",
+     "type": "file",
+     "degree": 39
+    },
+    {
+     "id": "file:src/browser/WebSourceMapFetcher.ts",
+     "name": "WebSourceMapFetcher.ts",
+     "filePath": "src/browser/WebSourceMapFetcher.ts",
+     "summary": "Web source map 抓取与规范化器：在 30s 超时/64MiB 响应/输出字节预算内抓取白名单 origin 的 source map（手动跟随已批准重定向、有界流式读取），解码校验后把 sources/mappings/原始模块依赖边（经 Babel AST 分析 import/require）规范化为带",
+     "type": "file",
+     "degree": 39
+    },
+    {
+     "id": "file:src/browser/CdpEndpoint.ts",
+     "name": "CdpEndpoint.ts",
+     "filePath": "src/browser/CdpEndpoint.ts",
+     "summary": "CDP 端点发现核心：读取 /json/version 与 /json/list（不跟随重定向），用 zod 边界 schema 验证响应，并校验 WebSocket 调试 URL 的 loopback 绑定与 browser/page 作用域。",
+     "type": "file",
+     "degree": 37
+    },
+    {
+     "id": "file:src/browser/CdpCaptureValues.ts",
+     "name": "CdpCaptureValues.ts",
+     "filePath": "src/browser/CdpCaptureValues.ts",
+     "summary": "CDP 值访问与观察辅助底座：record/string/number 的防御式读取、HTTP URL 判定、allowedOrigins 内 URL 清洗（allowedSanitizedUrl）、web 文本 artifact 构造与可取消的分段延迟。",
+     "type": "file",
+     "degree": 36
+    },
+    {
+     "id": "file:src/browser/CdpCaptureEventHandlers.ts",
+     "name": "CdpCaptureEventHandlers.ts",
+     "filePath": "src/browser/CdpCaptureEventHandlers.ts",
+     "summary": "CDP 事件处理器集合（593 行核心）：脚本解析（含 source map 提取与元数据字节预算）、网络请求/响应/加载完成（含畸形重定向证据保留）、console 调用、WebSocket 创建与帧、frame 导航与执行上下文生命周期，全部按 allowedOrigins 过滤并登记 completeness 排",
+     "type": "file",
+     "degree": 35
+    },
+    {
+     "id": "file:src/browser/execution/CdpWebRuntimeProvider.ts",
+     "name": "CdpWebRuntimeProvider.ts",
+     "filePath": "src/browser/execution/CdpWebRuntimeProvider.ts",
+     "summary": "实现 WebRuntimePort 的 CDP provider 门面：observeExecution 与 inspectEventListeners 共用「开会话→采集→schema 校验→确认清理」骨架，全部异常折叠为 AnalysisError Result。",
+     "type": "file",
+     "degree": 32
+    },
+    {
+     "id": "file:src/browser/CdpPageCapture.ts",
+     "name": "CdpPageCapture.ts",
+     "filePath": "src/browser/CdpPageCapture.ts",
+     "summary": "页面捕获主编排：授权观察窗口→收集 JSON 响应体→采集 frames/DOM/可访问性/脚本/worker/存储，最后归一化为 WebPageInspection 证据对象（绝不执行页面 JavaScript）。",
+     "type": "file",
+     "degree": 31
+    },
+    {
+     "id": "file:src/browser/CdpCaptureDocuments.ts",
+     "name": "CdpCaptureDocuments.ts",
+     "filePath": "src/browser/CdpCaptureDocuments.ts",
+     "summary": "CDP 文档捕获核心：walkFrameTrees 遍历任意深度的 frame 树并按 origin 过滤，captureDom 解析扁平化 DOM 快照为节点+索引字符串表并提取元数据（title/canonical/agent hint），captureAccessibility 将无障碍树转为带状态与字节预算的紧",
+     "type": "file",
+     "degree": 30
+    },
+    {
+     "id": "file:src/javascript/recovery/RecoveryFiles.ts",
+     "name": "RecoveryFiles.ts",
+     "filePath": "src/javascript/recovery/RecoveryFiles.ts",
+     "summary": "recovery 输入/产物文件的受控读写层：流式扫描+sha256 指纹、字节上限、输入快照落盘、目录清单（拒绝符号链接）与取消/截止检查。",
+     "type": "file",
+     "degree": 26
+    },
+    {
+     "id": "file:src/browser/CdpElectronInspection.ts",
+     "name": "CdpElectronInspection.ts",
+     "filePath": "src/browser/CdpElectronInspection.ts",
+     "summary": "Electron 页面检查编排：授权初始 frame（file:// 范围校验）、启用 Debugger/Page/Runtime 捕获域、稳定窗口期后捕获帧/资源/DOM/脚本/workers，最后断言主框架未漂移并输出完整性快照与进度报告。",
+     "type": "file",
+     "degree": 25
+    },
+    {
+     "id": "file:src/browser/CdpWebMcpDiscovery.ts",
+     "name": "CdpWebMcpDiscovery.ts",
+     "filePath": "src/browser/CdpWebMcpDiscovery.ts",
+     "summary": "WebMCP 工具被动发现：启用 WebMCP.enable 后仅消费 toolsAdded/toolsRemoved 重放，维护 frame 作用域（含瞬态 about:blank 帧处理）并将页面声明的工具元数据标记为 untrusted。",
+     "type": "file",
+     "degree": 25
+    },
+    {
+     "id": "file:src/browser/CdpCaptureEventHelpers.ts",
+     "name": "CdpCaptureEventHelpers.ts",
+     "filePath": "src/browser/CdpCaptureEventHelpers.ts",
+     "summary": "事件处理辅助函数库：主框架导航判定、JSON content-type/media-type 判定、base64 解码、console 参数的原始值提取、URL 排除原因分类与执行上下文键构造。",
+     "type": "file",
+     "degree": 24
+    },
+    {
+     "id": "file:src/browser/CdpElectronProvider.ts",
+     "name": "CdpElectronProvider.ts",
+     "filePath": "src/browser/CdpElectronProvider.ts",
+     "summary": "被动 Electron 观察 provider：通过 loopback CDP 端点枚举本地 file:// 页面目标并委托 CdpElectronInspection 完成页面检查，是 ElectronObservationPort 的 CDP 适配实现。",
+     "type": "file",
+     "degree": 22
+    },
+    {
+     "id": "file:src/browser/PlaywrightBrowserScenarioProvider.ts",
+     "name": "PlaywrightBrowserScenarioProvider.ts",
+     "filePath": "src/browser/PlaywrightBrowserScenarioProvider.ts",
+     "summary": "Playwright 浏览器场景捕获 AnalysisProvider 实现：惰性动态 import PlaywrightScenarioSession，按步骤执行 scenario 动作并采集 artifacts，逐步与全局汇总 completeness，输出经 browserScenarioCaptureSchem",
+     "type": "file",
+     "degree": 22
+    },
+    {
+     "id": "file:src/browser/CdpCaptureEvents.ts",
+     "name": "CdpCaptureEvents.ts",
+     "filePath": "src/browser/CdpCaptureEvents.ts",
+     "summary": "CDP 捕获事件聚合器（状态机核心）：持脚本/网络/console/websocket/响应元数据等全部捕获状态，ingest 将原始 CDP 事件分派到对应 handler，并管理脚本元数据字节预算、授权 frame 生命周期与响应 body 拉取清单。",
+     "type": "file",
+     "degree": 21
+    },
+    {
+     "id": "file:src/browser/CdpCaptureStorageFingerprints.ts",
+     "name": "CdpCaptureStorageFingerprints.ts",
+     "filePath": "src/browser/CdpCaptureStorageFingerprints.ts",
+     "summary": "存储指纹引擎（498 行）：对 cookies、IndexedDB（schema+记录）、CacheStorage 条目生成稳定规范化值（键排序、剔除 objectId/customPreview）后取 sha256 摘要，只保留指纹不落原始敏感值，并跟踪规范化完整度。",
+     "type": "file",
+     "degree": 21
+    },
+    {
+     "id": "file:src/browser/execution/CdpRuntimeSession.ts",
+     "name": "CdpRuntimeSession.ts",
+     "filePath": "src/browser/execution/CdpRuntimeSession.ts",
+     "summary": "CDP 运行时会话的所有权与生命周期：endpoint 发现、target 授权、帧树校验、每条命令独立超时、域启用记账与逆序清理，清理失败聚合为 ProviderCleanupError。",
+     "type": "file",
+     "degree": 21
+    },
+    {
+     "id": "file:src/browser/PlaywrightElectronActiveProvider.ts",
+     "name": "PlaywrightElectronActiveProvider.ts",
+     "filePath": "src/browser/PlaywrightElectronActiveProvider.ts",
+     "summary": "Playwright Electron 主动观测 AnalysisProvider：launch 受控 Electron 进程（白名单环境变量、runId token、进程谱系观察），执行动作前后读取应用状态并投影，失败与取消路径都保证 cleanupElectronProcesses 按 Windows 进程树/Un",
+     "type": "file",
+     "degree": 20
+    },
+    {
+     "id": "file:src/browser/history/HistoricalCaptureDecoder.ts",
+     "name": "HistoricalCaptureDecoder.ts",
+     "filePath": "src/browser/history/HistoricalCaptureDecoder.ts",
+     "summary": "历史捕获解码编排器：选择适配器→快照 artifact→私有运行时根写请求→runOwnedCommand（剥离 NODE_OPTIONS）→回复 schema 校验与解码器身份核对→统一脱敏错误与独立清理。",
+     "type": "file",
+     "degree": 19
+    },
+    {
+     "id": "file:src/browser/assets/WebArtifactReads.ts",
+     "name": "WebArtifactReads.ts",
+     "filePath": "src/browser/assets/WebArtifactReads.ts",
+     "summary": "Web artifact 读取基础设施：严格 UTF-8 解码（保留 BOM 供摘要验证）、带字节预算的稳定 JSON 读取，以及把格式/完整性/IO/取消错误映射为分析层 AnalysisError 的错误翻译器。",
+     "type": "file",
+     "degree": 18
+    },
+    {
+     "id": "file:src/browser/CdpObservationSession.ts",
+     "name": "CdpObservationSession.ts",
+     "filePath": "src/browser/CdpObservationSession.ts",
+     "summary": "用户行为观察会话：附加到已授权主框架后启用 Page/Network 事件，以 TimelineCapture 累积导航/重定向/生命周期时间线，越权导航立即终止并抹除 URL。",
+     "type": "file",
+     "degree": 18
+    },
+    {
+     "id": "file:src/browser/PlaywrightScenarioSession.ts",
+     "name": "PlaywrightScenarioSession.ts",
+     "filePath": "src/browser/PlaywrightScenarioSession.ts",
+     "summary": "Playwright 场景会话门面：open 打开浏览器（storage seeds 注入、service worker 屏蔽、初始导航），perform/capture/currentUrl 等接口全部走 withPlaywrightExecutionBoundary 边界，聚合事件采集与 artifacts 采集，",
+     "type": "file",
+     "degree": 18
+    },
+    {
+     "id": "file:src/browser/assets/LocalWebScriptArtifacts.ts",
+     "name": "LocalWebScriptArtifacts.ts",
+     "filePath": "src/browser/assets/LocalWebScriptArtifacts.ts",
+     "summary": "实现 WebScriptArtifactPort：读取导出 manifest、按索引选中脚本、路径规范化并断言仍在根内，用 readStableArtifact 对照 manifest 声明的 sha256 验证源字节。",
+     "type": "file",
+     "degree": 17
+    }
+   ]
+  },
+  {
+   "id": "layer:analysis-providers",
+   "name": "分析 Provider 层",
+   "description": "各逆向引擎的 AnalysisProvider 适配：Ghidra/Hopper/IDA 反汇编会话、Apple Mach-O/ObjC dispatch 原生解析、.NET 托管静态分析、EVM/firmware/Android 专用引擎，以及 artifacts 工件读取与参考源码树安全读取。",
+   "totalNodes": 234,
+   "representatives": [
+    {
+     "id": "file:src/native/NativeMacOSProvider.ts",
+     "name": "NativeMacOSProvider.ts",
+     "filePath": "src/native/NativeMacOSProvider.ts",
+     "summary": "native-macos provider 主体：NativeMacOSProvider 实现 AnalysisProvider（identity/capabilities/createClient），NativeMacOSClient 分派 health、inspect_native_dispatch_metadat",
+     "type": "file",
+     "degree": 54
+    },
+    {
+     "id": "file:src/artifacts/ArtifactProvider.ts",
+     "name": "ArtifactProvider.ts",
+     "filePath": "src/artifacts/ArtifactProvider.ts",
+     "summary": "工件分析域的 AnalysisProvider 适配器入口：ArtifactProvider 暴露 identity/capabilities/createClient，ArtifactClient.execute 按 operation 分派到 Interface Builder 解析、KeyedArchive 检查",
+     "type": "file",
+     "degree": 46
+    },
+    {
+     "id": "file:src/artifacts/ArtifactReader.ts",
+     "name": "ArtifactReader.ts",
+     "filePath": "src/artifacts/ArtifactReader.ts",
+     "summary": "定义归档中立的读取器契约：ArtifactEntry 条目元数据接口、ArtifactReader 只读适配器接口（entries/open/provenance/close）与统一的 ArtifactReaderFailure 类型化错误，Reader 适配器从不自选输出路径。",
+     "type": "file",
+     "degree": 43
+    },
+    {
+     "id": "file:src/hopper/HopperClient.ts",
+     "name": "HopperClient.ts",
+     "filePath": "src/hopper/HopperClient.ts",
+     "summary": "Hopper 桥客户端：HopperClient 拥有一条 NDJSON-over-unix-socket 认证会话——私有目录加随机 bearer token、数字 id 请求关联、run lineage 与操作健康度分级，close 走完整清理管线并仅终止显式标记为 owned 的启动进程。",
+     "type": "file",
+     "degree": 43
+    },
+    {
+     "id": "file:src/dotnet/ManagedPe.fixture.ts",
+     "name": "ManagedPe.fixture.ts",
+     "filePath": "src/dotnet/ManagedPe.fixture.ts",
+     "summary": "测试用托管 PE 镜像工厂：StringHeap/BlobHeap 累积堆内容，按 ECMA-335 逐表构造 Module/TypeDef/MethodDef/ImplMap 等行与 metadata root/tables 流，拼装出含可选畸形注入（坏行、重叠 ReadyToRun 目录）的完整 PE 镜像供测试消",
+     "type": "file",
+     "degree": 41
+    },
+    {
+     "id": "file:src/artifacts/inventory/ArtifactGraphConstruction.ts",
+     "name": "ArtifactGraphConstruction.ts",
+     "filePath": "src/artifacts/inventory/ArtifactGraphConstruction.ts",
+     "summary": "工件图构建原语集：把扫描 occurrences 组装为根/目录/工件节点与父子边（createRootNode/materializeDirectoryNodes/createArtifactEdges 等 12 个导出原语），classifyArtifactPath/Content 按扩展名与内容魔数分类。",
+     "type": "file",
+     "degree": 34
+    },
+    {
+     "id": "file:src/ghidra/GhidraLauncher.ts",
+     "name": "GhidraLauncher.ts",
+     "filePath": "src/ghidra/GhidraLauncher.ts",
+     "summary": "Ghidra analyzeHeadless 进程启动器：创建隔离运行时目录树（home/temp/cache/config/data）、写 launch manifest、经 ghidraJavaLaunch 得到命令行后 spawn 受管进程；Windows 走 cmd.exe 批处理引号与进程树清理。",
+     "type": "file",
+     "degree": 34
+    },
+    {
+     "id": "file:src/native/LldbCallTracer.ts",
+     "name": "LldbCallTracer.ts",
+     "filePath": "src/native/LldbCallTracer.ts",
+     "summary": "通过 xcrun 定位 LLDB 并在 PrivateRuntimeRoot 中运行自带 bridge 脚本，对 Mach-O 目标设断点采集函数调用入口（参数寄存器、Objective-C receiver、backtrace），管理进程所有权、deadline 与输出预算，产出 NativeCallTrace 或降",
+     "type": "file",
+     "degree": 34
+    },
+    {
+     "id": "file:src/artifacts/apple/KeyedArchiveReader.ts",
+     "name": "KeyedArchiveReader.ts",
+     "filePath": "src/artifacts/apple/KeyedArchiveReader.ts",
+     "summary": "NSKeyedArchiver 归档检查：decodeKeyedArchiveBytes 解码二进制/XML plist 并投影 $objects UID 图（经 PlistNumberLiterals 保留数字字面量原始形态），inspectBundleKeyedArchive 从 bundle 定位条目、流式读取并",
+     "type": "file",
+     "degree": 33
+    },
+    {
+     "id": "file:src/dotnet/ManagedMetadataHeaps.ts",
+     "name": "ManagedMetadataHeaps.ts",
+     "filePath": "src/dotnet/ManagedMetadataHeaps.ts",
+     "summary": "元数据堆读取原语库：MetadataRowCursor 提供带边界校验的定宽行游标，readMetadataString/Blob/Guid 解码 #Strings/#Blob/#GUID 三堆，另有 metadataToken、coded token 解码、sha256 与 strong name token 工具。",
+     "type": "file",
+     "degree": 32
+    },
+    {
+     "id": "file:src/hopper/BridgeLauncher.ts",
+     "name": "BridgeLauncher.ts",
+     "filePath": "src/hopper/BridgeLauncher.ts",
+     "summary": "Hopper 桥启动器：HopperApplicationLauncher 通过 Hopper 官方 CLI 注入 REA 自有的 Python bridge 引导脚本（嵌入 socket/token/run-id 常量后 exec bridge 脚本），管理目标租约、Mach-O thin 镜像准备、Linux 验证",
+     "type": "file",
+     "degree": 32
+    },
+    {
+     "id": "file:src/ghidra/GhidraClient.ts",
+     "name": "GhidraClient.ts",
+     "filePath": "src/ghidra/GhidraClient.ts",
+     "summary": "Ghidra Java bridge 核心客户端：拥有一个经认证的私有 headless Ghidra 会话——私有 Unix socket 传输、请求队列、行式响应 buffer/router、启动握手、鉴权 token 保留与诊断脱敏、进程监督、运行 lineage 与关闭清算，mutation 权威绑定到 tra",
+     "type": "file",
+     "degree": 31
+    },
+    {
+     "id": "file:src/dotnet/ManagedNativeBoundaryHelpers.ts",
+     "name": "ManagedNativeBoundaryHelpers.ts",
+     "filePath": "src/dotnet/ManagedNativeBoundaryHelpers.ts",
+     "summary": "原生边界解析辅助库：解析 ModuleRef/Field/MethodDef/ImplMap 表还原 P/Invoke 导入（charSet、调用约定、bestFit 等标志解码），nativeImplementations 结合 implFlags 分类 native/managed 边界，buildNativeBo",
+     "type": "file",
+     "degree": 30
+    },
+    {
+     "id": "file:src/dotnet/ManagedStaticProvider.ts",
+     "name": "ManagedStaticProvider.ts",
+     "filePath": "src/dotnet/ManagedStaticProvider.ts",
+     "summary": "托管静态分析 provider：ManagedStaticProvider 实现 provider 工厂接口，ManagedStaticClient.execute 按 MANAGED_TOOL_CONTRACTS 分派 artifact/member/native-boundary 三类操作（zod 校验入参、快照 ",
+     "type": "file",
+     "degree": 30
+    },
+    {
+     "id": "file:src/dotnet/ManagedMemberInspector.ts",
+     "name": "ManagedMemberInspector.ts",
+     "filePath": "src/dotnet/ManagedMemberInspector.ts",
+     "summary": "从本地字节检查托管元数据成员与方法体（不加载目标代码）：inspectManagedMembersBytes 解析类型/字段/方法/MemberRef 与 call_edges/field_accesses，标注 build-local token 身份域（绑定 artifact SHA-256 与 MVID）；CLI",
+     "type": "file",
+     "degree": 29
+    },
+    {
+     "id": "file:src/dotnet/ManagedMetadataLayout.ts",
+     "name": "ManagedMetadataLayout.ts",
+     "filePath": "src/dotnet/ManagedMetadataLayout.ts",
+     "summary": "CLI 元数据布局解析：读取 metadata root 的流头（#Strings/#GUID/#Blob/#~），解析 tables header 的 valid 位图与行数，按堆索引宽度计算各表行大小，产出供行级解码使用的 ManagedMetadataLayout 上下文。",
+     "type": "file",
+     "degree": 28
+    },
+    {
+     "id": "file:src/ghidra/extensions/GhidraExtensions.ts",
+     "name": "GhidraExtensions.ts",
+     "filePath": "src/ghidra/extensions/GhidraExtensions.ts",
+     "summary": "Ghidra 可选扩展机制核心：定义扩展 JAR 的 zod schema（绝对路径+sha256+entry_class+integration_api 1）与共享结果 envelope，声明可独立替换的 GhidraExtensionAdapter 注册契约（当前注册 nativeaot），并有界读取 JAR、解析",
+     "type": "file",
+     "degree": 28
+    },
+    {
+     "id": "file:src/ghidra/GhidraProviderClient.ts",
+     "name": "GhidraProviderClient.ts",
+     "filePath": "src/ghidra/GhidraProviderClient.ts",
+     "summary": "Ghidra provider 客户端工厂：前置条件检查（安装巡检、Windows authority）、extension 校验、经 GhidraClient 与 launcher 启动会话；请求管线做输入/结果 zod 解析与 load-image attestation，错误统一投影为会话错误。",
+     "type": "file",
+     "degree": 28
+    },
+    {
+     "id": "file:src/ghidra/GhidraInstallation.ts",
+     "name": "GhidraInstallation.ts",
+     "filePath": "src/ghidra/GhidraInstallation.ts",
+     "summary": "Ghidra 安装巡检核心：解析安装坐标（installDir、analyzeHeadless、native decompiler 可执行文件），执行 platform/architecture/version/headless/native_decompiler/java 检查并派生 GhidraJavaEnviro",
+     "type": "file",
+     "degree": 28
+    },
+    {
+     "id": "file:src/hopper/HopperCleanup.ts",
+     "name": "HopperCleanup.ts",
+     "filePath": "src/hopper/HopperCleanup.ts",
+     "summary": "Hopper 会话清理管线：按 shutdown 请求（带 shutdown_document 回退）→ 释放传输 → 停止 owned 进程 → 关闭运行时根的顺序收尾，未确认的资源一律保留并记入 issues，最终产出带诊断的清理结果。",
+     "type": "file",
+     "degree": 28
+    },
+    {
+     "id": "file:src/artifacts/inventory/ArtifactInventory.ts",
+     "name": "ArtifactInventory.ts",
+     "filePath": "src/artifacts/inventory/ArtifactInventory.ts",
+     "summary": "工件清单门面：inventoryArtifact/scanArtifactInventory 包装 scanCanonical 扫描并经 artifactInventoryResultSchema 校验，同时 re-export 清单相关类型。",
+     "type": "file",
+     "degree": 27
+    },
+    {
+     "id": "file:src/artifacts/apple/MachoImage.fixture.ts",
+     "name": "MachoImage.fixture.ts",
+     "filePath": "src/artifacts/apple/MachoImage.fixture.ts",
+     "summary": "Mach-O 测试夹具工厂：LC/CPU/FILE_TYPE 常量表加 dylib/rpath/dyld 环境变量/代码签名/build version 等 load command 构造器，可拼装单架构 machoImage 与 fatImage 二进制及内存 reader。",
+     "type": "file",
+     "degree": 26
+    },
+    {
+     "id": "file:src/dotnet/ManagedMemberInspectorCore.ts",
+     "name": "ManagedMemberInspectorCore.ts",
+     "filePath": "src/dotnet/ManagedMemberInspectorCore.ts",
+     "summary": ".NET 元数据成员巡检核心：解析 TypeDef 表构造类型区间与 declaringType 查表，解码 ECMA-335 压缩整数与 Field/MethodDef/MemberRef 签名 blob，产出带 sha256 指纹的签名摘要。",
+     "type": "file",
+     "degree": 26
+    },
+    {
+     "id": "file:src/hopper/HopperProvider.ts",
+     "name": "HopperProvider.ts",
+     "filePath": "src/hopper/HopperProvider.ts",
+     "summary": "Hopper 分析 provider 装配：HopperProvider 实现 AnalysisProviderCandidate——平台与 launcher 可执行性探测、目标 kind/format 支持矩阵（DOS 让位 Ghidra）、分析档案解析，createClient 装配 HopperApplicati",
+     "type": "file",
+     "degree": 26
+    },
+    {
+     "id": "file:src/native/CommandRunner.ts",
+     "name": "CommandRunner.ts",
+     "filePath": "src/native/CommandRunner.ts",
+     "summary": "本地原生工具命令执行器：XcrunCommandRunner 仅允许白名单工具，resolveXcrunTool 经 xcrun --find 定位并 realpath+sha256 固定可执行身份，captureProcess 以 OwnedCommand 托管进程捕获 stdout/stderr（64MiB 输出预",
+     "type": "file",
+     "degree": 26
+    }
+   ]
+  },
+  {
+   "id": "layer:process-infra",
+   "name": "受管进程与宿主基础设施层",
+   "description": "owned process 沙箱与进程观测基础设施：spawnOwnedProviderProcess 资源上限、execFileOutput 无 shell 执行、进程捕获归一化，以及 Windows PE 装载、Job Object 属主进程与私有运行时目录。",
+   "totalNodes": 49,
+   "representatives": [
+    {
+     "id": "file:src/process/ProcessOwnership.ts",
+     "name": "ProcessOwnership.ts",
+     "filePath": "src/process/ProcessOwnership.ts",
+     "summary": "进程归属核心（1002 行）：定义 OwnedProcessGroup/ProcessTableEntry 等类型与 POSIX 进程组清理契约——清理前必须用 REA_PROCESS_RUN_ID 令牌与启动身份双重验证每个存活成员，身份存疑一律 fail-closed 拒绝发信号；Windows 降级为 taskk",
+     "type": "file",
+     "degree": 63
+    },
+    {
+     "id": "file:src/process/capture/ProcessCaptureLifecycle.ts",
+     "name": "ProcessCaptureLifecycle.ts",
+     "filePath": "src/process/capture/ProcessCaptureLifecycle.ts",
+     "summary": "进程捕获生命周期核心（本批最大文件）：观察缓冲、可执行文件前后身份与哈希观察、run manifest 承诺摘要、终端退出等待与超时/空闲超时、进程组沉降观察、资源释放与清理报告、部分观察恢复、最终结果解析。",
+     "type": "file",
+     "degree": 56
+    },
+    {
+     "id": "file:src/process/ProcessOwnershipObservation.ts",
+     "name": "ProcessOwnershipObservation.ts",
+     "filePath": "src/process/ProcessOwnershipObservation.ts",
+     "summary": "进程归属观察层（473 行）：createSystemProcessOwnershipHost 构建平台宿主（POSIX ps 表 + Linux /proc 身份 + Darwin Swift 令牌读取器），observeOwnedProcessGroup/Lineage 在不发信号的前提下观察组存活与世系；身份存疑",
+     "type": "file",
+     "degree": 55
+    },
+    {
+     "id": "file:src/process/ProviderProcess.ts",
+     "name": "ProviderProcess.ts",
+     "filePath": "src/process/ProviderProcess.ts",
+     "summary": "长生命周期 provider 进程生成与监督（552 行）：spawnOwnedProviderProcess 注入 REA_PROCESS_RUN_ID 令牌并生成归属进程（Windows 走 WindowsOwnedProcess，POSIX detached 进程组）；ProviderProcessSupervi",
+     "type": "file",
+     "degree": 55
+    },
+    {
+     "id": "file:src/process/capture/ProcessHarness.ts",
+     "name": "ProcessHarness.ts",
+     "filePath": "src/process/capture/ProcessHarness.ts",
+     "summary": "进程捕获主编排器：captureProcessScenario 从能力探测、场景路径解析、PTY 启动、帧捕获/交互调度/进程采样，到沉降观察、资源释放与结果解析的完整流水线；启动失败走 cleanupFailedStartup 保证已启动资源被回收。",
+     "type": "file",
+     "degree": 41
+    },
+    {
+     "id": "file:src/process/PrivateRuntimeRoot.ts",
+     "name": "PrivateRuntimeRoot.ts",
+     "filePath": "src/process/PrivateRuntimeRoot.ts",
+     "summary": "provider 私有运行时根目录：Windows 走 WindowsPrivateRuntime（DACL 隔离），POSIX 用 mkdtemp + chmod 0700；privateRuntimeRootCapability 报告平台可用性与安全证明（posix-mode-0700 / native-autho",
+     "type": "file",
+     "degree": 37
+    },
+    {
+     "id": "file:src/process/ExecFileOutput.ts",
+     "name": "ExecFileOutput.ts",
+     "filePath": "src/process/ExecFileOutput.ts",
+     "summary": "无 shell 的子进程执行封装：execFileOutput 以 UTF-8 捕获完整输出并放宽 maxBuffer 默认值；execFileOutputFailure 从失败原因中反射提取 stdout/stderr/code/signal/killed 供诊断保留。",
+     "type": "file",
+     "degree": 21
+    },
+    {
+     "id": "file:src/process/capture/ProcessSampling.ts",
+     "name": "ProcessSampling.ts",
+     "filePath": "src/process/capture/ProcessSampling.ts",
+     "summary": "进程树采样器：Linux 优先直读 /proc（stat/cmdline/task，64 并发批量 BFS），回退 ps 解析；startProcessSampler 以固定间隔采样、按观察 JSON 去重、限流并支持中止，并证明 forkpty 完成会话建立与 run token 安装。",
+     "type": "file",
+     "degree": 20
+    },
+    {
+     "id": "file:src/process/OwnedCommand.ts",
+     "name": "OwnedCommand.ts",
+     "filePath": "src/process/OwnedCommand.ts",
+     "summary": "短生命周期归属命令执行器：runOwnedCommand 以 ProviderProcessSupervisor 生成子进程、在截止期内收集完整输出，退出后强制清理进程组；失败分类为 cancelled/timeout/output-limit/process 并保留有界诊断。",
+     "type": "file",
+     "degree": 20
+    },
+    {
+     "id": "file:src/process/capture/ProcessCaptureError.ts",
+     "name": "ProcessCaptureError.ts",
+     "filePath": "src/process/capture/ProcessCaptureError.ts",
+     "summary": "受控进程捕获的类型化错误：继承 AnalysisError，携带 reason（capture_failed/cleanup_incomplete/cancelled）、cleanup 资源清单、执行失败摘要与部分观察（partialObservation），并提供非递归的领域中性失败描述与取消构造器。",
+     "type": "file",
+     "degree": 17
+    },
+    {
+     "id": "file:src/process/WindowsAuthority.ts",
+     "name": "WindowsAuthority.ts",
+     "filePath": "src/process/WindowsAuthority.ts",
+     "summary": "Windows 原生控制权威声明：windowsNativeCapabilities 委托 systemWindowsNativeLoader 报告 job_object_process_ownership/private_runtime_dacl/reparse_safe_path_admission 三项能力，绝不",
+     "type": "file",
+     "degree": 17
+    },
+    {
+     "id": "file:src/process/ProviderDeadline.ts",
+     "name": "ProviderDeadline.ts",
+     "filePath": "src/process/ProviderDeadline.ts",
+     "summary": "provider 启动握手截止期：ProviderStartupDeadline 是所有启动阶段共享的绝对截止（AbortController 自有信号 + 外部信号桥接，区分 cancelled/timeout），waitForAbortableDelay 提供可中止延时原语。",
+     "type": "file",
+     "degree": 15
+    },
+    {
+     "id": "file:src/process/DarwinProcessRunTokenReader.ts",
+     "name": "DarwinProcessRunTokenReader.ts",
+     "filePath": "src/process/DarwinProcessRunTokenReader.ts",
+     "summary": "macOS 进程归属读取器：用 xcrun swiftc 把 bridge/process/ProcessRunTokenReader.swift 编译到私有临时目录，再以子进程批量读取各 PID 的 REA_PROCESS_RUN_ID 环境令牌与进程启动身份；带编译共享、AbortSignal 取消与退出清理。",
+     "type": "file",
+     "degree": 15
+    },
+    {
+     "id": "file:src/process/capture/ProcessNormalization.ts",
+     "name": "ProcessNormalization.ts",
+     "filePath": "src/process/capture/ProcessNormalization.ts",
+     "summary": "场景归一化规则实现：把临时根/工作目录/可执行文件/文件系统观察路径替换为占位符，PID 令牌按真实 PID 集合边界替换，端口数字与自定义 pattern 一并归一，并对进程样本做同套投影。",
+     "type": "file",
+     "degree": 13
+    },
+    {
+     "id": "file:src/process/capture/FilesystemSnapshot.ts",
+     "name": "FilesystemSnapshot.ts",
+     "filePath": "src/process/capture/FilesystemSnapshot.ts",
+     "summary": "进程捕获的文件系统前后快照：hashFile 仅在打开前后 dev/ino/size/mtime/ctime 未变时计算哈希，snapshotRoots 按场景观察路径递归遍历（含符号链接身份校验），产出带截断标记的 FileState 列表。",
+     "type": "file",
+     "degree": 13
+    },
+    {
+     "id": "file:src/process/capture/ProcessHarness.test.ts",
+     "name": "ProcessHarness.test.ts",
+     "filePath": "src/process/capture/ProcessHarness.test.ts",
+     "summary": "ProcessHarness 端到端测试（515 行）：拒绝 legacy replay 输出、保留 Darwin 所有权编译前提、错误投影 schema、清理失败路径与部分观察恢复等。",
+     "type": "file",
+     "degree": 13
+    },
+    {
+     "id": "file:src/process/ProcessOwnershipProcessTree.ts",
+     "name": "ProcessOwnershipProcessTree.ts",
+     "filePath": "src/process/ProcessOwnershipProcessTree.ts",
+     "summary": "进程树纯函数工具：liveProcesses 过滤僵尸，descendantsOf 以 BFS 收集 launcher 后代（带环防护），selectCapturedProcessGroupIds 选出 PTY 根组与采样观察到的进程组。",
+     "type": "file",
+     "degree": 13
+    },
+    {
+     "id": "file:src/windows/WindowsNativeLoader.ts",
+     "name": "WindowsNativeLoader.ts",
+     "filePath": "src/windows/WindowsNativeLoader.ts",
+     "summary": "Windows 原生 addon 受信加载器：以 zod strictObject 锁定 manifest（rea-windows-x64.node、Node-API 8、abi 1）与 NTFS 文件身份 schema；加载前校验 sha256 与 PE32+ x64 头，返回带 native 操作句柄的 Windo",
+     "type": "file",
+     "degree": 13
+    },
+    {
+     "id": "file:src/process/capture/ProcessScenarioRuntimeValidation.ts",
+     "name": "ProcessScenarioRuntimeValidation.ts",
+     "filePath": "src/process/capture/ProcessScenarioRuntimeValidation.ts",
+     "summary": "场景运行时前置校验：realpath 解析工作目录并校验为目录，按 PATH 搜索解析可执行文件（保留调用方选择的符号链接），把 OS 错误码转成用户可读失败原因，并提供 assertNotCancelled 取消闸。",
+     "type": "file",
+     "degree": 12
+    },
+    {
+     "id": "file:src/process/capture/ProcessCaptureCapability.ts",
+     "name": "ProcessCaptureCapability.ts",
+     "filePath": "src/process/capture/ProcessCaptureCapability.ts",
+     "summary": "探测真实原生 PTY 接缝而非按 OS 名推断：win32 返回明确的不可用原因，其余平台加载 @lydell/node-pty 并试跑一个终端进程；把 MODULE_NOT_FOUND、NODE_MODULE_VERSION、ERR_DLOPEN_FAILED 等加载失败翻译成面向用户的重装指引。",
+     "type": "file",
+     "degree": 12
+    },
+    {
+     "id": "file:src/process/capture/ProcessCaptureJournal.ts",
+     "name": "ProcessCaptureJournal.ts",
+     "filePath": "src/process/capture/ProcessCaptureJournal.ts",
+     "summary": "进程捕获的观察序账本与交互调度：createProcessCaptureJournal 建立单调 capture_order 事件日志；scheduleScenarioInteractions 按 scenario.events 延时派发 write/resize/kill 并原子记录每次实际派发。",
+     "type": "file",
+     "degree": 11
+    },
+    {
+     "id": "file:src/windows/WindowsPrivateRuntime.ts",
+     "name": "WindowsPrivateRuntime.ts",
+     "filePath": "src/windows/WindowsPrivateRuntime.ts",
+     "summary": "Windows 私有运行时目录管理：WindowsPrivateRuntime 经 native authority 以私有 DACL 创建目录，提供 mkdir/writeFile/sha256 snapshot/readFile/close，全部操作返回经 zod 校验的 NTFS 身份观测；模块级 runtime",
+     "type": "file",
+     "degree": 11
+    },
+    {
+     "id": "file:src/process/ProcessOwnership.test.ts",
+     "name": "ProcessOwnership.test.ts",
+     "filePath": "src/process/ProcessOwnership.test.ts",
+     "summary": "归属进程组清理发现主测试（439 行）：组合 fixture host 验证 parseProcessEnvironment、selectCapturedProcessGroupIds、matchesOwnedProcessCommand 与清理发现逻辑。",
+     "type": "file",
+     "degree": 9
+    },
+    {
+     "id": "file:src/process/capture/ProcessTimer.ts",
+     "name": "ProcessTimer.ts",
+     "filePath": "src/process/capture/ProcessTimer.ts",
+     "summary": "进程捕获/回放端点私有的计时器原语：scheduleProcessDelay 将长等待切分为连续的 Node 定时器链，避免 32 位定时器上限缩短长延时；scheduleProcessInterval 提供可取消间隔。调度器可注入以支持确定性测试。",
+     "type": "file",
+     "degree": 9
+    },
+    {
+     "id": "file:src/windows/WindowsOwnedProcess.ts",
+     "name": "WindowsOwnedProcess.ts",
+     "filePath": "src/windows/WindowsOwnedProcess.ts",
+     "summary": "基于原生 Job Object 的 Windows 子进程封装：WindowsOwnedProcess 继承 EventEmitter，经 native authority 启动进程（killOnOwnerClose 保证属主退出即终止），以 PassThrough 暴露 stdout/stderr，支持 kill 与",
+     "type": "file",
+     "degree": 9
+    }
+   ]
+  },
+  {
+   "id": "layer:bridge-native",
+   "name": "Bridge 与原生插件层",
+   "description": "进程外引擎桥接脚本与原生扩展：Ghidra headless Java 扩展、pwntools/pwndbg/mitmproxy Python 桥、Hopper bridge，以及 Windows NAPI C++ 原生 authority 插件。",
+   "totalNodes": 29,
+   "representatives": [
+    {
+     "id": "file:bridge/ghidra/ReaGhidraBridge.java",
+     "name": "ReaGhidraBridge.java",
+     "filePath": "bridge/ghidra/ReaGhidraBridge.java",
+     "summary": "REA 打包的只读 Ghidra headless 桥（单类 3300 行）：读环境描述符后在 Unix socket（Windows 回环 TCP）上服务 29 个能力——内存读取、反编译、pcode 值流、跳转表与 API 边界推断、注释回写与交叉引用。",
+     "type": "file",
+     "degree": 89
+    },
+    {
+     "id": "file:bridge/hopper_bridge.py",
+     "name": "hopper_bridge.py",
+     "filePath": "bridge/hopper_bridge.py",
+     "summary": "运行在 Hopper 专用 Python 线程上的鉴权 REA 适配器：bootstrap 注入 REA_SOCKET/REA_TOKEN，HMAC 鉴权帧协议 + 方法白名单分发 + 能力可用性检查，提供与 Ghidra 桥对齐的过程/字符串/引用分析能力。",
+     "type": "file",
+     "degree": 58
+    },
+    {
+     "id": "file:bridge/native/rea_lldb_tracer.py",
+     "name": "rea_lldb_tracer.py",
+     "filePath": "bridge/native/rea_lldb_tracer.py",
+     "summary": "LLDB 追踪器：以 __lldb_init_module 挂接，trace() 主流程启动目标→建断点→采样寄存器/内存/动态类→经 _ObservationJournal 按字节预算写 JSON 行轨迹，_OutputPipe 捕获子进程 stdout。",
+     "type": "file",
+     "degree": 36
+    },
+    {
+     "id": "file:native/windows/src/filesystem.cc",
+     "name": "filesystem.cc",
+     "filePath": "native/windows/src/filesystem.cc",
+     "summary": "文件系统沙箱实现：localPath 只放行固定本地 NTFS 绝对路径并拒绝 reparse point/备用流/歧义组件，openFile 逐组件打开句柄把祖先目录钉死防删除替换；createRuntime 以专属 DACL 建立私有运行时目录，snapshot 用 NAPI async work + BCrypt",
+     "type": "file",
+     "degree": 25
+    },
+    {
+     "id": "file:bridge/pwntools/layout_impl.py",
+     "name": "layout_impl.py",
+     "filePath": "bridge/pwntools/layout_impl.py",
+     "summary": "pwntools ELF 布局检查实现：基于 pwnlib/pyelftools 提取 sections、symbols、relocations、segments、dynamic tags、interpreter 与 GOT/PLT 映射，所有定位都带 file_range/location 证据，末尾 exec de",
+     "type": "file",
+     "degree": 22
+    },
+    {
+     "id": "file:native/windows/src/authority.hpp",
+     "name": "authority.hpp",
+     "filePath": "native/windows/src/authority.hpp",
+     "summary": "Windows 原生模块的共享头文件（单一编译契约）：定义 Failure 异常、require 断言、Handle RAII 包装、Resource/File/Runtime/Process 多态资源类型，以及全部跨 .cc 文件的函数声明，是 addon/filesystem/process 三个翻译单元共用的中枢",
+     "type": "file",
+     "degree": 19
+    },
+    {
+     "id": "file:native/windows/src/addon.cc",
+     "name": "addon.cc",
+     "filePath": "native/windows/src/addon.cc",
+     "summary": "Windows 原生 NAPI 插件入口：向 Node.js 只导出单一 call 函数，内部按操作名分发到 inspect/process_*/filesystem* 三类实现，并集中提供 JS↔C++ 值编组、type-tagged Resource 包装与 Win32 错误到 JS Error（ENOENT/EA",
+     "type": "file",
+     "degree": 15
+    },
+    {
+     "id": "file:bridge/ghidra/extensions/nativeaot/NativeAotExtension.java",
+     "name": "NativeAotExtension.java",
+     "filePath": "bridge/ghidra/extensions/nativeaot/NativeAotExtension.java",
+     "summary": "nativeaot 扩展的 ABI 入口（rea.extensions.nativeaot.NativeAotExtension）：定位 R2R 目录、构建 MethodTableManager、执行冻结对象审计与恢复，并向桥输出 JSON 报告。",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "file:bridge/mitmproxy/capture.py",
+     "name": "capture.py",
+     "filePath": "bridge/mitmproxy/capture.py",
+     "summary": "mitmproxy 离线捕获适配器：直接复用上游原生 tnetstring 解码器做有界解码（BoundedReader 拒绝越界声明长度），凭证字段脱敏，96MiB 输出预算，以 OfflineCapture addon 挂接 mitmdump 生命周期。",
+     "type": "file",
+     "degree": 12
+    },
+    {
+     "id": "file:native/windows/src/process.cc",
+     "name": "process.cc",
+     "filePath": "native/windows/src/process.cc",
+     "summary": "进程沙箱实现：spawnProcess 以 CREATE_SUSPENDED + PROC_THREAD_ATTRIBUTE_JOB_LIST/HANDLE_LIST 原子创建属主式子进程（kill-on-close Job Object、双输出管道、stdin 接 NUL、环境变量序号序去重），readOutput ",
+     "type": "file",
+     "degree": 11
+    },
+    {
+     "id": "file:bridge/process/ProcessRunTokenReader.swift",
+     "name": "ProcessRunTokenReader.swift",
+     "filePath": "bridge/process/ProcessRunTokenReader.swift",
+     "summary": "macOS 进程 run token 读取器：解析 KERN_PROCARGS2 布局提取 REA_PROCESS_RUN_ID，前后双快照防 PID 复用，用 csops 区分 Apple 平台二进制环境扣留与真实缺失环境。",
+     "type": "file",
+     "degree": 11
+    },
+    {
+     "id": "file:bridge/pwntools/recorded_crash_impl.py",
+     "name": "recorded_crash_impl.py",
+     "filePath": "bridge/pwntools/recorded_crash_impl.py",
+     "summary": "ELF core dump 检查实现：解析 program headers、NOTE 段中的 NT_PRSTATUS 寄存器组与 NT_SIGINFO 信号信息，产出线程寄存器/信号/notes 证据，末尾 exec decoder_runtime.py 复用受控回复协议。",
+     "type": "file",
+     "degree": 10
+    },
+    {
+     "id": "file:bridge/ghidra/ReaGhidraExtensions.java",
+     "name": "ReaGhidraExtensions.java",
+     "filePath": "bridge/ghidra/ReaGhidraExtensions.java",
+     "summary": "会话级 Ghidra 扩展加载器：按描述符经 URLClassLoader 加载白名单扩展（当前仅 nativeaot v1），强制绝对路径、8MiB 尺寸上限与 sha256 摘要校验，AutoCloseable 聚合关闭。",
+     "type": "file",
+     "degree": 8
+    },
+    {
+     "id": "file:bridge/native/NativeUIChildren.swift",
+     "name": "NativeUIChildren.swift",
+     "filePath": "bridge/native/NativeUIChildren.swift",
+     "summary": "AX 子元素枚举辅助：ChildCount/ChildBatch 值类型封装部分失败（value/error、complete 标志），captureChildValues 做批量拷贝，serializeHelperOutput 提供确定性 JSON 序列化。",
+     "type": "file",
+     "degree": 7
+    },
+    {
+     "id": "file:bridge/pwndbg/core_context.py",
+     "name": "core_context.py",
+     "filePath": "bridge/pwndbg/core_context.py",
+     "summary": "core-only 的 GDB/pwndbg 检查器：禁 auto-load/debuginfod/solib-add，sysroot 指向空目录，执行受控 gdbinit 后经 pwndbg.aglib 提取 vmmap 等核心上下文，64MiB 输出预算。",
+     "type": "file",
+     "degree": 7
+    },
+    {
+     "id": "file:bridge/android/ReaJadxBridge.java",
+     "name": "ReaJadxBridge.java",
+     "filePath": "bridge/android/ReaJadxBridge.java",
+     "summary": "REA 对未修改的 jadx-headless-mcp 0.7.1 JAR 建立的元数据边界：在 jadx Java API 之上以 MCP Kotlin SDK 起 stdin/stdout JSON-RPC 服务，暴露类/方法索引与选择器查询。",
+     "type": "file",
+     "degree": 6
+    },
+    {
+     "id": "file:bridge/pwntools/decoder_runtime.py",
+     "name": "decoder_runtime.py",
+     "filePath": "bridge/pwntools/decoder_runtime.py",
+     "summary": "pwntools/pwndbg bridge 共享的受控运行时协议：收紧 RLIMIT_AS/CPU/FSIZE 软限制、设 64 MiB 回复预算，并把注入的 inspect 回调产出统一封装为带错误分类（resource-limit/decoder/output-limit）的 JSON 回复文件。",
+     "type": "file",
+     "degree": 6
+    },
+    {
+     "id": "file:bridge/ghidra/ReaGhidraPrepareCom.java",
+     "name": "ReaGhidraPrepareCom.java",
+     "filePath": "bridge/ghidra/ReaGhidraPrepareCom.java",
+     "summary": "GhidraScript：在默认自动分析前为 DOS COM 镜像播种分析上下文——校验 x86 实模式 Raw Binary 导入、映射 1000:0100 入口、设段寄存器并建 entry 函数。",
+     "type": "file",
+     "degree": 4
+    },
+    {
+     "id": "file:bridge/ghidra/extensions/nativeaot/NativeAotMethodConventions.java",
+     "name": "NativeAotMethodConventions.java",
+     "filePath": "bridge/ghidra/extensions/nativeaot/NativeAotMethodConventions.java",
+     "summary": "分析前捕获、分析后恢复 Ghidra 方法命名约定，防止 nativeaot 分析过程污染用户数据库中的既有符号名。",
+     "type": "file",
+     "degree": 4
+    },
+    {
+     "id": "file:bridge/native/test_rea_lldb_tracer.py",
+     "name": "test_rea_lldb_tracer.py",
+     "filePath": "bridge/native/test_rea_lldb_tracer.py",
+     "summary": "rea_lldb_tracer 的字节预算单元测试：以 importlib 按路径动态加载被测模块（不依赖包结构），覆盖 journal 精确预算、逐条 flush、聚合预算边界与超预算拒绝。",
+     "type": "file",
+     "degree": 4
+    },
+    {
+     "id": "file:bridge/process/ProcessRunTokenReaderMain.swift",
+     "name": "ProcessRunTokenReaderMain.swift",
+     "filePath": "bridge/process/ProcessRunTokenReaderMain.swift",
+     "summary": "run token 读取器 CLI 入口：@main 结构体，--identities 模式输出进程身份，默认模式输出 run token 观测，JSON 编码到 stdout。",
+     "type": "file",
+     "degree": 4
+    },
+    {
+     "id": "file:bridge/pwndbg/launch_impl.py",
+     "name": "launch_impl.py",
+     "filePath": "bridge/pwndbg/launch_impl.py",
+     "summary": "启动实现：加载 ../pwntools/decoder_runtime.py，按 request 降低继承的资源上限后 os.execve 替换为 GDB 批处理进程，-ex 内嵌 core_context.py 的 Python exec 命令。",
+     "type": "file",
+     "degree": 4
+    },
+    {
+     "id": "file:bridge/ghidra/extensions/nativeaot/NativeAotDirectory.java",
+     "name": "NativeAotDirectory.java",
+     "filePath": "bridge/ghidra/extensions/nativeaot/NativeAotDirectory.java",
+     "summary": "NativeAOT 适配层：在 Ghidra 程序内定位并校验 ReadyToRun 目录布局，符号定位器优先、签名启发兜底，返回 Located(address, directory, discovery)。",
+     "type": "file",
+     "degree": 3
+    },
+    {
+     "id": "file:bridge/ghidra/extensions/nativeaot/NativeAotTypeMetadata.java",
+     "name": "NativeAotTypeMetadata.java",
+     "filePath": "bridge/ghidra/extensions/nativeaot/NativeAotTypeMetadata.java",
+     "summary": "基于 MethodTable 派生 NativeAOT 数据类型元数据描述（describe），供桥的 inspect_native_data_type 透传。",
+     "type": "file",
+     "degree": 3
+    },
+    {
+     "id": "file:bridge/native/ReaNativeUI.swift",
+     "name": "ReaNativeUI.swift",
+     "filePath": "bridge/native/ReaNativeUI.swift",
+     "summary": "macOS 原生 UI 观察器：进程身份三重校验（canonical 路径+SHA256+启动时间）→ CGWindow 归属校验 → AX 树有界遍历（max_nodes 截断、32 层深限）→ 受控动作（click/scroll/key-entry）→ ScreenCaptureKit 单窗口截图。",
+     "type": "file",
+     "degree": 3
+    }
+   ]
+  },
+  {
+   "id": "layer:composition",
+   "name": "组合根与配置解析层（Composition）",
+   "description": "CLI 与 MCP 适配器共享的生产装配点：createBinarySession 组装主/辅助 provider 注册表、可选观测端口逐个容错加载，以及 REA_*/GHIDRA_*/HOPPER_* 环境变量配置解析管道。",
+   "totalNodes": 26,
+   "representatives": [
+    {
+     "id": "file:src/composition/directAnalysis.ts",
+     "name": "directAnalysis.ts",
+     "filePath": "src/composition/directAnalysis.ts",
+     "summary": "直接分析层的导线模块：把 binary.ts 的生产 session 工厂绑定为 DirectAnalysisDependencies，再用 bind 预注入依赖，导出五个可直接调用的分析/状态入口。",
+     "type": "file",
+     "degree": 30
+    },
+    {
+     "id": "file:src/config.ts",
+     "name": "config.ts",
+     "filePath": "src/config.ts",
+     "summary": "配置模块 barrel：从 config/types.ts 重导出 AppConfig 类型、从 config/parseConfig.ts 重导出 parseConfig，作为外部消费配置的唯一入口。",
+     "type": "file",
+     "degree": 29
+    },
+    {
+     "id": "file:src/composition/binary.ts",
+     "name": "binary.ts",
+     "filePath": "src/composition/binary.ts",
+     "summary": "CLI 与 MCP 适配器共享的唯一生产装配点：createBinarySession 组装 Hopper/Ghidra/IDA 主 provider 与辅助 provider 注册表并经 composeBinarySession 产出可切换目标的 BinarySession；createManagedBinarySe",
+     "type": "file",
+     "degree": 22
+    },
+    {
+     "id": "file:src/composition/auxiliaryAnalysisProviders.ts",
+     "name": "auxiliaryAnalysisProviders.ts",
+     "filePath": "src/composition/auxiliaryAnalysisProviders.ts",
+     "summary": "声明三个辅助 AnalysisProvider（artifacts、dotnet managed static、native macOS）的懒加载装配：按平台返回 identity+capabilities，load 回调用动态 import 惰性实例化，避免 import 期 I/O。",
+     "type": "file",
+     "degree": 12
+    },
+    {
+     "id": "file:src/composition/optionalObservationProviders.ts",
+     "name": "optionalObservationProviders.ts",
+     "filePath": "src/composition/optionalObservationProviders.ts",
+     "summary": "五个可选观察端口（浏览器观察/浏览器场景/Electron 观察/Electron 主动/JS 运行时）的独立加载器：动态 import 各组合根工厂，逐端口容错——健康者保留、失败者以 providerId+reason 精确记录，互不影响。",
+     "type": "file",
+     "degree": 12
+    },
+    {
+     "id": "file:src/composition/android.ts",
+     "name": "android.ts",
+     "filePath": "src/composition/android.ts",
+     "summary": "Android 分析 provider 的组合根：createAndroidAnalysisProvider 以环境变量与可选 JadxLauncher 构造带独立队列与清理失败状态的 JadxProvider（实现 AndroidAnalysisPort）。",
+     "type": "file",
+     "degree": 11
+    },
+    {
+     "id": "file:src/composition/binaryDiagnostics.ts",
+     "name": "binaryDiagnostics.ts",
+     "filePath": "src/composition/binaryDiagnostics.ts",
+     "summary": "二进制诊断服务组合根：createBinaryLayoutService 与 createRecordedCrashService 分别以 pwntools 适配器装配离线布局分析与录制崩溃检查，构造期不获取调试器或工具链。",
+     "type": "file",
+     "degree": 10
+    },
+    {
+     "id": "file:src/config/parseConfig.ts",
+     "name": "parseConfig.ts",
+     "filePath": "src/config/parseConfig.ts",
+     "summary": "组合根配置解析管道：parseEnvironment→parseLoaderArgs→parseStringArray 逐级短路，产出 AppConfig，并按平台推导 Hopper launcher 默认路径（macOS app bundle；Linux /opt/hopper 或 ~/.local/share/re",
+     "type": "file",
+     "degree": 8
+    },
+    {
+     "id": "file:src/composition/firmware.ts",
+     "name": "firmware.ts",
+     "filePath": "src/composition/firmware.ts",
+     "summary": "固件分析 provider 组合根：构造 FirmwareProvider 实现 FirmwareAnalysisPort，支持注入自定义 FirmwareLauncher。",
+     "type": "file",
+     "degree": 7
+    },
+    {
+     "id": "file:src/composition/javascriptRecovery.ts",
+     "name": "javascriptRecovery.ts",
+     "filePath": "src/composition/javascriptRecovery.ts",
+     "summary": "JavaScript 反混淆恢复 provider 组合根：构造 WakaruProvider 实现 JavaScriptRecoveryPort，可选注入 WakaruLauncher。",
+     "type": "file",
+     "degree": 7
+    },
+    {
+     "id": "file:src/composition/webModules.ts",
+     "name": "webModules.ts",
+     "filePath": "src/composition/webModules.ts",
+     "summary": "Web 模块追踪服务组合根：以 LocalWebModuleArtifacts 与 NativeModuleResolver 组装 WebModuleTraceService，不获取浏览器也不读文件。",
+     "type": "file",
+     "degree": 6
+    },
+    {
+     "id": "file:src/config/mcpResponseBudget.ts",
+     "name": "mcpResponseBudget.ts",
+     "filePath": "src/config/mcpResponseBudget.ts",
+     "summary": "MCP stdio 响应预算配置：schema 要求十进制正整数字符串且不小于 10MiB（SDK 默认接收缓冲下限），parseMcpResponseBudget 独立解析而不引入 SDK 的急切服务端导入。",
+     "type": "file",
+     "degree": 6
+    },
+    {
+     "id": "file:src/composition/browserScenario.ts",
+     "name": "browserScenario.ts",
+     "filePath": "src/composition/browserScenario.ts",
+     "summary": "浏览器场景捕获 provider 组合根：构造 PlaywrightBrowserScenarioProvider 实现 BrowserScenarioCapturePort。",
+     "type": "file",
+     "degree": 5
+    },
+    {
+     "id": "file:src/composition/electronObservation.ts",
+     "name": "electronObservation.ts",
+     "filePath": "src/composition/electronObservation.ts",
+     "summary": "Electron 应用观察 provider 组合根：构造 CdpElectronProvider 实现 ElectronObservationPort。",
+     "type": "file",
+     "degree": 5
+    },
+    {
+     "id": "file:src/composition/electronScenario.ts",
+     "name": "electronScenario.ts",
+     "filePath": "src/composition/electronScenario.ts",
+     "summary": "Electron 主动场景 provider 组合根：构造 PlaywrightElectronActiveProvider 实现 ElectronActiveObservationPort。",
+     "type": "file",
+     "degree": 5
+    },
+    {
+     "id": "file:src/config/environment.ts",
+     "name": "environment.ts",
+     "filePath": "src/config/environment.ts",
+     "summary": "以 zod 定义全部 REA_*/GHIDRA_*/JAVA_HOME/HOPPER_* 环境变量 schema（绝对路径 refine、枚举默认值、provider 选择器与 MCP 预算），parseEnvironment 返回 Result<Environment, ConfigurationError>。",
+     "type": "file",
+     "degree": 5
+    },
+    {
+     "id": "file:src/config/parsers.ts",
+     "name": "parsers.ts",
+     "filePath": "src/config/parsers.ts",
+     "summary": "JSON 编码字符串的通用解析工具：parseStringArray 校验任意命名变量的字符串数组编码，parseLoaderArgs 专解 HOPPER_LOADER_ARGS_JSON，均区分 JSON 语法错误与元素类型错误。",
+     "type": "file",
+     "degree": 5
+    },
+    {
+     "id": "file:src/composition/browserObservation.ts",
+     "name": "browserObservation.ts",
+     "filePath": "src/composition/browserObservation.ts",
+     "summary": "浏览器观察 provider 的组合根：构造 CdpBrowserProvider 实现 BrowserObservationPort，不在导入时打开目标或获取引擎。",
+     "type": "file",
+     "degree": 4
+    },
+    {
+     "id": "file:src/composition/evm.ts",
+     "name": "evm.ts",
+     "filePath": "src/composition/evm.ts",
+     "summary": "EVM 接口分析组合根：以注入的 environment 构造 EvmoleInterfaceProvider 并组装 EvmInterfaceService，离线分析且无导入时 I/O。",
+     "type": "file",
+     "degree": 4
+    },
+    {
+     "id": "file:src/composition/javascriptRuntimeObservation.ts",
+     "name": "javascriptRuntimeObservation.ts",
+     "filePath": "src/composition/javascriptRuntimeObservation.ts",
+     "summary": "JavaScript 运行时观察 provider 组合根：构造 V8InspectorProvider 实现 JavaScriptRuntimeObservationPort。",
+     "type": "file",
+     "degree": 4
+    },
+    {
+     "id": "file:src/composition/webNetworkCaptures.ts",
+     "name": "webNetworkCaptures.ts",
+     "filePath": "src/composition/webNetworkCaptures.ts",
+     "summary": "网络捕获服务组合根：以 HAR 与 mitmproxy 两个离线格式适配器构造 HistoricalCaptureDecoder，再组装 WebNetworkCaptureService。",
+     "type": "file",
+     "degree": 4
+    },
+    {
+     "id": "file:src/composition/webRuntime.ts",
+     "name": "webRuntime.ts",
+     "filePath": "src/composition/webRuntime.ts",
+     "summary": "Web 运行时服务组合根：构造 CdpWebRuntimeProvider 组装 WebRuntimeService，实现实时归因工作流而不打开浏览器连接。",
+     "type": "file",
+     "degree": 4
+    },
+    {
+     "id": "file:src/composition/webSourceLocations.ts",
+     "name": "webSourceLocations.ts",
+     "filePath": "src/composition/webSourceLocations.ts",
+     "summary": "Web 源码定位服务组合根：以 LocalWebSourceLocationArtifacts 与 SourceMapDecoder 组装 WebSourceLocationService，做本地 source map 分析。",
+     "type": "file",
+     "degree": 4
+    },
+    {
+     "id": "file:src/config.test.ts",
+     "name": "config.test.ts",
+     "filePath": "src/config.test.ts",
+     "summary": "parseConfig 的 vitest 单元测试：覆盖目标无关启动与运行时默认值、共享 provider 选择器的稳定 ID 校验、Ghidra/Java/ilspycmd/IDA MCP 绝对路径约束、Hopper 目标类型与 loader args JSON 解析、日志级别及引用源密钥模式。",
+     "type": "file",
+     "degree": 2
+    },
+    {
+     "id": "file:src/config/ghidraStartupTimeout.ts",
+     "name": "ghidraStartupTimeout.ts",
+     "filePath": "src/config/ghidraStartupTimeout.ts",
+     "summary": "Ghidra 启动超时配置：默认 330 秒（覆盖 import/analysis/bridge/readiness 全程），schema 把非法或超 32 位定时器上限（2^31-1 ms）的值安全回落到默认值。",
+     "type": "file",
+     "degree": 2
+    }
+   ]
+  },
+  {
+   "id": "layer:mcp-server",
+   "name": "MCP 服务适配层（Server）",
+   "description": "把应用层操作注册为 MCP 工具的适配层：registerApplicationTools/registerEvidenceTools/registerManagedWorkflowTools 等工具族注册器、progress token 节流上报与 prompts 能力。",
+   "totalNodes": 69,
+   "representatives": [
+    {
+     "id": "file:src/server/createServer.ts",
+     "name": "createServer.ts",
+     "filePath": "src/server/createServer.ts",
+     "summary": "MCP server 组装总枢纽：createServer 依可选 provider 注入 60 余项依赖，注册二进制/Android/EVM/固件/Web/浏览器/Electron/应用图/会话等全部工具族，并按平台与环境变量计算工具可用性策略。",
+     "type": "file",
+     "degree": 158
+    },
+    {
+     "id": "file:src/server/toolResult.ts",
+     "name": "toolResult.ts",
+     "filePath": "src/server/toolResult.ts",
+     "summary": "应用结果到 MCP CallToolResult 的序列化核心：共享错误投影、Evidence 记录确认、响应超预算时转为可行动的资源约束错误并附 Evidence 恢复建议。",
+     "type": "file",
+     "degree": 67
+    },
+    {
+     "id": "file:src/server/toolRegistrationOptions.ts",
+     "name": "toolRegistrationOptions.ts",
+     "filePath": "src/server/toolRegistrationOptions.ts",
+     "summary": "把规范化 Zod 契约直接投影为 SDK registerTool 所需的 title/description/inputSchema/outputSchema/annotations 选项。",
+     "type": "file",
+     "degree": 47
+    },
+    {
+     "id": "file:src/server/toolLogging.ts",
+     "name": "toolLogging.ts",
+     "filePath": "src/server/toolLogging.ts",
+     "summary": "记录单个 MCP 工具的耗时与成功/失败状态，刻意不记录调用方输入。",
+     "type": "file",
+     "degree": 36
+    },
+    {
+     "id": "file:src/server/registerSessionTools.ts",
+     "name": "registerSessionTools.ts",
+     "filePath": "src/server/registerSessionTools.ts",
+     "summary": "会话工具聚合入口：按契约组合注册生命周期（open/close/status）、进程捕获与对比、上下文查询（navigation/address）及各比较类工具，是 server 端工具注册的组合根。",
+     "type": "file",
+     "degree": 36
+    },
+    {
+     "id": "file:src/server/registerElectronTools.ts",
+     "name": "registerElectronTools.ts",
+     "filePath": "src/server/registerElectronTools.ts",
+     "summary": "注册 5 个 Electron 观测工具（list_electron_targets / inspect_electron_page / analyze_javascript_application / reconcile_javascript_runtime / capture_electron_scenario），",
+     "type": "file",
+     "degree": 24
+    },
+    {
+     "id": "file:src/server/registerProcessComparisonTool.ts",
+     "name": "registerProcessComparisonTool.ts",
+     "filePath": "src/server/registerProcessComparisonTool.ts",
+     "summary": "注册确定性进程捕获对比工具 compare_process_captures：双侧解析捕获 Evidence 并做防篡改校验，经 runDerivedOperation 执行对比，把矛盾追踪为残余 unknown。",
+     "type": "file",
+     "degree": 22
+    },
+    {
+     "id": "file:src/server/registerBrowserTools.ts",
+     "name": "registerBrowserTools.ts",
+     "filePath": "src/server/registerBrowserTools.ts",
+     "summary": "集中注册 8 个浏览器观测工具（list_browser_targets / inspect_web_page / analyze_web_bundle / observe_web_session / discover_webmcp_tools / compare_web_captures / capture_web_",
+     "type": "file",
+     "degree": 21
+    },
+    {
+     "id": "file:src/server/registerOfficialTools.ts",
+     "name": "registerOfficialTools.ts",
+     "filePath": "src/server/registerOfficialTools.ts",
+     "summary": "为 OFFICIAL_TOOL_CONTRACTS 中每个契约生成直连 bridge 代理：投影参数、透传 MCP 取消信号与进度，保留类型化错误投影。",
+     "type": "file",
+     "degree": 21
+    },
+    {
+     "id": "file:src/server/registerEnhancedTools.ts",
+     "name": "registerEnhancedTools.ts",
+     "filePath": "src/server/registerEnhancedTools.ts",
+     "summary": "在 AnalysisOperationPort 之上注册 16 个组合式工作流工具（trace_native_values / trace_call_path / trace_feature / batch_decompile / get_call_graph / analyze_function 等），统一走 exe",
+     "type": "file",
+     "degree": 20
+    },
+    {
+     "id": "file:src/server/registerInvestigationTools.ts",
+     "name": "registerInvestigationTools.ts",
+     "filePath": "src/server/registerInvestigationTools.ts",
+     "summary": "注册 4 个 Evidence 组合的差分调查工作流工具（find_changed_behavior / build_call_path / correlate_static_and_runtime / verify_reconstruction），每个都基于 helpers 的证据闭包与派生证据登记构建。",
+     "type": "file",
+     "degree": 20
+    },
+    {
+     "id": "file:src/server/promptCompletion.ts",
+     "name": "promptCompletion.ts",
+     "filePath": "src/server/promptCompletion.ts",
+     "summary": "MCP prompt 参数补全源：createPromptCompletionSource 按种类（document/procedure/provider/evidence/unknown）从活跃 provider 与会话台账拉取候选，NFKC 归一化后前缀过滤。",
+     "type": "file",
+     "degree": 19
+    },
+    {
+     "id": "file:src/server/registerSessionRecordTools.ts",
+     "name": "registerSessionRecordTools.ts",
+     "filePath": "src/server/registerSessionRecordTools.ts",
+     "summary": "注册 Evidence bundle 导出/导入/快照工具，以及残余 unknown 的 list/record/update/verify 四件套工具。",
+     "type": "file",
+     "degree": 19
+    },
+    {
+     "id": "file:src/server/registerFunctionComparisonTool.ts",
+     "name": "registerFunctionComparisonTool.ts",
+     "filePath": "src/server/registerFunctionComparisonTool.ts",
+     "summary": "注册 compare_functions 工具：严格校验两侧均为 analyze_function 的 rea.analysis Evidence，compareFunctions 确定性比对后登记来源与 FUNCTION_COMPARISON_PROVIDER 派生证据，未匹配函数生成 residual unknow",
+     "type": "file",
+     "degree": 18
+    },
+    {
+     "id": "file:src/server/sessionEvidence.ts",
+     "name": "sessionEvidence.ts",
+     "filePath": "src/server/sessionEvidence.ts",
+     "summary": "按序记录源 Evidence，遇到首个会话拒绝即停止并返回 EvidenceIntegrityError。",
+     "type": "file",
+     "degree": 18
+    },
+    {
+     "id": "file:src/server/registerApplicationTools/projectMobileApplicationGraph.ts",
+     "name": "projectMobileApplicationGraph.ts",
+     "filePath": "src/server/registerApplicationTools/projectMobileApplicationGraph.ts",
+     "summary": "注册 project_android_application_graph 与 project_apple_application_graph 两个执行无关的清单投影工具，registerProjection 复用注册骨架。",
+     "type": "file",
+     "degree": 17
+    },
+    {
+     "id": "file:src/server/registerJavaScriptRuntimeObservationTools.ts",
+     "name": "registerJavaScriptRuntimeObservationTools.ts",
+     "filePath": "src/server/registerJavaScriptRuntimeObservationTools.ts",
+     "summary": "注册两个被动 Inspector 工具（list_javascript_runtime_targets / observe_javascript_runtime），策略导致 provider 不可用时仍保持注册并在执行期返回诊断。",
+     "type": "file",
+     "degree": 17
+    },
+    {
+     "id": "file:src/server/registerEvidenceTools.ts",
+     "name": "registerEvidenceTools.ts",
+     "filePath": "src/server/registerEvidenceTools.ts",
+     "summary": "通用 Evidence 工具注册器：遍历契约数组把 provider 支撑的原子观测操作注册为 MCP 工具，处理 extract_artifact 输出目录注入、进度上报与可选 sourceEvidence 来源适配。",
+     "type": "file",
+     "degree": 17
+    },
+    {
+     "id": "file:src/server/registerSessionStatusTool.ts",
+     "name": "registerSessionStatusTool.ts",
+     "filePath": "src/server/registerSessionStatusTool.ts",
+     "summary": "注册只读的 binary_session 状态工具：投影 provider 能力清单、目标状态与会话元数据。",
+     "type": "file",
+     "degree": 17
+    },
+    {
+     "id": "file:src/server/EvidenceMcpServer.ts",
+     "name": "EvidenceMcpServer.ts",
+     "filePath": "src/server/EvidenceMcpServer.ts",
+     "summary": "McpServer 子类与 ErrorEvidenceTransport 装饰器：工具错误响应超出 MCP 预算时把原始错误转存为 Evidence 台账条目，回投带 remediation 的资源约束错误并保持连接可用。",
+     "type": "file",
+     "degree": 15
+    },
+    {
+     "id": "file:src/server/registerArtifactComparisonTool.ts",
+     "name": "registerArtifactComparisonTool.ts",
+     "filePath": "src/server/registerArtifactComparisonTool.ts",
+     "summary": "注册 compare_artifacts MCP 工具：解析左右两侧 Evidence 输入，调用 compareArtifacts 做确定性比对，把两侧来源证据登记进 BinarySession 并产出 rea.artifact-comparison 派生 Evidence；比对状态非 unchanged 时自动生成",
+     "type": "file",
+     "degree": 15
+    },
+    {
+     "id": "file:src/server/registerApplicationTools/helpers.ts",
+     "name": "helpers.ts",
+     "filePath": "src/server/registerApplicationTools/helpers.ts",
+     "summary": "应用工具族共享助手：recordResult 依 unknownKind 选择普通或带 unknown 的记录路径，unknownRegistration 为三类比对生成追问式 unknown。",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "file:src/server/registerManagedTools.ts",
+     "name": "registerManagedTools.ts",
+     "filePath": "src/server/registerManagedTools.ts",
+     "summary": "注册免执行的 managed PE/CLI 检查工具集：包装 AnalysisOperationPort 使 managed 工具名路由到 runManagedProviderExecution，记忆已选 managed 路径并复用 registerEvidenceTools 通用注册器。",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "file:src/server/registerBrowserScenarioTool.ts",
+     "name": "registerBrowserScenarioTool.ts",
+     "filePath": "src/server/registerBrowserScenarioTool.ts",
+     "summary": "注册 capture_browser_scenario 浏览器场景捕获工具，provider 缺失时通过 optionalProviderUnavailable 输出执行期诊断而非注册失败。",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "file:src/server/registerInvestigationTools/helpers.ts",
+     "name": "helpers.ts",
+     "filePath": "src/server/registerInvestigationTools/helpers.ts",
+     "summary": "调查工作流共享助手：evidenceClosure 沿 evidence_links 做迭代闭包遍历并校验悬空链接，comparisonClosure / functionEvidenceIds 提取证据 ID，recordWorkflowEvidence 按未解状态附带 residual unknown 登记。",
+     "type": "file",
+     "degree": 14
+    }
+   ]
+  },
+  {
+   "id": "layer:cli-runtime",
+   "name": "CLI 入口与运行时层",
+   "description": "终端入口与 stdio MCP 进程运行时：cli.ts 命令分派、JSON/jsonl 流式输出、doctor/setup 命令、main/transport 传输装配、配置热重载状态与共享 identity/logger。",
+   "totalNodes": 64,
+   "representatives": [
+    {
+     "id": "file:src/logger.ts",
+     "name": "logger.ts",
+     "filePath": "src/logger.ts",
+     "summary": "基于 pino 的进程级日志工厂：解析 REA_LOG_LEVEL、在 stderr 输出 JSON 日志以保持 stdout 的 MCP 协议/CLI 结果纯净，并提供静默 logger。",
+     "type": "file",
+     "degree": 93
+    },
+    {
+     "id": "file:src/cliLogging.ts",
+     "name": "cliLogging.ts",
+     "filePath": "src/cliLogging.ts",
+     "summary": "CLI 命令执行的统一包装层：logCliCommand 用 performance.now 计时、按失败判定选择 error/info 级别输出日志并统一错误投影；isCliOperationFailure 基于 error projection 与 CLI 错误信封两个 schema 识别操作失败。",
+     "type": "file",
+     "degree": 43
+    },
+    {
+     "id": "file:src/cli.ts",
+     "name": "cli.ts",
+     "filePath": "src/cli.ts",
+     "summary": "一次性 Incur CLI 组装入口：createCli 构建 logger 与 Cli 实例（MCP 注册指引、npx 命令），按序注册 setup/核心分析/工具/EVM/artifact/managed/Android/固件/诊断/证据/进程/浏览器/Web 系列/Electron/运行时观测/应用共 24 组命",
+     "type": "file",
+     "degree": 34
+    },
+    {
+     "id": "file:src/identity.ts",
+     "name": "identity.ts",
+     "filePath": "src/identity.ts",
+     "summary": "打包/setup/MCP/skill 安装共享的规范公共身份：PRODUCT_IDENTITY（displayName/packageName/cli 二进制/mcpCommand/skill 名/配置文件名）与 SDK_IDENTITY（server/client_test/core 三个 SDK 包精确身份），全部",
+     "type": "file",
+     "degree": 34
+    },
+    {
+     "id": "file:src/cli/applicationCommands.ts",
+     "name": "applicationCommands.ts",
+     "filePath": "src/cli/applicationCommands.ts",
+     "summary": "注册应用层重构评估命令：obligation ledger、reconstruction coverage、Android/Apple application evidence 投影等，核心是 registerJsonCommand 工厂统一 JSON 输入校验与 workflow 执行。",
+     "type": "file",
+     "degree": 29
+    },
+    {
+     "id": "file:src/cli/electronCommands.ts",
+     "name": "electronCommands.ts",
+     "filePath": "src/cli/electronCommands.ts",
+     "summary": "注册 Electron 逆向命令：active 场景捕获、JS runtime reconciliation、Electron target/page 观察、JS 应用分析；electron provider 用动态 import() 惰性加载。",
+     "type": "file",
+     "degree": 28
+    },
+    {
+     "id": "file:src/cliCommandNames.ts",
+     "name": "cliCommandNames.ts",
+     "filePath": "src/cliCommandNames.ts",
+     "summary": "全部 CLI 命令名的唯一权威清单：CLI_COMMANDS 规范名映射、CLI_COMMAND_NAMES 有序主清单、CLI_COMMAND_ALIASES 别名、CLI_COMMAND_TOOL_ALIASES CLI 命令到 MCP 工具名的对照表，以及 MCP_TOOLS_WITHOUT_DEDICATED_",
+     "type": "file",
+     "degree": 28
+    },
+    {
+     "id": "file:src/cli/setupCommands.ts",
+     "name": "setupCommands.ts",
+     "filePath": "src/cli/setupCommands.ts",
+     "summary": "注册 setup/doctor/uninstall/update 命令：setupIsInteractive 按 TTY+无显式 scope 决定交互模式，交互路径挂接 interactiveSetup，非交互直跑 runSetup/runDoctor。",
+     "type": "file",
+     "degree": 25
+    },
+    {
+     "id": "file:src/main.ts",
+     "name": "main.ts",
+     "filePath": "src/main.ts",
+     "summary": "REA 进程入口：装配运行时依赖、parseConfig、创建 logger 与 binary session、打开初始目标、启动 MCP stdio transport 并注册配置热重载与优雅退出。",
+     "type": "file",
+     "degree": 25
+    },
+    {
+     "id": "file:src/mcpDoctor.ts",
+     "name": "mcpDoctor.ts",
+     "filePath": "src/mcpDoctor.ts",
+     "summary": "`rea mcp doctor` 诊断命令全实现：以 stdio 子进程拉起生产 server，在单个 deadline 有界会话内 listTools/listPrompts/调用身份工具，对照 TOOL_CONTRACTS/PROMPT_CONTRACTS 清单产出 missing/unexpected/dupli",
+     "type": "file",
+     "degree": 24
+    },
+    {
+     "id": "file:src/cliJsonInput.ts",
+     "name": "cliJsonInput.ts",
+     "filePath": "src/cliJsonInput.ts",
+     "summary": "CLI JSON 输入解析工具：parseCliJsonInput 支持内联 JSON 与文件路径两种输入（fatal UTF-8 严格解码 + safeParseJson），resolveCliJsonPaths 递归将对象内相对路径字段解析为绝对路径，错误统一走 input/file 两类投影。",
+     "type": "file",
+     "degree": 23
+    },
+    {
+     "id": "file:src/cli/utilityCommands.ts",
+     "name": "utilityCommands.ts",
+     "filePath": "src/cli/utilityCommands.ts",
+     "summary": "CLI 工具类命令的聚合注册入口：registerUtilityCommands 一次性挂载 capability/providers 状态查询、Mach-O/签名/架构/plist/Swift demangle 等免 Hopper 原生命令、native 调用命令与 reference source 导入命令，参数全",
+     "type": "file",
+     "degree": 23
+    },
+    {
+     "id": "file:src/cli/managedCommands.ts",
+     "name": "managedCommands.ts",
+     "filePath": "src/cli/managedCommands.ts",
+     "summary": "注册 managed（.NET 等托管）检查命令：artifact/members/native boundaries 检查、成员比较、重构证据导入与边界验证，并挂接 managed 应用图谱命令。",
+     "type": "file",
+     "degree": 21
+    },
+    {
+     "id": "file:src/cli/coreBinaryCommands.ts",
+     "name": "coreBinaryCommands.ts",
+     "filePath": "src/cli/coreBinaryCommands.ts",
+     "summary": "注册核心二进制深析命令（overview、decompile、function、instructions、search、xrefs、trace）；runRoutedOverview 对 .apk/Electron 等 JS 应用路径自动改道 JavaScript 应用分析。",
+     "type": "file",
+     "degree": 21
+    },
+    {
+     "id": "file:src/cli/browserAdvancedCommands.ts",
+     "name": "browserAdvancedCommands.ts",
+     "filePath": "src/cli/browserAdvancedCommands.ts",
+     "summary": "注册高级浏览器命令：WebMCP 工具发现、capture diff、screenshot 与 screenshot diff，基于 CdpBrowserProvider 及浏览器证据 schema 做输入校验与证据比较。",
+     "type": "file",
+     "degree": 20
+    },
+    {
+     "id": "file:src/cli/types.ts",
+     "name": "types.ts",
+     "filePath": "src/cli/types.ts",
+     "summary": "从 incur 框架 Cli.create 的返回类型推导出 CliInstance 类型别名，为 src/cli/ 目录下全部命令注册模块提供统一的 CLI 实例类型。",
+     "type": "file",
+     "degree": 18
+    },
+    {
+     "id": "file:src/cli/browserCommands.ts",
+     "name": "browserCommands.ts",
+     "filePath": "src/cli/browserCommands.ts",
+     "summary": "注册被动浏览器观察命令（target 列表、页面检查、web bundle 分析、会话观察），复用 BrowserObservationService 并经 browserContext 统一错误出口。",
+     "type": "file",
+     "degree": 17
+    },
+    {
+     "id": "file:src/catalogIdentity.ts",
+     "name": "catalogIdentity.ts",
+     "filePath": "src/catalogIdentity.ts",
+     "summary": "MCP 目录的身份与摘要：把 TOOL_CONTRACTS/PROMPT_CONTRACTS/CLI_COMMAND_NAMES 排序成稳定 catalog，惰性计算 canonicalize JSON 的 sha256 摘要（tools/prompts/combined 三联），暴露工具计数与 MCP annotat",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "file:src/cli/interactiveSetup.ts",
+     "name": "interactiveSetup.ts",
+     "filePath": "src/cli/interactiveSetup.ts",
+     "summary": "setup 命令的 @clack/prompts 交互层：选择 agent 客户端、渲染检测摘要、确认执行计划与结果，并提供 accessible 模式（逐客户端串行确认）适配非 TTY 场景。",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "file:src/cli/artifactCommands.ts",
+     "name": "artifactCommands.ts",
+     "filePath": "src/cli/artifactCommands.ts",
+     "summary": "注册 artifact 检查与提取命令（dylib 解析、asset catalog、Interface Builder、extraction、inspection），统一经 runProviderAnalysis 走 directAnalysis 组合根。",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "file:src/cli/commandCancellation.ts",
+     "name": "commandCancellation.ts",
+     "filePath": "src/cli/commandCancellation.ts",
+     "summary": "把一次性 CLI 中断（SIGINT/SIGTERM）翻译成 AbortSignal 取消并落惯例退出码（130/143），host 接口可注入使测试无需真实信号。",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "file:src/cliLogging.test.ts",
+     "name": "cliLogging.test.ts",
+     "filePath": "src/cliLogging.test.ts",
+     "summary": "CLI 操作状态分类与日志行为的综合测试：用 FakeSetupHost、err 等构造 setup/update/uninstall/process 各类失败值，验证 isCliOperationFailure 的分类边界与 logCliCommand 的成功/失败双路径日志输出。",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "file:src/cliBrowserScenarioCommands.ts",
+     "name": "cliBrowserScenarioCommands.ts",
+     "filePath": "src/cliBrowserScenarioCommands.ts",
+     "summary": "注册浏览器场景捕获命令：用 parseCliJsonInput 解析内联/文件 JSON 输入，经 browserScenarioSchema 校验、resolveCliJsonPaths 归一化路径后调用 captureBrowserScenario 执行捕获。",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "file:src/cliOutput.ts",
+     "name": "cliOutput.ts",
+     "filePath": "src/cliOutput.ts",
+     "summary": "CLI 输出参数的解析/校验/净化：parseCliOutputArguments 处理 filter-output/token 窗口/full-output 等 incur 输出参数并检测互斥组合（UNSUPPORTED_OUTPUT_COMBINATION），sanitizeCliOutput 对输出做安全 JSO",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "file:src/cli/nativeCallCommands.ts",
+     "name": "nativeCallCommands.ts",
+     "filePath": "src/cli/nativeCallCommands.ts",
+     "summary": "注册 native 调用观察命令：输入先过 nativeCallObservationInputSchema 校验，再经 runProviderAnalysis 执行并投影上下文。",
+     "type": "file",
+     "degree": 13
+    }
+   ]
+  },
+  {
+   "id": "layer:tests",
+   "name": "测试与评估矩阵层",
+   "description": "vitest 多项目测试矩阵：boundary 边界测试（最大宗）、conformance 一致性、composition 组合、acceptance 验收、evaluation 评估（含 Codex agent 评估器）、process-global 进程级测试及 fixtures/support 夹具。",
+   "totalNodes": 553,
+   "representatives": [
+    {
+     "id": "file:tests/fixtures/temporaryDirectory.ts",
+     "name": "temporaryDirectory.ts",
+     "filePath": "tests/fixtures/temporaryDirectory.ts",
+     "summary": "导出 createTestTempDirectory：为当前 Vitest 用例创建规范化（realpath 消歧）的空临时目录并在用例结束自动清理；注释钉版了不再借用 createTestWorkspace 的性能教训。",
+     "type": "file",
+     "degree": 206
+    },
+    {
+     "id": "file:tests/fixtures/binarySession.ts",
+     "name": "binarySession.ts",
+     "filePath": "tests/fixtures/binarySession.ts",
+     "summary": "BinarySession 测试工厂集：createTestBinarySession 以单一 provider/client factory 组装聚焦会话，createBinarySessionTargets 物化两个目标文件，createCacheProvider/ControllableAnalysisClien",
+     "type": "file",
+     "degree": 72
+    },
+    {
+     "id": "file:tests/fixtures/analysisExecution.ts",
+     "name": "analysisExecution.ts",
+     "filePath": "tests/fixtures/analysisExecution.ts",
+     "summary": "测试夹具：用固定 fixture provider 把任意值包装成与生产一致的原子 AnalysisExecution 信封（ok(createAnalysisExecution(...))），供各测试模拟 provider 观测输出。",
+     "type": "file",
+     "degree": 35
+    },
+    {
+     "id": "file:tests/support/cli/cliFixture.ts",
+     "name": "cliFixture.ts",
+     "filePath": "tests/support/cli/cliFixture.ts",
+     "summary": "编译版 REA CLI 测试驱动：createTestCli 基于 processFixture 的进程注册表 spawn process.execPath scripts/rea.mjs，收集 stdout/exitCode 并尽力 JSON.parse 成 json 字段；cliTest 把 cli fixture",
+     "type": "file",
+     "degree": 34
+    },
+    {
+     "id": "file:tests/fixtures/fakeCdpBrowser.ts",
+     "name": "fakeCdpBrowser.ts",
+     "filePath": "tests/fixtures/fakeCdpBrowser.ts",
+     "summary": "伪 Chrome DevTools Protocol 浏览器：startFakeCdpBrowser 在真实 HTTP+WebSocket 传输上启动假浏览器端点，记录命令与 HTTP 请求，replyToCommand 借 resultFor/emitEvents 产出原生线格式的回复与事件，让 CDP 集成测试不绕",
+     "type": "file",
+     "degree": 33
+    },
+    {
+     "id": "file:tests/fixtures/nativeCommands.ts",
+     "name": "nativeCommands.ts",
+     "filePath": "tests/fixtures/nativeCommands.ts",
+     "summary": "原生命令回放层：NativeFixtureRunner 实现生产 NativeCommandRunner seam，按工具名（lipo/otool/nm/dyld_info/codesign 等）回放 native-macos/ 下的捕获输出，并提供建造 Mach-O BinaryTarget 的辅助函数。",
+     "type": "file",
+     "degree": 28
+    },
+    {
+     "id": "file:tests/boundary/mcp/ghidraMcpHarness.ts",
+     "name": "ghidraMcpHarness.ts",
+     "filePath": "tests/boundary/mcp/ghidraMcpHarness.ts",
+     "summary": "Ghidra MCP 测试共享 harness：connectGhidraMcp() 用伪造 Ghidra client factory 与 GhidraProvider 组装 BinarySession 并接通 MCP server/client；内置 installationHost（Java 21 探测桩）、se",
+     "type": "file",
+     "degree": 26
+    },
+    {
+     "id": "file:tests/boundary/mcp/browserScenarioMcp.test.ts",
+     "name": "browserScenarioMcp.test.ts",
+     "filePath": "tests/boundary/mcp/browserScenarioMcp.test.ts",
+     "summary": "browser scenario MCP 测试：用 FakeBrowserScenarioProvider 记录并回放显式 scenario 请求（无权限授予也执行），验证 sanitizeBrowserUrl 脱敏、秘密与动作步骤映射及 schema 校验的捕获结果。",
+     "type": "file",
+     "degree": 24
+    },
+    {
+     "id": "file:tests/boundary/mcp/enhancedTools.01-lists-the-complete-target-open.test.ts",
+     "name": "enhancedTools.01-lists-the-complete-target-open.test.ts",
+     "filePath": "tests/boundary/mcp/enhancedTools.01-lists-the-complete-target-open.test.ts",
+     "summary": "enhanced tools 测试 01：经生产注册执行全部增强工具，验证完整 target-open 分析面枚举；fixturePort 内联实现全 inventory 端口行为（PROCEDURES 查找、typed ok/err、当前文档维护）提供可控替身。",
+     "type": "file",
+     "degree": 23
+    },
+    {
+     "id": "file:tests/boundary/filesystem/javascriptApplicationWorkflows.test.ts",
+     "name": "javascriptApplicationWorkflows.test.ts",
+     "filePath": "tests/boundary/filesystem/javascriptApplicationWorkflows.test.ts",
+     "summary": "JavaScript 应用工作流边界测试：验证 contextBridge API 经 IPC 到关联 native evidence 的追踪、no-match 显式化、版本比较工作流（rechunked 模块按精确源匹配、minified 模块按结构指纹配对、source-map 原件配对不升格 exact）与 sc",
+     "type": "file",
+     "degree": 22
+    },
+    {
+     "id": "file:tests/support/javascriptApplicationFixture.ts",
+     "name": "javascriptApplicationFixture.ts",
+     "filePath": "tests/support/javascriptApplicationFixture.ts",
+     "summary": "JavaScript 应用分析测试夹具：写入夹具文件目录、调用生产端 JavaScriptArtifactReconstruction 重构产物，并提供一组针对 JavaScriptApplicationGraph 的节点/边查询助手（按 chunk key、module key、logical path、export",
+     "type": "file",
+     "degree": 22
+    },
+    {
+     "id": "file:tests/boundary/mcp/processEvidenceIdentityMcp.test.ts",
+     "name": "processEvidenceIdentityMcp.test.ts",
+     "filePath": "tests/boundary/mcp/processEvidenceIdentityMcp.test.ts",
+     "summary": "进程比较 Evidence 身份测试：把精确公共 CLI/MCP 比较结果喂给全部三个 MCP 消费者、篡改 digest 在进入任何消费者或会话前被单独拒收、保留 ownership unknown 语义贯穿 CLI 与 MCP。",
+     "type": "file",
+     "degree": 21
+    },
+    {
+     "id": "file:tests/boundary/mcp/managedMcp.test.ts",
+     "name": "managedMcp.test.ts",
+     "filePath": "tests/boundary/mcp/managedMcp.test.ts",
+     "summary": "托管 .NET 静态分析 MCP 测试（本批最大文件）：验证全部 managed 静态检查可独立于 active native target 运行；打开托管 PE 后经 MCP 执行 ManagedStaticProvider 的目录核验、静态工作流检查、比较与重建、以及导入签名全链路。",
+     "type": "file",
+     "degree": 20
+    },
+    {
+     "id": "file:tests/composition/directAnalysisSnapshotReplay.test.ts",
+     "name": "directAnalysisSnapshotReplay.test.ts",
+     "filePath": "tests/composition/directAnalysisSnapshotReplay.test.ts",
+     "summary": "分析快照重放测试（约 658 非空行）：writeAnalysisSnapshot/readAnalysisSnapshot 往返，验证历史证据合并、workflow 问题保留、备用 profile 与更早证据重放等语义。",
+     "type": "file",
+     "degree": 20
+    },
+    {
+     "id": "file:tests/fixtures/fakeCdpBrowserResults.ts",
+     "name": "fakeCdpBrowserResults.ts",
+     "filePath": "tests/fixtures/fakeCdpBrowserResults.ts",
+     "summary": "CDP 命令结果构造集：resultFor 把各 CDP method 分派到 frameTree/resourceTree/domSnapshot/accessibilityTree 与 storage/cookie/indexedDB/cache 等构造器，产出原生形状的命令 result 载荷。",
+     "type": "file",
+     "degree": 19
+    },
+    {
+     "id": "file:tests/composition/analysis-sessions/binarySession.test.ts",
+     "name": "binarySession.test.ts",
+     "filePath": "tests/composition/analysis-sessions/binarySession.test.ts",
+     "summary": "BinarySession 组合层最大测试（约 1170 非空行）：覆盖 Hopper 启动错误投影、网络可达性 unknown 记录、缓存 provider、地址名执行、会话关闭生命周期与证据 bundle 组装。",
+     "type": "file",
+     "degree": 18
+    },
+    {
+     "id": "file:tests/boundary/inspector/javascriptRuntimeObservation.test.ts",
+     "name": "javascriptRuntimeObservation.test.ts",
+     "filePath": "tests/boundary/inspector/javascriptRuntimeObservation.test.ts",
+     "summary": "V8 Inspector 运行时观察边界的核心测试集：用 fakeV8Inspector 驱动被动 provider，覆盖未知观察字段拒绝、所选 Inspector 端点内联返回全部 target、包含旧 caller root 过滤之外的 target、两条 enable 命令捕获完整元数据、排除仅报告裸 file:",
+     "type": "file",
+     "degree": 17
+    },
+    {
+     "id": "file:tests/boundary/mcp/enhancedToolsHarness.ts",
+     "name": "enhancedToolsHarness.ts",
+     "filePath": "tests/boundary/mcp/enhancedToolsHarness.ts",
+     "summary": "enhanced MCP 工具测试共享 harness：提供 Swift mangled 符号 PROCEDURES fixture、inventory 辅助函数、connect()（把 AnalysisOperationPort 桩接入 createServer 并经 InMemoryTransport 连接 Cli",
+     "type": "file",
+     "degree": 17
+    },
+    {
+     "id": "file:tests/boundary/mcp/serverIdentity.test.ts",
+     "name": "serverIdentity.test.ts",
+     "filePath": "tests/boundary/mcp/serverIdentity.test.ts",
+     "summary": "服务器与 catalog 身份测试：transport 序列化与 detached clone 后字段完整、包与 SDK 版本取自 canonical package metadata、无比较时如实报 unknown 并区分 aligned/stale、组合/宿主/目标可用性真实汇报。",
+     "type": "file",
+     "degree": 17
+    },
+    {
+     "id": "file:tests/boundary/mcp/sessionMcp.test.ts",
+     "name": "sessionMcp.test.ts",
+     "filePath": "tests/boundary/mcp/sessionMcp.test.ts",
+     "summary": "MCP 会话边界大型测试集：快照生命周期顺序、target-free 生命周期与工作流、文件系统路径边界（拒绝相对快照/导出路径）、写失败时保留会话、深度嵌套 evidence 参数归类为输入校验错误。",
+     "type": "file",
+     "degree": 17
+    },
+    {
+     "id": "file:tests/fixtures/providerProcess.ts",
+     "name": "providerProcess.ts",
+     "filePath": "tests/fixtures/providerProcess.ts",
+     "summary": "providerProcess.mjs 的 TypeScript 驱动器：spawn 夹具进程并等待 ready 就绪行、解析 detached 模式回显的进程组长 PID、以 SIGKILL 兜底停止，全部带超时与监听器清洗。",
+     "type": "file",
+     "degree": 17
+    },
+    {
+     "id": "file:tests/boundary/mcp/browserMcp.test.ts",
+     "name": "browserMcp.test.ts",
+     "filePath": "tests/boundary/mcp/browserMcp.test.ts",
+     "summary": "browser MCP 测试：以 fakeCdpBrowser 驱动 CdpBrowserProvider，验证会话工具与比较工具暴露 CLI 等价的 Evidence 结果（含 websocket 事件核验、malformed/incomplete 比较拒绝、截图与视觉比较产物 artifact 化），且不附着请求范",
+     "type": "file",
+     "degree": 16
+    },
+    {
+     "id": "file:tests/boundary/providers/hopper/hopperClient.fixture.ts",
+     "name": "hopperClient.fixture.ts",
+     "filePath": "tests/boundary/providers/hopper/hopperClient.fixture.ts",
+     "summary": "共享测试 fixture：HopperFixtureLauncher spawn 真实 Hopper bridge Python 替身进程并追踪 socket/目录/runId，trackHopperClient 注册自动清理，startHopperFixtureClient 一键起客户端；被同目录 8 个 hoppe",
+     "type": "file",
+     "degree": 16
+    },
+    {
+     "id": "file:tests/composition/analysis-sessions/providerBinding.test.ts",
+     "name": "providerBinding.test.ts",
+     "filePath": "tests/composition/analysis-sessions/providerBinding.test.ts",
+     "summary": "provider 绑定组合测试：AnalysisProvider 候选选择、能力状态查询、database target 绑定、深度嵌套与延迟绑定等 SessionProviderRouter/AnalysisProvider 绑定语义。",
+     "type": "file",
+     "degree": 16
+    },
+    {
+     "id": "file:tests/composition/javascript-applications/javascriptArtifactReconstruction.test.ts",
+     "name": "javascriptArtifactReconstruction.test.ts",
+     "filePath": "tests/composition/javascript-applications/javascriptArtifactReconstruction.test.ts",
+     "summary": "JavaScript artifact 重建大测试（约 545 非空行）：@electron/asar 真实归档重建、artifact 文件分析、artifact 图与语义图构建/投影、语义链接断言。",
+     "type": "file",
+     "degree": 16
+    }
+   ]
+  },
+  {
+   "id": "layer:tooling",
+   "name": "脚本工具链层",
+   "description": "scripts 开发与验证工具链：verify-* 真实引擎验证（real Hopper/Ghidra/Electron、package 发布矩阵）、conformance fixture 构建、lib 共享助手与本地 fixture 站点。",
+   "totalNodes": 216,
+   "representatives": [
+    {
+     "id": "file:scripts/verify-real-ghidra-assertions.mjs",
+     "name": "verify-real-ghidra-assertions.mjs",
+     "filePath": "scripts/verify-real-ghidra-assertions.mjs",
+     "summary": "真实 Ghidra 验证套件的共享断言库（18 个导出）：覆盖 procedure info、assembly/pseudocode provider 文本、引用元数据、dossier 八项子断言、dense switch dossier、session 能力/版本承诺、runtime 坐标与清理探活，以及 debug",
+     "type": "file",
+     "degree": 45
+    },
+    {
+     "id": "file:scripts/lib/verifier-run.mjs",
+     "name": "verifier-run.mjs",
+     "filePath": "scripts/lib/verifier-run.mjs",
+     "summary": "verifier 运行遥测核心库：创建携带 REA_PROCESS_RUN_ID 的 run 记录，完成时观察进程谱系（Linux 读 /proc，POSIX 回退 ps），记录 launcher 与全部后代进程的快照；是几乎所有 verify 脚本的公共依赖。",
+     "type": "file",
+     "degree": 39
+    },
+    {
+     "id": "file:scripts/hopper-demo-x11.py",
+     "name": "hopper-demo-x11.py",
+     "filePath": "scripts/hopper-demo-x11.py",
+     "summary": "Hopper 反汇编器 demo 授权对话框的 X11 自动化检查器：在私有 Xvfb display 上按 sha256 白名单启动受检 Hopper 构建，用 ctypes 直调 Xlib/XTest 枚举窗口、定位 Registration 对话框并模拟点击，全部失败模式以稳定退出码与 REA_X11_DIAGN",
+     "type": "file",
+     "degree": 37
+    },
+    {
+     "id": "file:scripts/verify-real-ghidra-function.mjs",
+     "name": "verify-real-ghidra-function.mjs",
+     "filePath": "scripts/verify-real-ghidra-function.mjs",
+     "summary": "函数级真 Ghidra 验证集合（7 个导出）：debug 目标全链操作（call graph、xref 归属、string xref、entry/branch/indirect/switch 四类 dossier、取消超时与并发）、stripped 与跨格式操作、native type layout、relative",
+     "type": "file",
+     "degree": 33
+    },
+    {
+     "id": "file:scripts/verify-real-browser.mjs",
+     "name": "verify-real-browser.mjs",
+     "filePath": "scripts/verify-real-browser.mjs",
+     "summary": "真浏览器总验证器（主入口）：自起 headless Chrome 与 fixture 站点，依次驱动被动观察、敏感 shape、bundle/source map、截图与 diff、SPA session 时间线、page-scoped CDP 代理、attach/launch 两种 scenario 清理语义，再串联",
+     "type": "file",
+     "degree": 31
+    },
+    {
+     "id": "file:scripts/lib/mcp-verifier-results.mjs",
+     "name": "mcp-verifier-results.mjs",
+     "filePath": "scripts/lib/mcp-verifier-results.mjs",
+     "summary": "MCP 工具调用结果的共享读取辅助：提取文本投影、解析紧凑 result、并断言 provider 溯源（含组合 workflow 的上游 provider）真实存在。",
+     "type": "file",
+     "degree": 30
+    },
+    {
+     "id": "file:scripts/rea.mjs",
+     "name": "rea.mjs",
+     "filePath": "scripts/rea.mjs",
+     "summary": "npm 包生产入口 dispatcher：按参数路由三种模式——MCP stdio 服务（--mcp/mcp）、mcp doctor 诊断、以及默认 CLI，先校验 dist/ 编译运行时文件齐全再按需动态 import，缺失时提示执行 npm ci && npm run build:cached。",
+     "type": "file",
+     "degree": 27
+    },
+    {
+     "id": "file:scripts/lib/verify-package-core.mjs",
+     "name": "verify-package-core.mjs",
+     "filePath": "scripts/lib/verify-package-core.mjs",
+     "summary": "打包验证器共享核心库：封装命令执行（run/runWithStatus）、JSON stdout 解析、MCP 完整工具目录校验（Ajv schema + 逐工具 callTool）、路径存在检查与函数档案构造，是全部 verify-package-* 子验证器的公共依赖。",
+     "type": "file",
+     "degree": 26
+    },
+    {
+     "id": "file:scripts/verify-package-setup.mjs",
+     "name": "verify-package-setup.mjs",
+     "filePath": "scripts/verify-package-setup.mjs",
+     "summary": "setup/uninstall 全链路验证器（本批最大文件）：用 @lydell/node-pty 驱动交互式 TTY setup 与 stdout 重定向模式，验证 plan/apply 两段式、幂等性、OpenCode/Claude Code 缺席路径、配置回读与备份、失败恢复、dangling symlink 修",
+     "type": "file",
+     "degree": 21
+    },
+    {
+     "id": "file:scripts/lib/real-hopper-semantic.mjs",
+     "name": "real-hopper-semantic.mjs",
+     "filePath": "scripts/lib/real-hopper-semantic.mjs",
+     "summary": "真实 Hopper 语义验证核心：要求内存区域权限为真实三态、bridge 进度/诊断可观测、fixture 过程解析唯一，并组合成全量语义验证。",
+     "type": "file",
+     "degree": 20
+    },
+    {
+     "id": "file:scripts/verify-real-hopper.mjs",
+     "name": "verify-real-hopper.mjs",
+     "filePath": "scripts/verify-real-hopper.mjs",
+     "summary": "真实 Hopper 符合性验证总入口：以 stdio MCP 客户端连接 rea mcp，聚合全部 real-hopper-* 子验证器，覆盖概览、关系、字节访问、当前 target 与终端指令，并输出验证报告。",
+     "type": "file",
+     "degree": 19
+    },
+    {
+     "id": "file:scripts/lib/product-catalog.mjs",
+     "name": "product-catalog.mjs",
+     "filePath": "scripts/lib/product-catalog.mjs",
+     "summary": "产品目录门面模块：re-export catalog-cli 三件套，createProductCatalog 编排 loadSources→CLI 清单→assertSameNames 名单比对→families/providers/setup_clients/runtime digest 的完整投影，seriali",
+     "type": "file",
+     "degree": 18
+    },
+    {
+     "id": "file:scripts/lib/artifact-e2e.mjs",
+     "name": "artifact-e2e.mjs",
+     "filePath": "scripts/lib/artifact-e2e.mjs",
+     "summary": "真实 E2E 公共底座：以生产 provider 环境执行编译后的 rea CLI 并断言 --json Evidence 结构（artifactCli/artifactCliEvidence），再通过 StdioClientTransport 拉起 `rea.mjs mcp` 子进程提供 MCP 会话复用（withA",
+     "type": "file",
+     "degree": 18
+    },
+    {
+     "id": "file:scripts/fixtures/managed/pe.mjs",
+     "name": "pe.mjs",
+     "filePath": "scripts/fixtures/managed/pe.mjs",
+     "summary": "source-owned PE/CLI fixture 工厂：不提交编译产物，纯 Buffer 手工构造 .NET 托管程序集（CLI header、metadata 五流、#Strings/#Blob/#GUID 堆、IL method body），支持 framework/anycpu/ReadyToRun/P-I",
+     "type": "file",
+     "degree": 17
+    },
+    {
+     "id": "file:scripts/verify-package.mjs",
+     "name": "verify-package.mjs",
+     "filePath": "scripts/verify-package.mjs",
+     "summary": "打包验证总编排入口：在临时 workspace 依次执行 pack→environment→install→update→MCP 启动测量→discovery→artifact→managed→unknown-provider→platform→capabilities→evidence→setup→mcp 全链路，汇",
+     "type": "file",
+     "degree": 16
+    },
+    {
+     "id": "file:scripts/lib/browser-verifier-assertions.mjs",
+     "name": "browser-verifier-assertions.mjs",
+     "filePath": "scripts/lib/browser-verifier-assertions.mjs",
+     "summary": "真实浏览器被动观察断言集：覆盖清单（DOM/frame/AX/script/resource）、事件（网络、console、WebSocket initiator 行列号）、隐私（未批准文本与 payload 形状不留存）、元数据（base URL 相对链接、cookie 指纹、IndexedDB/cache、CSP/",
+     "type": "file",
+     "degree": 16
+    },
+    {
+     "id": "file:scripts/lib/browser-runtime-e2e.mjs",
+     "name": "browser-runtime-e2e.mjs",
+     "filePath": "scripts/lib/browser-runtime-e2e.mjs",
+     "summary": "browser runtime 的主 e2e 验证库：起 fixture 站点与自有 Chromium，经 CLI 与 MCP client 双通道驱动 web 执行工具，校验事件监听器、coverage、请求 callsite 等证据，并覆盖 isolated world 重载、无效 selector 与 targe",
+     "type": "file",
+     "degree": 16
+    },
+    {
+     "id": "file:scripts/lib/mcp-startup-probe.mjs",
+     "name": "mcp-startup-probe.mjs",
+     "filePath": "scripts/lib/mcp-startup-probe.mjs",
+     "summary": "MCP server 启动性能探针库：measureMcpStartup 经 stdio transport 连接打包后的 CLI 测量连接与工具列表耗时及 Linux RSS 峰值，profileMcpModuleLoading 借 node ESM debug 输出统计模块加载画像，供启动预算（MCP_STARTU",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "file:scripts/verify-package-managed.mjs",
+     "name": "verify-package-managed.mjs",
+     "filePath": "scripts/verify-package-managed.mjs",
+     "summary": "managed（.NET/PE）分析验证器：用 PE fixture 构造器生成托管程序集（含备用 MVID 变体），验证 artifact/成员/重建/边界/应用图/原生验证/对比七组语义，覆盖 managed 与 native 混合分析场景。",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "file:scripts/verify-real-ghidra-switch-assertions.mjs",
+     "name": "verify-real-ghidra-switch-assertions.mjs",
+     "filePath": "scripts/verify-real-ghidra-switch-assertions.mjs",
+     "summary": "switch/jump-table 证据的纯断言层（无外部项目依赖，仅 node:assert）：boundary 与编译期 fixture 对照、case→target 逐槽映射校验（BigInt.asUintN 符号语义）、typed/unknown 证据分类，以及 oracle 变异控制——对 structure",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "file:scripts/electron-active-hook.cjs",
+     "name": "electron-active-hook.cjs",
+     "filePath": "scripts/electron-active-hook.cjs",
+     "summary": "Electron 主动观测主 hook：加载边界补丁库后包装 ipcMain/webContents/导航方法，以 16 MiB 序列化+保留预算对事件做参数 shape 记录、丢弃统计与预算化快照导出。",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "file:scripts/lib/docs-facts.mjs",
+     "name": "docs-facts.mjs",
+     "filePath": "scripts/lib/docs-facts.mjs",
+     "summary": "文档事实校验库：skillReferenceIssues 递归扫描 skill bundle 内 markdown 的相对链接并拒绝缺失或逃逸 bundle 边界的引用；documentationFactIssues 对照产品目录核验 README*/installation.md/AGENTS.md 中的 setup",
+     "type": "file",
+     "degree": 13
+    },
+    {
+     "id": "file:scripts/lib/product-catalog.d.mts",
+     "name": "product-catalog.d.mts",
+     "filePath": "scripts/lib/product-catalog.d.mts",
+     "summary": "产品目录构建器的声明文件：定义 ProductCatalog 大接口（包元数据、工具族、providers、setup clients、schemas、CLI 清单、runtime catalog 计数与摘要）并导出 createProductCatalog 等 6 个构建/序列化函数契约。",
+     "type": "file",
+     "degree": 13
+    },
+    {
+     "id": "file:scripts/verify-package-mcp.mjs",
+     "name": "verify-package-mcp.mjs",
+     "filePath": "scripts/verify-package-mcp.mjs",
+     "summary": "MCP 端到端验证器：经 StdioClientTransport 连接打包 CLI 的 mcp 子命令，覆盖工具目录与提示词、target-free、未知 provider、open+bind、二进制生命周期、内联 artifact 证据与 evidence bundle 等场景。",
+     "type": "file",
+     "degree": 12
+    },
+    {
+     "id": "file:scripts/lib/browser-scenario-verifier.mjs",
+     "name": "browser-scenario-verifier.mjs",
+     "filePath": "scripts/lib/browser-scenario-verifier.mjs",
+     "summary": "scenario 验证支撑库：构造全量采集的 browserScenario（重复 origin 的 localStorage 种子、URL/存储 secret 声明、六类逐步与终态产物、八类事件全开）、以一次性 CLI 子进程执行、快照 provider 临时 profile 目录，并对步骤产物、脱敏与 comple",
+     "type": "file",
+     "degree": 12
+    }
+   ]
+  },
+  {
+   "id": "layer:docs-site",
+   "name": "文档与官网层",
+   "description": "docs 能力文档与 ADR、user-visible-errors 台账、website 官网（Cloudflare）与真实逆向案例页、skill-src 随包分发的 agent skill 指令，及根级 README/CONTRIBUTING/SECURITY 等。",
+   "totalNodes": 93,
+   "representatives": [
+    {
+     "id": "file:website/public/assets/main.js",
+     "name": "main.js",
+     "filePath": "website/public/assets/main.js",
+     "summary": "官网全站渐进增强脚本：初始化代码复制按钮、安装步骤对比切换、FAQ 答案渐进显示、返回顶部与 GitHub stars 拉取（带超时与降级），全部通过 data-* 属性挂钩 DOM。",
+     "type": "file",
+     "degree": 14
+    },
+    {
+     "id": "document:docs/adr/0001-provider-selection-and-analysis-profiles.md",
+     "name": "0001-provider-selection-and-analysis-profiles.md",
+     "filePath": "docs/adr/0001-provider-selection-and-analysis-profiles.md",
+     "summary": "ADR-0001（Accepted）：定义 deep provider（Hopper/Ghidra）与 auxiliary provider 的分界——不相交操作族继续走 CompositeProvider 组合，重叠的深度静态分析族改由 AnalysisProviderRegistry 做确定性选择，一次绑定会话内禁",
+     "type": "document",
+     "degree": 10
+    },
+    {
+     "id": "document:docs/cli.md",
+     "name": "cli.md",
+     "filePath": "docs/cli.md",
+     "summary": "CLI 与 Evidence 使用指南：覆盖 rea 命令运行、原生分析 provider 选择（Hopper/Ghidra/IDA）、分析快照保存复用、Evidence 导入导出与对比、历史源导入、运行时行为捕获，以及 TOON/JSON 输出与退出码约定（0/1/128+N）。",
+     "type": "document",
+     "degree": 10
+    },
+    {
+     "id": "file:website/public/assets/styles.css",
+     "name": "styles.css",
+     "filePath": "website/public/assets/styles.css",
+     "summary": "官网全站样式表：以 CSS 自定义属性定义浅色主题令牌（ink/muted/line/accent 等），覆盖布局、导航、终端演示块、步骤对比、FAQ 折叠等组件样式，共 1200 余行。",
+     "type": "file",
+     "degree": 9
+    },
+    {
+     "id": "file:website/public/guides/javascript/index.html",
+     "name": "index.html",
+     "filePath": "website/public/guides/javascript/index.html",
+     "summary": "JavaScript/Electron 分析指南：以 notes-electron 示例工程为主线讲解 bundle/模块图分析，正文逐文件链接示例源码。",
+     "type": "file",
+     "degree": 8
+    },
+    {
+     "id": "document:docs/installation.md",
+     "name": "installation.md",
+     "filePath": "docs/installation.md",
+     "summary": "安装与配置指南：覆盖 npx rea-agents setup 流程与版本钉定、发布包与 main 边界、skill-only 安装、支持的 agent、setup 变更审查与就绪检查、Hopper/Ghidra 安装（含 CI 与 launcher 路径排障）、诊断更新卸载及 MCP Registry。",
+     "type": "document",
+     "degree": 7
+    },
+    {
+     "id": "document:docs/testing.md",
+     "name": "testing.md",
+     "filePath": "docs/testing.md",
+     "summary": "测试权威指南：按行为深度分级（真实 provider 端到端 > 集成 > golden 回归 > 聚焦模块测试）并规定 Vitest project 分道（MCP 边界/文件系统边界/串行进程边界），详列真实工具链验证 lane（Android APK、NativeAOT Ghidra、IDA MCP adapter",
+     "type": "document",
+     "degree": 6
+    },
+    {
+     "id": "document:docs/adr/0003-managed-code-evidence-and-provider-boundary.md",
+     "name": "0003-managed-code-evidence-and-provider-boundary.md",
+     "filePath": "docs/adr/0003-managed-code-evidence-and-provider-boundary.md",
+     "summary": "ADR-0003（Partially superseded）：定义 managed 代码（.NET/CIL）证据边界——先按 classification vector（container/runtime family/implementation form/architecture）分类再选分析路线，managed ",
+     "type": "document",
+     "degree": 5
+    },
+    {
+     "id": "file:website/public/examples/notes-electron/main.js",
+     "name": "main.js",
+     "filePath": "website/public/examples/notes-electron/main.js",
+     "summary": "Electron 示例主进程：注册 ipcMain.handle(\"notes:export\") 将笔记经 toCsv 写入下载目录，创建 BrowserWindow 并挂载 preload.js、加载 index.html。",
+     "type": "file",
+     "degree": 5
+    },
+    {
+     "id": "file:website/public/guides/browser/index.html",
+     "name": "index.html",
+     "filePath": "website/public/guides/browser/index.html",
+     "summary": "浏览器观测指南：讲解如何用 REA 观测网页（以 notes-web 示例为演示目标），并链接示例脚本与数据文件供下载比对。",
+     "type": "file",
+     "degree": 5
+    },
+    {
+     "id": "file:website/public/guides/index.html",
+     "name": "index.html",
+     "filePath": "website/public/guides/index.html",
+     "summary": "指南索引页：汇总并链接 browser、javascript、native 三条分析指南路线。",
+     "type": "file",
+     "degree": 5
+    },
+    {
+     "id": "document:AGENTS.md",
+     "name": "AGENTS.md",
+     "filePath": "AGENTS.md",
+     "summary": "AI coding agent 的仓库级开发指南：阐述 REA 产品方向（Hopper、bring-your-own Ghidra/IDA 适配器三类深度二进制分析 provider 及本地-only 证据原则）、分层 ESM TypeScript 架构（src/domain→contracts→provider 边界",
+     "type": "document",
+     "degree": 4
+    },
+    {
+     "id": "document:docs/javascript-artifact-reconstruction.md",
+     "name": "javascript-artifact-reconstruction.md",
+     "filePath": "docs/javascript-artifact-reconstruction.md",
+     "summary": "JavaScript 制品重构指南：analyze_javascript_application（专用命令与通用 rea analyze 目录/ASAR 路由）把操作者提供的 Electron/JS 应用目录或 ASAR 投影为 Application Graph 而不执行应用代码，覆盖 ASAR 完整性、大结果、重构",
+     "type": "document",
+     "degree": 4
+    },
+    {
+     "id": "document:website/README.md",
+     "name": "README.md",
+     "filePath": "website/README.md",
+     "summary": "REA 官网总览与运维手册：列出 public/ 下全部页面（首页、showcase 案例索引、DX-Ball/Notion/TH04/CTF 四个案例、get-started、FAQ、guides、examples），规定内容与证据引用规范及 Electron 示例 ZIP 的生成校验流程，并覆盖 Cloudflar",
+     "type": "document",
+     "degree": 4
+    },
+    {
+     "id": "file:website/public/examples/notes-electron/csv.js",
+     "name": "csv.js",
+     "filePath": "website/public/examples/notes-electron/csv.js",
+     "summary": "Electron 示例的 CSV 序列化工具：toCsv 将笔记列表转为 id,title 两列 CSV，内含双引号转义，经 module.exports 导出供主进程使用。",
+     "type": "file",
+     "degree": 4
+    },
+    {
+     "id": "document:CONTRIBUTING.md",
+     "name": "CONTRIBUTING.md",
+     "filePath": "CONTRIBUTING.md",
+     "summary": "贡献者指南：定义贡献选择标准（欢迎聚焦修复与回归覆盖、拒绝纯外观独立 PR）、开发环境搭建（Node 24.18.x + npm 11.16.x 钉版工具链、nvm use、npm ci + check:fast）、VitePress 文档网站工作流（docs:dev/build/preview 与 Cloudflar",
+     "type": "document",
+     "degree": 3
+    },
+    {
+     "id": "document:docs/adr/README.md",
+     "name": "README.md",
+     "filePath": "docs/adr/README.md",
+     "summary": "架构决策记录（ADR）目录索引：说明 Accepted 状态与实现状态的分离，并以表格列出三份 ADR（0001 provider 选择、0002 受控重放已 Superseded、0003 managed 代码证据部分取代）及各自的实施进展。",
+     "type": "document",
+     "degree": 3
+    },
+    {
+     "id": "document:docs/electron-observation.md",
+     "name": "electron-observation.md",
+     "filePath": "docs/electron-observation.md",
+     "summary": "Electron file:// 页面被动观测文档：通过仅限 literal-port loopback 的 CDP 端点列出并检查现有渲染页（不执行 JavaScript、不调用 Electron API），与静态 analyze_javascript_application 工作流及 reconcile_javas",
+     "type": "document",
+     "degree": 3
+    },
+    {
+     "id": "document:docs/mcp-contracts.md",
+     "name": "mcp-contracts.md",
+     "filePath": "docs/mcp-contracts.md",
+     "summary": "MCP 运行时契约文档：npm run build:cached 生成的 product-catalog.json 目录及其与 binary_session 权威身份的关系、tools/list 发现语义（目录稳定、不发 list_changed）、schema 无递归引用与十层嵌套上限、进度与取消、Ghidra 首查",
+     "type": "document",
+     "degree": 3
+    },
+    {
+     "id": "document:docs/mcp-prompts.md",
+     "name": "mcp-prompts.md",
+     "filePath": "docs/mcp-prompts.md",
+     "summary": "列出 REA 经 MCP prompts 能力暴露的六个 provider 中立调查工作流（investigate_feature、compare_application_versions、verify_reconstruction、trace_crash、audit_residual_unknowns、prepare",
+     "type": "document",
+     "degree": 3
+    },
+    {
+     "id": "document:docs/provider-evaluation.md",
+     "name": "provider-evaluation.md",
+     "filePath": "docs/provider-evaluation.md",
+     "summary": "静态分析 provider 评估：Ghidra v1 只读边界（Ghidra 12.1.x + JDK 21，25 个只读操作，Linux/macOS 真实验证，annotate_native_function 原子改名）、Windows x64 P0 实验边界、已准入的 inventory 与 function-an",
+     "type": "document",
+     "degree": 3
+    },
+    {
+     "id": "document:docs/roadmap.md",
+     "name": "roadmap.md",
+     "filePath": "docs/roadmap.md",
+     "summary": "REA 路线图：工具方向为直接返回证据的 inspection/capture/comparison 工具且 CLI 与 MCP 行为等价（#555 移除权限授予、#572 退役重放引擎）；规划工作含 Hopper/Ghidra 原生架构与间接调用验证、跨层 feature trace、混淆 .NET 对比、LLDB/",
+     "type": "document",
+     "degree": 3
+    },
+    {
+     "id": "document:website/AGENTS.md",
+     "name": "AGENTS.md",
+     "filePath": "website/AGENTS.md",
+     "summary": "面向 agent 的网站维护规程：改动内容、布局或图表前必读 README 与 style-guide，图表资产说明与案例取证来源查 figures.md 和 evidence/；要求英文直陈式写作、复用共享样式与组件、公开资产中排除个人路径/账号数据/凭据，变更后运行 scripts/prepare-website.",
+     "type": "document",
+     "degree": 3
+    },
+    {
+     "id": "document:website/figures.md",
+     "name": "figures.md",
+     "filePath": "website/figures.md",
+     "summary": "网站图表资产台账：登记四张已发布 SVG（REA 调查流程、DX-Ball 声道调查、TH04 弹幕环、CTF 掩码方程）的 viewBox 与图示语义，完整保留两张历史图像生成 prompt 作为布局参考，并给出改图时的审查要点（拼写、算术顺序、箭头方向、SVG XML 校验与桌面/移动端渲染）。",
+     "type": "document",
+     "degree": 3
+    },
+    {
+     "id": "document:website/style-guide.md",
+     "name": "style-guide.md",
+     "filePath": "website/style-guide.md",
+     "summary": "网站写作与设计规范：定义读者 5/10/15 秒递进理解目标，给出泛化措辞到具体任务的对照表，规定 guide 与 case study 各自的七步页面结构，提供按关系类型选图表形式的决策表，钉死共享视觉系统（色板 token、1080px 容器、44px 最小触控目标、↑ Top 链接），并要求证据声明保留目标标识与",
+     "type": "document",
+     "degree": 3
+    }
+   ]
+  },
+  {
+   "id": "layer:project-config",
+   "name": "项目配置与 CI/CD 层",
+   "description": "monorepo 构建与发布工程化：package.json/turbo.json/tsconfig/vitest 配置、release-please 版本发布、.github/workflows CI 泳道与 issue 模板、oxlint/jscpd/knip 质量工具链与 husky 钩子。",
+   "totalNodes": 41,
+   "representatives": [
+    {
+     "id": "config:package.json",
+     "name": "package.json",
+     "filePath": "package.json",
+     "summary": "npm 包清单（rea-agents v6.1.0，MIT）：定义 rea 与 rea-agents 双 bin 入口（均指向 scripts/rea.mjs）、Node 引擎范围 ^22.19||^24.11||>=26、npm 11.16.0 包管理器钉版、约 130 个 scripts（build:cached、",
+     "type": "config",
+     "degree": 5
+    },
+    {
+     "id": "config:release-please-config.json",
+     "name": "release-please-config.json",
+     "filePath": "release-please-config.json",
+     "summary": "Release Please 发布流水线配置：node 发布类型、always-bump-minor 版本策略（含 breaking change 也只升 minor）、tag 不带 v 前缀、按 Conventional Commit 类型映射 changelog 分节（chore 隐藏），并声明 extra-fil",
+     "type": "config",
+     "degree": 5
+    },
+    {
+     "id": "config:.github/ISSUE_TEMPLATE/config.yml",
+     "name": "config.yml",
+     "filePath": ".github/ISSUE_TEMPLATE/config.yml",
+     "summary": "Issue template chooser 配置：blank_issues_enabled 关闭空白 issue（强制走结构化表单），并提供两个 contact links——README 文档入口与 GitHub Discussions 问答区，把提问类流量从 issue tracker 引导到讨论区。",
+     "type": "config",
+     "degree": 4
+    },
+    {
+     "id": "file:install.sh",
+     "name": "install.sh",
+     "filePath": "install.sh",
+     "summary": "curl|bash 一键安装脚本：校验 macOS/Linux 平台与 Node 22.19+/24.11+/26 版本门槛及 curl/npm 依赖，从 GitHub Releases API 解析最新 rea-agents 版本（严格 semver 正则校验、拒绝含 build metadata 的版本号），经 n",
+     "type": "file",
+     "degree": 3
+    },
+    {
+     "id": "config:tsconfig.build.json",
+     "name": "tsconfig.build.json",
+     "filePath": "tsconfig.build.json",
+     "summary": "生产构建 TypeScript 配置：extends 继承根 tsconfig.json，rootDir 收敛为 src/，排除全部测试（*.test.ts）、fixture 与 gitignored 的生成文件 generatedMcpToolCatalog.ts，增量编译信息写入 .cache/tsconfig.b",
+     "type": "config",
+     "degree": 3
+    },
+    {
+     "id": "config:tsconfig.json",
+     "name": "tsconfig.json",
+     "filePath": "tsconfig.json",
+     "summary": "根 TypeScript 配置：ESM NodeNext 模块解析、ES2023 target、全严格选项组合（strict、exactOptionalPropertyTypes、noUncheckedIndexedAccess、verbatimModuleSyntax、noImplicitOverride 等），增量",
+     "type": "config",
+     "degree": 3
+    },
+    {
+     "id": "pipeline:.github/workflows/real-browser.yml",
+     "name": "real-browser.yml",
+     "filePath": ".github/workflows/real-browser.yml",
+     "summary": "真实浏览器验证：Node 24 + 系统 Chrome（无沙箱）运行 npm run verify:browser，覆盖浏览器网络、脚本、模块与 DOM destination 采集链路；按 src/browser 及 scripts/verify-browser-*.mjs 路径过滤触发。",
+     "type": "pipeline",
+     "degree": 2
+    },
+    {
+     "id": "config:.github/ISSUE_TEMPLATE/bug_report.yml",
+     "name": "bug_report.yml",
+     "filePath": ".github/ISSUE_TEMPLATE/bug_report.yml",
+     "summary": "GitHub Bug report issue 表单模板（labels: bug/triage），用 15 个结构化字段强制采集可复现问题的完整上下文：area 下拉（setup/provider 发现、进程捕获、native 分析、证据重建、CLI、MCP 集成等 9 个子系统）、observed/reproduct",
+     "type": "config",
+     "degree": 2
+    },
+    {
+     "id": "config:.github/ISSUE_TEMPLATE/feature_request.yml",
+     "name": "feature_request.yml",
+     "filePath": ".github/ISSUE_TEMPLATE/feature_request.yml",
+     "summary": "Feature request issue 表单模板（labels: enhancement/triage），要求单一 capability/workflow outcome 一单；字段覆盖与 bug report 相同的 9 区 area 下拉、当前局限、具体用例、期望结果与成功判据（可观察行为/输入输出/证据/兼容",
+     "type": "config",
+     "degree": 2
+    },
+    {
+     "id": "config:knip.json",
+     "name": "knip.json",
+     "filePath": "knip.json",
+     "summary": "Knip 死代码与未用依赖检测配置：以 src/main.ts（MCP 入口）、src/cli.ts（CLI 入口）、src/contracts/errorSchemas.ts 与 tests/processOwnershipRunner.ts 为分析入口，项目范围覆盖 src/tests/scripts 与 Vite",
+     "type": "config",
+     "degree": 2
+    },
+    {
+     "id": "config:server.json",
+     "name": "server.json",
+     "filePath": "server.json",
+     "summary": "MCP 官方 server registry 元数据（name io.github.morluto/rea，title REA）：遵循 2025-12-11 MCP server JSON Schema，声明 npm 分发（rea-agents 6.1.0）、stdio transport、经 `npx rea-age",
+     "type": "config",
+     "degree": 2
+    },
+    {
+     "id": "pipeline:.github/workflows/ci.yml",
+     "name": "ci.yml",
+     "filePath": ".github/workflows/ci.yml",
+     "summary": "主 CI 工作流，12 个 job 覆盖 Conventional Commits PR 标题校验、按 git diff 的变更分类（docs-only PR 跳过代码 lane）、静态检查、四分片 vitest 测试加 coverage/JUnit/耗时报告合并、跨 linux/darwin 四矩阵的原生包基线（含 ",
+     "type": "pipeline",
+     "degree": 1
+    },
+    {
+     "id": "pipeline:.github/workflows/real-binary-layout.yml",
+     "name": "real-binary-layout.yml",
+     "filePath": ".github/workflows/real-binary-layout.yml",
+     "summary": "离线真实二进制布局验证：ubuntu-24.04 上以隔离 venv 精确固定 pwntools 4.15.0、pyelftools 0.33、unicorn 2.1.2，通过公共 CLI 与 MCP 验证源内 fixture，可选开关验证 65,281-section 大 ELF 的完整 MCP 结果。",
+     "type": "pipeline",
+     "degree": 1
+    },
+    {
+     "id": "pipeline:.github/workflows/real-hopper-linux.yml",
+     "name": "real-hopper-linux.yml",
+     "filePath": ".github/workflows/real-hopper-linux.yml",
+     "summary": "Linux Hopper E2E 双 job：干净安装验证（npm pack 后全局安装，sudo 下跑 verify:setup:linux）与自托管 [self-hosted, Linux, hopper] runner 上经备用 launcher symlink 对真实 Linux Hopper 的 confor",
+     "type": "pipeline",
+     "degree": 1
+    },
+    {
+     "id": "pipeline:.github/workflows/real-hopper.yml",
+     "name": "real-hopper.yml",
+     "filePath": ".github/workflows/real-hopper.yml",
+     "summary": "自托管 macOS Hopper runner 上将 npm pack 产物隔离全局安装，以 mcp 启动参数对源内 fixture 执行真实 Hopper conformance 验证。",
+     "type": "pipeline",
+     "degree": 1
+    },
+    {
+     "id": "pipeline:.github/workflows/real-recorded-crash.yml",
+     "name": "real-recorded-crash.yml",
+     "filePath": ".github/workflows/real-recorded-crash.yml",
+     "summary": "真实录制 crash 取证验证：安装 GDB，隔离 venv 固定 pwntools/pyelftools/unicorn/uv 栈，浅克隆 pin 死 commit 的 pwndbg 并 uv sync，npm pack 隔离安装本包后经 CLI/MCP 对源内 crash 录制做端到端验证。",
+     "type": "pipeline",
+     "degree": 1
+    },
+    {
+     "id": "pipeline:.github/workflows/real-web-runtime.yml",
+     "name": "real-web-runtime.yml",
+     "filePath": ".github/workflows/real-web-runtime.yml",
+     "summary": "网站运行时归因验证：Node 24 + 系统 Chrome（无沙箱）运行 npm run verify:browser:runtime，验证 CDP 连接、执行跟踪、事件监听器与运行时归因链路。",
+     "type": "pipeline",
+     "degree": 1
+    },
+    {
+     "id": "pipeline:.github/workflows/real-web-source-map.yml",
+     "name": "real-web-source-map.yml",
+     "filePath": ".github/workflows/real-web-source-map.yml",
+     "summary": "网站 source-map 验证：在隔离目录安装 esbuild 0.25.10 作为 fixture 编译器，Chrome 下运行 npm run verify:browser:source-maps 验证脚本源位置映射能力。",
+     "type": "pipeline",
+     "degree": 1
+    },
+    {
+     "id": "pipeline:.github/workflows/release.yml",
+     "name": "release.yml",
+     "filePath": ".github/workflows/release.yml",
+     "summary": "release-please 驱动的三通道发布工作流：main push 更新发布提案、合并 release PR 或 workflow_dispatch prepare/publish 双相触发；以 scripts/verify-release-checkpoint.mjs 校验版本与祖先链，publish job ",
+     "type": "pipeline",
+     "degree": 1
+    },
+    {
+     "id": "pipeline:.github/workflows/website-check.yml",
+     "name": "website-check.yml",
+     "filePath": ".github/workflows/website-check.yml",
+     "summary": "PR 触发的网站检查：运行 python3 scripts/prepare-website.py 准备示例下载，再用 scripts/verify-website.py 校验网站链接与发布配置。",
+     "type": "pipeline",
+     "degree": 1
+    },
+    {
+     "id": "pipeline:.github/workflows/website-pages.yml",
+     "name": "website-pages.yml",
+     "filePath": ".github/workflows/website-pages.yml",
+     "summary": "手动触发的网站发布：main 分支上先行执行与 website-check 相同的准备与校验步骤，再经 configure-pages、upload-pages-artifact 与 deploy-pages 将 website/public 发布到 GitHub Pages。",
+     "type": "pipeline",
+     "degree": 1
+    },
+    {
+     "id": "config:.github/ISSUE_TEMPLATE/design_discussion.yml",
+     "name": "design_discussion.yml",
+     "filePath": ".github/ISSUE_TEMPLATE/design_discussion.yml",
+     "summary": "Design discussion issue 表单模板（labels: enhancement/triage），用于在实现前解决 provider、公共/持久化 contract 或 authority 边界类架构决策；要求一次只讨论一个决策，并强制填写决策问题、context 与 evidence（区分观察行为/派",
+     "type": "config",
+     "degree": 1
+    },
+    {
+     "id": "config:.github/ISSUE_TEMPLATE/documentation.yml",
+     "name": "documentation.yml",
+     "filePath": ".github/ISSUE_TEMPLATE/documentation.yml",
+     "summary": "Documentation issue 表单模板（labels: documentation/triage），报告 REA 文档不清楚、缺失、过时或错误之处；必填字段要求给出文档位置（README 章节、命令、API、skill 或行内注释）、问题描述与受影响人群、期望的正确内容，可选附支撑证据（源码、命令输出、pro",
+     "type": "config",
+     "degree": 1
+    },
+    {
+     "id": "config:.oxfmtrc.json",
+     "name": ".oxfmtrc.json",
+     "filePath": ".oxfmtrc.json",
+     "summary": "Oxfmt 代码格式化配置：printWidth 80，禁用 import 排序与 package.json 键排序，忽略 dist/build/docs/api/node_modules/CHANGELOG.md/package-lock.json/_reference/third_party 等生成或第三方目录。",
+     "type": "config",
+     "degree": 1
+    },
+    {
+     "id": "config:.oxlintrc.json",
+     "name": ".oxlintrc.json",
+     "filePath": ".oxlintrc.json",
+     "summary": "Oxlint 静态检查配置：启用 typescript/import/unicorn/oxc 插件与复杂度约束（complexity 20、函数上限 100 行、文件上限 500 行、参数上限 4），并通过 overrides 的 no-restricted-imports 强制架构分层——application 测试",
+     "type": "config",
+     "degree": 1
+    }
+   ]
+  }
+ ],
+ "tour": [
+  {
+   "order": 1,
+   "title": "项目概览与包入口",
+   "description": "从 README 认识 REA（Reverse Engineer Anything）：一个让终端与 agent 对二进制、JS/Electron 应用、.NET 程序集与网站做逆向工程的 MCP server + CLI。package.json 定义 rea/rea-agents 双 bin 入口，二者都指向 scripts/rea.mjs 这个生产 dispatcher——它按参数三分派 MCP stdio 服务、mcp doctor 诊断与默认 CLI，并先校验 dist/ 编译产物齐全。这一步确立全仓的角色定位与启动方式，是后续所有旅程的地图。",
+   "nodes": [
+    {
+     "id": "document:README.md",
+     "name": "README.md",
+     "filePath": "README.md",
+     "summary": "项目主 README（16 种语言镜像入口）：REA（Reverse Engineer Anything）是统一的逆向工程 CLI 与 MCP server，让 agent 在无源码情况下检查原生二进制（Hopper/Ghidra/IDA）、JavaScript/Electron 应用、.NET 程序集与网站并给出带证据的结论；含快速开始（npx rea-agents setup）、工作原理、DX",
+     "type": "document",
+     "degree": 2
+    },
+    {
+     "id": "config:package.json",
+     "name": "package.json",
+     "filePath": "package.json",
+     "summary": "npm 包清单（rea-agents v6.1.0，MIT）：定义 rea 与 rea-agents 双 bin 入口（均指向 scripts/rea.mjs）、Node 引擎范围 ^22.19||^24.11||>=26、npm 11.16.0 包管理器钉版、约 130 个 scripts（build:cached、按 Vitest project 分层的 test:* 套件、数十条 verif",
+     "type": "config",
+     "degree": 5
+    },
+    {
+     "id": "file:scripts/rea.mjs",
+     "name": "rea.mjs",
+     "filePath": "scripts/rea.mjs",
+     "summary": "npm 包生产入口 dispatcher：按参数路由三种模式——MCP stdio 服务（--mcp/mcp）、mcp doctor 诊断、以及默认 CLI，先校验 dist/ 编译运行时文件齐全再按需动态 import，缺失时提示执行 npm ci && npm run build:cached。",
+     "type": "file",
+     "degree": 27
+    }
+   ]
+  },
+  {
+   "order": 2,
+   "title": "进程入口与 CLI 命令分派",
+   "description": "顺着 rea.mjs 的动态 import 进入两个真正的入口：main.ts 是 MCP 进程入口——装配运行时依赖、parseConfig、创建 binary session、启动 stdio transport 并注册配置热重载与优雅退出；cli.ts 则用 Incur 框架组装一次性 CLI，按序注册 setup/核心分析/EVM/artifact/Android 等命令。cliCommandNames.ts 是全部命令名的唯一权威清单，CLI 与 MCP 目录共用同一份名单，保证两个入口暴露一致的能力面。",
+   "nodes": [
+    {
+     "id": "file:src/main.ts",
+     "name": "main.ts",
+     "filePath": "src/main.ts",
+     "summary": "REA 进程入口：装配运行时依赖、parseConfig、创建 logger 与 binary session、打开初始目标、启动 MCP stdio transport 并注册配置热重载与优雅退出。",
+     "type": "file",
+     "degree": 25
+    },
+    {
+     "id": "file:src/cli.ts",
+     "name": "cli.ts",
+     "filePath": "src/cli.ts",
+     "summary": "一次性 Incur CLI 组装入口：createCli 构建 logger 与 Cli 实例（MCP 注册指引、npx 命令），按序注册 setup/核心分析/工具/EVM/artifact/managed/Android/固件/诊断/证据/进程/浏览器/Web 系列/Electron/运行时观测/应用共 24 组命令注册器；bare mcp 与 --mcp 由可执行分发层在此模块加载前拦截。",
+     "type": "file",
+     "degree": 34
+    },
+    {
+     "id": "file:src/cliCommandNames.ts",
+     "name": "cliCommandNames.ts",
+     "filePath": "src/cliCommandNames.ts",
+     "summary": "全部 CLI 命令名的唯一权威清单：CLI_COMMANDS 规范名映射、CLI_COMMAND_NAMES 有序主清单、CLI_COMMAND_ALIASES 别名、CLI_COMMAND_TOOL_ALIASES CLI 命令到 MCP 工具名的对照表，以及 MCP_TOOLS_WITHOUT_DEDICATED_CLI（无专属 CLI 命令的 MCP 工具列表）。",
+     "type": "file",
+     "degree": 28
+    }
+   ]
+  },
+  {
+   "order": 3,
+   "title": "组合根与配置解析",
+   "description": "CLI 与 MCP 适配器不在各自文件里拼装依赖，而是共享 composition/binary.ts 这个唯一生产装配点：createBinarySession 组装 Hopper/Ghidra/IDA 主 provider 与辅助 provider 注册表。directAnalysis.ts 把 session 工厂绑定为可直调的分析入口；config.ts 汇聚 REA_*/GHIDRA_*/HOPPER_* 环境变量的解析管道。理解这个组合根，就理解了依赖如何从环境变量流向运行时对象。",
+   "nodes": [
+    {
+     "id": "file:src/composition/binary.ts",
+     "name": "binary.ts",
+     "filePath": "src/composition/binary.ts",
+     "summary": "CLI 与 MCP 适配器共享的唯一生产装配点：createBinarySession 组装 Hopper/Ghidra/IDA 主 provider 与辅助 provider 注册表并经 composeBinarySession 产出可切换目标的 BinarySession；createManagedBinarySession 组装仅含 ManagedStaticProvider 的免执行托管会",
+     "type": "file",
+     "degree": 22
+    },
+    {
+     "id": "file:src/composition/directAnalysis.ts",
+     "name": "directAnalysis.ts",
+     "filePath": "src/composition/directAnalysis.ts",
+     "summary": "直接分析层的导线模块：把 binary.ts 的生产 session 工厂绑定为 DirectAnalysisDependencies，再用 bind 预注入依赖，导出五个可直接调用的分析/状态入口。",
+     "type": "file",
+     "degree": 30
+    },
+    {
+     "id": "file:src/config.ts",
+     "name": "config.ts",
+     "filePath": "src/config.ts",
+     "summary": "配置模块 barrel：从 config/types.ts 重导出 AppConfig 类型、从 config/parseConfig.ts 重导出 parseConfig，作为外部消费配置的唯一入口。",
+     "type": "file",
+     "degree": 29
+    }
+   ]
+  },
+  {
+   "order": 4,
+   "title": "MCP 工具契约总账",
+   "description": "在动手实现之前先看契约：toolContracts.ts 按 19 个 group（official/enhanced/native/managed/session 等）聚合出 TOOL_CONTRACTS 总清单，并以 PUBLISHED_TOOL_NAME_FLOOR 下限防止已发布工具被静默移除。toolContractTypes.ts 定义 ToolContract<Name,Input,Output> 核心接口，toolEffects.ts 则为每个公开工具显式声明 8 维副作用（是否改目标/写文件系统/访问网络）。这套\"契约先行\"设计让 MCP 工具面、CLI 命令与文档目录从同一份真相生成。",
+   "nodes": [
+    {
+     "id": "file:src/contracts/toolContracts.ts",
+     "name": "toolContracts.ts",
+     "filePath": "src/contracts/toolContracts.ts",
+     "summary": "工具契约聚合中枢：按固定顺序展开 19 个 group（official/enhanced/native/managed/session 等）为 TOOL_CONTRACTS 总清单，并提供按名精确检索且类型级保留 schema 的 toolContract()。",
+     "type": "file",
+     "degree": 112
+    },
+    {
+     "id": "file:src/contracts/toolContractTypes.ts",
+     "name": "toolContractTypes.ts",
+     "filePath": "src/contracts/toolContractTypes.ts",
+     "summary": "工具契约核心类型：ToolContract<Name,Input,Output> 接口（name/title/kind/schemas/effects/annotations/examples）与 TOOL_KINDS 12 个 adapter 家族常量，是全部契约文件的公共类型基准。",
+     "type": "file",
+     "degree": 17
+    },
+    {
+     "id": "file:src/contracts/toolEffects.ts",
+     "name": "toolEffects.ts",
+     "filePath": "src/contracts/toolEffects.ts",
+     "summary": "工具副作用审计表：TOOL_EFFECTS 为每个公开工具显式声明 8 维 effects（mutatesTarget/writesFilesystem/accessesNetwork 等），annotationsFromEffects 纯函数推导 MCP annotations，杜绝按工具名猜测的启发式。",
+     "type": "file",
+     "degree": 27
+    }
+   ]
+  },
+  {
+   "order": 5,
+   "title": "MCP Server 组装与结果序列化",
+   "description": "createServer.ts 是 server 层总枢纽：依可选 provider 注入 60 余项依赖，注册二进制/Android/EVM/固件/Web/浏览器/Electron/应用图等全部工具族。toolRegistrationOptions.ts 把第 4 步的 Zod 契约直接投影为 SDK registerTool 选项；toolResult.ts 负责应用结果到 CallToolResult 的序列化——共享错误投影、Evidence 记录确认，响应超预算时转为可行动的资源约束错误。MCP 适配层在这里做到\"薄\"：只做翻译，不做业务。",
+   "nodes": [
+    {
+     "id": "file:src/server/createServer.ts",
+     "name": "createServer.ts",
+     "filePath": "src/server/createServer.ts",
+     "summary": "MCP server 组装总枢纽：createServer 依可选 provider 注入 60 余项依赖，注册二进制/Android/EVM/固件/Web/浏览器/Electron/应用图/会话等全部工具族，并按平台与环境变量计算工具可用性策略。",
+     "type": "file",
+     "degree": 158
+    },
+    {
+     "id": "file:src/server/toolResult.ts",
+     "name": "toolResult.ts",
+     "filePath": "src/server/toolResult.ts",
+     "summary": "应用结果到 MCP CallToolResult 的序列化核心：共享错误投影、Evidence 记录确认、响应超预算时转为可行动的资源约束错误并附 Evidence 恢复建议。",
+     "type": "file",
+     "degree": 67
+    },
+    {
+     "id": "file:src/server/toolRegistrationOptions.ts",
+     "name": "toolRegistrationOptions.ts",
+     "filePath": "src/server/toolRegistrationOptions.ts",
+     "summary": "把规范化 Zod 契约直接投影为 SDK registerTool 所需的 title/description/inputSchema/outputSchema/annotations 选项。",
+     "type": "file",
+     "degree": 47
+    }
+   ]
+  },
+  {
+   "order": 6,
+   "title": "领域模型地基",
+   "description": "现在下潜到全仓被依赖最深的 domain 层（本层 409 节点是最大层）。result.ts 的 Result<T,E> 判别联合（fan-in 全仓第一，259）与 jsonValue.ts 的有界 JSON 校验构成最小类型基建；analysisErrorCore.ts 用十个核心错误类建立 provider 中立的失败分类法；binaryTarget.ts 无 I/O 解析 ELF/Mach-O/PE 文件头，产出 provider 中立的格式与架构元数据。上层一切 Provider 与工作流都以这套词汇表说话。",
+   "nodes": [
+    {
+     "id": "file:src/domain/result.ts",
+     "name": "result.ts",
+     "filePath": "src/domain/result.ts",
+     "summary": "Result<T,E> 判别联合与 ok/err 构造器：期望式错误通道的最小类型基建，供各输入边界复用。",
+     "type": "file",
+     "degree": 270
+    },
+    {
+     "id": "file:src/domain/jsonValue.ts",
+     "name": "jsonValue.ts",
+     "filePath": "src/domain/jsonValue.ts",
+     "summary": "共享 JSON 值契约：MAX_JSON_DEPTH=1000 深度上限、jsonValueValidationSteps 以有界步进迭代校验（每 4096 步让出一次），并用 WeakMap 缓存已认证不可变快照的校验结果。",
+     "type": "file",
+     "degree": 253
+    },
+    {
+     "id": "file:src/domain/analysisErrorCore.ts",
+     "name": "analysisErrorCore.ts",
+     "filePath": "src/domain/analysisErrorCore.ts",
+     "summary": "十个核心分析错误类：不支持目标、资源约束、协议、输入/输出、能力不可用、取消、超时、访问拒绝、artifact 变更——全部继承 AnalysisError 并以 _tag 判别，附 AnalysisInputIssue 秘密安全的参数纠错元数据。",
+     "type": "file",
+     "degree": 218
+    },
+    {
+     "id": "file:src/domain/binaryTarget.ts",
+     "name": "binaryTarget.ts",
+     "filePath": "src/domain/binaryTarget.ts",
+     "summary": "无 I/O 的可执行文件头解析域：按 magic 分派到 ELF/Mach-O(thin/fat)/DOS MZ/PE 解析器，产出 provider 中立的格式与 CPU 架构元数据；PE 额外提取 COFF executableRole 与 CLI header（managed）判定。",
+     "type": "file",
+     "degree": 93
+    }
+   ]
+  },
+  {
+   "order": 7,
+   "title": "应用编排与会话",
+   "description": "领域模型之上是应用编排：AnalysisProvider.ts（fan-in 161）定义 AnalysisOperation 封闭联合与 provider 选择契约，是所有引擎适配器实现的同一接口。BinarySession.ts 作为二进制分析会话门面，负责 provider 路由、目标打开/关闭与快照落盘；DirectAnalysis.ts 按工具名路由 native/managed/artifact/enhanced 操作，驱动会话生命周期与重放判定——它是 MCP 工具调用落到实际分析的必经之路。",
+   "nodes": [
+    {
+     "id": "file:src/application/AnalysisProvider.ts",
+     "name": "AnalysisProvider.ts",
+     "filePath": "src/application/AnalysisProvider.ts",
+     "summary": "应用层分析契约中枢：AnalysisOperation（official/enhanced/native/artifact/managed/health 封闭联合）、AnalysisExecution、ProviderIdentity、AnalysisClient/Port 等类型与 createAnalysisExecution 原子观察工厂。",
+     "type": "file",
+     "degree": 185
+    },
+    {
+     "id": "file:src/application/binary/BinarySession.ts",
+     "name": "BinarySession.ts",
+     "filePath": "src/application/binary/BinarySession.ts",
+     "summary": "二进制分析会话门面：BinarySession 继承 BinarySessionRecords 并实现 BinarySessionPort，负责 provider 路由选择、目标打开/关闭（含快照落盘）、执行调用记账与状态投影。",
+     "type": "file",
+     "degree": 58
+    },
+    {
+     "id": "file:src/application/DirectAnalysis.ts",
+     "name": "DirectAnalysis.ts",
+     "filePath": "src/application/DirectAnalysis.ts",
+     "summary": "直接分析执行引擎：按工具名路由 native/managed/artifact/enhanced 操作，驱动 BinarySession 生命周期、分析快照读写与重放判定、进程取消与 evidence 生成，是 MCP 工具调用到 provider 会话的核心编排层。",
+     "type": "file",
+     "degree": 51
+    }
+   ]
+  },
+  {
+   "order": 8,
+   "title": "受管进程沙箱",
+   "description": "逆向引擎多是长生命周期外部进程，REA 用 owned process 体系驯服它们：ProcessOwnership.ts（1002 行）定义 POSIX 进程组清理契约——清理前必须用 REA_PROCESS_RUN_ID 令牌验证进程归属，防止误杀；ProviderProcess.ts 生成并监督归属进程（Windows 走 Job Object）；PrivateRuntimeRoot.ts 为 provider 准备私有运行时目录（Windows DACL 隔离、POSIX mkdtemp 0700）。这是所有进程外引擎共用的安全底座。",
+   "nodes": [
+    {
+     "id": "file:src/process/ProcessOwnership.ts",
+     "name": "ProcessOwnership.ts",
+     "filePath": "src/process/ProcessOwnership.ts",
+     "summary": "进程归属核心（1002 行）：定义 OwnedProcessGroup/ProcessTableEntry 等类型与 POSIX 进程组清理契约——清理前必须用 REA_PROCESS_RUN_ID 令牌与启动身份双重验证每个存活成员，身份存疑一律 fail-closed 拒绝发信号；Windows 降级为 taskkill P0 有界清理。",
+     "type": "file",
+     "degree": 63
+    },
+    {
+     "id": "file:src/process/ProviderProcess.ts",
+     "name": "ProviderProcess.ts",
+     "filePath": "src/process/ProviderProcess.ts",
+     "summary": "长生命周期 provider 进程生成与监督（552 行）：spawnOwnedProviderProcess 注入 REA_PROCESS_RUN_ID 令牌并生成归属进程（Windows 走 WindowsOwnedProcess，POSIX detached 进程组）；ProviderProcessSupervisor 监督生命周期并区分 exit 与输出关闭，ProcessOutputCa",
+     "type": "file",
+     "degree": 55
+    },
+    {
+     "id": "file:src/process/PrivateRuntimeRoot.ts",
+     "name": "PrivateRuntimeRoot.ts",
+     "filePath": "src/process/PrivateRuntimeRoot.ts",
+     "summary": "provider 私有运行时根目录：Windows 走 WindowsPrivateRuntime（DACL 隔离），POSIX 用 mkdtemp + chmod 0700；privateRuntimeRootCapability 报告平台可用性与安全证明（posix-mode-0700 / native-authority）。",
+     "type": "file",
+     "degree": 37
+    }
+   ]
+  },
+  {
+   "order": 9,
+   "title": "反汇编三巨头：Ghidra/Hopper/IDA",
+   "description": "看 Provider 理念最完整的落地：GhidraClient.ts 拥有一条经认证的私有 headless Ghidra 会话（私有 Unix socket + 请求队列 + 行式响应路由），其进程外对手是 ReaGhidraBridge.java——单类 3300 行的只读 Ghidra 桥，服务 29 个能力（内存读取/反编译/pcode 等）。HopperProvider.ts 展示候选式 provider（平台探测 + Mach-O 支持矩阵），IdaMcpConnection.ts 则示范 bring-your-own 模式：把用户自备的 ida-pro-mcp 经 stdio/HTTP 接入并 listTools 建目录。三种接入姿势、同一个 AnalysisProvider 接口。",
+   "nodes": [
+    {
+     "id": "file:src/ghidra/GhidraClient.ts",
+     "name": "GhidraClient.ts",
+     "filePath": "src/ghidra/GhidraClient.ts",
+     "summary": "Ghidra Java bridge 核心客户端：拥有一个经认证的私有 headless Ghidra 会话——私有 Unix socket 传输、请求队列、行式响应 buffer/router、启动握手、鉴权 token 保留与诊断脱敏、进程监督、运行 lineage 与关闭清算，mutation 权威绑定到 transport。",
+     "type": "file",
+     "degree": 31
+    },
+    {
+     "id": "file:bridge/ghidra/ReaGhidraBridge.java",
+     "name": "ReaGhidraBridge.java",
+     "filePath": "bridge/ghidra/ReaGhidraBridge.java",
+     "summary": "REA 打包的只读 Ghidra headless 桥（单类 3300 行）：读环境描述符后在 Unix socket（Windows 回环 TCP）上服务 29 个能力——内存读取、反编译、pcode 值流、跳转表与 API 边界推断、注释回写与交叉引用。",
+     "type": "file",
+     "degree": 89
+    },
+    {
+     "id": "file:src/hopper/HopperProvider.ts",
+     "name": "HopperProvider.ts",
+     "filePath": "src/hopper/HopperProvider.ts",
+     "summary": "Hopper 分析 provider 装配：HopperProvider 实现 AnalysisProviderCandidate——平台与 launcher 可执行性探测、目标 kind/format 支持矩阵（DOS 让位 Ghidra）、分析档案解析，createClient 装配 HopperApplicationLauncher+HopperClient+HopperRegexSearc",
+     "type": "file",
+     "degree": 26
+    },
+    {
+     "id": "file:src/ida/IdaMcpConnection.ts",
+     "name": "IdaMcpConnection.ts",
+     "filePath": "src/ida/IdaMcpConnection.ts",
+     "summary": "可注入的 IDA MCP 连接层：createIdaMcpConnection 按配置创建 stdio 或 StreamableHTTP 传输的 MCP Client 并在连接时 listTools 建目录，decodeIdaToolResult 统一解包 content/structuredContent，redactIdaTransportFailure 从错误消息剥除已配置的认证秘密。",
+     "type": "file",
+     "degree": 19
+    }
+   ]
+  },
+  {
+   "order": 10,
+   "title": "多域专用引擎",
+   "description": "反汇编之外的五路专用引擎：ManagedStaticProvider.ts 不加载目标代码、直接从 ECMA-335 元数据字节检查 .NET 类型与调用边；JadxProvider.ts 经 MCP bridge 驱动 JADX 做 Android APK 分析（串行会话 + idle 退休）；EvmoleInterfaceProvider.ts 在 owned worker 里以 prlimit 资源限制运行未修改的 Evmole/WASM 推断 EVM 合约接口；FirmwareProvider.ts 串接 binwalk/unblob 的 bring-your-own 固件提取；NativeMacOSProvider.ts 用 lipo/otool/nm 等 Darwin 原生工具链检查 Mach-O。注意它们全部复用第 7-8 步的会话与沙箱设施。",
+   "nodes": [
+    {
+     "id": "file:src/dotnet/ManagedStaticProvider.ts",
+     "name": "ManagedStaticProvider.ts",
+     "filePath": "src/dotnet/ManagedStaticProvider.ts",
+     "summary": "托管静态分析 provider：ManagedStaticProvider 实现 provider 工厂接口，ManagedStaticClient.execute 按 MANAGED_TOOL_CONTRACTS 分派 artifact/member/native-boundary 三类操作（zod 校验入参、快照 sha256 复核、结果含位置定位），全程零进程零副作用。",
+     "type": "file",
+     "degree": 30
+    },
+    {
+     "id": "file:src/android/JadxProvider.ts",
+     "name": "JadxProvider.ts",
+     "filePath": "src/android/JadxProvider.ts",
+     "summary": "JADX provider 实现：每个 REA 实例持有一个串行化、不可变的 APK 会话，idle 定时退休，close 取消排队操作并加入 engine 与私有工作区清理。",
+     "type": "file",
+     "degree": 22
+    },
+    {
+     "id": "file:src/evm/EvmoleInterfaceProvider.ts",
+     "name": "EvmoleInterfaceProvider.ts",
+     "filePath": "src/evm/EvmoleInterfaceProvider.ts",
+     "summary": "实现 EvmInterfacePort 的 EVM 接口 provider 适配器：在 owned worker 进程中以 prlimit 资源限制运行未修改的 Evmole/WASM（evmole@0.9.3），把恢复出的函数 selector/参数/stateMutability 接口证据同时绑定到原始 carrier 与解码字节身份，全程离线、不执行目标代码、不触网。",
+     "type": "file",
+     "degree": 21
+    },
+    {
+     "id": "file:src/firmware/FirmwareProvider.ts",
+     "name": "FirmwareProvider.ts",
+     "filePath": "src/firmware/FirmwareProvider.ts",
+     "summary": "实现 FirmwareAnalysisPort 的固件分析 provider：以 #tail promise 链把 bring-your-own 固件适配器排队为单 worker 串行执行，串接命令解析、版本准入、报告规范化与提取发布，私有快照 + owned 清理，并声明签名不等于分区有效性、沙箱默认开启等四条能力 limitation。",
+     "type": "file",
+     "degree": 20
+    },
+    {
+     "id": "file:src/native/NativeMacOSProvider.ts",
+     "name": "NativeMacOSProvider.ts",
+     "filePath": "src/native/NativeMacOSProvider.ts",
+     "summary": "native-macos provider 主体：NativeMacOSProvider 实现 AnalysisProvider（identity/capabilities/createClient），NativeMacOSClient 分派 health、inspect_native_dispatch_metadata 与全部 native 工具操作（codesign/plist/架构/UI 观",
+     "type": "file",
+     "degree": 54
+    }
+   ]
+  },
+  {
+   "order": 11,
+   "title": "浏览器观测与 JS 应用图",
+   "description": "对网站与 Electron 应用的运行时取证：CdpConnection.ts 封装 CDP WebSocket 命令收发与 pending promise 管理，CdpBrowserProvider.ts 在其上实现被动观察（目标列举/页面检查/bundle 分析含 source map）。静态侧由 JavaScriptApplicationService.ts 主导：重建 artifact → 语义分析 → 构造 Evidence；javascriptApplicationGraph.ts（domain 层 fan-in 53）定义 JS Application Graph 的节点/边与确定性 ID 策略，把混淆 bundle 重建为可查询的应用结构。运行时观察与静态恢复在图上汇合。",
+   "nodes": [
+    {
+     "id": "file:src/browser/CdpConnection.ts",
+     "name": "CdpConnection.ts",
+     "filePath": "src/browser/CdpConnection.ts",
+     "summary": "CDP WebSocket 连接封装：命令收发与 pending promise 管理（支持 AbortSignal）、事件/断连/协议失败三类监听器、优雅 close 与超时 terminate，二进制帧统一转文本解析。",
+     "type": "file",
+     "degree": 39
+    },
+    {
+     "id": "file:src/browser/CdpBrowserProvider.ts",
+     "name": "CdpBrowserProvider.ts",
+     "filePath": "src/browser/CdpBrowserProvider.ts",
+     "summary": "基于 Chrome DevTools Protocol 的被动浏览器观察 provider，实现 BrowserObservationPort：目标列举、页面检查、bundle 分析（含 source map）、会话观察、WebMCP 工具发现、截图与截图/捕获对比九大能力，统一 CDP 域启用/清理与错误包装。",
+     "type": "file",
+     "degree": 64
+    },
+    {
+     "id": "file:src/application/javascript/JavaScriptApplicationService.ts",
+     "name": "JavaScriptApplicationService.ts",
+     "filePath": "src/application/javascript/JavaScriptApplicationService.ts",
+     "summary": "JavaScript 应用静态分析主入口：safeParse 输入 → 协作式重建 artifact → 解析自有分析步骤 → 协作式构造 Evidence，含结果 schema 失败的 JSON Pointer 诊断与文件系统错误分类。",
+     "type": "file",
+     "degree": 61
+    },
+    {
+     "id": "file:src/domain/javascript/javascriptApplicationGraph.ts",
+     "name": "javascriptApplicationGraph.ts",
+     "filePath": "src/domain/javascript/javascriptApplicationGraph.ts",
+     "summary": "JavaScript Application Graph 核心：节点/边/图的创建与规范化（semantic-content-sha256 确定性 ID 策略）、observation-identity 匹配、全图不变量校验（证据规范化、边端点存在、排序唯一）、canonical JSON 序列化与 sha256，以及冻结快照的 steps 迭代器协议。",
+     "type": "file",
+     "degree": 83
+    }
+   ]
+  },
+  {
+   "order": 12,
+   "title": "Evidence 证据体系与完成账本",
+   "description": "前面每一步的产出最终都收敛为证据：evidence.ts（fan-in 234）定义 provider/位置/信封/记录 schema 并校验语义 ID 防篡改；evidenceBundle.ts 生成确定性排序的密封 bundle；digests.ts 统一 SHA-256 digest 形状（收敛了约 30 个模块的手抄正则）。completionLedgerGeneration.ts 生成完成账本——校验 verifier 报告与 skill 摘要后产出 completion manifest。这套\"一切结论必须携带可验证证据\"的设计是 REA 对抗 agent 幻觉的核心机制。",
+   "nodes": [
+    {
+     "id": "file:src/domain/evidence.ts",
+     "name": "evidence.ts",
+     "filePath": "src/domain/evidence.ts",
+     "summary": "Evidence 领域核心：定义 provider/evidenceLocation/evidenceEnvelope/evidenceRecord 等 schema，parseEvidence 校验语义 ID 防篡改，immutableEvidence 冻结密封快照，createEvidence+normalizeEvidenceObservation 对观察值做逐 provider 归一化并计",
+     "type": "file",
+     "degree": 270
+    },
+    {
+     "id": "file:src/domain/evidenceBundle.ts",
+     "name": "evidenceBundle.ts",
+     "filePath": "src/domain/evidenceBundle.ts",
+     "summary": "Evidence bundle 构建与认证：createEvidenceBundle 生成确定性排序的密封 bundle，evidenceBundleForTarget 按目标投影；validateUnknownGraph/validateVerifiedResolution/validateResidualUnknownAddition/rejectDependencyCycles 维护 unk",
+     "type": "file",
+     "degree": 77
+    },
+    {
+     "id": "file:src/domain/digests.ts",
+     "name": "digests.ts",
+     "filePath": "src/domain/digests.ts",
+     "summary": "全仓统一的 canonical digest 形状定义：SHA256_PATTERN 正则、digestSchema 与带前缀的 prefixedDigestSchema 工厂，收敛了此前散落在约 30 个模块里的手抄正则。",
+     "type": "file",
+     "degree": 61
+    },
+    {
+     "id": "file:src/domain/completionLedgerGeneration.ts",
+     "name": "completionLedgerGeneration.ts",
+     "filePath": "src/domain/completionLedgerGeneration.ts",
+     "summary": "完成账本（completion ledger）生成：校验 verifier 报告与 skill 摘要，规范化 claims（内部 ID 排序、整体排序），生成 completion manifest 并以规范化 JSON 的 sha256 计算 manifest_id，同时产出证据账本。",
+     "type": "file",
+     "degree": 10
+    }
+   ]
+  },
+  {
+   "order": 13,
+   "title": "测试矩阵与夹具工厂",
+   "description": "测试层（553 节点）按行为深度分道：docs/testing.md 是权威指南——真实 provider 端到端 > 集成 > golden 回归 > 聚焦模块测试，并规定 Vitest 多 project 边界分道。binarySession.ts 提供 createTestBinarySession 测试工厂（fan-in 51），让任何 provider 组合都能聚焦验证；fakeCdpBrowser.ts 在真实 HTTP+WebSocket 传输上起一个假 CDP 浏览器端点，回放命令并记录请求。看夹具就懂了生产代码的接缝设计。",
+   "nodes": [
+    {
+     "id": "document:docs/testing.md",
+     "name": "testing.md",
+     "filePath": "docs/testing.md",
+     "summary": "测试权威指南：按行为深度分级（真实 provider 端到端 > 集成 > golden 回归 > 聚焦模块测试）并规定 Vitest project 分道（MCP 边界/文件系统边界/串行进程边界），详列真实工具链验证 lane（Android APK、NativeAOT Ghidra、IDA MCP adapter、DOS Ghidra、Apple Interface Builder 归档、原",
+     "type": "document",
+     "degree": 6
+    },
+    {
+     "id": "file:tests/fixtures/binarySession.ts",
+     "name": "binarySession.ts",
+     "filePath": "tests/fixtures/binarySession.ts",
+     "summary": "BinarySession 测试工厂集：createTestBinarySession 以单一 provider/client factory 组装聚焦会话，createBinarySessionTargets 物化两个目标文件，createCacheProvider/ControllableAnalysisClient 暴露可观测调用与能力声明，createDeferred/cacheCapab",
+     "type": "file",
+     "degree": 72
+    },
+    {
+     "id": "file:tests/fixtures/fakeCdpBrowser.ts",
+     "name": "fakeCdpBrowser.ts",
+     "filePath": "tests/fixtures/fakeCdpBrowser.ts",
+     "summary": "伪 Chrome DevTools Protocol 浏览器：startFakeCdpBrowser 在真实 HTTP+WebSocket 传输上启动假浏览器端点，记录命令与 HTTP 请求，replyToCommand 借 resultFor/emitEvents 产出原生线格式的回复与事件，让 CDP 集成测试不绕过生产传输解析器。",
+     "type": "file",
+     "degree": 33
+    }
+   ]
+  },
+  {
+   "order": 14,
+   "title": "真实引擎验证与 CI 收官",
+   "description": "最后一环是把\"真的能逆向\"变成流水线断言：verify-real-ghidra-assertions.mjs 是真 Ghidra 验证套件的共享断言库（18 个导出，覆盖反编译文本/引用元数据/dossier），verifier-run.mjs 创建携带 REA_PROCESS_RUN_ID 的运行遥测记录。ci.yml 的 12 个 job 覆盖四分片测试矩阵，real-hopper.yml 在自托管 macOS runner 上对 npm pack 产物跑真实 Hopper conformance；installation.md 与 mcp-contracts.md 则面向使用者收束安装与契约文档。至此从入口到验证的完整闭环走完。",
+   "nodes": [
+    {
+     "id": "file:scripts/verify-real-ghidra-assertions.mjs",
+     "name": "verify-real-ghidra-assertions.mjs",
+     "filePath": "scripts/verify-real-ghidra-assertions.mjs",
+     "summary": "真实 Ghidra 验证套件的共享断言库（18 个导出）：覆盖 procedure info、assembly/pseudocode provider 文本、引用元数据、dossier 八项子断言、dense switch dossier、session 能力/版本承诺、runtime 坐标与清理探活，以及 debug/stripped/cross/malformed 四类 fixture 断言和",
+     "type": "file",
+     "degree": 45
+    },
+    {
+     "id": "file:scripts/lib/verifier-run.mjs",
+     "name": "verifier-run.mjs",
+     "filePath": "scripts/lib/verifier-run.mjs",
+     "summary": "verifier 运行遥测核心库：创建携带 REA_PROCESS_RUN_ID 的 run 记录，完成时观察进程谱系（Linux 读 /proc，POSIX 回退 ps），记录 launcher 与全部后代进程的快照；是几乎所有 verify 脚本的公共依赖。",
+     "type": "file",
+     "degree": 39
+    },
+    {
+     "id": "pipeline:.github/workflows/ci.yml",
+     "name": "ci.yml",
+     "filePath": ".github/workflows/ci.yml",
+     "summary": "主 CI 工作流，12 个 job 覆盖 Conventional Commits PR 标题校验、按 git diff 的变更分类（docs-only PR 跳过代码 lane）、静态检查、四分片 vitest 测试加 coverage/JUnit/耗时报告合并、跨 linux/darwin 四矩阵的原生包基线（含 mingw-w64 交叉编译的 Windows 原生控件）、macOS Appl",
+     "type": "pipeline",
+     "degree": 1
+    },
+    {
+     "id": "pipeline:.github/workflows/real-hopper.yml",
+     "name": "real-hopper.yml",
+     "filePath": ".github/workflows/real-hopper.yml",
+     "summary": "自托管 macOS Hopper runner 上将 npm pack 产物隔离全局安装，以 mcp 启动参数对源内 fixture 执行真实 Hopper conformance 验证。",
+     "type": "pipeline",
+     "degree": 1
+    },
+    {
+     "id": "document:docs/installation.md",
+     "name": "installation.md",
+     "filePath": "docs/installation.md",
+     "summary": "安装与配置指南：覆盖 npx rea-agents setup 流程与版本钉定、发布包与 main 边界、skill-only 安装、支持的 agent、setup 变更审查与就绪检查、Hopper/Ghidra 安装（含 CI 与 launcher 路径排障）、诊断更新卸载及 MCP Registry。",
+     "type": "document",
+     "degree": 7
+    }
+   ]
+  }
+ ]
+}

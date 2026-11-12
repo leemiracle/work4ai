@@ -1,0 +1,2009 @@
+{
+ "nodes": [
+  {
+   "id": "file:packages/llm/llm-deepseek/src/file-store.ts",
+   "type": "file",
+   "name": "file-store.ts",
+   "filePath": "packages/llm/llm-deepseek/src/file-store.ts",
+   "summary": "DeepSeek Files API 上传复用、失效与配额恢复：DeepSeekFileStore 按（端点+认证头哈希）隔离上传复用，管理文件过期/主动刷新窗口/配额清理批量，上传等待可中止。",
+   "tags": [
+    "files",
+    "upload-reuse",
+    "quota",
+    "deepseek"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/llm/llm-deepseek/src/file-store.ts:DeepSeekFileStore",
+   "type": "class",
+   "name": "DeepSeekFileStore",
+   "filePath": "packages/llm/llm-deepseek/src/file-store.ts",
+   "lineRange": [
+    121,
+    336
+   ],
+   "summary": "共享 Files 存储门面：对每个请求图像执行上传复用（32MiB 上限）、陈旧 file-id 恢复与配额超限时的批量清理重试，原生凭据不落盘。",
+   "tags": [
+    "file-store",
+    "upload-reuse",
+    "recovery"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/file-store.ts:waitForUpload",
+   "type": "function",
+   "name": "waitForUpload",
+   "filePath": "packages/llm/llm-deepseek/src/file-store.ts",
+   "lineRange": [
+    69,
+    103
+   ],
+   "summary": "并发上传的去重等待：同一附件的上传只执行一次，后来者等待既有 promise 并在中止时给出确定性行为。",
+   "tags": [
+    "concurrency",
+    "dedup",
+    "upload"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/files-api.ts",
+   "type": "file",
+   "name": "files-api.ts",
+   "filePath": "packages/llm/llm-deepseek/src/files-api.ts",
+   "summary": "DeepSeek Files API 传输层：DeepSeekFilesClient 封装 list/upload/retrieve 的 HTTP 调用与文件对象校验（大小 128MiB 上限、数量 1 万、存储 25GiB 配额常量），配额错误可被 isFilesQuotaError 识别。",
+   "tags": [
+    "files",
+    "http-client",
+    "quota",
+    "deepseek"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/llm/llm-deepseek/src/files-api.ts:DeepSeekFilesError",
+   "type": "class",
+   "name": "DeepSeekFilesError",
+   "filePath": "packages/llm/llm-deepseek/src/files-api.ts",
+   "lineRange": [
+    39,
+    59
+   ],
+   "summary": "Files API 专用错误（继承 LlmError）：携带配额标志与提供方细节，供上层区分可恢复配额超限。",
+   "tags": [
+    "error-handling",
+    "files",
+    "exported"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/llm/llm-deepseek/src/files-api.ts:DeepSeekFilesClient",
+   "type": "class",
+   "name": "DeepSeekFilesClient",
+   "filePath": "packages/llm/llm-deepseek/src/files-api.ts",
+   "lineRange": [
+    131,
+    262
+   ],
+   "summary": "Files API HTTP 客户端：统一认证头与归因头，解析响应 JSON 并校验文件对象结构，错误归一为 DeepSeekFilesError。",
+   "tags": [
+    "http-client",
+    "files",
+    "validation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/files-api.ts:parseFileObject",
+   "type": "function",
+   "name": "parseFileObject",
+   "filePath": "packages/llm/llm-deepseek/src/files-api.ts",
+   "lineRange": [
+    95,
+    114
+   ],
+   "summary": "校验并解析提供方文件元数据（id/bytes/createdAt/filename/expiresAt）为 DeepSeekFileObject。",
+   "tags": [
+    "validation",
+    "parsing"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/host.ts",
+   "type": "file",
+   "name": "host.ts",
+   "filePath": "packages/llm/llm-deepseek/src/host.ts",
+   "summary": "DeepSeek 协议适配器的共享 Host 接线：registerDeepSeekProvider 组合适配器+模型目录缓存注册一条路由，createModelListingCache 拥有目录刷新、stderr 诊断与目录变更通知的生命周期。",
+   "tags": [
+    "host-wiring",
+    "provider-registration",
+    "listing"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/host.ts:createModelListingCache",
+   "type": "function",
+   "name": "createModelListingCache",
+   "filePath": "packages/llm/llm-deepseek/src/host.ts",
+   "lineRange": [
+    21,
+    36
+   ],
+   "summary": "为一条路由创建 ModelListingCache 并接管目录刷新调度与诊断日志，随 provider 生命周期销毁。",
+   "tags": [
+    "factory",
+    "listing-cache",
+    "exported"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/host.ts:registerDeepSeekProvider",
+   "type": "function",
+   "name": "registerDeepSeekProvider",
+   "filePath": "packages/llm/llm-deepseek/src/host.ts",
+   "lineRange": [
+    44,
+    91
+   ],
+   "summary": "在 ctx.llm 注册一条 DeepSeek 路由：组装 DeepSeekAdapter 依赖（凭据/设置/图像访问解析）并挂接目录缓存与目录变更事件。",
+   "tags": [
+    "registration",
+    "provider",
+    "cordis",
+    "exported"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/image-tokens.ts",
+   "type": "file",
+   "name": "image-tokens.ts",
+   "filePath": "packages/llm/llm-deepseek/src/image-tokens.ts",
+   "summary": "DeepSeek 视觉 token 计算器（v41 配置逐字移植）：小于 544×544 的图放缩上去、14px patch 网格对齐、3:1 降采样为 token 格、单图 1024 token 上限内解最大保持纵横比网格；计数精确无对齐填充。",
+   "tags": [
+    "vision-tokens",
+    "calculator",
+    "deepseek"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/image-tokens.ts:solveResizeRatio",
+   "type": "function",
+   "name": "solveResizeRatio",
+   "filePath": "packages/llm/llm-deepseek/src/image-tokens.ts",
+   "lineRange": [
+    49,
+    75
+   ],
+   "summary": "在 1024 token 预算内解出最大保持纵横比的放缩比例，token 网格求解的核心。",
+   "tags": [
+    "solver",
+    "aspect-ratio",
+    "tokens"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/image-tokens.ts:deepSeekRequestImageTokens",
+   "type": "function",
+   "name": "deepSeekRequestImageTokens",
+   "filePath": "packages/llm/llm-deepseek/src/image-tokens.ts",
+   "lineRange": [
+    147,
+    157
+   ],
+   "summary": "按提供方公布的算法计算一张请求图像的精确视觉 token 数（实际用量仍以提供方为准）。",
+   "tags": [
+    "tokens",
+    "images",
+    "exported"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/images.ts",
+   "type": "file",
+   "name": "images.ts",
+   "filePath": "packages/llm/llm-deepseek/src/images.ts",
+   "summary": "Messages 图像确定性准备：prepareImages 投影历史并按模型读取归一化图像请求版本（要求视觉模型+附件服务，图像仅允许 user/tool 消息），inlineImages 强制超预算图像先记录 offload，prepareFileIds 输出文件引用。",
+   "tags": [
+    "images",
+    "preparation",
+    "files",
+    "deepseek"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/images.ts:prepareImages",
+   "type": "function",
+   "name": "prepareImages",
+   "filePath": "packages/llm/llm-deepseek/src/images.ts",
+   "lineRange": [
+    38,
+    61
+   ],
+   "summary": "主图像准备管线：offload 投影→视觉模型与消息角色校验→按附件 id 读取归一化请求版本→原始表示边界断言。",
+   "tags": [
+    "images",
+    "pipeline",
+    "exported"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/images.ts:inlineImages",
+   "type": "function",
+   "name": "inlineImages",
+   "filePath": "packages/llm/llm-deepseek/src/images.ts",
+   "lineRange": [
+    69,
+    75
+   ],
+   "summary": "内联回退前的边界检查：超出内联预算的图像必须先走记录 offload 再重试。",
+   "tags": [
+    "images",
+    "inline",
+    "exported"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/images.ts:prepareFileIds",
+   "type": "function",
+   "name": "prepareFileIds",
+   "filePath": "packages/llm/llm-deepseek/src/images.ts",
+   "lineRange": [
+    99,
+    111
+   ],
+   "summary": "把准备好的图像版本转换为 Files API 的 file-id 引用表示。",
+   "tags": [
+    "images",
+    "file-ids",
+    "exported"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/llm/llm-deepseek/src/index.ts",
+   "summary": "dsh-llm-deepseek 包入口 barrel：统一再导出凭据解析、配置解析、默认值、适配器、图像 token、文件存储/上传索引、目录与定价等全部公共面。",
+   "tags": [
+    "entry-point",
+    "barrel",
+    "exports"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/listed-catalog.ts",
+   "type": "file",
+   "name": "listed-catalog.ts",
+   "filePath": "packages/llm/llm-deepseek/src/listed-catalog.ts",
+   "summary": "已列目录的解析：版本门控（semver 对照 build 支持范围）、本 build 的模型知识与部署覆盖三层合并；网络 I/O 之前即可拒绝不支持的已列模型并给出原因。",
+   "tags": [
+    "catalog",
+    "version-gating",
+    "models"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/listed-catalog.ts:resolveListedCatalog",
+   "type": "function",
+   "name": "resolveListedCatalog",
+   "filePath": "packages/llm/llm-deepseek/src/listed-catalog.ts",
+   "lineRange": [
+    103,
+    164
+   ],
+   "summary": "把 GET /models 列表解析为已列目录：逐条门控+覆盖合并+拒绝原因标注，产出可展示的目录事实。",
+   "tags": [
+    "catalog",
+    "resolution",
+    "exported"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/listed-catalog.ts:refuseListedModel",
+   "type": "function",
+   "name": "refuseListedModel",
+   "filePath": "packages/llm/llm-deepseek/src/listed-catalog.ts",
+   "lineRange": [
+    172,
+    186
+   ],
+   "summary": "为一条被拒模型生成带原因的目录拒绝（供 GUI 与诊断展示）。",
+   "tags": [
+    "refusal",
+    "catalog",
+    "exported"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/listing-cache.ts",
+   "type": "file",
+   "name": "listing-cache.ts",
+   "filePath": "packages/llm/llm-deepseek/src/listing-cache.ts",
+   "summary": "凭据作用域的 /models 缓存：单飞加载、后台自动刷新、最后已知良好保留；缓存键含认证头哈希，凭据轮换自然失效。",
+   "tags": [
+    "cache",
+    "single-flight",
+    "listing",
+    "credentials"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/llm/llm-deepseek/src/listing-cache.ts:ModelListingCache",
+   "type": "class",
+   "name": "ModelListingCache",
+   "filePath": "packages/llm/llm-deepseek/src/listing-cache.ts",
+   "lineRange": [
+    49,
+    202
+   ],
+   "summary": "凭据作用域模型目录缓存：settings 引用驱动自动跟随刷新，刷新失败保留最后已知良好值，活跃工作完成后再销毁。",
+   "tags": [
+    "cache",
+    "background-refresh",
+    "exported"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/listing-config.ts",
+   "type": "file",
+   "name": "listing-config.ts",
+   "filePath": "packages/llm/llm-deepseek/src/listing-config.ts",
+   "summary": "目录刷新时序配置：schemastery 声明的 TTL/超时字段与 resolveListingTiming 解析（含计时器上限钳制）。",
+   "tags": [
+    "configuration",
+    "schemastery",
+    "timing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/listing-config.ts:resolveListingTiming",
+   "type": "function",
+   "name": "resolveListingTiming",
+   "filePath": "packages/llm/llm-deepseek/src/listing-config.ts",
+   "lineRange": [
+    55,
+    64
+   ],
+   "summary": "把目录刷新配置解析为可用的时序参数（TTL、超时、刷新余量）。",
+   "tags": [
+    "resolution",
+    "timing",
+    "exported"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/listing.ts",
+   "type": "file",
+   "name": "listing.ts",
+   "filePath": "packages/llm/llm-deepseek/src/listing.ts",
+   "summary": "DeepSeek GET /models 列表：一次带认证与归因头的请求 + 逐条解码（模态、能力、badge 文本按字素与不可见字符校验、最长 12 字符限制、本地化翻译校验）。",
+   "tags": [
+    "listing",
+    "http",
+    "validation",
+    "badges"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/listing.ts:badgeOf",
+   "type": "function",
+   "name": "badgeOf",
+   "filePath": "packages/llm/llm-deepseek/src/listing.ts",
+   "lineRange": [
+    150,
+    170
+   ],
+   "summary": "校验并规范化单条目录 badge（文本、tone、本地化表），不可读字符直接拒绝。",
+   "tags": [
+    "badges",
+    "validation",
+    "localization"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/listing.ts:capabilitiesOf",
+   "type": "function",
+   "name": "capabilitiesOf",
+   "filePath": "packages/llm/llm-deepseek/src/listing.ts",
+   "lineRange": [
+    172,
+    199
+   ],
+   "summary": "把目录条目的原始能力字段解码为 harness 的模型能力结构。",
+   "tags": [
+    "capabilities",
+    "decoding"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/listing.ts:parseModelListing",
+   "type": "function",
+   "name": "parseModelListing",
+   "filePath": "packages/llm/llm-deepseek/src/listing.ts",
+   "lineRange": [
+    207,
+    229
+   ],
+   "summary": "整体校验 /models 响应结构并逐条解析为 ModelListing（坏条目带定位失败）。",
+   "tags": [
+    "validation",
+    "parsing",
+    "exported"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/listing.ts:requestModelListing",
+   "type": "function",
+   "name": "requestModelListing",
+   "filePath": "packages/llm/llm-deepseek/src/listing.ts",
+   "lineRange": [
+    241,
+    269
+   ],
+   "summary": "执行一次带认证与归因头的 /models 请求并解析，超时由 timeoutOf 控制。",
+   "tags": [
+    "http",
+    "listing",
+    "exported"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/messages-api.ts",
+   "type": "file",
+   "name": "messages-api.ts",
+   "filePath": "packages/llm/llm-deepseek/src/messages-api.ts",
+   "summary": "共享 Messages API 端点与头策略：messagesApiRoot 去重显式版本路径，MESSAGES_FILES_BETA / MESSAGES_TOOL_CHANGES_BETA 两个 opt-in beta 头常量。",
+   "tags": [
+    "endpoints",
+    "beta-headers",
+    "constants"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/model-info.ts",
+   "type": "file",
+   "name": "model-info.ts",
+   "filePath": "packages/llm/llm-deepseek/src/model-info.ts",
+   "summary": "协议无关的模型能力与推理力度选择：off/low/high/max 四档推理力度元数据，modelInfo 把目录模型+连接选项解析为 LlmResolvedModelInfo。",
+   "tags": [
+    "model-info",
+    "reasoning-effort",
+    "resolution"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/model-info.ts:modelInfo",
+   "type": "function",
+   "name": "modelInfo",
+   "filePath": "packages/llm/llm-deepseek/src/model-info.ts",
+   "lineRange": [
+    63,
+    102
+   ],
+   "summary": "把 DeepSeekCatalogModel 与连接选项解析为 harness 的 LlmResolvedModelInfo（上下文窗口、输出上限、模态、推理力度集合）。",
+   "tags": [
+    "resolution",
+    "model-info",
+    "exported"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/models.ts",
+   "type": "file",
+   "name": "models.ts",
+   "filePath": "packages/llm/llm-deepseek/src/models.ts",
+   "summary": "默认 DeepSeek 模型目录：deepseek-flash（V4.1-Flash）与 deepseek-chat（V4 Pro）两条咨询条目，上下文 1,048,576，text+image 输入，部署可整体替换。",
+   "tags": [
+    "models",
+    "catalog",
+    "constants"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/replay.ts",
+   "type": "file",
+   "name": "replay.ts",
+   "filePath": "packages/llm/llm-deepseek/src/replay.ts",
+   "summary": "原生 thinking 回放的极小元数据：ReplayBlock（text/reasoning/tool-call 的 signature 对齐索引）+ envelope 构造与读取校验；持久 harness 块拥有全部响应文本。",
+   "tags": [
+    "replay",
+    "metadata",
+    "validation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/replay.ts:readReplay",
+   "type": "function",
+   "name": "readReplay",
+   "filePath": "packages/llm/llm-deepseek/src/replay.ts",
+   "lineRange": [
+    39,
+    46
+   ],
+   "summary": "读取并校验原生回放元数据：外来/跨模型/降级历史返回 undefined 并回调诊断原因。",
+   "tags": [
+    "replay",
+    "validation",
+    "exported"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/replay.ts:validateReplay",
+   "type": "function",
+   "name": "validateReplay",
+   "filePath": "packages/llm/llm-deepseek/src/replay.ts",
+   "lineRange": [
+    48,
+    64
+   ],
+   "summary": "回放结构校验器：envelope/response 逐层校验，坏结构抛 INVALID_REPLAY_STATE。",
+   "tags": [
+    "validation",
+    "replay"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/request-extensions.ts",
+   "type": "file",
+   "name": "request-extensions.ts",
+   "filePath": "packages/llm/llm-deepseek/src/request-extensions.ts",
+   "summary": "把插件贡献的请求字段并入序列化后的 Messages 请求：拒绝替换基础字段与基字段冲突（REQUEST_EXTENSION 带原因链），序列化失败退回基请求，accept 失败只报告不影响请求。",
+   "tags": [
+    "request-extensions",
+    "merge",
+    "error-handling"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/request-extensions.ts:prepareRequestExtensions",
+   "type": "function",
+   "name": "prepareRequestExtensions",
+   "filePath": "packages/llm/llm-deepseek/src/request-extensions.ts",
+   "lineRange": [
+    21,
+    59
+   ],
+   "summary": "调用注册表 prepare 并合并贡献字段到基请求体，处理冲突报告与序列化失败回退，返回 accept 提交通道。",
+   "tags": [
+    "merge",
+    "request-extensions",
+    "exported"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/request-files.ts",
+   "type": "file",
+   "name": "request-files.ts",
+   "filePath": "packages/llm/llm-deepseek/src/request-files.ts",
+   "summary": "共享 Files 解析、有界陈旧 id 恢复与归一化图像诊断：RequestFiles 把请求中的文件/图像引用解析为可用表示，file-id 失效时按有界策略恢复重传，归一化图像被拒时给出带 wire 定位的诊断。",
+   "tags": [
+    "files",
+    "recovery",
+    "diagnostics"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/llm/llm-deepseek/src/request-files.ts:RequestFiles",
+   "type": "class",
+   "name": "RequestFiles",
+   "filePath": "packages/llm/llm-deepseek/src/request-files.ts",
+   "lineRange": [
+    94,
+    158
+   ],
+   "summary": "请求文件解析器：按消息定位文件/图像引用，经 DeepSeekFileStore 解析 file-id，陈旧映射触发有界恢复，失败以 FileResolutionFailure 报告。",
+   "tags": [
+    "files",
+    "resolution",
+    "recovery"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/request-files.ts:normalizedImageDiagnostic",
+   "type": "function",
+   "name": "normalizedImageDiagnostic",
+   "filePath": "packages/llm/llm-deepseek/src/request-files.ts",
+   "lineRange": [
+    72,
+    90
+   ],
+   "summary": "为被提供方拒绝的归一化图像构造带消息/图像定位的诊断事实。",
+   "tags": [
+    "diagnostics",
+    "images"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/request-pricing.ts",
+   "type": "file",
+   "name": "request-pricing.ts",
+   "filePath": "packages/llm/llm-deepseek/src/request-pricing.ts",
+   "summary": "提供方侧请求图像定价：按模型请求目标对保留的表面出现逐一定价（发布视觉 token 记账），offload 出现按占位文本计价；token meter 经 LlmAdapter.imageRequestPricing 同步消费，提供方用量仍是权威锚。",
+   "tags": [
+    "pricing",
+    "images",
+    "token-meter"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/request-pricing.ts:deepSeekImageRequestPricing",
+   "type": "function",
+   "name": "deepSeekImageRequestPricing",
+   "filePath": "packages/llm/llm-deepseek/src/request-pricing.ts",
+   "lineRange": [
+    90,
+    111
+   ],
+   "summary": "计算一条请求的图像定价投影：每个保留出现按请求目标+视觉 token 记账，offload 出现按占位文本计。",
+   "tags": [
+    "pricing",
+    "projection",
+    "exported"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/serialize.ts",
+   "type": "file",
+   "name": "serialize.ts",
+   "filePath": "packages/llm/llm-deepseek/src/serialize.ts",
+   "summary": "把系统快照、工具变更与对话轮次映射为 Messages 线缆格式：不支持的内容类型显式抛 UNSUPPORTED_CONTENT，回放状态经 readReplay 读取以恢复原生 thinking。",
+   "tags": [
+    "serialization",
+    "wire-format",
+    "messages"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/serialize.ts:serialize",
+   "type": "function",
+   "name": "serialize",
+   "filePath": "packages/llm/llm-deepseek/src/serialize.ts",
+   "lineRange": [
+    57,
+    169
+   ],
+   "summary": "主序列化器：GenerateOptions→WireRequest，处理系统消息、工具声明/更新块、多轮消息（含图像 file-id/base64 引用）与采样参数。",
+   "tags": [
+    "serialization",
+    "wire-request",
+    "exported"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/sse.ts",
+   "type": "file",
+   "name": "sse.ts",
+   "filePath": "packages/llm/llm-deepseek/src/sse.ts",
+   "summary": "SSE 帧解码委托 eventsource-parser：parseSse 把响应字节流转为 JSON 事件流（心跳注释脉冲空闲看门狗），未终止尾帧不算事件，JSON 错误保持提供方失败语义。",
+   "tags": [
+    "sse",
+    "streaming",
+    "parsing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/sse.ts:parseSse",
+   "type": "function",
+   "name": "parseSse",
+   "filePath": "packages/llm/llm-deepseek/src/sse.ts",
+   "lineRange": [
+    13,
+    28
+   ],
+   "summary": "解码完整 SSE 帧为 JSON 事件异步生成器，注释帧驱动活动脉冲，完成事件由翻译器裁决。",
+   "tags": [
+    "sse",
+    "generator",
+    "exported"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/translate.ts",
+   "type": "file",
+   "name": "translate.ts",
+   "filePath": "packages/llm/llm-deepseek/src/translate.ts",
+   "summary": "Messages 事件→harness 块流翻译：保持块序与累积用量，维护每块的回放元数据（signature），stop 原因映射与坏事件以 MALFORMED_RESPONSE 拒绝。",
+   "tags": [
+    "translation",
+    "streaming",
+    "replay"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/translate.ts:deltaChunk",
+   "type": "function",
+   "name": "deltaChunk",
+   "filePath": "packages/llm/llm-deepseek/src/translate.ts",
+   "lineRange": [
+    65,
+    88
+   ],
+   "summary": "把内容增量事件转换为 harness 的 delta 块（文本/推理/工具参数增量），维护部分块状态。",
+   "tags": [
+    "translation",
+    "deltas"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/translate.ts:translate",
+   "type": "function",
+   "name": "translate",
+   "filePath": "packages/llm/llm-deepseek/src/translate.ts",
+   "lineRange": [
+    104,
+    166
+   ],
+   "summary": "主翻译循环：消费 JSON 事件流产出 StreamChunk 序列，处理块开始/增量/结束、用量累积与终止原因映射。",
+   "tags": [
+    "translation",
+    "streaming",
+    "exported"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/transport.ts",
+   "type": "file",
+   "name": "transport.ts",
+   "filePath": "packages/llm/llm-deepseek/src/transport.ts",
+   "summary": "把 HTTP 与带内 Messages 错误归一为 provider 中立失败：providerErrorDetail 只读取 code/type/message 三字段，上下文超限/配额超限映射到规范 code。",
+   "tags": [
+    "error-handling",
+    "normalization",
+    "http"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/transport.ts:providerError",
+   "type": "function",
+   "name": "providerError",
+   "filePath": "packages/llm/llm-deepseek/src/transport.ts",
+   "lineRange": [
+    22,
+    44
+   ],
+   "summary": "把提供方 HTTP/带内错误转换为 LlmError（含 ProviderRequestId），分类上下文超限与配额超限。",
+   "tags": [
+    "error-handling",
+    "classification",
+    "exported"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/llm/llm-deepseek/src/types.ts",
+   "summary": "llm-deepseek 类型面：DeepSeekConnectionOptions 连接选项、DeepSeekCatalogModel 目录条目、适配器依赖注入接口（凭据/附件/图像访问解析器）。",
+   "tags": [
+    "type-definition",
+    "connection-options",
+    "di"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/upload-index.ts",
+   "type": "file",
+   "name": "upload-index.ts",
+   "filePath": "packages/llm/llm-deepseek/src/upload-index.ts",
+   "summary": "持久附件→file-id 上传索引：DeepSeekUploadIndex 以原子写+文件锁维护 DSH home 下的 JSON 索引，记录哈希命中的可复用上传（过期/配额字段），损坏索引显式报 InvalidUploadIndexError。",
+   "tags": [
+    "upload-index",
+    "persistence",
+    "atomic-write",
+    "file-lock"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/llm/llm-deepseek/src/upload-index.ts:DeepSeekUploadIndex",
+   "type": "class",
+   "name": "DeepSeekUploadIndex",
+   "filePath": "packages/llm/llm-deepseek/src/upload-index.ts",
+   "lineRange": [
+    112,
+    224
+   ],
+   "summary": "持久上传索引：按（附件 id+变体+内容哈希+端点+认证头哈希）判定可复用上传，原子更新与并发文件锁保护。",
+   "tags": [
+    "index",
+    "persistence",
+    "reuse"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/llm/llm-deepseek/src/upload-index.ts:parseIndex",
+   "type": "function",
+   "name": "parseIndex",
+   "filePath": "packages/llm/llm-deepseek/src/upload-index.ts",
+   "lineRange": [
+    83,
+    105
+   ],
+   "summary": "校验并解析磁盘索引 JSON 为记录表，坏结构抛 InvalidUploadIndexError。",
+   "tags": [
+    "validation",
+    "parsing"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/llm/llm-deepseek/src/wire-types.ts",
+   "type": "file",
+   "name": "wire-types.ts",
+   "filePath": "packages/llm/llm-deepseek/src/wire-types.ts",
+   "summary": "DeepSeek 支持的 Anthropic Messages 协议子集的线缆类型：WireInput（text/base64 图像/file 引用）、WireBlock、WireMessage、WireRequest。",
+   "tags": [
+    "type-definition",
+    "wire-format",
+    "messages"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/llm/llm-deepseek/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/llm/llm-deepseek/tsconfig.json",
+   "summary": "dsh-llm-deepseek 的 TypeScript 编译配置：strict + NodeNext + 工作区路径别名。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/llm/llm-deepseek/src/file-store.ts",
+   "target": "file:packages/attachment/attachment/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/file-store.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/file-store.ts",
+   "target": "file:packages/llm/llm-deepseek/src/files-api.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/file-store.ts",
+   "target": "file:packages/llm/llm-deepseek/src/file-id.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/file-store.ts",
+   "target": "file:packages/llm/llm-deepseek/src/messages-api.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/file-store.ts",
+   "target": "file:packages/llm/llm-deepseek/src/upload-index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/file-store.ts",
+   "target": "class:packages/llm/llm-deepseek/src/file-store.ts:DeepSeekFileStore",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/file-store.ts",
+   "target": "class:packages/llm/llm-deepseek/src/file-store.ts:DeepSeekFileStore",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/file-store.ts",
+   "target": "function:packages/llm/llm-deepseek/src/file-store.ts:waitForUpload",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/files-api.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/files-api.ts",
+   "target": "file:packages/attachment/attachment/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/files-api.ts",
+   "target": "file:packages/llm/llm-deepseek/src/file-id.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/files-api.ts",
+   "target": "file:packages/llm/llm-deepseek/src/messages-api.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/files-api.ts",
+   "target": "class:packages/llm/llm-deepseek/src/files-api.ts:DeepSeekFilesError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/files-api.ts",
+   "target": "class:packages/llm/llm-deepseek/src/files-api.ts:DeepSeekFilesError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/files-api.ts",
+   "target": "class:packages/llm/llm-deepseek/src/files-api.ts:DeepSeekFilesClient",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/files-api.ts",
+   "target": "class:packages/llm/llm-deepseek/src/files-api.ts:DeepSeekFilesClient",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/files-api.ts",
+   "target": "function:packages/llm/llm-deepseek/src/files-api.ts:parseFileObject",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/host.ts",
+   "target": "file:packages/settings/settings/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/host.ts",
+   "target": "file:packages/fs/fs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/host.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/host.ts",
+   "target": "file:packages/identity/anonymous-user-id/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/host.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/host.ts",
+   "target": "file:packages/llm/llm-deepseek/src/adapter.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/host.ts",
+   "target": "file:packages/llm/llm-deepseek/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/host.ts",
+   "target": "file:packages/llm/llm-deepseek/src/listing-cache.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/host.ts",
+   "target": "function:packages/llm/llm-deepseek/src/host.ts:createModelListingCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/host.ts",
+   "target": "function:packages/llm/llm-deepseek/src/host.ts:createModelListingCache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/host.ts",
+   "target": "function:packages/llm/llm-deepseek/src/host.ts:registerDeepSeekProvider",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/host.ts",
+   "target": "function:packages/llm/llm-deepseek/src/host.ts:registerDeepSeekProvider",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/image-tokens.ts",
+   "target": "file:packages/attachment/attachment/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/image-tokens.ts",
+   "target": "function:packages/llm/llm-deepseek/src/image-tokens.ts:solveResizeRatio",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/image-tokens.ts",
+   "target": "function:packages/llm/llm-deepseek/src/image-tokens.ts:deepSeekRequestImageTokens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/image-tokens.ts",
+   "target": "function:packages/llm/llm-deepseek/src/image-tokens.ts:deepSeekRequestImageTokens",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/images.ts",
+   "target": "file:packages/attachment/attachment/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/images.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/images.ts",
+   "target": "file:packages/llm/llm-deepseek/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/images.ts",
+   "target": "file:packages/llm/llm-deepseek/src/request-pricing.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/images.ts",
+   "target": "file:packages/llm/llm-deepseek/src/file-id.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/images.ts",
+   "target": "file:packages/llm/llm-deepseek/src/request-files.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/images.ts",
+   "target": "function:packages/llm/llm-deepseek/src/images.ts:prepareImages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/images.ts",
+   "target": "function:packages/llm/llm-deepseek/src/images.ts:prepareImages",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/images.ts",
+   "target": "function:packages/llm/llm-deepseek/src/images.ts:inlineImages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/images.ts",
+   "target": "function:packages/llm/llm-deepseek/src/images.ts:inlineImages",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/images.ts",
+   "target": "function:packages/llm/llm-deepseek/src/images.ts:prepareFileIds",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/images.ts",
+   "target": "function:packages/llm/llm-deepseek/src/images.ts:prepareFileIds",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek/src/credential.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek/src/config.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek/src/defaults.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek/src/adapter.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek/src/request-pricing.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek/src/image-tokens.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek/src/file-store.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek/src/files-api.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek/src/file-id.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek/src/upload-index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek/src/model-info.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek/src/host.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek/src/listing.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek/src/listing-config.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek/src/listing-cache.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek/src/listed-catalog.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listed-catalog.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listed-catalog.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listed-catalog.ts",
+   "target": "file:packages/llm/llm-deepseek/src/config.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listed-catalog.ts",
+   "target": "file:packages/llm/llm-deepseek/src/listing.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listed-catalog.ts",
+   "target": "file:packages/llm/llm-deepseek/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listed-catalog.ts",
+   "target": "function:packages/llm/llm-deepseek/src/listed-catalog.ts:resolveListedCatalog",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listed-catalog.ts",
+   "target": "function:packages/llm/llm-deepseek/src/listed-catalog.ts:resolveListedCatalog",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listed-catalog.ts",
+   "target": "function:packages/llm/llm-deepseek/src/listed-catalog.ts:refuseListedModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listed-catalog.ts",
+   "target": "function:packages/llm/llm-deepseek/src/listed-catalog.ts:refuseListedModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listing-cache.ts",
+   "target": "file:packages/util/timeout/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listing-cache.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listing-cache.ts",
+   "target": "file:packages/llm/llm-deepseek/src/listing-config.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listing-cache.ts",
+   "target": "file:packages/llm/llm-deepseek/src/listing.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listing-cache.ts",
+   "target": "class:packages/llm/llm-deepseek/src/listing-cache.ts:ModelListingCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listing-cache.ts",
+   "target": "class:packages/llm/llm-deepseek/src/listing-cache.ts:ModelListingCache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listing-config.ts",
+   "target": "file:packages/util/timeout/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listing-config.ts",
+   "target": "function:packages/llm/llm-deepseek/src/listing-config.ts:resolveListingTiming",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listing-config.ts",
+   "target": "function:packages/llm/llm-deepseek/src/listing-config.ts:resolveListingTiming",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listing.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listing.ts",
+   "target": "file:packages/util/timeout/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listing.ts",
+   "target": "function:packages/llm/llm-deepseek/src/listing.ts:badgeOf",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listing.ts",
+   "target": "function:packages/llm/llm-deepseek/src/listing.ts:capabilitiesOf",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listing.ts",
+   "target": "function:packages/llm/llm-deepseek/src/listing.ts:parseModelListing",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listing.ts",
+   "target": "function:packages/llm/llm-deepseek/src/listing.ts:parseModelListing",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listing.ts",
+   "target": "function:packages/llm/llm-deepseek/src/listing.ts:requestModelListing",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/listing.ts",
+   "target": "function:packages/llm/llm-deepseek/src/listing.ts:requestModelListing",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/model-info.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/model-info.ts",
+   "target": "file:packages/llm/llm-deepseek/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/model-info.ts",
+   "target": "function:packages/llm/llm-deepseek/src/model-info.ts:modelInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/model-info.ts",
+   "target": "function:packages/llm/llm-deepseek/src/model-info.ts:modelInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/models.ts",
+   "target": "file:packages/llm/llm-deepseek/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/replay.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/replay.ts",
+   "target": "function:packages/llm/llm-deepseek/src/replay.ts:readReplay",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/replay.ts",
+   "target": "function:packages/llm/llm-deepseek/src/replay.ts:readReplay",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/replay.ts",
+   "target": "function:packages/llm/llm-deepseek/src/replay.ts:validateReplay",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/request-extensions.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/request-extensions.ts",
+   "target": "file:packages/llm/deepseek-llm-api-extensions/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/request-extensions.ts",
+   "target": "file:packages/llm/llm-deepseek/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/request-extensions.ts",
+   "target": "function:packages/llm/llm-deepseek/src/request-extensions.ts:prepareRequestExtensions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/request-extensions.ts",
+   "target": "function:packages/llm/llm-deepseek/src/request-extensions.ts:prepareRequestExtensions",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/request-files.ts",
+   "target": "file:packages/attachment/attachment/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/request-files.ts",
+   "target": "file:packages/util/timeout/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/request-files.ts",
+   "target": "file:packages/llm/llm-deepseek/src/file-store.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/request-files.ts",
+   "target": "file:packages/llm/llm-deepseek/src/file-id.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/request-files.ts",
+   "target": "class:packages/llm/llm-deepseek/src/request-files.ts:RequestFiles",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/request-files.ts",
+   "target": "class:packages/llm/llm-deepseek/src/request-files.ts:RequestFiles",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/request-files.ts",
+   "target": "function:packages/llm/llm-deepseek/src/request-files.ts:normalizedImageDiagnostic",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/request-pricing.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/request-pricing.ts",
+   "target": "file:packages/attachment/attachment/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/request-pricing.ts",
+   "target": "file:packages/llm/llm-deepseek/src/image-tokens.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/request-pricing.ts",
+   "target": "file:packages/llm/llm-deepseek/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/request-pricing.ts",
+   "target": "function:packages/llm/llm-deepseek/src/request-pricing.ts:deepSeekImageRequestPricing",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/request-pricing.ts",
+   "target": "function:packages/llm/llm-deepseek/src/request-pricing.ts:deepSeekImageRequestPricing",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/serialize.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/serialize.ts",
+   "target": "file:packages/attachment/attachment/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/serialize.ts",
+   "target": "file:packages/llm/llm-deepseek/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/serialize.ts",
+   "target": "file:packages/llm/llm-deepseek/src/file-id.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/serialize.ts",
+   "target": "file:packages/llm/llm-deepseek/src/replay.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/serialize.ts",
+   "target": "file:packages/llm/llm-deepseek/src/wire-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/serialize.ts",
+   "target": "function:packages/llm/llm-deepseek/src/serialize.ts:serialize",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/serialize.ts",
+   "target": "function:packages/llm/llm-deepseek/src/serialize.ts:serialize",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/sse.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/sse.ts",
+   "target": "file:packages/llm/llm-deepseek/src/replay.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/sse.ts",
+   "target": "file:packages/llm/llm-deepseek/src/transport.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/sse.ts",
+   "target": "function:packages/llm/llm-deepseek/src/sse.ts:parseSse",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/sse.ts",
+   "target": "function:packages/llm/llm-deepseek/src/sse.ts:parseSse",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/translate.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/translate.ts",
+   "target": "file:packages/llm/llm-deepseek/src/replay.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/translate.ts",
+   "target": "function:packages/llm/llm-deepseek/src/translate.ts:deltaChunk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/translate.ts",
+   "target": "function:packages/llm/llm-deepseek/src/translate.ts:translate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/translate.ts",
+   "target": "function:packages/llm/llm-deepseek/src/translate.ts:translate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/transport.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/transport.ts",
+   "target": "function:packages/llm/llm-deepseek/src/transport.ts:providerError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/transport.ts",
+   "target": "function:packages/llm/llm-deepseek/src/transport.ts:providerError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/types.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/types.ts",
+   "target": "file:packages/attachment/attachment/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/types.ts",
+   "target": "file:packages/identity/anonymous-user-id/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/types.ts",
+   "target": "file:packages/llm/deepseek-llm-api-extensions/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/types.ts",
+   "target": "file:packages/llm/llm-deepseek/src/file-store.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/upload-index.ts",
+   "target": "file:packages/util/atomic-write/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/upload-index.ts",
+   "target": "file:packages/util/home-paths/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/upload-index.ts",
+   "target": "file:packages/attachment/attachment/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/upload-index.ts",
+   "target": "file:packages/llm/llm-deepseek/src/file-id.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/upload-index.ts",
+   "target": "class:packages/llm/llm-deepseek/src/upload-index.ts:DeepSeekUploadIndex",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/upload-index.ts",
+   "target": "class:packages/llm/llm-deepseek/src/upload-index.ts:DeepSeekUploadIndex",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/llm/llm-deepseek/src/upload-index.ts",
+   "target": "function:packages/llm/llm-deepseek/src/upload-index.ts:parseIndex",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:packages/llm/llm-deepseek/src/files-api.ts:DeepSeekFilesError",
+   "target": "class:packages/llm/llm/src/index.ts:LlmError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:packages/llm/llm-deepseek/src/file-store.ts:DeepSeekFileStore",
+   "target": "class:packages/llm/llm-deepseek/src/files-api.ts:DeepSeekFilesClient",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:packages/llm/llm-deepseek/src/file-store.ts:DeepSeekFileStore",
+   "target": "class:packages/llm/llm-deepseek/src/upload-index.ts:DeepSeekUploadIndex",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/llm/llm-deepseek/src/host.ts:registerDeepSeekProvider",
+   "target": "class:packages/llm/llm-deepseek/src/adapter.ts:DeepSeekAdapter",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/llm/llm-deepseek/src/host.ts:registerDeepSeekProvider",
+   "target": "function:packages/llm/llm-deepseek/src/host.ts:createModelListingCache",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:packages/llm/llm-deepseek/src/listing-cache.ts:ModelListingCache",
+   "target": "function:packages/llm/llm-deepseek/src/listing.ts:requestModelListing",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/llm/llm-deepseek/src/serialize.ts:serialize",
+   "target": "function:packages/llm/llm-deepseek/src/replay.ts:readReplay",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/llm/llm-deepseek/src/translate.ts:translate",
+   "target": "function:packages/llm/llm-deepseek/src/replay.ts:replayState",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

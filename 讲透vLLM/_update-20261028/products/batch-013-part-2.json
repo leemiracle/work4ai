@@ -1,0 +1,1559 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/hisparse/runtime.py",
+   "type": "file",
+   "name": "runtime.py",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "HiSparse resident/host/hot 数据面运行时（1360 行）：pinned 主机池分配与注册（TP 可共享 mmap）、prefill staging 计划、top-k 索引组共享状态、驻留更新与 CUDA-graph 安全的缓存句柄。",
+   "tags": [
+    "hisparse",
+    "runtime",
+    "data-plane",
+    "host-pool"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/hisparse/types.py",
+   "type": "file",
+   "name": "types.py",
+   "filePath": "vllm/v1/hisparse/types.py",
+   "summary": "HiSparse 跨层数据类型：页传输（transfer_id/host 块/resident 块组）、行镜像、驻留更新与调度器→worker 的 offload 命令；ACTIVE_TAIL_PAGES=2 保证在飞页不被复用。",
+   "tags": [
+    "hisparse",
+    "types",
+    "data-model",
+    "transfers"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/kv_hints/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/v1/kv_hints/__init__.py",
+   "summary": "kv_hints 包 barrel：导出 KvHintAction 与 KvHintsEnvelope。",
+   "tags": [
+    "barrel",
+    "kv-hints",
+    "protocol"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/kv_hints/protocol.py",
+   "type": "file",
+   "name": "protocol.py",
+   "filePath": "vllm/v1/kv_hints/protocol.py",
+   "summary": "编排器 KV 提示协议：msgspecStruct 定义带版本的 KvHintAction（action_id/type/version/payload）与按请求附加的 KvHintsEnvelope 信封。",
+   "tags": [
+    "kv-hints",
+    "protocol",
+    "msgspec",
+    "orchestrator"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/metrics/buckets.py",
+   "type": "file",
+   "name": "buckets.py",
+   "filePath": "vllm/v1/metrics/buckets.py",
+   "summary": "Prometheus 直方图桶族单一事实源：8 个规范桶族（请求延迟/TTFT/ITL/迭代 token 等），build_buckets 按尾数×10 的幂构造，1-2-5 序列与 histogram_buckets 家族查询。",
+   "tags": [
+    "metrics",
+    "prometheus",
+    "histogram-buckets"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/metrics/cache_hit_source.py",
+   "type": "file",
+   "name": "cache_hit_source.py",
+   "filePath": "vllm/v1/metrics/cache_hit_source.py",
+   "summary": "缓存命中来源枚举 CacheHitSource：device/host/p2p/disk/external_unspecified，按块卸载顺序排列，outermost() 取离加速器最远的层。",
+   "tags": [
+    "metrics",
+    "cache-hits",
+    "enum"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/metrics/loggers.py",
+   "type": "file",
+   "name": "loggers.py",
+   "filePath": "vllm/v1/metrics/loggers.py",
+   "summary": "统计日志器族：StatLoggerBase 抽象 → LoggingStatLogger（文本）与 PrometheusStatLogger（880 行全量指标），AggregateStatLoggerBase 支持跨 DP 引擎聚合，StatLoggerManager 管理每引擎 logger 与插件工厂加载。",
+   "tags": [
+    "metrics",
+    "logging",
+    "prometheus",
+    "stat-loggers"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/hisparse/runtime.py:PagedCacheView",
+   "type": "class",
+   "name": "PagedCacheView",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "分页缓存视图 dataclass（缓存张量、注意力视图、块大小/步长）。",
+   "tags": [
+    "hisparse",
+    "cache-view",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    66,
+    98
+   ]
+  },
+  {
+   "id": "class:vllm/v1/hisparse/runtime.py:ResolvedHiSparseConfig",
+   "type": "class",
+   "name": "ResolvedHiSparseConfig",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "解析后的 HiSparse 配置（含常量折叠的池/驻留参数）。",
+   "tags": [
+    "hisparse",
+    "config",
+    "resolved"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    102,
+    165
+   ]
+  },
+  {
+   "id": "class:vllm/v1/hisparse/runtime.py:HiSparseHostPool",
+   "type": "class",
+   "name": "HiSparseHostPool",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "单一主机后备与其精确注册范围持有者。",
+   "tags": [
+    "hisparse",
+    "host-pool",
+    "pinned-memory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    222,
+    264
+   ]
+  },
+  {
+   "id": "class:vllm/v1/hisparse/runtime.py:HiSparsePrefillStagingPlan",
+   "type": "class",
+   "name": "HiSparsePrefillStagingPlan",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "异步、层无关的 host-cache prefill staging 重排计划。",
+   "tags": [
+    "hisparse",
+    "prefill",
+    "staging"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    522,
+    599
+   ]
+  },
+  {
+   "id": "class:vllm/v1/hisparse/runtime.py:_SharedTopKState",
+   "type": "class",
+   "name": "_SharedTopKState",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "CUDA-graph 安全的驻留 top-k 结果，供索引共享层复用。",
+   "tags": [
+    "hisparse",
+    "topk",
+    "cudagraph"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    651,
+    664
+   ]
+  },
+  {
+   "id": "class:vllm/v1/hisparse/runtime.py:HiSparseIndexGroup",
+   "type": "class",
+   "name": "HiSparseIndexGroup",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "一个 leader 与 follower 层共享的 GPU 索引解析状态。",
+   "tags": [
+    "hisparse",
+    "index-group",
+    "sharing"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    677,
+    718
+   ]
+  },
+  {
+   "id": "class:vllm/v1/hisparse/runtime.py:HiSparseRuntime",
+   "type": "class",
+   "name": "HiSparseRuntime",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "每缓存主机/hot 数据面与 GPU 替换状态运行时（17 方法）。",
+   "tags": [
+    "hisparse",
+    "runtime",
+    "data-plane"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    721,
+    1138
+   ]
+  },
+  {
+   "id": "class:vllm/v1/hisparse/runtime.py:HiSparseCacheHandle",
+   "type": "class",
+   "name": "HiSparseCacheHandle",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "注意力层面对接句柄：驻留 KV 读取与稀疏卸载状态（7 方法）。",
+   "tags": [
+    "hisparse",
+    "handle",
+    "attention"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1179,
+    1288
+   ]
+  },
+  {
+   "id": "class:vllm/v1/hisparse/types.py:SparseKVPageTransfer",
+   "type": "class",
+   "name": "SparseKVPageTransfer",
+   "filePath": "vllm/v1/hisparse/types.py",
+   "summary": "跨缓存管理层与 worker 层复制一个逻辑 KV 页的命令。",
+   "tags": [
+    "hisparse",
+    "transfer",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    12,
+    19
+   ]
+  },
+  {
+   "id": "class:vllm/v1/hisparse/types.py:SparseKVRowMirror",
+   "type": "class",
+   "name": "SparseKVRowMirror",
+   "filePath": "vllm/v1/hisparse/types.py",
+   "summary": "把一段连续驻留行镜像到 host 缓存的描述。",
+   "tags": [
+    "hisparse",
+    "mirror",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    23,
+    28
+   ]
+  },
+  {
+   "id": "class:vllm/v1/hisparse/types.py:SparseKVResidencyUpdate",
+   "type": "class",
+   "name": "SparseKVResidencyUpdate",
+   "filePath": "vllm/v1/hisparse/types.py",
+   "summary": "按驻留组给出请求部分页的 GPU 块 id（空 id 表示读 host）。",
+   "tags": [
+    "hisparse",
+    "residency",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    32,
+    37
+   ]
+  },
+  {
+   "id": "class:vllm/v1/hisparse/types.py:SparseKVOffloadCommand",
+   "type": "class",
+   "name": "SparseKVOffloadCommand",
+   "filePath": "vllm/v1/hisparse/types.py",
+   "summary": "调度器→worker 的单步 offload 命令（页传输列表）。",
+   "tags": [
+    "hisparse",
+    "command",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    41,
+    44
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_hints/protocol.py:KvHintAction",
+   "type": "class",
+   "name": "KvHintAction",
+   "filePath": "vllm/v1/kv_hints/protocol.py",
+   "summary": "带版本的编排器 KV 提示动作（action_id/type/version/payload）。",
+   "tags": [
+    "kv-hints",
+    "protocol",
+    "action"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    9,
+    17
+   ]
+  },
+  {
+   "id": "class:vllm/v1/kv_hints/protocol.py:KvHintsEnvelope",
+   "type": "class",
+   "name": "KvHintsEnvelope",
+   "filePath": "vllm/v1/kv_hints/protocol.py",
+   "summary": "按推理请求附加的 KV 提示信封（协议版本/消息 id/动作列表）。",
+   "tags": [
+    "kv-hints",
+    "protocol",
+    "envelope"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    20,
+    26
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/cache_hit_source.py:CacheHitSource",
+   "type": "class",
+   "name": "CacheHitSource",
+   "filePath": "vllm/v1/metrics/cache_hit_source.py",
+   "summary": "缓存命中来源枚举（device/host/p2p/disk/external），含 outermost 取最远层。",
+   "tags": [
+    "metrics",
+    "cache-hits",
+    "enum"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    10,
+    29
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/loggers.py:StatLoggerBase",
+   "type": "class",
+   "name": "StatLoggerBase",
+   "filePath": "vllm/v1/metrics/loggers.py",
+   "summary": "统计日志器抽象接口：record/log_engine_initialized 与可选 sleep 状态。",
+   "tags": [
+    "metrics",
+    "logging",
+    "interface"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    54,
+    81
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/loggers.py:AggregateStatLoggerBase",
+   "type": "class",
+   "name": "AggregateStatLoggerBase",
+   "filePath": "vllm/v1/metrics/loggers.py",
+   "summary": "跨 DP 引擎聚合日志器的抽象基类。",
+   "tags": [
+    "metrics",
+    "logging",
+    "aggregation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    101,
+    109
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/loggers.py:LoggingStatLogger",
+   "type": "class",
+   "name": "LoggingStatLogger",
+   "filePath": "vllm/v1/metrics/loggers.py",
+   "summary": "文本日志统计器：把 SchedulerStats/IterationStats 格式化为 INFO 级日志行。",
+   "tags": [
+    "metrics",
+    "logging",
+    "text"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    112,
+    355
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/loggers.py:AggregatedLoggingStatLogger",
+   "type": "class",
+   "name": "AggregatedLoggingStatLogger",
+   "filePath": "vllm/v1/metrics/loggers.py",
+   "summary": "DP 聚合文本日志器（LoggingStatLogger × AggregateStatLoggerBase）。",
+   "tags": [
+    "metrics",
+    "logging",
+    "aggregation"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    358,
+    430
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/loggers.py:PerEngineStatLoggerAdapter",
+   "type": "class",
+   "name": "PerEngineStatLoggerAdapter",
+   "filePath": "vllm/v1/metrics/loggers.py",
+   "summary": "把聚合日志器适配到单引擎 record 接口的适配器。",
+   "tags": [
+    "metrics",
+    "logging",
+    "adapter"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    433,
+    470
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/loggers.py:PrometheusStatLogger",
+   "type": "class",
+   "name": "PrometheusStatLogger",
+   "filePath": "vllm/v1/metrics/loggers.py",
+   "summary": "Prometheus 统计日志器（880 行）：注册并更新 vLLM 全量指标（延迟/吞吐/缓存/spec decode/KV connector/perf/LoRA），含 multiprocess 支持。",
+   "tags": [
+    "metrics",
+    "prometheus",
+    "gauges",
+    "histograms"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    473,
+    1355
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/loggers.py:StatLoggerManager",
+   "type": "class",
+   "name": "StatLoggerManager",
+   "filePath": "vllm/v1/metrics/loggers.py",
+   "summary": "每 EngineCore 的 logger 管理器：DP 多引擎注册、聚合 record 分发与插件工厂合并。",
+   "tags": [
+    "metrics",
+    "logging",
+    "manager"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1358,
+    1453
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/runtime.py:is_hisparse_decode_batch",
+   "type": "function",
+   "name": "is_hisparse_decode_batch",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "判断注意力元数据是否纯 decode 批（单查询/请求）。",
+   "tags": [
+    "hisparse",
+    "decode",
+    "predicate"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    47,
+    53
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/runtime.py:_check_residency_shared_memory",
+   "type": "function",
+   "name": "_check_residency_shared_memory",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "拒绝驻留解析器超出每块共享内存的配置。",
+   "tags": [
+    "hisparse",
+    "smem",
+    "validation"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    168,
+    192
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/runtime.py:check_hisparse_host_memory",
+   "type": "function",
+   "name": "check_hisparse_host_memory",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "拒绝放不进 RAM 的物理主机池分配。",
+   "tags": [
+    "hisparse",
+    "host-memory",
+    "validation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    195,
+    204
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/runtime.py:allocate_pinned_host_pool",
+   "type": "function",
+   "name": "allocate_pinned_host_pool",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "分配并确定性注册精确尺寸的 host KV 区域。",
+   "tags": [
+    "hisparse",
+    "pinned-memory",
+    "allocation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    207,
+    215
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/runtime.py:get_hisparse_host_pool",
+   "type": "function",
+   "name": "get_hisparse_host_pool",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "取引擎级主机池（寿命长于 profiling KV cache）。",
+   "tags": [
+    "hisparse",
+    "host-pool",
+    "accessor"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    270,
+    277
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/runtime.py:use_shared_hisparse_host_pool",
+   "type": "function",
+   "name": "use_shared_hisparse_host_pool",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "判断复制的 MLA host KV 能否共享同一本地 mmap。",
+   "tags": [
+    "hisparse",
+    "mmap",
+    "sharing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    284,
+    296
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/runtime.py:_hisparse_registration_ranges",
+   "type": "function",
+   "name": "_hisparse_registration_ranges",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "在不切断任何张量 host 块的前提下切分共享池的注册范围（CUDA 批拷贝拒绝跨描述符切分）。",
+   "tags": [
+    "hisparse",
+    "registration",
+    "ranges"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    307,
+    377
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/runtime.py:allocate_hisparse_host_pools",
+   "type": "function",
+   "name": "allocate_hisparse_host_pools",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "分配私有 host 张量或本地 TP rank 共享的单 mmap。",
+   "tags": [
+    "hisparse",
+    "allocation",
+    "mmap"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    380,
+    426
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/runtime.py:release_pinned_state",
+   "type": "function",
+   "name": "release_pinned_state",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "同步并释放已注册的 host KV 池。",
+   "tags": [
+    "hisparse",
+    "pinned-memory",
+    "release"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    429,
+    478
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/runtime.py:hisparse_prefill_staging_remap",
+   "type": "function",
+   "name": "hisparse_prefill_staging_remap",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "无数据依赖 CUDA 输出分配的块重编号（prefill staging 用）。",
+   "tags": [
+    "hisparse",
+    "prefill",
+    "remap"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    481,
+    518
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/runtime.py:build_hisparse_prefill_staging_plan",
+   "type": "function",
+   "name": "build_hisparse_prefill_staging_plan",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "构建异步、层无关的 host-cache staging 重排计划（trtllm-gen 前 256 行常驻要求）。",
+   "tags": [
+    "hisparse",
+    "prefill",
+    "staging"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    602,
+    640
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/runtime.py:update_hisparse_residency",
+   "type": "function",
+   "name": "update_hisparse_residency",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "应用调度请求的驻留变化（[组,行,页] 张量）。",
+   "tags": [
+    "hisparse",
+    "residency",
+    "update"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1141,
+    1176
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/runtime.py:initialize_hisparse_runtime_buffers",
+   "type": "function",
+   "name": "initialize_hisparse_runtime_buffers",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "分配所有 HiSparse 运行时共享的请求状态缓冲。",
+   "tags": [
+    "hisparse",
+    "buffers",
+    "initialization"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1291,
+    1305
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/runtime.py:create_hisparse_cache_handle",
+   "type": "function",
+   "name": "create_hisparse_cache_handle",
+   "filePath": "vllm/v1/hisparse/runtime.py",
+   "summary": "为一条缓存构建注意力层句柄。",
+   "tags": [
+    "hisparse",
+    "handle",
+    "factory"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1308,
+    1359
+   ]
+  },
+  {
+   "id": "function:vllm/v1/metrics/buckets.py:build_buckets",
+   "type": "function",
+   "name": "build_buckets",
+   "filePath": "vllm/v1/metrics/buckets.py",
+   "summary": "按尾数×10 的幂构造桶序列。",
+   "tags": [
+    "metrics",
+    "buckets",
+    "builder"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    172,
+    192
+   ]
+  },
+  {
+   "id": "function:vllm/v1/metrics/buckets.py:build_1_2_5_buckets",
+   "type": "function",
+   "name": "build_1_2_5_buckets",
+   "filePath": "vllm/v1/metrics/buckets.py",
+   "summary": "构造封顶 max_value 的 1-2-5 桶序列。",
+   "tags": [
+    "metrics",
+    "buckets",
+    "series"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    195,
+    203
+   ]
+  },
+  {
+   "id": "function:vllm/v1/metrics/buckets.py:histogram_buckets",
+   "type": "function",
+   "name": "histogram_buckets",
+   "filePath": "vllm/v1/metrics/buckets.py",
+   "summary": "按规范桶族 key 返回桶边界。",
+   "tags": [
+    "metrics",
+    "buckets",
+    "lookup"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    206,
+    240
+   ]
+  },
+  {
+   "id": "function:vllm/v1/metrics/loggers.py:load_stat_logger_plugin_factories",
+   "type": "function",
+   "name": "load_stat_logger_plugin_factories",
+   "filePath": "vllm/v1/metrics/loggers.py",
+   "summary": "加载 stat logger 插件工厂（entry_points 组）。",
+   "tags": [
+    "metrics",
+    "plugins",
+    "loading"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    84,
+    98
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "file:vllm/utils/mem_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "file:vllm/v1/hisparse/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "file:vllm/v1/hisparse/types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "file:vllm/v1/kv_offload/cpu/shared_offload_region.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_hints/__init__.py",
+   "target": "file:vllm/v1/kv_hints/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "file:vllm/compilation/cuda_graph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "file:vllm/plugins/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "file:vllm/v1/metrics/buckets.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "file:vllm/v1/metrics/cache_hit_source.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "file:vllm/v1/metrics/perf.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "file:vllm/v1/metrics/prometheus.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "file:vllm/v1/metrics/stats.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "file:vllm/v1/metrics/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "file:vllm/v1/spec_decode/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "class:vllm/v1/hisparse/runtime.py:PagedCacheView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "class:vllm/v1/hisparse/runtime.py:ResolvedHiSparseConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "class:vllm/v1/hisparse/runtime.py:HiSparseHostPool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "class:vllm/v1/hisparse/runtime.py:HiSparsePrefillStagingPlan",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "class:vllm/v1/hisparse/runtime.py:_SharedTopKState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "class:vllm/v1/hisparse/runtime.py:HiSparseIndexGroup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "class:vllm/v1/hisparse/runtime.py:HiSparseRuntime",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "class:vllm/v1/hisparse/runtime.py:HiSparseCacheHandle",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:is_hisparse_decode_batch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:_check_residency_shared_memory",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:check_hisparse_host_memory",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:allocate_pinned_host_pool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:get_hisparse_host_pool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:use_shared_hisparse_host_pool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:_hisparse_registration_ranges",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:allocate_hisparse_host_pools",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:release_pinned_state",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:hisparse_prefill_staging_remap",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:build_hisparse_prefill_staging_plan",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:update_hisparse_residency",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:initialize_hisparse_runtime_buffers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:create_hisparse_cache_handle",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/types.py",
+   "target": "class:vllm/v1/hisparse/types.py:SparseKVPageTransfer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/types.py",
+   "target": "class:vllm/v1/hisparse/types.py:SparseKVRowMirror",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/types.py",
+   "target": "class:vllm/v1/hisparse/types.py:SparseKVResidencyUpdate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/types.py",
+   "target": "class:vllm/v1/hisparse/types.py:SparseKVOffloadCommand",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_hints/protocol.py",
+   "target": "class:vllm/v1/kv_hints/protocol.py:KvHintAction",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_hints/protocol.py",
+   "target": "class:vllm/v1/kv_hints/protocol.py:KvHintsEnvelope",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/cache_hit_source.py",
+   "target": "class:vllm/v1/metrics/cache_hit_source.py:CacheHitSource",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "class:vllm/v1/metrics/loggers.py:StatLoggerBase",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "class:vllm/v1/metrics/loggers.py:AggregateStatLoggerBase",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "class:vllm/v1/metrics/loggers.py:LoggingStatLogger",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "class:vllm/v1/metrics/loggers.py:AggregatedLoggingStatLogger",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "class:vllm/v1/metrics/loggers.py:PerEngineStatLoggerAdapter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "class:vllm/v1/metrics/loggers.py:PrometheusStatLogger",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "class:vllm/v1/metrics/loggers.py:StatLoggerManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "function:vllm/v1/metrics/loggers.py:load_stat_logger_plugin_factories",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/buckets.py",
+   "target": "function:vllm/v1/metrics/buckets.py:build_buckets",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/buckets.py",
+   "target": "function:vllm/v1/metrics/buckets.py:build_1_2_5_buckets",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/buckets.py",
+   "target": "function:vllm/v1/metrics/buckets.py:histogram_buckets",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "class:vllm/v1/hisparse/runtime.py:PagedCacheView",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "class:vllm/v1/hisparse/runtime.py:ResolvedHiSparseConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "class:vllm/v1/hisparse/runtime.py:HiSparseHostPool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "class:vllm/v1/hisparse/runtime.py:HiSparsePrefillStagingPlan",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "class:vllm/v1/hisparse/runtime.py:HiSparseIndexGroup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "class:vllm/v1/hisparse/runtime.py:HiSparseRuntime",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "class:vllm/v1/hisparse/runtime.py:HiSparseCacheHandle",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:is_hisparse_decode_batch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:check_hisparse_host_memory",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:allocate_pinned_host_pool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:get_hisparse_host_pool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:use_shared_hisparse_host_pool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:allocate_hisparse_host_pools",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:release_pinned_state",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:hisparse_prefill_staging_remap",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:build_hisparse_prefill_staging_plan",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:update_hisparse_residency",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:initialize_hisparse_runtime_buffers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/runtime.py",
+   "target": "function:vllm/v1/hisparse/runtime.py:create_hisparse_cache_handle",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/types.py",
+   "target": "class:vllm/v1/hisparse/types.py:SparseKVPageTransfer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/types.py",
+   "target": "class:vllm/v1/hisparse/types.py:SparseKVRowMirror",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/types.py",
+   "target": "class:vllm/v1/hisparse/types.py:SparseKVResidencyUpdate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/types.py",
+   "target": "class:vllm/v1/hisparse/types.py:SparseKVOffloadCommand",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_hints/protocol.py",
+   "target": "class:vllm/v1/kv_hints/protocol.py:KvHintAction",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_hints/protocol.py",
+   "target": "class:vllm/v1/kv_hints/protocol.py:KvHintsEnvelope",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/cache_hit_source.py",
+   "target": "class:vllm/v1/metrics/cache_hit_source.py:CacheHitSource",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "class:vllm/v1/metrics/loggers.py:StatLoggerBase",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "class:vllm/v1/metrics/loggers.py:AggregateStatLoggerBase",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "class:vllm/v1/metrics/loggers.py:LoggingStatLogger",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "class:vllm/v1/metrics/loggers.py:AggregatedLoggingStatLogger",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "class:vllm/v1/metrics/loggers.py:PerEngineStatLoggerAdapter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "class:vllm/v1/metrics/loggers.py:PrometheusStatLogger",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "class:vllm/v1/metrics/loggers.py:StatLoggerManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/loggers.py",
+   "target": "function:vllm/v1/metrics/loggers.py:load_stat_logger_plugin_factories",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/buckets.py",
+   "target": "function:vllm/v1/metrics/buckets.py:build_buckets",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/buckets.py",
+   "target": "function:vllm/v1/metrics/buckets.py:build_1_2_5_buckets",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/buckets.py",
+   "target": "function:vllm/v1/metrics/buckets.py:histogram_buckets",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/metrics/loggers.py:AggregateStatLoggerBase",
+   "target": "class:vllm/v1/metrics/loggers.py:StatLoggerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/loggers.py:LoggingStatLogger",
+   "target": "class:vllm/v1/metrics/loggers.py:StatLoggerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/loggers.py:AggregatedLoggingStatLogger",
+   "target": "class:vllm/v1/metrics/loggers.py:LoggingStatLogger",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/loggers.py:AggregatedLoggingStatLogger",
+   "target": "class:vllm/v1/metrics/loggers.py:AggregateStatLoggerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/loggers.py:PerEngineStatLoggerAdapter",
+   "target": "class:vllm/v1/metrics/loggers.py:AggregateStatLoggerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/loggers.py:PrometheusStatLogger",
+   "target": "class:vllm/v1/metrics/loggers.py:AggregateStatLoggerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

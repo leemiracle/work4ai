@@ -1,0 +1,40 @@
+# DeepWiki 索引 — allenai/multimodalqa
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 528835 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+  - [2.1 Installation and Environment Setup](2.1-installation-and-environment-setup.md)
+  - [2.2 Quick Start Guide](2.2-quick-start-guide.md)
+- [3 Dataset](3-dataset.md)
+  - [3.1 Dataset Format Specification](3.1-dataset-format-specification.md)
+  - [3.2 Question Types and Taxonomy](3.2-question-types-and-taxonomy.md)
+  - [3.3 Context Files and Structure](3.3-context-files-and-structure.md)
+- [4 System Architecture](4-system-architecture.md)
+  - [4.1 Question Type Classification](4.1-question-type-classification.md)
+  - [4.2 Inference Methods](4.2-inference-methods.md)
+- [5 Baseline Models](5-baseline-models.md)
+  - [5.1 Image QA Model](5.1-image-qa-model.md)
+  - [5.2 Table QA Model](5.2-table-qa-model.md)
+  - [5.3 Text QA Model](5.3-text-qa-model.md)
+- [6 Running Inference](6-running-inference.md)
+  - [6.1 Pipeline Implementation](6.1-pipeline-implementation.md)
+  - [6.2 Running Baseline Evaluations](6.2-running-baseline-evaluations.md)
+- [7 Training Models](7-training-models.md)
+  - [7.1 Training Image QA Models](7.1-training-image-qa-models.md)
+  - [7.2 Training Text and Table QA Models](7.2-training-text-and-table-qa-models.md)
+- [8 Evaluation](8-evaluation.md)
+  - [8.1 Evaluation Metrics](8.1-evaluation-metrics.md)
+  - [8.2 Results Analysis](8.2-results-analysis.md)
+- [9 Technical Reference](9-technical-reference.md)
+  - [9.1 Common Utilities](9.1-common-utilities.md)
+  - [9.2 Answer Normalization](9.2-answer-normalization.md)
+
+## 附：结构清单外的页
+- [Image QA Dataset Preparation](x1-image-qa-dataset-preparation.md)
+- [Image QA Inference](x2-image-qa-inference.md)
+- [Image QA Model Architecture](x3-image-qa-model-architecture.md)
+- [Image QA Training](x4-image-qa-training.md)
+- [Table QA Inference](x5-table-qa-inference.md)
+- [Table QA Prediction Logic](x6-table-qa-prediction-logic.md)

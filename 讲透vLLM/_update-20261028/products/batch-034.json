@@ -1,0 +1,5934 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/deepseek_v4/amd/mono/stages/router.py",
+   "type": "file",
+   "name": "router.py",
+   "filePath": "vllm/models/deepseek_v4/amd/mono/stages/router.py",
+   "summary": "mono 的 router GEMV tile（decode）：bf16 x [T,K] × gate 权重 [experts,K] → f32 logits（固定求和序保证确定性）。",
+   "tags": [
+    "router",
+    "gemv",
+    "mono"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/mono/stages/router.py:router_weight_loads",
+   "type": "function",
+   "name": "router_weight_loads",
+   "filePath": "vllm/models/deepseek_v4/amd/mono/stages/router.py",
+   "lineRange": [
+    40,
+    56
+   ],
+   "summary": "router gate 权重加载。",
+   "tags": [
+    "router",
+    "loads"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/mono/stages/router.py:router_x_loads",
+   "type": "function",
+   "name": "router_x_loads",
+   "filePath": "vllm/models/deepseek_v4/amd/mono/stages/router.py",
+   "lineRange": [
+    59,
+    77
+   ],
+   "summary": "router 输入加载。",
+   "tags": [
+    "router",
+    "loads"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/mono/stages/router.py:router_tile_mfma",
+   "type": "function",
+   "name": "router_tile_mfma",
+   "filePath": "vllm/models/deepseek_v4/amd/mono/stages/router.py",
+   "lineRange": [
+    80,
+    85
+   ],
+   "summary": "router tile 的 MFMA。",
+   "tags": [
+    "router",
+    "mfma"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "type": "file",
+   "name": "seam.py",
+   "filePath": "vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "summary": "mono 的 mHC seam stage（427 行）：持久 launch 的任务表，经 tagged mailbox handoff（slice/gate/norm/collapse/reduce）。",
+   "tags": [
+    "seam",
+    "mhc",
+    "mailbox",
+    "stage"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:scratch_layout",
+   "type": "function",
+   "name": "scratch_layout",
+   "filePath": "vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "lineRange": [
+    89,
+    95
+   ],
+   "summary": "seam scratch 布局。",
+   "tags": [
+    "scratch",
+    "layout"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:pend_value",
+   "type": "function",
+   "name": "pend_value",
+   "filePath": "vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "lineRange": [
+    116,
+    122
+   ],
+   "summary": "pending 值处理。",
+   "tags": [
+    "pending",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:slice_loads",
+   "type": "function",
+   "name": "slice_loads",
+   "filePath": "vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "lineRange": [
+    131,
+    139
+   ],
+   "summary": "slice 的输入加载。",
+   "tags": [
+    "slice",
+    "loads"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:slice_row",
+   "type": "function",
+   "name": "slice_row",
+   "filePath": "vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "lineRange": [
+    142,
+    167
+   ],
+   "summary": "slice 单行处理。",
+   "tags": [
+    "slice",
+    "row"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:stage_slice",
+   "type": "function",
+   "name": "stage_slice",
+   "filePath": "vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "lineRange": [
+    171,
+    208
+   ],
+   "summary": "slice stage 装配。",
+   "tags": [
+    "slice",
+    "stage"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:slice_mix",
+   "type": "function",
+   "name": "slice_mix",
+   "filePath": "vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "lineRange": [
+    212,
+    241
+   ],
+   "summary": "slice 的 mix 处理。",
+   "tags": [
+    "slice",
+    "mix"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:stage_gate",
+   "type": "function",
+   "name": "stage_gate",
+   "filePath": "vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "lineRange": [
+    256,
+    315
+   ],
+   "summary": "gate stage 装配（24 mixes→pre/post/comb，Sinkhorn 20）。",
+   "tags": [
+    "gate",
+    "stage",
+    "sinkhorn"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:stage_norm",
+   "type": "function",
+   "name": "stage_norm",
+   "filePath": "vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "lineRange": [
+    320,
+    356
+   ],
+   "summary": "norm stage 装配。",
+   "tags": [
+    "norm",
+    "stage"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:collapse_chunk",
+   "type": "function",
+   "name": "collapse_chunk",
+   "filePath": "vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "lineRange": [
+    359,
+    384
+   ],
+   "summary": "collapse 单 chunk。",
+   "tags": [
+    "collapse",
+    "chunk"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:stage_reduce",
+   "type": "function",
+   "name": "stage_reduce",
+   "filePath": "vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "lineRange": [
+    389,
+    405
+   ],
+   "summary": "seam reduce stage 装配。",
+   "tags": [
+    "reduce",
+    "stage"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:reduce_attn_pair",
+   "type": "function",
+   "name": "reduce_attn_pair",
+   "filePath": "vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "lineRange": [
+    409,
+    427
+   ],
+   "summary": "attention partial 成对归约。",
+   "tags": [
+    "reduce",
+    "attention"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "type": "file",
+   "name": "mono_decode.py",
+   "filePath": "vllm/models/deepseek_v4/amd/mono_decode.py",
+   "summary": "DeepSeek-V4-Pro mono decode layer 的 vLLM 集成层（--monokernel，CDNA4）：MonoDecodeLayer 作为 DeepseekV4DecoderLayer.forward 的 drop-in。",
+   "tags": [
+    "mono",
+    "decode-layer",
+    "integration",
+    "cdna4"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/amd/mono_decode.py:MonoDecodeLayer",
+   "type": "class",
+   "name": "MonoDecodeLayer",
+   "filePath": "vllm/models/deepseek_v4/amd/mono_decode.py",
+   "lineRange": [
+    202,
+    423
+   ],
+   "summary": "mono decode layer 的 vLLM 集成类（222 行 6 方法：DeepseekV4DecoderLayer.forward 的 drop-in）。",
+   "tags": [
+    "mono",
+    "decode-layer",
+    "integration"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/mono_decode.py:_mono_runner",
+   "type": "function",
+   "name": "_mono_runner",
+   "filePath": "vllm/models/deepseek_v4/amd/mono_decode.py",
+   "lineRange": [
+    63,
+    86
+   ],
+   "summary": "构建/获取 MonoRunner。",
+   "tags": [
+    "runner",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/mono_decode.py:_deployment_error",
+   "type": "function",
+   "name": "_deployment_error",
+   "filePath": "vllm/models/deepseek_v4/amd/mono_decode.py",
+   "lineRange": [
+    139,
+    174
+   ],
+   "summary": "部署约束错误诊断（36 行）。",
+   "tags": [
+    "diagnostics",
+    "deployment"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/mono_decode.py:_select",
+   "type": "function",
+   "name": "_select",
+   "filePath": "vllm/models/deepseek_v4/amd/mono_decode.py",
+   "lineRange": [
+    177,
+    199
+   ],
+   "summary": "K1/K2 间 select 交接实现（vLLM compressor/indexer 在此运行）。",
+   "tags": [
+    "select",
+    "handoff"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "type": "file",
+   "name": "mtp.py",
+   "filePath": "vllm/models/deepseek_v4/amd/mtp.py",
+   "summary": "DeepSeek V4 的 MTP draft 模型（V4 架构与 V3 差异大，从 deepseek_mtp.py 拆出）。",
+   "tags": [
+    "mtp",
+    "spec-decode",
+    "draft-model"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/amd/mtp.py:DeepSeekV4MultiTokenPredictorLayer",
+   "type": "class",
+   "name": "DeepSeekV4MultiTokenPredictorLayer",
+   "filePath": "vllm/models/deepseek_v4/amd/mtp.py",
+   "lineRange": [
+    62,
+    170
+   ],
+   "summary": "V4 MTP 层。",
+   "tags": [
+    "mtp",
+    "layer"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/amd/mtp.py:DeepSeekV4MultiTokenPredictor",
+   "type": "class",
+   "name": "DeepSeekV4MultiTokenPredictor",
+   "filePath": "vllm/models/deepseek_v4/amd/mtp.py",
+   "lineRange": [
+    173,
+    289
+   ],
+   "summary": "V4 MTP 骨干。",
+   "tags": [
+    "mtp",
+    "model"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/amd/mtp.py:DeepSeekV4MTP",
+   "type": "class",
+   "name": "DeepSeekV4MTP",
+   "filePath": "vllm/models/deepseek_v4/amd/mtp.py",
+   "lineRange": [
+    292,
+    558
+   ],
+   "summary": "V4 MTP 顶层封装（267 行 8 方法）。",
+   "tags": [
+    "mtp",
+    "wrapper"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "type": "file",
+   "name": "rocm.py",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "summary": "DeepSeek V4 ROCm 专用层（1970 行）：AITER 稀疏 MLA/SWA 元数据与后端、MXFP4 压缩器/indexer、topk+SWA 索引合并内核。",
+   "tags": [
+    "rocm",
+    "aiter",
+    "sparse-mla",
+    "mxfp4"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4ROCMAiterMLASparseMetadataBuilder",
+   "type": "class",
+   "name": "DeepseekV4ROCMAiterMLASparseMetadataBuilder",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "lineRange": [
+    645,
+    723
+   ],
+   "summary": "AITER 稀疏 MLA 元数据构建器。",
+   "tags": [
+    "aiter",
+    "metadata-builder",
+    "sparse"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4ROCMAiterSparseSWAMetadataBuilder",
+   "type": "class",
+   "name": "DeepseekV4ROCMAiterSparseSWAMetadataBuilder",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "lineRange": [
+    726,
+    830
+   ],
+   "summary": "AITER 稀疏 SWA 元数据构建器（105 行）。",
+   "tags": [
+    "aiter",
+    "swa",
+    "metadata-builder"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4ROCMAiterMLASparseBackend",
+   "type": "class",
+   "name": "DeepseekV4ROCMAiterMLASparseBackend",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "lineRange": [
+    833,
+    840
+   ],
+   "summary": "AITER 稀疏 MLA 后端描述符。",
+   "tags": [
+    "aiter",
+    "backend",
+    "sparse"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4ROCMAiterMLAAttention",
+   "type": "class",
+   "name": "DeepseekV4ROCMAiterMLAAttention",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "lineRange": [
+    843,
+    1850
+   ],
+   "summary": "ROCm AITER 稀疏 MLA 注意力层（1008 行 20 方法）。",
+   "tags": [
+    "aiter",
+    "attention",
+    "sparse-mla"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4RocmMxfp4Compressor",
+   "type": "class",
+   "name": "DeepseekV4RocmMxfp4Compressor",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "lineRange": [
+    1853,
+    1930
+   ],
+   "summary": "MXFP4 压缩器 ROCm 变体。",
+   "tags": [
+    "mxfp4",
+    "compressor"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4RocmMxfp4Indexer",
+   "type": "class",
+   "name": "DeepseekV4RocmMxfp4Indexer",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "lineRange": [
+    1938,
+    1970
+   ],
+   "summary": "MXFP4 indexer ROCm 变体。",
+   "tags": [
+    "mxfp4",
+    "indexer"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/rocm.py:_wo_a_block_scale_to_e8m0",
+   "type": "function",
+   "name": "_wo_a_block_scale_to_e8m0",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "lineRange": [
+    72,
+    112
+   ],
+   "summary": "wo_a 块 scale 转 E8M0。",
+   "tags": [
+    "e8m0",
+    "scale"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/rocm.py:_trust_dsv4_extra_cache_nan_free",
+   "type": "function",
+   "name": "_trust_dsv4_extra_cache_nan_free",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "lineRange": [
+    115,
+    125
+   ],
+   "summary": "判定 extra cache 是否可信无 NaN。",
+   "tags": [
+    "nan",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/rocm.py:_aiter_sparse_mla_enabled",
+   "type": "function",
+   "name": "_aiter_sparse_mla_enabled",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "lineRange": [
+    128,
+    141
+   ],
+   "summary": "判定 AITER 稀疏 MLA 是否启用。",
+   "tags": [
+    "aiter",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/rocm.py:apply_pre_quantized_block_scaled_mm",
+   "type": "function",
+   "name": "apply_pre_quantized_block_scaled_mm",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "lineRange": [
+    163,
+    190
+   ],
+   "summary": "应用预量化块缩放矩阵乘。",
+   "tags": [
+    "block-scaled",
+    "mm"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/rocm.py:_combine_topk_swa_indices_kernel",
+   "type": "function",
+   "name": "_combine_topk_swa_indices_kernel",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "lineRange": [
+    209,
+    289
+   ],
+   "summary": "topk+SWA 索引合并 Triton 内核（81 行）。",
+   "tags": [
+    "triton",
+    "topk",
+    "swa",
+    "kernel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/rocm.py:combine_topk_swa_indices",
+   "type": "function",
+   "name": "combine_topk_swa_indices",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "lineRange": [
+    292,
+    353
+   ],
+   "summary": "topk+SWA 索引合并入口。",
+   "tags": [
+    "topk",
+    "swa",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/rocm.py:_compute_topk_lens_kernel",
+   "type": "function",
+   "name": "_compute_topk_lens_kernel",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "lineRange": [
+    357,
+    379
+   ],
+   "summary": "topk 长度计算 Triton 内核。",
+   "tags": [
+    "triton",
+    "topk",
+    "kernel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/rocm.py:_pack_global_topk_ragged_kernel",
+   "type": "function",
+   "name": "_pack_global_topk_ragged_kernel",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "lineRange": [
+    383,
+    421
+   ],
+   "summary": "全局 topk ragged 打包内核。",
+   "tags": [
+    "triton",
+    "topk",
+    "ragged"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/rocm.py:_compress_pool_kernel",
+   "type": "function",
+   "name": "_compress_pool_kernel",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "lineRange": [
+    435,
+    492
+   ],
+   "summary": "压缩池 Triton 内核。",
+   "tags": [
+    "triton",
+    "compress",
+    "kernel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/rocm.py:_compress_pool_warmup_inputs",
+   "type": "function",
+   "name": "_compress_pool_warmup_inputs",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "lineRange": [
+    495,
+    520
+   ],
+   "summary": "压缩池 warmup 输入构造。",
+   "tags": [
+    "warmup",
+    "inputs"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/rocm.py:compress_pool",
+   "type": "function",
+   "name": "compress_pool",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "lineRange": [
+    527,
+    552
+   ],
+   "summary": "压缩池入口。",
+   "tags": [
+    "compress",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/rocm.py:compute_global_topk_ragged_indices_and_indptr",
+   "type": "function",
+   "name": "compute_global_topk_ragged_indices_and_indptr",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "lineRange": [
+    555,
+    596
+   ],
+   "summary": "全局 topk ragged 索引与 indptr 计算。",
+   "tags": [
+    "topk",
+    "ragged",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/amd/rocm.py:_copy_ragged_to_graph_buffers",
+   "type": "function",
+   "name": "_copy_ragged_to_graph_buffers",
+   "filePath": "vllm/models/deepseek_v4/amd/rocm.py",
+   "lineRange": [
+    599,
+    624
+   ],
+   "summary": "ragged 结果拷入 CUDA Graph buffer。",
+   "tags": [
+    "cuda-graph",
+    "copy"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/attention.py",
+   "type": "file",
+   "name": "attention.py",
+   "filePath": "vllm/models/deepseek_v4/attention.py",
+   "summary": "DeepseekV4 MLA 注意力层（平台无关核心）：DeepseekV4Attention/IndexerCache/Indexer。",
+   "tags": [
+    "attention",
+    "mla",
+    "indexer",
+    "core"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/attention.py:DeepseekV4Attention",
+   "type": "class",
+   "name": "DeepseekV4Attention",
+   "filePath": "vllm/models/deepseek_v4/attention.py",
+   "lineRange": [
+    132,
+    883
+   ],
+   "summary": "V4 MLA 注意力层核心（752 行 19 方法：forward_impl/稀疏路由/indexer 协作）。",
+   "tags": [
+    "attention",
+    "mla",
+    "core"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/attention.py:DeepseekV4IndexerCache",
+   "type": "class",
+   "name": "DeepseekV4IndexerCache",
+   "filePath": "vllm/models/deepseek_v4/attention.py",
+   "lineRange": [
+    886,
+    929
+   ],
+   "summary": "V4 indexer 的 K cache 层。",
+   "tags": [
+    "indexer",
+    "cache"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/attention.py:DeepseekV4Indexer",
+   "type": "class",
+   "name": "DeepseekV4Indexer",
+   "filePath": "vllm/models/deepseek_v4/attention.py",
+   "lineRange": [
+    932,
+    1185
+   ],
+   "summary": "V4 indexer 层（MQA logits top-k，254 行 8 方法）。",
+   "tags": [
+    "indexer",
+    "topk",
+    "mqa"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/attention.py:_fill_short_context_topk_indices",
+   "type": "function",
+   "name": "_fill_short_context_topk_indices",
+   "filePath": "vllm/models/deepseek_v4/attention.py",
+   "lineRange": [
+    76,
+    91
+   ],
+   "summary": "短上下文的 topk 索引填充。",
+   "tags": [
+    "topk",
+    "short-context"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/attention.py:_resolve_dsv4_kv_cache_dtype",
+   "type": "function",
+   "name": "_resolve_dsv4_kv_cache_dtype",
+   "filePath": "vllm/models/deepseek_v4/attention.py",
+   "lineRange": [
+    94,
+    129
+   ],
+   "summary": "解析 V4 KV cache dtype。",
+   "tags": [
+    "kv-dtype",
+    "resolution"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/common/eplb_util.py",
+   "type": "file",
+   "name": "eplb_util.py",
+   "filePath": "vllm/models/deepseek_v4/common/eplb_util.py",
+   "summary": "V4 家族的 EPLB MoE 注册共享工具。",
+   "tags": [
+    "eplb",
+    "moe",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/eplb_util.py:dspark_draft_supports_eplb",
+   "type": "function",
+   "name": "dspark_draft_supports_eplb",
+   "filePath": "vllm/models/deepseek_v4/common/eplb_util.py",
+   "lineRange": [
+    13,
+    19
+   ],
+   "summary": "判定 DSpark draft 是否支持 EPLB。",
+   "tags": [
+    "eplb",
+    "dspark",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/eplb_util.py:collect_moe_layers",
+   "type": "function",
+   "name": "collect_moe_layers",
+   "filePath": "vllm/models/deepseek_v4/common/eplb_util.py",
+   "lineRange": [
+    22,
+    50
+   ],
+   "summary": "收集 MoE 层用于 EPLB 注册。",
+   "tags": [
+    "eplb",
+    "moe",
+    "collect"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "type": "file",
+   "name": "mm_preprocess.py",
+   "filePath": "vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "summary": "V4 vision 变体的多模态预处理：图像变换/sentinel 校验/resize 求解与全套 VL processor。",
+   "tags": [
+    "multimodal",
+    "preprocess",
+    "vision"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/mm_preprocess.py:DeepseekV4VLImageProcessor",
+   "type": "class",
+   "name": "DeepseekV4VLImageProcessor",
+   "filePath": "vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "lineRange": [
+    238,
+    258
+   ],
+   "summary": "V4 VL 图像处理器。",
+   "tags": [
+    "image-processor",
+    "vl"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/mm_preprocess.py:DeepseekV4VLProcessor",
+   "type": "class",
+   "name": "DeepseekV4VLProcessor",
+   "filePath": "vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "lineRange": [
+    261,
+    317
+   ],
+   "summary": "V4 VL 总处理器。",
+   "tags": [
+    "processor",
+    "vl"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/mm_preprocess.py:DeepseekV4VLProcessingInfo",
+   "type": "class",
+   "name": "DeepseekV4VLProcessingInfo",
+   "filePath": "vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "lineRange": [
+    320,
+    382
+   ],
+   "summary": "V4 VL 处理信息（BaseProcessingInfo 子类）。",
+   "tags": [
+    "processing-info",
+    "vl"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/mm_preprocess.py:DeepseekV4VLDummyInputsBuilder",
+   "type": "class",
+   "name": "DeepseekV4VLDummyInputsBuilder",
+   "filePath": "vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "lineRange": [
+    385,
+    405
+   ],
+   "summary": "V4 VL dummy 输入构建器。",
+   "tags": [
+    "dummy-inputs",
+    "vl"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/mm_preprocess.py:DeepseekV4VLMultiModalProcessor",
+   "type": "class",
+   "name": "DeepseekV4VLMultiModalProcessor",
+   "filePath": "vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "lineRange": [
+    408,
+    529
+   ],
+   "summary": "V4 VL 多模态处理器（122 行 3 方法）。",
+   "tags": [
+    "multimodal-processor",
+    "vl"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:image_sentinel_mask",
+   "type": "function",
+   "name": "image_sentinel_mask",
+   "filePath": "vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "lineRange": [
+    71,
+    75
+   ],
+   "summary": "图像 sentinel 掩码构造。",
+   "tags": [
+    "sentinel",
+    "mask"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:validate_image_sentinel_ids",
+   "type": "function",
+   "name": "validate_image_sentinel_ids",
+   "filePath": "vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "lineRange": [
+    78,
+    87
+   ],
+   "summary": "校验图像 sentinel id。",
+   "tags": [
+    "sentinel",
+    "validation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:grid_tokens",
+   "type": "function",
+   "name": "grid_tokens",
+   "filePath": "vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "lineRange": [
+    90,
+    99
+   ],
+   "summary": "网格 token 计数。",
+   "tags": [
+    "grid",
+    "tokens"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:solve_resize_ratio",
+   "type": "function",
+   "name": "solve_resize_ratio",
+   "filePath": "vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "lineRange": [
+    102,
+    133
+   ],
+   "summary": "求解 resize 比例（满足 token 预算）。",
+   "tags": [
+    "resize",
+    "solver"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:safe_resize",
+   "type": "function",
+   "name": "safe_resize",
+   "filePath": "vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "lineRange": [
+    136,
+    149
+   ],
+   "summary": "安全 resize（比例/边界处理）。",
+   "tags": [
+    "resize",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:load_image",
+   "type": "function",
+   "name": "load_image",
+   "filePath": "vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "lineRange": [
+    152,
+    192
+   ],
+   "summary": "图像加载。",
+   "tags": [
+    "image",
+    "load"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:build_image_block",
+   "type": "function",
+   "name": "build_image_block",
+   "filePath": "vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "lineRange": [
+    195,
+    225
+   ],
+   "summary": "构建图像 token 块。",
+   "tags": [
+    "image",
+    "block"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:build_image_block_pad_free",
+   "type": "function",
+   "name": "build_image_block_pad_free",
+   "filePath": "vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "lineRange": [
+    228,
+    235
+   ],
+   "summary": "无 pad 的图像块构建。",
+   "tags": [
+    "image",
+    "pad-free"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/common/ops/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/deepseek_v4/common/ops/__init__.py",
+   "summary": "V4 common ops 包入口。",
+   "tags": [
+    "package-init",
+    "ops"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "type": "file",
+   "name": "cache_utils.py",
+   "filePath": "vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "summary": "V4 分页 K-cache 管理与稀疏注意力索引准备的 Triton 内核集（量化插入/反量化 gather/global topk/混合稀疏索引）。",
+   "tags": [
+    "triton",
+    "k-cache",
+    "topk",
+    "sparse-indices"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/ops/cache_utils.py:DequantizeAndGatherKCacheKernel",
+   "type": "class",
+   "name": "DequantizeAndGatherKCacheKernel",
+   "filePath": "vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "lineRange": [
+    233,
+    496
+   ],
+   "summary": "K cache 反量化+gather 内核封装（264 行 5 方法）。",
+   "tags": [
+    "triton",
+    "dequant",
+    "gather"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/ops/cache_utils.py:ComputeGlobalTopkIndicesAndLensKernel",
+   "type": "class",
+   "name": "ComputeGlobalTopkIndicesAndLensKernel",
+   "filePath": "vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "lineRange": [
+    579,
+    737
+   ],
+   "summary": "全局 topk 索引与长度内核。",
+   "tags": [
+    "triton",
+    "topk"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/ops/cache_utils.py:CombineTopkSwaIndicesKernel",
+   "type": "class",
+   "name": "CombineTopkSwaIndicesKernel",
+   "filePath": "vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "lineRange": [
+    820,
+    1077
+   ],
+   "summary": "topk+SWA 索引合并内核（258 行）。",
+   "tags": [
+    "triton",
+    "topk",
+    "swa"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/ops/cache_utils.py:BuildFlashinferMixedSparseIndicesKernel",
+   "type": "class",
+   "name": "BuildFlashinferMixedSparseIndicesKernel",
+   "filePath": "vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "lineRange": [
+    1255,
+    1747
+   ],
+   "summary": "FlashInfer 混合稀疏索引构建内核（493 行）。",
+   "tags": [
+    "triton",
+    "flashinfer",
+    "sparse-indices"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/cache_utils.py:quantize_and_insert_k_kernel",
+   "type": "function",
+   "name": "quantize_and_insert_k_kernel",
+   "filePath": "vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "lineRange": [
+    44,
+    165
+   ],
+   "summary": "K 量化+插入 Triton 内核本体（122 行）。",
+   "tags": [
+    "triton",
+    "quantize",
+    "insert"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/cache_utils.py:quantize_and_insert_k_cache",
+   "type": "function",
+   "name": "quantize_and_insert_k_cache",
+   "filePath": "vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "lineRange": [
+    168,
+    230
+   ],
+   "summary": "K 量化插入入口。",
+   "tags": [
+    "quantize",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/cache_utils.py:dequantize_and_gather_k_cache",
+   "type": "function",
+   "name": "dequantize_and_gather_k_cache",
+   "filePath": "vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "lineRange": [
+    499,
+    547
+   ],
+   "summary": "K cache 反量化 gather 入口。",
+   "tags": [
+    "dequant",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/cache_utils.py:compute_global_topk_indices_and_lens",
+   "type": "function",
+   "name": "compute_global_topk_indices_and_lens",
+   "filePath": "vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "lineRange": [
+    550,
+    576
+   ],
+   "summary": "全局 topk 计算入口。",
+   "tags": [
+    "topk",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/cache_utils.py:combine_topk_swa_indices",
+   "type": "function",
+   "name": "combine_topk_swa_indices",
+   "filePath": "vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "lineRange": [
+    752,
+    806
+   ],
+   "summary": "topk+SWA 合并入口。",
+   "tags": [
+    "topk",
+    "swa",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/cache_utils.py:build_flashinfer_mixed_sparse_indices",
+   "type": "function",
+   "name": "build_flashinfer_mixed_sparse_indices",
+   "filePath": "vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "lineRange": [
+    1083,
+    1240
+   ],
+   "summary": "混合稀疏索引构建入口（158 行）。",
+   "tags": [
+    "sparse-indices",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "type": "file",
+   "name": "fused_compress_quant_cache.py",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "summary": "融合 compressor + FP8/MXFP4 UE8M0 量化 + KV 插入内核（三个特化变体 + 两阶段拆分）。",
+   "tags": [
+    "fused",
+    "compressor",
+    "quantization",
+    "kv-insert"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:FusedKVCompressNormRopeInsertIndexerTritonKernel",
+   "type": "class",
+   "name": "FusedKVCompressNormRopeInsertIndexerTritonKernel",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "lineRange": [
+    1092,
+    1320
+   ],
+   "summary": "indexer 路径的融合压缩内核封装（229 行 4 方法）。",
+   "tags": [
+    "fused",
+    "compressor",
+    "indexer"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:compress_norm_rope_store_triton",
+   "type": "function",
+   "name": "compress_norm_rope_store_triton",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "lineRange": [
+    48,
+    145
+   ],
+   "summary": "压缩+norm+RoPE+存储 Triton 入口。",
+   "tags": [
+    "compress",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:_fused_kv_compress_norm_rope_insert_sparse_attn",
+   "type": "function",
+   "name": "_fused_kv_compress_norm_rope_insert_sparse_attn",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "lineRange": [
+    152,
+    339
+   ],
+   "summary": "稀疏注意力路径融合内核本体（188 行）。",
+   "tags": [
+    "fused",
+    "sparse-attn"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:_pick_compress_num_splits",
+   "type": "function",
+   "name": "_pick_compress_num_splits",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "lineRange": [
+    357,
+    372
+   ],
+   "summary": "压缩 splits 数选择。",
+   "tags": [
+    "splits",
+    "selection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:_compress_gather_split_sparse_attn",
+   "type": "function",
+   "name": "_compress_gather_split_sparse_attn",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "lineRange": [
+    376,
+    437
+   ],
+   "summary": "两阶段压缩的 gather/split 阶段。",
+   "tags": [
+    "two-stage",
+    "gather"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:_finalize_norm_rope_quant_store_sparse_attn",
+   "type": "function",
+   "name": "_finalize_norm_rope_quant_store_sparse_attn",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "lineRange": [
+    441,
+    546
+   ],
+   "summary": "两阶段的 norm/rope/quant/store 收尾。",
+   "tags": [
+    "two-stage",
+    "finalize"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:_launch_two_stage_sparse_attn_compressor",
+   "type": "function",
+   "name": "_launch_two_stage_sparse_attn_compressor",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "lineRange": [
+    549,
+    614
+   ],
+   "summary": "两阶段压缩器启动。",
+   "tags": [
+    "two-stage",
+    "launch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:compress_norm_rope_store_two_stage_triton",
+   "type": "function",
+   "name": "compress_norm_rope_store_two_stage_triton",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "lineRange": [
+    617,
+    698
+   ],
+   "summary": "两阶段压缩 Triton 入口。",
+   "tags": [
+    "two-stage",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:_fused_kv_compress_norm_rope_insert_indexer_attn",
+   "type": "function",
+   "name": "_fused_kv_compress_norm_rope_insert_indexer_attn",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "lineRange": [
+    713,
+    887
+   ],
+   "summary": "indexer 路径融合内核本体（175 行）。",
+   "tags": [
+    "fused",
+    "indexer"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:_fused_kv_compress_norm_rope_insert_indexer_mxfp4_attn",
+   "type": "function",
+   "name": "_fused_kv_compress_norm_rope_insert_indexer_mxfp4_attn",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "lineRange": [
+    902,
+    1089
+   ],
+   "summary": "MXFP4 indexer 路径融合内核（188 行）。",
+   "tags": [
+    "fused",
+    "indexer",
+    "mxfp4"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "type": "file",
+   "name": "fused_indexer_q.py",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "summary": "融合 indexer q RoPE+量化内核（FP8 与 MXFP4 两变体）。",
+   "tags": [
+    "fused",
+    "indexer",
+    "rope",
+    "quantization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py:FusedIndexerQRopeQuantTritonKernel",
+   "type": "class",
+   "name": "FusedIndexerQRopeQuantTritonKernel",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "lineRange": [
+    79,
+    310
+   ],
+   "summary": "indexer q RoPE+FP8 量化内核封装（232 行）。",
+   "tags": [
+    "fused",
+    "indexer",
+    "fp8"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py:FusedIndexerQRopeMxFp4TritonKernel",
+   "type": "class",
+   "name": "FusedIndexerQRopeMxFp4TritonKernel",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "lineRange": [
+    322,
+    546
+   ],
+   "summary": "indexer q RoPE+MXFP4 量化内核封装（225 行）。",
+   "tags": [
+    "fused",
+    "indexer",
+    "mxfp4"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py:_get_cos_sin",
+   "type": "function",
+   "name": "_get_cos_sin",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "lineRange": [
+    24,
+    35
+   ],
+   "summary": "cos/sin 表获取。",
+   "tags": [
+    "rope",
+    "tables"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py:_fp32x2_to_fp4x2",
+   "type": "function",
+   "name": "_fp32x2_to_fp4x2",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "lineRange": [
+    39,
+    54
+   ],
+   "summary": "双 fp32 打包为两个 fp4。",
+   "tags": [
+    "fp4",
+    "packing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py:_quantize_mxfp4_pair",
+   "type": "function",
+   "name": "_quantize_mxfp4_pair",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "lineRange": [
+    58,
+    76
+   ],
+   "summary": "MXFP4 成对量化。",
+   "tags": [
+    "mxfp4",
+    "quant"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py:fused_indexer_q_rope_quant",
+   "type": "function",
+   "name": "fused_indexer_q_rope_quant",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "lineRange": [
+    549,
+    729
+   ],
+   "summary": "indexer q RoPE+量化公开入口（181 行）。",
+   "tags": [
+    "fused",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "type": "file",
+   "name": "fused_inv_rope_fp8_quant.py",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "summary": "融合逆 RoPE + 块缩放 FP8 量化内核（scale 格式预变换）。",
+   "tags": [
+    "fused",
+    "inverse-rope",
+    "fp8",
+    "quantization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py:FusedInvRopeFP8QuantKernel",
+   "type": "class",
+   "name": "FusedInvRopeFP8QuantKernel",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "lineRange": [
+    25,
+    349
+   ],
+   "summary": "逆 RoPE+FP8 量化内核封装（325 行）。",
+   "tags": [
+    "fused",
+    "inverse-rope",
+    "fp8"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py:fused_inv_rope_fp8_quant",
+   "type": "function",
+   "name": "fused_inv_rope_fp8_quant",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "lineRange": [
+    352,
+    433
+   ],
+   "summary": "逆 RoPE+FP8 量化公开入口（82 行）。",
+   "tags": [
+    "fused",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py:_fused_inv_rope_fp8_quant_kernel_impl",
+   "type": "function",
+   "name": "_fused_inv_rope_fp8_quant_kernel_impl",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "lineRange": [
+    436,
+    491
+   ],
+   "summary": "内核实现（含 dispatch 逻辑）。",
+   "tags": [
+    "fused",
+    "impl"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py:_fused_inv_rope_fp8_quant_kernel_fake",
+   "type": "function",
+   "name": "_fused_inv_rope_fp8_quant_kernel_fake",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "lineRange": [
+    494,
+    528
+   ],
+   "summary": "fake 模式（torch.compile/CUDA Graph 用）。",
+   "tags": [
+    "fake-mode"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py",
+   "type": "file",
+   "name": "fused_mtp_input_rmsnorm.py",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py",
+   "summary": "融合 MTP 输入 RMSNorm（enorm+mask-zero 与 hnorm）与 shared head RMSNorm 内核。",
+   "tags": [
+    "fused",
+    "rmsnorm",
+    "mtp"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py:FusedMTPInputRMSNormKernel",
+   "type": "class",
+   "name": "FusedMTPInputRMSNormKernel",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py",
+   "lineRange": [
+    53,
+    231
+   ],
+   "summary": "MTP 输入 RMSNorm（enorm+mask-zero+hnorm）内核封装（179 行）。",
+   "tags": [
+    "fused",
+    "rmsnorm",
+    "mtp"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py:MTPSharedHeadRMSNormKernel",
+   "type": "class",
+   "name": "MTPSharedHeadRMSNormKernel",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py",
+   "lineRange": [
+    234,
+    336
+   ],
+   "summary": "MTP shared head RMSNorm 内核封装。",
+   "tags": [
+    "fused",
+    "rmsnorm",
+    "shared-head"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py:_rmsnorm_row",
+   "type": "function",
+   "name": "_rmsnorm_row",
+   "filePath": "vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py",
+   "lineRange": [
+    36,
+    50
+   ],
+   "summary": "单行 RMSNorm helper。",
+   "tags": [
+    "rmsnorm",
+    "helper"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/common/ops/save_partial_states.py",
+   "type": "file",
+   "name": "save_partial_states.py",
+   "filePath": "vllm/models/deepseek_v4/common/ops/save_partial_states.py",
+   "summary": "部分状态保存 Triton 内核（SavePartialStatesKernel）。",
+   "tags": [
+    "triton",
+    "partial-states",
+    "save"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/ops/save_partial_states.py:SavePartialStatesKernel",
+   "type": "class",
+   "name": "SavePartialStatesKernel",
+   "filePath": "vllm/models/deepseek_v4/common/ops/save_partial_states.py",
+   "lineRange": [
+    19,
+    190
+   ],
+   "summary": "部分状态保存内核封装（172 行）。",
+   "tags": [
+    "triton",
+    "partial-states"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/common/rope.py",
+   "type": "file",
+   "name": "rope.py",
+   "filePath": "vllm/models/deepseek_v4/common/rope.py",
+   "summary": "V4 rotary embedding 初始化（build_deepseek_v4_rope）。",
+   "tags": [
+    "rope",
+    "initialization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/rope.py:build_deepseek_v4_rope",
+   "type": "function",
+   "name": "build_deepseek_v4_rope",
+   "filePath": "vllm/models/deepseek_v4/common/rope.py",
+   "lineRange": [
+    9,
+    52
+   ],
+   "summary": "构建 V4 rotary embedding（44 行）。",
+   "tags": [
+    "rope",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/common/spec_decode.py",
+   "type": "file",
+   "name": "spec_decode.py",
+   "filePath": "vllm/models/deepseek_v4/common/spec_decode.py",
+   "summary": "V4 投机解码共享工具（MTP hidden buffer 判定）。",
+   "tags": [
+    "spec-decode",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/spec_decode.py:needs_mtp_hidden_buffer",
+   "type": "function",
+   "name": "needs_mtp_hidden_buffer",
+   "filePath": "vllm/models/deepseek_v4/common/spec_decode.py",
+   "lineRange": [
+    6,
+    16
+   ],
+   "summary": "判定是否需要 MTP hidden buffer。",
+   "tags": [
+    "mtp",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/common/vision.py",
+   "type": "file",
+   "name": "vision.py",
+   "filePath": "vllm/models/deepseek_v4/common/vision.py",
+   "summary": "V4 vision tower（ViT + aligner，TP 分片线性层，从官方参考移植）与 DP 分片运行入口。",
+   "tags": [
+    "vision",
+    "vit",
+    "aligner",
+    "dp-sharding"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4RMSNorm",
+   "type": "class",
+   "name": "DeepseekV4RMSNorm",
+   "filePath": "vllm/models/deepseek_v4/common/vision.py",
+   "lineRange": [
+    68,
+    78
+   ],
+   "summary": "vision RMSNorm。",
+   "tags": [
+    "rmsnorm",
+    "vision"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4PatchEmbed",
+   "type": "class",
+   "name": "DeepseekV4PatchEmbed",
+   "filePath": "vllm/models/deepseek_v4/common/vision.py",
+   "lineRange": [
+    81,
+    94
+   ],
+   "summary": "patch embedding。",
+   "tags": [
+    "patch-embed",
+    "vision"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4VisionAttention",
+   "type": "class",
+   "name": "DeepseekV4VisionAttention",
+   "filePath": "vllm/models/deepseek_v4/common/vision.py",
+   "lineRange": [
+    97,
+    151
+   ],
+   "summary": "vision 注意力（55 行）。",
+   "tags": [
+    "attention",
+    "vision"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4VisionMLP",
+   "type": "class",
+   "name": "DeepseekV4VisionMLP",
+   "filePath": "vllm/models/deepseek_v4/common/vision.py",
+   "lineRange": [
+    154,
+    179
+   ],
+   "summary": "vision MLP。",
+   "tags": [
+    "mlp",
+    "vision"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4VisionBlock",
+   "type": "class",
+   "name": "DeepseekV4VisionBlock",
+   "filePath": "vllm/models/deepseek_v4/common/vision.py",
+   "lineRange": [
+    182,
+    199
+   ],
+   "summary": "vision block。",
+   "tags": [
+    "block",
+    "vision"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4ViT",
+   "type": "class",
+   "name": "DeepseekV4ViT",
+   "filePath": "vllm/models/deepseek_v4/common/vision.py",
+   "lineRange": [
+    202,
+    243
+   ],
+   "summary": "ViT tower（42 行 3 方法）。",
+   "tags": [
+    "vit",
+    "tower"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4Aligner",
+   "type": "class",
+   "name": "DeepseekV4Aligner",
+   "filePath": "vllm/models/deepseek_v4/common/vision.py",
+   "lineRange": [
+    341,
+    393
+   ],
+   "summary": "vision aligner（53 行）。",
+   "tags": [
+    "aligner",
+    "vision"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/vision.py:get_vision_cos_sin",
+   "type": "function",
+   "name": "get_vision_cos_sin",
+   "filePath": "vllm/models/deepseek_v4/common/vision.py",
+   "lineRange": [
+    56,
+    59
+   ],
+   "summary": "获取 vision cos/sin。",
+   "tags": [
+    "rope",
+    "vision"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/vision.py:apply_rotary",
+   "type": "function",
+   "name": "apply_rotary",
+   "filePath": "vllm/models/deepseek_v4/common/vision.py",
+   "lineRange": [
+    62,
+    65
+   ],
+   "summary": "应用 rotary。",
+   "tags": [
+    "rope",
+    "apply"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/vision.py:build_packed_vit_metadata",
+   "type": "function",
+   "name": "build_packed_vit_metadata",
+   "filePath": "vllm/models/deepseek_v4/common/vision.py",
+   "lineRange": [
+    246,
+    296
+   ],
+   "summary": "打包 ViT 元数据构建（51 行）。",
+   "tags": [
+    "vit",
+    "metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/vision.py:build_packed_merge_metadata",
+   "type": "function",
+   "name": "build_packed_merge_metadata",
+   "filePath": "vllm/models/deepseek_v4/common/vision.py",
+   "lineRange": [
+    299,
+    338
+   ],
+   "summary": "打包 merge 元数据构建。",
+   "tags": [
+    "merge",
+    "metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/vision.py:run_dp_sharded_vision_tower",
+   "type": "function",
+   "name": "run_dp_sharded_vision_tower",
+   "filePath": "vllm/models/deepseek_v4/common/vision.py",
+   "lineRange": [
+    396,
+    476
+   ],
+   "summary": "DP 分片运行 vision tower（81 行）。",
+   "tags": [
+    "dp-sharding",
+    "vision",
+    "run"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/common/vl_model.py",
+   "type": "file",
+   "name": "vl_model.py",
+   "filePath": "vllm/models/deepseek_v4/common/vl_model.py",
+   "summary": "V4 vision 变体封装（DeepSeek-V4-Flash-Vision-Exp）：文本模型的薄多模态 wrapper。",
+   "tags": [
+    "vl-model",
+    "multimodal",
+    "wrapper"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/common/vl_model.py:DeepseekV4ForConditionalGeneration",
+   "type": "class",
+   "name": "DeepseekV4ForConditionalGeneration",
+   "filePath": "vllm/models/deepseek_v4/common/vl_model.py",
+   "lineRange": [
+    105,
+    393
+   ],
+   "summary": "V4 vision 变体顶层（289 行 16 方法，多模态 wrapper）。",
+   "tags": [
+    "vl-model",
+    "conditional-generation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/vl_model.py:_make_deepseek_v4_vl_weights_mapper",
+   "type": "function",
+   "name": "_make_deepseek_v4_vl_weights_mapper",
+   "filePath": "vllm/models/deepseek_v4/common/vl_model.py",
+   "lineRange": [
+    54,
+    79
+   ],
+   "summary": "VL 权重名映射器。",
+   "tags": [
+    "weights",
+    "mapper"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/common/vl_model.py:stream_language_model_first",
+   "type": "function",
+   "name": "stream_language_model_first",
+   "filePath": "vllm/models/deepseek_v4/common/vl_model.py",
+   "lineRange": [
+    82,
+    97
+   ],
+   "summary": "首 token 语言模型流式优先。",
+   "tags": [
+    "streaming",
+    "priority"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/compressor.py",
+   "type": "file",
+   "name": "compressor.py",
+   "filePath": "vllm/models/deepseek_v4/compressor.py",
+   "summary": "DeepSeek 压缩器（KV 压缩状态层）：CompressorBackend/StateCache 与 DeepseekCompressor 主类。",
+   "tags": [
+    "compressor",
+    "kv-compression",
+    "state-cache"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/compressor.py:CompressorBackend",
+   "type": "class",
+   "name": "CompressorBackend",
+   "filePath": "vllm/models/deepseek_v4/compressor.py",
+   "lineRange": [
+    60,
+    78
+   ],
+   "summary": "压缩器注意力后端描述符。",
+   "tags": [
+    "backend",
+    "compressor"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/compressor.py:CompressorMetadataBuilder",
+   "type": "class",
+   "name": "CompressorMetadataBuilder",
+   "filePath": "vllm/models/deepseek_v4/compressor.py",
+   "lineRange": [
+    92,
+    136
+   ],
+   "summary": "压缩器元数据构建器。",
+   "tags": [
+    "metadata-builder",
+    "compressor"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/compressor.py:CompressorStateCache",
+   "type": "class",
+   "name": "CompressorStateCache",
+   "filePath": "vllm/models/deepseek_v4/compressor.py",
+   "lineRange": [
+    139,
+    197
+   ],
+   "summary": "压缩器状态缓存层（Module+AttentionLayerBase）。",
+   "tags": [
+    "state-cache",
+    "compressor"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/compressor.py:DeepseekCompressor",
+   "type": "class",
+   "name": "DeepseekCompressor",
+   "filePath": "vllm/models/deepseek_v4/compressor.py",
+   "lineRange": [
+    200,
+    524
+   ],
+   "summary": "DeepSeek 压缩器主类（325 行 3 方法）。",
+   "tags": [
+    "compressor",
+    "core"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/compressor.py:_get_c128_boundary",
+   "type": "function",
+   "name": "_get_c128_boundary",
+   "filePath": "vllm/models/deepseek_v4/compressor.py",
+   "lineRange": [
+    45,
+    57
+   ],
+   "summary": "c128 层边界计算。",
+   "tags": [
+    "c128",
+    "boundary"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/cpu/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/deepseek_v4/cpu/__init__.py",
+   "summary": "V4 CPU 子包入口。",
+   "tags": [
+    "package-init",
+    "cpu"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/cpu/cpu_compressor.py",
+   "type": "file",
+   "name": "cpu_compressor.py",
+   "filePath": "vllm/models/deepseek_v4/cpu/cpu_compressor.py",
+   "summary": "CPU V4 压缩器子类：partial-state-cache 写与 compress→RMSNorm→RoPE→FP8 量化的 CPU 分发。",
+   "tags": [
+    "cpu",
+    "compressor"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/cpu/cpu_compressor.py:DeepseekV4CPUCompressor",
+   "type": "class",
+   "name": "DeepseekV4CPUCompressor",
+   "filePath": "vllm/models/deepseek_v4/cpu/cpu_compressor.py",
+   "lineRange": [
+    28,
+    112
+   ],
+   "summary": "CPU 压缩器子类（85 行 2 方法）。",
+   "tags": [
+    "cpu",
+    "compressor"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/cpu/cpu_mla.py",
+   "type": "file",
+   "name": "cpu_mla.py",
+   "filePath": "vllm/models/deepseek_v4/cpu/cpu_mla.py",
+   "summary": "CPU V4 稀疏 MLA 后端描述符集（FlashMLA/Sparse/Indexer/SWA 的 CPU 变体薄层）。",
+   "tags": [
+    "cpu",
+    "sparse-mla",
+    "backends"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/cpu/cpu_mla.py:DeepseekV4CPUSparseBackend",
+   "type": "class",
+   "name": "DeepseekV4CPUSparseBackend",
+   "filePath": "vllm/models/deepseek_v4/cpu/cpu_mla.py",
+   "lineRange": [
+    54,
+    61
+   ],
+   "summary": "CPU 稀疏后端描述符。",
+   "tags": [
+    "cpu",
+    "backend"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/cpu/cpu_mla.py:DeepseekV4CPUIndexerMetadataBuilder",
+   "type": "class",
+   "name": "DeepseekV4CPUIndexerMetadataBuilder",
+   "filePath": "vllm/models/deepseek_v4/cpu/cpu_mla.py",
+   "lineRange": [
+    64,
+    100
+   ],
+   "summary": "CPU indexer 元数据构建器。",
+   "tags": [
+    "cpu",
+    "indexer"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/cpu/cpu_mla.py:DeepseekV4CPUIndexerBackend",
+   "type": "class",
+   "name": "DeepseekV4CPUIndexerBackend",
+   "filePath": "vllm/models/deepseek_v4/cpu/cpu_mla.py",
+   "lineRange": [
+    103,
+    110
+   ],
+   "summary": "CPU indexer 后端描述符。",
+   "tags": [
+    "cpu",
+    "indexer"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "type": "file",
+   "name": "cpu_sparse.py",
+   "filePath": "vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "summary": "CPU V4 注意力子类（642 行）：forward_mqa 解析 SWA/压缩 top-k 到分页 slot 并调 CPU 注意力。",
+   "tags": [
+    "cpu",
+    "attention",
+    "sparse"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/cpu/cpu_sparse.py:DeepseekV4CPUIndexer",
+   "type": "class",
+   "name": "DeepseekV4CPUIndexer",
+   "filePath": "vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "lineRange": [
+    187,
+    261
+   ],
+   "summary": "CPU indexer 子类（75 行）。",
+   "tags": [
+    "cpu",
+    "indexer"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/cpu/cpu_sparse.py:DeepseekV4CPUAttention",
+   "type": "class",
+   "name": "DeepseekV4CPUAttention",
+   "filePath": "vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "lineRange": [
+    264,
+    642
+   ],
+   "summary": "CPU 注意力子类（379 行 11 方法：SWA/压缩 top-k→分页 slot）。",
+   "tags": [
+    "cpu",
+    "attention"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/cpu/cpu_sparse.py:_deepseek_v4_cpu_prepare_and_attn",
+   "type": "function",
+   "name": "_deepseek_v4_cpu_prepare_and_attn",
+   "filePath": "vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "lineRange": [
+    44,
+    81
+   ],
+   "summary": "CPU 准备+注意力 fake-compat 入口（38 行）。",
+   "tags": [
+    "cpu",
+    "attention",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/cpu/cpu_sparse.py:_deepseek_v4_cpu_prepare_and_attn_fake",
+   "type": "function",
+   "name": "_deepseek_v4_cpu_prepare_and_attn_fake",
+   "filePath": "vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "lineRange": [
+    84,
+    98
+   ],
+   "summary": "CPU 注意力 fake 模式。",
+   "tags": [
+    "fake-mode",
+    "cpu"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/cpu/cpu_sparse.py:_dequant_linear_weight",
+   "type": "function",
+   "name": "_dequant_linear_weight",
+   "filePath": "vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "lineRange": [
+    109,
+    142
+   ],
+   "summary": "线性权重反量化（CPU 路径）。",
+   "tags": [
+    "dequant",
+    "weights"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/cpu/cpu_sparse.py:_fused_indexer_q_rope_quant_cpu",
+   "type": "function",
+   "name": "_fused_indexer_q_rope_quant_cpu",
+   "filePath": "vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "lineRange": [
+    145,
+    175
+   ],
+   "summary": "CPU 版 indexer q RoPE+量化。",
+   "tags": [
+    "cpu",
+    "indexer",
+    "rope"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/cpu/cpu_utils.py",
+   "type": "file",
+   "name": "cpu_utils.py",
+   "filePath": "vllm/models/deepseek_v4/cpu/cpu_utils.py",
+   "summary": "V4 CPU 移植内核的共享 helper。",
+   "tags": [
+    "cpu",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/cpu/cpu_utils.py:map_local_to_global_slots_cpu",
+   "type": "function",
+   "name": "map_local_to_global_slots_cpu",
+   "filePath": "vllm/models/deepseek_v4/cpu/cpu_utils.py",
+   "lineRange": [
+    8,
+    35
+   ],
+   "summary": "CPU 的局部→全局 slot 映射。",
+   "tags": [
+    "cpu",
+    "slots"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/cpu/dspark.py",
+   "type": "file",
+   "name": "dspark.py",
+   "filePath": "vllm/models/deepseek_v4/cpu/dspark.py",
+   "summary": "CPU DSpark（占位：仅实例化提示 deferred，未实现）。",
+   "tags": [
+    "cpu",
+    "dspark",
+    "deferred"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "type": "file",
+   "name": "model.py",
+   "filePath": "vllm/models/deepseek_v4/cpu/model.py",
+   "summary": "V4 CPU 主模型（898 行：MLP/MoE/DecoderLayer/Model/ForCausalLM 的 CPU 实现）。",
+   "tags": [
+    "cpu",
+    "model",
+    "deepseek-v4"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/cpu/model.py:DeepseekV4MLP",
+   "type": "class",
+   "name": "DeepseekV4MLP",
+   "filePath": "vllm/models/deepseek_v4/cpu/model.py",
+   "lineRange": [
+    67,
+    113
+   ],
+   "summary": "CPU 版 MLP。",
+   "tags": [
+    "cpu",
+    "mlp"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/cpu/model.py:DeepseekV4MoE",
+   "type": "class",
+   "name": "DeepseekV4MoE",
+   "filePath": "vllm/models/deepseek_v4/cpu/model.py",
+   "lineRange": [
+    116,
+    234
+   ],
+   "summary": "CPU 版 MoE（119 行）。",
+   "tags": [
+    "cpu",
+    "moe"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/cpu/model.py:DeepseekV4DecoderLayer",
+   "type": "class",
+   "name": "DeepseekV4DecoderLayer",
+   "filePath": "vllm/models/deepseek_v4/cpu/model.py",
+   "lineRange": [
+    237,
+    444
+   ],
+   "summary": "CPU 版 decoder layer（208 行）。",
+   "tags": [
+    "cpu",
+    "decoder-layer"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/cpu/model.py:DeepseekV4Model",
+   "type": "class",
+   "name": "DeepseekV4Model",
+   "filePath": "vllm/models/deepseek_v4/cpu/model.py",
+   "lineRange": [
+    455,
+    770
+   ],
+   "summary": "CPU 版模型骨干（316 行，EagleModelMixin）。",
+   "tags": [
+    "cpu",
+    "model"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/cpu/model.py:DeepseekV4ForCausalLM",
+   "type": "class",
+   "name": "DeepseekV4ForCausalLM",
+   "filePath": "vllm/models/deepseek_v4/cpu/model.py",
+   "lineRange": [
+    823,
+    898
+   ],
+   "summary": "CPU 版 ForCausalLM。",
+   "tags": [
+    "cpu",
+    "causal-lm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/cpu/model.py:_make_deepseek_v4_weights_mapper",
+   "type": "function",
+   "name": "_make_deepseek_v4_weights_mapper",
+   "filePath": "vllm/models/deepseek_v4/cpu/model.py",
+   "lineRange": [
+    773,
+    820
+   ],
+   "summary": "CPU 权重名映射器。",
+   "tags": [
+    "weights",
+    "mapper"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/cpu/mtp.py",
+   "type": "file",
+   "name": "mtp.py",
+   "filePath": "vllm/models/deepseek_v4/cpu/mtp.py",
+   "summary": "CPU MTP（占位：deferred 未实现）。",
+   "tags": [
+    "cpu",
+    "mtp",
+    "deferred"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/router.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/router.py:router_weight_loads",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/router.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/router.py:router_weight_loads",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/router.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/router.py:router_x_loads",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/router.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/router.py:router_x_loads",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/router.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/router.py:router_tile_mfma",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/router.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/router.py:router_tile_mfma",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:scratch_layout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:scratch_layout",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:pend_value",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:pend_value",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:slice_loads",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:slice_loads",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:slice_row",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:slice_row",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:stage_slice",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:stage_slice",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:slice_mix",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:slice_mix",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:stage_gate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:stage_gate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:stage_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:stage_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:collapse_chunk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:collapse_chunk",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:stage_reduce",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:stage_reduce",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:reduce_attn_pair",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono/stages/seam.py:reduce_attn_pair",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "class:vllm/models/deepseek_v4/amd/mono_decode.py:MonoDecodeLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "class:vllm/models/deepseek_v4/amd/mono_decode.py:MonoDecodeLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono_decode.py:_mono_runner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono_decode.py:_deployment_error",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "function:vllm/models/deepseek_v4/amd/mono_decode.py:_select",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "class:vllm/models/deepseek_v4/amd/mtp.py:DeepSeekV4MultiTokenPredictorLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "class:vllm/models/deepseek_v4/amd/mtp.py:DeepSeekV4MultiTokenPredictorLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "class:vllm/models/deepseek_v4/amd/mtp.py:DeepSeekV4MultiTokenPredictor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "class:vllm/models/deepseek_v4/amd/mtp.py:DeepSeekV4MultiTokenPredictor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "class:vllm/models/deepseek_v4/amd/mtp.py:DeepSeekV4MTP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "class:vllm/models/deepseek_v4/amd/mtp.py:DeepSeekV4MTP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4ROCMAiterMLASparseMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4ROCMAiterMLASparseMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4ROCMAiterSparseSWAMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4ROCMAiterSparseSWAMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4ROCMAiterMLASparseBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4ROCMAiterMLASparseBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4ROCMAiterMLAAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4ROCMAiterMLAAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4RocmMxfp4Compressor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4RocmMxfp4Compressor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4RocmMxfp4Indexer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4RocmMxfp4Indexer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "function:vllm/models/deepseek_v4/amd/rocm.py:_wo_a_block_scale_to_e8m0",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "function:vllm/models/deepseek_v4/amd/rocm.py:_trust_dsv4_extra_cache_nan_free",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "function:vllm/models/deepseek_v4/amd/rocm.py:_aiter_sparse_mla_enabled",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "function:vllm/models/deepseek_v4/amd/rocm.py:apply_pre_quantized_block_scaled_mm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "function:vllm/models/deepseek_v4/amd/rocm.py:apply_pre_quantized_block_scaled_mm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "function:vllm/models/deepseek_v4/amd/rocm.py:_combine_topk_swa_indices_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "function:vllm/models/deepseek_v4/amd/rocm.py:combine_topk_swa_indices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "function:vllm/models/deepseek_v4/amd/rocm.py:combine_topk_swa_indices",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "function:vllm/models/deepseek_v4/amd/rocm.py:_compute_topk_lens_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "function:vllm/models/deepseek_v4/amd/rocm.py:_pack_global_topk_ragged_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "function:vllm/models/deepseek_v4/amd/rocm.py:_compress_pool_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "function:vllm/models/deepseek_v4/amd/rocm.py:_compress_pool_warmup_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "function:vllm/models/deepseek_v4/amd/rocm.py:compress_pool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "function:vllm/models/deepseek_v4/amd/rocm.py:compress_pool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "function:vllm/models/deepseek_v4/amd/rocm.py:compute_global_topk_ragged_indices_and_indptr",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "function:vllm/models/deepseek_v4/amd/rocm.py:compute_global_topk_ragged_indices_and_indptr",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "function:vllm/models/deepseek_v4/amd/rocm.py:_copy_ragged_to_graph_buffers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "class:vllm/models/deepseek_v4/attention.py:DeepseekV4Attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "class:vllm/models/deepseek_v4/attention.py:DeepseekV4Attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "class:vllm/models/deepseek_v4/attention.py:DeepseekV4IndexerCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "class:vllm/models/deepseek_v4/attention.py:DeepseekV4IndexerCache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "class:vllm/models/deepseek_v4/attention.py:DeepseekV4Indexer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "class:vllm/models/deepseek_v4/attention.py:DeepseekV4Indexer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "function:vllm/models/deepseek_v4/attention.py:_fill_short_context_topk_indices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "function:vllm/models/deepseek_v4/attention.py:_resolve_dsv4_kv_cache_dtype",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/eplb_util.py",
+   "target": "function:vllm/models/deepseek_v4/common/eplb_util.py:dspark_draft_supports_eplb",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/eplb_util.py",
+   "target": "function:vllm/models/deepseek_v4/common/eplb_util.py:dspark_draft_supports_eplb",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/eplb_util.py",
+   "target": "function:vllm/models/deepseek_v4/common/eplb_util.py:collect_moe_layers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/eplb_util.py",
+   "target": "function:vllm/models/deepseek_v4/common/eplb_util.py:collect_moe_layers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "class:vllm/models/deepseek_v4/common/mm_preprocess.py:DeepseekV4VLImageProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "class:vllm/models/deepseek_v4/common/mm_preprocess.py:DeepseekV4VLImageProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "class:vllm/models/deepseek_v4/common/mm_preprocess.py:DeepseekV4VLProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "class:vllm/models/deepseek_v4/common/mm_preprocess.py:DeepseekV4VLProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "class:vllm/models/deepseek_v4/common/mm_preprocess.py:DeepseekV4VLProcessingInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "class:vllm/models/deepseek_v4/common/mm_preprocess.py:DeepseekV4VLProcessingInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "class:vllm/models/deepseek_v4/common/mm_preprocess.py:DeepseekV4VLDummyInputsBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "class:vllm/models/deepseek_v4/common/mm_preprocess.py:DeepseekV4VLDummyInputsBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "class:vllm/models/deepseek_v4/common/mm_preprocess.py:DeepseekV4VLMultiModalProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "class:vllm/models/deepseek_v4/common/mm_preprocess.py:DeepseekV4VLMultiModalProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:image_sentinel_mask",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:image_sentinel_mask",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:validate_image_sentinel_ids",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:validate_image_sentinel_ids",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:grid_tokens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:grid_tokens",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:solve_resize_ratio",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:solve_resize_ratio",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:safe_resize",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:safe_resize",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:load_image",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:load_image",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:build_image_block",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:build_image_block",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:build_image_block_pad_free",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "function:vllm/models/deepseek_v4/common/mm_preprocess.py:build_image_block_pad_free",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/cache_utils.py:DequantizeAndGatherKCacheKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/cache_utils.py:DequantizeAndGatherKCacheKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/cache_utils.py:ComputeGlobalTopkIndicesAndLensKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/cache_utils.py:ComputeGlobalTopkIndicesAndLensKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/cache_utils.py:CombineTopkSwaIndicesKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/cache_utils.py:CombineTopkSwaIndicesKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/cache_utils.py:BuildFlashinferMixedSparseIndicesKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/cache_utils.py:BuildFlashinferMixedSparseIndicesKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/cache_utils.py:quantize_and_insert_k_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/cache_utils.py:quantize_and_insert_k_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/cache_utils.py:quantize_and_insert_k_cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/cache_utils.py:quantize_and_insert_k_cache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/cache_utils.py:dequantize_and_gather_k_cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/cache_utils.py:dequantize_and_gather_k_cache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/cache_utils.py:compute_global_topk_indices_and_lens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/cache_utils.py:compute_global_topk_indices_and_lens",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/cache_utils.py:combine_topk_swa_indices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/cache_utils.py:combine_topk_swa_indices",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/cache_utils.py:build_flashinfer_mixed_sparse_indices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/cache_utils.py:build_flashinfer_mixed_sparse_indices",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:FusedKVCompressNormRopeInsertIndexerTritonKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:FusedKVCompressNormRopeInsertIndexerTritonKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:compress_norm_rope_store_triton",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:compress_norm_rope_store_triton",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:_fused_kv_compress_norm_rope_insert_sparse_attn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:_pick_compress_num_splits",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:_compress_gather_split_sparse_attn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:_finalize_norm_rope_quant_store_sparse_attn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:_launch_two_stage_sparse_attn_compressor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:compress_norm_rope_store_two_stage_triton",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:compress_norm_rope_store_two_stage_triton",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:_fused_kv_compress_norm_rope_insert_indexer_attn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py:_fused_kv_compress_norm_rope_insert_indexer_mxfp4_attn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py:FusedIndexerQRopeQuantTritonKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py:FusedIndexerQRopeQuantTritonKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py:FusedIndexerQRopeMxFp4TritonKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py:FusedIndexerQRopeMxFp4TritonKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py:_get_cos_sin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py:_fp32x2_to_fp4x2",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py:_quantize_mxfp4_pair",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py:fused_indexer_q_rope_quant",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py:fused_indexer_q_rope_quant",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py:FusedInvRopeFP8QuantKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py:FusedInvRopeFP8QuantKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py:fused_inv_rope_fp8_quant",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py:fused_inv_rope_fp8_quant",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py:_fused_inv_rope_fp8_quant_kernel_impl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py:_fused_inv_rope_fp8_quant_kernel_fake",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py:FusedMTPInputRMSNormKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py:FusedMTPInputRMSNormKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py:MTPSharedHeadRMSNormKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py:MTPSharedHeadRMSNormKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py",
+   "target": "function:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py:_rmsnorm_row",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/save_partial_states.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/save_partial_states.py:SavePartialStatesKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/save_partial_states.py",
+   "target": "class:vllm/models/deepseek_v4/common/ops/save_partial_states.py:SavePartialStatesKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/rope.py",
+   "target": "function:vllm/models/deepseek_v4/common/rope.py:build_deepseek_v4_rope",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/rope.py",
+   "target": "function:vllm/models/deepseek_v4/common/rope.py:build_deepseek_v4_rope",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/spec_decode.py",
+   "target": "function:vllm/models/deepseek_v4/common/spec_decode.py:needs_mtp_hidden_buffer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/spec_decode.py",
+   "target": "function:vllm/models/deepseek_v4/common/spec_decode.py:needs_mtp_hidden_buffer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4RMSNorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4RMSNorm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4PatchEmbed",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4PatchEmbed",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4VisionAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4VisionAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4VisionMLP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4VisionMLP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4VisionBlock",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4VisionBlock",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4ViT",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4ViT",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4Aligner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "class:vllm/models/deepseek_v4/common/vision.py:DeepseekV4Aligner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "function:vllm/models/deepseek_v4/common/vision.py:get_vision_cos_sin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "function:vllm/models/deepseek_v4/common/vision.py:get_vision_cos_sin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "function:vllm/models/deepseek_v4/common/vision.py:apply_rotary",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "function:vllm/models/deepseek_v4/common/vision.py:apply_rotary",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "function:vllm/models/deepseek_v4/common/vision.py:build_packed_vit_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "function:vllm/models/deepseek_v4/common/vision.py:build_packed_vit_metadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "function:vllm/models/deepseek_v4/common/vision.py:build_packed_merge_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "function:vllm/models/deepseek_v4/common/vision.py:build_packed_merge_metadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "function:vllm/models/deepseek_v4/common/vision.py:run_dp_sharded_vision_tower",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "function:vllm/models/deepseek_v4/common/vision.py:run_dp_sharded_vision_tower",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vl_model.py",
+   "target": "class:vllm/models/deepseek_v4/common/vl_model.py:DeepseekV4ForConditionalGeneration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vl_model.py",
+   "target": "class:vllm/models/deepseek_v4/common/vl_model.py:DeepseekV4ForConditionalGeneration",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vl_model.py",
+   "target": "function:vllm/models/deepseek_v4/common/vl_model.py:_make_deepseek_v4_vl_weights_mapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vl_model.py",
+   "target": "function:vllm/models/deepseek_v4/common/vl_model.py:stream_language_model_first",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vl_model.py",
+   "target": "function:vllm/models/deepseek_v4/common/vl_model.py:stream_language_model_first",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "class:vllm/models/deepseek_v4/compressor.py:CompressorBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "class:vllm/models/deepseek_v4/compressor.py:CompressorBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "class:vllm/models/deepseek_v4/compressor.py:CompressorMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "class:vllm/models/deepseek_v4/compressor.py:CompressorMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "class:vllm/models/deepseek_v4/compressor.py:CompressorStateCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "class:vllm/models/deepseek_v4/compressor.py:CompressorStateCache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "class:vllm/models/deepseek_v4/compressor.py:DeepseekCompressor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "class:vllm/models/deepseek_v4/compressor.py:DeepseekCompressor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "function:vllm/models/deepseek_v4/compressor.py:_get_c128_boundary",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_compressor.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/cpu_compressor.py:DeepseekV4CPUCompressor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_compressor.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/cpu_compressor.py:DeepseekV4CPUCompressor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_mla.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/cpu_mla.py:DeepseekV4CPUSparseBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_mla.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/cpu_mla.py:DeepseekV4CPUSparseBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_mla.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/cpu_mla.py:DeepseekV4CPUIndexerMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_mla.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/cpu_mla.py:DeepseekV4CPUIndexerMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_mla.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/cpu_mla.py:DeepseekV4CPUIndexerBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_mla.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/cpu_mla.py:DeepseekV4CPUIndexerBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/cpu_sparse.py:DeepseekV4CPUIndexer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/cpu_sparse.py:DeepseekV4CPUIndexer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/cpu_sparse.py:DeepseekV4CPUAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/cpu_sparse.py:DeepseekV4CPUAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "function:vllm/models/deepseek_v4/cpu/cpu_sparse.py:_deepseek_v4_cpu_prepare_and_attn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "function:vllm/models/deepseek_v4/cpu/cpu_sparse.py:_deepseek_v4_cpu_prepare_and_attn_fake",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "function:vllm/models/deepseek_v4/cpu/cpu_sparse.py:_dequant_linear_weight",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "function:vllm/models/deepseek_v4/cpu/cpu_sparse.py:_fused_indexer_q_rope_quant_cpu",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_utils.py",
+   "target": "function:vllm/models/deepseek_v4/cpu/cpu_utils.py:map_local_to_global_slots_cpu",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_utils.py",
+   "target": "function:vllm/models/deepseek_v4/cpu/cpu_utils.py:map_local_to_global_slots_cpu",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/model.py:DeepseekV4MLP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/model.py:DeepseekV4MLP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/model.py:DeepseekV4MoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/model.py:DeepseekV4MoE",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/model.py:DeepseekV4DecoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/model.py:DeepseekV4DecoderLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/model.py:DeepseekV4Model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/model.py:DeepseekV4Model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/model.py:DeepseekV4ForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/cpu/model.py:DeepseekV4ForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "function:vllm/models/deepseek_v4/cpu/model.py:_make_deepseek_v4_weights_mapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/router.py",
+   "target": "file:vllm/models/deepseek_v4/amd/mono/common/ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/router.py",
+   "target": "file:vllm/models/deepseek_v4/amd/mono/common/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "file:vllm/models/deepseek_v4/amd/mono/common/ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "file:vllm/models/deepseek_v4/amd/mono/common/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "file:vllm/models/deepseek_v4/amd/mono/common/sync.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "file:vllm/models/deepseek_v4/amd/mono/dims.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "file:vllm/models/deepseek_v4/amd/mono/stages/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono/stages/seam.py",
+   "target": "file:vllm/models/deepseek_v4/amd/mono/stages/gemv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "file:vllm/models/deepseek_v4/amd/mono/dims.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "file:vllm/models/deepseek_v4/amd/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "file:vllm/models/deepseek_v4/amd/mono/runner.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/fp8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/oracle/mxfp4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mono_decode.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "file:vllm/model_executor/layers/mhc.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/mtp_validation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "file:vllm/model_executor/models/deepseek_mtp.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "file:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "file:vllm/models/deepseek_v4/quant_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "file:vllm/models/deepseek_v4/amd/mega_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/mtp.py",
+   "target": "file:vllm/models/deepseek_v4/amd/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/model_executor/layers/rocm_paged_mxfp4_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/model_executor/layers/sparse_attn_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/models/deepseek_v4/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/models/deepseek_v4/common/ops/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/models/deepseek_v4/compressor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/utils/multi_stream_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/v1/attention/backends/mla/indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/v1/attention/ops/rocm_aiter_mla_sparse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/v1/attention/ops/rocm_paged_mxfp4_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/BlockScaledMMLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/fp8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/model_executor/offloader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/model_executor/layers/sparse_attn_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/models/common/ops/fused_qk_rmsnorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/models/deepseek_v4/common/ops/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/model_executor/layers/attention_layer_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/model_executor/layers/fusion/quant_activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/models/deepseek_v4/common/rope.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/models/deepseek_v4/compressor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/utils/multi_stream_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/v1/attention/backends/mla/indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/v1/attention/backends/mla/compressor_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/models/deepseek_v4/nvidia/ops/dequant_gather_k_cutedsl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/attention.py",
+   "target": "file:vllm/models/deepseek_v4/nvidia/ops/fused_indexer_q_cutedsl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/eplb_util.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "file:vllm/multimodal/processing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "target": "file:vllm/multimodal/processing/processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/__init__.py",
+   "target": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/__init__.py",
+   "target": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/__init__.py",
+   "target": "file:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "file:vllm/transformers_utils/deepseek_v4_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "file:vllm/models/deepseek_v4/nvidia/ops/dequant_gather_k_cutedsl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "target": "file:vllm/v1/attention/backends/mla/compressor_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "file:vllm/utils/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "file:vllm/v1/attention/ops/common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "target": "file:vllm/v1/attention/backends/mla/indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "target": "file:vllm/models/deepseek_v4/nvidia/ops/fused_indexer_q_cutedsl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "target": "file:vllm/utils/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/save_partial_states.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/save_partial_states.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/save_partial_states.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/ops/save_partial_states.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/rope.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/rope.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/spec_decode.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "file:vllm/model_executor/layers/attention/mm_encoder_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "file:vllm/model_executor/models/vision.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vision.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vl_model.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vl_model.py",
+   "target": "file:vllm/model_executor/models/module_mapping.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vl_model.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vl_model.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vl_model.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vl_model.py",
+   "target": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/common/vl_model.py",
+   "target": "file:vllm/models/deepseek_v4/common/vision.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "file:vllm/model_executor/layers/attention_layer_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "file:vllm/models/deepseek_v4/common/ops/fused_compress_quant_cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "file:vllm/models/deepseek_v4/common/ops/fused_indexer_q.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "file:vllm/models/deepseek_v4/common/ops/save_partial_states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/compressor.py",
+   "target": "file:vllm/models/deepseek_v4/nvidia/ops/sparse_attn_compress_cutedsl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_compressor.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_compressor.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_compressor.py",
+   "target": "file:vllm/models/deepseek_v4/compressor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_compressor.py",
+   "target": "file:vllm/models/deepseek_v4/cpu/cpu_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_mla.py",
+   "target": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_mla.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_mla.py",
+   "target": "file:vllm/v1/attention/backends/mla/indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_mla.py",
+   "target": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_mla.py",
+   "target": "file:vllm/v1/attention/ops/flashmla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "file:vllm/models/deepseek_v4/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "file:vllm/models/deepseek_v4/cpu/cpu_compressor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "file:vllm/models/deepseek_v4/cpu/cpu_mla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "file:vllm/models/deepseek_v4/cpu/cpu_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/fp8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/dspark.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "file:vllm/compilation/decorators.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "file:vllm/model_executor/layers/mhc.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "file:vllm/models/deepseek_v4/common/spec_decode.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "file:vllm/models/deepseek_v4/cpu/cpu_sparse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/model.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/cpu/mtp.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4ROCMAiterMLASparseMetadataBuilder",
+   "target": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4SparseMLAMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4ROCMAiterSparseSWAMetadataBuilder",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekSparseSWAMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4ROCMAiterMLASparseBackend",
+   "target": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4SparseMLABackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4ROCMAiterMLAAttention",
+   "target": "class:vllm/models/deepseek_v4/attention.py:DeepseekV4Attention",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4RocmMxfp4Compressor",
+   "target": "class:vllm/models/deepseek_v4/compressor.py:DeepseekCompressor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/amd/rocm.py:DeepseekV4RocmMxfp4Indexer",
+   "target": "class:vllm/models/deepseek_v4/attention.py:DeepseekV4Indexer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/attention.py:DeepseekV4Attention",
+   "target": "class:vllm/model_executor/layers/attention_layer_base.py:AttentionLayerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/attention.py:DeepseekV4IndexerCache",
+   "target": "class:vllm/model_executor/layers/attention_layer_base.py:AttentionLayerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/common/mm_preprocess.py:DeepseekV4VLProcessingInfo",
+   "target": "class:vllm/multimodal/processing/__init__.py:BaseProcessingInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/common/vl_model.py:DeepseekV4ForConditionalGeneration",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsMultiModal",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/common/vl_model.py:DeepseekV4ForConditionalGeneration",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsPP",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/common/vl_model.py:DeepseekV4ForConditionalGeneration",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsEagle3",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/common/vl_model.py:DeepseekV4ForConditionalGeneration",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/compressor.py:CompressorBackend",
+   "target": "class:vllm/v1/attention/backend.py:AttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/compressor.py:CompressorMetadataBuilder",
+   "target": "class:vllm/v1/attention/backend.py:AttentionMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/compressor.py:CompressorStateCache",
+   "target": "class:vllm/model_executor/layers/attention_layer_base.py:AttentionLayerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/cpu/cpu_compressor.py:DeepseekV4CPUCompressor",
+   "target": "class:vllm/models/deepseek_v4/compressor.py:DeepseekCompressor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/cpu/cpu_mla.py:DeepseekV4CPUSparseBackend",
+   "target": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4SparseMLABackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/cpu/cpu_mla.py:DeepseekV4CPUIndexerMetadataBuilder",
+   "target": "class:vllm/v1/attention/backends/mla/indexer.py:DeepseekV32IndexerMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/cpu/cpu_mla.py:DeepseekV4CPUIndexerBackend",
+   "target": "class:vllm/v1/attention/backends/mla/indexer.py:DeepseekV4IndexerBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/cpu/cpu_sparse.py:DeepseekV4CPUIndexer",
+   "target": "class:vllm/models/deepseek_v4/attention.py:DeepseekV4Indexer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/cpu/cpu_sparse.py:DeepseekV4CPUAttention",
+   "target": "class:vllm/models/deepseek_v4/attention.py:DeepseekV4Attention",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/cpu/model.py:DeepseekV4Model",
+   "target": "class:vllm/model_executor/models/interfaces.py:EagleModelMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/cpu/model.py:DeepseekV4ForCausalLM",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsPP",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/cpu/model.py:DeepseekV4ForCausalLM",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsEagle3",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

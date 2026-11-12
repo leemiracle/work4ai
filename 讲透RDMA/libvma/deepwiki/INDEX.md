@@ -1,0 +1,33 @@
+# DeepWiki 索引 — Mellanox/libvma
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-11-11
+> 结构 28 页 · 全文 392599 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Architecture Overview](1.1-architecture-overview.md)
+- [2 Socket Layer](2-socket-layer.md)
+  - [2.1 Socket Redirection](2.1-socket-redirection.md)
+  - [2.2 Socket Implementation](2.2-socket-implementation.md)
+  - [2.3 I/O Multiplexing](2.3-i-o-multiplexing.md)
+- [3 Network Layer](3-network-layer.md)
+  - [3.1 Network Device Management](3.1-network-device-management.md)
+  - [3.2 Neighbor Discovery](3.2-neighbor-discovery.md)
+  - [3.3 Routing](3.3-routing.md)
+  - [3.4 TCP Implementation](3.4-tcp-implementation.md)
+- [4 Hardware Abstraction Layer](4-hardware-abstraction-layer.md)
+  - [4.1 InfiniBand Context Management](4.1-infiniband-context-management.md)
+  - [4.2 RDMA Verbs Abstraction](4.2-rdma-verbs-abstraction.md)
+  - [4.3 Ring Management](4.3-ring-management.md)
+  - [4.4 Completion Queue Management](4.4-completion-queue-management.md)
+  - [4.5 Memory Management](4.5-memory-management.md)
+- [5 Event Handling](5-event-handling.md)
+- [6 Configuration and Initialization](6-configuration-and-initialization.md)
+- [7 Building and Packaging](7-building-and-packaging.md)
+- [8 Tools and Utilities](8-tools-and-utilities.md)
+  - [8.1 vmad Daemon](8.1-vmad-daemon.md)
+  - [8.2 Statistics Collection](8.2-statistics-collection.md)
+- [9 Testing and CI/CD](9-testing-and-ci-cd.md)
+  - [9.1 Jenkins Testing](9.1-jenkins-testing.md)
+  - [9.2 CI Pipeline](9.2-ci-pipeline.md)
+  - [9.3 Functional and Performance Testing](9.3-functional-and-performance-testing.md)
+- [10 Advanced Features](10-advanced-features.md)

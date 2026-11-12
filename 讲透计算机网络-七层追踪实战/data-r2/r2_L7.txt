@@ -1,0 +1,31 @@
+### L7 应用层 —— HTTP 语义与访问日志
+
+-- curl -v 一次完整交互（请求行/头/体 + 响应 + 计时）
+*   Trying 127.0.0.1:8443...
+* connect to 127.0.0.1 port 8443 failed: Connection refused
+* Failed to connect to 127.0.0.1 port 8443 after 0 ms: Couldn't connect to server
+* Closing connection
+
+-- 本轮 JSONL 访问日志（应用自证视角，与网络侧抓包互为对照）
+{"ts": 1793881372.0223186, "client": "127.0.0.1", "line": "\"GET /api/time HTTP/1.1\" 401 -"}
+{"ts": 1793881372.0707848, "client": "127.0.0.1", "line": "\"GET /api/time HTTP/1.1\" 200 -"}
+{"ts": 1793881372.1185515, "client": "127.0.0.1", "line": "\"POST /api/login HTTP/1.1\" 200 -"}
+{"ts": 1793881372.1664147, "client": "127.0.0.1", "line": "\"GET /files/../../../../etc/hostname HTTP/1.1\" 403 -"}
+{"ts": 1793881372.2145243, "client": "127.0.0.1", "line": "code 501, message Unsupported method ('HEAD')"}
+{"ts": 1793881372.2146087, "client": "127.0.0.1", "line": "\"HEAD / HTTP/1.1\" 501 -"}
+{"ts": 1793881400.3077724, "client": "127.0.0.1", "line": "Request timed out: TimeoutError('The read operation timed out')"}
+{"ts": 1793881400.4753418, "client": "127.0.0.1", "line": "\"GET /api/time HTTP/1.1\" 200 -"}
+{"ts": 1793881400.4773052, "client": "127.0.0.1", "line": "\"GET /api/time HTTP/1.1\" 200 -"}
+{"ts": 1793881400.479521, "client": "127.0.0.1", "line": "\"GET /api/time HTTP/1.1\" 200 -"}
+{"ts": 1793881400.4813151, "client": "127.0.0.1", "line": "\"GET /api/time HTTP/1.1\" 200 -"}
+{"ts": 1793881400.4830816, "client": "127.0.0.1", "line": "\"GET /api/time HTTP/1.1\" 200 -"}
+{"ts": 1793881400.4848685, "client": "127.0.0.1", "line": "\"GET /api/time HTTP/1.1\" 200 -"}
+{"ts": 1793881400.486623, "client": "127.0.0.1", "line": "\"GET /api/time HTTP/1.1\" 200 -"}
+{"ts": 1793881400.4883947, "client": "127.0.0.1", "line": "\"GET /api/time HTTP/1.1\" 200 -"}
+{"ts": 1793881400.4901557, "client": "127.0.0.1", "line": "\"GET /api/time HTTP/1.1\" 200 -"}
+{"ts": 1793881401.4866793, "client": "127.0.0.1", "line": "\"GET /api/time HTTP/1.1\" 200 -"}
+{"ts": 1793881401.48858, "client": "127.0.0.1", "line": "\"GET /api/time HTTP/1.1\" 200 -"}
+{"ts": 1793881401.4904597, "client": "127.0.0.1", "line": "\"GET /api/time HTTP/1.1\" 200 -"}
+{"ts": 1793881401.4923773, "client": "127.0.0.1", "line": "\"GET /api/time HTTP/1.1\" 200 -"}
+
+-- 抓包侧看到的明文 HTTP（r1 可读 / r2 应为空——加密生效的直接证据）

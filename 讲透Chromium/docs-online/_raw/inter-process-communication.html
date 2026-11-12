@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inter-process Communication (IPC)</title>
+  <link rel="stylesheet" href="/_stylesheets/@docsearch/style.css">
+  <link rel="stylesheet" href="/_stylesheets/default.css">
+  <link rel="stylesheet" href="/_stylesheets/highlight.js/github.min.css">
+</head>
+
+<header id="site-header">
+  <button id="mobile-nav-toggle" class="mobile-nav-toggle" type="button" aria-label="Open navigation menu" aria-controls="sidebar-left" aria-expanded="false">
+    <span class="mobile-nav-toggle-bars" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+  </button>
+  <a class="header-brand" href="/">
+    <img alt="the Chromium logo" src="/_assets/icon-chromium-96.png" width="48" height="48">
+    <h2>The Chromium Projects</h2>
+  </a>
+  <div id="search"></div>
+</header>
+<div id="mobile-header-spacer" aria-hidden="true"></div>
+
+<div id="mobile-nav-backdrop" aria-hidden="true"></div>
+
+<div id="main-wrapper">
+  <nav id="sidebar-left" class="sidebar-nav" aria-label="Site navigation">
+    <div class="mobile-nav-header">
+      <h3>Menu</h3>
+      <button id="mobile-nav-close" class="mobile-nav-close" type="button" aria-label="Close navigation menu">&times;</button>
+    </div>
+    <section class="sidebar-primary">
+      <a href="/chromium-projects">Home</a>
+      <a href="/Home">Chromium</a>
+      <a href="/chromium-os">ChromiumOS</a>
+    </section>
+    <section class="sidebar-quick-links">
+      <h4>Quick links</h4>
+      <a href="/for-testers/bug-reporting-guidelines">Report bugs</a>
+      <a href="/developers/discussion-groups">Discuss</a>
+    </section>
+    <section class="sidebar-other-sites">
+      <h4>Other sites</h4>
+      <a href="https://blog.chromium.org/">Chromium Blog</a>
+      <a href="https://developer.chrome.com/extensions">Google Chrome Extensions</a>
+    </section>
+    <section class="sidebar-license" role="complementary">
+      Except as otherwise
+      <a href="https://developers.google.com/site-policies.html#restrictions">noted</a>,
+      the content of this page is licensed under a
+      <a href="https://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 license</a>,
+      and examples are licensed under the
+      <a href="https://chromium.googlesource.com/chromium/src/+/HEAD/LICENSE">BSD License</a>.
+    </section>
+    <section class="sidebar-privacy" role="complementary">
+      <a href="https://policies.google.com/privacy">Privacy</a>
+    </section>
+    <a class="edit-this-page" href="https://edit.chromium.org/edit?repo=chromium/website/main&file=site/developers/design-documents/inter-process-communication/index.md&cloneRepo=chromium/website:refs/heads/main&fullPath=chromium/site/developers/design-documents/inter-process-communication/index.md">Edit</a>
+  </nav>
+  <main>
+    <div class="breadcrumbs">
+      <a href="/developers">For Developers</a> &gt;
+      <a href="/developers/design-documents">Design Documents</a> &gt;
+    </div>
+    <h1>Inter-process Communication (IPC)</h1>
+  <nav class="table-of-contents"><ol><li><a href="#overview">Overview</a><ol><li><a href="#ipc-in-the-browser">IPC in the browser</a></li><li><a href="#ipc-in-the-renderer">IPC in the renderer</a></li></ol></li><li><a href="#messages">Messages</a><ol><li><a href="#types-of-messages">Types of messages</a></li><li><a href="#declaring-messages">Declaring messages</a><ol><li><a href="#pickling-values">Pickling values</a></li></ol></li><li><a href="#sending-messages">Sending messages</a></li><li><a href="#handling-messages">Handling messages</a></li><li><a href="#security-considerations">Security considerations</a></li></ol></li><li><a href="#channels">Channels</a></li><li><a href="#synchronous-messages">Synchronous messages</a><ol><li><a href="#declaring-synchronous-messages">Declaring synchronous messages</a></li><li><a href="#issuing-synchronous-messages">Issuing synchronous messages</a></li><li><a href="#handling-synchronous-messages">Handling synchronous messages</a></li><li><a href="#converting-message-type-to-a-message-name">Converting message type to a message name</a></li></ol></li></ol></nav><h2 id="overview" tabindex="-1"><a class="header-anchor" href="#overview">Overview</a></h2>
+<p>Chromium has a <a href="/developers/design-documents/multi-process-architecture">multi-process
+architecture</a> which
+means that we have a lot of processes communicating with each other. Our main
+inter-process communication primitive is the named pipe. On Linux &amp; OS X, we use
+a <code>socketpair()</code>. A named pipe is allocated for each renderer process for
+communication with the browser process. The pipes are used in asynchronous mode
+to ensure that neither end is blocked waiting for the other.</p>
+<p>For advice on how to write safe IPC endpoints, please see <a href="/Home/chromium-security/education/security-tips-for-ipc">Security Tips for
+IPC</a>.</p>
+<h3 id="ipc-in-the-browser" tabindex="-1"><a class="header-anchor" href="#ipc-in-the-browser">IPC in the browser</a></h3>
+<p>Within the browser, communication with the renderers is done in a separate I/<wbr>O
+thread. Messages to and from the views then have to be proxied over to the main
+thread using a <code>ChannelProxy</code>. The advantage of this scheme is that resource
+requests (for web pages, etc.), which are the most common and performance
+critical messages, can be handled entirely on the I/<wbr>O thread and not block the
+user interface. These are done through the use of a
+<code>ChannelProxy::MessageFilter</code> which is inserted into the channel by the
+<code>RenderProcessHost</code>. This filter runs in the I/<wbr>O thread, intercepts resource
+request messages, and forwards them directly to the resource dispatcher host.
+See <a href="/developers/design-documents/multi-process-resource-loading">Multi-process Resource
+Loading</a> for more
+information on resource loading.</p>
+<h3 id="ipc-in-the-renderer" tabindex="-1"><a class="header-anchor" href="#ipc-in-the-renderer">IPC in the renderer</a></h3>
+<p>Each renderer also has a thread that manages communication (in this case, the
+main thread), with the rendering and most processing happening on another thread
+(see the diagram in <a href="/developers/design-documents/multi-process-architecture">multi-process
+architecture</a>). Most
+messages are sent from the browser to the WebKit thread through the main
+renderer thread and vice-versa. This extra thread is to support synchronous
+renderer-to-browser messages (see &quot;Synchronous messages&quot; below).</p>
+<h2 id="messages" tabindex="-1"><a class="header-anchor" href="#messages">Messages</a></h2>
+<h3 id="types-of-messages" tabindex="-1"><a class="header-anchor" href="#types-of-messages">Types of messages</a></h3>
+<p>We have two primary types of messages: &quot;routed&quot; and &quot;control.&quot; Control messages
+are handled by the class that created the pipe. Sometimes that class will allow
+others to received message by having a <code>MessageRouter</code> object that other
+listeners can register with and received &quot;routed&quot; messages sent with their
+unique (per pipe) id.</p>
+<p>For example, when rendering, control messages are not specific to a given view
+and will be handled by the <code>RenderProcess</code> (renderer) or the <code>RenderProcessHost</code>
+(browser). Requests for resources or to modify the clipboard are not
+view-specific so are control messages. An example of routed messages are a
+message to ask a view to paint a region.</p>
+<p>Routed messages have historically been used to get messages to a specific
+<code>RenderViewHost</code>. However, technically any class can receive routed messages by
+using <code>RenderProcessHost::GetNextRoutingID</code> and registering itself with
+<code>RenderProcessHost::AddRoute</code>. Currently both <code>RenderViewHost</code> and
+<code>RenderFrameHost</code> instances have their own routing IDs.</p>
+<p>Independent of the message type is whether the message is sent from the browser
+to the renderer, or from the renderer to the browser. Messages related to a
+document's frame sent from the browser to the renderer are called <code>Frame</code>
+messages because they are being sent <em>to</em> the <code>RenderFrame</code>. Similarly, messages
+sent from the renderer to the browser are called <code>FrameHost</code> messages because
+they are being sent <em>to</em> the <code>RenderFrameHost</code>. You will notice the messages
+defined in
+<a href="https://code.google.com/p/chromium/codesearch#chromium/src/content/common/frame_messages.h">frame_messages.h</a>
+are two sections, one for <code>Frame</code> and one for <code>FrameHost</code> messages.</p>
+<p>Plugins also have separate processes. Like the render messages, there are
+<code>PluginProcess</code> messages (sent from the browser to the plugin process) and
+<code>PluginProcessHost</code> messages (sent from the plugin process to the browser).
+These messages are all defined in
+<a href="https://code.google.com/p/chromium/codesearch#chromium/src/content/common/plugin_process_messages.h"><code>plugin_process_messages.h</code></a>.
+The automation messages (for controlling the browser from the UI tests) are done
+in a similar manner.</p>
+<p>The same organization applies for other groups of messages exchanged between the
+browser and the renderer, as for <code>View</code> and <code>ViewHost</code> labeled messages
+exchanged between <code>RenderViewHost</code> and <code>RenderView</code>, defined in
+<a href="https://code.google.com/p/chromium/codesearch#chromium/src/content/common/view_messages.h">view_messages.h</a>.</p>
+<h3 id="declaring-messages" tabindex="-1"><a class="header-anchor" href="#declaring-messages">Declaring messages</a></h3>
+<p>Special macros are used to declare messages. To declare a routed message from
+the renderer to the browser (e.g. a <code>FrameHost</code> message specific to a frame)
+that contains a URL and an integer as an argument, write:</p>
+<pre><code class="language-cpp"><span class="hljs-built_in">IPC_MESSAGE_ROUTED2</span>(FrameHostMsg_MyMessage, GURL, <span class="hljs-type">int</span>)
+</code></pre>
+<p>To declare a control message from the browser to the renderer (e.g. a <code>Frame</code>
+message not specific to a frame) that contains no parameters, write:</p>
+<pre><code class="language-cpp"><span class="hljs-built_in">IPC_MESSAGE_CONTROL0</span>(FrameMsg_MyMessage)
+</code></pre>
+<h4 id="pickling-values" tabindex="-1"><a class="header-anchor" href="#pickling-values">Pickling values</a></h4>
+<p>Parameters are serialized and de-serialized to message bodies using the
+<code>ParamTraits</code> template. Specializations of this template are provided for most
+common types in <code>ipc_message_utils.h</code>. If you define your own types, you will
+also have to define your own <code>ParamTraits</code> specialization for it.</p>
+<p>Sometimes, a message has too many values to be reasonably put in a message. In
+this case, we define a separate structure to hold the values. For example, for
+the <code>FrameMsg_Navigate</code> message, the <code>CommonNavigationParams</code> structure is
+defined in
+<a href="https://code.google.com/p/chromium/codesearch/#chromium/src/content/common/navigation_params.h"><code>navigation_params.h</code></a>.
+<a href="https://code.google.com/p/chromium/codesearch/#chromium/src/content/common/frame_messages.h"><code>frame_messages.h</code></a>
+defines the <code>ParamTraits</code> specializations for the structures using the
+<a href="https://code.google.com/p/chromium/codesearch/#chromium/src/ipc/param_traits_macros.h"><code>IPC_STRUCT_TRAITS</code></a>
+family of macros.</p>
+<h3 id="sending-messages" tabindex="-1"><a class="header-anchor" href="#sending-messages">Sending messages</a></h3>
+<p>You send messages through &quot;channels&quot; (see below). In the browser, the
+<code>RenderProcessHost</code> contains the channel used to send messages from the UI
+thread of the browser to the renderer. The <code>RenderWidgetHost</code> (base class for
+<code>RenderViewHost</code>) provides a <code>Send</code> function that is used for convenience.</p>
+<p>Messages are sent by pointer and will be deleted by the IPC layer after they are
+dispatched. Therefore, once you can find the appropriate <code>Send</code> function, just
+call it with a new message:</p>
+<pre><code class="language-cpp"><span class="hljs-built_in">Send</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">ViewMsg_StopFinding</span>(routing_id_));
+</code></pre>
+<p>Notice that you must specify the routing ID in order for the message to be
+routed to the correct View/<wbr>ViewHost on the receiving end. Both the
+<code>RenderWidgetHost</code> (base class for <code>RenderViewHost</code>) and the <code>RenderWidget</code>
+(base class for <code>RenderView</code>) have<code> GetRoutingID()</code> members that you can use.</p>
+<h3 id="handling-messages" tabindex="-1"><a class="header-anchor" href="#handling-messages">Handling messages</a></h3>
+<p>Messages are handled by implementing the <code>IPC::Listener</code> interface, the most
+important function on which is <code>OnMessageReceived</code>. We have a variety of macros
+to simplify message handling in this function, which can best be illustrated by
+example:</p>
+<pre><code class="language-cpp">MyClass::<span class="hljs-built_in">OnMessageReceived</span>(<span class="hljs-type">const</span> IPC::Message&amp; message) {
+  <span class="hljs-built_in">IPC_BEGIN_MESSAGE_MAP</span>(MyClass, message)
+    <span class="hljs-comment">// Will call OnMyMessage with the message. The parameters of the message will be unpacked for you.</span>
+    <span class="hljs-built_in">IPC_MESSAGE_HANDLER</span>(ViewHostMsg_MyMessage, OnMyMessage)  
+    ...
+    <span class="hljs-built_in">IPC_MESSAGE_UNHANDLED_ERROR</span>()  <span class="hljs-comment">// This will throw an exception for unhandled messages.</span>
+  <span class="hljs-built_in">IPC_END_MESSAGE_MAP</span>()
+}
+
+<span class="hljs-comment">// This function will be called with the parameters extracted from the ViewHostMsg_MyMessage message.</span>
+MyClass::<span class="hljs-built_in">OnMyMessage</span>(<span class="hljs-type">const</span> GURL&amp; url, <span class="hljs-type">int</span> something) {
+  ...
+}
+</code></pre>
+<p>You can also use <code>IPC_DEFINE_MESSAGE_MAP</code> to implement the function definition
+for you as well. In this case, do not specify a message variable name, it will
+declare a <code>OnMessageReceived</code> function on the given class and implement its
+guts.</p>
+<p>Other macros:</p>
+<ul>
+<li>
+<p><code>IPC_MESSAGE_FORWARD</code>: This is the same as <code>IPC_MESSAGE_HANDLER</code> but
+you can specify your own class to send the message to, instead of
+sending it to the current class.</p>
+<pre><code class="language-cpp"><span class="hljs-built_in">IPC_MESSAGE_FORWARD</span>(ViewHostMsg_MyMessage, some_object_pointer, SomeObject::OnMyMessage)
+</code></pre>
+</li>
+<li>
+<p><code>IPC_MESSAGE_HANDLER_GENERIC</code>: This allows you to write your own
+code, but you have to unpack the parameters from the message
+yourself:</p>
+<pre><code class="language-cpp"><span class="hljs-built_in">IPC_MESSAGE_HANDLER_GENERIC</span>(ViewHostMsg_MyMessage, <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Hello, world, I got the message.&quot;</span>))
+</code></pre>
+</li>
+</ul>
+<h3 id="security-considerations" tabindex="-1"><a class="header-anchor" href="#security-considerations">Security considerations</a></h3>
+<p>Security bugs in IPC can have <a href="http://blog.chromium.org/2012/05/tale-of-two-pwnies-part-1.html">nasty
+consequences</a>
+(file theft, sandbox escapes, remote code execution). Check out our <a href="/Home/chromium-security/education/security-tips-for-ipc">security
+for IPC</a> document for
+tips on how to avoid common pitfalls.</p>
+<h2 id="channels" tabindex="-1"><a class="header-anchor" href="#channels">Channels</a></h2>
+<p><code>IPC::Channel</code> (defined in <code>ipc/ipc_channel.h</code>) defines the methods for
+communicating across pipes. <code>IPC::SyncChannel</code> provides additional capabilities
+for synchronously waiting for responses to some messages (the renderer processes
+use this as described below in the &quot;Synchronous messages&quot; section, but the
+browser process never does).</p>
+<p>Channels are not thread safe. We often want to send messages using a channel on
+another thread. For example, when the UI thread wants to send a message, it must
+go through the I/<wbr>O thread. For this, we use a <code>IPC::ChannelProxy</code>. It has a
+similar API as the regular channel object, but proxies messages to another
+thread for sending them, and proxies messages back to the original thread when
+receiving them. It allows your object (typically on the UI thread) to install a
+<code>IPC::ChannelProxy::Listener</code> on the channel thread (typically the I/<wbr>O thread)
+to filter out some messages from getting proxied over. We use this for resource
+requests and other requests that can be handled directly on the I/<wbr>O thread.
+<code>RenderProcessHost</code> installs a <code>RenderMessageFilter</code> object that does this
+filtering.</p>
+<h2 id="synchronous-messages" tabindex="-1"><a class="header-anchor" href="#synchronous-messages">Synchronous messages</a></h2>
+<p>Some messages should be synchronous from the renderer's perspective. This
+happens mostly when there is a WebKit call to us that is supposed to return
+something, but that we must do in the browser. Examples of this type of messages
+are spell-checking and getting the cookies for JavaScript. Synchronous
+browser-to-renderer IPC is disallowed to prevent blocking the user-interface on
+a potentially flaky renderer.</p>
+<p><strong>Danger:</strong> Do not handle any synchronous messages in the UI thread! You must
+handle them only in the I/<wbr>O thread. Otherwise, the application might deadlock
+because plug-ins require synchronous painting from the UI thread, and these will
+be blocked when the renderer is waiting for synchronous messages from the
+browser.</p>
+<h3 id="declaring-synchronous-messages" tabindex="-1"><a class="header-anchor" href="#declaring-synchronous-messages">Declaring synchronous messages</a></h3>
+<p>Synchronous messages are declared using the <code>IPC_SYNC_MESSAGE_*</code> macros. These
+macros have input and return parameters (non-synchronous messages lack the
+concept of return parameters). For a control function which takes two input
+parameters and returns one parameter, you would append <code>2_1</code> to the macro name
+to get:</p>
+<pre><code class="language-cpp"><span class="hljs-built_in">IPC_SYNC_MESSAGE_CONTROL2_1</span>(SomeMessage,  <span class="hljs-comment">// Message name</span>
+                            GURL, <span class="hljs-comment">//input_param1</span>
+                            <span class="hljs-type">int</span>, <span class="hljs-comment">//input_param2</span>
+                            std::string); <span class="hljs-comment">//result</span>
+</code></pre>
+<p>Likewise, you can also have messages that are routed to the view in which case
+you would replace &quot;control&quot; with &quot;routed&quot; to get <code>IPC_SYNC_MESSAGE_ROUTED2_1</code>.
+You can also have <code>0</code> input or return parameters. Having no return parameters is
+used when the renderer must wait for the browser to do something, but needs no
+results. We use this for certain printing and clipboard operations.</p>
+<h3 id="issuing-synchronous-messages" tabindex="-1"><a class="header-anchor" href="#issuing-synchronous-messages">Issuing synchronous messages</a></h3>
+<p>When the WebKit thread issues a synchronous IPC request, the request object
+(derived from <code>IPC::SyncMessage</code>) is dispatched to the main thread on the
+renderer through a <code>IPC::SyncChannel</code> object (the same one is also used to send
+all asynchronous messages). The <code>SyncChannel</code> will block the calling thread when
+it receives a synchronous message, and will only unblock it when the reply is
+received.</p>
+<p>While the WebKit thread is waiting for the synchronous reply, the main thread is
+still receiving messages from the browser process. These messages will be added
+to the queue of the WebKit thread for processing when it wakes up. When the
+synchronous message reply is received, the thread will be un-blocked. Note that
+this means that the synchronous message reply can be processed out-of-order.</p>
+<p>Synchronous messages are sent the same way normal messages are, with output
+parameters being given to the constructor. For example:</p>
+<pre><code class="language-cpp"><span class="hljs-function"><span class="hljs-type">const</span> GURL <span class="hljs-title">input_param</span><span class="hljs-params">(<span class="hljs-string">&quot;https://www.google.com/&quot;</span>)</span></span>;
+std::string result;
+content::RenderThread::<span class="hljs-built_in">Get</span>()-&gt;<span class="hljs-built_in">Send</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">MyMessage</span>(input_param, &amp;result));
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;The result is %s\\n&quot;</span>, result.<span class="hljs-built_in">c_str</span>());
+</code></pre>
+<h3 id="handling-synchronous-messages" tabindex="-1"><a class="header-anchor" href="#handling-synchronous-messages">Handling synchronous messages</a></h3>
+<p>Synchronous messages and asynchronous messages use the same
+<code>IPC_MESSAGE_HANDLER</code>, etc. macros for dispatching the message. The handler
+function for the message will have the same signature as the message
+constructor, and the function will simply write the output to the output
+parameter. For the above message you would add</p>
+<pre><code class="language-cpp"><span class="hljs-built_in">IPC_MESSAGE_HANDLER</span>(MyMessage, OnMyMessage)
+</code></pre>
+<p>to the <code>OnMessageReceived</code> function, and write:</p>
+<pre><code class="language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">RenderProcessHost::OnMyMessage</span><span class="hljs-params">(GURL input_param, std::string* result)</span> </span>{
+  *result = input_param.<span class="hljs-built_in">spec</span>() + <span class="hljs-string">&quot; is not available&quot;</span>;
+}
+</code></pre>
+<h3 id="converting-message-type-to-a-message-name" tabindex="-1"><a class="header-anchor" href="#converting-message-type-to-a-message-name">Converting message type to a message name</a></h3>
+<p>If you get a crash and you have the message type you can convert this to a
+message name. The message type will be 32-bit value, the high 16-bits are the
+class and the low 16-bits are the id. The class is based on the enums in
+ipc/<wbr>ipc_message_start.h, the id is based on the line number in the file that
+defines the message. This means that you need to get the exact revision of
+Chromium in order to accurately get the message name.</p>
+<p>Example of this in <a href="https://crbug.com/554011">554011</a> was 0x1c0098 at Chromium
+revision
+<a href="https://crrev.com/ad0950c1ac32ef02b0b0133ebac2a0fa4771cf20">ad0950c1ac32ef02b0b0133ebac2a0fa4771cf20</a>.
+That's class 0x1c which is line
+<a href="https://chromium.googlesource.com/chromium/src/+/ad0950c1ac32ef02b0b0133ebac2a0fa4771cf20/ipc/ipc_message_start.h#40">40</a>
+which matches ChildProcessMsgStart. ChildProcessMsgStart messages are in
+content/<wbr>common/<wbr>child_process_messages.h and the IPC will be on line 0x98 or line
+<a href="https://chromium.googlesource.com/chromium/src/+/ad0950c1ac32ef02b0b0133ebac2a0fa4771cf20/content/common/child_process_messages.h#152">152</a>
+which is ChildProcessHostMsg_ChildHistogramData.</p>
+<p>This technique is particularly useful if you are dealing with crashes caused by
+content::RenderProcessHostImpl::OnBadMessageReceived</p>
+
+  </main>
+</div>
+<script>
+// Configure Algolia search.
+let s = document.createElement('script');
+s.src = '/_scripts/@docsearch/index.js';
+document.head.append(s);
+
+window.addEventListener('load', () => {
+  // Add the Algolia search widget.
+  docsearch({
+    container: '#search',
+    appId: 'RZDQYCCABX',
+    apiKey: '98b0eabafeb13fe3e1af693d5713d8b4',
+    indexName: 'chromium'
+  });
+});
+
+// Configure Google Analytics v4
+s = document.createElement('script');
+s.src = 'https://www.googletagmanager.com/gtag/js?id=G-24XP4PG02H'
+s.async = true;
+document.head.append(s)
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-24XP4PG02H');
+
+// Configure consent bar.
+s = document.createElement('script');
+s.src = 'https://www.gstatic.com/brandstudio/kato/cookie_choice_component/cookie_consent_bar.v3.js'
+s.dataset.autoloadCookieConsentBar = true;
+s.dataset.autoloadCookieContentBarIntlCode = '';
+document.head.append(s);
+
+// Configure the mobile navigation drawer.
+// Keep in sync with $mobile-nav-breakpoint in default.scss.
+const mobileNavBreakpoint = 768;
+const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+const mobileNav = document.getElementById('sidebar-left');
+const mobileNavClose = document.getElementById('mobile-nav-close');
+const mobileNavBackdrop = document.getElementById('mobile-nav-backdrop');
+const siteHeader = document.getElementById('site-header');
+
+if (mobileNavToggle && mobileNav && mobileNavClose && mobileNavBackdrop) {
+  const setMobileNavState = (isOpen) => {
+    mobileNavToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    document.body.classList.toggle('mobile-nav-open', isOpen);
+    if (isOpen && siteHeader) {
+      siteHeader.classList.remove('mobile-header-hidden');
+    }
+  };
+
+  const closeMobileNav = (returnFocus = false) => {
+    setMobileNavState(false);
+    if (returnFocus) {
+      mobileNavToggle.focus();
+    }
+  };
+
+  const openMobileNav = () => {
+    setMobileNavState(true);
+    mobileNav.scrollTop = 0;
+    mobileNavClose.focus();
+  };
+
+  mobileNavToggle.addEventListener('click', () => {
+    if (document.body.classList.contains('mobile-nav-open')) {
+      closeMobileNav();
+    } else {
+      openMobileNav();
+    }
+  });
+
+  mobileNavClose.addEventListener('click', () => closeMobileNav(true));
+  mobileNavBackdrop.addEventListener('click', () => closeMobileNav(true));
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeMobileNav(true);
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > mobileNavBreakpoint) {
+      closeMobileNav();
+    }
+  });
+
+  mobileNav.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', closeMobileNav);
+  });
+}
+
+if (siteHeader) {
+  // Ignore small changes in direction so touch scrolling does not make the
+  // header flicker in and out of view.
+  const mobileHeaderScrollThresholdPx = 10;
+
+  // Ignore elastic overscroll beyond the top or bottom of the page.
+  const getClampedScrollY = () => {
+    const maxScrollY = Math.max(
+        document.documentElement.scrollHeight - window.innerHeight, 0);
+    return Math.min(Math.max(window.scrollY, 0), maxScrollY);
+  };
+
+  let accumulatedHeaderScroll = 0;
+  let lastHeaderScrollY = getClampedScrollY();
+  let headerScrollUpdatePending = false;
+
+  const showMobileHeader = () => {
+    siteHeader.classList.remove('mobile-header-hidden');
+  };
+
+  const updateMobileHeader = () => {
+    const currentScrollY = getClampedScrollY();
+    const scrollDelta = currentScrollY - lastHeaderScrollY;
+    lastHeaderScrollY = currentScrollY;
+    headerScrollUpdatePending = false;
+
+    if (window.innerWidth > mobileNavBreakpoint ||
+        currentScrollY <= siteHeader.offsetHeight ||
+        document.body.classList.contains('mobile-nav-open')) {
+      accumulatedHeaderScroll = 0;
+      showMobileHeader();
+      return;
+    }
+
+    if (scrollDelta === 0) {
+      return;
+    }
+
+    if ((scrollDelta > 0 && accumulatedHeaderScroll < 0) ||
+        (scrollDelta < 0 && accumulatedHeaderScroll > 0)) {
+      accumulatedHeaderScroll = 0;
+    }
+    accumulatedHeaderScroll += scrollDelta;
+
+    if (Math.abs(accumulatedHeaderScroll) < mobileHeaderScrollThresholdPx) {
+      return;
+    }
+
+    siteHeader.classList.toggle(
+        'mobile-header-hidden', accumulatedHeaderScroll > 0);
+    accumulatedHeaderScroll = 0;
+  };
+
+  window.addEventListener('scroll', () => {
+    if (!headerScrollUpdatePending) {
+      window.requestAnimationFrame(updateMobileHeader);
+      headerScrollUpdatePending = true;
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    accumulatedHeaderScroll = 0;
+    lastHeaderScrollY = getClampedScrollY();
+    if (window.innerWidth > mobileNavBreakpoint) {
+      showMobileHeader();
+    }
+  });
+}</script>

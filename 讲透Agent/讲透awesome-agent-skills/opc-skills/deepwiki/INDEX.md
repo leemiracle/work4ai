@@ -1,0 +1,41 @@
+# DeepWiki 索引 — ReScienceLab/opc-skills
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 29 页 · 全文 611212 字符
+
+- [1 Overview](1-overview.md)
+- [2 Skills System](2-skills-system.md)
+  - [2.1 Skills Registry (skills.json)](2.1-skills-registry-skills.json.md)
+  - [2.2 Skill Structure & Standards](2.2-skill-structure-standards.md)
+  - [2.3 Dependency Management](2.3-dependency-management.md)
+  - [2.4 Skill Categories & Reference](2.4-skill-categories-reference.md)
+- [3 Installation & Distribution](3-installation-distribution.md)
+  - [3.1 Installation Methods Overview](3.1-installation-methods-overview.md)
+  - [3.2 Claude Code Plugin Marketplace](3.2-claude-code-plugin-marketplace.md)
+  - [3.3 Universal Installer (npx skills add)](3.3-universal-installer-npx-skills-add.md)
+  - [3.4 Platform-Specific Installation](3.4-platform-specific-installation.md)
+  - [3.5 Installation Statistics System](3.5-installation-statistics-system.md)
+- [4 Website & Content Delivery](4-website-content-delivery.md)
+  - [4.1 Website Architecture](4.1-website-architecture.md)
+  - [4.2 Request Routing & Handlers](4.2-request-routing-handlers.md)
+  - [4.3 Caching Strategy](4.3-caching-strategy.md)
+  - [4.4 API Endpoints](4.4-api-endpoints.md)
+  - [4.5 SEO & GEO Optimization Strategy](4.5-seo-geo-optimization-strategy.md)
+- [5 Blog & Content System](5-blog-content-system.md)
+  - [5.1 Blog System Architecture](5.1-blog-system-architecture.md)
+  - [5.2 Content Creation & Validation](5.2-content-creation-validation.md)
+  - [5.3 Blog Publishing Workflows](5.3-blog-publishing-workflows.md)
+  - [5.4 Featured Content: Ralph Autonomous Agent](5.4-featured-content-ralph-autonomous-agent.md)
+- [6 Development & CI/CD](6-development-ci-cd.md)
+  - [6.1 Git Workflow & Branching Strategy](6.1-git-workflow-branching-strategy.md)
+  - [6.2 Automated Testing Pipeline](6.2-automated-testing-pipeline.md)
+  - [6.3 Pre-commit Hooks & Quality Gates](6.3-pre-commit-hooks-quality-gates.md)
+  - [6.4 Release Management](6.4-release-management.md)
+- [7 Creating New Skills](7-creating-new-skills.md)
+
+## 附：结构清单外的页
+- [Design & Image Generation Skills](x1-design-image-generation-skills.md)
+- [Foundation Skills](x2-foundation-skills.md)
+- [Research & Validation Skills](x3-research-validation-skills.md)
+- [SEO & GEO Optimization Skill](x4-seo-geo-optimization-skill.md)
+- [Social Media & Domain Skills](x5-social-media-domain-skills.md)

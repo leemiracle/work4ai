@@ -1,0 +1,33 @@
+# DeepWiki 索引 — wrsmith108/linear-claude-skill
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 168548 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Architecture Overview](1.2-architecture-overview.md)
+- [2 Core Scripts & CLI](2-core-scripts-cli.md)
+  - [2.1 linear-ops CLI](2.1-linear-ops-cli.md)
+  - [2.2 Shared Runner & Build System](2.2-shared-runner-build-system.md)
+  - [2.3 Utility Scripts](2.3-utility-scripts.md)
+  - [2.4 Image Pipeline](2.4-image-pipeline.md)
+- [3 Shared Library (scripts/lib)](3-shared-library-scripts-lib.md)
+  - [3.1 Linear Client & Utilities](3.1-linear-client-utilities.md)
+  - [3.2 Label Taxonomy System](3.2-label-taxonomy-system.md)
+  - [3.3 Agent Selection](3.3-agent-selection.md)
+  - [3.4 Project Template & Verification](3.4-project-template-verification.md)
+  - [3.5 Lin CLI Integration](3.5-lin-cli-integration.md)
+- [4 Linear API Reference](4-linear-api-reference.md)
+  - [4.1 GraphQL API Patterns](4.1-graphql-api-patterns.md)
+  - [4.2 SDK Automation Patterns](4.2-sdk-automation-patterns.md)
+  - [4.3 Bulk Sync Engine](4.3-bulk-sync-engine.md)
+- [5 Issue & Project Management Workflows](5-issue-project-management-workflows.md)
+  - [5.1 Issue Lifecycle](5.1-issue-lifecycle.md)
+  - [5.2 Project & Initiative Management](5.2-project-initiative-management.md)
+- [6 Automation & Integration](6-automation-integration.md)
+  - [6.1 Post-Edit Hook](6.1-post-edit-hook.md)
+  - [6.2 CI/CD & Release Pipeline](6.2-ci-cd-release-pipeline.md)
+- [7 Troubleshooting](7-troubleshooting.md)
+  - [7.1 MCP Issues](7.1-mcp-issues.md)
+  - [7.2 Environment & Authentication](7.2-environment-authentication.md)
+- [8 Glossary](8-glossary.md)

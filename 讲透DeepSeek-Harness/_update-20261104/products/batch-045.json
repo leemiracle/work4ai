@@ -1,0 +1,996 @@
+{
+ "nodes": [
+  {
+   "id": "document:packages/jobs/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/jobs/README.md",
+   "summary": "jobs 组级 README：后台任务能力族——dsh-jobs 注册表缝、dsh-jobs-local 进程内实现与 dsh-tool-jobs 模型工具。",
+   "tags": [
+    "documentation",
+    "group-index",
+    "jobs"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/jobs/jobs/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/jobs/jobs/README.md",
+   "summary": "dsh-jobs 文档：后台任务的所有权边界、启动需要控制器、最小组合、生命周期与有界输出环语义。",
+   "tags": [
+    "documentation",
+    "jobs",
+    "background-job"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/jobs/jobs/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/jobs/jobs/package.json",
+   "summary": "包清单 @deepseek-ai/dsh-jobs：后台任务注册表（ctx.jobs）——共享 id、owner 隔离、轮询、取消与有界输出。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/jobs/jobs/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/jobs/jobs/tsconfig.json",
+   "summary": "包编译配置：extends tsconfig.base.json，rootDir src / outDir lib/types。",
+   "tags": [
+    "configuration",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/jobs/jobs/src/archive-admission.ts",
+   "type": "file",
+   "name": "archive-admission.ts",
+   "filePath": "packages/jobs/jobs/src/archive-admission.ts",
+   "summary": "Workspace 归档准入的 job 侧规则：Session 归档时其未结算后台任务清单与随档 kill，由各注册表实现经缝安装。",
+   "tags": [
+    "archive",
+    "admission",
+    "jobs"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/jobs/jobs/src/brand.ts",
+   "type": "file",
+   "name": "brand.ts",
+   "filePath": "packages/jobs/jobs/src/brand.ts",
+   "summary": "dsh-jobs 自有的品牌化 JobId：注册表、模型控制面与 client wire 共用；独立成叶避免把 dsh-agent 拉进 client 面。",
+   "tags": [
+    "brand",
+    "utility",
+    "leaf"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/jobs/jobs/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/jobs/jobs/src/index.ts",
+   "summary": "后台任务 Service Definition（ctx.jobs）：JobRegistry extends Service 持有 job id、session 作用域访问、生命周期状态、每任务有界输出环与模型游标契约（start/list/get/read/readAt/kill/wait/remove/attachController）。",
+   "tags": [
+    "service-definition",
+    "jobs",
+    "registry"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/jobs/jobs/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/jobs/jobs/src/types.ts",
+   "summary": "生产者、注册表与消费者共享的类型：owner/listener 签名、输出源与游标词汇；client 安全投影在 view.ts。",
+   "tags": [
+    "type-definition",
+    "contracts"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/jobs/jobs/src/view.ts",
+   "type": "file",
+   "name": "view.ts",
+   "filePath": "packages/jobs/jobs/src/view.ts",
+   "summary": "client 安全 job 词汇：单任务只读投影与输出环分发的 chunk；不触任何 Host 包，浏览器与 Remote wire 可直接引用。",
+   "tags": [
+    "type-definition",
+    "client-safe",
+    "projection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/jobs/jobs-local/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/jobs/jobs-local/README.md",
+   "summary": "dsh-jobs-local 文档：何时选进程内实现、最小配置、每个 owner 所得与生命周期。",
+   "tags": [
+    "documentation",
+    "jobs-local",
+    "jobs"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/jobs/jobs-local/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/jobs/jobs-local/package.json",
+   "summary": "包清单 @deepseek-ai/dsh-jobs-local：后台任务注册表缝的进程内实现。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/jobs/jobs-local/src/events.ts",
+   "type": "file",
+   "name": "events.ts",
+   "filePath": "packages/jobs/jobs-local/src/events.ts",
+   "summary": "本地注册表的事件路由：订阅按过滤器归档，每次提交对每个匹配监听器恰好派发一次且监听器包含（JobLayer/JobEventHub）。",
+   "tags": [
+    "events",
+    "routing",
+    "jobs"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/jobs/jobs-local/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/jobs/jobs-local/src/index.ts",
+   "summary": "ctx.jobs 的进程内 provider：LocalJobRegistry 把生命周期状态、有界输出环与模型游标全存内存，对外只发新投影与 chunk 拷贝、永不给活状态；含 owner 解析与作用域服务。",
+   "tags": [
+    "provider",
+    "registry",
+    "in-memory",
+    "jobs"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/jobs/jobs-local/src/pump.ts",
+   "type": "file",
+   "name": "pump.ts",
+   "filePath": "packages/jobs/jobs-local/src/pump.ts",
+   "summary": "注册表持有的拉取泵：以有界节奏把任务的 JobOutputSource 拷入其环，生产者结算后再排空一次，保证环在结算裁剪关闭前持有每个字节。",
+   "tags": [
+    "pump",
+    "output",
+    "drain"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/jobs/jobs-local/src/ring.ts",
+   "type": "file",
+   "name": "ring.ts",
+   "filePath": "packages/jobs/jobs-local/src/ring.ts",
+   "summary": "单任务的有界输出环：绝对字节偏移的 chunk、头端驱逐不移动已分配偏移、任意偏移的非消费读（OutputRing）。",
+   "tags": [
+    "ring-buffer",
+    "output",
+    "eviction"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "document:packages/jobs/tool-jobs/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/jobs/tool-jobs/README.md",
+   "summary": "dsh-tool-jobs 文档：job_output/job_list/job_kill 三工具、完成通知机制、最小配置与故障形态。",
+   "tags": [
+    "documentation",
+    "tool",
+    "jobs"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/jobs/tool-jobs/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/jobs/tool-jobs/package.json",
+   "summary": "包清单 @deepseek-ai/dsh-tool-jobs：ctx.jobs 之上的模型面向后台任务控制工具。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/jobs/tool-jobs/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/jobs/tool-jobs/src/index.ts",
+   "summary": "模型面向的 job_output/job_list/job_kill 工具：加载即附上生产者所需 controller；把模型尚未收集的完成投递给 owning agent（提示注入），含输出限额与通知文案裁剪。",
+   "tags": [
+    "tool",
+    "jobs",
+    "completion-notices",
+    "plugin"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/jobs/tool-jobs/src/render.ts",
+   "type": "file",
+   "name": "render.ts",
+   "filePath": "packages/jobs/tool-jobs/src/render.ts",
+   "summary": "注册表读取的模型面向渲染：消费 delta（stdout 后跟标记 stderr 段）、[status: …] 行与工具 schema 暴露的公共 job 投影。",
+   "tags": [
+    "render",
+    "model-visible",
+    "jobs"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/jobs/jobs/src/archive-admission.ts:installJobArchiveAdmission",
+   "type": "function",
+   "name": "installJobArchiveAdmission",
+   "filePath": "packages/jobs/jobs/src/archive-admission.ts",
+   "lineRange": [
+    24,
+    42
+   ],
+   "summary": "安装 job 族归档准入：未结算任务阻止归档，随档 kill。",
+   "tags": [
+    "archive",
+    "admission",
+    "install"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/jobs/jobs/src/brand.ts:JobId",
+   "type": "function",
+   "name": "JobId",
+   "filePath": "packages/jobs/jobs/src/brand.ts",
+   "lineRange": [
+    26,
+    28
+   ],
+   "summary": "品牌化字符串为 JobId。",
+   "tags": [
+    "brand",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/jobs/jobs/src/index.ts:JobRegistry",
+   "type": "class",
+   "name": "JobRegistry",
+   "filePath": "packages/jobs/jobs/src/index.ts",
+   "lineRange": [
+    88,
+    196
+   ],
+   "summary": "后台任务注册表 Service Definition：id 契约、session 作用域、生命周期、输出环与游标；具体实现（如 jobs-local）继承并提供存储。",
+   "tags": [
+    "service-definition",
+    "registry",
+    "abstract-service"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/jobs/jobs-local/src/events.ts:JobLayer",
+   "type": "class",
+   "name": "JobLayer",
+   "filePath": "packages/jobs/jobs-local/src/events.ts",
+   "lineRange": [
+    25,
+    34
+   ],
+   "summary": "按过滤器归档的事件层（空层判定）。",
+   "tags": [
+    "events",
+    "layer"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/jobs/jobs-local/src/events.ts:JobEventHub",
+   "type": "class",
+   "name": "JobEventHub",
+   "filePath": "packages/jobs/jobs-local/src/events.ts",
+   "lineRange": [
+    43,
+    102
+   ],
+   "summary": "事件集线器：subscribe/emit/deliver，提交后对匹配监听器各派发一次且含拆卸包含。",
+   "tags": [
+    "events",
+    "dispatch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/jobs/jobs-local/src/index.ts:LocalJobRegistry",
+   "type": "class",
+   "name": "LocalJobRegistry",
+   "filePath": "packages/jobs/jobs-local/src/index.ts",
+   "lineRange": [
+    130,
+    715
+   ],
+   "summary": "JobRegistry 的进程内实现：内存态任务/环/游标、owner 解析与 servesOwner、attachController 与归档准入安装。",
+   "tags": [
+    "provider",
+    "registry",
+    "in-memory"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/jobs/jobs-local/src/pump.ts:startPump",
+   "type": "function",
+   "name": "startPump",
+   "filePath": "packages/jobs/jobs-local/src/pump.ts",
+   "lineRange": [
+    53,
+    106
+   ],
+   "summary": "启动任务输出拉取泵：有界节奏拷贝 + 结算后排空。",
+   "tags": [
+    "pump",
+    "output"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/jobs/jobs-local/src/ring.ts:OutputRing",
+   "type": "class",
+   "name": "OutputRing",
+   "filePath": "packages/jobs/jobs-local/src/ring.ts",
+   "lineRange": [
+    38,
+    113
+   ],
+   "summary": "有界输出环：append/trim/readFrom，绝对偏移与头端驱逐保护。",
+   "tags": [
+    "ring-buffer",
+    "output"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/jobs/tool-jobs/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/jobs/tool-jobs/src/index.ts",
+   "lineRange": [
+    240,
+    604
+   ],
+   "summary": "插件入口：注册三个 job 工具、附 controller、注入完成通知提示与投递逻辑。",
+   "tags": [
+    "plugin-entry",
+    "registration",
+    "jobs"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/jobs/tool-jobs/src/index.ts:fitCompletionNotice",
+   "type": "function",
+   "name": "fitCompletionNotice",
+   "filePath": "packages/jobs/tool-jobs/src/index.ts",
+   "lineRange": [
+    160,
+    182
+   ],
+   "summary": "把完成通知裁剪进可见预算（含后缀提示）。",
+   "tags": [
+    "notice",
+    "budget"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/jobs/tool-jobs/src/render.ts:jobDetail",
+   "type": "function",
+   "name": "jobDetail",
+   "filePath": "packages/jobs/tool-jobs/src/render.ts",
+   "lineRange": [
+    29,
+    31
+   ],
+   "summary": "渲染任务详情文本。",
+   "tags": [
+    "render",
+    "detail"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/jobs/tool-jobs/src/render.ts:publicJob",
+   "type": "function",
+   "name": "publicJob",
+   "filePath": "packages/jobs/tool-jobs/src/render.ts",
+   "lineRange": [
+    38,
+    49
+   ],
+   "summary": "把注册表任务投影为工具 schema 暴露的公共形状。",
+   "tags": [
+    "render",
+    "projection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/jobs/tool-jobs/src/render.ts:statusLine",
+   "type": "function",
+   "name": "statusLine",
+   "filePath": "packages/jobs/tool-jobs/src/render.ts",
+   "lineRange": [
+    56,
+    60
+   ],
+   "summary": "渲染 [status: …] 行。",
+   "tags": [
+    "render",
+    "status"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/jobs/tool-jobs/src/render.ts:renderModelDelta",
+   "type": "function",
+   "name": "renderModelDelta",
+   "filePath": "packages/jobs/tool-jobs/src/render.ts",
+   "lineRange": [
+    75,
+    84
+   ],
+   "summary": "渲染消费 delta：stdout 在前、标记 stderr 段在后（与 shell 工具一致）。",
+   "tags": [
+    "render",
+    "delta"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/jobs/jobs/src/archive-admission.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/archive-admission.ts",
+   "target": "file:packages/workspace/workspace/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/archive-admission.ts",
+   "target": "file:packages/jobs/jobs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/archive-admission.ts",
+   "target": "file:packages/jobs/jobs/src/view.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/brand.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/index.ts",
+   "target": "file:packages/jobs/jobs/src/archive-admission.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/index.ts",
+   "target": "file:packages/jobs/jobs/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/types.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/types.ts",
+   "target": "file:packages/jobs/jobs/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/types.ts",
+   "target": "file:packages/jobs/jobs/src/view.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/view.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/view.ts",
+   "target": "file:packages/workspace/workspace/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/view.ts",
+   "target": "file:packages/jobs/jobs/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/events.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/events.ts",
+   "target": "file:packages/core/scope/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/events.ts",
+   "target": "file:packages/jobs/jobs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/index.ts",
+   "target": "file:packages/core/scope/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/index.ts",
+   "target": "file:packages/util/timeout/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/index.ts",
+   "target": "file:packages/jobs/jobs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/index.ts",
+   "target": "file:packages/jobs/jobs-local/src/events.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/index.ts",
+   "target": "file:packages/jobs/jobs-local/src/pump.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/index.ts",
+   "target": "file:packages/jobs/jobs-local/src/ring.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/pump.ts",
+   "target": "file:packages/jobs/jobs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/ring.ts",
+   "target": "file:packages/jobs/jobs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/index.ts",
+   "target": "file:packages/util/output-retention/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/index.ts",
+   "target": "file:packages/jobs/jobs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/index.ts",
+   "target": "file:packages/jobs/tool-jobs/src/render.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/render.ts",
+   "target": "file:packages/jobs/jobs/src/view.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/archive-admission.ts",
+   "target": "function:packages/jobs/jobs/src/archive-admission.ts:installJobArchiveAdmission",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/archive-admission.ts",
+   "target": "function:packages/jobs/jobs/src/archive-admission.ts:installJobArchiveAdmission",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/brand.ts",
+   "target": "function:packages/jobs/jobs/src/brand.ts:JobId",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/brand.ts",
+   "target": "function:packages/jobs/jobs/src/brand.ts:JobId",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/index.ts",
+   "target": "class:packages/jobs/jobs/src/index.ts:JobRegistry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/index.ts",
+   "target": "class:packages/jobs/jobs/src/index.ts:JobRegistry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/events.ts",
+   "target": "class:packages/jobs/jobs-local/src/events.ts:JobLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/events.ts",
+   "target": "class:packages/jobs/jobs-local/src/events.ts:JobLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/events.ts",
+   "target": "class:packages/jobs/jobs-local/src/events.ts:JobEventHub",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/events.ts",
+   "target": "class:packages/jobs/jobs-local/src/events.ts:JobEventHub",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/index.ts",
+   "target": "class:packages/jobs/jobs-local/src/index.ts:LocalJobRegistry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/index.ts",
+   "target": "class:packages/jobs/jobs-local/src/index.ts:LocalJobRegistry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/pump.ts",
+   "target": "function:packages/jobs/jobs-local/src/pump.ts:startPump",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/pump.ts",
+   "target": "function:packages/jobs/jobs-local/src/pump.ts:startPump",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/ring.ts",
+   "target": "class:packages/jobs/jobs-local/src/ring.ts:OutputRing",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/ring.ts",
+   "target": "class:packages/jobs/jobs-local/src/ring.ts:OutputRing",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/index.ts",
+   "target": "function:packages/jobs/tool-jobs/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/index.ts",
+   "target": "function:packages/jobs/tool-jobs/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/index.ts",
+   "target": "function:packages/jobs/tool-jobs/src/index.ts:fitCompletionNotice",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/render.ts",
+   "target": "function:packages/jobs/tool-jobs/src/render.ts:jobDetail",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/render.ts",
+   "target": "function:packages/jobs/tool-jobs/src/render.ts:jobDetail",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/render.ts",
+   "target": "function:packages/jobs/tool-jobs/src/render.ts:publicJob",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/render.ts",
+   "target": "function:packages/jobs/tool-jobs/src/render.ts:publicJob",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/render.ts",
+   "target": "function:packages/jobs/tool-jobs/src/render.ts:statusLine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/render.ts",
+   "target": "function:packages/jobs/tool-jobs/src/render.ts:statusLine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/render.ts",
+   "target": "function:packages/jobs/tool-jobs/src/render.ts:renderModelDelta",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/render.ts",
+   "target": "function:packages/jobs/tool-jobs/src/render.ts:renderModelDelta",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/index.ts",
+   "target": "class:packages/jobs/jobs-local/src/ring.ts:OutputRing",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/index.ts",
+   "target": "function:packages/jobs/jobs-local/src/pump.ts:startPump",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/index.ts",
+   "target": "class:packages/jobs/jobs-local/src/events.ts:JobEventHub",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/jobs-local/src/index.ts",
+   "target": "function:packages/jobs/jobs/src/archive-admission.ts:installJobArchiveAdmission",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/jobs/src/index.ts",
+   "target": "function:packages/jobs/jobs/src/archive-admission.ts:installJobArchiveAdmission",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/index.ts",
+   "target": "function:packages/jobs/tool-jobs/src/render.ts:renderModelDelta",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/index.ts",
+   "target": "function:packages/jobs/tool-jobs/src/render.ts:publicJob",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/jobs/tool-jobs/src/index.ts",
+   "target": "class:packages/jobs/jobs/src/index.ts:JobRegistry",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:packages/jobs/jobs-local/src/index.ts:LocalJobRegistry",
+   "target": "class:packages/jobs/jobs/src/index.ts:JobRegistry",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "document:packages/jobs/README.md",
+   "target": "file:packages/jobs/jobs/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/jobs/jobs/README.md",
+   "target": "file:packages/jobs/jobs/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/jobs/jobs-local/README.md",
+   "target": "file:packages/jobs/jobs-local/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/jobs/tool-jobs/README.md",
+   "target": "file:packages/jobs/tool-jobs/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  }
+ ]
+}

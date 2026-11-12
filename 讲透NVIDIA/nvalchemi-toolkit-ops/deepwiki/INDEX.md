@@ -1,0 +1,43 @@
+# DeepWiki 索引 — NVIDIA/nvalchemi-toolkit-ops
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 24 页 · 全文 676447 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation and Setup](1.1-installation-and-setup.md)
+  - [1.2 Quick Start Guide](1.2-quick-start-guide.md)
+- [2 Core Components](2-core-components.md)
+  - [2.1 Neighbor Lists](2.1-neighbor-lists.md)
+  - [2.2 Dispersion Corrections (DFT-D3)](2.2-dispersion-corrections-dft-d3.md)
+  - [2.3 Electrostatics](2.3-electrostatics.md)
+- [3 System Architecture](3-system-architecture.md)
+  - [3.1 NVIDIA Warp Integration](3.1-nvidia-warp-integration.md)
+  - [3.2 PyTorch Compatibility](3.2-pytorch-compatibility.md)
+  - [3.3 Batch Processing](3.3-batch-processing.md)
+- [4 Performance and Benchmarks](4-performance-and-benchmarks.md)
+  - [4.1 Neighbor List Performance](4.1-neighbor-list-performance.md)
+  - [4.2 Dispersion Performance](4.2-dispersion-performance.md)
+  - [4.3 Electrostatics Performance](4.3-electrostatics-performance.md)
+  - [4.4 Benchmark Methodology](4.4-benchmark-methodology.md)
+- [5 API Reference](5-api-reference.md)
+  - [5.1 Neighbor List API](5.1-neighbor-list-api.md)
+  - [5.2 Dispersion API](5.2-dispersion-api.md)
+  - [5.3 Electrostatics API](5.3-electrostatics-api.md)
+- [6 Development and Contributing](6-development-and-contributing.md)
+  - [6.1 Changelog](6.1-changelog.md)
+  - [6.2 Running Benchmarks](6.2-running-benchmarks.md)
+- [7 FAQ and Troubleshooting](7-faq-and-troubleshooting.md)
+
+## 附：结构清单外的页
+- [Algorithm Selection](x1-algorithm-selection.md)
+- [Backend Comparison](x2-backend-comparison.md)
+- [Batched DFT-D3 Performance](x3-batched-dft-d3-performance.md)
+- [Batched Performance](x4-batched-performance.md)
+- [D3Parameters Configuration](x5-d3parameters-configuration.md)
+- [Ewald Performance](x6-ewald-performance.md)
+- [Ewald Summation](x7-ewald-summation.md)
+- [Multi-Pass Kernel Architecture](x8-multi-pass-kernel-architecture.md)
+- [Output Formats](x9-output-formats.md)
+- [PME Performance](x10-pme-performance.md)
+- [Particle Mesh Ewald (PME)](x11-particle-mesh-ewald-pme.md)
+- [Single System Performance](x12-single-system-performance.md)

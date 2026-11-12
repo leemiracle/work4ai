@@ -1,0 +1,736 @@
+{
+ "nodes": [
+  {
+   "id": "file:packages/context/session-reference/src/spill.ts",
+   "type": "file",
+   "name": "spill.ts",
+   "filePath": "packages/context/session-reference/src/spill.ts",
+   "summary": "有界引用预览的全量转录与模型可见省略结局：prepareReferenceOmission 仅在预览截断时把完整投影存入可选 spill 后端（失败降级为 unavailable 而非谎称有全量）；renderTranscript 渲染行可读转录（每行至多 64 码点的 JSON 字符串分片）；REFERENCE_WARNING 是内联预览与转录共用的不可信警告。",
+   "tags": [
+    "spill",
+    "full-transcript",
+    "omission-notice"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/context/session-reference/src/spill.ts:prepareReferenceOmission",
+   "type": "function",
+   "name": "prepareReferenceOmission",
+   "filePath": "packages/context/session-reference/src/spill.ts",
+   "lineRange": [
+    23,
+    50
+   ],
+   "summary": "预览省略文本时保存完整投影转录到 spill 存储（存储未配置/保存失败→unavailable），产出省略告示。",
+   "tags": [
+    "spill",
+    "fail-soft"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/context/session-reference/src/spill.ts:renderTranscript",
+   "type": "function",
+   "name": "renderTranscript",
+   "filePath": "packages/context/session-reference/src/spill.ts",
+   "lineRange": [
+    62,
+    81
+   ],
+   "summary": "渲染完整投影转录：头部 JSON+逐消息 64 码点 JSON 字符串分片行（源文本无换行也保持行可读）。",
+   "tags": [
+    "rendering",
+    "transcript"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/context/session-reference/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/context/session-reference/src/types.ts",
+   "summary": "session-reference 公开请求/候选/准备记录类型：仅 type-only 子路径导入，让生成的 Remote 客户端可消费（Typert API Gateway 面）。",
+   "tags": [
+    "type-definition",
+    "remote-contract"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/context/session-reference/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/context/session-reference/tsconfig.json",
+   "summary": "包级 TS 配置：extends 仓根 base，rootDir=src、outDir=lib/types，references 覆盖 typert/llm/session-query 等（57 行，引用面较宽）。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/context/time-context/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/context/time-context/README.md",
+   "summary": "dsh-time-context 包英文主文档（153 行）：给模型一个时钟——合格步骤追加持久带源读数（当前时间、开放请求附带的浏览器时区、距上一模型可见消息的耗时）；浏览器时区混合/缺失时提示模型询问；默认 10 分钟最小注入间隔，refreshIntervalMs:0 每步注入。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/context/time-context/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/context/time-context/package.json",
+   "summary": "@deepseek-ai/dsh-time-context 包清单：当前时间与耗时的持久逐步上下文，依赖 util-values/schemastery/zod。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/context/time-context/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/context/time-context/src/index.ts",
+   "summary": "Cordis 函数插件（244 行）：pre-step 监听器在合格步骤追加 'time-context' 源的持久用户消息——当前时间戳（Intl 格式化）、浏览器时区上下文（resolved/mixed/missing）、距上一模型可见基线的耗时；投影状态跟踪 lastMessageTime/lastInjectionTime/browserTimeZones，refreshIntervalMs 节流（倒读时钟钳到 0）。",
+   "tags": [
+    "cordis-plugin",
+    "time-context",
+    "pre-step",
+    "durable-injection"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/context/time-context/src/index.ts:formatDuration",
+   "type": "function",
+   "name": "formatDuration",
+   "filePath": "packages/context/time-context/src/index.ts",
+   "lineRange": [
+    72,
+    82
+   ],
+   "summary": "把非负毫秒格式化为紧凑整秒单位（1d 2h 3m 4s）；倒读墙钟钳零。",
+   "tags": [
+    "formatting",
+    "duration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/time-context/src/index.ts:requestMessages",
+   "type": "function",
+   "name": "requestMessages",
+   "filePath": "packages/context/time-context/src/index.ts",
+   "lineRange": [
+    85,
+    96
+   ],
+   "summary": "为非最新 turn 的类型化 pre-step 调用者保留原扫描（逆序找 turn/start 拼接已输入消息）。",
+   "tags": [
+    "legacy-reader",
+    "messages"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/time-context/src/index.ts:renderText",
+   "type": "function",
+   "name": "renderText",
+   "filePath": "packages/context/time-context/src/index.ts",
+   "lineRange": [
+    98,
+    113
+   ],
+   "summary": "渲染时间读数文本：采样时间戳+浏览器时区上下文+距基线（首步=模型可见消息，后续=步上下文）的耗时。",
+   "tags": [
+    "rendering",
+    "time-context"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/time-context/src/index.ts:validateRefreshInterval",
+   "type": "function",
+   "name": "validateRefreshInterval",
+   "filePath": "packages/context/time-context/src/index.ts",
+   "lineRange": [
+    116,
+    122
+   ],
+   "summary": "拒绝无法表示精确毫秒阈值的刷新间隔（非负安全整数）。",
+   "tags": [
+    "validation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/time-context/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/context/time-context/src/index.ts",
+   "lineRange": [
+    133,
+    244
+   ],
+   "summary": "112 行插件主体：解析时区/间隔（非法即加载失败）、注册 timeContext 投影、挂 prepend pre-step 监听器做节流注入，激活期步骤等待投影注册。",
+   "tags": [
+    "cordis-plugin",
+    "orchestration"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/context/time-context/src/request-zone.ts",
+   "type": "file",
+   "name": "request-zone.ts",
+   "filePath": "packages/context/time-context/src/request-zone.ts",
+   "summary": "来自已提交/拟议 user-rpc 消息的浏览器时区事实与模型面策略文本：reportedBrowserTimeZone 只读 user 源的 rpcId+clientTimeZone（校验属请求准备期）；browserTimeZone 逐拒绝原因精确抛错（非规范/不支持/非 Area/Location）；derive 产出 resolved/mixed/missing 三态。",
+   "tags": [
+    "time-zone",
+    "validation",
+    "browser-context"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/context/time-context/src/request-zone.ts:reportedBrowserTimeZone",
+   "type": "function",
+   "name": "reportedBrowserTimeZone",
+   "filePath": "packages/context/time-context/src/request-zone.ts",
+   "lineRange": [
+    18,
+    27
+   ],
+   "summary": "读取 user-rpc 源报告的原始时区（仅 string rpcId+clientTimeZone 贡献）。",
+   "tags": [
+    "extraction",
+    "user-rpc"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/time-context/src/request-zone.ts:deriveBrowserTimeZoneContext",
+   "type": "function",
+   "name": "deriveBrowserTimeZoneContext",
+   "filePath": "packages/context/time-context/src/request-zone.ts",
+   "lineRange": [
+    61,
+    74
+   ],
+   "summary": "从选中请求消息推导唯一/混合/缺失的浏览器时区（排序去重），非法或非规范时区抛 TypeError。",
+   "tags": [
+    "derivation",
+    "three-state"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/time-context/src/request-zone.ts:renderBrowserTimeZoneContext",
+   "type": "function",
+   "name": "renderBrowserTimeZoneContext",
+   "filePath": "packages/context/time-context/src/request-zone.ts",
+   "lineRange": [
+    81,
+    96
+   ],
+   "summary": "渲染时区上下文的模型面文本（resolved 直陈、mixed/missing 提示询问用户）。",
+   "tags": [
+    "rendering",
+    "policy-text"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/context/time-context/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/context/time-context/tsconfig.json",
+   "summary": "包级 TS 配置：extends 仓根 base，rootDir=src、outDir=lib/types，references 覆盖 agent/llm/session/投影等。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/context/time-context/tsdown.config.ts",
+   "type": "file",
+   "name": "tsdown.config.ts",
+   "filePath": "packages/context/time-context/tsdown.config.ts",
+   "summary": "time-context 打包配置：公共入口单独构建以各自内联共享内部助手（lib/types/index.js ESM）。",
+   "tags": [
+    "build-system",
+    "bundler"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/context/tmux-context/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/context/tmux-context/README.md",
+   "summary": "dsh-tmux-context 包英文主文档：让模型识别其 agent 进程所在的 tmux 会话/窗口/pane/pane 树布局——仅在位置变化时于 turn 首步追加持久带源读数；仅继承 tmux 环境变量而未运行在命名 pane 的终端不加内容，查询失败也不失败 turn；opt-in 不入随仓 Web/headless profile。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/context/tmux-context/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/context/tmux-context/package.json",
+   "summary": "@deepseek-ai/dsh-tmux-context 包清单：agent 的 tmux pane/窗口位置 opt-in 持久逐步上下文，依赖 schemastery/zod。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/context/tmux-context/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/context/tmux-context/src/index.ts",
+   "summary": "Cordis 函数插件（272 行）：每 turn 首步经 ctx.shell 跑一次 tmux display-message 拉取位置——用 #{pane_tty} 对照本进程控制终端（ps -o tty=）甄别真 pane 与仅继承 $TMUX/$TMUX_PANE 的终端（如 VS Code 集成终端读作不在 tmux）；渲染态变化才重注入（refreshIntervalMs 下限），executor 拒绝/失败一律包容为警告 no-op。",
+   "tags": [
+    "cordis-plugin",
+    "tmux",
+    "environment-detection",
+    "contained-failure"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/context/tmux-context/src/index.ts:queryTmuxLocation",
+   "type": "function",
+   "name": "queryTmuxLocation",
+   "filePath": "packages/context/tmux-context/src/index.ts",
+   "lineRange": [
+    120,
+    168
+   ],
+   "summary": "49 行位置查询：八字段 display-message（tab 分隔用字面 \\\\t——tmux 不解释格式内 C 转义）+pane_tty 与本进程 tty 匹配才发字段；任何失败返回 undefined。",
+   "tags": [
+    "tmux",
+    "query",
+    "tty-verification"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/context/tmux-context/src/index.ts:renderState",
+   "type": "function",
+   "name": "renderState",
+   "filePath": "packages/context/tmux-context/src/index.ts",
+   "lineRange": [
+    175,
+    181
+   ],
+   "summary": "渲染位置为稳定状态文本（变更检测的比较基）。",
+   "tags": [
+    "rendering",
+    "state"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/tmux-context/src/index.ts:renderReading",
+   "type": "function",
+   "name": "renderReading",
+   "filePath": "packages/context/tmux-context/src/index.ts",
+   "lineRange": [
+    184,
+    186
+   ],
+   "summary": "渲染带 turn 前缀的易变读数行。",
+   "tags": [
+    "rendering"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/tmux-context/src/index.ts:validateRefreshInterval",
+   "type": "function",
+   "name": "validateRefreshInterval",
+   "filePath": "packages/context/tmux-context/src/index.ts",
+   "lineRange": [
+    195,
+    204
+   ],
+   "summary": "校验注入间隔（非负安全整数或省略）。",
+   "tags": [
+    "validation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/tmux-context/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/context/tmux-context/src/index.ts",
+   "lineRange": [
+    220,
+    272
+   ],
+   "summary": "53 行插件主体：注册 tmuxContext 投影+pre-step 监听器（turn 首步查询、状态变更+间隔节流后注入持久消息）。",
+   "tags": [
+    "cordis-plugin",
+    "orchestration"
+   ],
+   "complexity": "moderate"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/context/session-reference/src/spill.ts",
+   "target": "function:packages/context/session-reference/src/spill.ts:prepareReferenceOmission",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/session-reference/src/spill.ts",
+   "target": "function:packages/context/session-reference/src/spill.ts:prepareReferenceOmission",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/session-reference/src/spill.ts",
+   "target": "function:packages/context/session-reference/src/spill.ts:renderTranscript",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "config:packages/context/session-reference/tsconfig.json",
+   "target": "file:packages/context/session-reference/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "document:packages/context/time-context/README.md",
+   "target": "file:packages/context/time-context/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/context/time-context/package.json",
+   "target": "file:packages/context/time-context/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/context/time-context/src/index.ts",
+   "target": "function:packages/context/time-context/src/index.ts:formatDuration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/time-context/src/index.ts",
+   "target": "function:packages/context/time-context/src/index.ts:requestMessages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/time-context/src/index.ts",
+   "target": "function:packages/context/time-context/src/index.ts:renderText",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/time-context/src/index.ts",
+   "target": "function:packages/context/time-context/src/index.ts:validateRefreshInterval",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/time-context/src/index.ts",
+   "target": "function:packages/context/time-context/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/time-context/src/index.ts",
+   "target": "function:packages/context/time-context/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/time-context/src/request-zone.ts",
+   "target": "function:packages/context/time-context/src/request-zone.ts:reportedBrowserTimeZone",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/time-context/src/request-zone.ts",
+   "target": "function:packages/context/time-context/src/request-zone.ts:reportedBrowserTimeZone",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/time-context/src/request-zone.ts",
+   "target": "function:packages/context/time-context/src/request-zone.ts:deriveBrowserTimeZoneContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/time-context/src/request-zone.ts",
+   "target": "function:packages/context/time-context/src/request-zone.ts:deriveBrowserTimeZoneContext",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/time-context/src/request-zone.ts",
+   "target": "function:packages/context/time-context/src/request-zone.ts:renderBrowserTimeZoneContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/time-context/src/request-zone.ts",
+   "target": "function:packages/context/time-context/src/request-zone.ts:renderBrowserTimeZoneContext",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "config:packages/context/time-context/tsconfig.json",
+   "target": "file:packages/context/time-context/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/context/time-context/tsdown.config.ts",
+   "target": "file:packages/context/time-context/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "document:packages/context/tmux-context/README.md",
+   "target": "file:packages/context/tmux-context/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/context/tmux-context/package.json",
+   "target": "file:packages/context/tmux-context/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/context/tmux-context/src/index.ts",
+   "target": "function:packages/context/tmux-context/src/index.ts:queryTmuxLocation",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/tmux-context/src/index.ts",
+   "target": "function:packages/context/tmux-context/src/index.ts:renderState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/tmux-context/src/index.ts",
+   "target": "function:packages/context/tmux-context/src/index.ts:renderReading",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/tmux-context/src/index.ts",
+   "target": "function:packages/context/tmux-context/src/index.ts:validateRefreshInterval",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/tmux-context/src/index.ts",
+   "target": "function:packages/context/tmux-context/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/tmux-context/src/index.ts",
+   "target": "function:packages/context/tmux-context/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/session-reference/src/spill.ts",
+   "target": "file:packages/context/session-reference/src/projection.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/spill.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/spill.ts",
+   "target": "file:packages/spill/spill/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/types.ts",
+   "target": "file:packages/llm/llm/src/message.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/types.ts",
+   "target": "file:packages/llm/llm/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/types.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/time-context/src/index.ts",
+   "target": "file:packages/context/time-context/src/request-zone.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/time-context/src/index.ts",
+   "target": "file:packages/context/time-context/src/timestamp.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/time-context/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/time-context/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/time-context/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/time-context/src/index.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/time-context/src/index.ts",
+   "target": "file:packages/util/time/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/time-context/src/request-zone.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/time-context/src/request-zone.ts",
+   "target": "file:packages/util/time/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/time-context/src/request-zone.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/tmux-context/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/tmux-context/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/tmux-context/src/index.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/tmux-context/src/index.ts",
+   "target": "file:packages/shell/shell/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

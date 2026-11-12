@@ -1,0 +1,31 @@
+# DeepWiki 索引 — mit-han-lab/torchsparse
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-30
+> 结构 26 页 · 全文 256930 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation Guide](1.1-installation-guide.md)
+  - [1.2 Frequently Asked Questions](1.2-frequently-asked-questions.md)
+  - [1.3 Performance Benchmarks](1.3-performance-benchmarks.md)
+- [2 Core Concepts](2-core-concepts.md)
+  - [2.1 SparseTensor Data Structure](2.1-sparsetensor-data-structure.md)
+  - [2.2 Backend System](2.2-backend-system.md)
+- [3 Neural Network Modules](3-neural-network-modules.md)
+  - [3.1 Convolution Operations](3.1-convolution-operations.md)
+  - [3.2 BEV (Bird's Eye View) Operations](3.2-bev-bird-s-eye-view-operations.md)
+  - [3.3 Pooling Operations](3.3-pooling-operations.md)
+  - [3.4 Normalization and Activation Layers](3.4-normalization-and-activation-layers.md)
+- [4 Functional API](4-functional-api.md)
+  - [4.1 Voxelization and Devoxelization](4.1-voxelization-and-devoxelization.md)
+  - [4.2 Hashing and Quantization](4.2-hashing-and-quantization.md)
+  - [4.3 Downsampling and Cropping](4.3-downsampling-and-cropping.md)
+- [5 Backbone Networks](5-backbone-networks.md)
+  - [5.1 ResNet Architecture](5.1-resnet-architecture.md)
+  - [5.2 UNet Architecture](5.2-unet-architecture.md)
+- [6 Advanced Topics](6-advanced-topics.md)
+  - [6.1 CUDA Kernel Implementation](6.1-cuda-kernel-implementation.md)
+  - [6.2 Performance Optimization](6.2-performance-optimization.md)
+  - [6.3 Testing and Validation](6.3-testing-and-validation.md)
+- [7 Examples and Tutorials](7-examples-and-tutorials.md)
+  - [7.1 Basic Usage Example](7.1-basic-usage-example.md)
+  - [7.2 Backbone Implementation Example](7.2-backbone-implementation-example.md)

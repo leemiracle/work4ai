@@ -1,0 +1,438 @@
+{
+ "nodes": [
+  {
+   "id": "config:packages/subagent/subagent-spawn-in-process/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/subagent/subagent-spawn-in-process/tsconfig.json",
+   "summary": "包编译配置：extends tsconfig.base.json，rootDir src / outDir lib/types，引用 vendor 与 subagent 工作区依赖。",
+   "tags": [
+    "configuration",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/subagent/tool-subagent/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/subagent/tool-subagent/README.md",
+   "summary": "dsh-tool-subagent 文档：ctx.subagents 缝之上的模型面向委托工具——最小配置、托管委托、子 preset/LLM 选择与工具暴露。",
+   "tags": [
+    "documentation",
+    "tool",
+    "subagent"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/subagent/tool-subagent/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/subagent/tool-subagent/package.json",
+   "summary": "包清单 @deepseek-ai/dsh-tool-subagent：模型面向的 subagent 委托工具（Consumer 角色）。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/subagent/tool-subagent/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/subagent/tool-subagent/tsconfig.json",
+   "summary": "包编译配置：extends tsconfig.base.json，rootDir src / outDir lib/types，引用 vendor 与工作区依赖。",
+   "tags": [
+    "configuration",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/subagent/tool-subagent/src/preset-selection.ts",
+   "type": "file",
+   "name": "preset-selection.ts",
+   "filePath": "packages/subagent/tool-subagent/src/preset-selection.ts",
+   "summary": "一个委托工具的部署持有 preset 选择：默认 preset 与模型可选 allowlist 的校验、模型参数暴露与解析（SubagentPresetSelection）。",
+   "tags": [
+    "preset",
+    "selection",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "document:packages/subagent/tool-subagent-control/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/subagent/tool-subagent-control/README.md",
+   "summary": "dsh-tool-subagent-control 文档：共享的 send_message / interrupt_agent / wait_agent / list_agents 控制与发现工具及最小配置。",
+   "tags": [
+    "documentation",
+    "tool",
+    "control"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/subagent/tool-subagent-control/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/subagent/tool-subagent-control/package.json",
+   "summary": "包清单 @deepseek-ai/dsh-tool-subagent-control：subagent 的共享消息/中断/发现工具。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/subagent/tool-subagent-control/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/subagent/tool-subagent-control/tsconfig.json",
+   "summary": "包编译配置：extends tsconfig.base.json，rootDir src / outDir lib/types，引用 vendor 与工作区依赖。",
+   "tags": [
+    "configuration",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/subagent/tool-subagent-control/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/subagent/tool-subagent-control/src/index.ts",
+   "summary": "共享 subagent 控制与发现工具插件：注册 send_message/list_agents/wait_agent（可关 interrupt_agent），自身不做生命周期路由——驻留、冷恢复与中断授权归 subagent 服务；并注入 subagent:identity 系统提示上下文（根/子身份与协作树说明）。",
+   "tags": [
+    "tool",
+    "control",
+    "system-prompt",
+    "plugin"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/subagent/tool-subagent-control/src/list-agents.ts",
+   "type": "file",
+   "name": "list-agents.ts",
+   "filePath": "packages/subagent/tool-subagent-control/src/list-agents.ts",
+   "summary": "list_agents 工具：发现调用者的整棵 subagent 树；turn 活动不暴露子是否驻留，one-shot 子不可被 send_message 续跑故不出现在模型条目里。",
+   "tags": [
+    "tool",
+    "discovery",
+    "projection"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/subagent/tool-subagent-control/src/wait-agent.ts",
+   "type": "file",
+   "name": "wait-agent.ts",
+   "filePath": "packages/subagent/tool-subagent-control/src/wait-agent.ts",
+   "summary": "wait_agent 工具：不消费输入的收件箱等待；每次结算移除全部活动资源（定时器/监听器），插件卸载时以 lifetime abort 取消所有等待。",
+   "tags": [
+    "tool",
+    "waiting",
+    "cleanup"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/subagent/tool-subagent/src/preset-selection.ts:SubagentPresetSelection",
+   "type": "class",
+   "name": "SubagentPresetSelection",
+   "filePath": "packages/subagent/tool-subagent/src/preset-selection.ts",
+   "lineRange": [
+    18,
+    72
+   ],
+   "summary": "校验部署配置并把模型输入解析到 allowlist：configured/choices/description/assertProvider/resolve。",
+   "tags": [
+    "preset",
+    "validation",
+    "allowlist"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/tool-subagent-control/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/subagent/tool-subagent-control/src/index.ts",
+   "lineRange": [
+    41,
+    163
+   ],
+   "summary": "插件入口：注册控制工具与 subagent:identity 提示上下文。",
+   "tags": [
+    "plugin-entry",
+    "registration"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/tool-subagent-control/src/list-agents.ts:registerListAgents",
+   "type": "function",
+   "name": "registerListAgents",
+   "filePath": "packages/subagent/tool-subagent-control/src/list-agents.ts",
+   "lineRange": [
+    64,
+    146
+   ],
+   "summary": "注册 list_agents 工具：服务行投影为模型条目（root/child/diagnostic），诊断行带 corrupt/unsupported/unavailable 原因。",
+   "tags": [
+    "tool",
+    "registration",
+    "discovery"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/subagent/tool-subagent-control/src/wait-agent.ts:AgentWaitError",
+   "type": "class",
+   "name": "AgentWaitError",
+   "filePath": "packages/subagent/tool-subagent-control/src/wait-agent.ts",
+   "lineRange": [
+    9,
+    14
+   ],
+   "summary": "wait_agent 专用错误类型（WAIT_UNAVAILABLE 等）。",
+   "tags": [
+    "error",
+    "waiting"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/tool-subagent-control/src/wait-agent.ts:registerWaitAgent",
+   "type": "function",
+   "name": "registerWaitAgent",
+   "filePath": "packages/subagent/tool-subagent-control/src/wait-agent.ts",
+   "lineRange": [
+    67,
+    100
+   ],
+   "summary": "注册 wait_agent 工具并持有 lifetime：插件卸载时取消全部在途等待。",
+   "tags": [
+    "tool",
+    "registration",
+    "lifetime"
+   ],
+   "complexity": "moderate"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/subagent/tool-subagent/src/preset-selection.ts",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/index.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/index.ts",
+   "target": "file:packages/core/system-prompt/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/index.ts",
+   "target": "file:packages/subagent/tool-subagent-control/src/list-agents.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/index.ts",
+   "target": "file:packages/subagent/tool-subagent-control/src/wait-agent.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/list-agents.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/list-agents.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/list-agents.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/list-agents.ts",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/wait-agent.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/wait-agent.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/wait-agent.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent/src/preset-selection.ts",
+   "target": "class:packages/subagent/tool-subagent/src/preset-selection.ts:SubagentPresetSelection",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent/src/preset-selection.ts",
+   "target": "class:packages/subagent/tool-subagent/src/preset-selection.ts:SubagentPresetSelection",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/index.ts",
+   "target": "function:packages/subagent/tool-subagent-control/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/index.ts",
+   "target": "function:packages/subagent/tool-subagent-control/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/list-agents.ts",
+   "target": "function:packages/subagent/tool-subagent-control/src/list-agents.ts:registerListAgents",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/list-agents.ts",
+   "target": "function:packages/subagent/tool-subagent-control/src/list-agents.ts:registerListAgents",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/wait-agent.ts",
+   "target": "class:packages/subagent/tool-subagent-control/src/wait-agent.ts:AgentWaitError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/wait-agent.ts",
+   "target": "function:packages/subagent/tool-subagent-control/src/wait-agent.ts:registerWaitAgent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/wait-agent.ts",
+   "target": "function:packages/subagent/tool-subagent-control/src/wait-agent.ts:registerWaitAgent",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/index.ts",
+   "target": "function:packages/subagent/tool-subagent-control/src/list-agents.ts:registerListAgents",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/index.ts",
+   "target": "function:packages/subagent/tool-subagent-control/src/wait-agent.ts:registerWaitAgent",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/tool-subagent-control/src/index.ts",
+   "target": "class:packages/subagent/subagent/src/index.ts:SubagentRuntime",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "document:packages/subagent/tool-subagent/README.md",
+   "target": "file:packages/subagent/tool-subagent/src/preset-selection.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/subagent/tool-subagent-control/README.md",
+   "target": "file:packages/subagent/tool-subagent-control/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  }
+ ]
+}

@@ -1,0 +1,4525 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/deepseek_v32/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/deepseek_v32/__init__.py",
+   "summary": "DeepSeek V3.2 平台入口：DSA 架构（MLA+lightning indexer 选 token），按平台分派 amd/nvidia 实现。",
+   "tags": [
+    "entry-point",
+    "dsa",
+    "platform"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v32/amd/model.py",
+   "type": "file",
+   "name": "model.py",
+   "filePath": "vllm/models/deepseek_v32/amd/model.py",
+   "summary": "V3.2 AMD 模型：DecoderLayer/Model 复用 DeepSeek V2/V3 编排 + DSA backbone。",
+   "tags": [
+    "deepseek-v32",
+    "amd",
+    "model"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "type": "file",
+   "name": "mtp.py",
+   "filePath": "vllm/models/deepseek_v32/amd/mtp.py",
+   "summary": "V3.2 MTP draft（AMD）：与 NVIDIA 版同构，fused_eh_norm 融合。",
+   "tags": [
+    "mtp",
+    "amd",
+    "spec-decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "type": "file",
+   "name": "rocm.py",
+   "filePath": "vllm/models/deepseek_v32/amd/rocm.py",
+   "summary": "V3.2 ROCm attention 特化：AITER indexer/cache、ROCMAiterMLASparseBackend 与 fused_norm_rope/fused_q。",
+   "tags": [
+    "rocm",
+    "mla",
+    "indexer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v32/attention.py",
+   "type": "file",
+   "name": "attention.py",
+   "filePath": "vllm/models/deepseek_v32/attention.py",
+   "summary": "V3.2 attention 公共层：DeepseekV32Indexer（lightning indexer）与 DeepseekV32Attention（MLA+indexer 协调）。",
+   "tags": [
+    "dsa",
+    "indexer",
+    "mla"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "type": "file",
+   "name": "kernels.py",
+   "filePath": "vllm/models/deepseek_v32/common/kernels.py",
+   "summary": "V3.2 公共 Triton kernel（1191 行）：fused_norm_rope（norm+RoPE+FP8 量化+缓存写）、fused_q（MQA query+indexer query 融合）与 fused_eh_norm（MTP 输入融合）。",
+   "tags": [
+    "triton",
+    "fused",
+    "fp8"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "type": "file",
+   "name": "glm52_low_latency_gemm.py",
+   "filePath": "vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "summary": "GLM-5.2 decode GEMM 选择（SM103/107）：按 (N,K,M) 实测表分派 skinny GEMM，enable/build/run 三段 plan。",
+   "tags": [
+    "low-latency",
+    "gemm",
+    "shape-dispatch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "type": "file",
+   "name": "model.py",
+   "filePath": "vllm/models/deepseek_v32/nvidia/model.py",
+   "summary": "V3.2 NVIDIA 模型：DSA causal LM（V2/V3 编排+DSA backbone），fused_embed_norm 与 GLM52 低延迟 GEMM 集成。",
+   "tags": [
+    "deepseek-v32",
+    "nvidia",
+    "model"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "type": "file",
+   "name": "mtp.py",
+   "filePath": "vllm/models/deepseek_v32/nvidia/mtp.py",
+   "summary": "V3.2 MTP draft（NVIDIA）：fused_embed_eh_norm+GLM52 plan 集成。",
+   "tags": [
+    "mtp",
+    "nvidia",
+    "spec-decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/dots3_note/common/processor.py",
+   "type": "file",
+   "name": "processor.py",
+   "filePath": "vllm/models/dots3_note/common/processor.py",
+   "summary": "Dots3Note 多模态预处理：CPU 图像处理（对齐原生 Cybertron ViT）+HF 风格 processor+dummy 输入。",
+   "tags": [
+    "multimodal",
+    "processor",
+    "dots"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "type": "file",
+   "name": "attention.py",
+   "filePath": "vllm/models/dots3_note/nvidia/attention.py",
+   "summary": "Dots3 NOTE 滑窗 MLA attention 后端族（Hopper）：prefill/mixed 走 FA3 varlen MHA，decode 走 MQA（TritonMLA 特化）与 padded-sparse DSA。",
+   "tags": [
+    "dots",
+    "mla",
+    "swa",
+    "backends"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/dots3_note/nvidia/audio.py",
+   "type": "file",
+   "name": "audio.py",
+   "filePath": "vllm/models/dots3_note/nvidia/audio.py",
+   "summary": "Dots3Note 音频模型：DotsEncoderWithMask/AudioAdapter 组合。",
+   "tags": [
+    "dots",
+    "audio"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "type": "file",
+   "name": "audio_encoder.py",
+   "filePath": "vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "summary": "Dots 路径 speech encoder（单 GPU 推理，移植自 cybertron_alm 的 Whisper encoder）。",
+   "tags": [
+    "dots",
+    "speech",
+    "whisper"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/inkling/amd/logits_processor.py",
+   "type": "file",
+   "name": "logits_processor.py",
+   "filePath": "vllm/models/inkling/amd/logits_processor.py",
+   "summary": "Inkling logits 处理器（muP+LoRA 感知）：按 muP 宽度乘子除 logits（AMD 版）。",
+   "tags": [
+    "inkling",
+    "mup",
+    "logits"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/inkling/amd/mtp.py",
+   "type": "file",
+   "name": "mtp.py",
+   "filePath": "vllm/models/inkling/amd/mtp.py",
+   "summary": "Inkling MTP draft（AMD）：每深度 hidden_norm/fuse(2H→H)/block 镜像参考实现。",
+   "tags": [
+    "inkling",
+    "mtp",
+    "amd"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "type": "file",
+   "name": "fa4_rel_attention.py",
+   "filePath": "vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "summary": "ROCm paged attention+Inkling 查询相关相对偏置：Triton 实现（FA4 score-mod 语义的 ROCm 替代）+gluon gfx950 双路。",
+   "tags": [
+    "inkling",
+    "roc",
+    "rel-attention"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/inkling/common/mm_preprocess.py",
+   "type": "file",
+   "name": "mm_preprocess.py",
+   "filePath": "vllm/models/inkling/common/mm_preprocess.py",
+   "summary": "Inkling 多模态预处理：图像 LANCZOS 重缩放与 audio/vision 使能判定。",
+   "tags": [
+    "inkling",
+    "multimodal"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/inkling/configs.py",
+   "type": "file",
+   "name": "configs.py",
+   "filePath": "vllm/models/inkling/configs.py",
+   "summary": "Inkling 配置族：文本骨干/Audio/Vision/MM 四 config 与 TML conv cache 参数（shape/dtype）。",
+   "tags": [
+    "inkling",
+    "configs"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/inkling/nvidia/attention.py",
+   "type": "file",
+   "name": "attention.py",
+   "filePath": "vllm/models/inkling/nvidia/attention.py",
+   "summary": "Inkling attention（NVIDIA）：FA4 相对偏置（RelLogitsProj 逐头相对分支→逐距离 logits）+short conv/SWA。",
+   "tags": [
+    "inkling",
+    "attention",
+    "fa4"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/inkling/nvidia/logits_processor.py",
+   "type": "file",
+   "name": "logits_processor.py",
+   "filePath": "vllm/models/inkling/nvidia/logits_processor.py",
+   "summary": "Inkling logits 处理器（NVIDIA 版，muP+LoRA 感知）。",
+   "tags": [
+    "inkling",
+    "mup",
+    "logits"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/inkling/nvidia/mtp.py",
+   "type": "file",
+   "name": "mtp.py",
+   "filePath": "vllm/models/inkling/nvidia/mtp.py",
+   "summary": "Inkling MTP draft（NVIDIA）：与 AMD 版镜像。",
+   "tags": [
+    "inkling",
+    "mtp",
+    "nvidia"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/inkling/nvidia/ops/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/inkling/nvidia/ops/__init__.py",
+   "summary": "Inkling kernels barrel：rmsnorm/sconv 即时导入，SwiGLU 与 FA4 相对注意力懒加载。",
+   "tags": [
+    "barrel",
+    "lazy-loading"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "type": "file",
+   "name": "fa4_rel_attention.py",
+   "filePath": "vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "summary": "FA4 相对注意力 kernel 封装：score-mod（Inkling 相对偏置）+split 上限与 JIT warmup 注册。",
+   "tags": [
+    "inkling",
+    "fa4",
+    "rel-attention"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v32/amd/model.py:DeepseekV32DecoderLayer",
+   "type": "class",
+   "name": "DeepseekV32DecoderLayer",
+   "filePath": "vllm/models/deepseek_v32/amd/model.py",
+   "summary": "V3.2 AMD 解码层。",
+   "tags": [
+    "decoder-layer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    46,
+    130
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v32/amd/model.py:DeepseekV32Model",
+   "type": "class",
+   "name": "DeepseekV32Model",
+   "filePath": "vllm/models/deepseek_v32/amd/model.py",
+   "summary": "V3.2 AMD 骨干。",
+   "tags": [
+    "backbone"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    133,
+    386
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v32/amd/model.py:DeepseekV32ForCausalLM",
+   "type": "class",
+   "name": "DeepseekV32ForCausalLM",
+   "filePath": "vllm/models/deepseek_v32/amd/model.py",
+   "summary": "V3.2 AMD 入口（继承 V2 编排）。",
+   "tags": [
+    "causal-lm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    389,
+    404
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v32/amd/mtp.py:DeepseekV32MultiTokenPredictorLayer",
+   "type": "class",
+   "name": "DeepseekV32MultiTokenPredictorLayer",
+   "filePath": "vllm/models/deepseek_v32/amd/mtp.py",
+   "summary": "V3.2 MTP 单层（AMD）。",
+   "tags": [
+    "mtp",
+    "layer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    48,
+    100
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v32/amd/mtp.py:DeepseekV32MultiTokenPredictor",
+   "type": "class",
+   "name": "DeepseekV32MultiTokenPredictor",
+   "filePath": "vllm/models/deepseek_v32/amd/mtp.py",
+   "summary": "V3.2 MTP 层栈。",
+   "tags": [
+    "mtp"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    103,
+    171
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v32/amd/mtp.py:DeepseekV32MTP",
+   "type": "class",
+   "name": "DeepseekV32MTP",
+   "filePath": "vllm/models/deepseek_v32/amd/mtp.py",
+   "summary": "V3.2 MTP draft（8 个方法，SupportsPP）。",
+   "tags": [
+    "mtp",
+    "draft"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    174,
+    430
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v32/amd/rocm.py:DeepseekV32ROCmIndexerCache",
+   "type": "class",
+   "name": "DeepseekV32ROCmIndexerCache",
+   "filePath": "vllm/models/deepseek_v32/amd/rocm.py",
+   "summary": "ROCm indexer cache 特化。",
+   "tags": [
+    "indexer",
+    "cache"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    24,
+    32
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v32/amd/rocm.py:DeepseekV32ROCmIndexer",
+   "type": "class",
+   "name": "DeepseekV32ROCmIndexer",
+   "filePath": "vllm/models/deepseek_v32/amd/rocm.py",
+   "summary": "ROCm indexer 特化。",
+   "tags": [
+    "indexer"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    35,
+    36
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v32/amd/rocm.py:DeepseekV32MLAAttention",
+   "type": "class",
+   "name": "DeepseekV32MLAAttention",
+   "filePath": "vllm/models/deepseek_v32/amd/rocm.py",
+   "summary": "ROCm V3.2 attention（7 个方法：AITER indexer+MLA sparse backend）。",
+   "tags": [
+    "rocm",
+    "attention"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    39,
+    315
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v32/attention.py:DeepseekV32Indexer",
+   "type": "class",
+   "name": "DeepseekV32Indexer",
+   "filePath": "vllm/models/deepseek_v32/attention.py",
+   "summary": "lightning indexer（token 选择器）模块。",
+   "tags": [
+    "indexer",
+    "dsa"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    50,
+    118
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v32/attention.py:DeepseekV32Attention",
+   "type": "class",
+   "name": "DeepseekV32Attention",
+   "filePath": "vllm/models/deepseek_v32/attention.py",
+   "summary": "V3.2 attention（4 个方法：MLA+indexer 协调）。",
+   "tags": [
+    "attention",
+    "dsa"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    121,
+    656
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v32/common/kernels.py:_fused_norm_rope_kernel",
+   "type": "function",
+   "name": "_fused_norm_rope_kernel",
+   "filePath": "vllm/models/deepseek_v32/common/kernels.py",
+   "summary": "norm+RoPE+FP8 量化+缓存写主 kernel（400 行）。",
+   "tags": [
+    "triton",
+    "fused"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    123,
+    515
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v32/common/kernels.py:fused_norm_rope",
+   "type": "function",
+   "name": "fused_norm_rope",
+   "filePath": "vllm/models/deepseek_v32/common/kernels.py",
+   "summary": "融合 norm+RoPE 入口（FP8 UE8M0 路线）。",
+   "tags": [
+    "fused",
+    "rope"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    518,
+    744
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v32/common/kernels.py:_fused_q_kernel",
+   "type": "function",
+   "name": "_fused_q_kernel",
+   "filePath": "vllm/models/deepseek_v32/common/kernels.py",
+   "summary": "MQA query+indexer query 融合 kernel。",
+   "tags": [
+    "triton",
+    "fused"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    748,
+    966
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v32/common/kernels.py:fused_q",
+   "type": "function",
+   "name": "fused_q",
+   "filePath": "vllm/models/deepseek_v32/common/kernels.py",
+   "summary": "融合 query 准备（返回 index_q_fp8/weights 等）。",
+   "tags": [
+    "fused",
+    "query"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    969,
+    1128
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v32/common/kernels.py:_fused_eh_norm_kernel",
+   "type": "function",
+   "name": "_fused_eh_norm_kernel",
+   "filePath": "vllm/models/deepseek_v32/common/kernels.py",
+   "summary": "MTP 输入融合 kernel（位置 0 零嵌入+双 RMSNorm）。",
+   "tags": [
+    "triton",
+    "mtp"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1132,
+    1163
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v32/common/kernels.py:fused_eh_norm",
+   "type": "function",
+   "name": "fused_eh_norm",
+   "filePath": "vllm/models/deepseek_v32/common/kernels.py",
+   "summary": "cat([enorm(masked embeds),hnorm(prev_hidden)])→[N,2H]。",
+   "tags": [
+    "mtp",
+    "norm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1166,
+    1191
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py:GLM52ProjectionSpec",
+   "type": "class",
+   "name": "GLM52ProjectionSpec",
+   "filePath": "vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "summary": "GLM52 投影 (N,K) 规格。",
+   "tags": [
+    "spec"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    37,
+    50
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py:_low_latency_table",
+   "type": "function",
+   "name": "_low_latency_table",
+   "filePath": "vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "summary": "当前设备实测分派表（不支持则 None）。",
+   "tags": [
+    "dispatch",
+    "table"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    211,
+    217
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py:run_glm52_plan",
+   "type": "function",
+   "name": "run_glm52_plan",
+   "filePath": "vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "summary": "按 plan 跑 skinny GEMM。",
+   "tags": [
+    "execute"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    238,
+    263
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py:build_glm52_plan",
+   "type": "function",
+   "name": "build_glm52_plan",
+   "filePath": "vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "summary": "为 walk 到不了的权重（普通 nn.Linear）建 plan。",
+   "tags": [
+    "plan"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    271,
+    286
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py:GLM52LowLatencyLinearMethod",
+   "type": "class",
+   "name": "GLM52LowLatencyLinearMethod",
+   "filePath": "vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "summary": "GLM52 低延迟 linear 方法。",
+   "tags": [
+    "linear-method"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    289,
+    304
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py:enable_glm52_low_latency_gemm",
+   "type": "function",
+   "name": "enable_glm52_low_latency_gemm",
+   "filePath": "vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "summary": "安装 GLM52 形状分派低延迟 GEMM。",
+   "tags": [
+    "install"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    307,
+    333
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v32/nvidia/model.py:DeepseekV32DecoderLayer",
+   "type": "class",
+   "name": "DeepseekV32DecoderLayer",
+   "filePath": "vllm/models/deepseek_v32/nvidia/model.py",
+   "summary": "V3.2 NVIDIA 解码层。",
+   "tags": [
+    "decoder-layer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    57,
+    166
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v32/nvidia/model.py:DeepseekV32Model",
+   "type": "class",
+   "name": "DeepseekV32Model",
+   "filePath": "vllm/models/deepseek_v32/nvidia/model.py",
+   "summary": "V3.2 NVIDIA 骨干（4 个方法）。",
+   "tags": [
+    "backbone"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    169,
+    429
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v32/nvidia/model.py:DeepseekV32ForCausalLM",
+   "type": "class",
+   "name": "DeepseekV32ForCausalLM",
+   "filePath": "vllm/models/deepseek_v32/nvidia/model.py",
+   "summary": "DSA causal LM：V2/V3 编排+DSA backbone（服务 V3.2 及同架构模型）。",
+   "tags": [
+    "causal-lm",
+    "dsa"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    432,
+    459
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v32/nvidia/mtp.py:DeepseekV32MultiTokenPredictorLayer",
+   "type": "class",
+   "name": "DeepseekV32MultiTokenPredictorLayer",
+   "filePath": "vllm/models/deepseek_v32/nvidia/mtp.py",
+   "summary": "V3.2 MTP 单层（NVIDIA）。",
+   "tags": [
+    "mtp",
+    "layer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    64,
+    168
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v32/nvidia/mtp.py:DeepseekV32MultiTokenPredictor",
+   "type": "class",
+   "name": "DeepseekV32MultiTokenPredictor",
+   "filePath": "vllm/models/deepseek_v32/nvidia/mtp.py",
+   "summary": "V3.2 MTP 层栈（NVIDIA）。",
+   "tags": [
+    "mtp"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    171,
+    271
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v32/nvidia/mtp.py:DeepseekV32MTP",
+   "type": "class",
+   "name": "DeepseekV32MTP",
+   "filePath": "vllm/models/deepseek_v32/nvidia/mtp.py",
+   "summary": "V3.2 MTP draft（NVIDIA，9 个方法）。",
+   "tags": [
+    "mtp",
+    "draft"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    274,
+    499
+   ]
+  },
+  {
+   "id": "function:vllm/models/dots3_note/common/processor.py:load_note_config_section",
+   "type": "function",
+   "name": "load_note_config_section",
+   "filePath": "vllm/models/dots3_note/common/processor.py",
+   "summary": "读 note 配置节。",
+   "tags": [
+    "config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    51,
+    58
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/common/processor.py:Dots3NoteImageProcessor",
+   "type": "class",
+   "name": "Dots3NoteImageProcessor",
+   "filePath": "vllm/models/dots3_note/common/processor.py",
+   "summary": "对齐原生 Cybertron ViT 的 CPU 图像处理（7 个方法）。",
+   "tags": [
+    "image-processor"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    61,
+    215
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/common/processor.py:Dots3NoteProcessor",
+   "type": "class",
+   "name": "Dots3NoteProcessor",
+   "filePath": "vllm/models/dots3_note/common/processor.py",
+   "summary": "vLLM 多模态前端用的小型 HF 风格 processor。",
+   "tags": [
+    "processor"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    218,
+    455
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/common/processor.py:Dots3NoteProcessingInfo",
+   "type": "class",
+   "name": "Dots3NoteProcessingInfo",
+   "filePath": "vllm/models/dots3_note/common/processor.py",
+   "summary": "Dots3Note 处理信息（9 个方法）。",
+   "tags": [
+    "processing-info"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    458,
+    569
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/common/processor.py:Dots3NoteDummyInputsBuilder",
+   "type": "class",
+   "name": "Dots3NoteDummyInputsBuilder",
+   "filePath": "vllm/models/dots3_note/common/processor.py",
+   "summary": "dummy 输入构建。",
+   "tags": [
+    "dummy-inputs"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    572,
+    627
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/common/processor.py:Dots3NoteMultiModalProcessor",
+   "type": "class",
+   "name": "Dots3NoteMultiModalProcessor",
+   "filePath": "vllm/models/dots3_note/common/processor.py",
+   "summary": "多模态 processor（4 个方法）。",
+   "tags": [
+    "processor"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    630,
+    801
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteDecodeMetadata",
+   "type": "class",
+   "name": "Dots3NoteDecodeMetadata",
+   "filePath": "vllm/models/dots3_note/nvidia/attention.py",
+   "summary": "decode metadata（MLACommonDecodeMetadata 子类）。",
+   "tags": [
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    175,
+    176
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteFlashAttnPrefillBackend",
+   "type": "class",
+   "name": "Dots3NoteFlashAttnPrefillBackend",
+   "filePath": "vllm/models/dots3_note/nvidia/attention.py",
+   "summary": "NOTE SWA MLA 维度的 FA3 varlen prefill。",
+   "tags": [
+    "backend",
+    "prefill"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    270,
+    316
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteMLAMetadataBuilder",
+   "type": "class",
+   "name": "Dots3NoteMLAMetadataBuilder",
+   "filePath": "vllm/models/dots3_note/nvidia/attention.py",
+   "summary": "decode 保持 MQA、prefill/mixed 走 FA3 的 builder。",
+   "tags": [
+    "metadata",
+    "builder"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    319,
+    430
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteTritonMLABackend",
+   "type": "class",
+   "name": "Dots3NoteTritonMLABackend",
+   "filePath": "vllm/models/dots3_note/nvidia/attention.py",
+   "summary": "内部 NOTE SWA 特化（非用户可选后端）。",
+   "tags": [
+    "backend",
+    "triton"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    433,
+    450
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteTritonMLAImpl",
+   "type": "class",
+   "name": "Dots3NoteTritonMLAImpl",
+   "filePath": "vllm/models/dots3_note/nvidia/attention.py",
+   "summary": "Triton MLA impl（NOTE 特化，4 个方法）。",
+   "tags": [
+    "impl",
+    "triton"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    453,
+    689
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NotePaddedSparseBackend",
+   "type": "class",
+   "name": "Dots3NotePaddedSparseBackend",
+   "filePath": "vllm/models/dots3_note/nvidia/attention.py",
+   "summary": "cache 行 pad 到 SWA latent 宽度的 NOTE DSA 后端。",
+   "tags": [
+    "backend",
+    "dsa"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    692,
+    708
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NotePaddedSparseImpl",
+   "type": "class",
+   "name": "Dots3NotePaddedSparseImpl",
+   "filePath": "vllm/models/dots3_note/nvidia/attention.py",
+   "summary": "从均匀 pad 的 cache 行直读 top-k KV（4 个方法）。",
+   "tags": [
+    "impl",
+    "dsa"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    711,
+    831
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/nvidia/audio.py:Dots3NoteAudioConfig",
+   "type": "class",
+   "name": "Dots3NoteAudioConfig",
+   "filePath": "vllm/models/dots3_note/nvidia/audio.py",
+   "summary": "音频配置。",
+   "tags": [
+    "config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    23,
+    78
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/nvidia/audio.py:DotsEncoderWithMask",
+   "type": "class",
+   "name": "DotsEncoderWithMask",
+   "filePath": "vllm/models/dots3_note/nvidia/audio.py",
+   "summary": "带 mask 的 Dots 编码器。",
+   "tags": [
+    "encoder"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    125,
+    233
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/nvidia/audio.py:AudioAdapter",
+   "type": "class",
+   "name": "AudioAdapter",
+   "filePath": "vllm/models/dots3_note/nvidia/audio.py",
+   "summary": "音频适配层。",
+   "tags": [
+    "adapter"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    236,
+    247
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/nvidia/audio.py:Dots3NoteAudioModel",
+   "type": "class",
+   "name": "Dots3NoteAudioModel",
+   "filePath": "vllm/models/dots3_note/nvidia/audio.py",
+   "summary": "音频模型组合。",
+   "tags": [
+    "audio-model"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    250,
+    301
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:RMSNorm",
+   "type": "class",
+   "name": "RMSNorm",
+   "filePath": "vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "summary": "RMSNorm（移植）。",
+   "tags": [
+    "rmsnorm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    30,
+    39
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:RotaryEmbedding",
+   "type": "class",
+   "name": "RotaryEmbedding",
+   "filePath": "vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "summary": "RoPE（移植）。",
+   "tags": [
+    "rope"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    47,
+    137
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:WhisperPositionalEmbedding",
+   "type": "class",
+   "name": "WhisperPositionalEmbedding",
+   "filePath": "vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "summary": "Whisper 位置嵌入。",
+   "tags": [
+    "embedding"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    184,
+    193
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:WhisperAttention",
+   "type": "class",
+   "name": "WhisperAttention",
+   "filePath": "vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "summary": "标准多头注意力（移植）。",
+   "tags": [
+    "attention"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    196,
+    306
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:WhisperEncoderLayer",
+   "type": "class",
+   "name": "WhisperEncoderLayer",
+   "filePath": "vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "summary": "Whisper 编码层。",
+   "tags": [
+    "encoder-layer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    310,
+    415
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:DotsSpeechPreTrainedModel",
+   "type": "class",
+   "name": "DotsSpeechPreTrainedModel",
+   "filePath": "vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "summary": "预训练基类（移植）。",
+   "tags": [
+    "base"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    418,
+    434
+   ]
+  },
+  {
+   "id": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:DotsSpeechEncoder",
+   "type": "class",
+   "name": "DotsSpeechEncoder",
+   "filePath": "vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "summary": "speech encoder（9 个方法，Whisper 式自注意力层栈）。",
+   "tags": [
+    "speech",
+    "encoder"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    437,
+    745
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/amd/logits_processor.py:InklingLogitsProcessor",
+   "type": "class",
+   "name": "InklingLogitsProcessor",
+   "filePath": "vllm/models/inkling/amd/logits_processor.py",
+   "summary": "应用 muP logits 宽度乘子的处理器（AMD，4 个方法）。",
+   "tags": [
+    "mup",
+    "logits"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    29,
+    137
+   ]
+  },
+  {
+   "id": "function:vllm/models/inkling/amd/mtp.py:_select_mtp_depth_count",
+   "type": "function",
+   "name": "_select_mtp_depth_count",
+   "filePath": "vllm/models/inkling/amd/mtp.py",
+   "summary": "MTP 深度数选择。",
+   "tags": [
+    "mtp"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    66,
+    73
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/amd/mtp.py:InklingMTPDepthLayer",
+   "type": "class",
+   "name": "InklingMTPDepthLayer",
+   "filePath": "vllm/models/inkling/amd/mtp.py",
+   "summary": "单 MTP 深度：双输入 norm+fuse(2H→H)+block。",
+   "tags": [
+    "mtp",
+    "layer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    76,
+    115
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/amd/mtp.py:InklingMultiTokenPredictor",
+   "type": "class",
+   "name": "InklingMultiTokenPredictor",
+   "filePath": "vllm/models/inkling/amd/mtp.py",
+   "summary": "MTP 层栈（4 个方法）。",
+   "tags": [
+    "mtp"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    118,
+    258
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/amd/mtp.py:InklingMTP",
+   "type": "class",
+   "name": "InklingMTP",
+   "filePath": "vllm/models/inkling/amd/mtp.py",
+   "summary": "Inkling MTP draft（6 个方法，多模态嵌入）。",
+   "tags": [
+    "mtp",
+    "draft"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    261,
+    358
+   ]
+  },
+  {
+   "id": "function:vllm/models/inkling/amd/mtp.py:_load_inkling_mtp_weights",
+   "type": "function",
+   "name": "_load_inkling_mtp_weights",
+   "filePath": "vllm/models/inkling/amd/mtp.py",
+   "summary": "把 model.mtp.* 权重装入 MTP 模块（深度键解析）。",
+   "tags": [
+    "weights",
+    "loader"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    361,
+    461
+   ]
+  },
+  {
+   "id": "function:vllm/models/inkling/amd/ops/fa4_rel_attention.py:use_gfx950_gluon_decode",
+   "type": "function",
+   "name": "use_gfx950_gluon_decode",
+   "filePath": "vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "summary": "支持处用 vendored TokenSpeed CDNA4 decode kernel。",
+   "tags": [
+    "gluon",
+    "decode"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    31,
+    41
+   ]
+  },
+  {
+   "id": "function:vllm/models/inkling/amd/ops/fa4_rel_attention.py:use_gfx950_gluon_extend",
+   "type": "function",
+   "name": "use_gfx950_gluon_extend",
+   "filePath": "vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "summary": "仅长 full-attention extend 赢时用 Gluon。",
+   "tags": [
+    "gluon",
+    "extend"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    44,
+    61
+   ]
+  },
+  {
+   "id": "function:vllm/models/inkling/amd/ops/fa4_rel_attention.py:inkling_fa4_num_splits",
+   "type": "function",
+   "name": "inkling_fa4_num_splits",
+   "filePath": "vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "summary": "保持 NVIDIA 版 split 启发式为 API 兼容元数据。",
+   "tags": [
+    "splits"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    64,
+    99
+   ]
+  },
+  {
+   "id": "function:vllm/models/inkling/amd/ops/fa4_rel_attention.py:_inkling_rel_attention_kernel",
+   "type": "function",
+   "name": "_inkling_rel_attention_kernel",
+   "filePath": "vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "summary": "相对偏置 paged attention Triton kernel。",
+   "tags": [
+    "triton",
+    "rel-attention"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    112,
+    288
+   ]
+  },
+  {
+   "id": "function:vllm/models/inkling/amd/ops/fa4_rel_attention.py:inkling_fa4_rel_attention",
+   "type": "function",
+   "name": "inkling_fa4_rel_attention",
+   "filePath": "vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "summary": "带 Inkling 相对 score 修改的 paged varlen attention。",
+   "tags": [
+    "rel-attention"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    292,
+    446
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/common/mm_preprocess.py:InklingMultiModalDataParser",
+   "type": "class",
+   "name": "InklingMultiModalDataParser",
+   "filePath": "vllm/models/inkling/common/mm_preprocess.py",
+   "summary": "Inkling 数据解析器。",
+   "tags": [
+    "parser"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    54,
+    61
+   ]
+  },
+  {
+   "id": "function:vllm/models/inkling/common/mm_preprocess.py:_rescale_image",
+   "type": "function",
+   "name": "_rescale_image",
+   "filePath": "vllm/models/inkling/common/mm_preprocess.py",
+   "summary": "PIL LANCZOS 按比例缩长边（对齐参考实现）。",
+   "tags": [
+    "image",
+    "resize"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    64,
+    79
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/common/mm_preprocess.py:InklingProcessingInfo",
+   "type": "class",
+   "name": "InklingProcessingInfo",
+   "filePath": "vllm/models/inkling/common/mm_preprocess.py",
+   "summary": "Inkling 处理信息（5 个方法）。",
+   "tags": [
+    "processing-info"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    90,
+    123
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/common/mm_preprocess.py:InklingDummyInputsBuilder",
+   "type": "class",
+   "name": "InklingDummyInputsBuilder",
+   "filePath": "vllm/models/inkling/common/mm_preprocess.py",
+   "summary": "dummy 输入构建。",
+   "tags": [
+    "dummy-inputs"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    126,
+    170
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/common/mm_preprocess.py:InklingMultiModalProcessor",
+   "type": "class",
+   "name": "InklingMultiModalProcessor",
+   "filePath": "vllm/models/inkling/common/mm_preprocess.py",
+   "summary": "多模态 processor（4 个方法）。",
+   "tags": [
+    "processor"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    173,
+    351
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/configs.py:InklingModelConfig",
+   "type": "class",
+   "name": "InklingModelConfig",
+   "filePath": "vllm/models/inkling/configs.py",
+   "summary": "文本骨干 config（6 个方法）。",
+   "tags": [
+    "config"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    14,
+    215
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/configs.py:InklingAudioConfig",
+   "type": "class",
+   "name": "InklingAudioConfig",
+   "filePath": "vllm/models/inkling/configs.py",
+   "summary": "音频 config。",
+   "tags": [
+    "config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    218,
+    255
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/configs.py:InklingVisionConfig",
+   "type": "class",
+   "name": "InklingVisionConfig",
+   "filePath": "vllm/models/inkling/configs.py",
+   "summary": "视觉 config。",
+   "tags": [
+    "config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    258,
+    295
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/configs.py:InklingMMConfig",
+   "type": "class",
+   "name": "InklingMMConfig",
+   "filePath": "vllm/models/inkling/configs.py",
+   "summary": "MM 组合 config（13 个方法）。",
+   "tags": [
+    "config",
+    "multimodal"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    298,
+    378
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/configs.py:TMLConvStateShape",
+   "type": "class",
+   "name": "TMLConvStateShape",
+   "filePath": "vllm/models/inkling/configs.py",
+   "summary": "TML conv 态形状描述。",
+   "tags": [
+    "tml",
+    "conv"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    382,
+    384
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/configs.py:TMLStateDType",
+   "type": "class",
+   "name": "TMLStateDType",
+   "filePath": "vllm/models/inkling/configs.py",
+   "summary": "TML 态 dtype。",
+   "tags": [
+    "tml"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    388,
+    390
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/configs.py:TMLConvCacheParams",
+   "type": "class",
+   "name": "TMLConvCacheParams",
+   "filePath": "vllm/models/inkling/configs.py",
+   "summary": "TML conv cache 参数。",
+   "tags": [
+    "tml",
+    "cache"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    394,
+    397
+   ]
+  },
+  {
+   "id": "function:vllm/models/inkling/nvidia/attention.py:compute_log_scaling_tau",
+   "type": "function",
+   "name": "compute_log_scaling_tau",
+   "filePath": "vllm/models/inkling/nvidia/attention.py",
+   "summary": "log scaling τ 计算。",
+   "tags": [
+    "scaling"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    47,
+    51
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/nvidia/attention.py:RelLogitsProj",
+   "type": "class",
+   "name": "RelLogitsProj",
+   "filePath": "vllm/models/inkling/nvidia/attention.py",
+   "summary": "逐头相对分支 r 投影到逐距离 logits。",
+   "tags": [
+    "rel-attention"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    54,
+    65
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/nvidia/attention.py:InklingAttention",
+   "type": "class",
+   "name": "InklingAttention",
+   "filePath": "vllm/models/inkling/nvidia/attention.py",
+   "summary": "Inkling attention 层（6 个方法：FA4 相对偏置+short conv/SWA）。",
+   "tags": [
+    "attention"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    68,
+    310
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/nvidia/logits_processor.py:InklingLogitsProcessor",
+   "type": "class",
+   "name": "InklingLogitsProcessor",
+   "filePath": "vllm/models/inkling/nvidia/logits_processor.py",
+   "summary": "muP 宽度乘子 logits 处理器（NVIDIA）。",
+   "tags": [
+    "mup",
+    "logits"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    29,
+    137
+   ]
+  },
+  {
+   "id": "function:vllm/models/inkling/nvidia/mtp.py:_select_mtp_depth_count",
+   "type": "function",
+   "name": "_select_mtp_depth_count",
+   "filePath": "vllm/models/inkling/nvidia/mtp.py",
+   "summary": "MTP 深度数选择（NVIDIA 版）。",
+   "tags": [
+    "mtp"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    66,
+    73
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/nvidia/mtp.py:InklingMTPDepthLayer",
+   "type": "class",
+   "name": "InklingMTPDepthLayer",
+   "filePath": "vllm/models/inkling/nvidia/mtp.py",
+   "summary": "单 MTP 深度（NVIDIA 版）。",
+   "tags": [
+    "mtp",
+    "layer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    76,
+    115
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/nvidia/mtp.py:InklingMultiTokenPredictor",
+   "type": "class",
+   "name": "InklingMultiTokenPredictor",
+   "filePath": "vllm/models/inkling/nvidia/mtp.py",
+   "summary": "MTP 层栈（NVIDIA）。",
+   "tags": [
+    "mtp"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    118,
+    258
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/nvidia/mtp.py:InklingMTP",
+   "type": "class",
+   "name": "InklingMTP",
+   "filePath": "vllm/models/inkling/nvidia/mtp.py",
+   "summary": "Inkling MTP draft（NVIDIA）。",
+   "tags": [
+    "mtp",
+    "draft"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    261,
+    358
+   ]
+  },
+  {
+   "id": "function:vllm/models/inkling/nvidia/mtp.py:_load_inkling_mtp_weights",
+   "type": "function",
+   "name": "_load_inkling_mtp_weights",
+   "filePath": "vllm/models/inkling/nvidia/mtp.py",
+   "summary": "MTP 权重装载（NVIDIA 版）。",
+   "tags": [
+    "weights"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    361,
+    461
+   ]
+  },
+  {
+   "id": "function:vllm/models/inkling/nvidia/ops/__init__.py:__getattr__",
+   "type": "function",
+   "name": "__getattr__",
+   "filePath": "vllm/models/inkling/nvidia/ops/__init__.py",
+   "summary": "懒加载 SwiGLU/FA4 相对注意力包装的模块级钩子。",
+   "tags": [
+    "lazy-loading"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    38,
+    45
+   ]
+  },
+  {
+   "id": "function:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py:bucket_max_seqlen_q",
+   "type": "function",
+   "name": "bucket_max_seqlen_q",
+   "filePath": "vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "summary": "FA4 调度上界取整到 2 的幂。",
+   "tags": [
+    "bucketing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    25,
+    27
+   ]
+  },
+  {
+   "id": "function:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py:_get_score_mod",
+   "type": "function",
+   "name": "_get_score_mod",
+   "filePath": "vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "summary": "返回加 Inkling 相对偏置的 score 修改。",
+   "tags": [
+    "score-mod"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    37,
+    68
+   ]
+  },
+  {
+   "id": "function:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py:inkling_fa4_num_splits",
+   "type": "function",
+   "name": "inkling_fa4_num_splits",
+   "filePath": "vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "summary": "相对注意力的 split-KV 上限。",
+   "tags": [
+    "splits"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    71,
+    109
+   ]
+  },
+  {
+   "id": "class:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py:InklingFA4RelAttentionKernel",
+   "type": "class",
+   "name": "InklingFA4RelAttentionKernel",
+   "filePath": "vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "summary": "FA4 相对注意力 kernel 封装（6 个方法，JIT warmup）。",
+   "tags": [
+    "fa4",
+    "kernel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    117,
+    433
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/model.py",
+   "target": "class:vllm/models/deepseek_v32/amd/model.py:DeepseekV32DecoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/model.py",
+   "target": "class:vllm/models/deepseek_v32/amd/model.py:DeepseekV32DecoderLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/model.py",
+   "target": "class:vllm/models/deepseek_v32/amd/model.py:DeepseekV32Model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/model.py",
+   "target": "class:vllm/models/deepseek_v32/amd/model.py:DeepseekV32Model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/model.py",
+   "target": "class:vllm/models/deepseek_v32/amd/model.py:DeepseekV32ForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/model.py",
+   "target": "class:vllm/models/deepseek_v32/amd/model.py:DeepseekV32ForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "class:vllm/models/deepseek_v32/amd/mtp.py:DeepseekV32MultiTokenPredictorLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "class:vllm/models/deepseek_v32/amd/mtp.py:DeepseekV32MultiTokenPredictorLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "class:vllm/models/deepseek_v32/amd/mtp.py:DeepseekV32MultiTokenPredictor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "class:vllm/models/deepseek_v32/amd/mtp.py:DeepseekV32MultiTokenPredictor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "class:vllm/models/deepseek_v32/amd/mtp.py:DeepseekV32MTP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "class:vllm/models/deepseek_v32/amd/mtp.py:DeepseekV32MTP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "target": "class:vllm/models/deepseek_v32/amd/rocm.py:DeepseekV32ROCmIndexerCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "target": "class:vllm/models/deepseek_v32/amd/rocm.py:DeepseekV32ROCmIndexerCache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "target": "class:vllm/models/deepseek_v32/amd/rocm.py:DeepseekV32ROCmIndexer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "target": "class:vllm/models/deepseek_v32/amd/rocm.py:DeepseekV32ROCmIndexer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "target": "class:vllm/models/deepseek_v32/amd/rocm.py:DeepseekV32MLAAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "target": "class:vllm/models/deepseek_v32/amd/rocm.py:DeepseekV32MLAAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "class:vllm/models/deepseek_v32/attention.py:DeepseekV32Indexer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "class:vllm/models/deepseek_v32/attention.py:DeepseekV32Indexer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "class:vllm/models/deepseek_v32/attention.py:DeepseekV32Attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "class:vllm/models/deepseek_v32/attention.py:DeepseekV32Attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "target": "function:vllm/models/deepseek_v32/common/kernels.py:_fused_norm_rope_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "target": "function:vllm/models/deepseek_v32/common/kernels.py:fused_norm_rope",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "target": "function:vllm/models/deepseek_v32/common/kernels.py:fused_norm_rope",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "target": "function:vllm/models/deepseek_v32/common/kernels.py:_fused_q_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "target": "function:vllm/models/deepseek_v32/common/kernels.py:fused_q",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "target": "function:vllm/models/deepseek_v32/common/kernels.py:fused_q",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "target": "function:vllm/models/deepseek_v32/common/kernels.py:_fused_eh_norm_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "target": "function:vllm/models/deepseek_v32/common/kernels.py:fused_eh_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "target": "function:vllm/models/deepseek_v32/common/kernels.py:fused_eh_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "target": "class:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py:GLM52ProjectionSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "target": "class:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py:GLM52ProjectionSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "target": "function:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py:_low_latency_table",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "target": "function:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py:run_glm52_plan",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "target": "function:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py:run_glm52_plan",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "target": "function:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py:build_glm52_plan",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "target": "function:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py:build_glm52_plan",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "target": "class:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py:GLM52LowLatencyLinearMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "target": "class:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py:GLM52LowLatencyLinearMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "target": "function:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py:enable_glm52_low_latency_gemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "target": "function:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py:enable_glm52_low_latency_gemm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v32/nvidia/model.py:DeepseekV32DecoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v32/nvidia/model.py:DeepseekV32DecoderLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v32/nvidia/model.py:DeepseekV32Model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v32/nvidia/model.py:DeepseekV32Model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v32/nvidia/model.py:DeepseekV32ForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v32/nvidia/model.py:DeepseekV32ForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "class:vllm/models/deepseek_v32/nvidia/mtp.py:DeepseekV32MultiTokenPredictorLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "class:vllm/models/deepseek_v32/nvidia/mtp.py:DeepseekV32MultiTokenPredictorLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "class:vllm/models/deepseek_v32/nvidia/mtp.py:DeepseekV32MultiTokenPredictor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "class:vllm/models/deepseek_v32/nvidia/mtp.py:DeepseekV32MultiTokenPredictor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "class:vllm/models/deepseek_v32/nvidia/mtp.py:DeepseekV32MTP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "class:vllm/models/deepseek_v32/nvidia/mtp.py:DeepseekV32MTP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "function:vllm/models/dots3_note/common/processor.py:load_note_config_section",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "function:vllm/models/dots3_note/common/processor.py:load_note_config_section",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "class:vllm/models/dots3_note/common/processor.py:Dots3NoteImageProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "class:vllm/models/dots3_note/common/processor.py:Dots3NoteImageProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "class:vllm/models/dots3_note/common/processor.py:Dots3NoteProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "class:vllm/models/dots3_note/common/processor.py:Dots3NoteProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "class:vllm/models/dots3_note/common/processor.py:Dots3NoteProcessingInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "class:vllm/models/dots3_note/common/processor.py:Dots3NoteProcessingInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "class:vllm/models/dots3_note/common/processor.py:Dots3NoteDummyInputsBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "class:vllm/models/dots3_note/common/processor.py:Dots3NoteDummyInputsBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "class:vllm/models/dots3_note/common/processor.py:Dots3NoteMultiModalProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "class:vllm/models/dots3_note/common/processor.py:Dots3NoteMultiModalProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteDecodeMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteDecodeMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteFlashAttnPrefillBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteFlashAttnPrefillBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteMLAMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteMLAMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteTritonMLABackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteTritonMLABackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteTritonMLAImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteTritonMLAImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NotePaddedSparseBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NotePaddedSparseBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NotePaddedSparseImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NotePaddedSparseImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio.py:Dots3NoteAudioConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio.py:Dots3NoteAudioConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio.py:DotsEncoderWithMask",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio.py:DotsEncoderWithMask",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio.py:AudioAdapter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio.py:AudioAdapter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio.py:Dots3NoteAudioModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio.py:Dots3NoteAudioModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:RMSNorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:RMSNorm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:RotaryEmbedding",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:RotaryEmbedding",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:WhisperPositionalEmbedding",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:WhisperPositionalEmbedding",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:WhisperAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:WhisperAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:WhisperEncoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:WhisperEncoderLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:DotsSpeechPreTrainedModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:DotsSpeechPreTrainedModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:DotsSpeechEncoder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "target": "class:vllm/models/dots3_note/nvidia/audio_encoder.py:DotsSpeechEncoder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/logits_processor.py",
+   "target": "class:vllm/models/inkling/amd/logits_processor.py:InklingLogitsProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/logits_processor.py",
+   "target": "class:vllm/models/inkling/amd/logits_processor.py:InklingLogitsProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "function:vllm/models/inkling/amd/mtp.py:_select_mtp_depth_count",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "class:vllm/models/inkling/amd/mtp.py:InklingMTPDepthLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "class:vllm/models/inkling/amd/mtp.py:InklingMTPDepthLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "class:vllm/models/inkling/amd/mtp.py:InklingMultiTokenPredictor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "class:vllm/models/inkling/amd/mtp.py:InklingMultiTokenPredictor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "class:vllm/models/inkling/amd/mtp.py:InklingMTP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "class:vllm/models/inkling/amd/mtp.py:InklingMTP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "function:vllm/models/inkling/amd/mtp.py:_load_inkling_mtp_weights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "target": "function:vllm/models/inkling/amd/ops/fa4_rel_attention.py:use_gfx950_gluon_decode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "target": "function:vllm/models/inkling/amd/ops/fa4_rel_attention.py:use_gfx950_gluon_decode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "target": "function:vllm/models/inkling/amd/ops/fa4_rel_attention.py:use_gfx950_gluon_extend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "target": "function:vllm/models/inkling/amd/ops/fa4_rel_attention.py:use_gfx950_gluon_extend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "target": "function:vllm/models/inkling/amd/ops/fa4_rel_attention.py:inkling_fa4_num_splits",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "target": "function:vllm/models/inkling/amd/ops/fa4_rel_attention.py:inkling_fa4_num_splits",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "target": "function:vllm/models/inkling/amd/ops/fa4_rel_attention.py:_inkling_rel_attention_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "target": "function:vllm/models/inkling/amd/ops/fa4_rel_attention.py:inkling_fa4_rel_attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "target": "function:vllm/models/inkling/amd/ops/fa4_rel_attention.py:inkling_fa4_rel_attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/common/mm_preprocess.py",
+   "target": "class:vllm/models/inkling/common/mm_preprocess.py:InklingMultiModalDataParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/common/mm_preprocess.py",
+   "target": "class:vllm/models/inkling/common/mm_preprocess.py:InklingMultiModalDataParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/common/mm_preprocess.py",
+   "target": "function:vllm/models/inkling/common/mm_preprocess.py:_rescale_image",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/common/mm_preprocess.py",
+   "target": "class:vllm/models/inkling/common/mm_preprocess.py:InklingProcessingInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/common/mm_preprocess.py",
+   "target": "class:vllm/models/inkling/common/mm_preprocess.py:InklingProcessingInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/common/mm_preprocess.py",
+   "target": "class:vllm/models/inkling/common/mm_preprocess.py:InklingDummyInputsBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/common/mm_preprocess.py",
+   "target": "class:vllm/models/inkling/common/mm_preprocess.py:InklingDummyInputsBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/common/mm_preprocess.py",
+   "target": "class:vllm/models/inkling/common/mm_preprocess.py:InklingMultiModalProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/common/mm_preprocess.py",
+   "target": "class:vllm/models/inkling/common/mm_preprocess.py:InklingMultiModalProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/configs.py",
+   "target": "class:vllm/models/inkling/configs.py:InklingModelConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/configs.py",
+   "target": "class:vllm/models/inkling/configs.py:InklingModelConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/configs.py",
+   "target": "class:vllm/models/inkling/configs.py:InklingAudioConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/configs.py",
+   "target": "class:vllm/models/inkling/configs.py:InklingAudioConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/configs.py",
+   "target": "class:vllm/models/inkling/configs.py:InklingVisionConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/configs.py",
+   "target": "class:vllm/models/inkling/configs.py:InklingVisionConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/configs.py",
+   "target": "class:vllm/models/inkling/configs.py:InklingMMConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/configs.py",
+   "target": "class:vllm/models/inkling/configs.py:InklingMMConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/configs.py",
+   "target": "class:vllm/models/inkling/configs.py:TMLConvStateShape",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/configs.py",
+   "target": "class:vllm/models/inkling/configs.py:TMLConvStateShape",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/configs.py",
+   "target": "class:vllm/models/inkling/configs.py:TMLStateDType",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/configs.py",
+   "target": "class:vllm/models/inkling/configs.py:TMLStateDType",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/configs.py",
+   "target": "class:vllm/models/inkling/configs.py:TMLConvCacheParams",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/configs.py",
+   "target": "class:vllm/models/inkling/configs.py:TMLConvCacheParams",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "function:vllm/models/inkling/nvidia/attention.py:compute_log_scaling_tau",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "function:vllm/models/inkling/nvidia/attention.py:compute_log_scaling_tau",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "class:vllm/models/inkling/nvidia/attention.py:RelLogitsProj",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "class:vllm/models/inkling/nvidia/attention.py:RelLogitsProj",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "class:vllm/models/inkling/nvidia/attention.py:InklingAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "class:vllm/models/inkling/nvidia/attention.py:InklingAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/logits_processor.py",
+   "target": "class:vllm/models/inkling/nvidia/logits_processor.py:InklingLogitsProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/logits_processor.py",
+   "target": "class:vllm/models/inkling/nvidia/logits_processor.py:InklingLogitsProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "function:vllm/models/inkling/nvidia/mtp.py:_select_mtp_depth_count",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "class:vllm/models/inkling/nvidia/mtp.py:InklingMTPDepthLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "class:vllm/models/inkling/nvidia/mtp.py:InklingMTPDepthLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "class:vllm/models/inkling/nvidia/mtp.py:InklingMultiTokenPredictor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "class:vllm/models/inkling/nvidia/mtp.py:InklingMultiTokenPredictor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "class:vllm/models/inkling/nvidia/mtp.py:InklingMTP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "class:vllm/models/inkling/nvidia/mtp.py:InklingMTP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "function:vllm/models/inkling/nvidia/mtp.py:_load_inkling_mtp_weights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/ops/__init__.py",
+   "target": "function:vllm/models/inkling/nvidia/ops/__init__.py:__getattr__",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "target": "function:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py:bucket_max_seqlen_q",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "target": "function:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py:bucket_max_seqlen_q",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "target": "function:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py:_get_score_mod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "target": "function:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py:inkling_fa4_num_splits",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "target": "function:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py:inkling_fa4_num_splits",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "target": "class:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py:InklingFA4RelAttentionKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "target": "class:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py:InklingFA4RelAttentionKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/__init__.py",
+   "target": "file:vllm/model_executor/models/deepseek_mtp.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/__init__.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/__init__.py",
+   "target": "file:vllm/models/deepseek_v32/amd/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/__init__.py",
+   "target": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/__init__.py",
+   "target": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/__init__.py",
+   "target": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/__init__.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/model.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/model.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/model.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/model.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/model.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/model.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/model.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/model.py",
+   "target": "file:vllm/models/common/ops/fused_allreduce_rms_norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/model.py",
+   "target": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/model.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/model.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "file:vllm/model_executor/models/deepseek_mtp.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "file:vllm/models/deepseek_v32/amd/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/mtp.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "target": "file:vllm/model_executor/layers/attention/mla_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "target": "file:vllm/model_executor/layers/sparse_attn_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "target": "file:vllm/models/deepseek_v32/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "target": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "target": "file:vllm/v1/attention/backends/mla/indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "target": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/amd/rocm.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/model_executor/layers/attention/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/model_executor/layers/attention/mla_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/model_executor/layers/sparse_attn_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/v1/attention/backends/mla/index_group.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/v1/attention/backends/mla/indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/v1/attention/ops/pcp.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/attention.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "target": "file:vllm/models/deepseek_v32/nvidia/ops/fused_q_cutedsl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "target": "file:vllm/utils/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "target": "file:vllm/v1/attention/ops/common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "target": "file:vllm/model_executor/kernels/linear/cute_dsl/skinny_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/fused_embed_norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "file:vllm/models/common/ops/fused_allreduce_rms_norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "file:vllm/models/common/ops/sequence_parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "file:vllm/models/deepseek_v32/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "file:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "target": "file:vllm/v1/attention/backends/mla/index_group.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/fused_embed_norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/mtp_validation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/models/deepseek_mtp.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/models/common/ops/fused_allreduce_rms_norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/models/common/ops/sequence_parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/models/deepseek_v32/common/kernels.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/models/deepseek_v32/nvidia/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v32/nvidia/mtp.py",
+   "target": "file:vllm/v1/attention/backends/mla/index_group.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "file:vllm/models/dots3_note/common/video.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "file:vllm/multimodal/media/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "file:vllm/multimodal/processing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "file:vllm/multimodal/processing/processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/common/processor.py",
+   "target": "file:vllm/transformers_utils/repo_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "file:vllm/model_executor/layers/attention/mla_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "file:vllm/v1/attention/backends/mla/flashattn_mla_sparse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/flash_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/attention.py",
+   "target": "file:vllm/vllm_flash_attn/flash_attn_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio.py",
+   "target": "file:vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/dots3_note/nvidia/audio_encoder.py",
+   "target": "file:vllm/vllm_flash_attn/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/logits_processor.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/logits_processor.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/mtp_validation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "file:vllm/models/inkling/amd/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "file:vllm/models/inkling/amd/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "file:vllm/models/inkling/amd/ops/norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "file:vllm/models/inkling/configs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/mtp.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "target": "file:vllm/models/inkling/amd/ops/gluon/rel_mha_decode_gfx950.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "target": "file:vllm/models/inkling/amd/ops/gluon/rel_mha_extend_gfx950.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "target": "file:vllm/models/inkling/amd/ops/rel_attention_decode.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/amd/ops/fa4_rel_attention.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/common/mm_preprocess.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/common/mm_preprocess.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/common/mm_preprocess.py",
+   "target": "file:vllm/models/inkling/configs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/common/mm_preprocess.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/common/mm_preprocess.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/common/mm_preprocess.py",
+   "target": "file:vllm/multimodal/processing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/configs.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "file:vllm/model_executor/layers/attention_layer_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "file:vllm/models/inkling/configs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "file:vllm/models/inkling/nvidia/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "file:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "file:vllm/models/inkling/nvidia/ops/qkvr_prep.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "file:vllm/models/inkling/nvidia/sconv_swa_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "file:vllm/models/inkling/nvidia/short_conv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "file:vllm/v1/attention/backends/flash_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/attention.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/logits_processor.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/logits_processor.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/mtp_validation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "file:vllm/models/inkling/configs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "file:vllm/models/inkling/nvidia/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "file:vllm/models/inkling/nvidia/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "file:vllm/models/inkling/nvidia/ops/norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/mtp.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/ops/__init__.py",
+   "target": "file:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/ops/__init__.py",
+   "target": "file:vllm/models/inkling/nvidia/ops/norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/ops/__init__.py",
+   "target": "file:vllm/models/inkling/nvidia/ops/sconv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/ops/__init__.py",
+   "target": "file:vllm/models/inkling/nvidia/ops/silu_and_mul.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/inkling/nvidia/ops/fa4_rel_attention.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/models/deepseek_v32/amd/model.py:DeepseekV32ForCausalLM",
+   "target": "class:vllm/model_executor/models/deepseek_v2.py:DeepseekV2ForCausalLM",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v32/amd/mtp.py:DeepseekV32MTP",
+   "target": "class:vllm/model_executor/models/deepseek_v2.py:DeepseekV2MixtureOfExperts",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v32/amd/mtp.py:DeepseekV32MTP",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsPP",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v32/amd/rocm.py:DeepseekV32ROCmIndexerCache",
+   "target": "class:vllm/model_executor/models/deepseek_v2.py:DeepseekV32IndexerCache",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v32/amd/rocm.py:DeepseekV32MLAAttention",
+   "target": "class:vllm/models/deepseek_v32/attention.py:DeepseekV32Attention",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v32/attention.py:DeepseekV32Attention",
+   "target": "class:vllm/model_executor/layers/attention/mla_attention.py:MLAAttention",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v32/nvidia/glm52_low_latency_gemm.py:GLM52LowLatencyLinearMethod",
+   "target": "class:vllm/model_executor/layers/linear.py:UnquantizedLinearMethod",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v32/nvidia/model.py:DeepseekV32ForCausalLM",
+   "target": "class:vllm/model_executor/models/deepseek_v2.py:DeepseekV2ForCausalLM",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v32/nvidia/mtp.py:DeepseekV32MTP",
+   "target": "class:vllm/model_executor/models/deepseek_v2.py:DeepseekV2MixtureOfExperts",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v32/nvidia/mtp.py:DeepseekV32MTP",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsPP",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/dots3_note/common/processor.py:Dots3NoteProcessingInfo",
+   "target": "class:vllm/multimodal/processing/context.py:BaseProcessingInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteDecodeMetadata",
+   "target": "class:vllm/model_executor/layers/attention/mla_attention.py:MLACommonDecodeMetadata",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteFlashAttnPrefillBackend",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/flash_attn.py:FlashAttnPrefillBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteMLAMetadataBuilder",
+   "target": "class:vllm/v1/attention/backends/mla/triton_mla.py:TritonMLAMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteTritonMLABackend",
+   "target": "class:vllm/v1/attention/backends/mla/triton_mla.py:TritonMLABackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NoteTritonMLAImpl",
+   "target": "class:vllm/v1/attention/backends/mla/triton_mla.py:TritonMLAImpl",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NotePaddedSparseBackend",
+   "target": "class:vllm/v1/attention/backends/mla/flashattn_mla_sparse.py:FlashAttnMLASparseBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/dots3_note/nvidia/attention.py:Dots3NotePaddedSparseImpl",
+   "target": "class:vllm/v1/attention/backends/mla/flashattn_mla_sparse.py:FlashAttnMLASparseImpl",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/inkling/amd/logits_processor.py:InklingLogitsProcessor",
+   "target": "class:vllm/model_executor/layers/logits_processor.py:LogitsProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/inkling/amd/mtp.py:InklingMTP",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsMultiModalEmbeddings",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/inkling/common/mm_preprocess.py:InklingMultiModalDataParser",
+   "target": "class:vllm/multimodal/parse.py:MultiModalDataParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/inkling/common/mm_preprocess.py:InklingProcessingInfo",
+   "target": "class:vllm/multimodal/processing/context.py:BaseProcessingInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/inkling/nvidia/logits_processor.py:InklingLogitsProcessor",
+   "target": "class:vllm/model_executor/layers/logits_processor.py:LogitsProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/inkling/nvidia/mtp.py:InklingMTP",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsMultiModalEmbeddings",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

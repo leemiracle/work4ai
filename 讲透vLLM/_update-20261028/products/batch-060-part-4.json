@@ -1,0 +1,989 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "type": "file",
+   "name": "qwen_gdn_linear_attn.py",
+   "filePath": "vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "summary": "Qwen3-Next/Qwen3.5 GDN 线性注意力（2313 行，32 方法）：prefill 后端解析（SYCL/FlashInfer/AITER FlyDSL/Triton/CUDA）、MTP 融合 decode 与 chunked gated delta rule。",
+   "tags": [
+    "gdn",
+    "qwen",
+    "linear-attention",
+    "backend-selection"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/kda_checkpoint.py",
+   "type": "file",
+   "name": "kda_checkpoint.py",
+   "filePath": "vllm/model_executor/layers/mamba/kda_checkpoint.py",
+   "summary": "FlashKDA 的 prefill checkpoint 导出器与对齐（薄壳）。",
+   "tags": [
+    "kda",
+    "checkpoints",
+    "flash"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "type": "file",
+   "name": "bailing_linear_attn.py",
+   "filePath": "vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "summary": "Bailing MoE 线性注意力：分组 RMSNormGate、prefill 混合与 MTP spec decode 步进 Triton kernel。",
+   "tags": [
+    "bailing",
+    "linear-attention",
+    "moe",
+    "spec-decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/linear/base.py",
+   "type": "file",
+   "name": "base.py",
+   "filePath": "vllm/model_executor/layers/mamba/linear/base.py",
+   "summary": "LinearAttention 基类（可插拔 OOT 后端）。",
+   "tags": [
+    "linear-attention",
+    "base-class",
+    "pluggable"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "type": "file",
+   "name": "minimax_linear_attn.py",
+   "filePath": "vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "summary": "MiniMax-Text-01 线性注意力：kernel 封装与 prefill 混合/decode 路径。",
+   "tags": [
+    "minimax",
+    "linear-attention",
+    "kernel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py:ChunkGatedDeltaRule",
+   "type": "class",
+   "name": "ChunkGatedDeltaRule",
+   "filePath": "vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "summary": "chunked gated delta rule CustomOp（5 方法）。",
+   "tags": [
+    "chunked",
+    "gated-delta-rule",
+    "custom-op"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    374,
+    540
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py:QwenGatedDeltaNetAttention",
+   "type": "class",
+   "name": "QwenGatedDeltaNetAttention",
+   "filePath": "vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "summary": "Qwen3-Next GDN 线性注意力（32 方法，含后端选择与 MTP 融合 decode）。",
+   "tags": [
+    "qwen",
+    "gdn",
+    "linear-attention",
+    "mtp"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    544,
+    2240
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py:BailingGroupRMSNormGate",
+   "type": "class",
+   "name": "BailingGroupRMSNormGate",
+   "filePath": "vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "summary": "分组 RMSNormGate。",
+   "tags": [
+    "rmsnorm",
+    "gated",
+    "grouped"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    343,
+    372
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py:BailingMoELinearAttention",
+   "type": "class",
+   "name": "BailingMoELinearAttention",
+   "filePath": "vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "summary": "Bailing MoE 线性注意力（可插拔 OOT 后端，7 方法）。",
+   "tags": [
+    "bailing",
+    "moe",
+    "linear-attention"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    377,
+    704
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/linear/base.py:LinearAttention",
+   "type": "class",
+   "name": "LinearAttention",
+   "filePath": "vllm/model_executor/layers/mamba/linear/base.py",
+   "summary": "线性注意力基类（4 方法）。",
+   "tags": [
+    "linear-attention",
+    "base-class",
+    "pluggable"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    23,
+    66
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py:MiniMaxText01LinearKernel",
+   "type": "class",
+   "name": "MiniMaxText01LinearKernel",
+   "filePath": "vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "summary": "MiniMax-Text-01 线性注意力 kernel 封装。",
+   "tags": [
+    "minimax",
+    "kernel",
+    "wrapper"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    122,
+    148
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py:MiniMaxText01LinearAttention",
+   "type": "class",
+   "name": "MiniMaxText01LinearAttention",
+   "filePath": "vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "summary": "MiniMax-Text-01 线性注意力（7 方法）。",
+   "tags": [
+    "minimax",
+    "linear-attention",
+    "minimax-extra"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    152,
+    326
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py:_resolve_gdn_prefill_backend",
+   "type": "function",
+   "name": "_resolve_gdn_prefill_backend",
+   "filePath": "vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "summary": "GDN prefill 后端解析（SYCL/FlashInfer/AITER/Triton/CUDA）。",
+   "tags": [
+    "backend-selection",
+    "prefill",
+    "gdn"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    148,
+    270
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py:fi_chunk_gated_delta_rule",
+   "type": "function",
+   "name": "fi_chunk_gated_delta_rule",
+   "filePath": "vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "summary": "FlashInfer chunked gated delta rule 封装。",
+   "tags": [
+    "flashinfer",
+    "chunked",
+    "gated-delta"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    313,
+    370
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py:qwen_gdn_attention_core",
+   "type": "function",
+   "name": "qwen_gdn_attention_core",
+   "filePath": "vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "summary": "核心分发 custom op（_forward_core/_forward_decode）。",
+   "tags": [
+    "custom-op",
+    "dispatch",
+    "core"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    2244,
+    2281
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py:linear_attention_prefill_and_mix",
+   "type": "function",
+   "name": "linear_attention_prefill_and_mix",
+   "filePath": "vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "summary": "prefill 输出与门控混合。",
+   "tags": [
+    "prefill",
+    "mix",
+    "linear-attention"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    85,
+    141
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py:bailing_linear_attention_decode_spec",
+   "type": "function",
+   "name": "bailing_linear_attention_decode_spec",
+   "filePath": "vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "summary": "Bailing MTP spec decode 步进入口。",
+   "tags": [
+    "spec-decode",
+    "decode",
+    "bailing"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    269,
+    340
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/kda_checkpoint.py:FlashKDAPrefillCheckpointExporter",
+   "type": "class",
+   "name": "FlashKDAPrefillCheckpointExporter",
+   "filePath": "vllm/model_executor/layers/mamba/kda_checkpoint.py",
+   "lineRange": [
+    13,
+    14
+   ],
+   "summary": "FlashKDA 循环/卷积 checkpoint 状态的 prefill 导出器（MambaPrefillCheckpointExporter 薄壳）。",
+   "tags": [
+    "kda",
+    "checkpoints",
+    "exporter",
+    "flash"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/mamba/gdn/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_mixer2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/causal_conv1d.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/quantization/inc/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/chunk.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/fused_gdn_decode_post_conv_mtp.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/v1/attention/backends/gdn_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/kda_checkpoint.py",
+   "target": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/mamba/linear/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/layernorm_guard.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "file:vllm/v1/attention/backends/linear_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/base.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/base.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/base.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/base.py",
+   "target": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/base.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/base.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/base.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/lightning_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/mamba/linear/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/minimax_rms_norm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "target": "file:vllm/v1/attention/backends/linear_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "class:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py:ChunkGatedDeltaRule",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "class:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py:QwenGatedDeltaNetAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "function:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py:_resolve_gdn_prefill_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "function:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py:fi_chunk_gated_delta_rule",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "function:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py:qwen_gdn_attention_core",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "class:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py:BailingGroupRMSNormGate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "class:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py:BailingMoELinearAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "function:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py:linear_attention_prefill_and_mix",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "function:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py:bailing_linear_attention_decode_spec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/base.py",
+   "target": "class:vllm/model_executor/layers/mamba/linear/base.py:LinearAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "target": "class:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py:MiniMaxText01LinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "target": "class:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py:MiniMaxText01LinearAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "class:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py:ChunkGatedDeltaRule",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "class:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py:QwenGatedDeltaNetAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "function:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py:fi_chunk_gated_delta_rule",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "target": "function:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py:qwen_gdn_attention_core",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "class:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py:BailingGroupRMSNormGate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "class:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py:BailingMoELinearAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "function:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py:linear_attention_prefill_and_mix",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py",
+   "target": "function:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py:bailing_linear_attention_decode_spec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/base.py",
+   "target": "class:vllm/model_executor/layers/mamba/linear/base.py:LinearAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "target": "class:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py:MiniMaxText01LinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py",
+   "target": "class:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py:MiniMaxText01LinearAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py:QwenGatedDeltaNetAttention",
+   "target": "class:vllm/model_executor/layers/mamba/gdn/base.py:GatedDeltaNetAttention",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/mamba/linear/base.py:LinearAttention",
+   "target": "class:vllm/model_executor/layers/mamba/abstract.py:MambaBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py:BailingMoELinearAttention",
+   "target": "class:vllm/model_executor/layers/mamba/linear/base.py:LinearAttention",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py:BailingGroupRMSNormGate",
+   "target": "class:vllm/model_executor/layers/layernorm.py:RMSNormGated",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/mamba/linear/minimax_linear_attn.py:MiniMaxText01LinearAttention",
+   "target": "class:vllm/model_executor/layers/mamba/linear/base.py:LinearAttention",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/mamba/kda_checkpoint.py:FlashKDAPrefillCheckpointExporter",
+   "target": "class:vllm/model_executor/layers/mamba/checkpoint.py:MambaPrefillCheckpointExporter",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py:QwenGatedDeltaNetAttention",
+   "target": "function:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py:_resolve_gdn_prefill_backend",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py:QwenGatedDeltaNetAttention",
+   "target": "class:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py:ChunkGatedDeltaRule",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py:BailingMoELinearAttention",
+   "target": "function:vllm/model_executor/layers/mamba/linear/bailing_linear_attn.py:bailing_linear_attention_decode_spec",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/kda_checkpoint.py",
+   "target": "class:vllm/model_executor/layers/mamba/kda_checkpoint.py:FlashKDAPrefillCheckpointExporter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  }
+ ]
+}

@@ -1,0 +1,6100 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/utils/ompmultiprocessing.py",
+   "type": "file",
+   "name": "ompmultiprocessing.py",
+   "filePath": "vllm/utils/ompmultiprocessing.py",
+   "summary": "CPU 后端 OpenMP 多进程管理器（300 行）：按 NUMA 拓扑为每个 worker rank 生成 CPU 绑定列表，配置 IOMP/GOMP/OMP 线程亲和环境变量（configure_omp_envs 上下文管理器），支持 POWERPC SMT-8/x86 SMT-2/ARM 等架构差异与 DP rank 切片。",
+   "tags": [
+    "cpu-backend",
+    "openmp",
+    "numa",
+    "thread-affinity",
+    "worker-binding"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/utils/ompmultiprocessing.py:OMPProcessManager",
+   "type": "class",
+   "name": "OMPProcessManager",
+   "filePath": "vllm/utils/ompmultiprocessing.py",
+   "lineRange": [
+    25,
+    299
+   ],
+   "summary": "OMP 感知的进程管理器（4 方法）：解析 VLLM_CPU_OMP_THREADS_BIND（auto/nobind/手动列表），按 NUMA 节点为各 local_rank 选核并保留 scheduler/pd-connector 专用核；configure_omp_envs 以上下文管理器临时注入 KMP_AFFINITY/GOMP_CPU_AFFINITY/OMP_PLACES 后恢复。",
+   "tags": [
+    "cpu-binding",
+    "numa",
+    "context-manager",
+    "smt"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/utils/registry.py",
+   "type": "file",
+   "name": "registry.py",
+   "filePath": "vllm/utils/registry.py",
+   "summary": "可插拔扩展类注册表（45 行）：ExtensionManager 提供 register 装饰器 + load 按名实例化，vLLM 插件系统（平台后端等）按名换实现的基础设施。",
+   "tags": [
+    "registry",
+    "plugin",
+    "extension",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/utils/registry.py:ExtensionManager",
+   "type": "class",
+   "name": "ExtensionManager",
+   "filePath": "vllm/utils/registry.py",
+   "lineRange": [
+    8,
+    44
+   ],
+   "summary": "名称→类注册表（3 方法）：register 装饰器登记类，load 断言查表并实例化。",
+   "tags": [
+    "registry",
+    "plugin",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/utils/sparse_utils.py",
+   "type": "file",
+   "name": "sparse_utils.py",
+   "filePath": "vllm/utils/sparse_utils.py",
+   "summary": "客户端提供 embedding 张量的安全反序列化助手（73 行）：check_sparse_tensor_invariants_threadsafe 用锁串行化 PyTorch 进程级全局标志避免并发竞态；safe_to_dense 在 to_dense() 分配前按 VLLM_MAX_EMBED_DECODE_BYTES 拒绝声明超大形状的内存放大攻击载荷。",
+   "tags": [
+    "security",
+    "deserialization",
+    "sparse-tensor",
+    "memory-limit"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/sparse_utils.py:check_sparse_tensor_invariants_threadsafe",
+   "type": "function",
+   "name": "check_sparse_tensor_invariants_threadsafe",
+   "filePath": "vllm/utils/sparse_utils.py",
+   "lineRange": [
+    32,
+    34
+   ],
+   "summary": "线程安全的 sparse 不变量校验上下文（锁 + torch.sparse.check_sparse_tensor_invariants）。",
+   "tags": [
+    "thread-safety",
+    "sparse",
+    "context-manager"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/utils/sparse_utils.py:safe_to_dense",
+   "type": "function",
+   "name": "safe_to_dense",
+   "filePath": "vllm/utils/sparse_utils.py",
+   "lineRange": [
+    37,
+    72
+   ],
+   "summary": "限定内存预算的稠密化：按 tensor.numel()*element_size 预检并拒绝超过 VLLM_MAX_EMBED_DECODE_BYTES 的载荷（2.6KB 声明 30000x30000 即 3.4GiB 的放大攻击）。",
+   "tags": [
+    "security",
+    "memory-amplification",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/utils/system_utils.py",
+   "type": "file",
+   "name": "system_utils.py",
+   "filePath": "vllm/utils/system_utils.py",
+   "summary": "系统级工具集（321 行）：环境变量管理、fd 级 stdout 抑制、fork/spawn 方法决策（_maybe_force_spawn 收集 Ray/NUMA/CUDA/WSL 强制 spawn 理由）、libgomp fork 死锁规避（omp_pause_resource_all）、psutil 进程树击杀、/proc/self/maps 库路径查找与 ulimit 提升。",
+   "tags": [
+    "system-utils",
+    "multiprocessing",
+    "process-management",
+    "environment"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/utils/system_utils.py:update_environment_variables",
+   "type": "function",
+   "name": "update_environment_variables",
+   "filePath": "vllm/utils/system_utils.py",
+   "lineRange": [
+    31,
+    41
+   ],
+   "summary": "批量更新环境变量并告警覆盖。",
+   "tags": [
+    "environment",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/utils/system_utils.py:set_env_var",
+   "type": "function",
+   "name": "set_env_var",
+   "filePath": "vllm/utils/system_utils.py",
+   "lineRange": [
+    45,
+    55
+   ],
+   "summary": "临时设置环境变量的上下文管理器（finally 恢复旧值）。",
+   "tags": [
+    "environment",
+    "context-manager"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/utils/system_utils.py:suppress_stdout",
+   "type": "function",
+   "name": "suppress_stdout",
+   "filePath": "vllm/utils/system_utils.py",
+   "lineRange": [
+    59,
+    89
+   ],
+   "summary": "fd 级抑制 C 库 stdout（dup/dup2 到 devnull），DEBUG 日志开启时让路、保留 stderr。",
+   "tags": [
+    "stdout",
+    "file-descriptor",
+    "c-library"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/system_utils.py:unique_filepath",
+   "type": "function",
+   "name": "unique_filepath",
+   "filePath": "vllm/utils/system_utils.py",
+   "lineRange": [
+    95,
+    107
+   ],
+   "summary": "递增整数生成唯一文件路径（自注 TOCTOU 竞态，调用方须用 'x' 模式原子创建）。",
+   "tags": [
+    "filepath",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/utils/system_utils.py:_maybe_force_spawn",
+   "type": "function",
+   "name": "_maybe_force_spawn",
+   "filePath": "vllm/utils/system_utils.py",
+   "lineRange": [
+    123,
+    165
+   ],
+   "summary": "判定是否强制 spawn 多进程方法：Ray actor/NUMA 绑定/CUDA 已初始化/WSL 任一命中即覆写 VLLM_WORKER_MULTIPROC_METHOD。",
+   "tags": [
+    "multiprocessing",
+    "spawn",
+    "cuda"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/system_utils.py:_release_libgomp_threads",
+   "type": "function",
+   "name": "_release_libgomp_threads",
+   "filePath": "vllm/utils/system_utils.py",
+   "lineRange": [
+    171,
+    185
+   ],
+   "summary": "OpenMP5 omp_pause_resource_all(HARD) 回收 libgomp 空闲线程，避免 fork 子进程首个并行区死锁（libgomp 无 fork handler）。",
+   "tags": [
+    "openmp",
+    "fork-safety",
+    "libgomp"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/system_utils.py:get_mp_context",
+   "type": "function",
+   "name": "get_mp_context",
+   "filePath": "vllm/utils/system_utils.py",
+   "lineRange": [
+    188,
+    203
+   ],
+   "summary": "取 multiprocessing 上下文：_maybe_force_spawn 判定 + ROCm 可见设备同步 + fork 前释放 libgomp 线程。",
+   "tags": [
+    "multiprocessing",
+    "context"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/system_utils.py:set_process_title",
+   "type": "function",
+   "name": "set_process_title",
+   "filePath": "vllm/utils/system_utils.py",
+   "lineRange": [
+    206,
+    220
+   ],
+   "summary": "setproctitle 可选设置进程标题（prefix::name）。",
+   "tags": [
+    "process-title",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/utils/system_utils.py:kill_process_tree",
+   "type": "function",
+   "name": "kill_process_tree",
+   "filePath": "vllm/utils/system_utils.py",
+   "lineRange": [
+    233,
+    260
+   ],
+   "summary": "psutil 递归收集子进程并先子后父发 SIGKILL。",
+   "tags": [
+    "process-management",
+    "shutdown"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/system_utils.py:set_ulimit",
+   "type": "function",
+   "name": "set_ulimit",
+   "filePath": "vllm/utils/system_utils.py",
+   "lineRange": [
+    267,
+    288
+   ],
+   "summary": "Linux 下提升 RLIMIT_NOFILE 软限到 65535，失败仅告警（防 Too many open files）。",
+   "tags": [
+    "resource-limit",
+    "utility"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/system_utils.py:find_loaded_libraries",
+   "type": "function",
+   "name": "find_loaded_libraries",
+   "filePath": "vllm/utils/system_utils.py",
+   "lineRange": [
+    291,
+    315
+   ],
+   "summary": "解析 /proc/self/maps 按文件名前缀精确匹配已加载共享库路径（防 TileLang libcudart_stub 类子串误配劫持）。",
+   "tags": [
+    "procfs",
+    "shared-library",
+    "utility"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/utils/tensor_schema.py",
+   "type": "file",
+   "name": "tensor_schema.py",
+   "filePath": "vllm/utils/tensor_schema.py",
+   "summary": "声明式张量形状校验框架（255 行）：TensorShape 用符号维度（str）+dynamic_dims 表达期望形状，TensorSchema 通过 type_hints 的 Annotated 元数据递归校验标量/Tensor/嵌套 list 的实际形状、符号维度绑定一致性与 Union 可选字段。",
+   "tags": [
+    "validation",
+    "type-hints",
+    "tensor-shape",
+    "declarative"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/utils/tensor_schema.py:TensorShape",
+   "type": "class",
+   "name": "TensorShape",
+   "filePath": "vllm/utils/tensor_schema.py",
+   "lineRange": [
+    13,
+    44
+   ],
+   "summary": "符号形状描述：dims 接受 int|str，resolve 按 bindings 解析动态维度，__str__ 用 * 标记动态维。",
+   "tags": [
+    "tensor-shape",
+    "symbolic-dims",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/utils/tensor_schema.py:TensorSchema",
+   "type": "class",
+   "name": "TensorSchema",
+   "filePath": "vllm/utils/tensor_schema.py",
+   "lineRange": [
+    47,
+    254
+   ],
+   "summary": "基于类注解的形状校验器（9 方法）：validate 走 get_type_hints(include_extras) 取 Annotated TensorShape，_validate_field 递归校验嵌套 list 要求同形（后缀匹配），_validate_tensor_shape_expected 做符号环境（shape_env）跨字段一致绑定。",
+   "tags": [
+    "validation",
+    "type-hints",
+    "recursive",
+    "shape-inference"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/utils/torch_utils.py",
+   "type": "file",
+   "name": "torch_utils.py",
+   "filePath": "vllm/utils/torch_utils.py",
+   "summary": "PyTorch 核心工具集（1061 行）：dtype 映射表（含 fp8/nvfp4/turboquant/octave/ultraquant 等 KV 量化 dtype 注册位）、cgroup v1/v2 CPU 配额感知的线程数决策、TMA 兼容的 stride 规范化、NVFP4 KV cache data/scale 零拷贝切分、torch.cuda.set_stream 补丁缓存当前流、LayerName opaque type 防 torch.compile 每层重编译、direct_register_custom_op 低开销注册 custom op。",
+   "tags": [
+    "torch-utils",
+    "dtype",
+    "kv-cache-quantization",
+    "custom-op",
+    "stream"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/utils/torch_utils.py:LayerName",
+   "type": "class",
+   "name": "LayerName",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    961,
+    980
+   ],
+   "summary": "torch>=2.11 hoisted value-type opaque 对象包装层名：torch.compile 将其提升为 graph input 而非常量，避免 attention/MoE/KV cache custom op 按层重编译；注册 __eq__/__hash__/__fx_repr__。",
+   "tags": [
+    "torch-compile",
+    "opaque-type",
+    "custom-op",
+    "performance"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:is_strictly_contiguous",
+   "type": "function",
+   "name": "is_strictly_contiguous",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    105,
+    131
+   ],
+   "summary": "严格连续性检查：contiguous 且无退化 stride（size=1 维也须符合 canonical 步长积），CUDA 内核按 stride 寻址时的安全前提。",
+   "tags": [
+    "tensor",
+    "contiguity",
+    "strides"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:is_non_overlapping_and_dense",
+   "type": "function",
+   "name": "is_non_overlapping_and_dense",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    134,
+    146
+   ],
+   "summary": "判张量元素覆盖无缝不重叠字节区间（permuted contiguous 视图也算），比 is_contiguous 宽松（不要求行主序）。",
+   "tags": [
+    "tensor",
+    "contiguity",
+    "strides"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:canonicalize_singleton_dim_strides",
+   "type": "function",
+   "name": "canonicalize_singleton_dim_strides",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    149,
+    172
+   ],
+   "summary": "零拷贝修正 size=1 维的退化 stride 至 canonical 积（as_strided 仅改元数据），满足 H100+ TMA 非最外层 stride≥16 字节对齐要求。",
+   "tags": [
+    "cuda",
+    "tma",
+    "strides",
+    "zero-copy"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:_cgroup_cpu_limit",
+   "type": "function",
+   "name": "_cgroup_cpu_limit",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    186,
+    235
+   ],
+   "summary": "解析 /proc/self/cgroup 沿层级取最紧 cpu.max(v2)/cfs_quota(v1) 得有效 CPU 配额，无限制返回 None。",
+   "tags": [
+    "cgroup",
+    "cpu-quota",
+    "containers"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:available_cpu_count",
+   "type": "function",
+   "name": "available_cpu_count",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    238,
+    247
+   ],
+   "summary": "sched_getaffinity 与 cgroup 配额取 min 的真实可用核数（os.cpu_count 对配额盲）。",
+   "tags": [
+    "cpu",
+    "cgroup",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:startup_omp_num_threads",
+   "type": "function",
+   "name": "startup_omp_num_threads",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    255,
+    264
+   ],
+   "summary": "权重加载期线程数=可用核数//本地进程数（加载是 CPU 并行工作）。",
+   "tags": [
+    "openmp",
+    "weight-loading",
+    "threads"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:set_torch_threads_for_runtime",
+   "type": "function",
+   "name": "set_torch_threads_for_runtime",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    267,
+    298
+   ],
+   "summary": "稳态服务期把 torch intra-op 线程降为 1（热循环多线程 op 的自旋等待窃取周期+烧 cgroup 配额），尊重外部 OMP_NUM_THREADS。",
+   "tags": [
+    "openmp",
+    "threads",
+    "serving",
+    "performance"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:set_default_torch_num_threads",
+   "type": "function",
+   "name": "set_default_torch_num_threads",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    301,
+    330
+   ],
+   "summary": "临时设置 torch 线程数的上下文管理器（None 时取 OMP_NUM_THREADS 或 1）。",
+   "tags": [
+    "openmp",
+    "context-manager",
+    "threads"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:guard_cuda_initialization",
+   "type": "function",
+   "name": "guard_cuda_initialization",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    333,
+    356
+   ],
+   "summary": "清空 CUDA_VISIBLE_DEVICES 阻断意外 CUDA 初始化的上下文管理器，异常翻译为友好错误。",
+   "tags": [
+    "cuda",
+    "context-manager",
+    "initialization"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:is_lossless_cast",
+   "type": "function",
+   "name": "is_lossless_cast",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    370,
+    398
+   ],
+   "summary": "dtype 间无损转换判定：精度层级（bool<int<float<complex）+整型范围/浮点 min-max-resolution 包络。",
+   "tags": [
+    "dtype",
+    "casting",
+    "utility"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:get_kv_cache_torch_dtype",
+   "type": "function",
+   "name": "get_kv_cache_torch_dtype",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    432,
+    452
+   ],
+   "summary": "cache_dtype 字符串（含 auto）→torch.dtype，经 STR_DTYPE_TO_TORCH_DTYPE 注册表（平台可运行时注入新条目，禁止快照拷贝）。",
+   "tags": [
+    "kv-cache",
+    "dtype",
+    "registry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:get_kv_cache_quant_algo_string",
+   "type": "function",
+   "name": "get_kv_cache_quant_algo_string",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    455,
+    507
+   ],
+   "summary": "从 modelopt 量化配置（kv_cache_scheme dict/str）映射出 vLLM 标准 cache_dtype 串（fp8/nvfp4），未知格式回退 auto。",
+   "tags": [
+    "modelopt",
+    "kv-cache",
+    "quantization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:resolve_kv_cache_dtype_string",
+   "type": "function",
+   "name": "resolve_kv_cache_dtype_string",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    510,
+    528
+   ],
+   "summary": "把 'auto' 解析为模型 quantization_config 推导的实际 dtype 串。",
+   "tags": [
+    "kv-cache",
+    "dtype",
+    "resolution"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:set_random_seed",
+   "type": "function",
+   "name": "set_random_seed",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    540,
+    551
+   ],
+   "summary": "统一播种 random/numpy/torch/平台 manual_seed_all；DP rank 用 SeedSequence((seed, dp_index)) 派生避免各副本同样采样。",
+   "tags": [
+    "random",
+    "seed",
+    "data-parallel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:nvfp4_split_data_scale",
+   "type": "function",
+   "name": "nvfp4_split_data_scale",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    559,
+    607
+   ],
+   "summary": "NVFP4 KV 单侧零拷贝切分：full_dim 按 8/9 比例分 data(uint8)/scale(fp8e4m3)，as_strided 保持输入 NHD/HND 物理布局。",
+   "tags": [
+    "nvfp4",
+    "kv-cache",
+    "quantization",
+    "zero-copy"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:create_kv_caches_with_random_flash",
+   "type": "function",
+   "name": "create_kv_caches_with_random_flash",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    610,
+    663
+   ],
+   "summary": "按 flash 布局（NHD/HND permute）造随机 KV cache 测试张量，支持 nvfp4 packed page（data+scale 拼页）。",
+   "tags": [
+    "kv-cache",
+    "testing",
+    "nvfp4"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:create_kv_caches_with_random",
+   "type": "function",
+   "name": "create_kv_caches_with_random",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    666,
+    711
+   ],
+   "summary": "传统 (blocks, heads, head_size//x, block_size, x) 布局的随机 KV cache 生成（fp8 走 fp16 均匀+convert_fp8 防 NaN/Inf）。",
+   "tags": [
+    "kv-cache",
+    "testing",
+    "fp8"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:async_tensor_h2d",
+   "type": "function",
+   "name": "async_tensor_h2d",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    714,
+    740
+   ],
+   "summary": "list/ndarray/Tensor 异步 H2D：非 pinned 先入 pinned 连续缓冲确保 non_blocking 生效，支持写入预分配 out。",
+   "tags": [
+    "tensor",
+    "pinned-memory",
+    "async-copy"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:make_tensor_with_pad",
+   "type": "function",
+   "name": "make_tensor_with_pad",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    772,
+    793
+   ],
+   "summary": "2D list →padding 张量（numpy 中转+可选 pin_memory）。",
+   "tags": [
+    "tensor",
+    "padding",
+    "utility"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:current_stream",
+   "type": "function",
+   "name": "current_stream",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    814,
+    853
+   ],
+   "summary": "缓存版 torch.cuda.current_stream：monkeypatch torch.cuda.set_stream 记 TLS 当前流，避免原 API 每次构造新流对象的开销；未设置时按平台创建专用流（cudagraph 捕获/RCCL 忌默认流）。",
+   "tags": [
+    "cuda",
+    "stream",
+    "monkeypatch",
+    "performance"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:aux_stream",
+   "type": "function",
+   "name": "aux_stream",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    865,
+    874
+   ],
+   "summary": "全局辅助流惰性单例（MoE shared_expert 与 router 重叠用）。",
+   "tags": [
+    "cuda",
+    "stream",
+    "singleton"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:weak_ref_tensors",
+   "type": "function",
+   "name": "weak_ref_tensors",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    889,
+    916
+   ],
+   "summary": "递归对 Tensor/嵌套 list/tuple/IntermediateTensors 建弱引用视图（共享存储不保活，PP 中间张量防显存泄漏）。",
+   "tags": [
+    "tensor",
+    "weak-ref",
+    "memory",
+    "pipeline-parallel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:get_accelerator_view_from_cpu_tensor",
+   "type": "function",
+   "name": "get_accelerator_view_from_cpu_tensor",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    919,
+    945
+   ],
+   "summary": "经 UVA 把 CPU pinned 张量映射为 XPU/CUDA 加速器视图（torch.ops._C.get_*_view_from_cpu_tensor），绕过一次拷贝。",
+   "tags": [
+    "uva",
+    "zero-copy",
+    "xpu",
+    "cuda"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/utils/torch_utils.py:direct_register_custom_op",
+   "type": "function",
+   "name": "direct_register_custom_op",
+   "filePath": "vllm/utils/torch_utils.py",
+   "lineRange": [
+    1017,
+    1054
+   ],
+   "summary": "绕过 torch.library.custom_op 复杂 dispatch 的直接注册：infer_schema+Library.define+impl(dispatch_key)+可选 fake_impl，算子寿命绑定 Library 对象。",
+   "tags": [
+    "custom-op",
+    "torch-library",
+    "performance"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/utils/torch_version.py",
+   "type": "file",
+   "name": "torch_version.py",
+   "filePath": "vllm/utils/torch_version.py",
+   "summary": "Torch 版本判定（53 行）：刻意零 vLLM 依赖（供 vllm.env_override 等早期导入者使用），is_torch_equal_or_newer/equal 带 importlib.metadata 回退（文档生成场景）。",
+   "tags": [
+    "version-check",
+    "torch",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/utils/torch_version.py:is_torch_equal_or_newer",
+   "type": "function",
+   "name": "is_torch_equal_or_newer",
+   "filePath": "vllm/utils/torch_version.py",
+   "lineRange": [
+    22,
+    30
+   ],
+   "summary": "安装的 torch 版本 >= 目标串（2.6.0 式），异常回退 PKG-INFO。",
+   "tags": [
+    "version-check",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/utils/torch_version.py:_is_torch_equal",
+   "type": "function",
+   "name": "_is_torch_equal",
+   "filePath": "vllm/utils/torch_version.py",
+   "lineRange": [
+    33,
+    42
+   ],
+   "summary": "版本等于目标 minor 线的判定（用 [target, target.1) 半开区间兼容 dev/cu 后缀）。",
+   "tags": [
+    "version-check",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/utils/watch_dog.py",
+   "type": "file",
+   "name": "watch_dog.py",
+   "filePath": "vllm/utils/watch_dog.py",
+   "summary": "看门狗体系（175 行）：WatchDog ABC（feed/disable/handle_failure）+ NoopWatchDog 空实现 + ThreadedWatchDog 后台线程按超时 faulthandler.dump_traceback 全线程栈转储到编号文件；start_watch_dog 按 dump_dir 配置启动进程级单例。",
+   "tags": [
+    "watchdog",
+    "fault-diagnostics",
+    "threading",
+    "stack-dump"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/utils/watch_dog.py:WatchDog",
+   "type": "class",
+   "name": "WatchDog",
+   "filePath": "vllm/utils/watch_dog.py",
+   "lineRange": [
+    15,
+    26
+   ],
+   "summary": "看门狗抽象基类：feed 标记进度、disable 挂起检测上下文、handle_failure 记录线程状态。",
+   "tags": [
+    "abc",
+    "watchdog"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/utils/watch_dog.py:NoopWatchDog",
+   "type": "class",
+   "name": "NoopWatchDog",
+   "filePath": "vllm/utils/watch_dog.py",
+   "lineRange": [
+    29,
+    38
+   ],
+   "summary": "空看门狗（默认单例），全部操作 no-op。",
+   "tags": [
+    "null-object",
+    "watchdog"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/utils/watch_dog.py:ThreadedWatchDog",
+   "type": "class",
+   "name": "ThreadedWatchDog",
+   "filePath": "vllm/utils/watch_dog.py",
+   "lineRange": [
+    41,
+    141
+   ],
+   "summary": "线程看门狗（9 方法）：check_interval 轮询 last_feed_time 超时即 handle_failure，dump_stack 用 faulthandler 全线程转储并编号；RLock 防信号处理器重入，每段停摆至多转储一次。",
+   "tags": [
+    "watchdog",
+    "faulthandler",
+    "threading",
+    "diagnostics"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/utils/watch_dog.py:start_watch_dog",
+   "type": "function",
+   "name": "start_watch_dog",
+   "filePath": "vllm/utils/watch_dog.py",
+   "lineRange": [
+    152,
+    174
+   ],
+   "summary": "dump_dir 已配置时启用 faulthandler 并启动 ThreadedWatchDog 进程级单例。",
+   "tags": [
+    "watchdog",
+    "singleton",
+    "startup"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/cudagraph_dispatcher.py",
+   "type": "file",
+   "name": "cudagraph_dispatcher.py",
+   "filePath": "vllm/v1/cudagraph_dispatcher.py",
+   "summary": "运行时 cudagraph 分发器（349 行）：维护 PIECEWISE/FULL 两套 BatchDescriptor 键集合（唯一合法捕获源），initialize_cudagraph_keys 按 capture_sizes×LoRA cases 笛卡尔积建键（FULL 需精确 num_reqs，PIEWISE 放宽），dispatch 按 num_tokens/uniform/LoRA 归一化查键返回 (mode, descriptor) 或降级 NONE。",
+   "tags": [
+    "cudagraph",
+    "dispatch",
+    "batch-descriptor",
+    "capture"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/cudagraph_dispatcher.py:CudagraphDispatcher",
+   "type": "class",
+   "name": "CudagraphDispatcher",
+   "filePath": "vllm/v1/cudagraph_dispatcher.py",
+   "lineRange": [
+    15,
+    348
+   ],
+   "summary": "cudagraph 键分发器（8 方法）：_compute_bs_to_padded_graph_size 预计算 bs→padded 尺寸表并校验 compile_sizes 不被 padding 改写；dispatch 中 LoRA 特化用 bisect 找最近捕获计数，uniform→non-uniform 键放宽匹配；get_capture_descs 按 PIECEWISE→FULL、尺寸降序输出捕获清单。",
+   "tags": [
+    "cudagraph",
+    "dispatch",
+    "lora",
+    "scheduling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/executor/abstract.py",
+   "type": "file",
+   "name": "abstract.py",
+   "filePath": "vllm/v1/executor/abstract.py",
+   "summary": "v1 Executor 抽象基类（475 行）：定义 executor（单/多设备模型执行编排者）的完整控制面——collective_rpc 抽象 + execute_model/sample_tokens/sleep/wake_up/discard/LoRA 管理/KV cache 初始化等 40+ 方法模板；get_class 静态工厂按 distributed_executor_backend（ray/mp/uni/external_launcher/qualname 插件）分发具体实现。",
+   "tags": [
+    "executor",
+    "abc",
+    "distributed",
+    "rpc",
+    "factory"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/executor/abstract.py:Executor",
+   "type": "class",
+   "name": "Executor",
+   "filePath": "vllm/v1/executor/abstract.py",
+   "lineRange": [
+    53,
+    462
+   ],
+   "summary": "v1 executor 基类（43 方法）：__init__ 持各 config 并调 _init_executor；collective_rpc 为核心抽象（支持 str/cloudpickle callable、non_block Future、timeout）；sleep/wake_up 按 tags（weights/kv_cache）管理休眠内存池；文件尾 import uniproc 实现并别名保持向后兼容。",
+   "tags": [
+    "executor",
+    "abc",
+    "collective-rpc",
+    "sleep-wake"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/executor/abstract.py:_check_worker_profile_kwargs",
+   "type": "function",
+   "name": "_check_worker_profile_kwargs",
+   "filePath": "vllm/v1/executor/abstract.py",
+   "lineRange": [
+    41,
+    50
+   ],
+   "summary": "用 inspect.signature 预检 worker.profile 是否接受 per-session profiling 覆盖参数，未派发先拒绝避免残留未读响应。",
+   "tags": [
+    "validation",
+    "profiling",
+    "signature"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/executor/multiproc_executor.py",
+   "type": "file",
+   "name": "multiproc_executor.py",
+   "filePath": "vllm/v1/executor/multiproc_executor.py",
+   "summary": "v1 多进程 executor（1261 行）：DP leader 节点建 MessageQueue 广播 SchedulerOutput、spawn/fork 并行起 worker（spawn 可线程并发缩短导入）、ready pipe+death pipe 握手、FutureWrapper 按序排空响应队列、worker 死亡监控线程触发 failure_callback；WorkerProc 为主进程内 worker 包装（busy loop 消费 RPC、watchdog feed、KV connector 输出随异常带回）；set_multiprocessing_worker_envs 在 fork 前定 OMP 线程数规避 libgomp fork 死锁。",
+   "tags": [
+    "multiprocessing",
+    "executor",
+    "message-queue",
+    "worker",
+    "v1-engine"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/executor/multiproc_executor.py:ExceptionWithKVConnectorOutput",
+   "type": "class",
+   "name": "ExceptionWithKVConnectorOutput",
+   "filePath": "vllm/v1/executor/multiproc_executor.py",
+   "lineRange": [
+    84,
+    89
+   ],
+   "summary": "携带 worker KV connector 输出的异常：故障容错下把已产出 KV 输出随失败上报而非丢弃。",
+   "tags": [
+    "exception",
+    "fault-tolerance",
+    "kv-connector"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/executor/multiproc_executor.py:FutureWrapper",
+   "type": "class",
+   "name": "FutureWrapper",
+   "filePath": "vllm/v1/executor/multiproc_executor.py",
+   "lineRange": [
+    92,
+    122
+   ],
+   "summary": "保序 Future（3 方法）：result() 先排空队列中靠前的 Future 响应（FIFO drain）再取自身结果，聚合器链式归并 worker 输出。",
+   "tags": [
+    "future",
+    "ordering",
+    "rpc"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/executor/multiproc_executor.py:MultiprocExecutor",
+   "type": "class",
+   "name": "MultiprocExecutor",
+   "filePath": "vllm/v1/executor/multiproc_executor.py",
+   "lineRange": [
+    125,
+    667
+   ],
+   "summary": "多进程 executor（20 方法）：_init_executor 建 MQ（本机 SHM/跨节点 TCP）+并发/串行起 worker+wait_for_ready 握手；collective_rpc 入队 (method,args,kwargs,output_rank) 并按 response MQ 收响应，FT 开启时失败也可带回 KV 输出延期处理；shutdown 分阶段（death_writer→grace→SIGTERM→SIGKILL）；_get_output_rank 取 TP0×末 PP 级 worker 作输出源。",
+   "tags": [
+    "executor",
+    "multiprocessing",
+    "message-queue",
+    "fault-tolerance"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/executor/multiproc_executor.py:WorkerProcHandle",
+   "type": "class",
+   "name": "WorkerProcHandle",
+   "filePath": "vllm/v1/executor/multiproc_executor.py",
+   "lineRange": [
+    681,
+    705
+   ],
+   "summary": "就绪 worker 句柄 dataclass：进程/等级/本地响应 MQ/peer MQ 列表/death_writer。",
+   "tags": [
+    "dataclass",
+    "handle",
+    "worker"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/executor/multiproc_executor.py:WorkerProc",
+   "type": "class",
+   "name": "WorkerProc",
+   "filePath": "vllm/v1/executor/multiproc_executor.py",
+   "lineRange": [
+    708,
+    1229
+   ],
+   "summary": "worker 进程主体（14 方法+ResponseStatus 枚举）：make_worker_process 建 ready/death pipe 与 NUMA 绑定启动；worker_main 装信号处理器/关继承 fd/set_worker_net_device 后握手 READY 并进 worker_busy_loop；_execute_worker_rpc 前后双 feed watchdog，异常 add_note 回溯后转 FAILURE 响应；async_output_busy_loop 线程设设备上下文防 CUDA 上下文泄漏；enqueue_output 把 AsyncModelRunnerOutput 异常路径的 KV 输出转 FAILURE_WITH_KV_OUTPUT。",
+   "tags": [
+    "worker",
+    "busy-loop",
+    "rpc",
+    "signal-handling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/executor/multiproc_executor.py:set_multiprocessing_worker_envs",
+   "type": "function",
+   "name": "set_multiprocessing_worker_envs",
+   "filePath": "vllm/v1/executor/multiproc_executor.py",
+   "lineRange": [
+    1232,
+    1260
+   ],
+   "summary": "父进程在起 worker 前定 OMP_NUM_THREADS（可用核//进程数）：spawn 子进程从 env 继承、fork 子进程继承已 sized 的线程池（仅 sizing 不跑并行区则 fork 安全）。",
+   "tags": [
+    "openmp",
+    "fork-safety",
+    "worker-env"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/executor/ray_executor_v2.py",
+   "type": "file",
+   "name": "ray_executor_v2.py",
+   "filePath": "vllm/v1/executor/ray_executor_v2.py",
+   "summary": "Ray executor V2（583 行）：复用 MultiprocExecutor 的 MQ 控制面与 NCCL 数据面，worker 换为 Ray actor——RayWorkerProc 两阶段初始化（先轻量构造、placement 定 GPU 后 initialize_worker 补全，CUDA_VISIBLE_DEVICES 全程不改以支持多实例共节点）；RayExecutorV2 九步建群（placement group→bundle 排序→广播 MQ→actor 生成→物理 GPU 发现→按节点分配 local_rank→响应 MQ 收集→run()→ready barrier），sharded_rdt 权重传输后端要求 actor 开 enable_tensor_transport。",
+   "tags": [
+    "ray",
+    "executor",
+    "placement-group",
+    "distributed",
+    "gpu-mapping"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/executor/ray_executor_v2.py:RayWorkerHandle",
+   "type": "class",
+   "name": "RayWorkerHandle",
+   "filePath": "vllm/v1/executor/ray_executor_v2.py",
+   "lineRange": [
+    53,
+    76
+   ],
+   "summary": "Ray worker actor 句柄 dataclass：actor/rank/local_rank/node_id/bundle 索引，run() 拉起 busy loop 并存 ObjectRef 作健康哨兵。",
+   "tags": [
+    "ray",
+    "handle",
+    "dataclass"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/executor/ray_executor_v2.py:RayWorkerProc",
+   "type": "class",
+   "name": "RayWorkerProc",
+   "filePath": "vllm/v1/executor/ray_executor_v2.py",
+   "lineRange": [
+    79,
+    236
+   ],
+   "summary": "Ray actor 内 worker（7 方法）：__init__ 仅存参数，get_node_and_physical_gpu_ids 从 ray runtime context 取 placement 分配的物理 GPU；initialize_worker 注入 env（driver vars setdefault 不覆盖）+ assigned_physical_gpu_ids 映射后调 super().__init__；create_dist_init_method 起 multi_tenant TCPStore 供 init_process_group 复用；跨节点响应 MQ 走 TCP。",
+   "tags": [
+    "ray",
+    "worker",
+    "two-phase-init",
+    "gpu-discovery"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/executor/ray_executor_v2.py:RayExecutorV2",
+   "type": "class",
+   "name": "RayExecutorV2",
+   "filePath": "vllm/v1/executor/ray_executor_v2.py",
+   "lineRange": [
+    239,
+    582
+   ],
+   "summary": "Ray executor（7 方法）：_init_executor 九步建群；monitor 线程 5s 轮询 ray.wait(run_refs) 防 Ray 拆除时阻塞调用段错误；shutdown 持锁幂等，先 join monitor 再 ray.kill actor 与 MQ。",
+   "tags": [
+    "ray",
+    "executor",
+    "monitoring",
+    "shutdown"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/executor/ray_utils.py",
+   "type": "file",
+   "name": "ray_utils.py",
+   "filePath": "vllm/v1/executor/ray_utils.py",
+   "summary": "Ray 集群工具（385 行）：placement group 创建/校验/等待（_wait_until_pg_ready 指数回退打日志、超时按 GPU 数给差异化报错），bundle 按节点排序 driver 优先（保证 driver 节点 SHM MQ），VLLM_RAY_BUNDLE_INDICES 显式指派，WORKER_SPECIFIC_ENV_VARS 列出不可从 driver 复制的 per-worker 环境变量。",
+   "tags": [
+    "ray",
+    "placement-group",
+    "cluster",
+    "utility"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/executor/ray_utils.py:_verify_bundles",
+   "type": "function",
+   "name": "_verify_bundles",
+   "filePath": "vllm/v1/executor/ray_utils.py",
+   "lineRange": [
+    55,
+    91
+   ],
+   "summary": "校验 placement group：警告单节点 bundle 数 < TP size（TP 跨节点劣化性能，除非 IB）。",
+   "tags": [
+    "ray",
+    "validation",
+    "placement-group"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/executor/ray_utils.py:build_actor_name",
+   "type": "function",
+   "name": "build_actor_name",
+   "filePath": "vllm/v1/executor/ray_utils.py",
+   "lineRange": [
+    94,
+    109
+   ],
+   "summary": "按 instance_id/rank/TP/PP/PCP 拼 dashboard 友好的 actor 名。",
+   "tags": [
+    "ray",
+    "naming",
+    "utility"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/executor/ray_utils.py:get_bundles_for_indices",
+   "type": "function",
+   "name": "get_bundles_for_indices",
+   "filePath": "vllm/v1/executor/ray_utils.py",
+   "lineRange": [
+    112,
+    138
+   ],
+   "summary": "按 VLLM_RAY_BUNDLE_INDICES 显式取 (bundle_idx,node_id,node_ip) 三元组，校验数量与去重。",
+   "tags": [
+    "ray",
+    "bundles",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/executor/ray_utils.py:get_bundles_sorted_by_node",
+   "type": "function",
+   "name": "get_bundles_sorted_by_node",
+   "filePath": "vllm/v1/executor/ray_utils.py",
+   "lineRange": [
+    141,
+    198
+   ],
+   "summary": "枚举设备 bundle 并按 (driver 节点优先, node_id) 排序，返回含节点 IP 的三元组。",
+   "tags": [
+    "ray",
+    "bundles",
+    "sorting"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/executor/ray_utils.py:_wait_until_pg_ready",
+   "type": "function",
+   "name": "_wait_until_pg_ready",
+   "filePath": "vllm/v1/executor/ray_utils.py",
+   "lineRange": [
+    201,
+    263
+   ],
+   "summary": "指数回退等待 placement group ready（上限 1800s），超时按所需 GPU 数给针对性错误提示（K8s 建议)--tensor-parallel-size 适配）。",
+   "tags": [
+    "ray",
+    "placement-group",
+    "timeout"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/executor/ray_utils.py:initialize_ray_cluster",
+   "type": "function",
+   "name": "initialize_ray_cluster",
+   "filePath": "vllm/v1/executor/ray_utils.py",
+   "lineRange": [
+    266,
+    384
+   ],
+   "summary": "Ray 初始化总入口：CUDA 预校验 GPU 数、ROCm/XPU 连 auto 失败再起本地实例、复用或 PACK 策略新建 PG、_verify_bundles 后写回 parallel_config。",
+   "tags": [
+    "ray",
+    "initialization",
+    "cluster"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/executor/uniproc_executor.py",
+   "type": "file",
+   "name": "uniproc_executor.py",
+   "filePath": "vllm/v1/executor/uniproc_executor.py",
+   "summary": "单进程 executor（220 行）：driver 内直接持 WorkerWrapperBase，collective_rpc 经 run_method 直调（无 IPC）；AsyncOutputFuture 把 AsyncModelRunnerOutput 惰性转正；ExecutorWithExternalLauncher 面向 torchrun：每引擎一 worker、env:// 寻址、all_reduce MIN 对齐各 rank 可用内存，shutdown 释放 TP/PP/DP/EP 通信组防 RCCL 静态析构崩溃。",
+   "tags": [
+    "executor",
+    "single-process",
+    "torchrun",
+    "v1-engine"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/executor/uniproc_executor.py:AsyncOutputFuture",
+   "type": "class",
+   "name": "AsyncOutputFuture",
+   "filePath": "vllm/v1/executor/uniproc_executor.py",
+   "lineRange": [
+    32,
+    48
+   ],
+   "summary": "惰性 Future：result() 时才调 async_output.get_output()（阻塞等 D2H），异常转 set_exception。",
+   "tags": [
+    "future",
+    "async-scheduling"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/executor/uniproc_executor.py:UniProcExecutor",
+   "type": "class",
+   "name": "UniProcExecutor",
+   "filePath": "vllm/v1/executor/uniproc_executor.py",
+   "lineRange": [
+    51,
+    158
+   ],
+   "summary": "单进程 executor（9 方法）：_init_executor 直建 driver worker（file store 或 aiter TCP store init）；collective_rpc 用 run_method 同步调用并可选单值返回；支持 async scheduling。",
+   "tags": [
+    "executor",
+    "single-process",
+    "rpc"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/executor/uniproc_executor.py:ExecutorWithExternalLauncher",
+   "type": "class",
+   "name": "ExecutorWithExternalLauncher",
+   "filePath": "vllm/v1/executor/uniproc_executor.py",
+   "lineRange": [
+    161,
+    219
+   ],
+   "summary": "torchrun 外部启动器 executor（4 方法）：读 RANK/LOCAL_RANK/MASTER_ADDR env://；determine_available_memory 做 cpu_group all_reduce MIN；shutdown 额外 destroy_model_parallel（世界组属 launcher 不动）。",
+   "tags": [
+    "executor",
+    "torchrun",
+    "distributed"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/executor/vllm_net_devices.py",
+   "type": "file",
+   "name": "vllm_net_devices.py",
+   "filePath": "vllm/v1/executor/vllm_net_devices.py",
+   "summary": "GPU→NIC 网卡映射（219 行）：VLLM_GPU_NIC_PCIE_MAPPING（GPU_BDF=NIC_BDF 对）+VLLM_NIC_SELECTION_VARS（如 UCX_NET_DEVICES:1,NCCL_IB_HCA:1）成对生效，把 worker 的 RDMA 传输（UCX/NVSHMEM）钉到与 GPU 同 PCIe 拓扑的网卡；normalize_pci 严格解析 domain:bus:dev.fn，rdma_name_for_nic_pci 经 /sys/class/infiniband device 符号链接反查 mlx5_*/ibp* 名。",
+   "tags": [
+    "rdma",
+    "nic-mapping",
+    "pcie",
+    "ucx",
+    "infiniband"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/executor/vllm_net_devices.py:normalize_pci",
+   "type": "function",
+   "name": "normalize_pci",
+   "filePath": "vllm/v1/executor/vllm_net_devices.py",
+   "lineRange": [
+    26,
+    64
+   ],
+   "summary": "解析 PCI BDF（domain 宽度可变/bus:dev.fn 两形态）为可比四元组，函数号十六进制校验越界报错。",
+   "tags": [
+    "pci",
+    "parsing",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/executor/vllm_net_devices.py:parse_gpu_nic_mapping",
+   "type": "function",
+   "name": "parse_gpu_nic_mapping",
+   "filePath": "vllm/v1/executor/vllm_net_devices.py",
+   "lineRange": [
+    67,
+    84
+   ],
+   "summary": "解析逗号分隔 gpu_bdf=nic_bdf 对为 {gpu_bdf: nic_bdf} 字典。",
+   "tags": [
+    "parsing",
+    "nic-mapping"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/executor/vllm_net_devices.py:rdma_name_for_nic_pci",
+   "type": "function",
+   "name": "rdma_name_for_nic_pci",
+   "filePath": "vllm/v1/executor/vllm_net_devices.py",
+   "lineRange": [
+    87,
+    117
+   ],
+   "summary": "遍历 /sys/class/infiniband/*/device 符号链接 resolve 出 BDF 匹配 NIC，返回 RDMA 设备名（mlx5_* 等）。",
+   "tags": [
+    "rdma",
+    "sysfs",
+    "infiniband"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/executor/vllm_net_devices.py:parse_nic_selection_vars",
+   "type": "function",
+   "name": "parse_nic_selection_vars",
+   "filePath": "vllm/v1/executor/vllm_net_devices.py",
+   "lineRange": [
+    120,
+    136
+   ],
+   "summary": "解析 VLLM_NIC_SELECTION_VARS 为 (env_var, 后缀) 对，冒号后缀原样拼接到 RDMA 名。",
+   "tags": [
+    "parsing",
+    "env-vars"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/executor/vllm_net_devices.py:set_worker_gpu_nic_mapping",
+   "type": "function",
+   "name": "set_worker_gpu_nic_mapping",
+   "filePath": "vllm/v1/executor/vllm_net_devices.py",
+   "lineRange": [
+    139,
+    191
+   ],
+   "summary": "按 worker 物理 GPU BDF 查映射取 NIC，RDMA 名+后缀写入各选择环境变量（已有值则前插不去重）；CUDA 相对 rank 经 device_id_to_physical_device_id 换物理号。",
+   "tags": [
+    "rdma",
+    "env-vars",
+    "worker-setup"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/executor/vllm_net_devices.py:set_worker_net_device",
+   "type": "function",
+   "name": "set_worker_net_device",
+   "filePath": "vllm/v1/executor/vllm_net_devices.py",
+   "lineRange": [
+    194,
+    218
+   ],
+   "summary": "Uni/Multiproc executor 共用入口：两 env 必须成对设置否则报错，GPU 索引在 CUDA 初始化前解析。",
+   "tags": [
+    "rdma",
+    "entry-point",
+    "worker-setup"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "type": "file",
+   "name": "engine_core_sentinel.py",
+   "filePath": "vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "summary": "引擎核容错哨兵（232 行）：EngineCoreSentinel 维护 HEALTHY/UNHEALTHY/DEAD 状态机——on_fault 中止全部请求、分级状态、向客户端推送健康变化；retry 指令经 collective_rpc 下发 worker 重建并按 epoch 重建 DP 进程组（gloo stateless init）；fault_tolerant_wrapper 包裹 busy loop 捕异常→等恢复→超时重抛。",
+   "tags": [
+    "fault-tolerance",
+    "recovery",
+    "engine-core",
+    "dp-group"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/fault_tolerance/engine_core_sentinel.py:EngineCoreSentinel",
+   "type": "class",
+   "name": "EngineCoreSentinel",
+   "filePath": "vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "lineRange": [
+    37,
+    204
+   ],
+   "summary": "单引擎核容错状态机（7 方法）：handle_command 分发 FT 指令并回 UtilityOutput；on_fault finish_requests(ABORTED)+executor 失败判 DEAD；_drain_batch_queue 把遗留 KV connector 输出喂回 scheduler；_reinit_dp_group 按 epoch 从 dp_store 协商新端口 stateless 重建。",
+   "tags": [
+    "fault-tolerance",
+    "state-machine",
+    "recovery",
+    "dp-group"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/fault_tolerance/engine_core_sentinel.py:fault_tolerant_wrapper",
+   "type": "function",
+   "name": "fault_tolerant_wrapper",
+   "filePath": "vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "lineRange": [
+    207,
+    231
+   ],
+   "summary": "busy loop 容错包装：异常→on_fault→等 resumed 事件（recovery_timeout 超时重抛），SystemExit 直通。",
+   "tags": [
+    "fault-tolerance",
+    "wrapper",
+    "decorator"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/kv_cache_interface.py",
+   "type": "file",
+   "name": "kv_cache_interface.py",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "summary": "KV cache 规格与配置中枢（1661 行）：KVQuantMode 15 态量化枚举（fp8/int4/nvfp4/turboquant/octave/ultraquant/custom）、KVCacheSpec 族 19 个 dataclass（Full/MLA/SlidingWindow/SlidingWindowMLA/RSWA/ChunkedLocal/CircularBuffer/Mamba/Sink/Cross/EncoderOnly/HiSparse 热-驻留/UniformType 聚合）、布局数学（compute_layout_strides 按 [L,B,H,N,C] 轴序与页 padding 计算 stride、create_kv_cache_views as_strided 切层视图、kernel block 拆分）、KVCacheConfig 汇总分组/张量布局/HiSparse host 池/TP 副本等。",
+   "tags": [
+    "kv-cache",
+    "spec",
+    "data-model",
+    "memory-layout",
+    "quantization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_interface.py:KVQuantMode",
+   "type": "class",
+   "name": "KVQuantMode",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    40,
+    118
+   ],
+   "summary": "KV 量化模式 IntEnum（15 值）：NONE..OCTAVE_K3V3_COMPACT+CUSTOM（后端自管 kernel dispatch，读作量化但不匹配任何通用模式）；is_per_token_head/is_nvfp4/is_octave/is_turboquant/is_ultraquant/is_custom_mode 谓词族供免字符串匹配分派。",
+   "tags": [
+    "enum",
+    "quantization",
+    "kv-cache"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_interface.py:KVCacheSpecKind",
+   "type": "class",
+   "name": "KVCacheSpecKind",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    183,
+    193
+   ],
+   "summary": "spec 种类字符串枚举（full/mla/sliding_window/mamba/... 10 态+unknown），供调度器等消费者分类。",
+   "tags": [
+    "enum",
+    "kv-cache"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_interface.py:KVCacheSpec",
+   "type": "class",
+   "name": "KVCacheSpec",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    202,
+    345
+   ],
+   "summary": "单层 KV 格式基类（18 成员）：block_size/dcp_sharded/block_stride_alignment(MultipleOf 内核块)/is_draft；派生量 page_size_bytes/tokens_per_state(Fraction 支持多 token 压缩与 Whisper 分数态)/max_memory_usage_bytes/max_num_blocks_per_req；merge 要求组内全同，is_uniform_with_collection 经注册表判分组基类。",
+   "tags": [
+    "dataclass",
+    "kv-cache",
+    "spec",
+    "hierarchy"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_interface.py:HiSparseHotSpec",
+   "type": "class",
+   "name": "HiSparseHotSpec",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    486,
+    516
+   ],
+   "summary": "HiSparse 每请求临时热缓存 spec：page_size/blocks_per_request，不参与前缀缓存与 slot mapping。",
+   "tags": [
+    "hisparse",
+    "kv-cache",
+    "hot-cache"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_interface.py:HiSparseResidentSpec",
+   "type": "class",
+   "name": "HiSparseResidentSpec",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    520,
+    548
+   ],
+   "summary": "HiSparse 可回收 GPU 驻留页 spec（host 后备 KV 的准入窗口），max_admission_blocks 按 in-flight tokens 封顶。",
+   "tags": [
+    "hisparse",
+    "kv-cache",
+    "resident-pages"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_interface.py:AttentionSpec",
+   "type": "class",
+   "name": "AttentionSpec",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    552,
+    615
+   ],
+   "summary": "注意力类 spec 中层：num_kv_heads/head_size/head_size_v/kv_quant_mode/page_size_padded/num_head_slots(打包头位)/state_content_bytes(打包 C)/tokens_per_state；page 字节数=头位×态数×内容字节。",
+   "tags": [
+    "dataclass",
+    "attention",
+    "kv-cache"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_interface.py:FullAttentionSpec",
+   "type": "class",
+   "name": "FullAttentionSpec",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    619,
+    716
+   ],
+   "summary": "全注意力 spec：sliding_window/attention_chunk_size/non_causal(Prefix LM，调度侧禁不兼容策略)；merge 聚合窗口尺寸集合并断言组内字段全同、滑窗与 chunked 互斥。",
+   "tags": [
+    "dataclass",
+    "full-attention",
+    "merge"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_interface.py:MLAAttentionSpec",
+   "type": "class",
+   "name": "MLAAttentionSpec",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    729,
+    805
+   ],
+   "summary": "MLA spec：cache_dtype_str/topk_buffer_width/DeepSeek-V4 专属（alignment 页 padding、model_version、cache_role sparse/indexer、index group leader、非因果多 token decode）；merge 七集合一致性断言；head_size_v=0（单 latent 无独立 V）。",
+   "tags": [
+    "dataclass",
+    "mla",
+    "deepseek",
+    "kv-cache"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_interface.py:RSWASpec",
+   "type": "class",
+   "name": "RSWASpec",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    816,
+    857
+   ],
+   "summary": "Reference-SWA spec：prefill 全局可见+仅保留 rswa_window 生成 token，gap 块每步驱逐使内存 O(prefix+window)。",
+   "tags": [
+    "dataclass",
+    "sliding-window",
+    "rswa"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_interface.py:ChunkedLocalAttentionSpec",
+   "type": "class",
+   "name": "ChunkedLocalAttentionSpec",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    861,
+    897
+   ],
+   "summary": "chunked local attention spec：admission 上限=chunk 窗口+in-flight tokens（启动池与运行时准入同一真源）。",
+   "tags": [
+    "dataclass",
+    "local-attention",
+    "admission"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_interface.py:SlidingWindowSpec",
+   "type": "class",
+   "name": "SlidingWindowSpec",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    901,
+    964
+   ],
+   "summary": "滑窗 spec：extra_retained_tokens 延迟释放尾块（多模块投机解码重 prefill 需要）；num_retained_tokens/准入 cap（窗口-1+额外保留+in-flight，+1 处理窗口未块对齐）。",
+   "tags": [
+    "dataclass",
+    "sliding-window",
+    "admission"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_interface.py:CircularBufferSpec",
+   "type": "class",
+   "name": "CircularBufferSpec",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    968,
+    1004
+   ],
+   "summary": "环形缓冲 spec：每请求一块存压缩中 token 组原始 key，ring 容量须超压缩比×投机 lookahead；不参与前缀缓存与 slot mapping。",
+   "tags": [
+    "dataclass",
+    "circular-buffer",
+    "compression"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_interface.py:SlidingWindowMLASpec",
+   "type": "class",
+   "name": "SlidingWindowMLASpec",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    1008,
+    1090
+   ],
+   "summary": "滑窗×MLA spec（DeepSeek-V4）：bounded_replay 有界重放（prefix_cacheable 关闭、replay=窗口宽）；merge 八集合一致性断言。",
+   "tags": [
+    "dataclass",
+    "sliding-window",
+    "mla",
+    "deepseek"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_interface.py:MambaSpec",
+   "type": "class",
+   "name": "MambaSpec",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    1094,
+    1166
+   ],
+   "summary": "Mamba 状态池 spec：shapes/dtypes 元组求页大小；mamba_cache_mode=align 时按位置索引块表（仅 2+投机块驻留，其余由 remove_skipped_blocks 置空）；tp_replicated 区分分片/复制态（GDN vs PLE conv）。",
+   "tags": [
+    "dataclass",
+    "mamba",
+    "state-cache",
+    "hybrid"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_interface.py:SinkFullAttentionSpec",
+   "type": "class",
+   "name": "SinkFullAttentionSpec",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    1232,
+    1287
+   ],
+   "summary": "sink attention spec（sink_len 前缀钉留），merge 沿 FullAttentionSpec 路径。",
+   "tags": [
+    "dataclass",
+    "sink-attention"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_interface.py:UniformTypeKVCacheSpecs",
+   "type": "class",
+   "name": "UniformTypeKVCacheSpecs",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    1291,
+    1389
+   ],
+   "summary": "同型多层聚合 spec：kv_cache_specs dict 汇总页大小/内存上界/块表宽度（断言各层同宽）；is_uniform_type 经注册表判分组兼容，from_specs 可合并则包装否则 None。",
+   "tags": [
+    "dataclass",
+    "aggregation",
+    "kv-cache",
+    "grouping"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_interface.py:KVCacheTensor",
+   "type": "class",
+   "name": "KVCacheTensor",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    1475,
+    1495
+   ],
+   "summary": "同形层组在分配中的放置：size/layers/layer_stride/block_stride/offset/host_resident；地址范围重叠即别名（块 ID 同时只归一组故安全）。",
+   "tags": [
+    "dataclass",
+    "memory-layout",
+    "aliasing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_interface.py:KVCacheGroupSpec",
+   "type": "class",
+   "name": "KVCacheGroupSpec",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    1505,
+    1522
+   ],
+   "summary": "共享块表的一组层：layer_names/kv_cache_spec/is_eagle_group（EAGLE 末块 drop）/host_resident（HiSparse 池）/enable_kv_transfer/role(default/hisparse source/indexer)。",
+   "tags": [
+    "dataclass",
+    "grouping",
+    "kv-cache"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_interface.py:KVCacheConfig",
+   "type": "class",
+   "name": "KVCacheConfig",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    1526,
+    1660
+   ],
+   "summary": "模型级 KV 配置（11 成员）：num_blocks/kv_cache_tensors/kv_cache_groups+engine core 解析的 layout/hash_block_size/cache_hit_alignment/HiSparse host 池参数/kv_tp_replicas；cached_property 派生 transfer/prefix_cacheable 组集合；needs_kv_cache_zeroing（Mamba 先读后写或混精度块复用须清零防 NaN）。",
+   "tags": [
+    "dataclass",
+    "kv-cache",
+    "configuration",
+    "derived-views"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/kv_cache_interface.py:get_kv_quant_mode",
+   "type": "function",
+   "name": "get_kv_quant_mode",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    121,
+    149
+   ],
+   "summary": "cache_dtype 串→KVQuantMode：先查平台 handler 注册表，再前缀匹配（nvfp4_ds_mla 须先于 nvfp4、turboquant_/octave_ 大写枚举名）。",
+   "tags": [
+    "quantization",
+    "kv-cache",
+    "dispatch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/kv_cache_interface.py:replace_as",
+   "type": "function",
+   "name": "replace_as",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    156,
+    175
+   ],
+   "summary": "跨类 dataclasses.replace：rebuild 为 target_cls（如 SlidingWindowSpec→FullAttentionSpec），drop 指定丢字段，目标类专有字段保默认。",
+   "tags": [
+    "utility",
+    "dataclass",
+    "conversion"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/kv_cache_interface.py:group_kernel_blocks",
+   "type": "function",
+   "name": "group_kernel_blocks",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    348,
+    357
+   ],
+   "summary": "内核块粒度层缓存按管理块 unflatten 出 dim0 视图（均匀 stride 故纯视图）。",
+   "tags": [
+    "memory-layout",
+    "view",
+    "kernel-blocks"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/kv_cache_interface.py:compute_layer_kv_cache_shape_bytes",
+   "type": "function",
+   "name": "compute_layer_kv_cache_shape_bytes",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    360,
+    376
+   ],
+   "summary": "返回 4D 逻辑形 (B,H,N,C)，C 按字节；kernel block 拆分时 B 乘 blocks_per_page。",
+   "tags": [
+    "memory-layout",
+    "shape",
+    "kv-cache"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/kv_cache_interface.py:compute_layout_strides",
+   "type": "function",
+   "name": "compute_layout_strides",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    379,
+    415
+   ],
+   "summary": "按 layout.stride_order 与页 padding（padded_page_size 对齐到页网格尾）计算逻辑 [L,B,H,N,C] 轴序字节 stride，支持 fixed_strides 覆盖。",
+   "tags": [
+    "memory-layout",
+    "strides",
+    "kv-cache"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/kv_cache_interface.py:create_kv_cache_views",
+   "type": "function",
+   "name": "create_kv_cache_views",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    418,
+    482
+   ],
+   "summary": "把平 int8 缓冲 as_strided 成每层 4D [B,H,N,C] 视图：kernel block 拆分要求块为稠密无 padding 页（否则指导降 block_size 或换层紧凑布局）；dtype 视图还原。",
+   "tags": [
+    "memory-layout",
+    "as-strided",
+    "kv-cache",
+    "views"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/kv_cache_interface.py:get_mamba_prefill_checkpoint_position",
+   "type": "function",
+   "name": "get_mamba_prefill_checkpoint_position",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    1169,
+    1186
+   ],
+   "summary": "Mamba prefill 可复用检查点边界（hash 块对齐，EAGLE drop 块再让一块重算 logits/hash）。",
+   "tags": [
+    "mamba",
+    "checkpoint",
+    "prefill"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/kv_cache_interface.py:is_mamba_prefill_checkpoint_valid",
+   "type": "function",
+   "name": "is_mamba_prefill_checkpoint_valid",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    1189,
+    1210
+   ],
+   "summary": "后端能否在本 query 导出检查点的五条件判定（query_start 对齐/列推进/区间覆盖/alignment 整除）。",
+   "tags": [
+    "mamba",
+    "checkpoint",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/kv_cache_interface.py:iter_layer_specs",
+   "type": "function",
+   "name": "iter_layer_specs",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    1392,
+    1401
+   ],
+   "summary": "统一迭代组 spec 的成员层 spec（UniformType 展开 dict.values，其余自包装），调用方免特判。",
+   "tags": [
+    "utility",
+    "iteration",
+    "kv-cache"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/kv_cache_interface.py:is_full_attention_spec",
+   "type": "function",
+   "name": "is_full_attention_spec",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    1404,
+    1418
+   ],
+   "summary": "组 spec 是否（含包装）全为全注意力：裸 isinstance 会漏 UniformType 包装的 DeepSeek-V4 MLA 组。",
+   "tags": [
+    "utility",
+    "type-check",
+    "kv-cache"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/kv_cache_interface.py:get_kv_cache_spec_kind",
+   "type": "function",
+   "name": "get_kv_cache_spec_kind",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    1421,
+    1459
+   ],
+   "summary": "spec→KVCacheSpecKind：先解 UniformType 包装（内部 kind 唯一直接取，否则注册基类全 FullAttention 才归 full），子类先于基类判定保精确。",
+   "tags": [
+    "classification",
+    "kv-cache",
+    "dispatch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/kv_cache_interface.py:get_kv_cache_spec_sliding_window",
+   "type": "function",
+   "name": "get_kv_cache_spec_sliding_window",
+   "filePath": "vllm/v1/kv_cache_interface.py",
+   "lineRange": [
+    1462,
+    1471
+   ],
+   "summary": "取组 spec 的滑窗宽（UniformType 内部唯一才返回，否则 None）。",
+   "tags": [
+    "utility",
+    "sliding-window"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/kv_cache_spec_registry.py",
+   "type": "file",
+   "name": "kv_cache_spec_registry.py",
+   "filePath": "vllm/v1/kv_cache_spec_registry.py",
+   "summary": "KVCacheSpec 可插拔注册表（220 行）：out-of-tree 平台经 @register_kv_cache_spec 挂自定义 spec+manager+分组基类，免改核心代码；get_manager_class/get_uniform_type_base_spec 沿 MRO 找注册基类，role 管理器（HiSparse source/indexer）优先于类型匹配。",
+   "tags": [
+    "registry",
+    "kv-cache",
+    "plugin",
+    "extension"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_spec_registry.py:KVCacheSpecMetadata",
+   "type": "class",
+   "name": "KVCacheSpecMetadata",
+   "filePath": "vllm/v1/kv_cache_spec_registry.py",
+   "lineRange": [
+    24,
+    32
+   ],
+   "summary": "注册条目 dataclass：spec 类/manager 类/分组兼容基类三元组。",
+   "tags": [
+    "dataclass",
+    "registry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/kv_cache_spec_registry.py:KVCacheSpecRegistry",
+   "type": "class",
+   "name": "KVCacheSpecRegistry",
+   "filePath": "vllm/v1/kv_cache_spec_registry.py",
+   "lineRange": [
+    39,
+    183
+   ],
+   "summary": "全局注册表（6 classmethod）：_ensure_registered 惰性触发 single_type_kv_cache_manager 的全量注册（防循环依赖）；register 冲突断言（同注册幂等）；role 管理器按组角色覆盖类型匹配。",
+   "tags": [
+    "registry",
+    "lazy-init",
+    "kv-cache"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/kv_cache_spec_registry.py:register_kv_cache_spec",
+   "type": "function",
+   "name": "register_kv_cache_spec",
+   "filePath": "vllm/v1/kv_cache_spec_registry.py",
+   "lineRange": [
+    186,
+    219
+   ],
+   "summary": "注册装饰器工厂：绑定 manager_class（必填）与 uniform_type_base_spec（None 则自成新基类型）。",
+   "tags": [
+    "decorator",
+    "registry",
+    "extension"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/outputs.py",
+   "type": "file",
+   "name": "outputs.py",
+   "filePath": "vllm/v1/outputs.py",
+   "summary": "v1 输出数据模型（415 行）：Logprobs 列表/张量双形态（含 cu_num_generated_tokens 变长边界与设备端边界张量随异步 D2H 搭车）、CSR 采样掩码、ModelRunnerOutput（可序列化回 scheduler 的采样结果+KV/EC connector 输出+cudagraph 统计）、AsyncModelRunnerOutput 抽象（失败时仍可抢救 KV 输出）。",
+   "tags": [
+    "data-model",
+    "outputs",
+    "logprobs",
+    "v1-engine"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/outputs.py:LogprobsLists",
+   "type": "class",
+   "name": "LogprobsLists",
+   "filePath": "vllm/v1/outputs.py",
+   "lineRange": [
+    34,
+    56
+   ],
+   "summary": "numpy 形态 logprobs NamedTuple：变长生成数的 CSR 边界 cu_num_generated_tokens + 按请求切片。",
+   "tags": [
+    "namedtuple",
+    "logprobs"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/outputs.py:SamplingMaskLists",
+   "type": "class",
+   "name": "SamplingMaskLists",
+   "filePath": "vllm/v1/outputs.py",
+   "lineRange": [
+    59,
+    86
+   ],
+   "summary": "CSR 采样掩码 NamedTuple：token_ids+offsets+请求边界，slice_request/to_nested_list 供 API 层展开。",
+   "tags": [
+    "namedtuple",
+    "csr",
+    "sampling"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/outputs.py:LogprobsTensors",
+   "type": "class",
+   "name": "LogprobsTensors",
+   "filePath": "vllm/v1/outputs.py",
+   "lineRange": [
+    89,
+    196
+   ],
+   "summary": "torch 形态 logprobs（5 成员）：tolists 转 CPU、to_cpu_nonblocking 全 non_blocking 搭车拷贝、cat 静态拼接（多 chunk 重建 CPU 边界）、empty_cpu 建 pinned 空容器；cu 边界可仅存设备端（自适应验证）。",
+   "tags": [
+    "namedtuple",
+    "logprobs",
+    "async-copy"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/outputs.py:SamplerOutput",
+   "type": "class",
+   "name": "SamplerOutput",
+   "filePath": "vllm/v1/outputs.py",
+   "lineRange": [
+    205,
+    211
+   ],
+   "summary": "采样器输出 dataclass：sampled_token_ids（pad 到 max 生成数）+logprobs_tensors。",
+   "tags": [
+    "dataclass",
+    "sampler"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/outputs.py:KVConnectorOutput",
+   "type": "class",
+   "name": "KVConnectorOutput",
+   "filePath": "vllm/v1/outputs.py",
+   "lineRange": [
+    215,
+    244
+   ],
+   "summary": "KV connector 输出：收发完成集合/统计/事件/worker meta/invalid_block_ids（失败块重排重算）/failed_recving（按 req_id 避多池块 ID 歧义）/expected_finished_count（Nixl 握手型连接器）。",
+   "tags": [
+    "dataclass",
+    "kv-connector",
+    "p-d"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/outputs.py:ECConnectorOutput",
+   "type": "class",
+   "name": "ECConnectorOutput",
+   "filePath": "vllm/v1/outputs.py",
+   "lineRange": [
+    248,
+    261
+   ],
+   "summary": "encoder-cache connector 输出（E/P/D 场景 mm_hash 粒度收发完成+统计）。",
+   "tags": [
+    "dataclass",
+    "ec-connector",
+    "encoder"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/outputs.py:ModelRunnerOutput",
+   "type": "class",
+   "name": "ModelRunnerOutput",
+   "filePath": "vllm/v1/outputs.py",
+   "lineRange": [
+    267,
+    350
+   ],
+   "summary": "回传 scheduler 的核心输出（13 字段）：req_ids/索引表/变长 sampled_token_ids/logprobs/prompt_logprobs 双字典/pooler_output/KV+EC connector 输出/NaN 计数/cudagraph 统计/采样掩码；with_kv_conn_output_only 等静态构造器共享空单例。",
+   "tags": [
+    "dataclass",
+    "model-runner",
+    "serialization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/outputs.py:AsyncModelRunnerOutput",
+   "type": "class",
+   "name": "AsyncModelRunnerOutput",
+   "filePath": "vllm/v1/outputs.py",
+   "lineRange": [
+    354,
+    372
+   ],
+   "summary": "异步调度输出抽象：get_output 阻塞就绪（限一次），get_kv_connector_output 在失败路径抢救该步 KV 输出。",
+   "tags": [
+    "abc",
+    "async-scheduling",
+    "fault-tolerance"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/outputs.py:make_empty_encoder_model_runner_output",
+   "type": "function",
+   "name": "make_empty_encoder_model_runner_output",
+   "filePath": "vllm/v1/outputs.py",
+   "lineRange": [
+    383,
+    411
+   ],
+   "summary": "encoder-only 请求的输出占位：每请求空采样与 None pooler 占位，scheduler 按编码完成收尾。",
+   "tags": [
+    "encoder-only",
+    "factory",
+    "utility"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/request.py",
+   "type": "file",
+   "name": "request.py",
+   "filePath": "vllm/v1/request.py",
+   "summary": "v1 Request 对象（427 行）：prompt token/embed 混合输入（prompt_is_token_ids 逐位掩码+嵌入块哈希缓存）、流式会话续推（StreamingUpdate+streaming_queue）、优先级调度比较（priority>arrival>id）、prefix cache hit limit 三源收紧、DP/PP/异步调度的在途与占位 token 记账、块哈希器防引用环持有。",
+   "tags": [
+    "request",
+    "data-model",
+    "scheduling",
+    "v1-engine"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/request.py:StreamingUpdate",
+   "type": "class",
+   "name": "StreamingUpdate",
+   "filePath": "vllm/v1/request.py",
+   "lineRange": [
+    34,
+    57
+   ],
+   "summary": "流式续推轻量数据（mm_features/prompt/max_tokens/arrival/sampling_params），from_request 仅 resumable 请求可转。",
+   "tags": [
+    "dataclass",
+    "streaming"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/request.py:Request",
+   "type": "class",
+   "name": "Request",
+   "filePath": "vllm/v1/request.py",
+   "lineRange": [
+    60,
+    381
+   ],
+   "summary": "请求主体（20 方法/40+ 字段）：structured_output 从采样参数派生；kv_transfer/ec_transfer params 从 extra_args 提取；ConstantList 只读视图防漏更新；replay_start（DSV4.1 SWA 有界重放）与 shared_prefix_boundary（Marconi 式共享前缀钉留）；__lt__ 供优先级堆。",
+   "tags": [
+    "request",
+    "state-machine",
+    "prefix-cache"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/request.py:RequestStatus",
+   "type": "class",
+   "name": "RequestStatus",
+   "filePath": "vllm/v1/request.py",
+   "lineRange": [
+    384,
+    411
+   ],
+   "summary": "请求状态 IntEnum（12 态）：WAITING 族（grammar/remote KV/streaming）→RUNNING→PREEMPTED→FINISHED 族；is_finished 以 PREEMPTED 为界，静态映射 FinishReason。",
+   "tags": [
+    "enum",
+    "status",
+    "request"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/serial_utils.py",
+   "type": "file",
+   "name": "serial_utils.py",
+   "filePath": "vllm/v1/serial_utils.py",
+   "summary": "序列化工具（626 行）：MsgpackEncoder/Decoder 对 torch.Tensor/ndarray 零拷贝 msgpack 编解码（小张量内联、大张量 aux_buffers 外挂索引、OOB consumer 交由外带通道）、多模态字段编解码、UtilityResult 类型信息递归编码、run_method RPC 调度、PydanticMsgspecMixin 让 msgspec.Struct 进 Pydantic/OpenAPI（默认值感知+私字段剥离）。",
+   "tags": [
+    "serialization",
+    "msgpack",
+    "zero-copy",
+    "rpc"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/serial_utils.py:OOBTensorConsumer",
+   "type": "class",
+   "name": "OOBTensorConsumer",
+   "filePath": "vllm/v1/serial_utils.py",
+   "lineRange": [
+    57,
+    70
+   ],
+   "summary": "带外张量消费 ABC：__call__ 接当前消息张量返回占位 dict（None 拒绝走常规序列化），new_message 每消息重置。",
+   "tags": [
+    "abc",
+    "out-of-band",
+    "serialization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/serial_utils.py:MsgpackEncoder",
+   "type": "class",
+   "name": "MsgpackEncoder",
+   "filePath": "vllm/v1/serial_utils.py",
+   "lineRange": [
+    135,
+    309
+   ],
+   "summary": "msgpack 编码器（11 方法）：enc_hook 分派 Tensor/ndarray/slice/MM 字段/UtilityResult；阈值下单张量内联 RAW_VIEW、大者入 aux_buffers 免拷贝；不安全 pickle 回退受 VLLM_ALLOW_INSECURE_SERIALIZATION 门控。",
+   "tags": [
+    "serialization",
+    "msgpack",
+    "zero-copy",
+    "tensors"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/serial_utils.py:MsgpackDecoder",
+   "type": "class",
+   "name": "MsgpackDecoder",
+   "filePath": "vllm/v1/serial_utils.py",
+   "lineRange": [
+    312,
+    482
+   ],
+   "summary": "msgpack 解码器（13 方法）：dec_hook 按 target 类型重建 ndarray（frombuffer 零拷贝可选复制）/tensor（frombuffer+按需 clone/pin 保异步 H2D 安全）/MM 字段经 MultiModalFieldConfig 工厂重建/OOB 张量走 provider。",
+   "tags": [
+    "serialization",
+    "msgpack",
+    "deserialization",
+    "tensors"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/serial_utils.py:PydanticMsgspecMixin",
+   "type": "class",
+   "name": "PydanticMsgspecMixin",
+   "filePath": "vllm/v1/serial_utils.py",
+   "lineRange": [
+    511,
+    625
+   ],
+   "summary": "msgspec.Struct↔Pydantic 桥（3 方法）：__get_pydantic_core_schema__ 按 msgspec 字段默认值生成非必填 typed_dict + is-instance 联合；序列化 to_builtins(omit_defaults) 剥 _ 前缀与显式排除键。",
+   "tags": [
+    "pydantic",
+    "msgspec",
+    "openapi",
+    "bridge"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/serial_utils.py:_decode_type_info_recursive",
+   "type": "function",
+   "name": "_decode_type_info_recursive",
+   "filePath": "vllm/v1/serial_utils.py",
+   "lineRange": [
+    103,
+    125
+   ],
+   "summary": "递归解码 UtilityResult 的类型标注树（dict/list 逐层下钻叶节点 convert_fn），排除已序列化张量的二元组形态。",
+   "tags": [
+    "serialization",
+    "type-info",
+    "recursion"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/serial_utils.py:run_method",
+   "type": "function",
+   "name": "run_method",
+   "filePath": "vllm/v1/serial_utils.py",
+   "lineRange": [
+    485,
+    508
+   ],
+   "summary": "RPC 方法统一调度：str→getattr（缺方法 NotImplementedError）、bytes→cloudpickle 反序列化 partial、callable 直调。",
+   "tags": [
+    "rpc",
+    "dispatch",
+    "utility"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/v1/utils.py",
+   "summary": "v1 通用工具（887 行）：ConstantList 只读列表、CpuGpuBuffer 双端缓冲；APIServerProcessManager 多 API server 进程编排（least-loaded 接入+共享 admission 计数器）、RustFrontendProcessManager 以 fd 传递启动 vllm-rs frontend 子进程（--args-json 脱敏引导，env 驱动参数显式转发绕过 clap）；wait_for_completion_or_failure 哨兵聚合等待、shutdown 分阶段击杀；report_usage_stats 上报 20+ 配置维度、compute_iteration_details 拆上下文/生成 token 计数。",
+   "tags": [
+    "v1-engine",
+    "process-management",
+    "api-server",
+    "rust-frontend",
+    "usage-stats"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/utils.py:ConstantList",
+   "type": "class",
+   "name": "ConstantList",
+   "filePath": "vllm/v1/utils.py",
+   "lineRange": [
+    48,
+    107
+   ],
+   "summary": "只读列表包装（Generic[T]+Sequence）：append/extend/setitem 等全部抛 TypeError，配 Request 的 output/all_token_ids 只读视图防漏同步更新。",
+   "tags": [
+    "container",
+    "read-only",
+    "utility"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/utils.py:CpuGpuBuffer",
+   "type": "class",
+   "name": "CpuGpuBuffer",
+   "filePath": "vllm/v1/utils.py",
+   "lineRange": [
+    110,
+    150
+   ],
+   "summary": "CPU(pin)+GPU 对偶缓冲：copy_to_gpu/copy_to_cpu 非 blocking 切片拷贝，可选 numpy 视图（bf16 不支持）。",
+   "tags": [
+    "buffer",
+    "pinned-memory",
+    "h2d"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/utils.py:APIServerProcessManager",
+   "type": "class",
+   "name": "APIServerProcessManager",
+   "filePath": "vllm/v1/utils.py",
+   "lineRange": [
+    167,
+    277
+   ],
+   "summary": "多 API server 进程管理（2 方法）：spawn 起 N 个 uvicorn worker（各配 input/output ZMQ listener fd 传递）；多实例时共享 RawArray 负载表（least-loaded 接入）与 admission 计数器；finalizer 兜底 GC 关停。",
+   "tags": [
+    "api-server",
+    "process-management",
+    "zmq"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/utils.py:RustFrontendProcessManager",
+   "type": "class",
+   "name": "RustFrontendProcessManager",
+   "filePath": "vllm/v1/utils.py",
+   "lineRange": [
+    280,
+    400
+   ],
+   "summary": "Rust 前端子进程管理：vllm-rs frontend 模式以 --listen-fd/--input-listener-fd 等继承 fd 启动；--args-json 经 redact_sensitive_args 脱敏；VLLM_ENGINE_READY_TIMEOUT_S 等 env 驱动参数显式注入（serde_json 绕过 clap 的 env 声明）。",
+   "tags": [
+    "rust-frontend",
+    "subprocess",
+    "fd-passing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/utils.py:_SubprocessWrapper",
+   "type": "class",
+   "name": "_SubprocessWrapper",
+   "filePath": "vllm/v1/utils.py",
+   "lineRange": [
+    403,
+    454
+   ],
+   "summary": "Popen→BaseProcess 适配器：Pipe 哨兵+监控线程统一进 multiprocessing.connection.wait，暴露 sentinel/exitcode/is_alive/terminate/join。",
+   "tags": [
+    "adapter",
+    "subprocess",
+    "monitoring"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/utils.py:IterationDetails",
+   "type": "class",
+   "name": "IterationDetails",
+   "filePath": "vllm/v1/utils.py",
+   "lineRange": [
+    827,
+    841
+   ],
+   "summary": "迭代计数 dataclass：上下文/生成请求与 token 数+encoder 输入统计。",
+   "tags": [
+    "dataclass",
+    "metrics"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/utils.py:get_engine_client_zmq_addr",
+   "type": "function",
+   "name": "get_engine_client_zmq_addr",
+   "filePath": "vllm/v1/utils.py",
+   "lineRange": [
+    153,
+    164
+   ],
+   "summary": "engine client ZMQ 地址：本机走 IPC 路径，否则 tcp://host:port（port=0 内核分配后 LAST_ENDPOINT 取回）。",
+   "tags": [
+    "zmq",
+    "address",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/utils.py:_shutdown_subprocesses",
+   "type": "function",
+   "name": "_shutdown_subprocesses",
+   "filePath": "vllm/v1/utils.py",
+   "lineRange": [
+    457,
+    494
+   ],
+   "summary": "子进程分阶段关停：terminate→deadline join→kill_process_tree 强杀，全程日志计数。",
+   "tags": [
+    "shutdown",
+    "process-management"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/utils.py:run_api_server_worker_proc",
+   "type": "function",
+   "name": "run_api_server_worker_proc",
+   "filePath": "vllm/v1/utils.py",
+   "lineRange": [
+    509,
+    529
+   ],
+   "summary": "API server worker 进程入口：配日志/进程标题后 uvloop.run(run_server_worker)。",
+   "tags": [
+    "entry-point",
+    "api-server",
+    "uvloop"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/utils.py:wait_for_completion_or_failure",
+   "type": "function",
+   "name": "wait_for_completion_or_failure",
+   "filePath": "vllm/v1/utils.py",
+   "lineRange": [
+    532,
+    600
+   ],
+   "summary": "聚合等待：sentinel→proc 映射 + connection.wait 任一退出（非零即 RuntimeError）；engine 存活监控线程经 Pipe 哨兵并入；KeyboardInterrupt 优雅路径。",
+   "tags": [
+    "process-management",
+    "monitoring",
+    "shutdown"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/utils.py:shutdown",
+   "type": "function",
+   "name": "shutdown",
+   "filePath": "vllm/v1/utils.py",
+   "lineRange": [
+    605,
+    660
+   ],
+   "summary": "进程组分阶段关停（故意非绑定方法保 GC）：terminate→join(deadline)→kill_process_tree 兜底。",
+   "tags": [
+    "shutdown",
+    "process-management"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/utils.py:report_usage_stats",
+   "type": "function",
+   "name": "report_usage_stats",
+   "filePath": "vllm/v1/utils.py",
+   "lineRange": [
+    688,
+    778
+   ],
+   "summary": "使用统计上报（20+ 维度）：dtype/并行度/KV connector/attention backend/编译模式/投机解码/EPLB 专家数；transformers 后端展示包装架构名。",
+   "tags": [
+    "telemetry",
+    "usage-stats",
+    "configuration"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/utils.py:record_function_or_nullcontext",
+   "type": "function",
+   "name": "record_function_or_nullcontext",
+   "filePath": "vllm/v1/utils.py",
+   "lineRange": [
+    784,
+    800
+   ],
+   "summary": "按 env 选 record_function/nvtx.annotate/nullcontext 的全局缓存工厂（自定义 profiler scope）。",
+   "tags": [
+    "profiling",
+    "factory",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/utils.py:tensor_data",
+   "type": "function",
+   "name": "tensor_data",
+   "filePath": "vllm/v1/utils.py",
+   "lineRange": [
+    803,
+    823
+   ],
+   "summary": "张量原始字节 memoryview：CPU 连续走 numpy 快路径（少释放 GIL），否则 flatten().cpu().contiguous()。",
+   "tags": [
+    "serialization",
+    "tensor",
+    "utility"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/utils.py:copy_slice",
+   "type": "function",
+   "name": "copy_slice",
+   "filePath": "vllm/v1/utils.py",
+   "lineRange": [
+    675,
+    685
+   ],
+   "summary": "前 length 元素非阻塞拷贝入预分配 GPU 张量（pinned→GPU 热路径）。",
+   "tags": [
+    "tensor",
+    "async-copy",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/utils.py:compute_iteration_details",
+   "type": "function",
+   "name": "compute_iteration_details",
+   "filePath": "vllm/v1/utils.py",
+   "lineRange": [
+    844,
+    886
+   ],
+   "summary": "按 scheduler output 拆上下文（新请求或 context phase）与生成请求/token 计数+encoder 统计。",
+   "tags": [
+    "metrics",
+    "scheduling",
+    "utility"
+   ],
+   "complexity": "moderate"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/utils/ompmultiprocessing.py",
+   "target": "class:vllm/utils/ompmultiprocessing.py:OMPProcessManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/ompmultiprocessing.py",
+   "target": "class:vllm/utils/ompmultiprocessing.py:OMPProcessManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/registry.py",
+   "target": "class:vllm/utils/registry.py:ExtensionManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/registry.py",
+   "target": "class:vllm/utils/registry.py:ExtensionManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/sparse_utils.py",
+   "target": "function:vllm/utils/sparse_utils.py:check_sparse_tensor_invariants_threadsafe",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/sparse_utils.py",
+   "target": "function:vllm/utils/sparse_utils.py:check_sparse_tensor_invariants_threadsafe",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/sparse_utils.py",
+   "target": "function:vllm/utils/sparse_utils.py:safe_to_dense",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/sparse_utils.py",
+   "target": "function:vllm/utils/sparse_utils.py:safe_to_dense",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:update_environment_variables",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:update_environment_variables",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:set_env_var",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:set_env_var",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:suppress_stdout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:suppress_stdout",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:unique_filepath",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:unique_filepath",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:_maybe_force_spawn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:_release_libgomp_threads",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:get_mp_context",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:get_mp_context",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:set_process_title",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:set_process_title",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:kill_process_tree",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:kill_process_tree",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:set_ulimit",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:set_ulimit",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:find_loaded_libraries",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "function:vllm/utils/system_utils.py:find_loaded_libraries",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/tensor_schema.py",
+   "target": "class:vllm/utils/tensor_schema.py:TensorShape",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/tensor_schema.py",
+   "target": "class:vllm/utils/tensor_schema.py:TensorShape",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/tensor_schema.py",
+   "target": "class:vllm/utils/tensor_schema.py:TensorSchema",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/tensor_schema.py",
+   "target": "class:vllm/utils/tensor_schema.py:TensorSchema",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "class:vllm/utils/torch_utils.py:LayerName",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "class:vllm/utils/torch_utils.py:LayerName",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:is_strictly_contiguous",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:is_strictly_contiguous",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:is_non_overlapping_and_dense",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:is_non_overlapping_and_dense",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:canonicalize_singleton_dim_strides",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:canonicalize_singleton_dim_strides",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:_cgroup_cpu_limit",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:available_cpu_count",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:available_cpu_count",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:startup_omp_num_threads",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:startup_omp_num_threads",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:set_torch_threads_for_runtime",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:set_torch_threads_for_runtime",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:set_default_torch_num_threads",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:set_default_torch_num_threads",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:guard_cuda_initialization",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:guard_cuda_initialization",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:is_lossless_cast",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:is_lossless_cast",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:get_kv_cache_torch_dtype",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:get_kv_cache_torch_dtype",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:get_kv_cache_quant_algo_string",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:get_kv_cache_quant_algo_string",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:resolve_kv_cache_dtype_string",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:resolve_kv_cache_dtype_string",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:set_random_seed",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:set_random_seed",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:nvfp4_split_data_scale",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:nvfp4_split_data_scale",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:create_kv_caches_with_random_flash",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:create_kv_caches_with_random_flash",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:create_kv_caches_with_random",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:create_kv_caches_with_random",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:async_tensor_h2d",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:async_tensor_h2d",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:make_tensor_with_pad",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:make_tensor_with_pad",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:current_stream",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:current_stream",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:aux_stream",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:aux_stream",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:weak_ref_tensors",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:weak_ref_tensors",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:get_accelerator_view_from_cpu_tensor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:get_accelerator_view_from_cpu_tensor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:direct_register_custom_op",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "function:vllm/utils/torch_utils.py:direct_register_custom_op",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_version.py",
+   "target": "function:vllm/utils/torch_version.py:is_torch_equal_or_newer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/torch_version.py",
+   "target": "function:vllm/utils/torch_version.py:is_torch_equal_or_newer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/torch_version.py",
+   "target": "function:vllm/utils/torch_version.py:_is_torch_equal",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/watch_dog.py",
+   "target": "class:vllm/utils/watch_dog.py:WatchDog",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/watch_dog.py",
+   "target": "class:vllm/utils/watch_dog.py:WatchDog",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/watch_dog.py",
+   "target": "class:vllm/utils/watch_dog.py:NoopWatchDog",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/watch_dog.py",
+   "target": "class:vllm/utils/watch_dog.py:NoopWatchDog",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/watch_dog.py",
+   "target": "class:vllm/utils/watch_dog.py:ThreadedWatchDog",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/watch_dog.py",
+   "target": "class:vllm/utils/watch_dog.py:ThreadedWatchDog",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/watch_dog.py",
+   "target": "function:vllm/utils/watch_dog.py:start_watch_dog",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/utils/watch_dog.py",
+   "target": "function:vllm/utils/watch_dog.py:start_watch_dog",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/cudagraph_dispatcher.py",
+   "target": "class:vllm/v1/cudagraph_dispatcher.py:CudagraphDispatcher",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/cudagraph_dispatcher.py",
+   "target": "class:vllm/v1/cudagraph_dispatcher.py:CudagraphDispatcher",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "class:vllm/v1/executor/abstract.py:Executor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "class:vllm/v1/executor/abstract.py:Executor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "function:vllm/v1/executor/abstract.py:_check_worker_profile_kwargs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "class:vllm/v1/executor/multiproc_executor.py:ExceptionWithKVConnectorOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "class:vllm/v1/executor/multiproc_executor.py:ExceptionWithKVConnectorOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "class:vllm/v1/executor/multiproc_executor.py:FutureWrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "class:vllm/v1/executor/multiproc_executor.py:FutureWrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "class:vllm/v1/executor/multiproc_executor.py:MultiprocExecutor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "class:vllm/v1/executor/multiproc_executor.py:MultiprocExecutor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "class:vllm/v1/executor/multiproc_executor.py:WorkerProcHandle",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "class:vllm/v1/executor/multiproc_executor.py:WorkerProcHandle",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "class:vllm/v1/executor/multiproc_executor.py:WorkerProc",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "class:vllm/v1/executor/multiproc_executor.py:WorkerProc",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "function:vllm/v1/executor/multiproc_executor.py:set_multiprocessing_worker_envs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "function:vllm/v1/executor/multiproc_executor.py:set_multiprocessing_worker_envs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_executor_v2.py",
+   "target": "class:vllm/v1/executor/ray_executor_v2.py:RayWorkerHandle",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_executor_v2.py",
+   "target": "class:vllm/v1/executor/ray_executor_v2.py:RayWorkerHandle",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_executor_v2.py",
+   "target": "class:vllm/v1/executor/ray_executor_v2.py:RayWorkerProc",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_executor_v2.py",
+   "target": "class:vllm/v1/executor/ray_executor_v2.py:RayWorkerProc",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_executor_v2.py",
+   "target": "class:vllm/v1/executor/ray_executor_v2.py:RayExecutorV2",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_executor_v2.py",
+   "target": "class:vllm/v1/executor/ray_executor_v2.py:RayExecutorV2",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_utils.py",
+   "target": "function:vllm/v1/executor/ray_utils.py:_verify_bundles",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_utils.py",
+   "target": "function:vllm/v1/executor/ray_utils.py:build_actor_name",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_utils.py",
+   "target": "function:vllm/v1/executor/ray_utils.py:build_actor_name",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_utils.py",
+   "target": "function:vllm/v1/executor/ray_utils.py:get_bundles_for_indices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_utils.py",
+   "target": "function:vllm/v1/executor/ray_utils.py:get_bundles_for_indices",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_utils.py",
+   "target": "function:vllm/v1/executor/ray_utils.py:get_bundles_sorted_by_node",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_utils.py",
+   "target": "function:vllm/v1/executor/ray_utils.py:get_bundles_sorted_by_node",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_utils.py",
+   "target": "function:vllm/v1/executor/ray_utils.py:_wait_until_pg_ready",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_utils.py",
+   "target": "function:vllm/v1/executor/ray_utils.py:initialize_ray_cluster",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_utils.py",
+   "target": "function:vllm/v1/executor/ray_utils.py:initialize_ray_cluster",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/uniproc_executor.py",
+   "target": "class:vllm/v1/executor/uniproc_executor.py:AsyncOutputFuture",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/uniproc_executor.py",
+   "target": "class:vllm/v1/executor/uniproc_executor.py:AsyncOutputFuture",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/uniproc_executor.py",
+   "target": "class:vllm/v1/executor/uniproc_executor.py:UniProcExecutor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/uniproc_executor.py",
+   "target": "class:vllm/v1/executor/uniproc_executor.py:UniProcExecutor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/uniproc_executor.py",
+   "target": "class:vllm/v1/executor/uniproc_executor.py:ExecutorWithExternalLauncher",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/uniproc_executor.py",
+   "target": "class:vllm/v1/executor/uniproc_executor.py:ExecutorWithExternalLauncher",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/vllm_net_devices.py",
+   "target": "function:vllm/v1/executor/vllm_net_devices.py:normalize_pci",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/vllm_net_devices.py",
+   "target": "function:vllm/v1/executor/vllm_net_devices.py:normalize_pci",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/vllm_net_devices.py",
+   "target": "function:vllm/v1/executor/vllm_net_devices.py:parse_gpu_nic_mapping",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/vllm_net_devices.py",
+   "target": "function:vllm/v1/executor/vllm_net_devices.py:parse_gpu_nic_mapping",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/vllm_net_devices.py",
+   "target": "function:vllm/v1/executor/vllm_net_devices.py:rdma_name_for_nic_pci",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/vllm_net_devices.py",
+   "target": "function:vllm/v1/executor/vllm_net_devices.py:rdma_name_for_nic_pci",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/vllm_net_devices.py",
+   "target": "function:vllm/v1/executor/vllm_net_devices.py:parse_nic_selection_vars",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/vllm_net_devices.py",
+   "target": "function:vllm/v1/executor/vllm_net_devices.py:parse_nic_selection_vars",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/vllm_net_devices.py",
+   "target": "function:vllm/v1/executor/vllm_net_devices.py:set_worker_gpu_nic_mapping",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/vllm_net_devices.py",
+   "target": "function:vllm/v1/executor/vllm_net_devices.py:set_worker_gpu_nic_mapping",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/executor/vllm_net_devices.py",
+   "target": "function:vllm/v1/executor/vllm_net_devices.py:set_worker_net_device",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/executor/vllm_net_devices.py",
+   "target": "function:vllm/v1/executor/vllm_net_devices.py:set_worker_net_device",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "target": "class:vllm/v1/fault_tolerance/engine_core_sentinel.py:EngineCoreSentinel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "target": "class:vllm/v1/fault_tolerance/engine_core_sentinel.py:EngineCoreSentinel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "target": "function:vllm/v1/fault_tolerance/engine_core_sentinel.py:fault_tolerant_wrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "target": "function:vllm/v1/fault_tolerance/engine_core_sentinel.py:fault_tolerant_wrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:KVQuantMode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:KVQuantMode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:KVCacheSpecKind",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:KVCacheSpecKind",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:KVCacheSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:KVCacheSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:HiSparseHotSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:HiSparseHotSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:HiSparseResidentSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:HiSparseResidentSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:AttentionSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:AttentionSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:FullAttentionSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:FullAttentionSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:MLAAttentionSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:MLAAttentionSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:RSWASpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:RSWASpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:ChunkedLocalAttentionSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:ChunkedLocalAttentionSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:SlidingWindowSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:SlidingWindowSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:CircularBufferSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:CircularBufferSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:SlidingWindowMLASpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:SlidingWindowMLASpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:MambaSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:MambaSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:SinkFullAttentionSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:SinkFullAttentionSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:UniformTypeKVCacheSpecs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:UniformTypeKVCacheSpecs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:KVCacheTensor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:KVCacheTensor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:KVCacheGroupSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:KVCacheGroupSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:KVCacheConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "class:vllm/v1/kv_cache_interface.py:KVCacheConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:get_kv_quant_mode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:get_kv_quant_mode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:replace_as",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:replace_as",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:group_kernel_blocks",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:group_kernel_blocks",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:compute_layer_kv_cache_shape_bytes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:compute_layer_kv_cache_shape_bytes",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:compute_layout_strides",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:compute_layout_strides",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:create_kv_cache_views",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:create_kv_cache_views",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:get_mamba_prefill_checkpoint_position",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:get_mamba_prefill_checkpoint_position",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:is_mamba_prefill_checkpoint_valid",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:is_mamba_prefill_checkpoint_valid",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:iter_layer_specs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:iter_layer_specs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:is_full_attention_spec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:is_full_attention_spec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:get_kv_cache_spec_kind",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:get_kv_cache_spec_kind",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:get_kv_cache_spec_sliding_window",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "function:vllm/v1/kv_cache_interface.py:get_kv_cache_spec_sliding_window",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_spec_registry.py",
+   "target": "class:vllm/v1/kv_cache_spec_registry.py:KVCacheSpecMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_spec_registry.py",
+   "target": "class:vllm/v1/kv_cache_spec_registry.py:KVCacheSpecMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_spec_registry.py",
+   "target": "class:vllm/v1/kv_cache_spec_registry.py:KVCacheSpecRegistry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_spec_registry.py",
+   "target": "class:vllm/v1/kv_cache_spec_registry.py:KVCacheSpecRegistry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_spec_registry.py",
+   "target": "function:vllm/v1/kv_cache_spec_registry.py:register_kv_cache_spec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_spec_registry.py",
+   "target": "function:vllm/v1/kv_cache_spec_registry.py:register_kv_cache_spec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "class:vllm/v1/outputs.py:LogprobsLists",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "class:vllm/v1/outputs.py:LogprobsLists",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "class:vllm/v1/outputs.py:SamplingMaskLists",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "class:vllm/v1/outputs.py:SamplingMaskLists",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "class:vllm/v1/outputs.py:LogprobsTensors",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "class:vllm/v1/outputs.py:LogprobsTensors",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "class:vllm/v1/outputs.py:SamplerOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "class:vllm/v1/outputs.py:SamplerOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "class:vllm/v1/outputs.py:KVConnectorOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "class:vllm/v1/outputs.py:KVConnectorOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "class:vllm/v1/outputs.py:ECConnectorOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "class:vllm/v1/outputs.py:ECConnectorOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "class:vllm/v1/outputs.py:ModelRunnerOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "class:vllm/v1/outputs.py:ModelRunnerOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "class:vllm/v1/outputs.py:AsyncModelRunnerOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "class:vllm/v1/outputs.py:AsyncModelRunnerOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "function:vllm/v1/outputs.py:make_empty_encoder_model_runner_output",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "function:vllm/v1/outputs.py:make_empty_encoder_model_runner_output",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/request.py",
+   "target": "class:vllm/v1/request.py:StreamingUpdate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/request.py",
+   "target": "class:vllm/v1/request.py:StreamingUpdate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/request.py",
+   "target": "class:vllm/v1/request.py:Request",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/request.py",
+   "target": "class:vllm/v1/request.py:Request",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/request.py",
+   "target": "class:vllm/v1/request.py:RequestStatus",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/request.py",
+   "target": "class:vllm/v1/request.py:RequestStatus",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/serial_utils.py",
+   "target": "class:vllm/v1/serial_utils.py:OOBTensorConsumer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/serial_utils.py",
+   "target": "class:vllm/v1/serial_utils.py:OOBTensorConsumer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/serial_utils.py",
+   "target": "class:vllm/v1/serial_utils.py:MsgpackEncoder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/serial_utils.py",
+   "target": "class:vllm/v1/serial_utils.py:MsgpackEncoder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/serial_utils.py",
+   "target": "class:vllm/v1/serial_utils.py:MsgpackDecoder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/serial_utils.py",
+   "target": "class:vllm/v1/serial_utils.py:MsgpackDecoder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/serial_utils.py",
+   "target": "class:vllm/v1/serial_utils.py:PydanticMsgspecMixin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/serial_utils.py",
+   "target": "class:vllm/v1/serial_utils.py:PydanticMsgspecMixin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/serial_utils.py",
+   "target": "function:vllm/v1/serial_utils.py:_decode_type_info_recursive",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/serial_utils.py",
+   "target": "function:vllm/v1/serial_utils.py:run_method",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/serial_utils.py",
+   "target": "function:vllm/v1/serial_utils.py:run_method",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "class:vllm/v1/utils.py:ConstantList",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "class:vllm/v1/utils.py:ConstantList",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "class:vllm/v1/utils.py:CpuGpuBuffer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "class:vllm/v1/utils.py:CpuGpuBuffer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "class:vllm/v1/utils.py:APIServerProcessManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "class:vllm/v1/utils.py:APIServerProcessManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "class:vllm/v1/utils.py:RustFrontendProcessManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "class:vllm/v1/utils.py:RustFrontendProcessManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "class:vllm/v1/utils.py:_SubprocessWrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "class:vllm/v1/utils.py:IterationDetails",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "class:vllm/v1/utils.py:IterationDetails",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "function:vllm/v1/utils.py:get_engine_client_zmq_addr",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "function:vllm/v1/utils.py:get_engine_client_zmq_addr",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "function:vllm/v1/utils.py:_shutdown_subprocesses",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "function:vllm/v1/utils.py:run_api_server_worker_proc",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "function:vllm/v1/utils.py:run_api_server_worker_proc",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "function:vllm/v1/utils.py:wait_for_completion_or_failure",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "function:vllm/v1/utils.py:wait_for_completion_or_failure",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "function:vllm/v1/utils.py:shutdown",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "function:vllm/v1/utils.py:shutdown",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "function:vllm/v1/utils.py:report_usage_stats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "function:vllm/v1/utils.py:report_usage_stats",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "function:vllm/v1/utils.py:record_function_or_nullcontext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "function:vllm/v1/utils.py:record_function_or_nullcontext",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "function:vllm/v1/utils.py:tensor_data",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "function:vllm/v1/utils.py:tensor_data",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "function:vllm/v1/utils.py:copy_slice",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "function:vllm/v1/utils.py:copy_slice",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "function:vllm/v1/utils.py:compute_iteration_details",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "function:vllm/v1/utils.py:compute_iteration_details",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/utils/watch_dog.py:NoopWatchDog",
+   "target": "class:vllm/utils/watch_dog.py:WatchDog",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/utils/watch_dog.py:ThreadedWatchDog",
+   "target": "class:vllm/utils/watch_dog.py:WatchDog",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/executor/multiproc_executor.py:MultiprocExecutor",
+   "target": "class:vllm/v1/executor/abstract.py:Executor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/executor/ray_executor_v2.py:RayWorkerProc",
+   "target": "class:vllm/v1/executor/multiproc_executor.py:WorkerProc",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/executor/ray_executor_v2.py:RayExecutorV2",
+   "target": "class:vllm/v1/executor/multiproc_executor.py:MultiprocExecutor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/executor/uniproc_executor.py:UniProcExecutor",
+   "target": "class:vllm/v1/executor/abstract.py:Executor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/executor/uniproc_executor.py:ExecutorWithExternalLauncher",
+   "target": "class:vllm/v1/executor/uniproc_executor.py:UniProcExecutor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_cache_interface.py:HiSparseHotSpec",
+   "target": "class:vllm/v1/kv_cache_interface.py:KVCacheSpec",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_cache_interface.py:HiSparseResidentSpec",
+   "target": "class:vllm/v1/kv_cache_interface.py:KVCacheSpec",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_cache_interface.py:AttentionSpec",
+   "target": "class:vllm/v1/kv_cache_interface.py:KVCacheSpec",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_cache_interface.py:FullAttentionSpec",
+   "target": "class:vllm/v1/kv_cache_interface.py:AttentionSpec",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_cache_interface.py:MLAAttentionSpec",
+   "target": "class:vllm/v1/kv_cache_interface.py:FullAttentionSpec",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_cache_interface.py:RSWASpec",
+   "target": "class:vllm/v1/kv_cache_interface.py:FullAttentionSpec",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_cache_interface.py:ChunkedLocalAttentionSpec",
+   "target": "class:vllm/v1/kv_cache_interface.py:AttentionSpec",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_cache_interface.py:SlidingWindowSpec",
+   "target": "class:vllm/v1/kv_cache_interface.py:AttentionSpec",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_cache_interface.py:CircularBufferSpec",
+   "target": "class:vllm/v1/kv_cache_interface.py:AttentionSpec",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_cache_interface.py:SlidingWindowMLASpec",
+   "target": "class:vllm/v1/kv_cache_interface.py:SlidingWindowSpec",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_cache_interface.py:MambaSpec",
+   "target": "class:vllm/v1/kv_cache_interface.py:KVCacheSpec",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_cache_interface.py:SinkFullAttentionSpec",
+   "target": "class:vllm/v1/kv_cache_interface.py:FullAttentionSpec",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/kv_cache_interface.py:UniformTypeKVCacheSpecs",
+   "target": "class:vllm/v1/kv_cache_interface.py:KVCacheSpec",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/executor/multiproc_executor.py:MultiprocExecutor",
+   "target": "class:vllm/utils/ompmultiprocessing.py:OMPProcessManager",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/executor/multiproc_executor.py:WorkerProc",
+   "target": "function:vllm/utils/watch_dog.py:start_watch_dog",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/executor/ray_executor_v2.py:RayExecutorV2",
+   "target": "function:vllm/v1/executor/ray_utils.py:initialize_ray_cluster",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/executor/uniproc_executor.py:UniProcExecutor",
+   "target": "function:vllm/v1/serial_utils.py:run_method",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/fault_tolerance/engine_core_sentinel.py:EngineCoreSentinel",
+   "target": "function:vllm/v1/serial_utils.py:run_method",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/executor/abstract.py:Executor",
+   "target": "class:vllm/v1/executor/multiproc_executor.py:MultiprocExecutor",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/executor/abstract.py:Executor",
+   "target": "class:vllm/v1/executor/uniproc_executor.py:UniProcExecutor",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/executor/abstract.py:Executor",
+   "target": "class:vllm/v1/executor/ray_executor_v2.py:RayExecutorV2",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/utils/ompmultiprocessing.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/ompmultiprocessing.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/ompmultiprocessing.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/ompmultiprocessing.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/ompmultiprocessing.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/ompmultiprocessing.py",
+   "target": "file:vllm/utils/cpu_resource_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/sparse_utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/sparse_utils.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/sparse_utils.py",
+   "target": "file:vllm/utils/mem_constants.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "file:vllm/ray/lazy_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/system_utils.py",
+   "target": "file:vllm/utils/platform_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/tensor_schema.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "file:vllm/utils/platform_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/torch_utils.py",
+   "target": "file:vllm/utils/torch_version.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/utils/watch_dog.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/cudagraph_dispatcher.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/cudagraph_dispatcher.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/cudagraph_dispatcher.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/cudagraph_dispatcher.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/cudagraph_dispatcher.py",
+   "target": "file:vllm/lora/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "file:vllm/tracing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "file:vllm/v1/executor/multiproc_executor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "file:vllm/v1/executor/ray_executor_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "file:vllm/v1/executor/uniproc_executor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/abstract.py",
+   "target": "file:vllm/v1/worker/worker_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/tracing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/utils/network_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/utils/numa_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/utils/ompmultiprocessing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/utils/system_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/utils/watch_dog.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/v1/executor/abstract.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/v1/executor/vllm_net_devices.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/multiproc_executor.py",
+   "target": "file:vllm/v1/worker/worker_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_executor_v2.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_executor_v2.py",
+   "target": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_executor_v2.py",
+   "target": "file:vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_executor_v2.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_executor_v2.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_executor_v2.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_executor_v2.py",
+   "target": "file:vllm/utils/network_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_executor_v2.py",
+   "target": "file:vllm/v1/executor/multiproc_executor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_executor_v2.py",
+   "target": "file:vllm/v1/executor/ray_env_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_executor_v2.py",
+   "target": "file:vllm/v1/executor/ray_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/ray_utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/uniproc_executor.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/uniproc_executor.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/uniproc_executor.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/uniproc_executor.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/uniproc_executor.py",
+   "target": "file:vllm/utils/network_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/uniproc_executor.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/uniproc_executor.py",
+   "target": "file:vllm/v1/executor/abstract.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/uniproc_executor.py",
+   "target": "file:vllm/v1/executor/vllm_net_devices.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/uniproc_executor.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/uniproc_executor.py",
+   "target": "file:vllm/v1/serial_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/uniproc_executor.py",
+   "target": "file:vllm/v1/worker/worker_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/vllm_net_devices.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/vllm_net_devices.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/vllm_net_devices.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/executor/vllm_net_devices.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "target": "file:vllm/utils/network_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "target": "file:vllm/v1/core/sched/scheduler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "target": "file:vllm/v1/engine/core.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "target": "file:vllm/v1/fault_tolerance/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "target": "file:vllm/v1/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "target": "file:vllm/v1/serial_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "file:vllm/v1/kv_cache_layout.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_interface.py",
+   "target": "file:vllm/v1/kv_cache_spec_registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_spec_registry.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_spec_registry.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_spec_registry.py",
+   "target": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/kv_cache_spec_registry.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "file:vllm/compilation/cuda_graph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "file:vllm/distributed/aux_output_connector/connector.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "file:vllm/distributed/kv_events.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/outputs.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/request.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/request.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/request.py",
+   "target": "file:vllm/pooling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/request.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/request.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/request.py",
+   "target": "file:vllm/v1/core/kv_cache_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/request.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/request.py",
+   "target": "file:vllm/v1/kv_hints/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/request.py",
+   "target": "file:vllm/v1/metrics/stats.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/request.py",
+   "target": "file:vllm/v1/structured_output/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/request.py",
+   "target": "file:vllm/v1/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/serial_utils.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/serial_utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/serial_utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/serial_utils.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/serial_utils.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/serial_utils.py",
+   "target": "file:vllm/v1/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "file:vllm/entrypoints/common/startup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "file:vllm/model_executor/model_loader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "file:vllm/usage/usage_lib.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "file:vllm/utils/network_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "file:vllm/utils/system_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "file:vllm/v1/engine/admission_control.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "file:vllm/v1/engine/coordinator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/utils.py",
+   "target": "file:vllm/v1/engine/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

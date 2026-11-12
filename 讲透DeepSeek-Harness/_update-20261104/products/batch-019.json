@@ -1,0 +1,1692 @@
+{
+ "nodes": [
+  {
+   "id": "document:packages/compaction/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/compaction/README.md",
+   "summary": "compaction 组地图：会话压缩功能族——自动压缩、按需 /compact 命令、工具输出裁剪。",
+   "tags": [
+    "documentation",
+    "group-map",
+    "overview"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/compaction/command-compact/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/compaction/command-compact/README.md",
+   "summary": "dsh-command-compact 包英文主文档：给聊天 UI 加 /compact 命令——按需把旧历史替换为单条摘要（早于自动压力触发）；命令与任意压缩后端协作且不消耗模型 turn，完成后显示压缩条数与估算省 token；agent 忙或压缩进行中时明确提示不可用，运行期间发送的提示排队等它结束。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/compaction/command-compact/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/compaction/command-compact/package.json",
+   "summary": "@deepseek-ai/dsh-command-compact 包清单：显式会话压缩的人面斜杠命令，零运行时依赖。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/compaction/command-compact/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/compaction/command-compact/src/index.ts",
+   "summary": "Cordis 函数插件（108 行）：注册无参 /compact 命令——executeCompact 委托 ctx.compaction.compactNow，ManualCompactionError 六类码（busy/cancelled/changed/summary/commit/persistence）转成简洁人面错误文案（closed-union assertNever 收口）；effect 内先登记活动 handler 排水再注册命令（复合 teardown LIFO 下无新调用混入）。",
+   "tags": [
+    "cordis-plugin",
+    "slash-command",
+    "error-mapping"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/compaction/command-compact/src/index.ts:expectedFailure",
+   "type": "function",
+   "name": "expectedFailure",
+   "filePath": "packages/compaction/command-compact/src/index.ts",
+   "lineRange": [
+    24,
+    56
+   ],
+   "summary": "把六类手动压缩失败码转换为人面命令结果（每码一句说明，含重试指引）。",
+   "tags": [
+    "error-mapping",
+    "human-facing"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/compaction/command-compact/src/index.ts:executeCompact",
+   "type": "function",
+   "name": "executeCompact",
+   "filePath": "packages/compaction/command-compact/src/index.ts",
+   "lineRange": [
+    59,
+    79
+   ],
+   "summary": "执行一次无参手动压缩：拒绝带参调用，成功回报压缩条数与估算 token，中止与 ManualCompactionError 分类处理。",
+   "tags": [
+    "command-handler",
+    "compaction"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/compaction/command-compact/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/compaction/command-compact/src/index.ts",
+   "lineRange": [
+    85,
+    108
+   ],
+   "summary": "注册 compact 命令定义：活动 promise 集排水 + effect 生命周期（观察者镜像不可成为未处理拒绝）。",
+   "tags": [
+    "cordis-plugin",
+    "registration",
+    "lifecycle"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "document:packages/compaction/compaction/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/compaction/compaction/README.md",
+   "summary": "dsh-compaction 包英文主文档：长会话把旧历史压缩成单条摘要消息、保留近期对话、后续如同摘要一直在场（配 basic 后端与可选 /compact）；被阴影的内容留在会话日志中，确定性重放复现同样的压缩后对话——实现后端/触发器/识别压缩消息时用它，本包自身不做压缩。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/compaction/compaction/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/compaction/compaction/package.json",
+   "summary": "@deepseek-ai/dsh-compaction 包清单：抽象压缩服务 seam（ctx.compaction），零依赖。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/compaction/compaction/src/checkpoint.ts",
+   "type": "file",
+   "name": "checkpoint.ts",
+   "filePath": "packages/compaction/compaction/src/checkpoint.ts",
+   "summary": "压缩 checkpoint 源：compactCheckpointSource 构造与一次压缩事务关联的不可变替换消息源（compactionId+可选 sourceCommandId），isCompactCheckpointSource 识别持久化 checkpoint；纯 type/value/predicate 出口（无 cordis 导入与模块合并）——client/wire 程序可不加载 host Context 合并即可命名（dsh-commands/brand 形态）。",
+   "tags": [
+    "checkpoint-source",
+    "leaf-outlet",
+    "persistence-attribution"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/compaction/compaction/src/checkpoint.ts:compactCheckpointSource",
+   "type": "function",
+   "name": "compactCheckpointSource",
+   "filePath": "packages/compaction/compaction/src/checkpoint.ts",
+   "lineRange": [
+    33,
+    42
+   ],
+   "summary": "构造与压缩事务关联的冻结 checkpoint 源。",
+   "tags": [
+    "factory",
+    "freezing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/compaction/compaction/src/checkpoint.ts:isCompactCheckpointSource",
+   "type": "function",
+   "name": "isCompactCheckpointSource",
+   "filePath": "packages/compaction/compaction/src/checkpoint.ts",
+   "lineRange": [
+    49,
+    51
+   ],
+   "summary": "类型守卫：判定持久化消息源是否压缩 checkpoint。",
+   "tags": [
+    "type-guard"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/compaction/compaction/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/compaction/compaction/src/index.ts",
+   "summary": "Compaction Service Definition（ctx.compaction，195 行）：后端子类化 CompactionEngine 决定何时压缩、把历史区间替换为单摘要节点；ManualCompactionError 六类期望失败（busy 可来自任何入口）；declare-merge 'compact-checkpoint' 消息源；依赖规则=本 seam 必然依赖 session 与 LLM 词表（组文档记录）。",
+   "tags": [
+    "service-definition",
+    "compaction",
+    "capability-seam"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/compaction/compaction/src/index.ts:ManualCompactionError",
+   "type": "class",
+   "name": "ManualCompactionError",
+   "filePath": "packages/compaction/compaction/src/index.ts",
+   "lineRange": [
+    48,
+    64
+   ],
+   "summary": "带稳定失败码的期望压缩失败（适合直接人面命令结果；后端诊断保留在 message）。",
+   "tags": [
+    "error-handling",
+    "classified-failure"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/compaction/compaction/src/index.ts:CompactionEngine",
+   "type": "class",
+   "name": "CompactionEngine",
+   "filePath": "packages/compaction/compaction/src/index.ts",
+   "lineRange": [
+    119,
+    193
+   ],
+   "summary": "抽象 Service 子类（Service Definition 'compaction'）：compactIfNeeded（自动触发：常规压力用最近持久路由请求，上下文溢出可在阈值下强制有用平衡缩减；单个超大保留单元或请求信封无法经 surface 压缩修复）与 compactNow（显式低于阈值压缩，同步先占 idle 任务）两个抽象入口。",
+   "tags": [
+    "service-definition",
+    "abstract",
+    "compaction"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/compaction/compaction/src/tool-pairing.ts",
+   "type": "file",
+   "name": "tool-pairing.ts",
+   "filePath": "packages/compaction/compaction/src/tool-pairing.ts",
+   "summary": "surface 上的工具配对平衡：压缩改变 surface 位置，安全切割从当前 surface 顺序中的 tool-call/result 内容推导而非步标记——增量 BalanceCache（按 surface 重写代失效）折叠每个切割位的在途工具调用计数，toolPairingBalancedBefore/After 判定切割不劈开工具对；缓存按 Session 弱引用（未见尾部先验证后变更防脏追加）。",
+   "tags": [
+    "tool-pairing",
+    "incremental-cache",
+    "surface-cuts"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/compaction/compaction/src/tool-pairing.ts:extendCache",
+   "type": "function",
+   "name": "extendCache",
+   "filePath": "packages/compaction/compaction/src/tool-pairing.ts",
+   "lineRange": [
+    41,
+    69
+   ],
+   "summary": "把未入缓存的 surface 序列折叠进平衡状态（先验证后变更，损坏追加不留下半推进状态）。",
+   "tags": [
+    "incremental-cache",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/compaction/compaction/src/tool-pairing.ts:balanceCache",
+   "type": "function",
+   "name": "balanceCache",
+   "filePath": "packages/compaction/compaction/src/tool-pairing.ts",
+   "lineRange": [
+    72,
+    92
+   ],
+   "summary": "取会话当前 surface 代的平衡缓存（代不匹配即重建）。",
+   "tags": [
+    "cache",
+    "generation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/compaction/compaction/src/tool-pairing.ts:toolPairingBalancedBefore",
+   "type": "function",
+   "name": "toolPairingBalancedBefore",
+   "filePath": "packages/compaction/compaction/src/tool-pairing.ts",
+   "lineRange": [
+    112,
+    114
+   ],
+   "summary": "判定 seq 之前的切割是否工具配对平衡。",
+   "tags": [
+    "predicate",
+    "tool-pairing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/compaction/compaction/src/tool-pairing.ts:toolPairingBalancedAfter",
+   "type": "function",
+   "name": "toolPairingBalancedAfter",
+   "filePath": "packages/compaction/compaction/src/tool-pairing.ts",
+   "lineRange": [
+    124,
+    126
+   ],
+   "summary": "判定 seq 之后的切割是否工具配对平衡。",
+   "tags": [
+    "predicate",
+    "tool-pairing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/compaction/compaction/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/compaction/compaction/src/types.ts",
+   "summary": "压缩词表：CompactionResult 类型与 compaction/* 会话事件（declare-merge）——锁与摘要输入记录不进 surface，独立替换 user/message 携带摘要；配置与保留策略归后端包。",
+   "tags": [
+    "type-definition",
+    "compaction",
+    "event-vocabulary"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/compaction/compaction/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/compaction/compaction/tsconfig.json",
+   "summary": "包级 TS 配置：extends 仓根 base，rootDir=src、outDir=lib/types，references 覆盖 llm/session/commands。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/compaction/compaction/tsdown.config.ts",
+   "type": "file",
+   "name": "tsdown.config.ts",
+   "filePath": "packages/compaction/compaction/tsdown.config.ts",
+   "summary": "compaction seam 打包配置（9 行）：单入口 ESM 输出。",
+   "tags": [
+    "build-system",
+    "bundler"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/compaction/compaction-basic/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/compaction/compaction-basic/README.md",
+   "summary": "dsh-compaction-basic 包英文主文档（273 行）：长 agent 对话在模型上下文限附近持续工作——token 压力增长时把最旧历史压缩为摘要保留近期消息，上下文溢出错误后压缩并重试；/compact 手动触发、可选先裁剪超大工具输出；压缩用一次额外模型请求只留摘要文本，无法缩减系统提示/工具/会话前缀或拆分不可分单元。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:packages/compaction/compaction-basic/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/compaction/compaction-basic/package.json",
+   "summary": "@deepseek-ai/dsh-compaction-basic 包清单：token 计量驱动的压缩策略与 LLM 摘要后端，依赖 util-values/schemastery。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/compaction/compaction-basic/src/config.ts",
+   "type": "file",
+   "name": "config.ts",
+   "filePath": "packages/compaction/compaction-basic/src/config.ts",
+   "summary": "basic 后端配置解析与校验（362 行）：阈值比/余量/保留（比或 token 双轨）/摘要模型/maxTokens/重试与溢出重试、按 provider+model 的策略覆盖（resolveModelPolicies+validatePolicy 拒绝未知目标）；resolveCompactSpec 按上下文窗口与保留完成 token 解析出精确压缩规格；TargetPressureConfigError 是策略目标无法解析的稳定失败。",
+   "tags": [
+    "configuration",
+    "validation",
+    "policy-resolution"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/compaction/compaction-basic/src/config.ts:TargetPressureConfigError",
+   "type": "class",
+   "name": "TargetPressureConfigError",
+   "filePath": "packages/compaction/compaction-basic/src/config.ts",
+   "lineRange": [
+    53,
+    61
+   ],
+   "summary": "压力策略目标（provider+model）无法解析时的配置失败。",
+   "tags": [
+    "error-handling",
+    "configuration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/compaction/compaction-basic/src/config.ts:resolveConfig",
+   "type": "function",
+   "name": "resolveConfig",
+   "filePath": "packages/compaction/compaction-basic/src/config.ts",
+   "lineRange": [
+    68,
+    110
+   ],
+   "summary": "解析校验完整压缩配置（默认值、模型策略表、汇总对校验）。",
+   "tags": [
+    "config-resolution"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/compaction/compaction-basic/src/config.ts:resolveTargetPolicy",
+   "type": "function",
+   "name": "resolveTargetPolicy",
+   "filePath": "packages/compaction/compaction-basic/src/config.ts",
+   "lineRange": [
+    118,
+    139
+   ],
+   "summary": "按对话目标（provider+model）解析可选策略覆盖。",
+   "tags": [
+    "policy-resolution"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/compaction/compaction-basic/src/config.ts:resolveCompactSpec",
+   "type": "function",
+   "name": "resolveCompactSpec",
+   "filePath": "packages/compaction/compaction-basic/src/config.ts",
+   "lineRange": [
+    153,
+    217
+   ],
+   "summary": "按策略、上下文窗口与保留完成 token 解析精确压缩规格（阈值/保留量/重试次数）。",
+   "tags": [
+    "spec-resolution",
+    "token-budget"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/compaction/compaction-basic/src/config.ts:validateSummarizationPair",
+   "type": "function",
+   "name": "validateSummarizationPair",
+   "filePath": "packages/compaction/compaction-basic/src/config.ts",
+   "lineRange": [
+    307,
+    327
+   ],
+   "summary": "校验摘要 provider+model 成对声明（不允许单边）。",
+   "tags": [
+    "validation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/compaction/compaction-basic/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/compaction/compaction-basic/src/index.ts",
+   "summary": "BasicCompactionEngine（476 行）：依赖轻量的压缩后端——ctx.tokenMeter 供压力/保留/引用源事件/摘要收敛计价；routedTarget 从最近请求 header 解析持久路由目标；compactPressure（自动 open-turn）与 compactNow（手动 idle 会话）双入口，上下文溢出重试上限与溢出 agent 集跟踪；summarize() 是唯一子类定制钩子，重放与持久变更策略固定。",
+   "tags": [
+    "service-provider",
+    "compaction",
+    "token-meter"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/compaction/compaction-basic/src/index.ts:routedTarget",
+   "type": "function",
+   "name": "routedTarget",
+   "filePath": "packages/compaction/compaction-basic/src/index.ts",
+   "lineRange": [
+    49,
+    57
+   ],
+   "summary": "从会话请求 header 解析最近持久路由的 provider/model。",
+   "tags": [
+    "routing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/compaction/compaction-basic/src/index.ts:reservedCompletionTokens",
+   "type": "function",
+   "name": "reservedCompletionTokens",
+   "filePath": "packages/compaction/compaction-basic/src/index.ts",
+   "lineRange": [
+    65,
+    67
+   ],
+   "summary": "计算路由请求保留的输出 token（信封 cap→适配器默认→0）。",
+   "tags": [
+    "token-budget"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/compaction/compaction-basic/src/index.ts:BasicCompactionEngine",
+   "type": "class",
+   "name": "BasicCompactionEngine",
+   "filePath": "packages/compaction/compaction-basic/src/index.ts",
+   "lineRange": [
+    112,
+    474
+   ],
+   "summary": "363 行引擎：static inject llm/tokenMeter/sessions；构造解析冻结配置；compactIfNeeded/compactPressure/compactNow 三层入口，区域依赖注入（meter+summarize+recover），溢出重试与警告去重；declare-merge LlmRequestPurposeMap 'compaction'。",
+   "tags": [
+    "service-provider",
+    "engine",
+    "compaction"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/compaction/compaction-basic/src/region.ts",
+   "type": "file",
+   "name": "region.ts",
+   "filePath": "packages/compaction/compaction-basic/src/region.ts",
+   "summary": "surface 保留选择与共享的日志记录压缩事务（600 行）：selectCompactableRange 按保留 token 与工具配对平衡选安全区间；compactSurfaceRegion 是完整事务——prepare（计价+摘要输入）→summarize（稳定性断言 whole-surface/selected-span 两档）→commitCompactionBody（compaction/start→summary→prune 事件+checkpoint 替换消息）→completeCompaction；SurfaceChangedError 与 assertNoActiveCompaction 保护并发。",
+   "tags": [
+    "region-selection",
+    "compaction-transaction",
+    "durability"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/compaction/compaction-basic/src/region.ts:selectCompactableRange",
+   "type": "function",
+   "name": "selectCompactableRange",
+   "filePath": "packages/compaction/compaction-basic/src/region.ts",
+   "lineRange": [
+    117,
+    155
+   ],
+   "summary": "按测量与保留 token 选择可压缩区间（工具配对平衡的切割点、系统头保护）。",
+   "tags": [
+    "selection",
+    "tool-pairing"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/compaction/compaction-basic/src/region.ts:compactSurfaceRegion",
+   "type": "function",
+   "name": "compactSurfaceRegion",
+   "filePath": "packages/compaction/compaction-basic/src/region.ts",
+   "lineRange": [
+    173,
+    276
+   ],
+   "summary": "104 行完整压缩事务：准备→摘要（异步期间稳定性断言）→提交事件序列→完成；手动失败分类抛 ManualCompactionError。",
+   "tags": [
+    "transaction",
+    "compaction",
+    "failure-classification"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/compaction/compaction-basic/src/region.ts:assertNoActiveCompaction",
+   "type": "function",
+   "name": "assertNoActiveCompaction",
+   "filePath": "packages/compaction/compaction-basic/src/region.ts",
+   "lineRange": [
+    327,
+    334
+   ],
+   "summary": "断言会话无未闭合压缩事务（compaction/start 无配对 end）。",
+   "tags": [
+    "validation",
+    "durable-lock"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/compaction/compaction-basic/src/region.ts:summarizeCompaction",
+   "type": "function",
+   "name": "summarizeCompaction",
+   "filePath": "packages/compaction/compaction-basic/src/region.ts",
+   "lineRange": [
+    387,
+    428
+   ],
+   "summary": "执行摘要生成（依赖注入的 summarize+稳定性断言钩子）。",
+   "tags": [
+    "summarization"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/compaction/compaction-basic/src/region.ts:commitCompactionBody",
+   "type": "function",
+   "name": "commitCompactionBody",
+   "filePath": "packages/compaction/compaction-basic/src/region.ts",
+   "lineRange": [
+    471,
+    522
+   ],
+   "summary": "提交压缩事件序列（start→summary→prune）与 checkpoint 替换用户消息。",
+   "tags": [
+    "durability",
+    "event-sequence"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/compaction/compaction-basic/src/region.ts:buildSummarizationInput",
+   "type": "function",
+   "name": "buildSummarizationInput",
+   "filePath": "packages/compaction/compaction-basic/src/region.ts",
+   "lineRange": [
+    544,
+    563
+   ],
+   "summary": "从被阴影序列构建摘要输入（引用源事件）。",
+   "tags": [
+    "summarization",
+    "input-building"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/compaction/compaction-basic/src/region.ts:inspectCompactionEntryState",
+   "type": "function",
+   "name": "inspectCompactionEntryState",
+   "filePath": "packages/compaction/compaction-basic/src/region.ts",
+   "lineRange": [
+    566,
+    600
+   ],
+   "summary": "检查会话压缩入口状态（活跃事务与未匹配起点诊断）。",
+   "tags": [
+    "diagnostics",
+    "state-inspection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/compaction/compaction-basic/src/summarizer.ts",
+   "type": "file",
+   "name": "summarizer.ts",
+   "filePath": "packages/compaction/compaction-basic/src/summarizer.ts",
+   "summary": "默认一次性摘要与持久 checkpoint 框架（221 行）：summarizeWithLlm 走 compaction 用途的一次 LLM 请求（BlockAssembler 组装流、finishError 拒绝工具调用/最大 token 终态）；frameSummary 深冻结摘要结果与 checkpoint 消息框。",
+   "tags": [
+    "summarization",
+    "llm",
+    "checkpoint-framing"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/compaction/compaction-basic/src/summarizer.ts:summarizeWithLlm",
+   "type": "function",
+   "name": "summarizeWithLlm",
+   "filePath": "packages/compaction/compaction-basic/src/summarizer.ts",
+   "lineRange": [
+    120,
+    181
+   ],
+   "summary": "62 行 LLM 摘要：构建请求、流式组装、终态校验、usage 记账，失败分类抛错。",
+   "tags": [
+    "summarization",
+    "llm-request"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/compaction/compaction-basic/src/summarizer.ts:frameSummary",
+   "type": "function",
+   "name": "frameSummary",
+   "filePath": "packages/compaction/compaction-basic/src/summarizer.ts",
+   "lineRange": [
+    188,
+    194
+   ],
+   "summary": "深冻结摘要结果与 checkpoint 消息框。",
+   "tags": [
+    "freezing",
+    "checkpoint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/compaction/compaction-basic/src/summarizer.ts:finishError",
+   "type": "function",
+   "name": "finishError",
+   "filePath": "packages/compaction/compaction-basic/src/summarizer.ts",
+   "lineRange": [
+    197,
+    211
+   ],
+   "summary": "把操作性终态（tool-calls/max-tokens）转为摘要失败错误。",
+   "tags": [
+    "error-handling"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/compaction/compaction-basic/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/compaction/compaction-basic/src/types.ts",
+   "summary": "basic 后端配置词表：BasicCompactionConfig/CompactionPolicyConfig/ModelCompactPolicyConfig 与解析后类型；declare-merge LlmRequestPurposeMap 'compaction'（辅助请求用途标记）。",
+   "tags": [
+    "type-definition",
+    "configuration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/compaction/compaction-image-offload/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/compaction/compaction-image-offload/README.md",
+   "summary": "dsh-compaction-image-offload 包英文主文档：图片密集对话在旧图超出模型路由预算时继续——插件永久用命名附件与其只读路径的文本替换这些图后重试（不花 provider 重试预算）；该选择跨路由变更/恢复/重放保留，token 记账跟随日志选择，provider 缓存复用在首个变更消息处终止。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/compaction/compaction-image-offload/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/compaction/compaction-image-offload/package.json",
+   "summary": "@deepseek-ai/dsh-compaction-image-offload 包清单：图像能力路由的持久图片卸载（超预算请求图替换为占位并重试），依赖 util-values。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/compaction/compaction-image-offload/src/image-offload.ts",
+   "type": "file",
+   "name": "image-offload.ts",
+   "filePath": "packages/compaction/compaction-image-offload/src/image-offload.ts",
+   "summary": "offloadOldestImages：按失败请求的输入消息顺序选择并记录最旧保留图片出现位的持久省略决策——助手节点（模型输出）排除，图片索引按深度-first 计数（含嵌套工具结果与已卸载图）。",
+   "tags": [
+    "image-offload",
+    "selection",
+    "durable-decision"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/compaction/compaction-image-offload/src/image-offload.ts:offloadOldestImages",
+   "type": "function",
+   "name": "offloadOldestImages",
+   "filePath": "packages/compaction/compaction-image-offload/src/image-offload.ts",
+   "lineRange": [
+    16,
+    46
+   ],
+   "summary": "记录省略最旧 count 个保留输入图出现位的 image/offload 事件，返回是否还有可卸载出现位。",
+   "tags": [
+    "image-offload",
+    "decision-logging"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/compaction/compaction-image-offload/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/compaction/compaction-image-offload/src/index.ts",
+   "summary": "Cordis 函数插件（41 行）：注册 imageOffloadProjection 到 sessions；监听 agent/request-error 与 compaction/summary-error 两个 waterfall——IMAGE_OFFLOAD_REQUIRED 失败带 offloadImages 时执行持久 surface 修复（不花重试预算、不记重试事件）后放行 retry/恢复。",
+   "tags": [
+    "cordis-plugin",
+    "error-recovery",
+    "waterfall"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/compaction/compaction-image-offload/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/compaction/compaction-image-offload/src/index.ts",
+   "lineRange": [
+    25,
+    41
+   ],
+   "summary": "挂载 agent 与摘要恢复监听器（无配置）：两个 waterfall 都先验证错误码与省略数量再走 durable 修复路径。",
+   "tags": [
+    "cordis-plugin",
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/compaction/compaction-image-offload/src/project-message.ts",
+   "type": "file",
+   "name": "project-message.ts",
+   "filePath": "packages/compaction/compaction-image-offload/src/project-message.ts",
+   "summary": "offloadMessageImages：把 image/offload 记录的图片出现位不可变地投影为已卸载块（同身份消息、选中图标记替换），选中出现位缺失或已卸载即抛错。",
+   "tags": [
+    "projection",
+    "immutable-transform"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/compaction/compaction-image-offload/src/project-message.ts:offloadMessageImages",
+   "type": "function",
+   "name": "offloadMessageImages",
+   "filePath": "packages/compaction/compaction-image-offload/src/project-message.ts",
+   "lineRange": [
+    13,
+    36
+   ],
+   "summary": "按严格递增深度优先索引把消息中的选中图片替换为命名占位块（immutable）。",
+   "tags": [
+    "projection",
+    "image-offload"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/compaction/compaction-image-offload/src/projection.ts",
+   "type": "file",
+   "name": "projection.ts",
+   "filePath": "packages/compaction/compaction-image-offload/src/projection.ts",
+   "summary": "browser-safe 的持久图片选择声明与纯重放定义：declare-merge SessionEventMap 'image/offload'（targets 命名唯一当前节点+严格递增深度优先索引，消息节点与身份不变）；imageOffloadProjection 是 SessionMessageProjection——活会话与 detached 重放共用的原子校验与重建（data 精确形态断言）。",
+   "tags": [
+    "projection",
+    "session-event",
+    "browser-safe"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/compaction/compaction-image-offload/src/projection.ts:isIndex",
+   "type": "function",
+   "name": "isIndex",
+   "filePath": "packages/compaction/compaction-image-offload/src/projection.ts",
+   "lineRange": [
+    35,
+    37
+   ],
+   "summary": "判定持久出现位索引/序号是否规范（安全非负整数、非 -0）。",
+   "tags": [
+    "validation",
+    "canonical"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "document:packages/compaction/README.md",
+   "target": "file:packages/compaction/compaction/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/compaction/command-compact/README.md",
+   "target": "file:packages/compaction/command-compact/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/compaction/command-compact/package.json",
+   "target": "file:packages/compaction/command-compact/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/compaction/command-compact/src/index.ts",
+   "target": "function:packages/compaction/command-compact/src/index.ts:expectedFailure",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/command-compact/src/index.ts",
+   "target": "function:packages/compaction/command-compact/src/index.ts:executeCompact",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/command-compact/src/index.ts",
+   "target": "function:packages/compaction/command-compact/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/command-compact/src/index.ts",
+   "target": "function:packages/compaction/command-compact/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "document:packages/compaction/compaction/README.md",
+   "target": "file:packages/compaction/compaction/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/compaction/compaction/package.json",
+   "target": "file:packages/compaction/compaction/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/checkpoint.ts",
+   "target": "function:packages/compaction/compaction/src/checkpoint.ts:compactCheckpointSource",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/checkpoint.ts",
+   "target": "function:packages/compaction/compaction/src/checkpoint.ts:compactCheckpointSource",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/checkpoint.ts",
+   "target": "function:packages/compaction/compaction/src/checkpoint.ts:isCompactCheckpointSource",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/checkpoint.ts",
+   "target": "function:packages/compaction/compaction/src/checkpoint.ts:isCompactCheckpointSource",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/index.ts",
+   "target": "class:packages/compaction/compaction/src/index.ts:ManualCompactionError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/index.ts",
+   "target": "class:packages/compaction/compaction/src/index.ts:ManualCompactionError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/index.ts",
+   "target": "class:packages/compaction/compaction/src/index.ts:CompactionEngine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/index.ts",
+   "target": "class:packages/compaction/compaction/src/index.ts:CompactionEngine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/tool-pairing.ts",
+   "target": "function:packages/compaction/compaction/src/tool-pairing.ts:extendCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/tool-pairing.ts",
+   "target": "function:packages/compaction/compaction/src/tool-pairing.ts:balanceCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/tool-pairing.ts",
+   "target": "function:packages/compaction/compaction/src/tool-pairing.ts:toolPairingBalancedBefore",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/tool-pairing.ts",
+   "target": "function:packages/compaction/compaction/src/tool-pairing.ts:toolPairingBalancedBefore",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/tool-pairing.ts",
+   "target": "function:packages/compaction/compaction/src/tool-pairing.ts:toolPairingBalancedAfter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/tool-pairing.ts",
+   "target": "function:packages/compaction/compaction/src/tool-pairing.ts:toolPairingBalancedAfter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "config:packages/compaction/compaction/tsconfig.json",
+   "target": "file:packages/compaction/compaction/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/compaction/compaction/tsdown.config.ts",
+   "target": "file:packages/compaction/compaction/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "document:packages/compaction/compaction-basic/README.md",
+   "target": "file:packages/compaction/compaction-basic/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/compaction/compaction-basic/package.json",
+   "target": "file:packages/compaction/compaction-basic/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/config.ts",
+   "target": "class:packages/compaction/compaction-basic/src/config.ts:TargetPressureConfigError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/config.ts",
+   "target": "class:packages/compaction/compaction-basic/src/config.ts:TargetPressureConfigError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/config.ts",
+   "target": "function:packages/compaction/compaction-basic/src/config.ts:resolveConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/config.ts",
+   "target": "function:packages/compaction/compaction-basic/src/config.ts:resolveConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/config.ts",
+   "target": "function:packages/compaction/compaction-basic/src/config.ts:resolveTargetPolicy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/config.ts",
+   "target": "function:packages/compaction/compaction-basic/src/config.ts:resolveTargetPolicy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/config.ts",
+   "target": "function:packages/compaction/compaction-basic/src/config.ts:resolveCompactSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/config.ts",
+   "target": "function:packages/compaction/compaction-basic/src/config.ts:resolveCompactSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/config.ts",
+   "target": "function:packages/compaction/compaction-basic/src/config.ts:validateSummarizationPair",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/index.ts",
+   "target": "function:packages/compaction/compaction-basic/src/index.ts:routedTarget",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/index.ts",
+   "target": "function:packages/compaction/compaction-basic/src/index.ts:reservedCompletionTokens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/index.ts",
+   "target": "class:packages/compaction/compaction-basic/src/index.ts:BasicCompactionEngine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/index.ts",
+   "target": "class:packages/compaction/compaction-basic/src/index.ts:BasicCompactionEngine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/region.ts",
+   "target": "function:packages/compaction/compaction-basic/src/region.ts:selectCompactableRange",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/region.ts",
+   "target": "function:packages/compaction/compaction-basic/src/region.ts:selectCompactableRange",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/region.ts",
+   "target": "function:packages/compaction/compaction-basic/src/region.ts:compactSurfaceRegion",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/region.ts",
+   "target": "function:packages/compaction/compaction-basic/src/region.ts:compactSurfaceRegion",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/region.ts",
+   "target": "function:packages/compaction/compaction-basic/src/region.ts:assertNoActiveCompaction",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/region.ts",
+   "target": "function:packages/compaction/compaction-basic/src/region.ts:assertNoActiveCompaction",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/region.ts",
+   "target": "function:packages/compaction/compaction-basic/src/region.ts:summarizeCompaction",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/region.ts",
+   "target": "function:packages/compaction/compaction-basic/src/region.ts:commitCompactionBody",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/region.ts",
+   "target": "function:packages/compaction/compaction-basic/src/region.ts:buildSummarizationInput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/region.ts",
+   "target": "function:packages/compaction/compaction-basic/src/region.ts:inspectCompactionEntryState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/summarizer.ts",
+   "target": "function:packages/compaction/compaction-basic/src/summarizer.ts:summarizeWithLlm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/summarizer.ts",
+   "target": "function:packages/compaction/compaction-basic/src/summarizer.ts:summarizeWithLlm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/summarizer.ts",
+   "target": "function:packages/compaction/compaction-basic/src/summarizer.ts:frameSummary",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/summarizer.ts",
+   "target": "function:packages/compaction/compaction-basic/src/summarizer.ts:frameSummary",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/summarizer.ts",
+   "target": "function:packages/compaction/compaction-basic/src/summarizer.ts:finishError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "document:packages/compaction/compaction-image-offload/README.md",
+   "target": "file:packages/compaction/compaction-image-offload/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/compaction/compaction-image-offload/package.json",
+   "target": "file:packages/compaction/compaction-image-offload/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/image-offload.ts",
+   "target": "function:packages/compaction/compaction-image-offload/src/image-offload.ts:offloadOldestImages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/image-offload.ts",
+   "target": "function:packages/compaction/compaction-image-offload/src/image-offload.ts:offloadOldestImages",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/index.ts",
+   "target": "function:packages/compaction/compaction-image-offload/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/index.ts",
+   "target": "function:packages/compaction/compaction-image-offload/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/project-message.ts",
+   "target": "function:packages/compaction/compaction-image-offload/src/project-message.ts:offloadMessageImages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/project-message.ts",
+   "target": "function:packages/compaction/compaction-image-offload/src/project-message.ts:offloadMessageImages",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/projection.ts",
+   "target": "function:packages/compaction/compaction-image-offload/src/projection.ts:isIndex",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/command-compact/src/index.ts",
+   "target": "file:packages/interaction/commands/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/command-compact/src/index.ts",
+   "target": "file:packages/interaction/commands/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/command-compact/src/index.ts",
+   "target": "file:packages/compaction/compaction/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/checkpoint.ts",
+   "target": "file:packages/compaction/compaction/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/checkpoint.ts",
+   "target": "file:packages/interaction/commands/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/checkpoint.ts",
+   "target": "file:packages/llm/llm/src/message.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/index.ts",
+   "target": "file:packages/compaction/compaction/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/index.ts",
+   "target": "file:packages/compaction/compaction/src/checkpoint.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/index.ts",
+   "target": "file:packages/compaction/compaction/src/tool-pairing.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/index.ts",
+   "target": "file:packages/compaction/compaction/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/index.ts",
+   "target": "file:packages/interaction/commands/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/tool-pairing.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/types.ts",
+   "target": "file:packages/compaction/compaction/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/types.ts",
+   "target": "file:packages/interaction/commands/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/types.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction/src/types.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/config.ts",
+   "target": "file:packages/compaction/compaction-basic/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/config.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/config.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/index.ts",
+   "target": "file:packages/compaction/compaction-basic/src/config.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/index.ts",
+   "target": "file:packages/compaction/compaction-basic/src/region.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/index.ts",
+   "target": "file:packages/compaction/compaction-basic/src/summarizer.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/index.ts",
+   "target": "file:packages/compaction/compaction-basic/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/index.ts",
+   "target": "file:packages/interaction/commands/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/index.ts",
+   "target": "file:packages/compaction/compaction/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/index.ts",
+   "target": "file:packages/compaction/compaction-tool-result-pruner/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/index.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/region.ts",
+   "target": "file:packages/compaction/compaction-basic/src/summarizer.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/region.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/region.ts",
+   "target": "file:packages/interaction/commands/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/region.ts",
+   "target": "file:packages/compaction/compaction/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/region.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/region.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/region.ts",
+   "target": "file:packages/llm/token-meter/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/summarizer.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/summarizer.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/summarizer.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-basic/src/types.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/image-offload.ts",
+   "target": "file:packages/compaction/compaction-image-offload/src/projection.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/image-offload.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/image-offload.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/index.ts",
+   "target": "file:packages/compaction/compaction-image-offload/src/image-offload.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/index.ts",
+   "target": "file:packages/compaction/compaction-image-offload/src/projection.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/index.ts",
+   "target": "file:packages/compaction/compaction/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/project-message.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/project-message.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/projection.ts",
+   "target": "file:packages/compaction/compaction-image-offload/src/project-message.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/projection.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/projection.ts",
+   "target": "file:packages/core/session/src/surface.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-image-offload/src/projection.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

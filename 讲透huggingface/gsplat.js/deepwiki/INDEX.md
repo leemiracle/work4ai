@@ -1,0 +1,33 @@
+# DeepWiki 索引 — huggingface/gsplat.js
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 269600 字符
+
+- [1 Overview](1-overview.md)
+- [2 Architecture](2-architecture.md)
+- [3 Core Components](3-core-components.md)
+  - [3.1 Scene Management](3.1-scene-management.md)
+  - [3.2 Splat Objects](3.2-splat-objects.md)
+  - [3.3 Camera System](3.3-camera-system.md)
+- [4 Rendering System](4-rendering-system.md)
+  - [4.1 WebGL Renderer](4.1-webgl-renderer.md)
+  - [4.2 Render Program](4.2-render-program.md)
+  - [4.3 WASM Integration](4.3-wasm-integration.md)
+  - [4.4 Sort Worker](4.4-sort-worker.md)
+  - [4.5 Intersection Testing](4.5-intersection-testing.md)
+- [5 Data Loading](5-data-loading.md)
+  - [5.1 File Loaders](5.1-file-loaders.md)
+  - [5.2 File Formats](5.2-file-formats.md)
+- [6 Math Utilities](6-math-utilities.md)
+  - [6.1 Vectors and Matrices](6.1-vectors-and-matrices.md)
+  - [6.2 Quaternions](6.2-quaternions.md)
+- [7 User Interaction](7-user-interaction.md)
+  - [7.1 Camera Controls](7.1-camera-controls.md)
+- [8 Examples](8-examples.md)
+  - [8.1 Basic Usage](8.1-basic-usage.md)
+  - [8.2 Scene Transformations](8.2-scene-transformations.md)
+  - [8.3 Editor Example](8.3-editor-example.md)
+  - [8.4 File Conversion](8.4-file-conversion.md)
+- [9 Development Guide](9-development-guide.md)
+  - [9.1 Building and Testing](9.1-building-and-testing.md)
+  - [9.2 Contributing](9.2-contributing.md)

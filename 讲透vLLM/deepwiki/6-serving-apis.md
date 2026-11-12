@@ -1,114 +1,200 @@
+<!-- source: DeepWiki mcp.deepwiki.com · repo vllm-project/vllm · page 6 Serving APIs · fetched 2026-10-28 -->
+
 # Serving APIs
 
-> 来源: https://deepwiki.com/vllm-project/vllm/6-serving-apis 抓取日期: 2026-09-02
-> 章节: 第 6 章 服务 API
+<details>
+<summary>Relevant source files</summary>
 
----
+The following files were used as context for generating this wiki page:
 
-Relevant source files
+- [docs/design/endpoint_plugins.md](docs/design/endpoint_plugins.md)
+- [docs/mkdocs/gen_files/generate_argparse.py](docs/mkdocs/gen_files/generate_argparse.py)
+- [examples/features/openai_batch/README.md](examples/features/openai_batch/README.md)
+- [tests/entrypoints/cohere/test_registry_and_args.py](tests/entrypoints/cohere/test_registry_and_args.py)
+- [tests/entrypoints/launchers/render/__init__.py](tests/entrypoints/launchers/render/__init__.py)
+- [tests/entrypoints/launchers/render/test_app_state.py](tests/entrypoints/launchers/render/test_app_state.py)
+- [tests/entrypoints/launchers/test_balanced_accepts.py](tests/entrypoints/launchers/test_balanced_accepts.py)
+- [tests/entrypoints/launchers/test_run_batch.py](tests/entrypoints/launchers/test_run_batch.py)
+- [tests/entrypoints/openai/test_render_parity.py](tests/entrypoints/openai/test_render_parity.py)
+- [tests/plugins/vllm_add_dummy_endpoint_plugin/setup.py](tests/plugins/vllm_add_dummy_endpoint_plugin/setup.py)
+- [tests/plugins/vllm_add_dummy_endpoint_plugin/vllm_add_dummy_endpoint_plugin/__init__.py](tests/plugins/vllm_add_dummy_endpoint_plugin/vllm_add_dummy_endpoint_plugin/__init__.py)
+- [tests/plugins_tests/test_endpoint_plugins.py](tests/plugins_tests/test_endpoint_plugins.py)
+- [vllm/entrypoints/cli/benchmark/main.py](vllm/entrypoints/cli/benchmark/main.py)
+- [vllm/entrypoints/cli/launch.py](vllm/entrypoints/cli/launch.py)
+- [vllm/entrypoints/cli/main.py](vllm/entrypoints/cli/main.py)
+- [vllm/entrypoints/cli/run_batch.py](vllm/entrypoints/cli/run_batch.py)
+- [vllm/entrypoints/launchers/api_server/app_state.py](vllm/entrypoints/launchers/api_server/app_state.py)
+- [vllm/entrypoints/launchers/api_server/entry.py](vllm/entrypoints/launchers/api_server/entry.py)
+- [vllm/entrypoints/launchers/app.py](vllm/entrypoints/launchers/app.py)
+- [vllm/entrypoints/launchers/launcher.py](vllm/entrypoints/launchers/launcher.py)
+- [vllm/entrypoints/launchers/render/app_state.py](vllm/entrypoints/launchers/render/app_state.py)
+- [vllm/entrypoints/launchers/render/entry.py](vllm/entrypoints/launchers/render/entry.py)
+- [vllm/entrypoints/launchers/run_batch.py](vllm/entrypoints/launchers/run_batch.py)
+- [vllm/entrypoints/openai/api_server.py](vllm/entrypoints/openai/api_server.py)
+- [vllm/plugins/__init__.py](vllm/plugins/__init__.py)
+- [vllm/plugins/endpoint_plugins/__init__.py](vllm/plugins/endpoint_plugins/__init__.py)
+- [vllm/plugins/endpoint_plugins/interface.py](vllm/plugins/endpoint_plugins/interface.py)
 
-  * [docs/features/per_request_metrics.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/features/per_request_metrics.md?plain=1)
-  * [docs/usage/security.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/usage/security.md?plain=1)
-  * [tests/engine/test_short_mm_context.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/engine/test_short_mm_context.py)
-  * [tests/entrypoints/openai/chat_completion/test_batched_chat_completions.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/entrypoints/openai/chat_completion/test_batched_chat_completions.py)
-  * [tests/entrypoints/openai/chat_completion/test_chat_error.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/entrypoints/openai/chat_completion/test_chat_error.py)
-  * [tests/entrypoints/openai/chat_completion/test_logprob_token_ids.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/entrypoints/openai/chat_completion/test_logprob_token_ids.py)
-  * [tests/entrypoints/openai/chat_completion/test_serving_chat.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/entrypoints/openai/chat_completion/test_serving_chat.py)
-  * [tests/entrypoints/openai/chat_completion/test_thinking_token_budget_validation.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/entrypoints/openai/chat_completion/test_thinking_token_budget_validation.py)
-  * [tests/entrypoints/openai/completion/test_completion_error.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/entrypoints/openai/completion/test_completion_error.py)
-  * [tests/entrypoints/openai/completion/test_lora_resolvers.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/entrypoints/openai/completion/test_lora_resolvers.py)
-  * [tests/entrypoints/openai/responses/test_sampling_params.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/entrypoints/openai/responses/test_sampling_params.py)
-  * [tests/entrypoints/openai/test_cli_args.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/entrypoints/openai/test_cli_args.py)
-  * [tests/entrypoints/openai/test_run_batch.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/entrypoints/openai/test_run_batch.py)
-  * [tests/entrypoints/serve/utils/test_request_logger.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/entrypoints/serve/utils/test_request_logger.py)
-  * [tests/tool_use/test_responses_request_validations.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/tool_use/test_responses_request_validations.py)
-  * [vllm/entrypoints/generate/api_router.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/generate/api_router.py)
-  * [vllm/entrypoints/generate/base/serving.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/generate/base/serving.py)
-  * [vllm/entrypoints/openai/api_server.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/api_server.py)
-  * [vllm/entrypoints/openai/chat_completion/batch_serving.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/chat_completion/batch_serving.py)
-  * [vllm/entrypoints/openai/chat_completion/protocol.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/chat_completion/protocol.py)
-  * [vllm/entrypoints/openai/chat_completion/serving.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/chat_completion/serving.py)
-  * [vllm/entrypoints/openai/cli_args.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/cli_args.py)
-  * [vllm/entrypoints/openai/completion/protocol.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/completion/protocol.py)
-  * [vllm/entrypoints/openai/completion/serving.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/completion/serving.py)
-  * [vllm/entrypoints/openai/engine/protocol.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/engine/protocol.py)
-  * [vllm/entrypoints/openai/responses/context.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/responses/context.py)
-  * [vllm/entrypoints/openai/responses/protocol.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/responses/protocol.py)
-  * [vllm/entrypoints/openai/responses/serving.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/responses/serving.py)
-  * [vllm/entrypoints/openai/run_batch.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/run_batch.py)
-  * [vllm/entrypoints/serve/utils/request_logger.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/serve/utils/request_logger.py)
-  * [vllm/renderers/online_renderer.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/renderers/online_renderer.py)
-  * [vllm/sampling_params.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/sampling_params.py)
+</details>
+
+
 
 ## Purpose and Scope
 
-This document describes vLLM's serving layer, which exposes OpenAI-compatible HTTP APIs for inference. It covers the FastAPI application setup, engine client integration, route registration, middleware, and application state initialization. The serving layer acts as the interface between external HTTP clients and vLLM's internal engine components, supporting text generation, multimodal inputs, and specialized tasks. [vllm/entrypoints/openai/api_server.py13-22](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/api_server.py#L13-L22)
+The serving layer provides HTTP-facing interfaces between clients and vLLM inference components. This page summarizes the server entrypoints, request-rendering path, and related serving features; detailed implementation belongs in the child pages listed below. The legacy `vllm.entrypoints.openai.api_server` module re-exports launcher functions and is deprecated in favor of the launcher entrypoints. [vllm/entrypoints/openai/api_server.py:5-30]()
 
-For details on the FastAPI application structure and route registration, see [OpenAI-Compatible API Server](../../../../vllm-project/vllm/6.1-openai-compatible-api-server). For chat template processing and message parsing, see [Chat Utilities and Message Processing](../../../../vllm-project/vllm/6.2-chat-utilities-and-message-processing). For function calling and structured output, see [Tool Calling and Structured Output](../../../../vllm-project/vllm/6.3-tool-calling-and-structured-output). For dynamic adapter management, see [LoRA Adapter Management](../../../../vllm-project/vllm/6.4-lora-adapter-management). For the experimental Rust-based high-performance frontend, see [Rust Frontend (vllm-frontend-rs)](../../../../vllm-project/vllm/6.5-rust-frontend-/(vllm-frontend-rs)).
+- For the FastAPI application, route registration, middleware, lifecycle, and endpoint families, see [OpenAI-Compatible API Server](#6.1).
+- For chat message processing, multimodal content, templates, tokenizers, and renderers, see [Chat Utilities and Message Processing](#6.2).
+- For tool and reasoning parsers and structured output, see [Tool Calling, Reasoning Parsers and Structured Output](#6.3).
+- For dynamic LoRA adapter management, see [LoRA Adapter Management](#6.4).
+- For the Rust HTTP/gRPC frontend and its engine integration, see [Rust Frontend (vllm-frontend-rs)](#6.5).
+- For rendering and token-in-token-out scale-out serving, see [Scale-Out and Token-in-Token-out Serving](#6.6).
 
-## System Architecture
+Sources: [vllm/entrypoints/openai/api_server.py:5-30]()
 
-The serving layer consists of a FastAPI application that manages the HTTP interface, coordinates with the engine client for inference, and provides OpenAI-compatible endpoints. The system supports multiple deployment modes including in-process engines and multi-process API servers. [vllm/entrypoints/openai/api_server.py5-22](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/api_server.py#L5-L22)
+---
 
-### High-Level Component Relationships
+## System Architecture Overview
 
-**Sources:** [vllm/entrypoints/openai/api_server.py5-22](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/api_server.py#L5-L22) [vllm/entrypoints/openai/chat_completion/serving.py116-139](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/chat_completion/serving.py#L116-L139) [vllm/entrypoints/openai/responses/serving.py150-169](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/responses/serving.py#L150-L169) [vllm/entrypoints/openai/chat_completion/protocol.py127-150](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/chat_completion/protocol.py#L127-L150)
+The Python serving path builds a FastAPI application, initializes its state using information from an `EngineClient`, and starts HTTP serving through the launcher. The engine client is created from `AsyncEngineArgs` and `VllmConfig`; it is shut down when its lifecycle context exits. [vllm/entrypoints/launchers/api_server/entry.py:34-65]()[vllm/entrypoints/launchers/api_server/entry.py:68-112]()[vllm/entrypoints/launchers/api_server/entry.py:115-161]()
 
-### Serving Entity Mapping
+### High-Level Component Diagram
 
-This diagram bridges serving concepts to the specific code entities that implement them, including the protocol definitions used for request/call parsing.
+```mermaid
+graph LR
+    Client["HTTP client"] --> "serve_http"
+    "vllm serve CLI" --> "run_server"
+    "run_server" --> "run_server_worker"
+    "run_server_worker" --> "build_async_engine_client"
+    "build_async_engine_client" --> "AsyncEngineArgs.from_cli_args"
+    "AsyncEngineArgs.from_cli_args" --> "AsyncLLM.from_vllm_config"
+    "run_server_worker" --> "build_and_serve"
+    "build_and_serve" --> "build_app"
+    "build_and_serve" --> "init_app_state"
+    "build_and_serve" --> "serve_http"
+    "build_app" --> "FastAPI application"
+    "init_app_state" --> "app.state"
+    "app.state" --> "EngineClient"
+```
 
-**Sources:** [vllm/entrypoints/openai/api_server.py5-22](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/api_server.py#L5-L22) [vllm/entrypoints/openai/chat_completion/serving.py116-139](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/chat_completion/serving.py#L116-L139) [vllm/entrypoints/openai/responses/serving.py150-169](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/responses/serving.py#L150-L169) [vllm/entrypoints/openai/run_batch.py148-188](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/run_batch.py#L148-L188)
+The CLI defines `serve` and other commands through its command modules; the server entrypoint then connects application construction, state initialization, and HTTP startup. The shown launcher code passes supported tasks and model configuration to `build_app` and initializes state before serving. [vllm/entrypoints/cli/main.py:39-64]()[vllm/entrypoints/launchers/api_server/entry.py:115-161]()
 
-## Supported API Suites
+Sources: [vllm/entrypoints/cli/main.py:39-64](), [vllm/entrypoints/launchers/api_server/entry.py:115-161]()
 
-vLLM provides several API interfaces registered conditionally based on the model's supported tasks. [vllm/entrypoints/openai/api_server.py13-14](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/api_server.py#L13-L14)
+---
 
-### Generative and Multimodal APIs
+## Serving Entity Mapping
 
-The primary interface for Large Language Models (LLMs) and Vision-Language Models (VLMs).
+This diagram connects user-facing concepts to named code entities. The compatibility module exposes launcher functions; the CLI includes serving commands; and the server entrypoint builds the application and engine client. [vllm/entrypoints/openai/api_server.py:5-20]()[vllm/entrypoints/cli/main.py:43-64]()[vllm/entrypoints/launchers/api_server/entry.py:34-40]()[vllm/entrypoints/launchers/api_server/entry.py:115-137]()
 
-  * **Completions:** `/v1/completions` handled by `OpenAIServingCompletion`. [vllm/entrypoints/openai/completion/protocol.py46-110](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/completion/protocol.py#L46-L110)
-  * **Chat Completions:** `/v1/chat/completions` handled by `OpenAIServingChat`. [vllm/entrypoints/openai/chat_completion/serving.py116-139](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/chat_completion/serving.py#L116-L139)
-  * **Responses API:** `/v1/responses` handled by `OpenAIServingResponses` for multi-turn or tool-enabled interactions, including support for MCP (Model Context Protocol) tools and unified parsing via `ParserManager`. [vllm/entrypoints/openai/responses/serving.py150-195](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/responses/serving.py#L150-L195)
+```mermaid
+graph LR
+    subgraph "Natural Language Space"
+        "Start the API server"
+        "Build the HTTP app"
+        "Connect the inference engine"
+        "Run batch inference"
+        "Launch a rendering server"
+    end
 
-### Specialized APIs
+    subgraph "Code Entity Space"
+        "vllm serve"
+        "run_server"
+        "build_and_serve"
+        "build_app"
+        "build_async_engine_client"
+        "AsyncLLM.from_vllm_config"
+        "vllm run-batch"
+        "vllm.entrypoints.launchers.run_batch"
+        "vllm launch render"
+        "run_launch_fastapi"
+    end
 
-  * **Batch API:** Supports offline processing of multiple requests from JSONL files, handling Chat, Embedding, and Audio tasks. [vllm/entrypoints/openai/run_batch.py148-188](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/run_batch.py#L148-L188)
-  * **Audio APIs:** Transcription and translation endpoints for speech-to-text models like Whisper. [vllm/entrypoints/openai/run_batch.py56-65](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/run_batch.py#L56-L65)
-  * **LoRA API:** Dynamic loading and unloading of adapters via `/v1/load_lora_adapter` and `/v1/unload_lora_adapter`. [vllm/entrypoints/openai/cli_args.py32-63](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/cli_args.py#L32-L63)
+    "Start the API server" --> "vllm serve"
+    "vllm serve" --> "run_server"
+    "run_server" --> "build_and_serve"
+    "Build the HTTP app" --> "build_app"
+    "Connect the inference engine" --> "build_async_engine_client"
+    "build_async_engine_client" --> "AsyncLLM.from_vllm_config"
+    "Run batch inference" --> "vllm run-batch"
+    "vllm run-batch" --> "vllm.entrypoints.launchers.run_batch"
+    "Launch a rendering server" --> "vllm launch render"
+    "vllm launch render" --> "run_launch_fastapi"
+```
 
-Feature| Code Implementation| Request Protocol  
----|---|---  
-Chat| `OpenAIServingChat`| `ChatCompletionRequest`  
-Completions| `OpenAIServingCompletion`| `CompletionRequest`  
-Responses| `OpenAIServingResponses`| `ResponsesRequest`  
-Batch| `run_batch` logic| `BatchRequestInput`  
-  
-**Sources:** [vllm/entrypoints/openai/chat_completion/serving.py116-139](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/chat_completion/serving.py#L116-L139) [vllm/entrypoints/openai/responses/serving.py150-195](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/responses/serving.py#L150-L195) [vllm/entrypoints/openai/run_batch.py148-188](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/run_batch.py#L148-L188) [vllm/entrypoints/openai/completion/protocol.py46-110](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/completion/protocol.py#L46-L110)
+The CLI dispatches registered command modules, including the `serve` and `run_batch` modules. The `launch render` command invokes `run_launch_fastapi`; its documented role is to start a GPU-less rendering server for preprocessing and postprocessing. [vllm/entrypoints/cli/main.py:43-64]()[vllm/entrypoints/cli/launch.py:46-64]()
 
-## Serving Utilities
+Sources: [vllm/entrypoints/cli/main.py:43-64](), [vllm/entrypoints/cli/launch.py:46-64]()
 
-### Chat Templates and Rendering
+---
 
-vLLM uses templates to convert structured chat messages into raw text prompts. This behavior is customized via `chat_template` or `chat_template_content_format` (supporting `string` or `openai` formats). [vllm/entrypoints/openai/chat_completion/serving.py146-153](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/chat_completion/serving.py#L146-L153) For details, see [Chat Utilities and Message Processing](../../../../vllm-project/vllm/6.2-chat-utilities-and-message-processing).
+## Request Processing and Rendering
 
-### Tool Calling and Structured Output
+The renderer is a shared serving concern: the render-server state initializer constructs an `OnlineRenderer` and an `OnlineDerenderer` from the model configuration, chat-template settings, and parser-related options. It also initializes tokenization and render state. [vllm/entrypoints/launchers/render/app_state.py:22-32]()[vllm/entrypoints/launchers/render/app_state.py:48-108]()
 
-vLLM supports automated tool choice and parsing of model-generated tool calls through the `ParserManager` which coordinates `ToolParser` and `ReasoningParser` instances. [vllm/entrypoints/openai/chat_completion/serving.py157-163](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/chat_completion/serving.py#L157-L163) This includes support for reasoning-specific token budgets defined in `ThinkingTokenBudget`. [vllm/sampling_params.py51-77](https://github.com/vllm-project/vllm/blob/185cada3/vllm/sampling_params.py#L51-L77) For details, see [Tool Calling and Structured Output](../../../../vllm-project/vllm/6.3-tool-calling-and-structured-output).
+The render server is distinct from the engine-backed API server: its state initializer documents that it does not require an `EngineClient`, sets `engine_client` to `None`, and disables stats logging. [vllm/entrypoints/launchers/render/app_state.py:27-32]()[vllm/entrypoints/launchers/render/app_state.py:110-120]()
 
-### LoRA Management
+### Rendering and Serving Path
 
-The API server allows dynamic loading of LoRA adapters. Adapters can be specified at startup via `--lora-modules` or loaded at runtime. [vllm/entrypoints/openai/cli_args.py32-63](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/cli_args.py#L32-L63) For details, see [LoRA Adapter Management](../../../../vllm-project/vllm/6.4-lora-adapter-management).
+```mermaid
+graph LR
+    "HTTP request" --> "FastAPI app"
+    "FastAPI app" --> "app.state"
+    "app.state" --> "OnlineRenderer"
+    "OnlineRenderer" --> "renderer_from_config"
+    "OnlineRenderer" --> "load_chat_template"
+    "OnlineRenderer" --> "EngineClient"
+    "EngineClient" --> "AsyncLLM"
+    "vllm launch render" --> "init_render_app_state"
+    "init_render_app_state" --> "OnlineRenderer"
+    "init_render_app_state" --> "OnlineDerenderer"
+    "init_render_app_state" --> "ServingTokenization"
+    "init_render_app_state" --> "engine_client = None"
+```
 
-## Configuration and CLI
+The diagram distinguishes the engine-backed server from the render-only initializer. The render initializer creates renderer, derenderer, and tokenization state directly from `VllmConfig`; the API server entrypoint instead builds an engine client and initializes app state before HTTP serving. [vllm/entrypoints/launchers/render/app_state.py:22-32]()[vllm/entrypoints/launchers/render/app_state.py:48-120]()[vllm/entrypoints/launchers/api_server/entry.py:68-112]()[vllm/entrypoints/launchers/api_server/entry.py:115-161]()
 
-The server is configured via `AsyncEngineArgs` and `BaseFrontendArgs` arguments from the CLI. These handle network settings, performance tuning, and model-specific parameters. [vllm/entrypoints/openai/cli_args.py67-151](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/cli_args.py#L67-L151)
+Sources: [vllm/entrypoints/launchers/render/app_state.py:22-32](), [vllm/entrypoints/launchers/render/app_state.py:48-120](), [vllm/entrypoints/launchers/api_server/entry.py:68-112](), [vllm/entrypoints/launchers/api_server/entry.py:115-161]()
 
-Argument Category| Class| Key Fields  
----|---|---  
-Engine Config| `AsyncEngineArgs`| `model`, `tensor_parallel_size`, `dtype`  
-Frontend Config| `BaseFrontendArgs`| `chat_template`, `tool_call_parser`, `api_key`  
-Request Handling| `SamplingParams`| `n`, `temperature`, `top_p`, `max_tokens`  
-  
-**Sources:** [vllm/entrypoints/openai/cli_args.py67-151](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/cli_args.py#L67-L151) [vllm/sampling_params.py198-205](https://github.com/vllm-project/vllm/blob/185cada3/vllm/sampling_params.py#L198-L205) [vllm/entrypoints/openai/engine/protocol.py124-130](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/openai/engine/protocol.py#L124-L130)
+---
+
+## Serving Features and Entry Points
+
+The serving surface includes an engine-backed HTTP application, a separate rendering launch path, batch execution, and endpoint plugins. The batch request schema shown in the launcher accepts chat completion, embedding, scoring, reranking, transcription, and translation request types; the batch runner uses the request URL to validate the body type. [vllm/entrypoints/launchers/run_batch.py:153-200]()
+
+| Serving area | Code entry point | Scope |
+|---|---|---|
+| API server | `run_server`, `build_and_serve` | Builds the app, initializes state, and serves HTTP. [vllm/entrypoints/launchers/api_server/entry.py:115-161]() |
+| Rendering server | `vllm launch render`, `run_launch_fastapi` | Launches a GPU-less server for preprocessing and postprocessing. [vllm/entrypoints/cli/launch.py:46-64]() |
+| Batch runner | `vllm.entrypoints.launchers.run_batch` | Defines batch request bodies and URL-based request validation. [vllm/entrypoints/launchers/run_batch.py:153-200]() |
+| Endpoint plugins | `EndpointPlugin`, `attach_endpoint_plugins` | Plugin hooks can attach routes and initialize plugin state. [tests/plugins_tests/test_endpoint_plugins.py:17-27]() |
+
+For the API server details, see [OpenAI-Compatible API Server](#6.1); for batch-specific behavior, see that child page’s endpoint-family coverage. For render-only processing, see [Scale-Out and Token-in-Token-out Serving](#6.6). [vllm/entrypoints/launchers/api_server/entry.py:115-161]()[vllm/entrypoints/cli/launch.py:46-64]()
+
+Sources: [vllm/entrypoints/launchers/api_server/entry.py:115-161](), [vllm/entrypoints/cli/launch.py:46-64](), [vllm/entrypoints/launchers/run_batch.py:153-200](), [tests/plugins_tests/test_endpoint_plugins.py:17-27]()
+
+---
+
+## Core Serving Subsystems and Their Relationships
+
+The serving components connect transport and API handling to request preparation and engine execution. Specialized concerns—parsing, adapter management, Rust frontend, and scale-out rendering—are covered in child pages rather than expanded here. [vllm/entrypoints/launchers/api_server/entry.py:115-161]()[vllm/entrypoints/launchers/render/app_state.py:48-108]()
+
+| Subsystem | Role in the overview | Details |
+|---|---|---|
+| OpenAI-Compatible API Server | FastAPI construction, app state, and HTTP lifecycle | [OpenAI-Compatible API Server](#6.1) |
+| Chat Utilities and Message Processing | Rendering, templates, tokenization, and multimodal request preparation | [Chat Utilities and Message Processing](#6.2) |
+| Tool Calling, Reasoning Parsers and Structured Output | Parser-related serving options are passed into renderer state | [Tool Calling, Reasoning Parsers and Structured Output](#6.3) |
+| LoRA Adapter Management | Dynamic adapter APIs and lifecycle | [LoRA Adapter Management](#6.4) |
+| Rust Frontend | Alternative OpenAI-compatible frontend | [Rust Frontend (vllm-frontend-rs)](#6.5) |
+| Scale-Out and Token-in-Token-out Serving | Render and derender paths and token-oriented deployments | [Scale-Out and Token-in-Token-out Serving](#6.6) |
+
+The Python API server initializes engine-backed app state, while the render initializer can prepare renderer and tokenization state without an engine client. These are related serving paths with different responsibilities; use the linked child pages for subsystem-level detail. [vllm/entrypoints/launchers/api_server/entry.py:115-161]()[vllm/entrypoints/launchers/render/app_state.py:27-32]()[vllm/entrypoints/launchers/render/app_state.py:110-120]()
+
+Sources: [vllm/entrypoints/launchers/api_server/entry.py:115-161](), [vllm/entrypoints/launchers/render/app_state.py:27-32](), [vllm/entrypoints/launchers/render/app_state.py:110-120]()
+
+---
+
+This page maps the serving layer at a high level. For implementation details, follow the child-page links above.
+
+---
+

@@ -1,0 +1,2878 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/entrypoints/generate/api_router.py",
+   "type": "file",
+   "name": "api_router.py",
+   "filePath": "vllm/entrypoints/generate/api_router.py",
+   "summary": "generate API 族的总装配：注册 chat/responses/completion/anthropic/cohere 各子路由与 generative_scoring，并在 init_generate_state 中构造全部 serving 对象（含 Cohere 按 env 开关懒加载）。",
+   "tags": [
+    "api-router",
+    "wiring",
+    "entry-point"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "file",
+   "name": "protocol.py",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "generate 族共享的请求协议原语：cache_salt 校验、response_format（json_schema/structural tag）到 structured_outputs 的归一、多模态 kwargs 别名迁移与 tool call/Delta 消息模型。",
+   "tags": [
+    "protocol",
+    "validation",
+    "response-format",
+    "tools"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/entrypoints/generate/base/serving.py",
+   "type": "file",
+   "name": "serving.py",
+   "filePath": "vllm/entrypoints/generate/base/serving.py",
+   "summary": "GenerateBaseServing：chat/completion/responses 共同的 serving 基类（engine client+renderer+每请求指标），含 ServeContext 泛型请求上下文与 per-request timing/spec-decode 指标构建、token id 解码和 logprobs 截断口径。",
+   "tags": [
+    "serving",
+    "base",
+    "metrics"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/entrypoints/generate/beam_search/offline.py",
+   "type": "file",
+   "name": "offline.py",
+   "filePath": "vllm/entrypoints/generate/beam_search/offline.py",
+   "summary": "BeamSearchOfflineMixin：offline beam search 推理（LLM.beam_search 入口），逐 beam 管理 tokens/logprobs，支持全部 structured output 后端（xgrammar/guidance/outlines/lm_format_enforcer）的 bitmask 约束。",
+   "tags": [
+    "beam-search",
+    "offline",
+    "structured-output"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/entrypoints/generate/beam_search/online.py",
+   "type": "file",
+   "name": "online.py",
+   "filePath": "vllm/entrypoints/generate/beam_search/online.py",
+   "summary": "BeamSearchOnlineMixin：online serving 的 beam search 实现（/v1/beam_search 类接口），异步生成 n 个 beam 候选并流式返回。",
+   "tags": [
+    "beam-search",
+    "online",
+    "async"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/generate/beam_search/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/entrypoints/generate/beam_search/utils.py",
+   "summary": "beam search 数据结构（BeamSearchSequence/Output/Instance）与打分/排序/EOS 解析工具（长度惩罚与 generation config eos 列表）。",
+   "tags": [
+    "beam-search",
+    "data-model",
+    "scoring"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/generate/generative_scoring/api_router.py",
+   "type": "file",
+   "name": "api_router.py",
+   "filePath": "vllm/entrypoints/generate/generative_scoring/api_router.py",
+   "summary": "/generative_scoring 端点：POST 路由把请求交给 app.state 上的 ServingGenerativeScoring 处理并打包 JSON 响应。",
+   "tags": [
+    "api-router",
+    "endpoint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "type": "file",
+   "name": "serving.py",
+   "filePath": "vllm/entrypoints/generate/generative_scoring/serving.py",
+   "summary": "Generative Scoring 服务：计算指定 token id 作为 query 后下一 token 出现的概率（max_tokens=1 + logprob 读出），支持多 item 批量与 label 读取复用。",
+   "tags": [
+    "scoring",
+    "serving",
+    "logprobs"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/entrypoints/generate/label_reads.py",
+   "type": "file",
+   "name": "label_reads.py",
+   "filePath": "vllm/entrypoints/generate/label_reads.py",
+   "summary": "label read 原语：一次跑多个单 token 读取（每输入一个 {request_id}-{i} 请求，max_tokens=1，标签 token 作为 logprob 候选），供 decisions/scoring 复用。",
+   "tags": [
+    "label-read",
+    "logprobs",
+    "async"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/generate/structured_decisions/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/entrypoints/generate/structured_decisions/__init__.py",
+   "summary": "空包初始化文件，仅标记 structured_decisions 子包。",
+   "tags": [
+    "package",
+    "empty"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/generate/structured_decisions/api_router.py",
+   "type": "file",
+   "name": "api_router.py",
+   "filePath": "vllm/entrypoints/generate/structured_decisions/api_router.py",
+   "summary": "/v1/systemone 结构化决策端点的路由与状态初始化（init_structured_decisions_state 经 decisions.select_read_strategy 选定读取策略）。",
+   "tags": [
+    "api-router",
+    "endpoint",
+    "wiring"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "type": "file",
+   "name": "protocol.py",
+   "filePath": "vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "summary": "结构化决策 API（/v1/systemone）请求/响应模型：问题规格、usage、逐问题诊断与 joint canvas 诊断。",
+   "tags": [
+    "protocol",
+    "data-model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/generate/structured_decisions/serving.py",
+   "type": "file",
+   "name": "serving.py",
+   "filePath": "vllm/entrypoints/generate/structured_decisions/serving.py",
+   "summary": "ServingStructuredDecisions：把请求问题经 parse_questions/build_question 构建、校验媒体模态并交给读取策略产出结构化决策响应。",
+   "tags": [
+    "serving",
+    "decisions"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/api_router.py:register_generate_api_routers",
+   "type": "function",
+   "name": "register_generate_api_routers",
+   "filePath": "vllm/entrypoints/generate/api_router.py",
+   "summary": "向 FastAPI app 注册 generate 族全部子路由（chat/responses/completion/anthropic/cohere/generative_scoring），import 均延迟到函数内。",
+   "tags": [
+    "router",
+    "registration"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    21,
+    54
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/api_router.py:init_generate_state",
+   "type": "function",
+   "name": "init_generate_state",
+   "filePath": "vllm/entrypoints/generate/api_router.py",
+   "summary": "引擎启动后构造全部 serving 对象（OpenAI chat/responses/completion、Anthropic、Cohere（按 env 开关）、generative scoring 等）并挂到 app.state。",
+   "tags": [
+    "wiring",
+    "startup",
+    "factory"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    57,
+    228
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/base/protocol.py:validate_cache_salt",
+   "type": "function",
+   "name": "validate_cache_salt",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "cache_salt 到达下游缓存后端前的校验（类型/格式约束）。",
+   "tags": [
+    "validation",
+    "cache-salt"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    42,
+    58
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/base/protocol.py:resolve_return_mm_kwargs_alias",
+   "type": "function",
+   "name": "resolve_return_mm_kwargs_alias",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "把已废弃的 return_mm_kwargs=False 映射到 mm_payload=\"none\" 新口径。",
+   "tags": [
+    "deprecation",
+    "alias"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    61,
+    69
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/base/protocol.py:validate_request_mm_kwargs",
+   "type": "function",
+   "name": "validate_request_mm_kwargs",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "拒绝不受信的每请求多模odal kwargs 覆盖。",
+   "tags": [
+    "validation",
+    "multimodal"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    72,
+    97
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/base/protocol.py:SpeculativeDecodingMetrics",
+   "type": "class",
+   "name": "SpeculativeDecodingMetrics",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "每请求 spec-decode 接受度指标（实验性）：仅 n==1 单序列请求填充，随最终输出返回。",
+   "tags": [
+    "metrics",
+    "spec-decode"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    100,
+    119
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/base/protocol.py:PerRequestMetrics",
+   "type": "class",
+   "name": "PerRequestMetrics",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "每请求指标信封（timing + spec-decode 指标）。",
+   "tags": [
+    "metrics",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    122,
+    129
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/base/protocol.py:RequestResponseMetadata",
+   "type": "class",
+   "name": "RequestResponseMetadata",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "随请求/响应透传的元数据（service tier 等）。",
+   "tags": [
+    "metadata",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    132,
+    134
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/base/protocol.py:JsonSchemaResponseFormat",
+   "type": "class",
+   "name": "JsonSchemaResponseFormat",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "response_format 的 json_schema 变体。",
+   "tags": [
+    "response-format",
+    "json-schema"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    137,
+    143
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/base/protocol.py:LegacyStructuralTag",
+   "type": "class",
+   "name": "LegacyStructuralTag",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "structural tag 的 legacy 单标签形态。",
+   "tags": [
+    "response-format",
+    "structural-tag"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    146,
+    151
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/base/protocol.py:LegacyStructuralTagResponseFormat",
+   "type": "class",
+   "name": "LegacyStructuralTagResponseFormat",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "legacy structural tag 的 response_format 包装。",
+   "tags": [
+    "response-format",
+    "structural-tag"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    154,
+    157
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/base/protocol.py:StructuralTagResponseFormat",
+   "type": "class",
+   "name": "StructuralTagResponseFormat",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "structural tag 的 response_format 形态（新版）。",
+   "tags": [
+    "response-format",
+    "structural-tag"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    160,
+    162
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/base/protocol.py:ResponseFormat",
+   "type": "class",
+   "name": "ResponseFormat",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "response_format 判别联合的基模型。",
+   "tags": [
+    "response-format",
+    "union"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    170,
+    173
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/base/protocol.py:structured_outputs_from_response_format",
+   "type": "function",
+   "name": "structured_outputs_from_response_format",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "把 response_format 的覆盖应用到 structured_outputs 参数（两种指定方式的归一）。",
+   "tags": [
+    "normalization",
+    "structured-output"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    181,
+    211
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/base/protocol.py:validate_structural_tag_response_format",
+   "type": "function",
+   "name": "validate_structural_tag_response_format",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "structural tag 在进入引擎前的校验：把畸形标签提前报为请求错误而非生成失败。",
+   "tags": [
+    "validation",
+    "structural-tag"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    214,
+    242
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/base/protocol.py:validate_structural_tag_payload",
+   "type": "function",
+   "name": "validate_structural_tag_payload",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "structural tag payload 结构校验。",
+   "tags": [
+    "validation",
+    "structural-tag"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    245,
+    272
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/base/protocol.py:validate_structured_outputs_structural_tag",
+   "type": "function",
+   "name": "validate_structured_outputs_structural_tag",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "structured_outputs+structural_tag 组合的一致性校验。",
+   "tags": [
+    "validation",
+    "structured-output"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    275,
+    290
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/base/protocol.py:StreamOptions",
+   "type": "class",
+   "name": "StreamOptions",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "流式选项（include_usage 等）。",
+   "tags": [
+    "streaming",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    293,
+    295
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/base/protocol.py:FunctionDefinition",
+   "type": "class",
+   "name": "FunctionDefinition",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "工具函数定义（name/description/parameters）。",
+   "tags": [
+    "tools",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    298,
+    313
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/base/protocol.py:FunctionCall",
+   "type": "class",
+   "name": "FunctionCall",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "已完成的消息级函数调用。",
+   "tags": [
+    "tools",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    316,
+    322
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/base/protocol.py:ToolCall",
+   "type": "class",
+   "name": "ToolCall",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "消息级工具调用（id+type+function）。",
+   "tags": [
+    "tools",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    325,
+    328
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/base/protocol.py:DeltaFunctionCall",
+   "type": "class",
+   "name": "DeltaFunctionCall",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "流式增量的函数调用片段。",
+   "tags": [
+    "tools",
+    "streaming"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    331,
+    333
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/base/protocol.py:DeltaToolCall",
+   "type": "class",
+   "name": "DeltaToolCall",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "流式增量的工具调用片段（含 index 对齐）。",
+   "tags": [
+    "tools",
+    "streaming"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    337,
+    341
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/base/protocol.py:ExtractedToolCallInformation",
+   "type": "class",
+   "name": "ExtractedToolCallInformation",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "从输出文本抽取的工具调用信息（名称/参数/是否工具调用）。",
+   "tags": [
+    "tools",
+    "parsing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    344,
+    353
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/base/protocol.py:DeltaMessage",
+   "type": "class",
+   "name": "DeltaMessage",
+   "filePath": "vllm/entrypoints/generate/base/protocol.py",
+   "summary": "流式 delta 消息（content/reasoning/tool_calls 组合）。",
+   "tags": [
+    "streaming",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    356,
+    367
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/base/serving.py:build_per_request_timing_metrics",
+   "type": "function",
+   "name": "build_per_request_timing_metrics",
+   "filePath": "vllm/entrypoints/generate/base/serving.py",
+   "summary": "由 RequestStateStats 构建每请求计时指标：generation_time_ms 只计 decode 区间（首输出 token 到最后）。",
+   "tags": [
+    "metrics",
+    "timing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    45,
+    97
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/base/serving.py:build_spec_decoding_metrics",
+   "type": "function",
+   "name": "build_spec_decoding_metrics",
+   "filePath": "vllm/entrypoints/generate/base/serving.py",
+   "summary": "从单输出序列构建每请求 spec-decode 接受度指标（指标未开或无序列时返回 None）。",
+   "tags": [
+    "metrics",
+    "spec-decode"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    100,
+    114
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/base/serving.py:ServeContext",
+   "type": "class",
+   "name": "ServeContext",
+   "filePath": "vllm/entrypoints/generate/base/serving.py",
+   "summary": "泛型请求上下文 dataclass：request/raw_request/model_name/request_id/lora/engine_inputs。",
+   "tags": [
+    "context",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    118,
+    126
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/base/serving.py:GenerateBaseServing",
+   "type": "class",
+   "name": "GenerateBaseServing",
+   "filePath": "vllm/entrypoints/generate/base/serving.py",
+   "summary": "generate 族 serving 基类（11 个方法）：持有 engine_client/renderer/models，提供 _check_model、请求日志与 logprobs/token 解码公共路径；混入 BeamSearchOnlineMixin。",
+   "tags": [
+    "serving",
+    "base-class",
+    "engine-client"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    129,
+    319
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/base/serving.py:decode_token_ids",
+   "type": "function",
+   "name": "decode_token_ids",
+   "filePath": "vllm/entrypoints/generate/base/serving.py",
+   "summary": "逐 token 解码为 token 字符串与 UTF-8 字节：恢复 SentencePiece 前缀空格，供 return_tokens_as_token_ids。",
+   "tags": [
+    "detokenizer",
+    "tokens"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    326,
+    352
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/base/serving.py:chat_top_logprobs_limit",
+   "type": "function",
+   "name": "chat_top_logprobs_limit",
+   "filePath": "vllm/entrypoints/generate/base/serving.py",
+   "summary": "chat completions 每位置返回的 logprob 候选数口径：首个 top_logprobs 个（含被采样 token 在前的引擎序）。",
+   "tags": [
+    "logprobs",
+    "api-semantics"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    355,
+    365
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/base/serving.py:completion_top_logprobs_limit",
+   "type": "function",
+   "name": "completion_top_logprobs_limit",
+   "filePath": "vllm/entrypoints/generate/base/serving.py",
+   "summary": "completions 的 logprob 候选数口径：前 logprobs+1 个（OpenAI completions 惯例）加可选扩展。",
+   "tags": [
+    "logprobs",
+    "api-semantics"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    368,
+    378
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/base/serving.py:clamp_prompt_logprobs",
+   "type": "function",
+   "name": "clamp_prompt_logprobs",
+   "filePath": "vllm/entrypoints/generate/base/serving.py",
+   "summary": "把 prompt logprobs 数量钳制到合法上限。",
+   "tags": [
+    "logprobs",
+    "validation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    381,
+    393
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/beam_search/offline.py:_bitmask_to_token_ids",
+   "type": "function",
+   "name": "_bitmask_to_token_ids",
+   "filePath": "vllm/entrypoints/generate/beam_search/offline.py",
+   "summary": "把打包的 int32 bitmask 行还原为允许 token id 列表（structured output 约束解码）。",
+   "tags": [
+    "bitmask",
+    "structured-output"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    43,
+    54
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/beam_search/offline.py:BeamSearchOfflineMixin",
+   "type": "class",
+   "name": "BeamSearchOfflineMixin",
+   "filePath": "vllm/entrypoints/generate/beam_search/offline.py",
+   "summary": "offline beam search（4 个方法）：LLM.beam_search 主循环，逐 beam 扩展/打分/截断，支持全部 structured output 后端与 LoRA。",
+   "tags": [
+    "beam-search",
+    "offline"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    57,
+    509
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/beam_search/online.py:BeamSearchOnlineMixin",
+   "type": "class",
+   "name": "BeamSearchOnlineMixin",
+   "filePath": "vllm/entrypoints/generate/beam_search/online.py",
+   "summary": "online beam search mixin：异步发起 beam 请求并按打分排序返回 beam 候选输出。",
+   "tags": [
+    "beam-search",
+    "online"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    27,
+    257
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/beam_search/utils.py:BeamSearchSequence",
+   "type": "class",
+   "name": "BeamSearchSequence",
+   "filePath": "vllm/entrypoints/generate/beam_search/utils.py",
+   "summary": "beam search 序列：tokens/logprobs/累计分数与可选 text，含 fork 复制语义。",
+   "tags": [
+    "beam-search",
+    "data-model"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    21,
+    101
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/beam_search/utils.py:BeamSearchOutput",
+   "type": "class",
+   "name": "BeamSearchOutput",
+   "filePath": "vllm/entrypoints/generate/beam_search/utils.py",
+   "summary": "beam search 输出：beam 宽度个最优序列列表。",
+   "tags": [
+    "beam-search",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    105,
+    111
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/beam_search/utils.py:BeamSearchInstance",
+   "type": "class",
+   "name": "BeamSearchInstance",
+   "filePath": "vllm/entrypoints/generate/beam_search/utils.py",
+   "summary": "单次 beam search 实例参数（beam width/prompt/params 等）。",
+   "tags": [
+    "beam-search",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    114,
+    138
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/beam_search/utils.py:get_beam_search_score",
+   "type": "function",
+   "name": "get_beam_search_score",
+   "filePath": "vllm/entrypoints/generate/beam_search/utils.py",
+   "summary": "带长度惩罚的 beam 打分：与 Transformers 一致，长度计生成的 token（含终止 EOS）。",
+   "tags": [
+    "beam-search",
+    "scoring"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    141,
+    154
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/beam_search/utils.py:create_sort_beams_key_function",
+   "type": "function",
+   "name": "create_sort_beams_key_function",
+   "filePath": "vllm/entrypoints/generate/beam_search/utils.py",
+   "summary": "构造 beam 排序 key 函数（按分数降序）。",
+   "tags": [
+    "beam-search",
+    "sorting"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    157,
+    163
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/beam_search/utils.py:get_beam_search_eos_token_ids",
+   "type": "function",
+   "name": "get_beam_search_eos_token_ids",
+   "filePath": "vllm/entrypoints/generate/beam_search/utils.py",
+   "summary": "返回结束生成的 token id 集合：tokenizer EOS 加 generation config 的 eos_token_id 列表。",
+   "tags": [
+    "beam-search",
+    "eos"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    166,
+    177
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/generative_scoring/api_router.py:create_generative_scoring",
+   "type": "function",
+   "name": "create_generative_scoring",
+   "filePath": "vllm/entrypoints/generate/generative_scoring/api_router.py",
+   "summary": "/generative_scoring POST 处理：取 app.state 的 serving handler，调用后按 ErrorResponse/GenerativeScoringResponse 打包响应。",
+   "tags": [
+    "endpoint",
+    "handler"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    41,
+    57
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/generative_scoring/api_router.py:register_generative_scoring_api_router",
+   "type": "function",
+   "name": "register_generative_scoring_api_router",
+   "filePath": "vllm/entrypoints/generate/generative_scoring/api_router.py",
+   "summary": "把 generative scoring 路由挂到 FastAPI app。",
+   "tags": [
+    "router",
+    "registration"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    60,
+    61
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/generative_scoring/serving.py:GenerativeScoringRequest",
+   "type": "class",
+   "name": "GenerativeScoringRequest",
+   "filePath": "vllm/entrypoints/generate/generative_scoring/serving.py",
+   "summary": "scoring 请求模型：model/query/items（每项 query 文本与候选 token）等。",
+   "tags": [
+    "protocol",
+    "request"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    45,
+    120
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/generative_scoring/serving.py:GenerativeScoringItemResult",
+   "type": "class",
+   "name": "GenerativeScoringItemResult",
+   "filePath": "vllm/entrypoints/generate/generative_scoring/serving.py",
+   "summary": "单 item 的 scoring 结果（index/object/score 等）。",
+   "tags": [
+    "protocol",
+    "response"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    123,
+    135
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/generative_scoring/serving.py:GenerativeScoringResponse",
+   "type": "class",
+   "name": "GenerativeScoringResponse",
+   "filePath": "vllm/entrypoints/generate/generative_scoring/serving.py",
+   "summary": "scoring 响应信封（id/object=list/created/usage/items）。",
+   "tags": [
+    "protocol",
+    "response"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    138,
+    156
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/generative_scoring/serving.py:ServingGenerativeScoring",
+   "type": "class",
+   "name": "ServingGenerativeScoring",
+   "filePath": "vllm/entrypoints/generate/generative_scoring/serving.py",
+   "summary": "scoring 服务类：计算候选 token 作为下一 token 的概率（复用 next_token_label_reads 单 token 读取），含模型校验与 usage 统计。",
+   "tags": [
+    "serving",
+    "scoring"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    164,
+    461
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/label_reads.py:next_token_label_reads",
+   "type": "function",
+   "name": "next_token_label_reads",
+   "filePath": "vllm/entrypoints/generate/label_reads.py",
+   "summary": "一次并发跑多个单 token 读取：每输入一个 {request_id}-{i} 请求，max_tokens=1，标签 token 作 logprob 候选；返回每项的 LabelRead。",
+   "tags": [
+    "label-read",
+    "async",
+    "logprobs"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    25,
+    82
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/structured_decisions/api_router.py:create_structured_decision",
+   "type": "function",
+   "name": "create_structured_decision",
+   "filePath": "vllm/entrypoints/generate/structured_decisions/api_router.py",
+   "summary": "结构化决策 POST 处理：委托 app.state 上的 ServingStructuredDecisions 并打包响应。",
+   "tags": [
+    "endpoint",
+    "handler"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    45,
+    56
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/structured_decisions/api_router.py:init_structured_decisions_state",
+   "type": "function",
+   "name": "init_structured_decisions_state",
+   "filePath": "vllm/entrypoints/generate/structured_decisions/api_router.py",
+   "summary": "构造结构化决策 serving（经 decisions 的 select_read_strategy/init_decisions_state 选策略）并挂到 app.state。",
+   "tags": [
+    "wiring",
+    "startup"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    63,
+    86
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:QuestionSpec",
+   "type": "class",
+   "name": "QuestionSpec",
+   "filePath": "vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "summary": "单个问题的规格（type/instructions/criteria 判别）。",
+   "tags": [
+    "protocol",
+    "question"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    15,
+    18
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:StructuredDecisionRequest",
+   "type": "class",
+   "name": "StructuredDecisionRequest",
+   "filePath": "vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "summary": "/v1/systemone 请求模型：state（文本/消息/媒体）+questions 映射+joint 选项等。",
+   "tags": [
+    "protocol",
+    "request"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    21,
+    65
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:DecisionUsage",
+   "type": "class",
+   "name": "DecisionUsage",
+   "filePath": "vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "summary": "决策 API usage 统计。",
+   "tags": [
+    "protocol",
+    "usage"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    68,
+    70
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:QuestionDiagnostics",
+   "type": "class",
+   "name": "QuestionDiagnostics",
+   "filePath": "vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "summary": "单问题诊断（标签概率等）。",
+   "tags": [
+    "protocol",
+    "diagnostics"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    73,
+    79
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:JointCanvas",
+   "type": "class",
+   "name": "JointCanvas",
+   "filePath": "vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "summary": "joint 读取的 canvas 诊断。",
+   "tags": [
+    "protocol",
+    "diagnostics"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    82,
+    85
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:JointDiagnostics",
+   "type": "class",
+   "name": "JointDiagnostics",
+   "filePath": "vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "summary": "joint 模式整体诊断。",
+   "tags": [
+    "protocol",
+    "diagnostics"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    88,
+    89
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:StructuredDecisionResponse",
+   "type": "class",
+   "name": "StructuredDecisionResponse",
+   "filePath": "vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "summary": "结构化决策响应（answers/diagnostics/usage）。",
+   "tags": [
+    "protocol",
+    "response"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    92,
+    100
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/generate/structured_decisions/serving.py:parse_questions",
+   "type": "function",
+   "name": "parse_questions",
+   "filePath": "vllm/entrypoints/generate/structured_decisions/serving.py",
+   "summary": "校验并构建请求问题：数量上限、未知字段拒绝，逐个经 build_question 生成带标签的 Question。",
+   "tags": [
+    "validation",
+    "questions"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    27,
+    53
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/generate/structured_decisions/serving.py:ServingStructuredDecisions",
+   "type": "class",
+   "name": "ServingStructuredDecisions",
+   "filePath": "vllm/entrypoints/generate/structured_decisions/serving.py",
+   "summary": "结构化决策服务：媒体模态校验后委托读取策略，产出每问题答案与诊断。",
+   "tags": [
+    "serving",
+    "decisions"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    56,
+    135
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "function:vllm/entrypoints/generate/api_router.py:register_generate_api_routers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "function:vllm/entrypoints/generate/api_router.py:register_generate_api_routers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "function:vllm/entrypoints/generate/api_router.py:init_generate_state",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "function:vllm/entrypoints/generate/api_router.py:init_generate_state",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "function:vllm/entrypoints/generate/base/protocol.py:validate_cache_salt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "function:vllm/entrypoints/generate/base/protocol.py:validate_cache_salt",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "function:vllm/entrypoints/generate/base/protocol.py:resolve_return_mm_kwargs_alias",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "function:vllm/entrypoints/generate/base/protocol.py:resolve_return_mm_kwargs_alias",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "function:vllm/entrypoints/generate/base/protocol.py:validate_request_mm_kwargs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "function:vllm/entrypoints/generate/base/protocol.py:validate_request_mm_kwargs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:SpeculativeDecodingMetrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:SpeculativeDecodingMetrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:PerRequestMetrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:PerRequestMetrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:RequestResponseMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:RequestResponseMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:JsonSchemaResponseFormat",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:JsonSchemaResponseFormat",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:LegacyStructuralTag",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:LegacyStructuralTag",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:LegacyStructuralTagResponseFormat",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:LegacyStructuralTagResponseFormat",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:StructuralTagResponseFormat",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:StructuralTagResponseFormat",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:ResponseFormat",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:ResponseFormat",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "function:vllm/entrypoints/generate/base/protocol.py:structured_outputs_from_response_format",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "function:vllm/entrypoints/generate/base/protocol.py:structured_outputs_from_response_format",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "function:vllm/entrypoints/generate/base/protocol.py:validate_structural_tag_response_format",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "function:vllm/entrypoints/generate/base/protocol.py:validate_structural_tag_response_format",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "function:vllm/entrypoints/generate/base/protocol.py:validate_structural_tag_payload",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "function:vllm/entrypoints/generate/base/protocol.py:validate_structural_tag_payload",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "function:vllm/entrypoints/generate/base/protocol.py:validate_structured_outputs_structural_tag",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "function:vllm/entrypoints/generate/base/protocol.py:validate_structured_outputs_structural_tag",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:StreamOptions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:StreamOptions",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:FunctionDefinition",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:FunctionDefinition",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:FunctionCall",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:FunctionCall",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:ToolCall",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:ToolCall",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:DeltaFunctionCall",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:DeltaFunctionCall",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:DeltaToolCall",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:DeltaToolCall",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:ExtractedToolCallInformation",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:ExtractedToolCallInformation",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:DeltaMessage",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "class:vllm/entrypoints/generate/base/protocol.py:DeltaMessage",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "function:vllm/entrypoints/generate/base/serving.py:build_per_request_timing_metrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "function:vllm/entrypoints/generate/base/serving.py:build_per_request_timing_metrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "function:vllm/entrypoints/generate/base/serving.py:build_spec_decoding_metrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "function:vllm/entrypoints/generate/base/serving.py:build_spec_decoding_metrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "class:vllm/entrypoints/generate/base/serving.py:ServeContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "class:vllm/entrypoints/generate/base/serving.py:ServeContext",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "class:vllm/entrypoints/generate/base/serving.py:GenerateBaseServing",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "class:vllm/entrypoints/generate/base/serving.py:GenerateBaseServing",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "function:vllm/entrypoints/generate/base/serving.py:decode_token_ids",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "function:vllm/entrypoints/generate/base/serving.py:decode_token_ids",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "function:vllm/entrypoints/generate/base/serving.py:chat_top_logprobs_limit",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "function:vllm/entrypoints/generate/base/serving.py:chat_top_logprobs_limit",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "function:vllm/entrypoints/generate/base/serving.py:completion_top_logprobs_limit",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "function:vllm/entrypoints/generate/base/serving.py:completion_top_logprobs_limit",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "function:vllm/entrypoints/generate/base/serving.py:clamp_prompt_logprobs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "function:vllm/entrypoints/generate/base/serving.py:clamp_prompt_logprobs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/offline.py",
+   "target": "function:vllm/entrypoints/generate/beam_search/offline.py:_bitmask_to_token_ids",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/offline.py",
+   "target": "class:vllm/entrypoints/generate/beam_search/offline.py:BeamSearchOfflineMixin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/offline.py",
+   "target": "class:vllm/entrypoints/generate/beam_search/offline.py:BeamSearchOfflineMixin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/online.py",
+   "target": "class:vllm/entrypoints/generate/beam_search/online.py:BeamSearchOnlineMixin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/online.py",
+   "target": "class:vllm/entrypoints/generate/beam_search/online.py:BeamSearchOnlineMixin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/utils.py",
+   "target": "class:vllm/entrypoints/generate/beam_search/utils.py:BeamSearchSequence",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/utils.py",
+   "target": "class:vllm/entrypoints/generate/beam_search/utils.py:BeamSearchSequence",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/utils.py",
+   "target": "class:vllm/entrypoints/generate/beam_search/utils.py:BeamSearchOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/utils.py",
+   "target": "class:vllm/entrypoints/generate/beam_search/utils.py:BeamSearchOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/utils.py",
+   "target": "class:vllm/entrypoints/generate/beam_search/utils.py:BeamSearchInstance",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/utils.py",
+   "target": "class:vllm/entrypoints/generate/beam_search/utils.py:BeamSearchInstance",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/utils.py",
+   "target": "function:vllm/entrypoints/generate/beam_search/utils.py:get_beam_search_score",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/utils.py",
+   "target": "function:vllm/entrypoints/generate/beam_search/utils.py:get_beam_search_score",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/utils.py",
+   "target": "function:vllm/entrypoints/generate/beam_search/utils.py:create_sort_beams_key_function",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/utils.py",
+   "target": "function:vllm/entrypoints/generate/beam_search/utils.py:create_sort_beams_key_function",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/utils.py",
+   "target": "function:vllm/entrypoints/generate/beam_search/utils.py:get_beam_search_eos_token_ids",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/utils.py",
+   "target": "function:vllm/entrypoints/generate/beam_search/utils.py:get_beam_search_eos_token_ids",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/api_router.py",
+   "target": "function:vllm/entrypoints/generate/generative_scoring/api_router.py:create_generative_scoring",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/api_router.py",
+   "target": "function:vllm/entrypoints/generate/generative_scoring/api_router.py:create_generative_scoring",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/api_router.py",
+   "target": "function:vllm/entrypoints/generate/generative_scoring/api_router.py:register_generative_scoring_api_router",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/api_router.py",
+   "target": "function:vllm/entrypoints/generate/generative_scoring/api_router.py:register_generative_scoring_api_router",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "class:vllm/entrypoints/generate/generative_scoring/serving.py:GenerativeScoringRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "class:vllm/entrypoints/generate/generative_scoring/serving.py:GenerativeScoringRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "class:vllm/entrypoints/generate/generative_scoring/serving.py:GenerativeScoringItemResult",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "class:vllm/entrypoints/generate/generative_scoring/serving.py:GenerativeScoringItemResult",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "class:vllm/entrypoints/generate/generative_scoring/serving.py:GenerativeScoringResponse",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "class:vllm/entrypoints/generate/generative_scoring/serving.py:GenerativeScoringResponse",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "class:vllm/entrypoints/generate/generative_scoring/serving.py:ServingGenerativeScoring",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "class:vllm/entrypoints/generate/generative_scoring/serving.py:ServingGenerativeScoring",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/label_reads.py",
+   "target": "function:vllm/entrypoints/generate/label_reads.py:next_token_label_reads",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/label_reads.py",
+   "target": "function:vllm/entrypoints/generate/label_reads.py:next_token_label_reads",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/api_router.py",
+   "target": "function:vllm/entrypoints/generate/structured_decisions/api_router.py:create_structured_decision",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/api_router.py",
+   "target": "function:vllm/entrypoints/generate/structured_decisions/api_router.py:create_structured_decision",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/api_router.py",
+   "target": "function:vllm/entrypoints/generate/structured_decisions/api_router.py:init_structured_decisions_state",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/api_router.py",
+   "target": "function:vllm/entrypoints/generate/structured_decisions/api_router.py:init_structured_decisions_state",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "target": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:QuestionSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "target": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:QuestionSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "target": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:StructuredDecisionRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "target": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:StructuredDecisionRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "target": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:DecisionUsage",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "target": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:DecisionUsage",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "target": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:QuestionDiagnostics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "target": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:QuestionDiagnostics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "target": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:JointCanvas",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "target": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:JointCanvas",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "target": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:JointDiagnostics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "target": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:JointDiagnostics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "target": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:StructuredDecisionResponse",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "target": "class:vllm/entrypoints/generate/structured_decisions/protocol.py:StructuredDecisionResponse",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/serving.py",
+   "target": "function:vllm/entrypoints/generate/structured_decisions/serving.py:parse_questions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/serving.py",
+   "target": "function:vllm/entrypoints/generate/structured_decisions/serving.py:parse_questions",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/serving.py",
+   "target": "class:vllm/entrypoints/generate/structured_decisions/serving.py:ServingStructuredDecisions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/serving.py",
+   "target": "class:vllm/entrypoints/generate/structured_decisions/serving.py:ServingStructuredDecisions",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "file:vllm/entrypoints/anthropic/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "file:vllm/entrypoints/anthropic/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "file:vllm/entrypoints/cohere/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "file:vllm/entrypoints/cohere/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "file:vllm/entrypoints/generate/generative_scoring/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/batch_serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "file:vllm/entrypoints/openai/completion/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "file:vllm/entrypoints/openai/completion/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "file:vllm/entrypoints/openai/responses/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "file:vllm/entrypoints/openai/responses/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "file:vllm/entrypoints/serve/utils/fingerprint.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/api_router.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/protocol.py",
+   "target": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/entrypoints/generate/beam_search/online.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/entrypoints/openai/completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/entrypoints/openai/models/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/entrypoints/openai/responses/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/entrypoints/serve/utils/fingerprint.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/logprobs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/tokenizers/detokenizer_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/base/serving.py",
+   "target": "file:vllm/v1/metrics/stats.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/offline.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/offline.py",
+   "target": "file:vllm/entrypoints/common/offline.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/offline.py",
+   "target": "file:vllm/entrypoints/generate/beam_search/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/offline.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/offline.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/offline.py",
+   "target": "file:vllm/pooling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/offline.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/offline.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/offline.py",
+   "target": "file:vllm/v1/structured_output/backend_guidance.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/offline.py",
+   "target": "file:vllm/v1/structured_output/backend_lm_format_enforcer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/offline.py",
+   "target": "file:vllm/v1/structured_output/backend_outlines.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/offline.py",
+   "target": "file:vllm/v1/structured_output/backend_types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/offline.py",
+   "target": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/offline.py",
+   "target": "file:vllm/v1/structured_output/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/online.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/online.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/online.py",
+   "target": "file:vllm/entrypoints/generate/beam_search/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/online.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/online.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/online.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/online.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/online.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/online.py",
+   "target": "file:vllm/utils/async_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/utils.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/utils.py",
+   "target": "file:vllm/logprobs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/utils.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/beam_search/utils.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/api_router.py",
+   "target": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/api_router.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/api_router.py",
+   "target": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/api_router.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "file:vllm/entrypoints/generate/label_reads.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "file:vllm/entrypoints/openai/models/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/generative_scoring/serving.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/label_reads.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/label_reads.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/label_reads.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/label_reads.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/label_reads.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/label_reads.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/label_reads.py",
+   "target": "file:vllm/utils/async_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/api_router.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/api_router.py",
+   "target": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/api_router.py",
+   "target": "file:vllm/entrypoints/generate/structured_decisions/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/api_router.py",
+   "target": "file:vllm/entrypoints/openai/decisions/state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/api_router.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/api_router.py",
+   "target": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/api_router.py",
+   "target": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/api_router.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/api_router.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/serving.py",
+   "target": "file:vllm/entrypoints/generate/structured_decisions/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/serving.py",
+   "target": "file:vllm/entrypoints/openai/decisions/question_types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/serving.py",
+   "target": "file:vllm/entrypoints/openai/decisions/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/serving.py",
+   "target": "file:vllm/entrypoints/openai/decisions/strategies.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/generate/structured_decisions/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/entrypoints/generate/base/serving.py:GenerateBaseServing",
+   "target": "class:vllm/entrypoints/serve/engine/serving.py:BaseServing",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/generate/base/serving.py:GenerateBaseServing",
+   "target": "class:vllm/entrypoints/generate/beam_search/online.py:BeamSearchOnlineMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/generate/beam_search/offline.py:BeamSearchOfflineMixin",
+   "target": "class:vllm/entrypoints/common/offline.py:OfflineInferenceMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/generate/generative_scoring/serving.py:ServingGenerativeScoring",
+   "target": "class:vllm/entrypoints/serve/engine/serving.py:BaseServing",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/generate/structured_decisions/serving.py:ServingStructuredDecisions",
+   "target": "class:vllm/entrypoints/openai/decisions/serving.py:BaseServingDecisions",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "function:vllm/entrypoints/generate/api_router.py:register_generate_api_routers",
+   "target": "function:vllm/entrypoints/openai/chat_completion/api_router.py:attach_router",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/entrypoints/generate/api_router.py:register_generate_api_routers",
+   "target": "function:vllm/entrypoints/openai/responses/api_router.py:attach_router",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/entrypoints/generate/api_router.py:register_generate_api_routers",
+   "target": "function:vllm/entrypoints/openai/completion/api_router.py:attach_router",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/entrypoints/generate/api_router.py:register_generate_api_routers",
+   "target": "function:vllm/entrypoints/generate/generative_scoring/api_router.py:register_generative_scoring_api_router",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/entrypoints/generate/api_router.py:init_generate_state",
+   "target": "class:vllm/entrypoints/openai/chat_completion/serving.py:OpenAIServingChat",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/entrypoints/generate/api_router.py:init_generate_state",
+   "target": "class:vllm/entrypoints/openai/completion/serving.py:OpenAIServingCompletion",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/entrypoints/generate/api_router.py:init_generate_state",
+   "target": "class:vllm/entrypoints/openai/responses/serving.py:OpenAIServingResponses",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/entrypoints/generate/structured_decisions/serving.py:parse_questions",
+   "target": "function:vllm/entrypoints/openai/decisions/question_types.py:build_question",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/entrypoints/generate/generative_scoring/serving.py:ServingGenerativeScoring",
+   "target": "function:vllm/entrypoints/generate/label_reads.py:next_token_label_reads",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

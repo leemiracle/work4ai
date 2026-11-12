@@ -1,0 +1,30 @@
+# DeepWiki 索引 — openai/frontier-evals
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 253396 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+- [3 Repository Structure](3-repository-structure.md)
+- [4 Core Evaluation Framework](4-core-evaluation-framework.md)
+  - [4.1 Compatibility API](4.1-compatibility-api.md)
+  - [4.2 Compatibility API Preparedness](4.2-compatibility-api-preparedness.md)
+  - [4.3 Nanoeval Framework](4.3-nanoeval-framework.md)
+  - [4.4 Nanoeval-Alcatraz Integration](4.4-nanoeval-alcatraz-integration.md)
+- [5 Alcatraz System](5-alcatraz-system.md)
+  - [5.1 Core Architecture and Local Cluster](5.1-core-architecture-and-local-cluster.md)
+  - [5.2 Container Process Management](5.2-container-process-management.md)
+  - [5.3 Serialization and Configuration](5.3-serialization-and-configuration.md)
+  - [5.4 Utilities and Commands](5.4-utilities-and-commands.md)
+- [6 Evaluation Projects](6-evaluation-projects.md)
+  - [6.1 PaperBench](6.1-paperbench.md)
+  - [6.2 SWE-Lancer](6.2-swe-lancer.md)
+  - [6.3 Preparedness Turn Completer](6.3-preparedness-turn-completer.md)
+  - [6.4 EVMbench](6.4-evmbench.md)
+- [7 Development and Maintenance](7-development-and-maintenance.md)
+  - [7.1 CI/CD Pipeline Architecture](7.1-ci-cd-pipeline-architecture.md)
+  - [7.2 Component-Specific Workflows](7.2-component-specific-workflows.md)
+  - [7.3 Code Quality and Tooling](7.3-code-quality-and-tooling.md)
+  - [7.4 Dependency Management](7.4-dependency-management.md)
+  - [7.5 Version Control Configuration](7.5-version-control-configuration.md)
+- [8 Glossary](8-glossary.md)

@@ -1,0 +1,744 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "type": "file",
+   "name": "indexer_context_parallel.py",
+   "filePath": "vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "summary": "索引器 context-parallel decode：IndexerCPDecode 按 rank 持久缓冲做 CP 评分的 top-k（共享单例），Triton 实现在 decode 时切到该路径。",
+   "tags": [
+    "indexer",
+    "context-parallel",
+    "decode",
+    "rocm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/indexer_cp.py",
+   "type": "file",
+   "name": "indexer_cp.py",
+   "filePath": "vllm/models/minimax_m3/amd/indexer_cp.py",
+   "summary": "索引器 CP 选择器的 peer 缓冲：每 rank IPC 共享候选缓冲（zeroed IPC 分配），供跨 rank top-k 交换。",
+   "tags": [
+    "indexer",
+    "context-parallel",
+    "ipc",
+    "peers"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "type": "file",
+   "name": "indexer_msa.py",
+   "filePath": "vllm/models/minimax_m3/amd/indexer_msa.py",
+   "summary": "MSA 索引器实现（ROCm）：FP8 score + top-k（prefill/decode 双路）、ragged top-k 的 per-row 形状元数据与 CP 启用判定/不支持原因探测。",
+   "tags": [
+    "indexer",
+    "msa",
+    "fp8",
+    "top-k"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/indexer_context_parallel.py:IndexerCPDecode",
+   "type": "class",
+   "name": "IndexerCPDecode",
+   "filePath": "vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "summary": "CP 评分 decode top-k：持久缓冲跨层共享，按 rank 索引头评分。",
+   "tags": [
+    "indexer",
+    "context-parallel",
+    "decode"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    63,
+    196
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/indexer_context_parallel.py:MiniMaxM3IndexerTritonCPImpl",
+   "type": "class",
+   "name": "MiniMaxM3IndexerTritonCPImpl",
+   "filePath": "vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "summary": "带 CP decode 评分的 Triton 索引器实现（ROCm）。",
+   "tags": [
+    "indexer",
+    "triton",
+    "context-parallel"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    221,
+    363
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/indexer_cp.py:IndexerCpPeers",
+   "type": "class",
+   "name": "IndexerCpPeers",
+   "filePath": "vllm/models/minimax_m3/amd/indexer_cp.py",
+   "summary": "CP 选择器交换用的 peer 缓冲（每 rank 候选缓冲+cp 代际）。",
+   "tags": [
+    "indexer",
+    "peers",
+    "buffers"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    45,
+    52
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3IndexerMSABackend",
+   "type": "class",
+   "name": "MiniMaxM3IndexerMSABackend",
+   "filePath": "vllm/models/minimax_m3/amd/indexer_msa.py",
+   "summary": "选 MSA builder 的索引器侧缓存后端。",
+   "tags": [
+    "indexer",
+    "backend",
+    "msa"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    124,
+    129
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3IndexerMSAMetadata",
+   "type": "class",
+   "name": "MiniMaxM3IndexerMSAMetadata",
+   "filePath": "vllm/models/minimax_m3/amd/indexer_msa.py",
+   "summary": "ragged top-k 所需的 per-row 形状元数据。",
+   "tags": [
+    "indexer",
+    "metadata",
+    "ragged"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    133,
+    149
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3IndexerMSAMetadataBuilder",
+   "type": "class",
+   "name": "MiniMaxM3IndexerMSAMetadataBuilder",
+   "filePath": "vllm/models/minimax_m3/amd/indexer_msa.py",
+   "summary": "Triton 元数据 + prefill 行因果形状。",
+   "tags": [
+    "indexer",
+    "metadata-builder",
+    "prefill-shapes"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    152,
+    281
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3IndexerMSAImpl",
+   "type": "class",
+   "name": "MiniMaxM3IndexerMSAImpl",
+   "filePath": "vllm/models/minimax_m3/amd/indexer_msa.py",
+   "summary": "FP8 score + top-k 的 MSA 索引器实现（prefill/decode，9 方法）。",
+   "tags": [
+    "indexer",
+    "msa",
+    "fp8"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    284,
+    692
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3MSAIndexer",
+   "type": "class",
+   "name": "MiniMaxM3MSAIndexer",
+   "filePath": "vllm/models/minimax_m3/amd/indexer_msa.py",
+   "summary": "MiniMaxM3Indexer 面向 MSA impl 的模块封装。",
+   "tags": [
+    "indexer",
+    "module",
+    "wrapper"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    695,
+    743
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/indexer_context_parallel.py:get_shared_cp_decode",
+   "type": "function",
+   "name": "get_shared_cp_decode",
+   "filePath": "vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "summary": "每 rank/几何一个共享 IndexerCPDecode 单例。",
+   "tags": [
+    "factory",
+    "singleton",
+    "cp-decode"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    202,
+    218
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/indexer_cp.py:_ipc_alloc",
+   "type": "function",
+   "name": "_ipc_alloc",
+   "filePath": "vllm/models/minimax_m3/amd/indexer_cp.py",
+   "summary": "每 rank 分配 zeroed IPC 共享内存。",
+   "tags": [
+    "ipc",
+    "allocation",
+    "ipc-detail"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    32,
+    41
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/indexer_cp.py:get_indexer_cp_peers",
+   "type": "function",
+   "name": "get_indexer_cp_peers",
+   "filePath": "vllm/models/minimax_m3/amd/indexer_cp.py",
+   "summary": "一次性分配的 CP 选择器 peer 缓冲。",
+   "tags": [
+    "peers",
+    "factory",
+    "ipc"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    58,
+    87
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/indexer_msa.py:_cp_score_buffer",
+   "type": "function",
+   "name": "_cp_score_buffer",
+   "filePath": "vllm/models/minimax_m3/amd/indexer_msa.py",
+   "summary": "一次分配、全层共享的 CP score 缓冲。",
+   "tags": [
+    "buffers",
+    "cp",
+    "shared"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    107,
+    121
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/indexer_msa.py:msa_indexer_unsupported_reason",
+   "type": "function",
+   "name": "msa_indexer_unsupported_reason",
+   "filePath": "vllm/models/minimax_m3/amd/indexer_msa.py",
+   "summary": "该配置不能用此索引器的原因（None 即可用）。",
+   "tags": [
+    "eligibility",
+    "diagnostics",
+    "indexer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    746,
+    845
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/indexer_msa.py:select_msa_indexer_impl_cls",
+   "type": "function",
+   "name": "select_msa_indexer_impl_cls",
+   "filePath": "vllm/models/minimax_m3/amd/indexer_msa.py",
+   "summary": "可用则返回 MSA 索引器 impl 类。",
+   "tags": [
+    "selection",
+    "factory",
+    "indexer"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    848,
+    874
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/indexer_msa.py:msa_indexer_cp_enabled",
+   "type": "function",
+   "name": "msa_indexer_cp_enabled",
+   "filePath": "vllm/models/minimax_m3/amd/indexer_msa.py",
+   "summary": "选定的 MSA 索引器是否跑 context-parallel。",
+   "tags": [
+    "context-parallel",
+    "predicate",
+    "indexer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    877,
+    931
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "target": "file:vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "target": "file:vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "target": "file:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "target": "file:vllm/models/minimax_m3/common/indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_cp.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_cp.py",
+   "target": "file:vllm/distributed/device_communicators/custom_all_reduce.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_cp.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "file:vllm/config/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "file:vllm/models/minimax_m3/amd/indexer_cp.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "file:vllm/models/minimax_m3/common/indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "target": "class:vllm/models/minimax_m3/amd/indexer_context_parallel.py:IndexerCPDecode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "target": "class:vllm/models/minimax_m3/amd/indexer_context_parallel.py:MiniMaxM3IndexerTritonCPImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "target": "function:vllm/models/minimax_m3/amd/indexer_context_parallel.py:get_shared_cp_decode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_cp.py",
+   "target": "class:vllm/models/minimax_m3/amd/indexer_cp.py:IndexerCpPeers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_cp.py",
+   "target": "function:vllm/models/minimax_m3/amd/indexer_cp.py:_ipc_alloc",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_cp.py",
+   "target": "function:vllm/models/minimax_m3/amd/indexer_cp.py:get_indexer_cp_peers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3IndexerMSABackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3IndexerMSAMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3IndexerMSAMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3IndexerMSAImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3MSAIndexer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "function:vllm/models/minimax_m3/amd/indexer_msa.py:_cp_score_buffer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "function:vllm/models/minimax_m3/amd/indexer_msa.py:msa_indexer_unsupported_reason",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "function:vllm/models/minimax_m3/amd/indexer_msa.py:select_msa_indexer_impl_cls",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "function:vllm/models/minimax_m3/amd/indexer_msa.py:msa_indexer_cp_enabled",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "target": "class:vllm/models/minimax_m3/amd/indexer_context_parallel.py:IndexerCPDecode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "target": "class:vllm/models/minimax_m3/amd/indexer_context_parallel.py:MiniMaxM3IndexerTritonCPImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "target": "function:vllm/models/minimax_m3/amd/indexer_context_parallel.py:get_shared_cp_decode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_cp.py",
+   "target": "class:vllm/models/minimax_m3/amd/indexer_cp.py:IndexerCpPeers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_cp.py",
+   "target": "function:vllm/models/minimax_m3/amd/indexer_cp.py:get_indexer_cp_peers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3IndexerMSABackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3IndexerMSAMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3IndexerMSAMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3IndexerMSAImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3MSAIndexer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "function:vllm/models/minimax_m3/amd/indexer_msa.py:msa_indexer_unsupported_reason",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "function:vllm/models/minimax_m3/amd/indexer_msa.py:select_msa_indexer_impl_cls",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "target": "function:vllm/models/minimax_m3/amd/indexer_msa.py:msa_indexer_cp_enabled",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/amd/indexer_context_parallel.py:MiniMaxM3IndexerTritonCPImpl",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerTritonImpl",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3IndexerMSABackend",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3IndexerMSAMetadata",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerMetadata",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3IndexerMSAMetadataBuilder",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3IndexerMSAImpl",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerImpl",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "function:vllm/models/minimax_m3/amd/indexer_msa.py:select_msa_indexer_impl_cls",
+   "target": "class:vllm/models/minimax_m3/amd/indexer_msa.py:MiniMaxM3IndexerMSAImpl",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/amd/indexer_context_parallel.py:MiniMaxM3IndexerTritonCPImpl",
+   "target": "class:vllm/models/minimax_m3/amd/indexer_context_parallel.py:IndexerCPDecode",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/models/minimax_m3/amd/indexer_context_parallel.py:get_shared_cp_decode",
+   "target": "class:vllm/models/minimax_m3/amd/indexer_context_parallel.py:IndexerCPDecode",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

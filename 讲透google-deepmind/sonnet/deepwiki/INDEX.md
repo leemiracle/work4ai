@@ -1,0 +1,32 @@
+# DeepWiki 索引 — google-deepmind/sonnet
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 314068 字符
+
+- [1 Overview](1-overview.md)
+- [2 Core Module System](2-core-module-system.md)
+  - [2.1 Module Lifecycle](2.1-module-lifecycle.md)
+  - [2.2 Name Scopes and Variable Management](2.2-name-scopes-and-variable-management.md)
+- [3 Basic Modules](3-basic-modules.md)
+  - [3.1 Linear and Convolutional Layers](3.1-linear-and-convolutional-layers.md)
+  - [3.2 Normalization Layers](3.2-normalization-layers.md)
+  - [3.3 Recurrent Neural Networks](3.3-recurrent-neural-networks.md)
+- [4 Higher-Level Neural Networks](4-higher-level-neural-networks.md)
+  - [4.1 MLP (Multi-Layer Perceptron)](4.1-mlp-multi-layer-perceptron.md)
+  - [4.2 ResNet](4.2-resnet.md)
+  - [4.3 Vector Quantization](4.3-vector-quantization.md)
+- [5 Optimization](5-optimization.md)
+  - [5.1 Optimizers](5.1-optimizers.md)
+  - [5.2 Regularizers and Initializers](5.2-regularizers-and-initializers.md)
+- [6 Distributed Training](6-distributed-training.md)
+  - [6.1 Replicator](6.1-replicator.md)
+  - [6.2 Cross-Replica Batch Normalization](6.2-cross-replica-batch-normalization.md)
+- [7 Advanced Features](7-advanced-features.md)
+  - [7.1 Mixed Precision Training](7.1-mixed-precision-training.md)
+  - [7.2 BatchApply](7.2-batchapply.md)
+  - [7.3 Serialization](7.3-serialization.md)
+- [8 Testing and Conformance](8-testing-and-conformance.md)
+- [9 Examples](9-examples.md)
+  - [9.1 MLP for MNIST](9.1-mlp-for-mnist.md)
+  - [9.2 GAN on MNIST](9.2-gan-on-mnist.md)
+  - [9.3 Distributed Training on CIFAR-10](9.3-distributed-training-on-cifar-10.md)

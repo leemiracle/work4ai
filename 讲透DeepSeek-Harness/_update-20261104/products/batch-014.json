@@ -1,0 +1,2868 @@
+{
+ "nodes": [
+  {
+   "id": "file:packages/session/session-persistence/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/session/session-persistence/src/index.ts",
+   "summary": "持久 seam 的 Service Definition：export abstract class SessionPersistence（ctx.sessionPersistence）声明 create/open/stat/list 抽象 API 与 SessionPersistenceSnapshot/StorageMetadata/Inspection 等元数据类型；再导出句柄契约、稳定错误词表与后端共享校验函数，供后端与 Consumer 从 Service Definition 导入。",
+   "tags": [
+    "service-definition",
+    "persistence",
+    "interface",
+    "cordis"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/session/session-persistence/src/index.ts:SessionPersistence",
+   "type": "class",
+   "name": "SessionPersistence",
+   "filePath": "packages/session/session-persistence/src/index.ts",
+   "lineRange": [
+    144,
+    211
+   ],
+   "summary": "抽象 Service 子类（Service Definition 'sessionPersistence'）：identity symbol 提供跨 Context 代理稳定的进程内身份；声明 create/open/stat/list 四个抽象方法，后端（如 JSONL）继承并实现。",
+   "tags": [
+    "service-definition",
+    "abstract",
+    "persistence"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/session/session-persistence/src/storage-contract.ts",
+   "type": "file",
+   "name": "storage-contract.ts",
+   "filePath": "packages/session/session-persistence/src/storage-contract.ts",
+   "summary": "后端共享存储校验：版本门（assertVersion 经 sessionFormatVersionRefusal 拒绝非当前格式）、fail-closed 事件词表（validateStoredEvents 逐事件 adopt+冻结，未知非 ignorable 类型拒绝以防重建错误会话）、append 批物化与连续性断言——一处实现让所有后端以相同方式拒绝相同输入。",
+   "tags": [
+    "validation",
+    "storage-contract",
+    "fail-closed"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-persistence/src/storage-contract.ts:assertStoredId",
+   "type": "function",
+   "name": "assertStoredId",
+   "filePath": "packages/session/session-persistence/src/storage-contract.ts",
+   "lineRange": [
+    35,
+    39
+   ],
+   "summary": "拒绝未绑定到请求 id 的存储元数据（header.id 必须等于请求 id）。",
+   "tags": [
+    "validation",
+    "identity"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence/src/storage-contract.ts:assertVersion",
+   "type": "function",
+   "name": "assertVersion",
+   "filePath": "packages/session/session-persistence/src/storage-contract.ts",
+   "lineRange": [
+    46,
+    53
+   ],
+   "summary": "版本门：header 未还原到当前逻辑格式即抛 SessionFormatUnsupportedError（带原始 artifact 路径）。",
+   "tags": [
+    "validation",
+    "version-gate"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence/src/storage-contract.ts:validateStoredEvents",
+   "type": "function",
+   "name": "validateStoredEvents",
+   "filePath": "packages/session/session-persistence/src/storage-contract.ts",
+   "lineRange": [
+    69,
+    104
+   ],
+   "summary": "就地校验独占存储事件数组：逐条 adopt（校验+冻结），未知事件类型除非 ignorable:true 否则拒绝——静默跳过未知必需事件可能重建出错误会话。",
+   "tags": [
+    "validation",
+    "fail-closed",
+    "event-vocabulary"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-persistence/src/storage-contract.ts:materializeCreateHeader",
+   "type": "function",
+   "name": "materializeCreateHeader",
+   "filePath": "packages/session/session-persistence/src/storage-contract.ts",
+   "lineRange": [
+    112,
+    121
+   ],
+   "summary": "物化 create 时的 header：JSON 快照化并校验可序列化性与 createdAt 计数。",
+   "tags": [
+    "materialization",
+    "header"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence/src/storage-contract.ts:materializeAppendBatch",
+   "type": "function",
+   "name": "materializeAppendBatch",
+   "filePath": "packages/session/session-persistence/src/storage-contract.ts",
+   "lineRange": [
+    131,
+    137
+   ],
+   "summary": "物化 append 批次：独占事件数组的快照与校验。",
+   "tags": [
+    "materialization",
+    "append-batch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence/src/storage-contract.ts:assertContiguous",
+   "type": "function",
+   "name": "assertContiguous",
+   "filePath": "packages/session/session-persistence/src/storage-contract.ts",
+   "lineRange": [
+    145,
+    151
+   ],
+   "summary": "断言事件批从 cursor 起连续（append-only 契约的执行器）。",
+   "tags": [
+    "validation",
+    "contiguity"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/session/session-persistence-jsonl/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/session/session-persistence-jsonl/README.md",
+   "summary": "dsh-session-persistence-jsonl 包英文主文档：随仓 JSONL 持久后端——每会话当前 append-only JSONL 日志+不可变历史格式世代文件（默认校验和 Zstandard 帧，可关压缩为明文行），迁移/压缩/历史解码/崩溃恢复都是存储内部细节；root 是唯一必需配置。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/session/session-persistence-jsonl/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/session/session-persistence-jsonl/package.json",
+   "summary": "@deepseek-ai/dsh-session-persistence-jsonl 包清单：依赖 session-format-catalog/v3-to-v4/llm/node-addon-system/koffi/p-limit 等，peer 依赖 session/session-persistence/cordis。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-persistence-jsonl/src/catalog-migration.ts",
+   "type": "file",
+   "name": "catalog-migration.ts",
+   "filePath": "packages/session/session-persistence-jsonl/src/catalog-migration.ts",
+   "summary": "收集历史发现事实而不递归准备相关当前世代：prepareCatalogFacts 经 historicalSessionFormatCatalog 用既有历史 codec 读取每个直接子的自有描述符，产出紧凑事实+子局部失败清单，并带 validate() 校验子物理世代未变。",
+   "tags": [
+    "catalog-facts",
+    "migration",
+    "historical-reading"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/catalog-migration.ts:prepareCatalogFacts",
+   "type": "function",
+   "name": "prepareCatalogFacts",
+   "filePath": "packages/session/session-persistence-jsonl/src/catalog-migration.ts",
+   "lineRange": [
+    31,
+    92
+   ],
+   "summary": "为父会话的入站迁移收集每个直接子的描述符事实：读取-提取-释放完整子事件数组，登记失败与世代校验钩子。",
+   "tags": [
+    "catalog-facts",
+    "evidence-collection"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "type": "file",
+   "name": "format.ts",
+   "filePath": "packages/session/session-persistence-jsonl/src/format.ts",
+   "summary": "JSONL 后端盘上格式层：路径清洗（SessionId 是未校验 branded string，必须 encodeSegment 编码后才能进路径——防遍历防碰撞）、项目/会话目录布局、header 行编解码、世代文件名解析与撕裂修复偏移计算；SessionLogScanner 提供单遍可恢复行扫描。",
+   "tags": [
+    "format",
+    "path-sanitization",
+    "session-format",
+    "physical-framing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/format.ts:parseGenerationLogFilename",
+   "type": "function",
+   "name": "parseGenerationLogFilename",
+   "filePath": "packages/session/session-persistence-jsonl/src/format.ts",
+   "lineRange": [
+    70,
+    77
+   ],
+   "summary": "解析世代文件名为版本号（v0 保留纯后缀名，后续世代带小写 vN 分量），非法名抛不支持迁移错误。",
+   "tags": [
+    "parsing",
+    "generation-files"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/format.ts:assertNoRetiredHeaderFields",
+   "type": "function",
+   "name": "assertNoRetiredHeaderFields",
+   "filePath": "packages/session/session-persistence-jsonl/src/format.ts",
+   "lineRange": [
+    105,
+    110
+   ],
+   "summary": "拒绝 header 记录中的退役字段。",
+   "tags": [
+    "validation",
+    "retired-fields"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/format.ts:toHeaderLine",
+   "type": "function",
+   "name": "toHeaderLine",
+   "filePath": "packages/session/session-persistence-jsonl/src/format.ts",
+   "lineRange": [
+    119,
+    134
+   ],
+   "summary": "把 header 与继承计数编码为首行 JSON 记录（带 version/id/createdAt/isSeeded 等成员）。",
+   "tags": [
+    "encoding",
+    "header"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/format.ts:fromHeaderLine",
+   "type": "function",
+   "name": "fromHeaderLine",
+   "filePath": "packages/session/session-persistence-jsonl/src/format.ts",
+   "lineRange": [
+    141,
+    156
+   ],
+   "summary": "解析首行为 header 记录（类型/版本/成员校验）。",
+   "tags": [
+    "decoding",
+    "header"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/format.ts:isHeaderLine",
+   "type": "function",
+   "name": "isHeaderLine",
+   "filePath": "packages/session/session-persistence-jsonl/src/format.ts",
+   "lineRange": [
+    159,
+    186
+   ],
+   "summary": "判定值是否为合法 header 行记录（供扫描器区分首行与事件行）。",
+   "tags": [
+    "validation",
+    "header"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/format.ts:encodeSegment",
+   "type": "function",
+   "name": "encodeSegment",
+   "filePath": "packages/session/session-persistence-jsonl/src/format.ts",
+   "lineRange": [
+    199,
+    214
+   ],
+   "summary": "把路径段编码为安全文件名成分：转义非常规字符，杜绝路径遍历与碰撞。",
+   "tags": [
+    "path-sanitization",
+    "encoding"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/format.ts:projectKey",
+   "type": "function",
+   "name": "projectKey",
+   "filePath": "packages/session/session-persistence-jsonl/src/format.ts",
+   "lineRange": [
+    225,
+    245
+   ],
+   "summary": "从会话 cwd 推导人类可读的项目目录键（绝对路径规范化+编码）。",
+   "tags": [
+    "path-layout",
+    "project-directories"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/format.ts:projectDir",
+   "type": "function",
+   "name": "projectDir",
+   "filePath": "packages/session/session-persistence-jsonl/src/format.ts",
+   "lineRange": [
+    254,
+    257
+   ],
+   "summary": "项目目录路径（root+projectKey）。",
+   "tags": [
+    "path-layout"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/format.ts:sessionDir",
+   "type": "function",
+   "name": "sessionDir",
+   "filePath": "packages/session/session-persistence-jsonl/src/format.ts",
+   "lineRange": [
+    267,
+    269
+   ],
+   "summary": "会话目录路径（项目目录+编码会话 id）。",
+   "tags": [
+    "path-layout"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/format.ts:generationLogPath",
+   "type": "function",
+   "name": "generationLogPath",
+   "filePath": "packages/session/session-persistence-jsonl/src/format.ts",
+   "lineRange": [
+    280,
+    288
+   ],
+   "summary": "历史世代文件的完整路径（会话目录+世代文件名）。",
+   "tags": [
+    "path-layout",
+    "generation-files"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/format.ts:logPath",
+   "type": "function",
+   "name": "logPath",
+   "filePath": "packages/session/session-persistence-jsonl/src/format.ts",
+   "lineRange": [
+    298,
+    305
+   ],
+   "summary": "当前代日志的完整路径（会话目录+当前文件名）。",
+   "tags": [
+    "path-layout"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/format.ts:eventLines",
+   "type": "function",
+   "name": "eventLines",
+   "filePath": "packages/session/session-persistence-jsonl/src/format.ts",
+   "lineRange": [
+    313,
+    315
+   ],
+   "summary": "把事件批编码为物理行序列。",
+   "tags": [
+    "encoding",
+    "events"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/format.ts:eventLine",
+   "type": "function",
+   "name": "eventLine",
+   "filePath": "packages/session/session-persistence-jsonl/src/format.ts",
+   "lineRange": [
+    322,
+    324
+   ],
+   "summary": "把单个事件编码为一行（经 format catalog 当前编码器+退役字段拒绝）。",
+   "tags": [
+    "encoding",
+    "events"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/format.ts:parseHeaderRecord",
+   "type": "function",
+   "name": "parseHeaderRecord",
+   "filePath": "packages/session/session-persistence-jsonl/src/format.ts",
+   "lineRange": [
+    349,
+    378
+   ],
+   "summary": "解析并校验 header 记录成员（拒绝外国格式版本），产出存储元数据。",
+   "tags": [
+    "decoding",
+    "header",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/session/session-persistence-jsonl/src/format.ts:SessionLogScanner",
+   "type": "class",
+   "name": "SessionLogScanner",
+   "filePath": "packages/session/session-persistence-jsonl/src/format.ts",
+   "lineRange": [
+    386,
+    522
+   ],
+   "summary": "137 行单遍日志扫描器：write 逐行消费（header 行→restore 配置，事件行→emit），checkpoint/finish 管理已提交字节与 issue 延迟抛出，服务撕裂尾部恢复。",
+   "tags": [
+    "scanning",
+    "recovery",
+    "state-machine"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/format.ts:scanLog",
+   "type": "function",
+   "name": "scanLog",
+   "filePath": "packages/session/session-persistence-jsonl/src/format.ts",
+   "lineRange": [
+    532,
+    538
+   ],
+   "summary": "一次性扫描完整缓冲为 artifact（SessionLogScanner 的便捷封装）。",
+   "tags": [
+    "scanning"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "type": "file",
+   "name": "generation.ts",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "summary": "JSONL Session artifact 的整代持久发布（1059 行）：本模块拥有物理编码、精确源身份、不可变世代文件与排他当前代发布——prepareMigration 流式解码历史代并暂存新代（writeSyncedTemp+syncDirectory），publishCurrentExclusive 以 link 排他发布；verifyCurrentGeneration 全量校验（供 worker 隔离执行）；三个具名错误区分源已变/不支持迁移/目标冲突。",
+   "tags": [
+    "generation-files",
+    "migration",
+    "durability",
+    "atomic-publication"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/session/session-persistence-jsonl/src/generation.ts:JsonlGenerationSourceChangedError",
+   "type": "class",
+   "name": "JsonlGenerationSourceChangedError",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    112,
+    119
+   ],
+   "summary": "迁移期间源世代被外部替换（物理身份不匹配）。",
+   "tags": [
+    "error-handling",
+    "migration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/session/session-persistence-jsonl/src/generation.ts:JsonlGenerationUnsupportedMigrationError",
+   "type": "class",
+   "name": "JsonlGenerationUnsupportedMigrationError",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    130,
+    143
+   ],
+   "summary": "源格式无受支持迁移路径（含原始日志路径诊断）。",
+   "tags": [
+    "error-handling",
+    "migration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/session/session-persistence-jsonl/src/generation.ts:JsonlGenerationTargetConflictError",
+   "type": "class",
+   "name": "JsonlGenerationTargetConflictError",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    146,
+    159
+   ],
+   "summary": "目标当前代已被并发发布占用。",
+   "tags": [
+    "error-handling",
+    "conflict"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/generation.ts:readStableJsonlFile",
+   "type": "function",
+   "name": "readStableJsonlFile",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    255,
+    260
+   ],
+   "summary": "读取物理身份稳定（stat 前后一致）的 JSONL 文件字节。",
+   "tags": [
+    "io",
+    "stable-read"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/generation.ts:readStableSnapshot",
+   "type": "function",
+   "name": "readStableSnapshot",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    262,
+    282
+   ],
+   "summary": "读取前后 inode/size/mtime 一致的文件快照，防读期间被替换。",
+   "tags": [
+    "io",
+    "stable-read"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/session/session-persistence-jsonl/src/generation.ts:MigratingJsonlRows",
+   "type": "class",
+   "name": "MigratingJsonlRows",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    305,
+    369
+   ],
+   "summary": "流式迁移行消费者：分片喂入解码器、跟踪行号与 issue，断言完整帧以记录边界结束。",
+   "tags": [
+    "migration",
+    "streaming"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/generation.ts:startMigrationStream",
+   "type": "function",
+   "name": "startMigrationStream",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    375,
+    391
+   ],
+   "summary": "启动迁移流：按源版本经 catalog 建立单遍 codec 与迁移状态。",
+   "tags": [
+    "migration",
+    "streaming"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/generation.ts:decodeStreamingMigration",
+   "type": "function",
+   "name": "decodeStreamingMigration",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    411,
+    481
+   ],
+   "summary": "分块流式解码历史代字节并迁移（1MiB 工作块、500ms 让出间隔），产出当前 artifact。",
+   "tags": [
+    "migration",
+    "streaming",
+    "decoding"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/generation.ts:verifyJsonlCurrentGeneration",
+   "type": "function",
+   "name": "verifyJsonlCurrentGeneration",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    492,
+    500
+   ],
+   "summary": "验证当前代（物理+逻辑全量校验）的对外入口，供 worker 与主进程共用。",
+   "tags": [
+    "verification",
+    "generation-files"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/generation.ts:verifyCurrentGeneration",
+   "type": "function",
+   "name": "verifyCurrentGeneration",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    502,
+    551
+   ],
+   "summary": "全量校验当前代：读取、解码、校验 id/事件数/前缀摘要（可注入 fs 与预期前缀）。",
+   "tags": [
+    "verification",
+    "digest"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/generation.ts:assertCurrentAssistantStreams",
+   "type": "function",
+   "name": "assertCurrentAssistantStreams",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    554,
+    577
+   ],
+   "summary": "校验当前代事件的 Assistant 流结构（BlockAssembler/expandAssistantStream 展开）。",
+   "tags": [
+    "verification",
+    "assistant-streams"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/generation.ts:decodeCurrentGeneration",
+   "type": "function",
+   "name": "decodeCurrentGeneration",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    579,
+    606
+   ],
+   "summary": "解码当前代字节为 artifact（首帧仅 header 行断言+扫描器）。",
+   "tags": [
+    "decoding",
+    "generation-files"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/generation.ts:assertGenerationPaths",
+   "type": "function",
+   "name": "assertGenerationPaths",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    634,
+    653
+   ],
+   "summary": "断言源/当前代路径与版本、压缩配置一致（防跨布局误发布）。",
+   "tags": [
+    "validation",
+    "path-layout"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/generation.ts:writeSyncedTemp",
+   "type": "function",
+   "name": "writeSyncedTemp",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    715,
+    787
+   ],
+   "summary": "把 artifact 写入同步过的临时文件（分块编码+fsync，Win32 走 durable namespace 原语）。",
+   "tags": [
+    "durability",
+    "staging"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/generation.ts:publishCurrentExclusive",
+   "type": "function",
+   "name": "publishCurrentExclusive",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    817,
+    843
+   ],
+   "summary": "排他发布当前代：link 临时文件到目标路径，EEXIST 即目标冲突，成功后 fsync 父目录并清临时文件。",
+   "tags": [
+    "atomic-publication",
+    "durability"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/generation.ts:publishPreparedMigration",
+   "type": "function",
+   "name": "publishPreparedMigration",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    884,
+    944
+   ],
+   "summary": "发布已准备的迁移：源身份复核→写暂存→排他发布→源代验证，任一步失败按阶段回滚。",
+   "tags": [
+    "migration",
+    "publication"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/generation.ts:prepareMigration",
+   "type": "function",
+   "name": "prepareMigration",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    946,
+    1000
+   ],
+   "summary": "准备迁移：流式解码源代、转换并暂存目标代（不发布），登记源物理身份供发布前复核。",
+   "tags": [
+    "migration",
+    "staging"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/generation.ts:prepareJsonlMigration",
+   "type": "function",
+   "name": "prepareJsonlMigration",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    1007,
+    1011
+   ],
+   "summary": "迁移准备入口（默认运行时绑定的薄封装）。",
+   "tags": [
+    "migration",
+    "entry-point"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/generation.ts:createJsonlGenerationRuntime",
+   "type": "function",
+   "name": "createJsonlGenerationRuntime",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    1018,
+    1029
+   ],
+   "summary": "以可覆盖的 I/O/平台/竞态依赖创建绑定运行时（测试注入缝）。",
+   "tags": [
+    "factory",
+    "test-injection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/generation.ts:readDecodedJsonlSource",
+   "type": "function",
+   "name": "readDecodedJsonlSource",
+   "filePath": "packages/session/session-persistence-jsonl/src/generation.ts",
+   "lineRange": [
+    1043,
+    1059
+   ],
+   "summary": "读取并解码历史 JSONL 源为 artifact（catalog-migration 收集子事实用）。",
+   "tags": [
+    "decoding",
+    "historical-reading"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/session/session-persistence-jsonl/src/index.ts",
+   "summary": "JSONL 后端 Cordis 插件（name/Config/apply 导出）：JsonlSessionPersistence 继承 SessionPersistence 实现全部服务 API——冷读 LRU 记忆化、迁移准备去重（每文件世代一次可加入操作）、撕裂尾部截断修复、世代目录枚举与压缩一致性检查；apply 经 ctx.effect 安装 tracker 与服务插件。",
+   "tags": [
+    "cordis-plugin",
+    "service-provider",
+    "persistence",
+    "jsonl"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/index.ts:freezeStoredEvent",
+   "type": "function",
+   "name": "freezeStoredEvent",
+   "filePath": "packages/session/session-persistence-jsonl/src/index.ts",
+   "lineRange": [
+    154,
+    173
+   ],
+   "summary": "深冻结存储事件（含 JSON 快照），建立不可变共享。",
+   "tags": [
+    "freezing",
+    "events"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/index.ts:waitWithAbort",
+   "type": "function",
+   "name": "waitWithAbort",
+   "filePath": "packages/session/session-persistence-jsonl/src/index.ts",
+   "lineRange": [
+    258,
+    283
+   ],
+   "summary": "把可等待操作与 AbortSignal 组合：先到者胜，取消映射为中止错误。",
+   "tags": [
+    "utility",
+    "cancellation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/session/session-persistence-jsonl/src/index.ts:JsonlSessionPersistence",
+   "type": "class",
+   "name": "JsonlSessionPersistence",
+   "filePath": "packages/session/session-persistence-jsonl/src/index.ts",
+   "lineRange": [
+    291,
+    1804
+   ],
+   "summary": "1514 行后端实现：create/open/flush/stat/list 服务 API（懒物化——创建即可见、首次 append/flush 落盘、之前崩溃即不存在），冷读 memo（stat 修订号守卫）、迁移准备/发布/失败处理、撕裂尾部修复、世代枚举与根编码检查；60+ 方法覆盖 POSIX/Win32 物化与对侧代拒绝。",
+   "tags": [
+    "service-provider",
+    "persistence",
+    "jsonl",
+    "lazy-materialization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/session/session-persistence-jsonl/src/index.ts",
+   "lineRange": [
+    1824,
+    1839
+   ],
+   "summary": "插件入口：ctx.effect 内安装 JsonlBackendTracker 与内层服务插件，await 服务就绪；effect 生成器保持同步以注册函数式 disposer。",
+   "tags": [
+    "cordis-plugin",
+    "entry-point",
+    "lifecycle"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-persistence-jsonl/src/lease.ts",
+   "type": "file",
+   "name": "lease.ts",
+   "filePath": "packages/session/session-persistence-jsonl/src/lease.ts",
+   "summary": "跨进程写所有权锁（会话 artifact 目录内 session.lock）：仲裁者是内核——POSIX 用非阻塞 flock(2)（native addon），Windows 持有按路径命名的内核信号量而非文件锁；锁后校验 inode 仍是锁路径上的文件（防 unlinked-and-recreated），无过期设计故意让僵死持有者保持锁到进程退出。",
+   "tags": [
+    "lease",
+    "kernel-lock",
+    "cross-process",
+    "ownership"
+   ],
+   "complexity": "complex",
+   "languageNotes": "POSIX flock 锁的是 inode 不是路径——锁后必须验证路径 inode 一致性；EAGAIN/EWOULDBLOCK 双拼写都算争用。"
+  },
+  {
+   "id": "class:packages/session/session-persistence-jsonl/src/lease.ts:SessionWriteLease",
+   "type": "class",
+   "name": "SessionWriteLease",
+   "filePath": "packages/session/session-persistence-jsonl/src/lease.ts",
+   "lineRange": [
+    58,
+    135
+   ],
+   "summary": "一次持有的写锁：acquire 非阻塞获取（争用映射 SessionAlreadyOwnedError，锁文件 inode 漂移时重试），release 关闭描述符即释放（从不删除 POSIX 锁文件以保 inode 稳定）。",
+   "tags": [
+    "lease",
+    "acquire-release",
+    "flock"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/session/session-persistence-jsonl/src/migration-verifier.ts",
+   "type": "file",
+   "name": "migration-verifier.ts",
+   "filePath": "packages/session/session-persistence-jsonl/src/migration-verifier.ts",
+   "summary": "暂存/竞争当前代的隔离验证：VerificationScheduler 全进程并发上限 2（内存界），verifyCurrentGenerationInWorker 在 worker 线程跑全量验证并结构化回传结果（ok/message/stack），abort 感知的等待队列。",
+   "tags": [
+    "worker-threads",
+    "verification",
+    "concurrency-limit"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/session/session-persistence-jsonl/src/migration-verifier.ts:VerificationScheduler",
+   "type": "class",
+   "name": "VerificationScheduler",
+   "filePath": "packages/session/session-persistence-jsonl/src/migration-verifier.ts",
+   "lineRange": [
+    23,
+    69
+   ],
+   "summary": "许可调度器：active/waiting 两级，等待者可被 abort 摘除，release 传递许可。",
+   "tags": [
+    "scheduler",
+    "concurrency-limit"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/migration-verifier.ts:workerSpawn",
+   "type": "function",
+   "name": "workerSpawn",
+   "filePath": "packages/session/session-persistence-jsonl/src/migration-verifier.ts",
+   "lineRange": [
+    73,
+    96
+   ],
+   "summary": "创建验证 worker（workerData 传请求，消息通道回传结果）。",
+   "tags": [
+    "worker-threads",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/migration-verifier.ts:verifyCurrentGenerationInWorker",
+   "type": "function",
+   "name": "verifyCurrentGenerationInWorker",
+   "filePath": "packages/session/session-persistence-jsonl/src/migration-verifier.ts",
+   "lineRange": [
+    108,
+    124
+   ],
+   "summary": "在隔离 worker 中验证当前代：调度许可→spawn→等待结构化响应，取消即中止等待。",
+   "tags": [
+    "worker-threads",
+    "verification"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/migration-verifier.ts:runVerificationWorker",
+   "type": "function",
+   "name": "runVerificationWorker",
+   "filePath": "packages/session/session-persistence-jsonl/src/migration-verifier.ts",
+   "lineRange": [
+    126,
+    191
+   ],
+   "summary": "worker 侧执行体：运行验证并把结果/异常打包回传后退出线程。",
+   "tags": [
+    "worker-threads",
+    "verification"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/session/session-persistence-jsonl/src/storage.ts",
+   "type": "file",
+   "name": "storage.ts",
+   "filePath": "packages/session/session-persistence-jsonl/src/storage.ts",
+   "summary": "JSONL 提供者的存储运行时（刻意 provider-local）：JsonlSessionHandle 是具体读/写句柄——每句柄 promise 链串行化变更、路由式 live 事件有界缓冲（200ms 批量上限）经同一链接水；JsonlBackendTracker 是进程内簿记，强制每会话 id 单活动写者并路由 live 事件与 teardown。",
+   "tags": [
+    "storage",
+    "handle",
+    "write-behind",
+    "single-writer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/session/session-persistence-jsonl/src/storage.ts:JsonlSessionHandle",
+   "type": "class",
+   "name": "JsonlSessionHandle",
+   "filePath": "packages/session/session-persistence-jsonl/src/storage.ts",
+   "lineRange": [
+    85,
+    375
+   ],
+   "summary": "291 行句柄实现：read 按需重扫 artifact 且不回退、append 校验连续后入链、flush 走持久屏障、close 幂等释放；live 事件缓冲窗口经 drainLive/drainBuffered 与显式 append 同链汇合。",
+   "tags": [
+    "handle",
+    "mutation-chain",
+    "live-routing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/session/session-persistence-jsonl/src/storage.ts:JsonlBackendTracker",
+   "type": "class",
+   "name": "JsonlBackendTracker",
+   "filePath": "packages/session/session-persistence-jsonl/src/storage.ts",
+   "lineRange": [
+    391,
+    571
+   ],
+   "summary": "181 行后端簿记：openHandles/writers/pending 三表管理创建未物化会话、写者认领与释放、pending 事件路由与 flushAll teardown。",
+   "tags": [
+    "bookkeeping",
+    "single-writer",
+    "lifecycle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/session/session-persistence-jsonl/src/testing/generation.ts",
+   "type": "file",
+   "name": "generation.ts",
+   "filePath": "packages/session/session-persistence-jsonl/src/testing/generation.ts",
+   "summary": "测试注入缝：createJsonlGenerationTestRuntime 以确定性 I/O/平台/竞态覆盖创建绑定的世代操作。",
+   "tags": [
+    "test-support",
+    "dependency-injection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/testing/generation.ts:createJsonlGenerationTestRuntime",
+   "type": "function",
+   "name": "createJsonlGenerationTestRuntime",
+   "filePath": "packages/session/session-persistence-jsonl/src/testing/generation.ts",
+   "lineRange": [
+    12,
+    16
+   ],
+   "summary": "以覆盖依赖创建世代运行时（测试确定性缝）。",
+   "tags": [
+    "test-support",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-persistence-jsonl/src/win32.ts",
+   "type": "file",
+   "name": "win32.ts",
+   "filePath": "packages/session/session-persistence-jsonl/src/win32.ts",
+   "summary": "Windows 持久命名空间助手：POSIX 靠「建目录项+fsync 父目录」发布新文件，Windows 无此契约——改用原生原语：目标目录内建 staging 对象后 MoveFileExW(..., MOVEFILE_WRITE_THROUGH) 发布（不替换、不跨卷）；锁用命名内核信号量；Koffi 绑定懒加载。",
+   "tags": [
+    "win32",
+    "durability",
+    "native-bindings",
+    "atomic-publication"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/win32.ts:win32",
+   "type": "function",
+   "name": "win32",
+   "filePath": "packages/session/session-persistence-jsonl/src/win32.ts",
+   "lineRange": [
+    54,
+    67
+   ],
+   "summary": "懒加载 Koffi Win32 API 绑定（MoveFileExW/信号量四件套/GetLastError），非 Windows 进程永不加载。",
+   "tags": [
+    "native-bindings",
+    "lazy-loading"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/win32.ts:publishNewFileWin32",
+   "type": "function",
+   "name": "publishNewFileWin32",
+   "filePath": "packages/session/session-persistence-jsonl/src/win32.ts",
+   "lineRange": [
+    134,
+    138
+   ],
+   "summary": "以 MOVEFILE_WRITE_THROUGH 发布 staging 文件为正式日志（跨设备/共享冲突按 errno 映射拒绝）。",
+   "tags": [
+    "win32",
+    "atomic-publication"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/win32.ts:acquireLockHandleWin32",
+   "type": "function",
+   "name": "acquireLockHandleWin32",
+   "filePath": "packages/session/session-persistence-jsonl/src/win32.ts",
+   "lineRange": [
+    151,
+    161
+   ],
+   "summary": "创建并等待按路径命名的内核信号量（写锁获取，超时即争用）。",
+   "tags": [
+    "win32",
+    "semaphore",
+    "lease"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/win32.ts:releaseLockHandleWin32",
+   "type": "function",
+   "name": "releaseLockHandleWin32",
+   "filePath": "packages/session/session-persistence-jsonl/src/win32.ts",
+   "lineRange": [
+    168,
+    173
+   ],
+   "summary": "释放信号量并关闭句柄。",
+   "tags": [
+    "win32",
+    "semaphore"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/win32.ts:ensureDurableDirectoryWin32",
+   "type": "function",
+   "name": "ensureDurableDirectoryWin32",
+   "filePath": "packages/session/session-persistence-jsonl/src/win32.ts",
+   "lineRange": [
+    183,
+    195
+   ],
+   "summary": "确保目录持久存在（逐级创建叶子目录）。",
+   "tags": [
+    "win32",
+    "durability"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-persistence-jsonl/src/worker.ts",
+   "type": "file",
+   "name": "worker.ts",
+   "filePath": "packages/session/session-persistence-jsonl/src/worker.ts",
+   "summary": "验证 worker 入口：parseRequest 严格校验 workerData（路径/压缩/id/事件数/64 位十六进制前缀摘要），verify 执行当前代验证并结构化回传后退出线程。",
+   "tags": [
+    "worker-threads",
+    "verification",
+    "entry-point"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/worker.ts:parseRequest",
+   "type": "function",
+   "name": "parseRequest",
+   "filePath": "packages/session/session-persistence-jsonl/src/worker.ts",
+   "lineRange": [
+    16,
+    31
+   ],
+   "summary": "校验验证请求形态（compression 二值、安全整数计数、摘要正则）。",
+   "tags": [
+    "validation",
+    "wire-format"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/worker.ts:verify",
+   "type": "function",
+   "name": "verify",
+   "filePath": "packages/session/session-persistence-jsonl/src/worker.ts",
+   "lineRange": [
+    38,
+    54
+   ],
+   "summary": "worker 主执行体：运行验证并回传结果或错误栈。",
+   "tags": [
+    "worker-threads",
+    "verification"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-persistence-jsonl/src/zstd-private-decoder.ts",
+   "type": "file",
+   "name": "zstd-private-decoder.ts",
+   "filePath": "packages/session/session-persistence-jsonl/src/zstd-private-decoder.ts",
+   "summary": "Node 私有同步 Zstandard 帧解码器优化：探测 createZstdDecompress 流的私有句柄契约（_handle.writeSync/_writeState/kError symbol），可用则跨帧复用原生上下文与输出块，不可用则拒绝该优化走公共路径。",
+   "tags": [
+    "zstd",
+    "node-internals",
+    "optimization"
+   ],
+   "complexity": "complex",
+   "languageNotes": "依赖 Node 内部流形状（symbol 键探测+运行时形状校验），Node 24/26 矩阵检查兼容性——私有契约使用的典型受控样例。"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/zstd-private-decoder.ts:privateZstdStream",
+   "type": "function",
+   "name": "privateZstdStream",
+   "filePath": "packages/session/session-persistence-jsonl/src/zstd-private-decoder.ts",
+   "lineRange": [
+    36,
+    55
+   ],
+   "summary": "探测流是否暴露可用的私有写契约，返回带错误键的适配视图或 undefined。",
+   "tags": [
+    "node-internals",
+    "capability-probe"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/session/session-persistence-jsonl/src/zstd-private-decoder.ts:NodePrivateZstdFrameDecoder",
+   "type": "class",
+   "name": "NodePrivateZstdFrameDecoder",
+   "filePath": "packages/session/session-persistence-jsonl/src/zstd-private-decoder.ts",
+   "lineRange": [
+    63,
+    178
+   ],
+   "summary": "单流多帧同步解码器：复用 1MiB 输出块与原生上下文，跨帧续解，close 时清理句柄与错误状态。",
+   "tags": [
+    "zstd",
+    "decoder",
+    "optimization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/session/session-persistence-jsonl/src/zstd.ts",
+   "type": "file",
+   "name": "zstd.ts",
+   "filePath": "packages/session/session-persistence-jsonl/src/zstd.ts",
+   "summary": "JSONL 后端的 Zstandard 帧原语：后端拥有拼接帧容器以便 append 与恢复而不经 seam 暴露压缩机制——scanZstdFrames 结构化定位完整帧（魔数校验、EOF 撕裂帧返回起点供修复）不解压内容；压缩帧带校验和；私有/公共两路解码器选择。",
+   "tags": [
+    "zstd",
+    "frame-scanning",
+    "compression"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/zstd.ts:scanZstdFrames",
+   "type": "function",
+   "name": "scanZstdFrames",
+   "filePath": "packages/session/session-persistence-jsonl/src/zstd.ts",
+   "lineRange": [
+    48,
+    104
+   ],
+   "summary": "不 解压定位完整帧范围：逐帧走块结构（魔数/头部 descriptor/块表），EOF 内的末帧标记 tornStart 供撕裂修复，可限帧数供仅元数据读取。",
+   "tags": [
+    "zstd",
+    "frame-scanning",
+    "torn-tail"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/zstd.ts:compressZstdFrame",
+   "type": "function",
+   "name": "compressZstdFrame",
+   "filePath": "packages/session/session-persistence-jsonl/src/zstd.ts",
+   "lineRange": [
+    111,
+    113
+   ],
+   "summary": "压缩单帧（带校验和选项）。",
+   "tags": [
+    "zstd",
+    "compression"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/zstd.ts:decompressZstdFrame",
+   "type": "function",
+   "name": "decompressZstdFrame",
+   "filePath": "packages/session/session-persistence-jsonl/src/zstd.ts",
+   "lineRange": [
+    120,
+    122
+   ],
+   "summary": "解压单帧。",
+   "tags": [
+    "zstd",
+    "decompression"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/zstd.ts:createZstdFrameDecoder",
+   "type": "function",
+   "name": "createZstdFrameDecoder",
+   "filePath": "packages/session/session-persistence-jsonl/src/zstd.ts",
+   "lineRange": [
+    143,
+    145
+   ],
+   "summary": "创建帧解码器（优先私有优化路径，退公共流式路径）。",
+   "tags": [
+    "zstd",
+    "decoder",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence-jsonl/src/zstd.ts:decompressZstdPrefix",
+   "type": "function",
+   "name": "decompressZstdPrefix",
+   "filePath": "packages/session/session-persistence-jsonl/src/zstd.ts",
+   "lineRange": [
+    154,
+    156
+   ],
+   "summary": "解压字节前缀（撕裂尾部恢复用）。",
+   "tags": [
+    "zstd",
+    "prefix-decode"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/session/session-persistence-jsonl/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/session/session-persistence-jsonl/tsconfig.json",
+   "summary": "包级 TS 配置：extends 仓根 base，rootDir=src、outDir=lib/types，references 覆盖 session/format-catalog/v3-to-v4/llm/persistence 等。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-persistence-jsonl/tsdown.config.ts",
+   "type": "file",
+   "name": "tsdown.config.ts",
+   "filePath": "packages/session/session-persistence-jsonl/tsdown.config.ts",
+   "summary": "双产物打包配置：主包 ESM（lib/types/index.js）+ 验证 worker 独立 CJS bundle（worker.js，alwaysBundle 内联除 node-addon-system 外的 workspace 依赖，避免每次 open 重新解析编译 workspace 包）；client 构建面跳过。",
+   "tags": [
+    "build-system",
+    "bundler",
+    "worker-bundle"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/session/session-projection/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/session/session-projection/README.md",
+   "summary": "dsh-session-projection 包英文主文档：当客户端需要免重放日志的每会话当前状态（todos/goals/统计）时使用——域定义同步投影，客户端经快照与变更通知收到完整 schema 校验 JSON 值；快照标识每个值反映的最后事件，状态可 checkpoint 加速冷读。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/session/session-projection/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/session/session-projection/package.json",
+   "summary": "@deepseek-ai/dsh-session-projection 包清单：投影 seam（可合并扩展投影类型表+provider 契约+ctx.sessionProjections 注册表），仅依赖 zod，peer 依赖 session/cordis。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-projection/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/session/session-projection/src/index.ts",
+   "summary": "session-projection 能力 seam 的 Service Definition 与驱动注册表（958 行）：ProjectionDefinition 是纯同步 fold 单元契约（全值事件规则——状态事件携带完整后态而非增量）；SessionProjectionRegistry（ctx.sessionProjections）订阅 session/created+session/event 急进驱动每个注册单元、维护每会话水位缓存与变更通知；域供 fold、框架供订阅、载波消费快照（三方切分）。",
+   "tags": [
+    "service-definition",
+    "projection",
+    "registry",
+    "capability-seam"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/session/session-projection/src/index.ts:SessionProjectionRegistry",
+   "type": "class",
+   "name": "SessionProjectionRegistry",
+   "filePath": "packages/session/session-projection/src/index.ts",
+   "lineRange": [
+    282,
+    956
+   ],
+   "summary": "675 行注册表 Service：register 返回可等待的 ProjectionHandle（引用计数，末次释放移出活动驱动但 checkpoint 保留至再注册）、stateOf/readerFor 读当前态、snapshot/cachedSnapshot 服务快照面、checkpoint/restore 与 cell 驱动（未变引用零下游工作）。",
+   "tags": [
+    "service-definition",
+    "registry",
+    "projection",
+    "watermark-cache"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/session/session-projection/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/session/session-projection/src/types.ts",
+   "summary": "投影 seam 的纯类型出口：SessionProjectionMap 可合并扩展客户端视图类型表（client 聚合可不拖入 host 侧 Context 合并）；SessionProjectionSummaryExcluded 类型级摘要排除标记（unique symbol 运行时不存在，仅 summary:false 声明生效）。",
+   "tags": [
+    "type-definition",
+    "merge-extensible",
+    "client-view"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/session/session-projection-cache/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/session/session-projection-cache/README.md",
+   "summary": "dsh-session-projection-cache 包英文主文档：持久每会话投影 checkpoint——历史列表/统计/目标快照免载日志读取缓存值，冷折叠从 checkpoint 前缀后恢复；会话日志仍是权威（崩溃可留旧 checkpoint 但绝不会超前），不兼容记录忽略或备份。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/session/session-projection-cache/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/session/session-projection-cache/package.json",
+   "summary": "@deepseek-ai/dsh-session-projection-cache 包清单：session_projcache 存储域上的持久 checkpoint（per-record 布局+节流 write-behind+缓存列表读），peer 依赖 storage-domain/session-projection/session/cordis。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-projection-cache/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/session/session-projection-cache/src/index.ts",
+   "summary": "SessionProjectionCache（ctx.sessionProjectionCache，472 行）：init 打开 session_projcache 域 KvTable，对活会话做节流 write-behind checkpoint（writeEveryEvents/writeIntervalMs 双触发+三个强制点：会话创建、turn/end、会话退役）；读写共享同一一致状态（磁盘先内存后），每写 fail-soft（丢写只加长下次冷读尾部重放），ver 不匹配弃行；身份匹配含格式世代/seed/继承切割与前驱身份三级。",
+   "tags": [
+    "service-definition",
+    "checkpoint-cache",
+    "write-behind",
+    "fail-soft"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/session/session-projection-cache/src/index.ts:SessionProjectionCache",
+   "type": "class",
+   "name": "SessionProjectionCache",
+   "filePath": "packages/session/session-projection-cache/src/index.ts",
+   "lineRange": [
+    105,
+    403
+   ],
+   "summary": "299 行缓存 Service：static inject storageDomain/sessionProjections/sessions；cachedSnapshot/cachedPredecessorTitle 零 I/O 列表读、hydratePrepared 冷折叠续传、write/put 持久化与 flushSoft 节流、dirty 按会话记账。",
+   "tags": [
+    "service-definition",
+    "checkpoint",
+    "throttling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-projection-cache/src/index.ts:identityOf",
+   "type": "function",
+   "name": "identityOf",
+   "filePath": "packages/session/session-projection-cache/src/index.ts",
+   "lineRange": [
+    416,
+    425
+   ],
+   "summary": "从 header+继承切割构造当前缓存代的完整身份（格式世代/seed/切割）。",
+   "tags": [
+    "identity"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-projection-cache/src/index.ts:predecessorIdentityMatches",
+   "type": "function",
+   "name": "predecessorIdentityMatches",
+   "filePath": "packages/session/session-projection-cache/src/index.ts",
+   "lineRange": [
+    453,
+    460
+   ],
+   "summary": "判定存储身份是否为期望身份的前驱（冷折叠续传判据）。",
+   "tags": [
+    "identity",
+    "predecessor"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/session/session-persistence/src/index.ts",
+   "target": "class:packages/session/session-persistence/src/index.ts:SessionPersistence",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/index.ts",
+   "target": "class:packages/session/session-persistence/src/index.ts:SessionPersistence",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/storage-contract.ts",
+   "target": "function:packages/session/session-persistence/src/storage-contract.ts:assertStoredId",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/storage-contract.ts",
+   "target": "function:packages/session/session-persistence/src/storage-contract.ts:assertStoredId",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/storage-contract.ts",
+   "target": "function:packages/session/session-persistence/src/storage-contract.ts:assertVersion",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/storage-contract.ts",
+   "target": "function:packages/session/session-persistence/src/storage-contract.ts:assertVersion",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/storage-contract.ts",
+   "target": "function:packages/session/session-persistence/src/storage-contract.ts:validateStoredEvents",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/storage-contract.ts",
+   "target": "function:packages/session/session-persistence/src/storage-contract.ts:validateStoredEvents",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/storage-contract.ts",
+   "target": "function:packages/session/session-persistence/src/storage-contract.ts:materializeCreateHeader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/storage-contract.ts",
+   "target": "function:packages/session/session-persistence/src/storage-contract.ts:materializeCreateHeader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/storage-contract.ts",
+   "target": "function:packages/session/session-persistence/src/storage-contract.ts:materializeAppendBatch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/storage-contract.ts",
+   "target": "function:packages/session/session-persistence/src/storage-contract.ts:materializeAppendBatch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/storage-contract.ts",
+   "target": "function:packages/session/session-persistence/src/storage-contract.ts:assertContiguous",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/storage-contract.ts",
+   "target": "function:packages/session/session-persistence/src/storage-contract.ts:assertContiguous",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "document:packages/session/session-persistence-jsonl/README.md",
+   "target": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/session/session-persistence-jsonl/package.json",
+   "target": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/catalog-migration.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/catalog-migration.ts:prepareCatalogFacts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/catalog-migration.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/catalog-migration.ts:prepareCatalogFacts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:parseGenerationLogFilename",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:parseGenerationLogFilename",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:assertNoRetiredHeaderFields",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:assertNoRetiredHeaderFields",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:toHeaderLine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:toHeaderLine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:fromHeaderLine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:isHeaderLine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:isHeaderLine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:encodeSegment",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:encodeSegment",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:projectKey",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:projectKey",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:projectDir",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:projectDir",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:sessionDir",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:sessionDir",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:generationLogPath",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:generationLogPath",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:logPath",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:logPath",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:eventLines",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:eventLines",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:eventLine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:eventLine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:parseHeaderRecord",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "class:packages/session/session-persistence-jsonl/src/format.ts:SessionLogScanner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "class:packages/session/session-persistence-jsonl/src/format.ts:SessionLogScanner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:scanLog",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/format.ts:scanLog",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "class:packages/session/session-persistence-jsonl/src/generation.ts:JsonlGenerationSourceChangedError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "class:packages/session/session-persistence-jsonl/src/generation.ts:JsonlGenerationSourceChangedError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "class:packages/session/session-persistence-jsonl/src/generation.ts:JsonlGenerationUnsupportedMigrationError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "class:packages/session/session-persistence-jsonl/src/generation.ts:JsonlGenerationUnsupportedMigrationError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "class:packages/session/session-persistence-jsonl/src/generation.ts:JsonlGenerationTargetConflictError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "class:packages/session/session-persistence-jsonl/src/generation.ts:JsonlGenerationTargetConflictError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:readStableJsonlFile",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:readStableJsonlFile",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:readStableSnapshot",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "class:packages/session/session-persistence-jsonl/src/generation.ts:MigratingJsonlRows",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:startMigrationStream",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:decodeStreamingMigration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:verifyJsonlCurrentGeneration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:verifyJsonlCurrentGeneration",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:verifyCurrentGeneration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:assertCurrentAssistantStreams",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:decodeCurrentGeneration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:assertGenerationPaths",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:writeSyncedTemp",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:publishCurrentExclusive",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:publishPreparedMigration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:prepareMigration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:prepareJsonlMigration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:prepareJsonlMigration",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:createJsonlGenerationRuntime",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:createJsonlGenerationRuntime",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:readDecodedJsonlSource",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/generation.ts:readDecodedJsonlSource",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/index.ts:freezeStoredEvent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/index.ts:waitWithAbort",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "target": "class:packages/session/session-persistence-jsonl/src/index.ts:JsonlSessionPersistence",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/lease.ts",
+   "target": "class:packages/session/session-persistence-jsonl/src/lease.ts:SessionWriteLease",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/lease.ts",
+   "target": "class:packages/session/session-persistence-jsonl/src/lease.ts:SessionWriteLease",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/migration-verifier.ts",
+   "target": "class:packages/session/session-persistence-jsonl/src/migration-verifier.ts:VerificationScheduler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/migration-verifier.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/migration-verifier.ts:workerSpawn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/migration-verifier.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/migration-verifier.ts:verifyCurrentGenerationInWorker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/migration-verifier.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/migration-verifier.ts:verifyCurrentGenerationInWorker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/migration-verifier.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/migration-verifier.ts:runVerificationWorker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/storage.ts",
+   "target": "class:packages/session/session-persistence-jsonl/src/storage.ts:JsonlSessionHandle",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/storage.ts",
+   "target": "class:packages/session/session-persistence-jsonl/src/storage.ts:JsonlSessionHandle",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/storage.ts",
+   "target": "class:packages/session/session-persistence-jsonl/src/storage.ts:JsonlBackendTracker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/storage.ts",
+   "target": "class:packages/session/session-persistence-jsonl/src/storage.ts:JsonlBackendTracker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/testing/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/testing/generation.ts:createJsonlGenerationTestRuntime",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/testing/generation.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/testing/generation.ts:createJsonlGenerationTestRuntime",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/win32.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/win32.ts:win32",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/win32.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/win32.ts:publishNewFileWin32",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/win32.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/win32.ts:publishNewFileWin32",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/win32.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/win32.ts:acquireLockHandleWin32",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/win32.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/win32.ts:acquireLockHandleWin32",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/win32.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/win32.ts:releaseLockHandleWin32",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/win32.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/win32.ts:releaseLockHandleWin32",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/win32.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/win32.ts:ensureDurableDirectoryWin32",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/win32.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/win32.ts:ensureDurableDirectoryWin32",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/worker.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/worker.ts:parseRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/worker.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/worker.ts:verify",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/zstd-private-decoder.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/zstd-private-decoder.ts:privateZstdStream",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/zstd-private-decoder.ts",
+   "target": "class:packages/session/session-persistence-jsonl/src/zstd-private-decoder.ts:NodePrivateZstdFrameDecoder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/zstd-private-decoder.ts",
+   "target": "class:packages/session/session-persistence-jsonl/src/zstd-private-decoder.ts:NodePrivateZstdFrameDecoder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/zstd.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/zstd.ts:scanZstdFrames",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/zstd.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/zstd.ts:scanZstdFrames",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/zstd.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/zstd.ts:compressZstdFrame",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/zstd.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/zstd.ts:compressZstdFrame",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/zstd.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/zstd.ts:decompressZstdFrame",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/zstd.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/zstd.ts:decompressZstdFrame",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/zstd.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/zstd.ts:createZstdFrameDecoder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/zstd.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/zstd.ts:createZstdFrameDecoder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/zstd.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/zstd.ts:decompressZstdPrefix",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/zstd.ts",
+   "target": "function:packages/session/session-persistence-jsonl/src/zstd.ts:decompressZstdPrefix",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "config:packages/session/session-persistence-jsonl/tsconfig.json",
+   "target": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/tsdown.config.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "document:packages/session/session-projection/README.md",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/session/session-projection/package.json",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/session/session-projection/src/index.ts",
+   "target": "class:packages/session/session-projection/src/index.ts:SessionProjectionRegistry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-projection/src/index.ts",
+   "target": "class:packages/session/session-projection/src/index.ts:SessionProjectionRegistry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "document:packages/session/session-projection-cache/README.md",
+   "target": "file:packages/session/session-projection-cache/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/session/session-projection-cache/package.json",
+   "target": "file:packages/session/session-projection-cache/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/session/session-projection-cache/src/index.ts",
+   "target": "class:packages/session/session-projection-cache/src/index.ts:SessionProjectionCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-projection-cache/src/index.ts",
+   "target": "class:packages/session/session-projection-cache/src/index.ts:SessionProjectionCache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-projection-cache/src/index.ts",
+   "target": "function:packages/session/session-projection-cache/src/index.ts:identityOf",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-projection-cache/src/index.ts",
+   "target": "function:packages/session/session-projection-cache/src/index.ts:predecessorIdentityMatches",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/index.ts",
+   "target": "file:packages/session/session-persistence/src/errors.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/index.ts",
+   "target": "file:packages/session/session-persistence/src/handle.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/index.ts",
+   "target": "file:packages/session/session-persistence/src/revision.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/index.ts",
+   "target": "file:packages/session/session-persistence/src/storage-contract.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/storage-contract.ts",
+   "target": "file:packages/session/session-persistence/src/errors.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/storage-contract.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/storage-contract.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/catalog-migration.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/catalog-migration.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/catalog-migration.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/catalog-migration.ts",
+   "target": "file:packages/session/session-format/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/catalog-migration.ts",
+   "target": "file:packages/session/session-format-catalog/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/catalog-migration.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "file:packages/session/session-format/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "file:packages/session/session-format-catalog/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "target": "file:packages/session/session-persistence/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/win32.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/zstd.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "file:packages/session/session-format/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "file:packages/session/session-format-catalog/src/message-projections.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "target": "file:packages/session/session-persistence/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/catalog-migration.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/lease.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/migration-verifier.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/storage.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/win32.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/zstd.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "target": "file:packages/session/session-format-catalog/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/index.ts",
+   "target": "file:packages/session/session-persistence/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/lease.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/win32.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/lease.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/lease.ts",
+   "target": "file:packages/session/session-persistence/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/migration-verifier.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/migration-verifier.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/storage.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/lease.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/storage.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/storage.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/storage.ts",
+   "target": "file:packages/session/session-persistence/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/testing/generation.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/worker.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/format.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/worker.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/generation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/zstd-private-decoder.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/zstd.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/zstd.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/zstd-private-decoder.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence-jsonl/src/zstd.ts",
+   "target": "file:packages/session/session-persistence-jsonl/src/zstd-public-decoder.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-projection/src/index.ts",
+   "target": "file:packages/session/session-projection/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-projection/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-projection-cache/src/index.ts",
+   "target": "file:packages/session/session-projection-cache/src/spec.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-projection-cache/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-projection-cache/src/index.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-projection-cache/src/index.ts",
+   "target": "file:packages/storage/storage-domain/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-projection-cache/src/index.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

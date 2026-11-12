@@ -1,0 +1,943 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/worker/gpu/states.py",
+   "type": "file",
+   "name": "states.py",
+   "filePath": "vllm/v1/worker/gpu/states.py",
+   "summary": "V2 引擎的请求状态槽位表（RequestState）：以 req_id 与 slot 双向映射管理 max_num_reqs 个槽位，StagedWriteTensor/UVA 维护全量 token 历史、prompt/prefill/total 长度与已计算 token 数（ngram_gpu 可选稠密驻留 GPU）。",
+   "tags": [
+    "request-state",
+    "gpu-buffers",
+    "uva"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/structured_outputs.py",
+   "type": "file",
+   "name": "structured_outputs.py",
+   "filePath": "vllm/v1/worker/gpu/structured_outputs.py",
+   "summary": "结构化输出 worker：grammar bitmask 异步 H2D 后用 Triton kernel（改编自 xgrammar）按（请求,位置）键就地掩码 logits；grammar_invalid_drafts 标记超出可接受数的草稿行使其被拒。",
+   "tags": [
+    "structured-output",
+    "grammar",
+    "triton"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "type": "file",
+   "name": "ubatch_utils.py",
+   "filePath": "vllm/v1/worker/gpu/ubatch_utils.py",
+   "summary": "V2 GPU model runner 的 DBO 微批工具：把 DP-padded 批切成微批子 InputBatch（跨界请求在两侧截断 query/seq_lens），UBatchRunner 以多线程+CPU/GPU 事件在重叠的 compute/comm stream 上运行微批。",
+   "tags": [
+    "microbatching",
+    "dbo",
+    "dual-batch-overlap"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/warmup.py",
+   "type": "file",
+   "name": "warmup.py",
+   "filePath": "vllm/v1/worker/gpu/warmup.py",
+   "summary": "V2 内核预热：手工构造 SchedulerOutput 走真实调度路径执行 prefill/decode/spec 混合批预热（复刻调度器 KV 块保留语义，覆盖 grammar bitmask、编码器输入、KV connector 禁用与自适应验证关闭）。",
+   "tags": [
+    "warmup",
+    "jit",
+    "scheduler-simulation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu_input_batch.py",
+   "type": "file",
+   "name": "gpu_input_batch.py",
+   "filePath": "vllm/v1/worker/gpu_input_batch.py",
+   "summary": "GPU 输入批数据结构：CachedRequestState 缓存请求全量状态（prompt/输出 token、block ids、LoRA、MM、pooling），InputBatch 持有全部 GPU 输入缓冲并承担 condense、采样元数据构建、LoRA 映射与思考预算等批级查询。",
+   "tags": [
+    "input-batch",
+    "data-model",
+    "gpu-buffers"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/states.py:RequestState",
+   "type": "class",
+   "name": "RequestState",
+   "filePath": "vllm/v1/worker/gpu/states.py",
+   "summary": "V2 请求状态槽位表：token 历史/长度/草稿的 staged-write GPU 缓冲与请求槽位分配回收。",
+   "tags": [
+    "request-state",
+    "buffers",
+    "gpu"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    9,
+    134
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/structured_outputs.py:StructuredOutputsWorker",
+   "type": "class",
+   "name": "StructuredOutputsWorker",
+   "filePath": "vllm/v1/worker/gpu/structured_outputs.py",
+   "summary": "结构化输出 bitmask 下发（异步 copy stream）与 logits 就地掩码 worker。",
+   "tags": [
+    "structured-output",
+    "bitmask",
+    "triton"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    52,
+    128
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/ubatch_utils.py:UBatchState",
+   "type": "class",
+   "name": "UBatchState",
+   "filePath": "vllm/v1/worker/gpu/ubatch_utils.py",
+   "summary": "单个 DBO 步的微批输入 NamedTuple（切片 + 每微批 forward context）。",
+   "tags": [
+    "microbatching",
+    "state",
+    "dbo"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    42,
+    46
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/ubatch_utils.py:UBatchRunner",
+   "type": "class",
+   "name": "UBatchRunner",
+   "filePath": "vllm/v1/worker/gpu/ubatch_utils.py",
+   "summary": "多线程微批执行器：每微批一线程在重叠的 compute/comm stream 上运行，支持 CUDA graph 捕获与中止。",
+   "tags": [
+    "microbatching",
+    "runner",
+    "threading"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    282,
+    542
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu_input_batch.py:CachedRequestState",
+   "type": "class",
+   "name": "CachedRequestState",
+   "filePath": "vllm/v1/worker/gpu_input_batch.py",
+   "summary": "请求级缓存状态：prompt/输出 token、block ids、LoRA、MM 特征与 pooling 状态。",
+   "tags": [
+    "data-model",
+    "request-state",
+    "caching"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    35,
+    87
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu_input_batch.py:InputBatch",
+   "type": "class",
+   "name": "InputBatch",
+   "filePath": "vllm/v1/worker/gpu_input_batch.py",
+   "summary": "GPU 输入批：全部持久输入缓冲 + 请求槽管理 + condense + 采样/LoRA/pooling 元数据构建。",
+   "tags": [
+    "input-batch",
+    "gpu-buffers",
+    "model-runner"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    90,
+    1144
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/warmup.py:_reserved_block_count",
+   "type": "function",
+   "name": "_reserved_block_count",
+   "filePath": "vllm/v1/worker/gpu/warmup.py",
+   "summary": "复刻调度器 KVCacheManager.allocate_slots 的块保留语义（lookahead token、circular 单块、cross-attn 编码器长度、mamba 对齐模式）。",
+   "tags": [
+    "warmup",
+    "kv-cache",
+    "block-count"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    34,
+    64
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/warmup.py:_warmup_block_counter",
+   "type": "function",
+   "name": "_warmup_block_counter",
+   "filePath": "vllm/v1/worker/gpu/warmup.py",
+   "summary": "把 _reserved_block_count 绑定到 model_runner 参数的闭包工厂。",
+   "tags": [
+    "warmup",
+    "factory",
+    "kv-cache"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    67,
+    84
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/warmup.py:run_mixed_prefill_decode_warmup",
+   "type": "function",
+   "name": "run_mixed_prefill_decode_warmup",
+   "filePath": "vllm/v1/worker/gpu/warmup.py",
+   "summary": "手工构造 SchedulerOutput 驱动一次 V2 混合 prefill+decode 步（块预算不足或 pooling 模型时跳过）。",
+   "tags": [
+    "warmup",
+    "mixed-batch",
+    "scheduler-simulation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    87,
+    214
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/warmup.py:warmup_kernels",
+   "type": "function",
+   "name": "warmup_kernels",
+   "filePath": "vllm/v1/worker/gpu/warmup.py",
+   "summary": "预热入口：临时关闭自适应验证跑常规预热，spec 下补 greedy 轮（所有 PP rank 同前向），再预热预算 kernel 与接受率估计器。",
+   "tags": [
+    "warmup",
+    "jit",
+    "entry-point"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    218,
+    259
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/warmup.py:_warmup_kernels",
+   "type": "function",
+   "name": "_warmup_kernels",
+   "filePath": "vllm/v1/worker/gpu/warmup.py",
+   "summary": "预热实现：全量 prefill + 多形态 decode 步（spec/非 spec/混合/单请求）+ grammar bitmask 演练 + 编码器 dummy 输入 + 清理。",
+   "tags": [
+    "warmup",
+    "scheduler-simulation",
+    "decode"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    262,
+    484
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/ubatch_utils.py:create_ubatch_slices",
+   "type": "function",
+   "name": "create_ubatch_slices",
+   "filePath": "vllm/v1/worker/gpu/ubatch_utils.py",
+   "summary": "把 DP-padded 批按中点切成微批切片，尾微批请求钳到最后请求保持良构。",
+   "tags": [
+    "microbatching",
+    "slicing",
+    "dbo"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    49,
+    75
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/ubatch_utils.py:_slice_input_batch",
+   "type": "function",
+   "name": "_slice_input_batch",
+   "filePath": "vllm/v1/worker/gpu/ubatch_utils.py",
+   "summary": "构建微批子 InputBatch：跨界请求在两侧截断 query/seq_lens（含 DCP 本地长度重算），其余输入为全批缓冲视图。",
+   "tags": [
+    "microbatching",
+    "input-batch",
+    "dbo"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    78,
+    199
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/ubatch_utils.py:_slice_query_start_loc",
+   "type": "function",
+   "name": "_slice_query_start_loc",
+   "filePath": "vllm/v1/worker/gpu/ubatch_utils.py",
+   "summary": "切片并平移 query_start_loc 到微批局部坐标。",
+   "tags": [
+    "microbatching",
+    "slicing",
+    "dbo"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    202,
+    216
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/ubatch_utils.py:_slice_seq_lens",
+   "type": "function",
+   "name": "_slice_seq_lens",
+   "filePath": "vllm/v1/worker/gpu/ubatch_utils.py",
+   "summary": "截断跨界请求的 seq_lens 写入调用方持久缓冲。",
+   "tags": [
+    "microbatching",
+    "slicing",
+    "dbo"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    219,
+    238
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/ubatch_utils.py:slice_model_inputs",
+   "type": "function",
+   "name": "slice_model_inputs",
+   "filePath": "vllm/v1/worker/gpu/ubatch_utils.py",
+   "summary": "按 token 切片切模型输入张量。",
+   "tags": [
+    "microbatching",
+    "slicing",
+    "dbo"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    241,
+    260
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/ubatch_utils.py:merge_ubatch_outputs",
+   "type": "function",
+   "name": "merge_ubatch_outputs",
+   "filePath": "vllm/v1/worker/gpu/ubatch_utils.py",
+   "summary": "沿批维拼接各微批输出。",
+   "tags": [
+    "microbatching",
+    "merge",
+    "outputs"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    263,
+    279
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/ubatch_utils.py:maybe_build_ubatch_runner",
+   "type": "function",
+   "name": "maybe_build_ubatch_runner",
+   "filePath": "vllm/v1/worker/gpu/ubatch_utils.py",
+   "summary": "按 DBO 启用与运行模式构建 UBatchRunner。",
+   "tags": [
+    "microbatching",
+    "factory",
+    "dbo"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    545,
+    565
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/structured_outputs.py:grammar_invalid_drafts",
+   "type": "function",
+   "name": "grammar_invalid_drafts",
+   "filePath": "vllm/v1/worker/gpu/structured_outputs.py",
+   "summary": "生成超出每请求可接受草稿数的 logits 行掩码（对齐 adaptive verification 的设备端裁剪）。",
+   "tags": [
+    "structured-output",
+    "verification",
+    "grammar"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    15,
+    49
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/structured_outputs.py:_apply_grammar_bitmask_kernel",
+   "type": "function",
+   "name": "_apply_grammar_bitmask_kernel",
+   "filePath": "vllm/v1/worker/gpu/structured_outputs.py",
+   "summary": "改编自 xgrammar 的 Triton kernel：解包 bitmask 并把禁用 token 的 logits 置 -inf。",
+   "tags": [
+    "triton",
+    "grammar",
+    "bitmask"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    134,
+    171
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/worker/gpu/states.py",
+   "target": "file:vllm/v1/worker/gpu/buffer_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/structured_outputs.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/structured_outputs.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/structured_outputs.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/structured_outputs.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "file:vllm/v1/worker/gpu/attn_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "file:vllm/v1/worker/gpu/cp_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "file:vllm/v1/worker/ubatch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "file:vllm/v1/worker/ubatching.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "file:vllm/v1/worker/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/warmup.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/warmup.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/warmup.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/warmup.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/warmup.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/warmup.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/warmup.py",
+   "target": "file:vllm/v1/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/warmup.py",
+   "target": "file:vllm/v1/worker/gpu/model_runner.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_input_batch.py",
+   "target": "file:vllm/config/reasoning.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_input_batch.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_input_batch.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_input_batch.py",
+   "target": "file:vllm/pooling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_input_batch.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_input_batch.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_input_batch.py",
+   "target": "file:vllm/utils/collection_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_input_batch.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_input_batch.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_input_batch.py",
+   "target": "file:vllm/v1/pool/metadata.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_input_batch.py",
+   "target": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_input_batch.py",
+   "target": "file:vllm/v1/sample/metadata.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_input_batch.py",
+   "target": "file:vllm/v1/sample/thinking_budget_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_input_batch.py",
+   "target": "file:vllm/v1/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_input_batch.py",
+   "target": "file:vllm/v1/worker/block_table.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/states.py",
+   "target": "class:vllm/v1/worker/gpu/states.py:RequestState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/structured_outputs.py",
+   "target": "class:vllm/v1/worker/gpu/structured_outputs.py:StructuredOutputsWorker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/structured_outputs.py",
+   "target": "function:vllm/v1/worker/gpu/structured_outputs.py:grammar_invalid_drafts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/structured_outputs.py",
+   "target": "function:vllm/v1/worker/gpu/structured_outputs.py:_apply_grammar_bitmask_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "class:vllm/v1/worker/gpu/ubatch_utils.py:UBatchState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "class:vllm/v1/worker/gpu/ubatch_utils.py:UBatchRunner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/gpu/ubatch_utils.py:create_ubatch_slices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/gpu/ubatch_utils.py:_slice_input_batch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/gpu/ubatch_utils.py:_slice_query_start_loc",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/gpu/ubatch_utils.py:_slice_seq_lens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/gpu/ubatch_utils.py:slice_model_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/gpu/ubatch_utils.py:merge_ubatch_outputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/gpu/ubatch_utils.py:maybe_build_ubatch_runner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_input_batch.py",
+   "target": "class:vllm/v1/worker/gpu_input_batch.py:CachedRequestState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_input_batch.py",
+   "target": "class:vllm/v1/worker/gpu_input_batch.py:InputBatch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/warmup.py",
+   "target": "function:vllm/v1/worker/gpu/warmup.py:_reserved_block_count",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/warmup.py",
+   "target": "function:vllm/v1/worker/gpu/warmup.py:_warmup_block_counter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/warmup.py",
+   "target": "function:vllm/v1/worker/gpu/warmup.py:run_mixed_prefill_decode_warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/warmup.py",
+   "target": "function:vllm/v1/worker/gpu/warmup.py:warmup_kernels",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/warmup.py",
+   "target": "function:vllm/v1/worker/gpu/warmup.py:_warmup_kernels",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/states.py",
+   "target": "class:vllm/v1/worker/gpu/states.py:RequestState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/structured_outputs.py",
+   "target": "class:vllm/v1/worker/gpu/structured_outputs.py:StructuredOutputsWorker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/structured_outputs.py",
+   "target": "function:vllm/v1/worker/gpu/structured_outputs.py:grammar_invalid_drafts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "class:vllm/v1/worker/gpu/ubatch_utils.py:UBatchState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "class:vllm/v1/worker/gpu/ubatch_utils.py:UBatchRunner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/gpu/ubatch_utils.py:create_ubatch_slices",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/gpu/ubatch_utils.py:slice_model_inputs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/gpu/ubatch_utils.py:merge_ubatch_outputs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/gpu/ubatch_utils.py:maybe_build_ubatch_runner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_input_batch.py",
+   "target": "class:vllm/v1/worker/gpu_input_batch.py:CachedRequestState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu_input_batch.py",
+   "target": "class:vllm/v1/worker/gpu_input_batch.py:InputBatch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/warmup.py",
+   "target": "function:vllm/v1/worker/gpu/warmup.py:run_mixed_prefill_decode_warmup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/warmup.py",
+   "target": "function:vllm/v1/worker/gpu/warmup.py:warmup_kernels",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/ubatch_utils.py:UBatchRunner",
+   "target": "function:vllm/v1/worker/ubatching.py:make_ubatch_contexts",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

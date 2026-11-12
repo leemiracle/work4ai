@@ -1,0 +1,32 @@
+# DeepWiki 索引 — linux-rdma/opensm
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-11-11
+> 结构 27 页 · 全文 314677 字符
+
+- [1 OpenSM Overview](1-opensm-overview.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 Central Data Structures](2.1-central-data-structures.md)
+  - [2.2 State Management](2.2-state-management.md)
+- [3 Network Discovery and Topology](3-network-discovery-and-topology.md)
+  - [3.1 Node and Port Discovery](3.1-node-and-port-discovery.md)
+  - [3.2 LID Management and Trap Handling](3.2-lid-management-and-trap-handling.md)
+- [4 Routing Management](4-routing-management.md)
+  - [4.1 Unicast Routing](4.1-unicast-routing.md)
+  - [4.2 Routing Algorithms](4.2-routing-algorithms.md)
+  - [4.3 Multicast Management](4.3-multicast-management.md)
+- [5 Subnet Administration (SA)](5-subnet-administration-sa.md)
+  - [5.1 SA Record Processing](5.1-sa-record-processing.md)
+  - [5.2 SA Record Types](5.2-sa-record-types.md)
+- [6 Specialized Management Components](6-specialized-management-components.md)
+  - [6.1 Partition Management](6.1-partition-management.md)
+  - [6.2 Quality of Service (QoS)](6.2-quality-of-service-qos.md)
+  - [6.3 Performance Management](6.3-performance-management.md)
+- [7 Network Communication Layer](7-network-communication-layer.md)
+  - [7.1 Vendor Abstraction Layer](7.1-vendor-abstraction-layer.md)
+  - [7.2 InfiniBand Types and MAD Processing](7.2-infiniband-types-and-mad-processing.md)
+- [8 Configuration and Deployment](8-configuration-and-deployment.md)
+  - [8.1 Build System](8.1-build-system.md)
+  - [8.2 Packaging and Distribution](8.2-packaging-and-distribution.md)
+- [9 Testing and Management Tools](9-testing-and-management-tools.md)
+  - [9.1 osmtest Testing Framework](9.1-osmtest-testing-framework.md)
+  - [9.2 Management Console](9.2-management-console.md)

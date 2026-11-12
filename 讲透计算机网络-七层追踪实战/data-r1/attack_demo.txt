@@ -1,0 +1,39 @@
+############ 攻击面演示（对自建教学服务，已授权）############
+时间: 2026-11-05 20:20:12  目标: 127.0.0.1:8080 (tracehttp v1)
+
+== A1 嗅探: 从抓包文件里直接捞出明文密码 ==
+攻击者条件: 只需在网络路径上(L2 可达/镜像端口/同网段)能抓包
+"payload": "POST /api/login HTTP/1.1..Host: 127.0.0.1:8188..User-Agent: curl/7.71.1..Accept: */*..Content-Length: 23..Content-Type: application/x-www-form-urlencoded....user=alice&pass=S3cret!"
+↑ 这串字节是 POST /api/login 的请求体——无需破解任何东西
+
+== A2 路径遍历: /files/../../../../etc/hostname (CWE-22) ==
+--path-as-is 防 curl 客户端自动规范化路径; 深度须数准(files 在 WS 下第 4 层):
+  先看错误的 3 层深度——404 里把服务器绝对路径吐给了攻击者(信息泄露):
+not found: [Errno 2] No such file or directory: '/root/luowz/netlab/files/../../../etc/hostname'
+ad63e6e3d4c3
+Linux version 4.19.90-89.11.v2401.ky10.x86_64 (root@localhost.localdomain) (gcc version 7.3.0 (GCC)) #1 SMP Tue May 7 18:33:01 CST 2024
+
+== A3 未认证访问: 任何匿名者 = 全权用户 ==
+{"now": 1793881212.603457, "iso": "2026-11-05T20:20:12+0800"}
+
+== A4 服务指纹: 响应头就是情报 ==
+Server: tracehttp/1.0 Python/3.11.6
+Date: Thu, 05 Nov 2026 12:20:12 GMT
+
+== A5 慢速攻击(slowloris 原理): 半截请求头挂住连接 ==
+  攻击前服务线程数: 1
+  挂起 12 个半开连接后线程数: 13
+  （每连接一线程的模型下，几十个连接即可耗尽线程/内存；
+    正常客户端此时会被拒服务——DoS 无需任何凭据）
+  释放后线程数: 1
+
+== A6 横向面: 同宿主任意容器可直达(绕过127.0.0.1端口映射) ==
+证据见 20:06 实录: luowz-dev(172.17.0.3) → 172.17.0.4:8080 直连成功
+  端口映射 -p 127.0.0.1:8188 只约束【宿主机侧】入口；
+  docker bridge 网段内(172.17.0.0/16)所有容器对 8080 是【直连】
+
+== A7 抓包文件自身即敏感数据 ==
+-rw-r--r-- 1 root root 1610 Nov  5 20:20 data/r1_eth0.pcap
+  pcap 里躺着明文密码(见 A1)——数据面泄露等价于凭据泄露
+
+演示输出已存 data/attack_demo.txt

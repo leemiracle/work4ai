@@ -1,0 +1,861 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/metrics/stats.py",
+   "type": "file",
+   "name": "stats.py",
+   "filePath": "vllm/v1/metrics/stats.py",
+   "summary": "统计数据结构集：缓存命中（含最近 N 请求命中率）、调度器迭代细节、前缀/多模态缓存、prefill 分解、prompt token 来源分解、每序列 spec decode 直方图、LoRA 计数与 IterationStats 聚合。",
+   "tags": [
+    "metrics",
+    "stats",
+    "data-model"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/pool/flash_maxsim/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/v1/pool/flash_maxsim/__init__.py",
+   "summary": "flash_maxsim 包 barrel：导出 flash_maxsim_rerank_direct 融合 MaxSim 打分入口。",
+   "tags": [
+    "barrel",
+    "flash-maxsim",
+    "triton"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/pool/flash_maxsim/_common.py",
+   "type": "file",
+   "name": "_common.py",
+   "filePath": "vllm/v1/pool/flash_maxsim/_common.py",
+   "summary": "flash-maxsim kernel 共享工具：2 的幂取整、(BLOCK_Q, BLOCK_D) autotune 配置网格、SMEM 预算查询与按运行时约束裁剪配置。",
+   "tags": [
+    "flash-maxsim",
+    "triton",
+    "autotune",
+    "smem"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py",
+   "type": "file",
+   "name": "flash_maxsim_rerank.py",
+   "filePath": "vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py",
+   "summary": "Flash-MaxSim rerank Triton kernel：一 query 对打包张量中变长散布 docs 直接打分，零拷贝读 (offset,length) 寻址，不物化 [B,Lq,Ld] 相似度矩阵。",
+   "tags": [
+    "flash-maxsim",
+    "triton",
+    "maxsim",
+    "rerank"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/pool/late_interaction_runner.py",
+   "type": "file",
+   "name": "late_interaction_runner.py",
+   "filePath": "vllm/v1/pool/late_interaction_runner.py",
+   "summary": "worker 侧晚期交互（ColBERT 风格）打分 runner：缓存 query 嵌入并跟踪引用计数，文档请求到达后用融合 flash kernel 或批处理路径打 MaxSim 分。",
+   "tags": [
+    "pooling",
+    "late-interaction",
+    "maxsim",
+    "worker"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/metrics/stats.py:BaseCacheStats",
+   "type": "class",
+   "name": "BaseCacheStats",
+   "filePath": "vllm/v1/metrics/stats.py",
+   "summary": "缓存命中统计基类（queries/hits）。",
+   "tags": [
+    "metrics",
+    "cache-stats",
+    "base-class"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    23,
+    36
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/stats.py:CachingMetrics",
+   "type": "class",
+   "name": "CachingMetrics",
+   "filePath": "vllm/v1/metrics/stats.py",
+   "summary": "最近 N 请求滚动命中率的缓存指标。",
+   "tags": [
+    "metrics",
+    "cache-stats",
+    "hit-rate"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    39,
+    117
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/stats.py:PrefixCacheStats",
+   "type": "class",
+   "name": "PrefixCacheStats",
+   "filePath": "vllm/v1/metrics/stats.py",
+   "summary": "前缀缓存命中统计（reset/queries/hits/requests）。",
+   "tags": [
+    "metrics",
+    "prefix-cache",
+    "stats"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    121,
+    170
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/stats.py:MultiModalCacheStats",
+   "type": "class",
+   "name": "MultiModalCacheStats",
+   "filePath": "vllm/v1/metrics/stats.py",
+   "summary": "多模态缓存命中统计。",
+   "tags": [
+    "metrics",
+    "multimodal-cache",
+    "stats"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    174,
+    185
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/stats.py:KVCacheEvictionEvent",
+   "type": "class",
+   "name": "KVCacheEvictionEvent",
+   "filePath": "vllm/v1/metrics/stats.py",
+   "summary": "单块 KV 驱逐事件样本。",
+   "tags": [
+    "metrics",
+    "eviction",
+    "kv-cache"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    189,
+    194
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/stats.py:SchedulerIterationDetails",
+   "type": "class",
+   "name": "SchedulerIterationDetails",
+   "filePath": "vllm/v1/metrics/stats.py",
+   "summary": "调度器单次迭代细节（时间戳/步数）。",
+   "tags": [
+    "metrics",
+    "scheduler",
+    "iteration"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    198,
+    209
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/stats.py:SchedulerStats",
+   "type": "class",
+   "name": "SchedulerStats",
+   "filePath": "vllm/v1/metrics/stats.py",
+   "summary": "调度器统计：运行/等待/KV 利用率与时间戳。",
+   "tags": [
+    "metrics",
+    "scheduler",
+    "stats"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    223,
+    255
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/stats.py:RequestStateStats",
+   "type": "class",
+   "name": "RequestStateStats",
+   "filePath": "vllm/v1/metrics/stats.py",
+   "summary": "跨增量更新跟踪的请求统计（queue/prefill/decode 时间累积）。",
+   "tags": [
+    "metrics",
+    "request-stats",
+    "tracking"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    259,
+    284
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/stats.py:FinishedRequestStats",
+   "type": "class",
+   "name": "FinishedRequestStats",
+   "filePath": "vllm/v1/metrics/stats.py",
+   "summary": "完成请求统计（延迟/token 数/完成原因）。",
+   "tags": [
+    "metrics",
+    "finished-request",
+    "stats"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    288,
+    304
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/stats.py:PrefillStats",
+   "type": "class",
+   "name": "PrefillStats",
+   "filePath": "vllm/v1/metrics/stats.py",
+   "summary": "调度 prefill 计算分解（prompt token/缓存命中/本步计算）。",
+   "tags": [
+    "metrics",
+    "prefill",
+    "breakdown"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    308,
+    346
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/stats.py:RequestSpecDecodeMetrics",
+   "type": "class",
+   "name": "RequestSpecDecodeMetrics",
+   "filePath": "vllm/v1/metrics/stats.py",
+   "summary": "单输出序列 spec decode 统计：跨 verify 步累积接受长度直方图。",
+   "tags": [
+    "metrics",
+    "spec-decode",
+    "histogram"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    350,
+    422
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/stats.py:PromptTokenStats",
+   "type": "class",
+   "name": "PromptTokenStats",
+   "filePath": "vllm/v1/metrics/stats.py",
+   "summary": "prompt token 来源分解（本地计算/缓存命中/外部层）。",
+   "tags": [
+    "metrics",
+    "prompt-stats",
+    "token-sources"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    426,
+    471
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/stats.py:IterationStats",
+   "type": "class",
+   "name": "IterationStats",
+   "filePath": "vllm/v1/metrics/stats.py",
+   "summary": "单次 EngineCoreOutputs 的迭代统计聚合（请求完成/时间/延迟分解）。",
+   "tags": [
+    "metrics",
+    "iteration",
+    "aggregation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    474,
+    645
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/stats.py:LoRAStats",
+   "type": "class",
+   "name": "LoRAStats",
+   "filePath": "vllm/v1/metrics/stats.py",
+   "summary": "单个 LoRA 的运行/等待请求统计。",
+   "tags": [
+    "metrics",
+    "lora",
+    "stats"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    648,
+    669
+   ]
+  },
+  {
+   "id": "class:vllm/v1/metrics/stats.py:LoRARequestStates",
+   "type": "class",
+   "name": "LoRARequestStates",
+   "filePath": "vllm/v1/metrics/stats.py",
+   "summary": "每 LoRA 运行/等待请求计数。",
+   "tags": [
+    "metrics",
+    "lora",
+    "counting"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    672,
+    704
+   ]
+  },
+  {
+   "id": "class:vllm/v1/pool/late_interaction_runner.py:LateInteractionRunner",
+   "type": "class",
+   "name": "LateInteractionRunner",
+   "filePath": "vllm/v1/pool/late_interaction_runner.py",
+   "summary": "晚期交互打分 runner：query 嵌入缓存与引用跟踪、文档 MaxSim 打分（融合 kernel 或批处理路径）。",
+   "tags": [
+    "pooling",
+    "late-interaction",
+    "runner"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    19,
+    243
+   ]
+  },
+  {
+   "id": "function:vllm/v1/pool/flash_maxsim/_common.py:_get_configs",
+   "type": "function",
+   "name": "_get_configs",
+   "filePath": "vllm/v1/pool/flash_maxsim/_common.py",
+   "summary": "(BLOCK_Q, BLOCK_D) autotune 配置网格。",
+   "tags": [
+    "flash-maxsim",
+    "autotune",
+    "configs"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    13,
+    27
+   ]
+  },
+  {
+   "id": "function:vllm/v1/pool/flash_maxsim/_common.py:_smem_budget",
+   "type": "function",
+   "name": "_smem_budget",
+   "filePath": "vllm/v1/pool/flash_maxsim/_common.py",
+   "summary": "查询活动设备的可选共享内存预算。",
+   "tags": [
+    "flash-maxsim",
+    "smem",
+    "query"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    30,
+    49
+   ]
+  },
+  {
+   "id": "function:vllm/v1/pool/flash_maxsim/_common.py:_prune_configs",
+   "type": "function",
+   "name": "_prune_configs",
+   "filePath": "vllm/v1/pool/flash_maxsim/_common.py",
+   "summary": "按 SMEM 预算与 Lq 裁剪超限配置。",
+   "tags": [
+    "flash-maxsim",
+    "pruning",
+    "configs"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    52,
+    85
+   ]
+  },
+  {
+   "id": "function:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py:_maxsim_rerank_kernel",
+   "type": "function",
+   "name": "_maxsim_rerank_kernel",
+   "filePath": "vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py",
+   "summary": "MaxSim rerank Triton kernel：每 doc 一个 program，Q 共享读、D 按 (offset,length) 散布读。",
+   "tags": [
+    "flash-maxsim",
+    "triton",
+    "kernel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    40,
+    107
+   ]
+  },
+  {
+   "id": "function:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py:_run_rerank_kernel",
+   "type": "function",
+   "name": "_run_rerank_kernel",
+   "filePath": "vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py",
+   "summary": "rerank 与 rerank_direct 共用的 kernel 启动封装（桶化 Lq/Ld）。",
+   "tags": [
+    "flash-maxsim",
+    "triton",
+    "launcher"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    113,
+    165
+   ]
+  },
+  {
+   "id": "function:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py:flash_maxsim_rerank_direct",
+   "type": "function",
+   "name": "flash_maxsim_rerank_direct",
+   "filePath": "vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py",
+   "summary": "零拷贝入口：直接对批张量中散布 docs 打分，无 padding 无中间相似度矩阵。",
+   "tags": [
+    "flash-maxsim",
+    "zero-copy",
+    "entry-point"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    171,
+    204
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "file:vllm/compilation/cuda_graph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "file:vllm/v1/metrics/cache_hit_source.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "file:vllm/v1/metrics/perf.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "file:vllm/v1/spec_decode/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/pool/flash_maxsim/__init__.py",
+   "target": "file:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/pool/flash_maxsim/_common.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/pool/flash_maxsim/_common.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py",
+   "target": "file:vllm/v1/pool/flash_maxsim/_common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/pool/late_interaction_runner.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/pool/late_interaction_runner.py",
+   "target": "file:vllm/pooling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/pool/late_interaction_runner.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/pool/late_interaction_runner.py",
+   "target": "file:vllm/v1/pool/late_interaction.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:BaseCacheStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:CachingMetrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:PrefixCacheStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:MultiModalCacheStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:KVCacheEvictionEvent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:SchedulerIterationDetails",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:SchedulerStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:RequestStateStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:FinishedRequestStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:PrefillStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:RequestSpecDecodeMetrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:PromptTokenStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:IterationStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:LoRAStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:LoRARequestStates",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/pool/late_interaction_runner.py",
+   "target": "class:vllm/v1/pool/late_interaction_runner.py:LateInteractionRunner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/pool/flash_maxsim/_common.py",
+   "target": "function:vllm/v1/pool/flash_maxsim/_common.py:_get_configs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/pool/flash_maxsim/_common.py",
+   "target": "function:vllm/v1/pool/flash_maxsim/_common.py:_smem_budget",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/pool/flash_maxsim/_common.py",
+   "target": "function:vllm/v1/pool/flash_maxsim/_common.py:_prune_configs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py",
+   "target": "function:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py:_maxsim_rerank_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py",
+   "target": "function:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py:_run_rerank_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py",
+   "target": "function:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py:flash_maxsim_rerank_direct",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:BaseCacheStats",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:CachingMetrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:PrefixCacheStats",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:MultiModalCacheStats",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:KVCacheEvictionEvent",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:SchedulerIterationDetails",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:SchedulerStats",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:RequestStateStats",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:FinishedRequestStats",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:PrefillStats",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:RequestSpecDecodeMetrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:PromptTokenStats",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:IterationStats",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:LoRAStats",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/metrics/stats.py",
+   "target": "class:vllm/v1/metrics/stats.py:LoRARequestStates",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/pool/late_interaction_runner.py",
+   "target": "class:vllm/v1/pool/late_interaction_runner.py:LateInteractionRunner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py",
+   "target": "function:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py:flash_maxsim_rerank_direct",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/metrics/stats.py:PrefixCacheStats",
+   "target": "class:vllm/v1/metrics/stats.py:BaseCacheStats",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/metrics/stats.py:MultiModalCacheStats",
+   "target": "class:vllm/v1/metrics/stats.py:BaseCacheStats",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "function:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py:flash_maxsim_rerank_direct",
+   "target": "function:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py:_run_rerank_kernel",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py:_run_rerank_kernel",
+   "target": "function:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py:_maxsim_rerank_kernel",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/pool/late_interaction_runner.py:LateInteractionRunner",
+   "target": "function:vllm/v1/pool/flash_maxsim/flash_maxsim_rerank.py:flash_maxsim_rerank_direct",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

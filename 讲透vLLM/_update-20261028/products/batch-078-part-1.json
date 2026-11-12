@@ -1,0 +1,1438 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/model_executor/custom_op.py",
+   "type": "file",
+   "name": "custom_op.py",
+   "filePath": "vllm/model_executor/custom_op.py",
+   "summary": "CustomOp/PluggableLayer（带 CUDA 后端）：自定义 op 基类——按设备分派 forward_native/forward_cuda 等，PluggableLayer 支持模块组合与 OOT 替换。",
+   "tags": [
+    "custom-op",
+    "dispatch",
+    "pluggable",
+    "backend"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "type": "file",
+   "name": "batch_invariant.py",
+   "filePath": "vllm/model_executor/determinism/batch_invariant.py",
+   "summary": "批不变模式（1444 行，34 函数）：mm/matmul/bmm/addmm/softmax/log_softmax/mean/rms_norm/linear/all_reduce/reduce_scatter 的 Triton 批不变实现（固定求和序），enable_batch_invariant_mode 全局开关与环境覆写。",
+   "tags": [
+    "determinism",
+    "batch-invariant",
+    "triton",
+    "reduction-order"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/determinism/batch_invariant_configs.py",
+   "type": "file",
+   "name": "batch_invariant_configs.py",
+   "filePath": "vllm/model_executor/determinism/batch_invariant_configs.py",
+   "summary": "批不变 matmul 调优配置（1344 行）：按架构家族的 tuned 配置表与 XPU descriptor matmul 配置选择。",
+   "tags": [
+    "determinism",
+    "matmul",
+    "configs",
+    "tuned"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/hw_agnostic/custom_op.py",
+   "type": "file",
+   "name": "custom_op.py",
+   "filePath": "vllm/model_executor/hw_agnostic/custom_op.py",
+   "summary": "硬件无关版 CustomOp/PluggableLayer（forward_native 唯一路径，11 方法版 CustomOp）。",
+   "tags": [
+    "custom-op",
+    "hw-agnostic",
+    "pluggable"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "type": "file",
+   "name": "aiter.py",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "summary": "AITER scaled MM kernel 族（5 类）：INT8、预 shuffle per-token FP8、HipbMM per-token FP8、per-token FP8 与 FP8 block。",
+   "tags": [
+    "aiter",
+    "scaled-mm",
+    "fp8",
+    "rocm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "type": "file",
+   "name": "cpu.py",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "summary": "CPU scaled MM kernel 族（794 行，6 类）：AMX BRGEMM 的 FP8 block/per-tensor/per-channel、W8A8 block 与 W8A8 动态量化。",
+   "tags": [
+    "cpu",
+    "scaled-mm",
+    "amx",
+    "brgemm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/custom_op.py:PluggableLayer",
+   "type": "class",
+   "name": "PluggableLayer",
+   "filePath": "vllm/model_executor/custom_op.py",
+   "summary": "可插拔层基类（模块组合抽象，支持 OOT 后端替换）。",
+   "tags": [
+    "pluggable",
+    "module",
+    "oot"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    32,
+    99
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/custom_op.py:CustomOp",
+   "type": "class",
+   "name": "CustomOp",
+   "filePath": "vllm/model_executor/custom_op.py",
+   "summary": "自定义 op 基类（16 方法）：按设备分派 native/cuda 实现。",
+   "tags": [
+    "custom-op",
+    "dispatch",
+    "backends"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    102,
+    356
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/hw_agnostic/custom_op.py:CustomOp",
+   "type": "class",
+   "name": "CustomOp",
+   "filePath": "vllm/model_executor/hw_agnostic/custom_op.py",
+   "summary": "硬件无关 CustomOp（仅 forward_native，11 方法）。",
+   "tags": [
+    "custom-op",
+    "hw-agnostic",
+    "native-only"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    102,
+    314
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/aiter.py:AiterInt8ScaledMMLinearKernel",
+   "type": "class",
+   "name": "AiterInt8ScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "summary": "AITER INT8 scaled MM。",
+   "tags": [
+    "aiter",
+    "int8",
+    "scaled-mm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    38,
+    126
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/aiter.py:AiterPreshuffledPerTokenFp8ScaledMMLinearKernel",
+   "type": "class",
+   "name": "AiterPreshuffledPerTokenFp8ScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "summary": "预 shuffle 权重的 AITER per-token FP8。",
+   "tags": [
+    "aiter",
+    "preshuffled",
+    "per-token"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    129,
+    219
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/aiter.py:AiterPerTokenFp8ScaledMMLinearKernel",
+   "type": "class",
+   "name": "AiterPerTokenFp8ScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "summary": "AITER per-token FP8 scaled MM。",
+   "tags": [
+    "aiter",
+    "per-token",
+    "fp8"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    320,
+    380
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/aiter.py:AiterFp8BlockScaledMMKernel",
+   "type": "class",
+   "name": "AiterFp8BlockScaledMMKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "summary": "AITER FP8 block-scaled MM。",
+   "tags": [
+    "aiter",
+    "fp8-block",
+    "scaled-mm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    383,
+    506
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUInt8ScaledMMLinearKernel",
+   "type": "class",
+   "name": "CPUInt8ScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "summary": "CPU INT8 scaled MM。",
+   "tags": [
+    "cpu",
+    "int8",
+    "scaled-mm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    33,
+    230
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFp8BlockScaledMMKernel",
+   "type": "class",
+   "name": "CPUFp8BlockScaledMMKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "summary": "AMX BRGEMM 的 FP8 W8A16 block GEMM。",
+   "tags": [
+    "cpu",
+    "amx",
+    "w8a16"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    233,
+    345
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFp8PerTensorScaledMMLinearKernel",
+   "type": "class",
+   "name": "CPUFp8PerTensorScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "summary": "复用 block kernel 的 per-tensor FP8。",
+   "tags": [
+    "cpu",
+    "per-tensor",
+    "reuse"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    348,
+    441
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFp8ChannelWiseScaledMMLinearKernel",
+   "type": "class",
+   "name": "CPUFp8ChannelWiseScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "summary": "per-channel FP8（仅 block scale 支持下的近似）。",
+   "tags": [
+    "cpu",
+    "channel-wise",
+    "fp8"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    444,
+    502
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFp8W8A8BlockScaledMMKernel",
+   "type": "class",
+   "name": "CPUFp8W8A8BlockScaledMMKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "summary": "W8A8 block：动态 per-token 激活量化。",
+   "tags": [
+    "cpu",
+    "w8a8",
+    "dynamic-quant"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    505,
+    663
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFP8W8A8ScaledMMLinearKernel",
+   "type": "class",
+   "name": "CPUFP8W8A8ScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "summary": "W8A8 per-tensor：动态激活量化。",
+   "tags": [
+    "cpu",
+    "w8a8",
+    "per-tensor"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    666,
+    793
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/determinism/batch_invariant.py:matmul_kernel_persistent",
+   "type": "function",
+   "name": "matmul_kernel_persistent",
+   "filePath": "vllm/model_executor/determinism/batch_invariant.py",
+   "summary": "持久 matmul kernel（固定 tile 序保证求和序）。",
+   "tags": [
+    "triton",
+    "matmul",
+    "persistent"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    49,
+    137
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/determinism/batch_invariant.py:matmul_kernel_descriptor_persistent",
+   "type": "function",
+   "name": "matmul_kernel_descriptor_persistent",
+   "filePath": "vllm/model_executor/determinism/batch_invariant.py",
+   "summary": "tensor descriptor 2D 块 IO 的持久 matmul。",
+   "tags": [
+    "triton",
+    "descriptor",
+    "matmul"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    141,
+    222
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/determinism/batch_invariant.py:matmul_persistent",
+   "type": "function",
+   "name": "matmul_persistent",
+   "filePath": "vllm/model_executor/determinism/batch_invariant.py",
+   "summary": "持久 matmul 启动封装。",
+   "tags": [
+    "triton",
+    "matmul",
+    "launcher"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    284,
+    360
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/determinism/batch_invariant.py:bmm_kernel",
+   "type": "function",
+   "name": "bmm_kernel",
+   "filePath": "vllm/model_executor/determinism/batch_invariant.py",
+   "summary": "批 GEMM kernel。",
+   "tags": [
+    "triton",
+    "bmm",
+    "batched"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    364,
+    493
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/determinism/batch_invariant.py:log_softmax",
+   "type": "function",
+   "name": "log_softmax",
+   "filePath": "vllm/model_executor/determinism/batch_invariant.py",
+   "summary": "log_softmax 的批不变 Triton 实现。",
+   "tags": [
+    "log-softmax",
+    "triton",
+    "invariant"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    564,
+    606
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/determinism/batch_invariant.py:mean_dim",
+   "type": "function",
+   "name": "mean_dim",
+   "filePath": "vllm/model_executor/determinism/batch_invariant.py",
+   "summary": "单维 mean 的批不变实现。",
+   "tags": [
+    "mean",
+    "triton",
+    "invariant"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    682,
+    769
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/determinism/batch_invariant.py:matmul_batch_invariant",
+   "type": "function",
+   "name": "matmul_batch_invariant",
+   "filePath": "vllm/model_executor/determinism/batch_invariant.py",
+   "summary": "批不变 matmul 入口（分派到持久 kernel）。",
+   "tags": [
+    "matmul",
+    "entry-point",
+    "dispatch"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    781,
+    828
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/determinism/batch_invariant.py:bmm_batch_invariant",
+   "type": "function",
+   "name": "bmm_batch_invariant",
+   "filePath": "vllm/model_executor/determinism/batch_invariant.py",
+   "summary": "批不变 bmm。",
+   "tags": [
+    "bmm",
+    "entry-point",
+    "invariant"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    831,
+    918
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/determinism/batch_invariant.py:softmax_batch_invariant",
+   "type": "function",
+   "name": "softmax_batch_invariant",
+   "filePath": "vllm/model_executor/determinism/batch_invariant.py",
+   "summary": "批不变 softmax。",
+   "tags": [
+    "softmax",
+    "entry-point",
+    "invariant"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    973,
+    986
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/determinism/batch_invariant.py:mean_batch_invariant",
+   "type": "function",
+   "name": "mean_batch_invariant",
+   "filePath": "vllm/model_executor/determinism/batch_invariant.py",
+   "summary": "批不变 mean。",
+   "tags": [
+    "mean",
+    "entry-point",
+    "invariant"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    989,
+    1010
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/determinism/batch_invariant.py:rms_norm_batch_invariant",
+   "type": "function",
+   "name": "rms_norm_batch_invariant",
+   "filePath": "vllm/model_executor/determinism/batch_invariant.py",
+   "summary": "批不变 RMSNorm。",
+   "tags": [
+    "rmsnorm",
+    "entry-point",
+    "invariant"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1065,
+    1123
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/determinism/batch_invariant.py:linear_batch_invariant",
+   "type": "function",
+   "name": "linear_batch_invariant",
+   "filePath": "vllm/model_executor/determinism/batch_invariant.py",
+   "summary": "批不变 linear（mm+bias）。",
+   "tags": [
+    "linear",
+    "entry-point",
+    "invariant"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1126,
+    1132
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/determinism/batch_invariant.py:all_reduce_batch_invariant",
+   "type": "function",
+   "name": "all_reduce_batch_invariant",
+   "filePath": "vllm/model_executor/determinism/batch_invariant.py",
+   "summary": "与消息序无关的求和 all-reduce。",
+   "tags": [
+    "all-reduce",
+    "order-independent",
+    "sum"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1166,
+    1199
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/determinism/batch_invariant.py:reduce_scatter_batch_invariant",
+   "type": "function",
+   "name": "reduce_scatter_batch_invariant",
+   "filePath": "vllm/model_executor/determinism/batch_invariant.py",
+   "summary": "与消息序无关的 reduce-scatter。",
+   "tags": [
+    "reduce-scatter",
+    "order-independent",
+    "sum"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1202,
+    1270
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/determinism/batch_invariant.py:enable_batch_invariant_mode",
+   "type": "function",
+   "name": "enable_batch_invariant_mode",
+   "filePath": "vllm/model_executor/determinism/batch_invariant.py",
+   "summary": "批不变模式全局开关（monkey-patch 各 op）。",
+   "tags": [
+    "enable",
+    "global-switch",
+    "monkey-patch"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1305,
+    1388
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/determinism/batch_invariant.py:init_batch_invariance",
+   "type": "function",
+   "name": "init_batch_invariance",
+   "filePath": "vllm/model_executor/determinism/batch_invariant.py",
+   "summary": "批不变模式初始化。",
+   "tags": [
+    "init",
+    "entry-point",
+    "invariance"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1433,
+    1443
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/determinism/batch_invariant_configs.py:resolve_tuned_matmul_configs",
+   "type": "function",
+   "name": "resolve_tuned_matmul_configs",
+   "filePath": "vllm/model_executor/determinism/batch_invariant_configs.py",
+   "summary": "按架构家族解析 tuned matmul 配置。",
+   "tags": [
+    "tuned",
+    "matmul",
+    "resolve"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1241,
+    1259
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/determinism/batch_invariant_configs.py:_get_matmul_config",
+   "type": "function",
+   "name": "_get_matmul_config",
+   "filePath": "vllm/model_executor/determinism/batch_invariant_configs.py",
+   "summary": "按形状取 matmul 配置。",
+   "tags": [
+    "matmul",
+    "config",
+    "shape"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1262,
+    1293
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/determinism/batch_invariant_configs.py:_get_descriptor_matmul_config",
+   "type": "function",
+   "name": "_get_descriptor_matmul_config",
+   "filePath": "vllm/model_executor/determinism/batch_invariant_configs.py",
+   "summary": "XPU descriptor matmul 配置选择。",
+   "tags": [
+    "xpu",
+    "descriptor",
+    "config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1296,
+    1343
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/model_executor/custom_op.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/custom_op.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/custom_op.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/custom_op.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "file:vllm/model_executor/determinism/batch_invariant_configs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "file:vllm/utils/mem_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "file:vllm/utils/nccl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "file:vllm/utils/platform_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant_configs.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant_configs.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/hw_agnostic/custom_op.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/hw_agnostic/custom_op.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/hw_agnostic/custom_op.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/hw_agnostic/custom_op.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/BlockScaledMMLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "file:vllm/model_executor/layers/quantization/input_quant_fp8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/fp8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/BlockScaledMMLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/fp8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/w8a8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "file:vllm/model_executor/layers/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/custom_op.py",
+   "target": "class:vllm/model_executor/custom_op.py:PluggableLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/custom_op.py",
+   "target": "class:vllm/model_executor/custom_op.py:CustomOp",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/hw_agnostic/custom_op.py",
+   "target": "class:vllm/model_executor/hw_agnostic/custom_op.py:CustomOp",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/aiter.py:AiterInt8ScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/aiter.py:AiterPreshuffledPerTokenFp8ScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/aiter.py:AiterPerTokenFp8ScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/aiter.py:AiterFp8BlockScaledMMKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUInt8ScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFp8BlockScaledMMKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFp8PerTensorScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFp8ChannelWiseScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFp8W8A8BlockScaledMMKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFP8W8A8ScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:matmul_kernel_persistent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:matmul_kernel_descriptor_persistent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:matmul_persistent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:bmm_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:log_softmax",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:mean_dim",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:matmul_batch_invariant",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:bmm_batch_invariant",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:softmax_batch_invariant",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:mean_batch_invariant",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:rms_norm_batch_invariant",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:linear_batch_invariant",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:all_reduce_batch_invariant",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:reduce_scatter_batch_invariant",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:enable_batch_invariant_mode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:init_batch_invariance",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant_configs.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant_configs.py:resolve_tuned_matmul_configs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant_configs.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant_configs.py:_get_matmul_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant_configs.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant_configs.py:_get_descriptor_matmul_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/custom_op.py",
+   "target": "class:vllm/model_executor/custom_op.py:PluggableLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/custom_op.py",
+   "target": "class:vllm/model_executor/custom_op.py:CustomOp",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/hw_agnostic/custom_op.py",
+   "target": "class:vllm/model_executor/hw_agnostic/custom_op.py:CustomOp",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/aiter.py:AiterInt8ScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/aiter.py:AiterPreshuffledPerTokenFp8ScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/aiter.py:AiterPerTokenFp8ScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/aiter.py:AiterFp8BlockScaledMMKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUInt8ScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFp8BlockScaledMMKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFp8PerTensorScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFp8ChannelWiseScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFp8W8A8BlockScaledMMKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFP8W8A8ScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:matmul_kernel_persistent",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:matmul_kernel_descriptor_persistent",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:matmul_persistent",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:bmm_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:log_softmax",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:mean_dim",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:matmul_batch_invariant",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:bmm_batch_invariant",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:softmax_batch_invariant",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:mean_batch_invariant",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:rms_norm_batch_invariant",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:linear_batch_invariant",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:all_reduce_batch_invariant",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:reduce_scatter_batch_invariant",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:enable_batch_invariant_mode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:init_batch_invariance",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/determinism/batch_invariant_configs.py",
+   "target": "function:vllm/model_executor/determinism/batch_invariant_configs.py:resolve_tuned_matmul_configs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/aiter.py:AiterInt8ScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py:CutlassInt8ScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/aiter.py:AiterPreshuffledPerTokenFp8ScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py:FP8ScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/aiter.py:AiterPerTokenFp8ScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py:FP8ScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/aiter.py:AiterFp8BlockScaledMMKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/BlockScaledMMLinearKernel.py:Fp8BlockScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUInt8ScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py:Int8ScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFp8BlockScaledMMKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/BlockScaledMMLinearKernel.py:Fp8BlockScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFp8PerTensorScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py:FP8ScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFp8ChannelWiseScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFp8PerTensorScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFp8W8A8BlockScaledMMKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/BlockScaledMMLinearKernel.py:Fp8BlockScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/cpu.py:CPUFP8W8A8ScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py:FP8ScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "function:vllm/model_executor/determinism/batch_invariant.py:matmul_batch_invariant",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:matmul_kernel_persistent",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/determinism/batch_invariant.py:matmul_batch_invariant",
+   "target": "function:vllm/model_executor/determinism/batch_invariant.py:matmul_persistent",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

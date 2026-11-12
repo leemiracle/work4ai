@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Multi-process Architecture</title>
+  <link rel="stylesheet" href="/_stylesheets/@docsearch/style.css">
+  <link rel="stylesheet" href="/_stylesheets/default.css">
+  <link rel="stylesheet" href="/_stylesheets/highlight.js/github.min.css">
+</head>
+
+<header id="site-header">
+  <button id="mobile-nav-toggle" class="mobile-nav-toggle" type="button" aria-label="Open navigation menu" aria-controls="sidebar-left" aria-expanded="false">
+    <span class="mobile-nav-toggle-bars" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+  </button>
+  <a class="header-brand" href="/">
+    <img alt="the Chromium logo" src="/_assets/icon-chromium-96.png" width="48" height="48">
+    <h2>The Chromium Projects</h2>
+  </a>
+  <div id="search"></div>
+</header>
+<div id="mobile-header-spacer" aria-hidden="true"></div>
+
+<div id="mobile-nav-backdrop" aria-hidden="true"></div>
+
+<div id="main-wrapper">
+  <nav id="sidebar-left" class="sidebar-nav" aria-label="Site navigation">
+    <div class="mobile-nav-header">
+      <h3>Menu</h3>
+      <button id="mobile-nav-close" class="mobile-nav-close" type="button" aria-label="Close navigation menu">&times;</button>
+    </div>
+    <section class="sidebar-primary">
+      <a href="/chromium-projects">Home</a>
+      <a href="/Home">Chromium</a>
+      <a href="/chromium-os">ChromiumOS</a>
+    </section>
+    <section class="sidebar-quick-links">
+      <h4>Quick links</h4>
+      <a href="/for-testers/bug-reporting-guidelines">Report bugs</a>
+      <a href="/developers/discussion-groups">Discuss</a>
+    </section>
+    <section class="sidebar-other-sites">
+      <h4>Other sites</h4>
+      <a href="https://blog.chromium.org/">Chromium Blog</a>
+      <a href="https://developer.chrome.com/extensions">Google Chrome Extensions</a>
+    </section>
+    <section class="sidebar-license" role="complementary">
+      Except as otherwise
+      <a href="https://developers.google.com/site-policies.html#restrictions">noted</a>,
+      the content of this page is licensed under a
+      <a href="https://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 license</a>,
+      and examples are licensed under the
+      <a href="https://chromium.googlesource.com/chromium/src/+/HEAD/LICENSE">BSD License</a>.
+    </section>
+    <section class="sidebar-privacy" role="complementary">
+      <a href="https://policies.google.com/privacy">Privacy</a>
+    </section>
+    <a class="edit-this-page" href="https://edit.chromium.org/edit?repo=chromium/website/main&file=site/developers/design-documents/multi-process-architecture/index.md&cloneRepo=chromium/website:refs/heads/main&fullPath=chromium/site/developers/design-documents/multi-process-architecture/index.md">Edit</a>
+  </nav>
+  <main>
+    <div class="breadcrumbs">
+      <a href="/developers">For Developers</a> &gt;
+      <a href="/developers/design-documents">Design Documents</a> &gt;
+    </div>
+    <h1>Multi-process Architecture</h1>
+  <p>This document describes Chromium's high-level architecture and how it is divided
+among multiple process types.</p>
+<h2 id="problem" tabindex="-1"><a class="header-anchor" href="#problem">Problem</a></h2>
+<p>It's nearly impossible to build a rendering engine that never crashes or hangs.
+It's also nearly impossible to build a rendering engine that is perfectly
+secure.</p>
+<p>In some ways, the state of web browsers around 2006 was like that of the
+single-user, co-operatively multi-tasked operating systems of the past. As a
+misbehaving application in such an operating system could take down the entire
+system, so could a misbehaving web page in a web browser. All it took was one
+rendering engine or plug-in bug to bring down the entire browser and all of the
+currently running tabs.</p>
+<p>Modern operating systems are more robust because they put applications into
+separate processes that are walled off from one another. A crash in one
+application generally does not impair other applications or the integrity of the
+operating system, and each user's access to other users' data is restricted.
+Chromium's architecture aims for this more robust design.</p>
+<h2 id="architectural-overview" tabindex="-1"><a class="header-anchor" href="#architectural-overview">Architectural overview</a></h2>
+<p>Chromium uses multiple processes to protect the overall application from bugs
+and glitches in the rendering engine or other components. It also restricts
+access from each rendering engine process to other processes and to the rest
+of the system. In some ways, this brings to web browsing the benefits that
+memory protection and access control brought to operating systems.</p>
+<p>We refer to the main process that runs the UI and manages renderer and other
+processes as the &quot;<strong>browser process</strong>&quot; or &quot;browser.&quot; Likewise, the processes
+that handle web content are called &quot;<strong>renderer processes</strong>&quot; or &quot;renderers.&quot;
+The renderers use the <a href="/blink">Blink</a> open-source layout engine for interpreting
+and laying out HTML.</p>
+<p><a href="/developers/design-documents/multi-process-architecture/arch.png"><img alt="image"
+src="/developers/design-documents/multi-process-architecture/arch.png"></a></p>
+<h3 id="managing-renderer-processes" tabindex="-1"><a class="header-anchor" href="#managing-renderer-processes">Managing renderer processes</a></h3>
+<p>Each renderer process has a global <code>RenderProcess</code> object that manages
+communication with the parent browser process and maintains global state. The
+browser maintains a corresponding <code>RenderProcessHost</code> for each renderer
+process, which manages browser state and communication for the renderer. The
+browser and the renderers communicate using
+<a href="https://chromium.googlesource.com/chromium/src/+/HEAD/mojo/README.md">Mojo</a> or
+<a href="/developers/design-documents/inter-process-communication">Chromium's legacy IPC
+system</a>.</p>
+<h3 id="managing-frames-and-documents" tabindex="-1"><a class="header-anchor" href="#managing-frames-and-documents">Managing frames and documents</a></h3>
+<p>Each renderer process has one or more <code>RenderFrame</code> objects, which correspond to
+frames with documents containing content. The corresponding <code>RenderFrameHost</code> in
+the browser process manages state associated with that document. Each
+<code>RenderFrame</code> is given a routing ID that is used to differentiate multiple
+documents or frames in the same renderer. These IDs are unique inside one
+renderer but not within the browser, so identifying a frame requires both a
+<code>RenderProcessHost</code> and a routing ID. Communication from the browser to a
+specific document in the renderer is done through these <code>RenderFrameHost</code>
+objects, which know how to send messages through Mojo or legacy IPC.</p>
+<h2 id="components-and-interfaces" tabindex="-1"><a class="header-anchor" href="#components-and-interfaces">Components and interfaces</a></h2>
+<p>In the renderer process:</p>
+<ul>
+<li>The <code>RenderProcess</code> handles Mojo setup and legacy IPC with the corresponding
+<code>RenderProcessHost</code> in the browser. There is exactly one
+<code>RenderProcess</code> object per renderer process.</li>
+<li>The <code>RenderFrame</code> object communicates with its corresponding
+<code>RenderFrameHost</code> in the browser process (via Mojo), and
+the Blink layer. This object represents the contents of
+one web document in a tab or subframe.</li>
+</ul>
+<p>In the browser process:</p>
+<ul>
+<li>The <code>Browser</code> object represents a top-level browser window.</li>
+<li>The <code>RenderProcessHost</code> object represents the browser side of a
+single browser ↔ renderer IPC connection. There is one
+<code>RenderProcessHost</code> in the browser process for each renderer process.</li>
+<li>The <code>RenderFrameHost</code> object encapsulates communication with the
+<code>RenderFrame</code>, and <code>RenderWidgetHost</code> handles the input and
+painting for <code>RenderWidget</code> in the browser.</li>
+</ul>
+<p>For more detailed information on how this embedding works, see the <a href="/developers/design-documents/displaying-a-web-page-in-chrome">How Chromium
+displays web
+pages</a> design
+document.</p>
+<h2 id="sharing-the-renderer-process" tabindex="-1"><a class="header-anchor" href="#sharing-the-renderer-process">Sharing the renderer process</a></h2>
+<p>In general, each new window or tab opens in a new process. The browser will
+spawn a new process and instruct it to create a single <code>RenderFrame</code>, which
+may create more iframes in the page (possibly in different processes).</p>
+<p>Sometimes it is necessary or desirable to share the renderer process between
+tabs or windows. For example, a web application can use <code>window.open</code> to
+create another window, and the new document must share the same process if
+it belongs to the same origin. Chromium also has strategies to assign new
+tabs to existing processes if the total number of processes is too large.
+These considerations and strategies are described in <a href="https://chromium.googlesource.com/chromium/src/+/main/docs/process_model_and_site_isolation.md">Process
+Models</a>.</p>
+<h2 id="detecting-crashed-or-misbehaving-renderers" tabindex="-1"><a class="header-anchor" href="#detecting-crashed-or-misbehaving-renderers">Detecting crashed or misbehaving renderers</a></h2>
+<p>Each Mojo or IPC connection to a browser process watches the process handles. If
+these handles are signaled, the renderer process has crashed and the affected
+tabs and frames are notified of the crash. Chromium shows a &quot;sad tab&quot; or &quot;sad
+frame&quot; image that notifies the user that the renderer has crashed. The page can
+be reloaded by pressing the reload button or by starting a new navigation. When
+this happens, Chromium notices that there is no renderer process and creates a
+new one.</p>
+<h2 id="sandboxing-the-renderer" tabindex="-1"><a class="header-anchor" href="#sandboxing-the-renderer">Sandboxing the renderer</a></h2>
+<p>Given the renderer is running in a separate process, we have the opportunity to
+restrict its access to system resources via
+<a href="https://chromium.googlesource.com/chromium/src/+/HEAD/docs/design/sandbox.md">sandboxing</a>.
+For example, we can ensure that the renderer's only access to the network is
+via Chromium's network service. Likewise, we can restrict its access to the
+filesystem using the host operating system's built-in permissions, or its access
+to the user's display and input. These restrictions significantly limit what a
+compromised renderer process is able to accomplish.</p>
+<h2 id="giving-back-memory" tabindex="-1"><a class="header-anchor" href="#giving-back-memory">Giving back memory</a></h2>
+<p>With renderers running in separate processes, it becomes straightforward to
+treat hidden tabs as lower priority. Normally, minimized processes on Windows
+have their memory automatically put into a pool of &quot;available memory.&quot; In
+low-memory situations, Windows will swap this memory to disk before it swaps out
+higher-priority memory, helping to keep the user-visible programs more
+responsive. We can apply this same principle to hidden tabs. When a render
+process has no top-level tabs, we can release that process's &quot;working set&quot; size
+as a hint to the system to swap that memory out to disk first if necessary.
+Because we found that reducing the working set size also reduces tab switching
+performance when the user is switching between two tabs, we release this memory
+gradually. This means that if the user switches back to a recently used tab,
+that tab's memory is more likely to be paged in than less recently used tabs.
+Users with enough memory to run all their programs will not notice this process
+at all: Windows will only actually reclaim such data if it needs it, so there is
+no performance hit when there is ample memory.</p>
+<p>This helps us get a more optimal memory footprint in low-memory situations. The
+memory associated with seldom-used background tabs can get entirely swapped out
+while foreground tabs' data can be entirely loaded into memory. In contrast, a
+single-process browser will have all tabs' data randomly distributed in its
+memory, and it is impossible to separate the used and unused data so cleanly,
+wasting both memory and performance.</p>
+<h2 id="additional-process-types" tabindex="-1"><a class="header-anchor" href="#additional-process-types">Additional Process Types</a></h2>
+<p>Chromium has split out a number of other components into separate processes as
+well, sometimes in platform-specific ways. For example, it now has a separate
+GPU process, network service, and storage service. Sandboxed utility processes
+can also be used for small or risky tasks, as one way to satisfy the <a href="https://chromium.googlesource.com/chromium/src/+/master/docs/security/rule-of-2.md">Rule of
+Two</a>
+for security.</p>
+
+  </main>
+</div>
+<script>
+// Configure Algolia search.
+let s = document.createElement('script');
+s.src = '/_scripts/@docsearch/index.js';
+document.head.append(s);
+
+window.addEventListener('load', () => {
+  // Add the Algolia search widget.
+  docsearch({
+    container: '#search',
+    appId: 'RZDQYCCABX',
+    apiKey: '98b0eabafeb13fe3e1af693d5713d8b4',
+    indexName: 'chromium'
+  });
+});
+
+// Configure Google Analytics v4
+s = document.createElement('script');
+s.src = 'https://www.googletagmanager.com/gtag/js?id=G-24XP4PG02H'
+s.async = true;
+document.head.append(s)
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-24XP4PG02H');
+
+// Configure consent bar.
+s = document.createElement('script');
+s.src = 'https://www.gstatic.com/brandstudio/kato/cookie_choice_component/cookie_consent_bar.v3.js'
+s.dataset.autoloadCookieConsentBar = true;
+s.dataset.autoloadCookieContentBarIntlCode = '';
+document.head.append(s);
+
+// Configure the mobile navigation drawer.
+// Keep in sync with $mobile-nav-breakpoint in default.scss.
+const mobileNavBreakpoint = 768;
+const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+const mobileNav = document.getElementById('sidebar-left');
+const mobileNavClose = document.getElementById('mobile-nav-close');
+const mobileNavBackdrop = document.getElementById('mobile-nav-backdrop');
+const siteHeader = document.getElementById('site-header');
+
+if (mobileNavToggle && mobileNav && mobileNavClose && mobileNavBackdrop) {
+  const setMobileNavState = (isOpen) => {
+    mobileNavToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    document.body.classList.toggle('mobile-nav-open', isOpen);
+    if (isOpen && siteHeader) {
+      siteHeader.classList.remove('mobile-header-hidden');
+    }
+  };
+
+  const closeMobileNav = (returnFocus = false) => {
+    setMobileNavState(false);
+    if (returnFocus) {
+      mobileNavToggle.focus();
+    }
+  };
+
+  const openMobileNav = () => {
+    setMobileNavState(true);
+    mobileNav.scrollTop = 0;
+    mobileNavClose.focus();
+  };
+
+  mobileNavToggle.addEventListener('click', () => {
+    if (document.body.classList.contains('mobile-nav-open')) {
+      closeMobileNav();
+    } else {
+      openMobileNav();
+    }
+  });
+
+  mobileNavClose.addEventListener('click', () => closeMobileNav(true));
+  mobileNavBackdrop.addEventListener('click', () => closeMobileNav(true));
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeMobileNav(true);
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > mobileNavBreakpoint) {
+      closeMobileNav();
+    }
+  });
+
+  mobileNav.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', closeMobileNav);
+  });
+}
+
+if (siteHeader) {
+  // Ignore small changes in direction so touch scrolling does not make the
+  // header flicker in and out of view.
+  const mobileHeaderScrollThresholdPx = 10;
+
+  // Ignore elastic overscroll beyond the top or bottom of the page.
+  const getClampedScrollY = () => {
+    const maxScrollY = Math.max(
+        document.documentElement.scrollHeight - window.innerHeight, 0);
+    return Math.min(Math.max(window.scrollY, 0), maxScrollY);
+  };
+
+  let accumulatedHeaderScroll = 0;
+  let lastHeaderScrollY = getClampedScrollY();
+  let headerScrollUpdatePending = false;
+
+  const showMobileHeader = () => {
+    siteHeader.classList.remove('mobile-header-hidden');
+  };
+
+  const updateMobileHeader = () => {
+    const currentScrollY = getClampedScrollY();
+    const scrollDelta = currentScrollY - lastHeaderScrollY;
+    lastHeaderScrollY = currentScrollY;
+    headerScrollUpdatePending = false;
+
+    if (window.innerWidth > mobileNavBreakpoint ||
+        currentScrollY <= siteHeader.offsetHeight ||
+        document.body.classList.contains('mobile-nav-open')) {
+      accumulatedHeaderScroll = 0;
+      showMobileHeader();
+      return;
+    }
+
+    if (scrollDelta === 0) {
+      return;
+    }
+
+    if ((scrollDelta > 0 && accumulatedHeaderScroll < 0) ||
+        (scrollDelta < 0 && accumulatedHeaderScroll > 0)) {
+      accumulatedHeaderScroll = 0;
+    }
+    accumulatedHeaderScroll += scrollDelta;
+
+    if (Math.abs(accumulatedHeaderScroll) < mobileHeaderScrollThresholdPx) {
+      return;
+    }
+
+    siteHeader.classList.toggle(
+        'mobile-header-hidden', accumulatedHeaderScroll > 0);
+    accumulatedHeaderScroll = 0;
+  };
+
+  window.addEventListener('scroll', () => {
+    if (!headerScrollUpdatePending) {
+      window.requestAnimationFrame(updateMobileHeader);
+      headerScrollUpdatePending = true;
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    accumulatedHeaderScroll = 0;
+    lastHeaderScrollY = getClampedScrollY();
+    if (window.innerWidth > mobileNavBreakpoint) {
+      showMobileHeader();
+    }
+  });
+}</script>

@@ -1,0 +1,30 @@
+# DeepWiki 索引 — google-deepmind/dm_control
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 227372 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation and Setup](1.1-installation-and-setup.md)
+  - [1.2 Migration Guide (v1.0)](1.2-migration-guide-v1.0.md)
+- [2 Core Concepts](2-core-concepts.md)
+  - [2.1 Physics Engine](2.1-physics-engine.md)
+  - [2.2 MJCF Model System](2.2-mjcf-model-system.md)
+  - [2.3 Entity-Component Framework](2.3-entity-component-framework.md)
+  - [2.4 Observation System](2.4-observation-system.md)
+  - [2.5 Variation System](2.5-variation-system.md)
+- [3 Visualization and Rendering](3-visualization-and-rendering.md)
+  - [3.1 Rendering Pipeline](3.1-rendering-pipeline.md)
+  - [3.2 Viewer Interface](3.2-viewer-interface.md)
+- [4 Locomotion Framework](4-locomotion-framework.md)
+  - [4.1 Walker System](4.1-walker-system.md)
+  - [4.2 Arenas](4.2-arenas.md)
+  - [4.3 Locomotion Tasks](4.3-locomotion-tasks.md)
+  - [4.4 Soccer Environment](4.4-soccer-environment.md)
+  - [4.5 Motion Capture Tracking](4.5-motion-capture-tracking.md)
+- [5 Control Suite and Manipulation](5-control-suite-and-manipulation.md)
+  - [5.1 DeepMind Control Suite](5.1-deepmind-control-suite.md)
+  - [5.2 Manipulation Tasks](5.2-manipulation-tasks.md)
+- [6 Advanced Topics](6-advanced-topics.md)
+  - [6.1 Threading and Performance](6.1-threading-and-performance.md)
+  - [6.2 Extending the Framework](6.2-extending-the-framework.md)
+- [7 Glossary](7-glossary.md)

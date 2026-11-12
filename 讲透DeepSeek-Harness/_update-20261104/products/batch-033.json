@@ -1,0 +1,531 @@
+{
+ "nodes": [
+  {
+   "id": "file:packages/sandbox/sandbox-windows-acl/src/runner.ts",
+   "type": "file",
+   "name": "runner.ts",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/runner.ts",
+   "summary": "windows-acl 限制运行器：seam 用来替换调用方命令的 argv 前缀包装器——创建带 workspace 写 SID allowlist 的 WRITE_RESTRICTED token、以继承 stdio spawn 被包 argv、镜像子进程退出码（全 32 位无截断，实证记录），退出时撤销 temp grant（workspace ACE 常驻为复用缓存）；seam 托管模式校验 SID 与路径匹配且 manageDacls:false，独立模式自建随机私有 temp 目录并在子进程退出后删除；一切失败打印 windows-acl-run: 签名并退 127，子进程绝不未限制启动。",
+   "tags": [
+    "runner",
+    "restricted-token",
+    "argv-wrapper",
+    "fail-closed"
+   ],
+   "complexity": "complex",
+   "languageNotes": "runner 忽略自身 CTRL+C 以存活到撤销 grant；TMP/TEMP 在自身环境重写后经 lpEnvironment NULL 继承（显式块经 koffi 传 CreateProcessAsUserW 实证触发 ERROR_INVALID_PARAMETER）。"
+  },
+  {
+   "id": "class:packages/sandbox/sandbox-windows-acl/src/runner.ts:RunnerFailure",
+   "type": "class",
+   "name": "RunnerFailure",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/runner.ts",
+   "lineRange": [
+    58,
+    58
+   ],
+   "summary": "Error 子类：已按契约打印过 windows-acl-run: 签名行的运行器失败标记，顶层捕获不再重复输出。",
+   "tags": [
+    "error-type",
+    "internal",
+    "runner"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/runner.ts:parseArgs",
+   "type": "function",
+   "name": "parseArgs",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/runner.ts",
+   "lineRange": [
+    76,
+    108
+   ],
+   "summary": "解析运行器稳定 argv 契约（--workspace/--temp/--mode/--write-sid/--temp-write-sid/-- 与命令），非法输入经 fail() 以签名行+127 退出。",
+   "tags": [
+    "argv-parsing",
+    "validation",
+    "cli-contract"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/runner.ts:main",
+   "type": "function",
+   "name": "main",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/runner.ts",
+   "lineRange": [
+    116,
+    208
+   ],
+   "summary": "运行器主流程：校验两目录与 SID 配对→屏蔽自身 CTRL+C→按模式物化私有 temp（seam 托管校验匹配/独立模式 mkdtemp）→new AclSandbox + init→重写 TMP/TEMP→继承 stdio spawn 子进程（按需转发控制 FD）→镜像退出码；finally 里清理失败只报告不遮蔽子进程退出码。",
+   "tags": [
+    "entry-point",
+    "lifecycle",
+    "cleanup"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/sandbox/sandbox-windows-acl/src/spawn.ts",
+   "type": "file",
+   "name": "spawn.ts",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/spawn.ts",
+   "summary": "共享 Win32 进程属主之上的受限 token 适配层：把 dsh-win32-process 的 piped/kill-on-close Job spawn 与等待函数包装为带 restricted token 的三个助手，re-export drainPipe。",
+   "tags": [
+    "adapter",
+    "spawn",
+    "restricted-token"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/spawn.ts:spawnSandboxed",
+   "type": "function",
+   "name": "spawnSandboxed",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/spawn.ts",
+   "lineRange": [
+    29,
+    32
+   ],
+   "summary": "以受限 primary token spawn 带管道 stdout/stderr 的子进程（委托 spawnPipedProcess）。",
+   "tags": [
+    "spawn",
+    "piped-stdio",
+    "win32"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/spawn.ts:spawnSandboxedInherited",
+   "type": "function",
+   "name": "spawnSandboxedInherited",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/spawn.ts",
+   "lineRange": [
+    44,
+    47
+   ],
+   "summary": "以受限 token spawn 继承 stdio、挂 kill-on-close Job 的子进程（运行器用法，字节直通），可选转发控制 FD。",
+   "tags": [
+    "spawn",
+    "job-object",
+    "inherit-stdio"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/spawn.ts:waitForExit",
+   "type": "function",
+   "name": "waitForExit",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/spawn.ts",
+   "lineRange": [
+    58,
+    60
+   ],
+   "summary": "等待受限子进程退出并关闭其进程句柄，返回直接退出码。",
+   "tags": [
+    "wait",
+    "process-handle",
+    "restricted-token"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "type": "file",
+   "name": "token.ts",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "summary": "受限 token 构造：打开当前进程 token、提取 logon SID、构建 well-known SID、按模式调 CreateRestrictedToken 组装 restricting-SID allowlist（read-only [logon,EVERYONE]；workspace-write 追加 workspace/temp 写 SID）；每个 API 调用都检查，失败带 API 名与精确 Win32 码抛出——原 POC 全部忽略并静默以完整未限 token 跑子进程。",
+   "tags": [
+    "restricted-token",
+    "win32-api",
+    "fail-closed"
+   ],
+   "complexity": "complex",
+   "languageNotes": "keep-alive 组（logon SID+EVERYONE）两模式共享（缺它 DLL init 0xC0000142、CNG 崩溃）；Authenticated Users/INTERACTIVE/LOCAL 两列表均缺席以关闭 CIM 与 Public tree 逃逸。"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/token.ts:openCurrentProcessToken",
+   "type": "function",
+   "name": "openCurrentProcessToken",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "lineRange": [
+    23,
+    42
+   ],
+   "summary": "经真实 OpenProcess 句柄（GetCurrentProcess 伪句柄不可经 koffi 寻址）打开当前进程 token，权限为 CreateRestrictedToken 所需集合。",
+   "tags": [
+    "win32-api",
+    "token-handle",
+    "win32"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/token.ts:findLogonSid",
+   "type": "function",
+   "name": "findLogonSid",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "lineRange": [
+    52,
+    77
+   ],
+   "summary": "遍历 token groups 找 SE_GROUP_LOGON_ID 属性的 logon 会话 SID 并拷贝出 token 所有的副本。",
+   "tags": [
+    "token-groups",
+    "logon-sid",
+    "win32"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/token.ts:makeWellKnownSid",
+   "type": "function",
+   "name": "makeWellKnownSid",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "lineRange": [
+    85,
+    94
+   ],
+   "summary": "经 CreateWellKnownSid 分配指定类型的 well-known SID（如 WinWorldSid）。",
+   "tags": [
+    "win32-api",
+    "well-known-sid",
+    "win32"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/token.ts:setTokenDefaultDaclGrant",
+   "type": "function",
+   "name": "setTokenDefaultDaclGrant",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "lineRange": [
+    112,
+    145
+   ],
+   "summary": "改写受限 token 的默认 DACL，为写 SID 授予新对象 FULL 权限——使受限子进程在自己创建的文件上仍能管理自己的产物。",
+   "tags": [
+    "default-dacl",
+    "win32-api",
+    "win32"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/token.ts:restrictTokenIntegrity",
+   "type": "function",
+   "name": "restrictTokenIntegrity",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "lineRange": [
+    156,
+    165
+   ],
+   "summary": "把 token 完整性级别降为 Low（SetTokenInformation TokenIntegrityLevel）。",
+   "tags": [
+    "integrity-level",
+    "win32-api",
+    "win32"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/token.ts:createRestrictedToken",
+   "type": "function",
+   "name": "createRestrictedToken",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "lineRange": [
+    216,
+    243
+   ],
+   "summary": "组装并调用 CreateRestrictedToken（WRITE_RESTRICTED|LUA_TOKEN|DISABLE_MAX_PRIVILEGE）：按模式打包 restricting SID（read-only 常驻 grant ACE 保持惰性，workspace-write 写 SID 进列表使 ACE 生效）；任何失败抛错，绝不未限制 spawn。",
+   "tags": [
+    "restricted-token",
+    "mode-selection",
+    "fail-closed"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/sandbox/sandbox-windows-acl/src/win32-abi.ts",
+   "type": "file",
+   "name": "win32-abi.ts",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/win32-abi.ts",
+   "summary": "ACL/token 专用 Win32 常量表：token 权限位、SID 结构尺寸、GRANT_MASK（FILE_GENERIC_WRITE|DELETE|FILE_DELETE_CHILD 去 STANDARD_RIGHTS_WRITE——WRITE_DAC/WRITE_OWNER 被排除以防受限子进程改写 DACL 逃逸）、CreateRestrictedToken 标志等，每个常量带用途 JSDoc。",
+   "tags": [
+    "type-definition",
+    "win32-constants",
+    "abi"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/sandbox/sandbox-windows-acl/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/sandbox/sandbox-windows-acl/tsconfig.json",
+   "summary": "包级 TypeScript 配置：references 指向 vendor cordis/schemastery 与 subprocess、win32-process、skill、util 依赖。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/sandbox/sandbox-windows-acl/verify/abi-probe.cpp",
+   "type": "file",
+   "name": "abi-probe.cpp",
+   "filePath": "packages/sandbox/sandbox-windows-acl/verify/abi-probe.cpp",
+   "summary": "C++ ABI 验证探针：printf 输出 TRUSTEE_W/EXPLICIT_ACCESS_W/SID_AND_ATTRIBUTES 等结构尺寸与偏移及全部 ACL/token 常量真值，用于钉死 win32-abi.ts 常量表与 FFI 结构打包布局（注释声明按需在 Windows 上重跑比对）。",
+   "tags": [
+    "verification",
+    "abi-probe",
+    "cpp",
+    "layout-check"
+   ],
+   "complexity": "simple",
+   "languageNotes": "原生 C++ 与 TS 常量表互证是 FFI 层防漂移的手段；生产代码不编译此文件。"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/runner.ts",
+   "target": "file:packages/subprocess/subprocess/src/control.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/runner.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/runner.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/runner.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/workspace-sid.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/spawn.ts",
+   "target": "file:packages/subprocess/win32-process/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/spawn.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/win32-abi.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/runner.ts",
+   "target": "class:packages/sandbox/sandbox-windows-acl/src/runner.ts:RunnerFailure",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/runner.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/runner.ts:parseArgs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/runner.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/runner.ts:main",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/spawn.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/spawn.ts:spawnSandboxed",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/spawn.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/spawn.ts:spawnSandboxedInherited",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/spawn.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/spawn.ts:waitForExit",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/token.ts:openCurrentProcessToken",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/token.ts:findLogonSid",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/token.ts:makeWellKnownSid",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/token.ts:setTokenDefaultDaclGrant",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/token.ts:restrictTokenIntegrity",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/token.ts:createRestrictedToken",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/spawn.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/spawn.ts:spawnSandboxed",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/spawn.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/spawn.ts:spawnSandboxedInherited",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/spawn.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/spawn.ts:waitForExit",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/token.ts:openCurrentProcessToken",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/token.ts:findLogonSid",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/token.ts:makeWellKnownSid",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/token.ts:setTokenDefaultDaclGrant",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/token.ts:restrictTokenIntegrity",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/token.ts:createRestrictedToken",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/sandbox/sandbox-windows-acl/src/runner.ts:main",
+   "target": "class:packages/sandbox/sandbox-windows-acl/src/index.ts:AclSandbox",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/sandbox/sandbox-windows-acl/src/runner.ts:main",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/workspace-sid.ts",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/verify/abi-probe.cpp",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/win32-abi.ts",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/sandbox/sandbox-windows-acl/tsconfig.json",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  }
+ ]
+}

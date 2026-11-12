@@ -1,0 +1,3601 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "type": "file",
+   "name": "dspark.py",
+   "filePath": "vllm/models/deepseek_v4/nvidia/dspark.py",
+   "summary": "DeepSeek-V4 的 DSpark 半自回归投机解码 draft 模型（NVIDIA 后端）：复用目标模型 attention，draft 层 WKV 进跨层投影，context KV 走 DSV4 融合 insert 算子。",
+   "tags": [
+    "dspark",
+    "spec-decode",
+    "draft-model",
+    "nvidia"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "type": "file",
+   "name": "flashinfer_sparse.py",
+   "filePath": "vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "summary": "DeepSeek-V4 FlashInfer sparse MLA 后端：TRTLLM-gen sparse MLA（SM100）与 SM120 专用 kernel 两套 attention 层，共享 sparse_mla 的 metadata/cache 布局与 o_proj 融合算子。",
+   "tags": [
+    "flashinfer",
+    "sparse-mla",
+    "attention",
+    "sm100"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "type": "file",
+   "name": "flashmla.py",
+   "filePath": "vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "summary": "DeepSeek-V4 FlashMLA sparse MLA attention（CUDA）：SWA 变长 decode metadata 与 flash_mla_sparse_fwd 路径。",
+   "tags": [
+    "flashmla",
+    "sparse-mla",
+    "attention"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "type": "file",
+   "name": "model.py",
+   "filePath": "vllm/models/deepseek_v4/nvidia/model.py",
+   "summary": "DeepSeek-V4 NVIDIA 主模型实现（1422 行）：mHC tilelang 融合 kernel、MegaGate 路由、DeepGemmMegaMoE（MXFP4）、sparse-MLA attention 按后端选择（FlashMLA/FlashInfer/SM120）与 EAGLE3/PP/LoRA 接口。",
+   "tags": [
+    "deepseek-v4",
+    "model",
+    "nvidia",
+    "mega-moe"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "type": "file",
+   "name": "mtp.py",
+   "filePath": "vllm/models/deepseek_v4/nvidia/mtp.py",
+   "summary": "DeepSeek-V4 MTP draft 模型（NVIDIA）：V4 独有的 e_proj/hc_head 等结构（与 V3/V32 无类比），共享头 RMSNorm 融合 kernel。",
+   "tags": [
+    "mtp",
+    "spec-decode",
+    "draft-model"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "type": "file",
+   "name": "o_proj.py",
+   "filePath": "vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "summary": "DSV4 attention 输出投影融合算子：inverse RoPE + grouped wo_a/wo_b（fp8_einsum，SM90 行块 FP32 scale/SM100 微缩放布局），FlashMLA 与 FlashInfer 后端共享。",
+   "tags": [
+    "o-proj",
+    "deep-gemm",
+    "fp8",
+    "fused"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/nvidia/vl_model.py",
+   "type": "file",
+   "name": "vl_model.py",
+   "filePath": "vllm/models/deepseek_v4/nvidia/vl_model.py",
+   "summary": "平台无关 DeepSeek-V4 视觉模型的 NVIDIA 兼容 re-export（真实实现在 common/vl_model.py）。",
+   "tags": [
+    "vl",
+    "compat",
+    "re-export"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/quant_config.py",
+   "type": "file",
+   "name": "quant_config.py",
+   "filePath": "vllm/models/deepseek_v4/quant_config.py",
+   "summary": "DeepSeek-V4 量化配置：DeepseekV4FP8Config 按 expert dtype 分派 MoE 方法（FP8 block quant + MXFP4/ModelOpt FP4 路线）并重键 MTP 条目到 draft 前缀。",
+   "tags": [
+    "quantization",
+    "fp8",
+    "moe-dispatch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "type": "file",
+   "name": "sparse_mla.py",
+   "filePath": "vllm/models/deepseek_v4/sparse_mla.py",
+   "summary": "DeepSeek-V4 sparse MLA 公共基座：直接子类化 AttentionBackend（非 V3.2 FlashMLASparseBackend）、metadata/builder 体系与 C128A topk metadata 单 kernel 构建（decode+prefill 统一）。",
+   "tags": [
+    "sparse-mla",
+    "backend",
+    "metadata",
+    "triton"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/vl_stub.py",
+   "type": "file",
+   "name": "vl_stub.py",
+   "filePath": "vllm/models/deepseek_v4/vl_stub.py",
+   "summary": "不支持 DeepSeek-V4 视觉变体的平台占位 stub。",
+   "tags": [
+    "vl",
+    "stub",
+    "platform-guard"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/xpu/dspark.py",
+   "type": "file",
+   "name": "dspark.py",
+   "filePath": "vllm/models/deepseek_v4/xpu/dspark.py",
+   "summary": "DSpark draft 的 XPU 移植：tilelang MHC kernel 换平台无关 HCHeadOp/MHCPostOp 自定义算子，context KV 走 XPU Triton qnorm+rope+FP8 insert。",
+   "tags": [
+    "dspark",
+    "xpu",
+    "spec-decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "type": "file",
+   "name": "model.py",
+   "filePath": "vllm/models/deepseek_v4/xpu/model.py",
+   "summary": "DeepSeek-V4 XPU 主模型：MHC 自定义算子链、MegaMoE 专家（Triton staging kernel）、sparse attention 走 XPU 实现。",
+   "tags": [
+    "deepseek-v4",
+    "xpu",
+    "model",
+    "mega-moe"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "type": "file",
+   "name": "mtp.py",
+   "filePath": "vllm/models/deepseek_v4/xpu/mtp.py",
+   "summary": "DeepSeek-V4 MTP draft（XPU）：与 NVIDIA 版同构，算子换 XPU 路线。",
+   "tags": [
+    "mtp",
+    "xpu",
+    "spec-decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/xpu/xpu_qnorm_rope_kv_fp8_insert.py",
+   "type": "file",
+   "name": "xpu_qnorm_rope_kv_fp8_insert.py",
+   "filePath": "vllm/models/deepseek_v4/xpu/xpu_qnorm_rope_kv_fp8_insert.py",
+   "summary": "XPU Triton 替代 fused_deepseek_v4_qnorm_rope_kv_rope_quant_insert：Q 每头 RMSNorm+GPT-J RoPE、KV RoPE+UE8M0 FP8 量化+插入。",
+   "tags": [
+    "xpu",
+    "triton",
+    "fp8",
+    "kv-insert"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py",
+   "type": "file",
+   "name": "xpu_sparse_decode_fp8.py",
+   "filePath": "vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py",
+   "summary": "XPU FP8 KV 的 sparse decode：把 FP8 UE8M0 页即时反量化到 BF16 工作区后复用 BF16 sparse MLA kernel（外部缓存布局不变）。",
+   "tags": [
+    "xpu",
+    "sparse-decode",
+    "fp8",
+    "dequant"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/nvidia/dspark.py:_duplicate_context_wkv_weights",
+   "type": "function",
+   "name": "_duplicate_context_wkv_weights",
+   "filePath": "vllm/models/deepseek_v4/nvidia/dspark.py",
+   "summary": "把每个 draft 层的 WKV 装载进跨层投影。",
+   "tags": [
+    "dspark",
+    "weights"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    72,
+    86
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/dspark.py:DSparkDeepseekV4Model",
+   "type": "class",
+   "name": "DSparkDeepseekV4Model",
+   "filePath": "vllm/models/deepseek_v4/nvidia/dspark.py",
+   "summary": "DSpark draft 骨干（5 个方法）：复用目标 attention 的半自回归 draft 层栈。",
+   "tags": [
+    "dspark",
+    "backbone"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    89,
+    278
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/nvidia/dspark.py:_insert_context_kv",
+   "type": "function",
+   "name": "_insert_context_kv",
+   "filePath": "vllm/models/deepseek_v4/nvidia/dspark.py",
+   "summary": "已 kv_norm 的 context KV 做 RoPE+量化+分页缓存插入（复用 DSV4 融合 insert 算子）。",
+   "tags": [
+    "dspark",
+    "kv-insert"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    281,
+    345
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/dspark.py:DSparkDeepseekV4ForCausalLM",
+   "type": "class",
+   "name": "DSparkDeepseekV4ForCausalLM",
+   "filePath": "vllm/models/deepseek_v4/nvidia/dspark.py",
+   "summary": "DSpark draft 入口（15 个方法）：Markov/Confidence 头、KV context 注入与 draft 循环。",
+   "tags": [
+    "dspark",
+    "causal-lm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    348,
+    600
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:_get_flashinfer_dsv4_workspace",
+   "type": "function",
+   "name": "_get_flashinfer_dsv4_workspace",
+   "filePath": "vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "summary": "取 FlashInfer DSV4 工作区。",
+   "tags": [
+    "flashinfer",
+    "workspace"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    50,
+    59
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:_packed_block_span",
+   "type": "function",
+   "name": "_packed_block_span",
+   "filePath": "vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "summary": "pool 的每块 token 步进（stride(0)//stride(-2)）：非打包 KV 为 block_size，l（压缩）布局另计。",
+   "tags": [
+    "flashinfer",
+    "layout"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    62,
+    74
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:_pad_to_supported_q_heads",
+   "type": "function",
+   "name": "_pad_to_supported_q_heads",
+   "filePath": "vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "summary": "把 q 头数 padding 到 kernel 支持的档位。",
+   "tags": [
+    "flashinfer",
+    "padding"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    81,
+    88
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:_required_sm120_sparse_topk",
+   "type": "function",
+   "name": "_required_sm120_sparse_topk",
+   "filePath": "vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "summary": "返回该模型需要的 SM120 DSV4 SWA 特化 topk。",
+   "tags": [
+    "sm120",
+    "topk"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    91,
+    101
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekV4FlashInferMLASparseBackend",
+   "type": "class",
+   "name": "DeepseekV4FlashInferMLASparseBackend",
+   "filePath": "vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "summary": "FlashInfer 后端：复用基类 DeepseekV4SparseMLABackend 的 DSv4 sparse metadata/cache 布局。",
+   "tags": [
+    "flashinfer",
+    "backend"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    104,
+    180
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekV4FlashInferSparseMLAMetadataBuilder",
+   "type": "class",
+   "name": "DeepseekV4FlashInferSparseMLAMetadataBuilder",
+   "filePath": "vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "summary": "varlen 兼容的 sparse MLA metadata builder。",
+   "tags": [
+    "flashinfer",
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    183,
+    186
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekSparseSWAFlashInferMetadataBuilder",
+   "type": "class",
+   "name": "DeepseekSparseSWAFlashInferMetadataBuilder",
+   "filePath": "vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "summary": "FlashInfer sparse decode 路径的 SWA metadata（varlen decode）。",
+   "tags": [
+    "swa",
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    189,
+    192
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekSparseSWAFlashInferBackend",
+   "type": "class",
+   "name": "DeepseekSparseSWAFlashInferBackend",
+   "filePath": "vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "summary": "FlashInfer SWA 后端变体。",
+   "tags": [
+    "swa",
+    "backend"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    195,
+    198
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekV4FlashInferMLAAttention",
+   "type": "class",
+   "name": "DeepseekV4FlashInferMLAAttention",
+   "filePath": "vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "summary": "SM100 的 FlashInfer TRTLLM-gen sparse MLA attention 层（7 个方法）。",
+   "tags": [
+    "flashinfer",
+    "attention",
+    "sm100"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    201,
+    616
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekV4FlashInferSM120Attention",
+   "type": "class",
+   "name": "DeepseekV4FlashInferSM120Attention",
+   "filePath": "vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "summary": "经 FlashInfer SM120 kernel 的 DSV4 sparse MLA attention（11 个方法）。",
+   "tags": [
+    "flashinfer",
+    "attention",
+    "sm120"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    619,
+    986
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/flashmla.py:DeepseekSparseSWAFlashMLAMetadataBuilder",
+   "type": "class",
+   "name": "DeepseekSparseSWAFlashMLAMetadataBuilder",
+   "filePath": "vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "summary": "FlashMLA decode 路径的 SWA metadata（支持 varlen decode）。",
+   "tags": [
+    "flashmla",
+    "swa",
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    39,
+    42
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/flashmla.py:DeepseekSparseSWAFlashMLABackend",
+   "type": "class",
+   "name": "DeepseekSparseSWAFlashMLABackend",
+   "filePath": "vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "summary": "FlashMLA SWA 后端变体。",
+   "tags": [
+    "flashmla",
+    "swa",
+    "backend"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    45,
+    48
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/flashmla.py:DeepseekV4FlashMLAAttention",
+   "type": "class",
+   "name": "DeepseekV4FlashMLAAttention",
+   "filePath": "vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "summary": "CUDA 的 FlashMLA sparse MLA attention 层（6 个方法）：topk 索引合并、k cache 反量化 gather 与 sparse_fwd。",
+   "tags": [
+    "flashmla",
+    "attention"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    51,
+    398
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/model.py:MegaGateRoutingMetadata",
+   "type": "class",
+   "name": "MegaGateRoutingMetadata",
+   "filePath": "vllm/models/deepseek_v4/nvidia/model.py",
+   "summary": "MegaGate 路由元数据 NamedTuple。",
+   "tags": [
+    "mega-gate",
+    "routing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    97,
+    100
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/nvidia/model.py:prepare_mega_gate_routing_metadata",
+   "type": "function",
+   "name": "prepare_mega_gate_routing_metadata",
+   "filePath": "vllm/models/deepseek_v4/nvidia/model.py",
+   "summary": "构建 MegaGate 路由元数据。",
+   "tags": [
+    "mega-gate",
+    "routing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    103,
+    125
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4MLP",
+   "type": "class",
+   "name": "DeepseekV4MLP",
+   "filePath": "vllm/models/deepseek_v4/nvidia/model.py",
+   "summary": "密集 MLP 层。",
+   "tags": [
+    "mlp"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    128,
+    185
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/nvidia/model.py:make_deepseek_v4_expert_params_mapping",
+   "type": "function",
+   "name": "make_deepseek_v4_expert_params_mapping",
+   "filePath": "vllm/models/deepseek_v4/nvidia/model.py",
+   "summary": "DSV4 专家参数名映射（供 checkpoint 加载）。",
+   "tags": [
+    "experts",
+    "mapping"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    188,
+    204
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4MoE",
+   "type": "class",
+   "name": "DeepseekV4MoE",
+   "filePath": "vllm/models/deepseek_v4/nvidia/model.py",
+   "summary": "MoE 层（5 个方法）：MegaGate 路由+DeepGemmMegaMoE/共享专家与 EPLB 收集。",
+   "tags": [
+    "moe",
+    "mega-moe"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    207,
+    536
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/nvidia/model.py:_select_dsv4_attn_cls",
+   "type": "function",
+   "name": "_select_dsv4_attn_cls",
+   "filePath": "vllm/models/deepseek_v4/nvidia/model.py",
+   "summary": "按配置后端选择 CUDA sparse-MLA attention 类（FlashMLA/FlashInfer/SM120）。",
+   "tags": [
+    "attention",
+    "selection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    539,
+    570
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/nvidia/model.py:_use_sequence_parallel",
+   "type": "function",
+   "name": "_use_sequence_parallel",
+   "filePath": "vllm/models/deepseek_v4/nvidia/model.py",
+   "summary": "是否启用 sequence parallel。",
+   "tags": [
+    "sequence-parallel"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    573,
+    584
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4DecoderLayer",
+   "type": "class",
+   "name": "DeepseekV4DecoderLayer",
+   "filePath": "vllm/models/deepseek_v4/nvidia/model.py",
+   "summary": "解码层：mHC seam（tilelang 融合）+ sparse MLA attention + MoE。",
+   "tags": [
+    "decoder-layer",
+    "mhc"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    587,
+    820
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4Model",
+   "type": "class",
+   "name": "DeepseekV4Model",
+   "filePath": "vllm/models/deepseek_v4/nvidia/model.py",
+   "summary": "DSV4 骨干（8 个方法，EagleModelMixin）：层栈、sequence parallel 与多模态哨兵处理。",
+   "tags": [
+    "backbone",
+    "eagle"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    823,
+    1233
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/nvidia/model.py:_make_deepseek_v4_weights_mapper",
+   "type": "function",
+   "name": "_make_deepseek_v4_weights_mapper",
+   "filePath": "vllm/models/deepseek_v4/nvidia/model.py",
+   "summary": "checkpoint 权重名→vLLM 模块名的 WeightsMapper。",
+   "tags": [
+    "weights",
+    "mapper"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1236,
+    1279
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4MixtureOfExperts",
+   "type": "class",
+   "name": "DeepseekV4MixtureOfExperts",
+   "filePath": "vllm/models/deepseek_v4/nvidia/model.py",
+   "summary": "MoE 能力 trait（MixtureOfExperts 接口实现）。",
+   "tags": [
+    "interface",
+    "moe"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1282,
+    1316
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4ForCausalLM",
+   "type": "class",
+   "name": "DeepseekV4ForCausalLM",
+   "filePath": "vllm/models/deepseek_v4/nvidia/model.py",
+   "summary": "DSV4 主入口（10 个方法）：embedding/层栈/lm_head、EAGLE3/PP/LoRA 支持与 multimodal 哨兵。",
+   "tags": [
+    "causal-lm",
+    "entry-point"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1319,
+    1422
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/mtp.py:DeepSeekV4MultiTokenPredictorLayer",
+   "type": "class",
+   "name": "DeepSeekV4MultiTokenPredictorLayer",
+   "filePath": "vllm/models/deepseek_v4/nvidia/mtp.py",
+   "summary": "MTP 单层（e_proj/hc_head 等 V4 独有件）。",
+   "tags": [
+    "mtp",
+    "layer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    79,
+    210
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/mtp.py:DeepSeekV4MultiTokenPredictor",
+   "type": "class",
+   "name": "DeepSeekV4MultiTokenPredictor",
+   "filePath": "vllm/models/deepseek_v4/nvidia/mtp.py",
+   "summary": "MTP 层栈容器。",
+   "tags": [
+    "mtp",
+    "stack"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    213,
+    300
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/nvidia/mtp.py:DeepSeekV4MTP",
+   "type": "class",
+   "name": "DeepSeekV4MTP",
+   "filePath": "vllm/models/deepseek_v4/nvidia/mtp.py",
+   "summary": "MTP draft 模型（8 个方法）：共享头 RMSNorm 融合 kernel 与 KV 注入。",
+   "tags": [
+    "mtp",
+    "draft"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    303,
+    557
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/nvidia/ops/o_proj.py:compute_fp8_einsum_recipe",
+   "type": "function",
+   "name": "compute_fp8_einsum_recipe",
+   "filePath": "vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "summary": "按 GPU 架构给 fp8_einsum recipe 与 scale 布局（SM90 行块 FP32，SM100 微缩放）。",
+   "tags": [
+    "deep-gemm",
+    "recipe"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    19,
+    32
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/nvidia/ops/o_proj.py:deep_gemm_fp8_o_proj",
+   "type": "function",
+   "name": "deep_gemm_fp8_o_proj",
+   "filePath": "vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "summary": "O 投影：inverse RoPE+grouped wo_a+wo_b（FlashMLA/FlashInfer CUDA 后端共享）。",
+   "tags": [
+    "o-proj",
+    "deep-gemm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    35,
+    103
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/nvidia/ops/o_proj.py:rope_quant_unsupported_reason",
+   "type": "function",
+   "name": "rope_quant_unsupported_reason",
+   "filePath": "vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "summary": "判定层为何不能走 FlashInfer 融合 inverse RoPE+FP8 输出。",
+   "tags": [
+    "validation",
+    "rope"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    115,
+    131
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/nvidia/ops/o_proj.py:rope_quant_attn_out",
+   "type": "function",
+   "name": "rope_quant_attn_out",
+   "filePath": "vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "summary": "分配 RopeQuant kernel 的输出对（group-major 布局）。",
+   "tags": [
+    "rope",
+    "quant"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    134,
+    158
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/nvidia/vl_model.py:_make_deepseek_v4_vl_weights_mapper",
+   "type": "function",
+   "name": "_make_deepseek_v4_vl_weights_mapper",
+   "filePath": "vllm/models/deepseek_v4/nvidia/vl_model.py",
+   "summary": "保留原 NVIDIA 助手签名供下游 import（真实实现移至 common）。",
+   "tags": [
+    "vl",
+    "compat"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    14,
+    18
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/quant_config.py:align_mtp_quant_config",
+   "type": "function",
+   "name": "align_mtp_quant_config",
+   "filePath": "vllm/models/deepseek_v4/quant_config.py",
+   "summary": "把量化配置的 MTP 条目重键到 draft 模块前缀。",
+   "tags": [
+    "quantization",
+    "mtp"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    33,
+    57
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/quant_config.py:DeepseekV4FP8Config",
+   "type": "class",
+   "name": "DeepseekV4FP8Config",
+   "filePath": "vllm/models/deepseek_v4/quant_config.py",
+   "summary": "DSV4 FP8 配置（11 个方法）：按 expert dtype 分派 MoE 方法（Unquantized/FP8 block/MXFP4/ModelOpt FP4）。",
+   "tags": [
+    "quantization",
+    "fp8",
+    "dispatch"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    60,
+    230
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4SparseMLABackend",
+   "type": "class",
+   "name": "DeepseekV4SparseMLABackend",
+   "filePath": "vllm/models/deepseek_v4/sparse_mla.py",
+   "summary": "DSV4 sparse-MLA 后端基类（直接子类化 AttentionBackend，8 个方法）：C128A topk 索引布局与 metadata 协议。",
+   "tags": [
+    "sparse-mla",
+    "backend",
+    "base"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    42,
+    96
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4FlashMLAMetadata",
+   "type": "class",
+   "name": "DeepseekV4FlashMLAMetadata",
+   "filePath": "vllm/models/deepseek_v4/sparse_mla.py",
+   "summary": "FlashMLA 形态的 attention metadata。",
+   "tags": [
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    100,
+    119
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4SparseMLAMetadataBuilder",
+   "type": "class",
+   "name": "DeepseekV4SparseMLAMetadataBuilder",
+   "filePath": "vllm/models/deepseek_v4/sparse_mla.py",
+   "summary": "sparse MLA metadata builder（3 个方法）：decode/prefill 拆分与公共构建。",
+   "tags": [
+    "metadata",
+    "builder"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    122,
+    285
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4FlashMLAMetadataBuilder",
+   "type": "class",
+   "name": "DeepseekV4FlashMLAMetadataBuilder",
+   "filePath": "vllm/models/deepseek_v4/sparse_mla.py",
+   "summary": "FlashMLA 变体 builder。",
+   "tags": [
+    "metadata",
+    "builder"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    288,
+    289
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4FlashMLABackend",
+   "type": "class",
+   "name": "DeepseekV4FlashMLABackend",
+   "filePath": "vllm/models/deepseek_v4/sparse_mla.py",
+   "summary": "FlashMLA 变体后端。",
+   "tags": [
+    "backend"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    292,
+    299
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/sparse_mla.py:build_c128a_topk_metadata",
+   "type": "function",
+   "name": "build_c128a_topk_metadata",
+   "filePath": "vllm/models/deepseek_v4/sparse_mla.py",
+   "summary": "全部 C128A token（decode+prefill）单 kernel 建 topk metadata：位置→block_table 查找等。",
+   "tags": [
+    "triton",
+    "topk",
+    "metadata"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    302,
+    361
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/sparse_mla.py:BuildC128ATopkMetadataKernel",
+   "type": "class",
+   "name": "BuildC128ATopkMetadataKernel",
+   "filePath": "vllm/models/deepseek_v4/sparse_mla.py",
+   "summary": "C128A topk metadata 的 Triton kernel 封装（含 JIT warmup 注册）。",
+   "tags": [
+    "triton",
+    "kernel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    364,
+    521
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/vl_stub.py:DeepseekV4ForConditionalGeneration",
+   "type": "class",
+   "name": "DeepseekV4ForConditionalGeneration",
+   "filePath": "vllm/models/deepseek_v4/vl_stub.py",
+   "summary": "不支持视觉变体平台的占位 stub（加载即报错）。",
+   "tags": [
+    "vl",
+    "stub"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    8,
+    14
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/xpu/dspark.py:DSparkDeepseekV4Model",
+   "type": "class",
+   "name": "DSparkDeepseekV4Model",
+   "filePath": "vllm/models/deepseek_v4/xpu/dspark.py",
+   "summary": "XPU DSpark draft 骨干（tilelang 换 HCHeadOp/MHCPostOp）。",
+   "tags": [
+    "dspark",
+    "xpu"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    44,
+    179
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/xpu/dspark.py:_insert_context_kv",
+   "type": "function",
+   "name": "_insert_context_kv",
+   "filePath": "vllm/models/deepseek_v4/xpu/dspark.py",
+   "summary": "XPU 版 context KV 插入（复用 xpu_qnorm_rope_kv_fp8_insert）。",
+   "tags": [
+    "dspark",
+    "kv-insert"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    182,
+    217
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/xpu/dspark.py:DSparkDeepseekV4ForCausalLM",
+   "type": "class",
+   "name": "DSparkDeepseekV4ForCausalLM",
+   "filePath": "vllm/models/deepseek_v4/xpu/dspark.py",
+   "summary": "XPU DSpark draft 入口（14 个方法）。",
+   "tags": [
+    "dspark",
+    "xpu",
+    "causal-lm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    220,
+    419
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4MLP",
+   "type": "class",
+   "name": "DeepseekV4MLP",
+   "filePath": "vllm/models/deepseek_v4/xpu/model.py",
+   "summary": "XPU 密集 MLP。",
+   "tags": [
+    "mlp",
+    "xpu"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    70,
+    118
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/xpu/model.py:_deepseek_v4_stage_mega_moe_inputs_kernel",
+   "type": "function",
+   "name": "_deepseek_v4_stage_mega_moe_inputs_kernel",
+   "filePath": "vllm/models/deepseek_v4/xpu/model.py",
+   "summary": "MegaMoE 输入 staging 的 Triton kernel。",
+   "tags": [
+    "mega-moe",
+    "triton"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    122,
+    221
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/xpu/model.py:_stage_deepseek_v4_mega_moe_inputs",
+   "type": "function",
+   "name": "_stage_deepseek_v4_mega_moe_inputs",
+   "filePath": "vllm/models/deepseek_v4/xpu/model.py",
+   "summary": "MegaMoE 输入 staging 包装。",
+   "tags": [
+    "mega-moe",
+    "staging"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    224,
+    279
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/xpu/model.py:make_deepseek_v4_expert_params_mapping",
+   "type": "function",
+   "name": "make_deepseek_v4_expert_params_mapping",
+   "filePath": "vllm/models/deepseek_v4/xpu/model.py",
+   "summary": "XPU 专家参数名映射。",
+   "tags": [
+    "experts",
+    "mapping"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    282,
+    298
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4MegaMoEExperts",
+   "type": "class",
+   "name": "DeepseekV4MegaMoEExperts",
+   "filePath": "vllm/models/deepseek_v4/xpu/model.py",
+   "summary": "XPU MegaMoE 专家模块（9 个方法，含 fp8 路线分派）。",
+   "tags": [
+    "mega-moe",
+    "experts",
+    "xpu"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    301,
+    557
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/xpu/model.py:_deepseek_v4_mega_moe_experts_op",
+   "type": "function",
+   "name": "_deepseek_v4_mega_moe_experts_op",
+   "filePath": "vllm/models/deepseek_v4/xpu/model.py",
+   "summary": "MegaMoE 专家自定义算子注册。",
+   "tags": [
+    "mega-moe",
+    "custom-op"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    563,
+    580
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4MoE",
+   "type": "class",
+   "name": "DeepseekV4MoE",
+   "filePath": "vllm/models/deepseek_v4/xpu/model.py",
+   "summary": "XPU MoE 层（6 个方法）。",
+   "tags": [
+    "moe",
+    "xpu"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    590,
+    796
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4DecoderLayer",
+   "type": "class",
+   "name": "DeepseekV4DecoderLayer",
+   "filePath": "vllm/models/deepseek_v4/xpu/model.py",
+   "summary": "XPU 解码层（MHC 自定义算子 seam）。",
+   "tags": [
+    "decoder-layer",
+    "xpu"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    799,
+    960
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4Model",
+   "type": "class",
+   "name": "DeepseekV4Model",
+   "filePath": "vllm/models/deepseek_v4/xpu/model.py",
+   "summary": "XPU DSV4 骨干（7 个方法）。",
+   "tags": [
+    "backbone",
+    "xpu"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    963,
+    1250
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/xpu/model.py:_make_deepseek_v4_weights_mapper",
+   "type": "function",
+   "name": "_make_deepseek_v4_weights_mapper",
+   "filePath": "vllm/models/deepseek_v4/xpu/model.py",
+   "summary": "XPU checkpoint 权重 mapper。",
+   "tags": [
+    "weights",
+    "mapper"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1253,
+    1296
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4ForCausalLM",
+   "type": "class",
+   "name": "DeepseekV4ForCausalLM",
+   "filePath": "vllm/models/deepseek_v4/xpu/model.py",
+   "summary": "XPU DSV4 入口（7 个方法）。",
+   "tags": [
+    "causal-lm",
+    "xpu"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1299,
+    1375
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/xpu/mtp.py:DeepSeekV4MultiTokenPredictorLayer",
+   "type": "class",
+   "name": "DeepSeekV4MultiTokenPredictorLayer",
+   "filePath": "vllm/models/deepseek_v4/xpu/mtp.py",
+   "summary": "XPU MTP 单层。",
+   "tags": [
+    "mtp",
+    "xpu",
+    "layer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    63,
+    170
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/xpu/mtp.py:DeepSeekV4MultiTokenPredictor",
+   "type": "class",
+   "name": "DeepSeekV4MultiTokenPredictor",
+   "filePath": "vllm/models/deepseek_v4/xpu/mtp.py",
+   "summary": "XPU MTP 层栈。",
+   "tags": [
+    "mtp",
+    "xpu"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    173,
+    262
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v4/xpu/mtp.py:DeepSeekV4MTP",
+   "type": "class",
+   "name": "DeepSeekV4MTP",
+   "filePath": "vllm/models/deepseek_v4/xpu/mtp.py",
+   "summary": "XPU MTP draft（7 个方法）。",
+   "tags": [
+    "mtp",
+    "xpu",
+    "draft"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    265,
+    510
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/xpu/xpu_qnorm_rope_kv_fp8_insert.py:_xpu_qnorm_rope_kernel",
+   "type": "function",
+   "name": "_xpu_qnorm_rope_kernel",
+   "filePath": "vllm/models/deepseek_v4/xpu/xpu_qnorm_rope_kv_fp8_insert.py",
+   "summary": "Q 每头 RMSNorm+GPT-J RoPE、KV GPT-J RoPE 的 Triton kernel（交错对格式）。",
+   "tags": [
+    "triton",
+    "rope"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    20,
+    110
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/xpu/xpu_qnorm_rope_kv_fp8_insert.py:xpu_qnorm_rope_kv_fp8_insert",
+   "type": "function",
+   "name": "xpu_qnorm_rope_kv_fp8_insert",
+   "filePath": "vllm/models/deepseek_v4/xpu/xpu_qnorm_rope_kv_fp8_insert.py",
+   "summary": "qnorm+rope(Q)、rope(KV) 后 UE8M0 FP8 量化+插入的组合入口。",
+   "tags": [
+    "fp8",
+    "kv-insert"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    113,
+    162
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py:_dequant_gather_slots_kernel",
+   "type": "function",
+   "name": "_dequant_gather_slots_kernel",
+   "filePath": "vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py",
+   "summary": "把散落 FP8 槽位反量化到扁平 BF16 工作区的 kernel（每槽一 program）。",
+   "tags": [
+    "dequant",
+    "triton"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    27,
+    112
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py:dequant_gather_slots",
+   "type": "function",
+   "name": "dequant_gather_slots",
+   "filePath": "vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py",
+   "summary": "按槽位索引把 FP8 UE8M0 页反量化为 bf16。",
+   "tags": [
+    "dequant"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    115,
+    141
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py:xpu_sparse_decode_fp8",
+   "type": "function",
+   "name": "xpu_sparse_decode_fp8",
+   "filePath": "vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py",
+   "summary": "XPU decode：FP8 页反量化到 BF16 后走 BF16 sparse MLA（外部缓存布局不变）。",
+   "tags": [
+    "sparse-decode",
+    "fp8"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    144,
+    237
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/dspark.py:_duplicate_context_wkv_weights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/dspark.py:DSparkDeepseekV4Model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/dspark.py:DSparkDeepseekV4Model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/dspark.py:_insert_context_kv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/dspark.py:DSparkDeepseekV4ForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/dspark.py:DSparkDeepseekV4ForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:_get_flashinfer_dsv4_workspace",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:_packed_block_span",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:_pad_to_supported_q_heads",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:_required_sm120_sparse_topk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekV4FlashInferMLASparseBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekV4FlashInferMLASparseBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekV4FlashInferSparseMLAMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekV4FlashInferSparseMLAMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekSparseSWAFlashInferMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekSparseSWAFlashInferMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekSparseSWAFlashInferBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekSparseSWAFlashInferBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekV4FlashInferMLAAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekV4FlashInferMLAAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekV4FlashInferSM120Attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekV4FlashInferSM120Attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/flashmla.py:DeepseekSparseSWAFlashMLAMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/flashmla.py:DeepseekSparseSWAFlashMLAMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/flashmla.py:DeepseekSparseSWAFlashMLABackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/flashmla.py:DeepseekSparseSWAFlashMLABackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/flashmla.py:DeepseekV4FlashMLAAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/flashmla.py:DeepseekV4FlashMLAAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/model.py:MegaGateRoutingMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/model.py:MegaGateRoutingMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/model.py:prepare_mega_gate_routing_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/model.py:prepare_mega_gate_routing_metadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4MLP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4MLP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/model.py:make_deepseek_v4_expert_params_mapping",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/model.py:make_deepseek_v4_expert_params_mapping",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4MoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4MoE",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/model.py:_select_dsv4_attn_cls",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/model.py:_use_sequence_parallel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4DecoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4DecoderLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4Model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4Model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/model.py:_make_deepseek_v4_weights_mapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4MixtureOfExperts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4MixtureOfExperts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4ForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4ForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/mtp.py:DeepSeekV4MultiTokenPredictorLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/mtp.py:DeepSeekV4MultiTokenPredictorLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/mtp.py:DeepSeekV4MultiTokenPredictor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/mtp.py:DeepSeekV4MultiTokenPredictor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/mtp.py:DeepSeekV4MTP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "class:vllm/models/deepseek_v4/nvidia/mtp.py:DeepSeekV4MTP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/ops/o_proj.py:compute_fp8_einsum_recipe",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/ops/o_proj.py:compute_fp8_einsum_recipe",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/ops/o_proj.py:deep_gemm_fp8_o_proj",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/ops/o_proj.py:deep_gemm_fp8_o_proj",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/ops/o_proj.py:rope_quant_unsupported_reason",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/ops/o_proj.py:rope_quant_unsupported_reason",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/ops/o_proj.py:rope_quant_attn_out",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/ops/o_proj.py:rope_quant_attn_out",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/vl_model.py",
+   "target": "function:vllm/models/deepseek_v4/nvidia/vl_model.py:_make_deepseek_v4_vl_weights_mapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/quant_config.py",
+   "target": "function:vllm/models/deepseek_v4/quant_config.py:align_mtp_quant_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/quant_config.py",
+   "target": "function:vllm/models/deepseek_v4/quant_config.py:align_mtp_quant_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/quant_config.py",
+   "target": "class:vllm/models/deepseek_v4/quant_config.py:DeepseekV4FP8Config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/quant_config.py",
+   "target": "class:vllm/models/deepseek_v4/quant_config.py:DeepseekV4FP8Config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4SparseMLABackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4SparseMLABackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4FlashMLAMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4FlashMLAMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4SparseMLAMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4SparseMLAMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4FlashMLAMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4FlashMLAMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4FlashMLABackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4FlashMLABackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "function:vllm/models/deepseek_v4/sparse_mla.py:build_c128a_topk_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "function:vllm/models/deepseek_v4/sparse_mla.py:build_c128a_topk_metadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "class:vllm/models/deepseek_v4/sparse_mla.py:BuildC128ATopkMetadataKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "class:vllm/models/deepseek_v4/sparse_mla.py:BuildC128ATopkMetadataKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/vl_stub.py",
+   "target": "class:vllm/models/deepseek_v4/vl_stub.py:DeepseekV4ForConditionalGeneration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/vl_stub.py",
+   "target": "class:vllm/models/deepseek_v4/vl_stub.py:DeepseekV4ForConditionalGeneration",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/dspark.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/dspark.py:DSparkDeepseekV4Model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/dspark.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/dspark.py:DSparkDeepseekV4Model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/dspark.py",
+   "target": "function:vllm/models/deepseek_v4/xpu/dspark.py:_insert_context_kv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/dspark.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/dspark.py:DSparkDeepseekV4ForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/dspark.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/dspark.py:DSparkDeepseekV4ForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4MLP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4MLP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "function:vllm/models/deepseek_v4/xpu/model.py:_deepseek_v4_stage_mega_moe_inputs_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "function:vllm/models/deepseek_v4/xpu/model.py:_stage_deepseek_v4_mega_moe_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "function:vllm/models/deepseek_v4/xpu/model.py:make_deepseek_v4_expert_params_mapping",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "function:vllm/models/deepseek_v4/xpu/model.py:make_deepseek_v4_expert_params_mapping",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4MegaMoEExperts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4MegaMoEExperts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "function:vllm/models/deepseek_v4/xpu/model.py:_deepseek_v4_mega_moe_experts_op",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4MoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4MoE",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4DecoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4DecoderLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4Model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4Model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "function:vllm/models/deepseek_v4/xpu/model.py:_make_deepseek_v4_weights_mapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4ForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4ForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/mtp.py:DeepSeekV4MultiTokenPredictorLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/mtp.py:DeepSeekV4MultiTokenPredictorLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/mtp.py:DeepSeekV4MultiTokenPredictor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/mtp.py:DeepSeekV4MultiTokenPredictor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/mtp.py:DeepSeekV4MTP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "class:vllm/models/deepseek_v4/xpu/mtp.py:DeepSeekV4MTP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/xpu_qnorm_rope_kv_fp8_insert.py",
+   "target": "function:vllm/models/deepseek_v4/xpu/xpu_qnorm_rope_kv_fp8_insert.py:_xpu_qnorm_rope_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/xpu_qnorm_rope_kv_fp8_insert.py",
+   "target": "function:vllm/models/deepseek_v4/xpu/xpu_qnorm_rope_kv_fp8_insert.py:xpu_qnorm_rope_kv_fp8_insert",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/xpu_qnorm_rope_kv_fp8_insert.py",
+   "target": "function:vllm/models/deepseek_v4/xpu/xpu_qnorm_rope_kv_fp8_insert.py:xpu_qnorm_rope_kv_fp8_insert",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py",
+   "target": "function:vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py:_dequant_gather_slots_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py",
+   "target": "function:vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py:dequant_gather_slots",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py",
+   "target": "function:vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py:dequant_gather_slots",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py",
+   "target": "function:vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py:xpu_sparse_decode_fp8",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py",
+   "target": "function:vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py:xpu_sparse_decode_fp8",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "file:vllm/config/kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "file:vllm/model_executor/kernels/mhc/tilelang.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "file:vllm/model_executor/models/qwen3_dspark.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "file:vllm/models/common/ops/sequence_parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "file:vllm/models/deepseek_v4/common/eplb_util.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/dspark.py",
+   "target": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/model_executor/layers/fusion/quant_activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/models/deepseek_v4/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/models/deepseek_v4/common/ops/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/utils/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/v1/attention/backends/mla/compressor_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "target": "file:vllm/models/deepseek_v4/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "target": "file:vllm/models/deepseek_v4/common/ops/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "target": "file:vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "target": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "target": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "target": "file:vllm/v1/attention/ops/flashmla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/config/kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/kernels/mhc/tilelang.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/kernels/mhc/tilelang_kernels.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/deep_gemm_mega_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/models/common/ops/sequence_parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/models/deepseek_v4/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/models/deepseek_v4/common/eplb_util.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/models/deepseek_v4/common/spec_decode.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/models/deepseek_v4/nvidia/flashmla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/utils/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/config/kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/kernels/mhc/tilelang.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/mtp_validation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/models/deepseek_mtp.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/models/common/ops/sequence_parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/models/deepseek_v4/common/mm_preprocess.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/mtp.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "target": "file:vllm/model_executor/layers/fusion/quant_activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "target": "file:vllm/models/deepseek_v4/common/ops/fused_inv_rope_fp8_quant.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/ops/o_proj.py",
+   "target": "file:vllm/utils/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/vl_model.py",
+   "target": "file:vllm/models/deepseek_v4/common/vl_model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/nvidia/vl_model.py",
+   "target": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/quant_config.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/quant_config.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/quant_config.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/quant_config.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/quant_config.py",
+   "target": "file:vllm/model_executor/layers/quantization/fp8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/quant_config.py",
+   "target": "file:vllm/model_executor/layers/quantization/modelopt.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/quant_config.py",
+   "target": "file:vllm/model_executor/layers/quantization/mxfp4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/quant_config.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/quant_config.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "file:vllm/v1/attention/backends/mla/compressor_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/sparse_mla.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/dspark.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/dspark.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/dspark.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/dspark.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/dspark.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/dspark.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/dspark.py",
+   "target": "file:vllm/model_executor/layers/mhc.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/dspark.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/dspark.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/dspark.py",
+   "target": "file:vllm/model_executor/models/qwen3_dspark.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/dspark.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/dspark.py",
+   "target": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/dspark.py",
+   "target": "file:vllm/models/deepseek_v4/xpu/xpu_qnorm_rope_kv_fp8_insert.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/model_executor/layers/mhc.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/models/deepseek_v4/common/spec_decode.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/models/deepseek_v4/xpu/xpu_sparse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "file:vllm/model_executor/layers/mhc.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/mtp_validation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "file:vllm/model_executor/models/deepseek_mtp.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "file:vllm/models/deepseek_v4/common/ops/fused_mtp_input_rmsnorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "file:vllm/models/deepseek_v4/xpu/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/mtp.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/xpu_qnorm_rope_kv_fp8_insert.py",
+   "target": "file:vllm/models/deepseek_v4/common/ops/cache_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/xpu_qnorm_rope_kv_fp8_insert.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v4/xpu/xpu_sparse_decode_fp8.py",
+   "target": "file:vllm/v1/attention/ops/xpu_mla_sparse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekV4FlashInferMLASparseBackend",
+   "target": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4SparseMLABackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekV4FlashInferSparseMLAMetadataBuilder",
+   "target": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4SparseMLAMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekSparseSWAFlashInferMetadataBuilder",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekSparseSWAMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekSparseSWAFlashInferBackend",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekSparseSWABackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekV4FlashInferMLAAttention",
+   "target": "class:vllm/models/deepseek_v4/attention.py:DeepseekV4Attention",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/nvidia/flashinfer_sparse.py:DeepseekV4FlashInferSM120Attention",
+   "target": "class:vllm/models/deepseek_v4/attention.py:DeepseekV4Attention",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/nvidia/flashmla.py:DeepseekSparseSWAFlashMLAMetadataBuilder",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekSparseSWAMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/nvidia/flashmla.py:DeepseekSparseSWAFlashMLABackend",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekSparseSWABackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/nvidia/flashmla.py:DeepseekV4FlashMLAAttention",
+   "target": "class:vllm/models/deepseek_v4/attention.py:DeepseekV4Attention",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4Model",
+   "target": "class:vllm/model_executor/models/interfaces.py:EagleModelMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4MixtureOfExperts",
+   "target": "class:vllm/model_executor/models/interfaces.py:MixtureOfExperts",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4ForCausalLM",
+   "target": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4MixtureOfExperts",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4ForCausalLM",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsPP",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4ForCausalLM",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsEagle3",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/nvidia/model.py:DeepseekV4ForCausalLM",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/quant_config.py:DeepseekV4FP8Config",
+   "target": "class:vllm/model_executor/layers/quantization/fp8.py:Fp8Config",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4SparseMLABackend",
+   "target": "class:vllm/v1/attention/backend.py:AttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4FlashMLAMetadata",
+   "target": "class:vllm/v1/attention/backend.py:AttentionMetadata",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4SparseMLAMetadataBuilder",
+   "target": "class:vllm/v1/attention/backend.py:AttentionMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4FlashMLAMetadataBuilder",
+   "target": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4SparseMLAMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4FlashMLABackend",
+   "target": "class:vllm/models/deepseek_v4/sparse_mla.py:DeepseekV4SparseMLABackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4Model",
+   "target": "class:vllm/model_executor/models/interfaces.py:EagleModelMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4ForCausalLM",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsPP",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4ForCausalLM",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsEagle3",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v4/xpu/model.py:DeepseekV4ForCausalLM",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

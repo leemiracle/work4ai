@@ -1,0 +1,4128 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/distributed/weight_transfer/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/distributed/weight_transfer/__init__.py",
+   "summary": "weight_transfer 包 barrel：导出 base 的引擎/客户端抽象与内置 HTTP/Ray 客户端、双工厂。",
+   "tags": [
+    "barrel",
+    "weight-transfer"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/distributed/weight_transfer/base.py",
+   "type": "file",
+   "name": "base.py",
+   "filePath": "vllm/distributed/weight_transfer/base.py",
+   "summary": "权重传输引擎抽象基座：ParamMeta/Replicate/Shard 布局词汇、WeightSource（trainer 侧权重源两迭代模式）、WeightTransferEngine/TrainerWeightTransferEngine 引擎 ABC 与 API 级请求对象、layerwise_groups 逐层分组。",
+   "tags": [
+    "base",
+    "abstraction",
+    "weight-sync",
+    "rl"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/weight_transfer/clients.py",
+   "type": "file",
+   "name": "clients.py",
+   "filePath": "vllm/distributed/weight_transfer/clients.py",
+   "summary": "内置 VLLMWeightSyncClient：HTTP（RLHF 路由 /init_weight_transfer_engine 等）与 Ray（多 actor 扇出阻塞聚合）两种传输适配，含 CUDA IPC 句柄的 JSON 安全化。",
+   "tags": [
+    "clients",
+    "http",
+    "ray",
+    "rlhf"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/distributed/weight_transfer/factory.py",
+   "type": "file",
+   "name": "factory.py",
+   "filePath": "vllm/distributed/weight_transfer/factory.py",
+   "summary": "懒加载注册工厂双件：WeightTransferEngineFactory（worker 侧）与 WeightTransferTrainerFactory（trainer 侧），按 WeightTransferConfig 后端名解析引擎类。",
+   "tags": [
+    "factory",
+    "registry",
+    "lazy-loading"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/distributed/weight_transfer/ipc_engine.py",
+   "type": "file",
+   "name": "ipc_engine.py",
+   "filePath": "vllm/distributed/weight_transfer/ipc_engine.py",
+   "summary": "CUDA IPC 权重传输引擎：trainer 打包权重进可复用 IPC 缓冲并 yield 句柄，worker 侧映射回 tensor 后经 layerwise reload 落盘到模型；免 rendezvous。",
+   "tags": [
+    "cuda-ipc",
+    "engine",
+    "weight-sync"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "type": "file",
+   "name": "m2n_common.py",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "NCCL M2N 后端公共层（nccl.m2n）：双 mesh（trainer [0,T) + worker [T,T+N)）单 communicator 的 reshard 语义——mesh/layout 校验、传输计划 digest 一致性检查与目的侧 placement 发布。",
+   "tags": [
+    "m2n",
+    "nccl",
+    "reshard",
+    "agreement"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/weight_transfer/m2n_engine.py",
+   "type": "file",
+   "name": "m2n_engine.py",
+   "filePath": "vllm/distributed/weight_transfer/m2n_engine.py",
+   "summary": "推理侧 M2N 引擎：每参数一次 reshard 直接落 engine 布局，静态布局只随一次性 init 握手传输，逐轮只发参数名序。",
+   "tags": [
+    "m2n",
+    "nccl",
+    "engine"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/weight_transfer/m2n_layout.py",
+   "type": "file",
+   "name": "m2n_layout.py",
+   "filePath": "vllm/distributed/weight_transfer/m2n_layout.py",
+   "summary": "M2N 目的布局解析：每个 checkpoint 参数落到本 worker 的目标缓冲与 placement（fail-closed 校验 loader 声明的 shard dim）。",
+   "tags": [
+    "m2n",
+    "layout",
+    "destination"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/distributed/weight_transfer/m2n_trainer.py",
+   "type": "file",
+   "name": "m2n_trainer.py",
+   "filePath": "vllm/distributed/weight_transfer/m2n_trainer.py",
+   "summary": "trainer 侧 M2N 引擎：每个 trainer rank 加入共享 communicator 并参与全部 reshard，只发送自己的本地分片。",
+   "tags": [
+    "m2n",
+    "nccl",
+    "trainer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/weight_transfer/modelexpress_engine.py",
+   "type": "file",
+   "name": "modelexpress_engine.py",
+   "filePath": "vllm/distributed/weight_transfer/modelexpress_engine.py",
+   "summary": "ModelExpress 维护的后端 re-export shim（安装其主分支子目录即得）。",
+   "tags": [
+    "modelexpress",
+    "re-export"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "type": "file",
+   "name": "nccl_common.py",
+   "filePath": "vllm/distributed/weight_transfer/nccl_common.py",
+   "summary": "NCCL 后端共享初始化：rendezvous（TCP/预共享 uid）与 TCP metadata 组、trainer/worker 两侧的进程组构建（dense 与 sparse 后端仅共享此层）。",
+   "tags": [
+    "nccl",
+    "rendezvous",
+    "process-group"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/weight_transfer/nccl_engine.py",
+   "type": "file",
+   "name": "nccl_engine.py",
+   "filePath": "vllm/distributed/weight_transfer/nccl_engine.py",
+   "summary": "dense NCCL 权重传输引擎：trainer rank0 经 packed NCCL broadcast 把打包权重推到 workers，worker 侧消费解包并逐层 reload；packed 与否是 must-agree 线参。",
+   "tags": [
+    "nccl",
+    "broadcast",
+    "engine",
+    "dense"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "type": "file",
+   "name": "packed_tensor.py",
+   "filePath": "vllm/distributed/weight_transfer/packed_tensor.py",
+   "summary": "打包张量工具：pack/unpack（视图级解包）、packed NCCL broadcast 生产/消费对与 packed CUDA IPC 生产/消费对（复用缓冲+句柄），PackedBufferImporter 做消费侧单槽映射缓存。",
+   "tags": [
+    "packing",
+    "nccl",
+    "cuda-ipc",
+    "tensors"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "type": "file",
+   "name": "sharded_rdt_common.py",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "summary": "sharded-RDT 后端公共件：算子链允许表、NIXL 内存注册、缓冲尺寸与 Ray 版本检查及 RdtRouter（按 NAME 决定 producer 并发送的消费侧路由器）。",
+   "tags": [
+    "rdt",
+    "nixl",
+    "ray",
+    "routing"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "type": "file",
+   "name": "sharded_rdt_engine.py",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "summary": "消费侧 sharded RDT 引擎（1477 行）：两阶段（BAKE 一次定型计划/逐轮仅执行），只拉取本 worker 在 TP/EP 下实际消费的切片而非整张 HF 张量，后台 scatter 线程落位。",
+   "tags": [
+    "rdt",
+    "pull-based",
+    "sharding",
+    "ray"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/weight_transfer/sharded_rdt_trainer.py",
+   "type": "file",
+   "name": "sharded_rdt_trainer.py",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_trainer.py",
+   "summary": "trainer 侧 sharded-RDT 引擎：每 rank 一个 _RDTProducerServer 内部 Ray actor（CUDA IPC 共享 trainer GPU），RDT 是 pull 型故不广播任何数据。",
+   "tags": [
+    "rdt",
+    "trainer",
+    "ray-actor",
+    "producer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "type": "file",
+   "name": "sparse_nccl_engine.py",
+   "filePath": "vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "summary": "稀疏 NCCL 权重传输引擎：以 checkpoint 名+形状+平坦索引广播 (indices, values) 补丁，推理侧经 CheckpointWeightPatch 映射到 rank 本地运行时参数（含 TP 分片与打包参数）。",
+   "tags": [
+    "sparse",
+    "nccl",
+    "patches"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/base.py:_stack_key",
+   "type": "function",
+   "name": "_stack_key",
+   "filePath": "vllm/distributed/weight_transfer/base.py",
+   "summary": "取最外层整数段 (prefix, index)：保证 MoE 逐层分组正确。",
+   "tags": [
+    "layerwise",
+    "keys"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    35,
+    46
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/base.py:layerwise_groups",
+   "type": "function",
+   "name": "layerwise_groups",
+   "filePath": "vllm/distributed/weight_transfer/base.py",
+   "summary": "按最外层索引段把扁平参数名切分为逐解码层分组。",
+   "tags": [
+    "layerwise",
+    "grouping"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    49,
+    102
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/base.py:materialize_full_tensor",
+   "type": "function",
+   "name": "materialize_full_tensor",
+   "filePath": "vllm/distributed/weight_transfer/base.py",
+   "summary": "物化完整本地 tensor（FSDP DTensor 的 full_tensor() 列切分处理）。",
+   "tags": [
+    "fsdp",
+    "dtensor"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    105,
+    114
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/base.py:Replicate",
+   "type": "class",
+   "name": "Replicate",
+   "filePath": "vllm/distributed/weight_transfer/base.py",
+   "summary": "该 mesh 轴每坐标持有完整张量。",
+   "tags": [
+    "layout",
+    "replicate"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    118,
+    119
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/base.py:Shard",
+   "type": "class",
+   "name": "Shard",
+   "filePath": "vllm/distributed/weight_transfer/base.py",
+   "summary": "该 mesh 轴按 torch.chunk 语义切分张量 dim。",
+   "tags": [
+    "layout",
+    "shard"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    123,
+    126
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/base.py:ParamMeta",
+   "type": "class",
+   "name": "ParamMeta",
+   "filePath": "vllm/distributed/weight_transfer/base.py",
+   "summary": "单输出参数：名字/wire dtype/HF 全形状+trainer rank 归属与布局（元数据先于数据传输）。",
+   "tags": [
+    "metadata",
+    "parameters"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    133,
+    212
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/base.py:WeightSource",
+   "type": "class",
+   "name": "WeightSource",
+   "filePath": "vllm/distributed/weight_transfer/base.py",
+   "summary": "trainer 权重源抽象：metadata（全模型每参数声明）+一或两种迭代模式。",
+   "tags": [
+    "abc",
+    "weight-source"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    215,
+    274
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/base.py:_dtensor_layout",
+   "type": "function",
+   "name": "_dtensor_layout",
+   "filePath": "vllm/distributed/weight_transfer/base.py",
+   "summary": "取 DTensor 的 (owners, mesh_shape, placements)，普通 tensor 返回 None。",
+   "tags": [
+    "dtensor",
+    "layout"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    277,
+    298
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/base.py:ModuleSource",
+   "type": "class",
+   "name": "ModuleSource",
+   "filePath": "vllm/distributed/weight_transfer/base.py",
+   "summary": "module.named_parameters() 上的 WeightSource：plain/FSDP/DTensor 三态归属与分片声明。",
+   "tags": [
+    "weight-source",
+    "named-parameters"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    306,
+    360
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/base.py:WeightTransferInitInfo",
+   "type": "class",
+   "name": "WeightTransferInitInfo",
+   "filePath": "vllm/distributed/weight_transfer/base.py",
+   "summary": "后端特定初始化信息基类。",
+   "tags": [
+    "init-info",
+    "base"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    365,
+    368
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/base.py:TrainerInitInfo",
+   "type": "class",
+   "name": "TrainerInitInfo",
+   "filePath": "vllm/distributed/weight_transfer/base.py",
+   "summary": "trainer 侧 init 基类：显式提供驱动传输的 trainer rank。",
+   "tags": [
+    "init-info",
+    "trainer"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    372,
+    403
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/base.py:WeightTransferUpdateInfo",
+   "type": "class",
+   "name": "WeightTransferUpdateInfo",
+   "filePath": "vllm/distributed/weight_transfer/base.py",
+   "summary": "后端特定更新信息基类。",
+   "tags": [
+    "update-info",
+    "base"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    407,
+    410
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/base.py:WeightTransferInitRequest",
+   "type": "class",
+   "name": "WeightTransferInitRequest",
+   "filePath": "vllm/distributed/weight_transfer/base.py",
+   "summary": "API 级权重传输初始化请求（前端→引擎）。",
+   "tags": [
+    "api",
+    "request"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    415,
+    418
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/base.py:WeightTransferUpdateRequest",
+   "type": "class",
+   "name": "WeightTransferUpdateRequest",
+   "filePath": "vllm/distributed/weight_transfer/base.py",
+   "summary": "API 级权重更新请求。",
+   "tags": [
+    "api",
+    "request"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    422,
+    425
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/base.py:WeightTransferEngine",
+   "type": "class",
+   "name": "WeightTransferEngine",
+   "filePath": "vllm/distributed/weight_transfer/base.py",
+   "summary": "worker 侧引擎 ABC（12 个方法）：init/roundtrip_update/权重迭代，与 trainer 进程解耦的传输抽象。",
+   "tags": [
+    "abc",
+    "engine"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    428,
+    614
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/base.py:VLLMWeightSyncClient",
+   "type": "class",
+   "name": "VLLMWeightSyncClient",
+   "filePath": "vllm/distributed/weight_transfer/base.py",
+   "summary": "推理引擎 weight-sync 控制面的 trainer 侧桩（Protocol，四方法镜像引擎暴露接口）。",
+   "tags": [
+    "protocol",
+    "client"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    618,
+    642
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/base.py:TrainerWeightTransferEngine",
+   "type": "class",
+   "name": "TrainerWeightTransferEngine",
+   "filePath": "vllm/distributed/weight_transfer/base.py",
+   "summary": "trainer 侧引擎 ABC：与 WeightTransferEngine 对称，经 trainer_init_info 构造。",
+   "tags": [
+    "abc",
+    "trainer-engine"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    645,
+    722
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/clients.py:_json_safe_update_info",
+   "type": "function",
+   "name": "_json_safe_update_info",
+   "filePath": "vllm/distributed/weight_transfer/clients.py",
+   "summary": "把 update_info 字典 JSON 安全化（CUDA IPC 句柄元组→可序列化形态）。",
+   "tags": [
+    "serialization",
+    "ipc-handles"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    26,
+    47
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/clients.py:HTTPVLLMWeightSyncClient",
+   "type": "class",
+   "name": "HTTPVLLMWeightSyncClient",
+   "filePath": "vllm/distributed/weight_transfer/clients.py",
+   "summary": "经 RLHF HTTP 路由对话 vLLM server 的权重同步客户端。",
+   "tags": [
+    "http",
+    "client",
+    "rlhf"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    58,
+    96
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/clients.py:RayVLLMWeightSyncClient",
+   "type": "class",
+   "name": "RayVLLMWeightSyncClient",
+   "filePath": "vllm/distributed/weight_transfer/clients.py",
+   "summary": "对一或多个 vLLM Ray actor 的客户端：每次调用扇出到全部 handle 并阻塞聚合（多 actor DP 场景）。",
+   "tags": [
+    "ray",
+    "client",
+    "fan-out"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    99,
+    138
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/factory.py:WeightTransferEngineFactory",
+   "type": "class",
+   "name": "WeightTransferEngineFactory",
+   "filePath": "vllm/distributed/weight_transfer/factory.py",
+   "summary": "worker 侧引擎懒加载注册工厂。",
+   "tags": [
+    "factory",
+    "registry"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    29,
+    121
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/factory.py:WeightTransferTrainerFactory",
+   "type": "class",
+   "name": "WeightTransferTrainerFactory",
+   "filePath": "vllm/distributed/weight_transfer/factory.py",
+   "summary": "trainer 侧引擎懒加载注册工厂（与引擎工厂平行）。",
+   "tags": [
+    "factory",
+    "registry"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    124,
+    215
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCWeightTransferInitInfo",
+   "type": "class",
+   "name": "IPCWeightTransferInitInfo",
+   "filePath": "vllm/distributed/weight_transfer/ipc_engine.py",
+   "summary": "IPC 后端 worker 侧 init 信息（免 rendezvous，packed 为 must-agree 线参）。",
+   "tags": [
+    "ipc",
+    "init-info"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    36,
+    44
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCTrainerInitInfo",
+   "type": "class",
+   "name": "IPCTrainerInitInfo",
+   "filePath": "vllm/distributed/weight_transfer/ipc_engine.py",
+   "summary": "IPC 后端 trainer 侧 init 信息（rank 区分单/多 trainer 源）。",
+   "tags": [
+    "ipc",
+    "init-info"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    48,
+    59
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCWeightTransferUpdateInfo",
+   "type": "class",
+   "name": "IPCWeightTransferUpdateInfo",
+   "filePath": "vllm/distributed/weight_transfer/ipc_engine.py",
+   "summary": "IPC 后端逐轮更新信息。",
+   "tags": [
+    "ipc",
+    "update-info"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    63,
+    117
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCWeightTransferEngine",
+   "type": "class",
+   "name": "IPCWeightTransferEngine",
+   "filePath": "vllm/distributed/weight_transfer/ipc_engine.py",
+   "summary": "CUDA IPC worker 侧引擎（6 个方法）：消费 packed IPC 句柄并逐层 reload 落模型。",
+   "tags": [
+    "ipc",
+    "engine"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    120,
+    248
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCTrainerWeightTransferEngine",
+   "type": "class",
+   "name": "IPCTrainerWeightTransferEngine",
+   "filePath": "vllm/distributed/weight_transfer/ipc_engine.py",
+   "summary": "trainer 侧 CUDA IPC 引擎（9 个方法）：多 rank（FSDP）时全 rank 驱动源的传输。",
+   "tags": [
+    "ipc",
+    "trainer-engine"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    251,
+    472
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_common.py:prepare_m2n_local_runtime",
+   "type": "function",
+   "name": "prepare_m2n_local_runtime",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "NCCL init 前准备 rank 本地资源。",
+   "tags": [
+    "m2n",
+    "runtime"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    80,
+    88
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_common.py:create_m2n_communicator",
+   "type": "function",
+   "name": "create_m2n_communicator",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "经 NCCL4Py 创建 M2N 数据面 communicator。",
+   "tags": [
+    "m2n",
+    "communicator"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    91,
+    129
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_common.py:import_m2n",
+   "type": "function",
+   "name": "import_m2n",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "懒 import nccl.m2n，缺失时给出可操作错误。",
+   "tags": [
+    "m2n",
+    "lazy-import"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    132,
+    142
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/m2n_common.py:M2NMesh",
+   "type": "class",
+   "name": "M2NMesh",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "单侧 rank 拓扑（镜像 ncclMesh_t：2 轴 mesh 持有连续 rank 区间）。",
+   "tags": [
+    "m2n",
+    "mesh"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    146,
+    178
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/m2n_common.py:M2NLayout",
+   "type": "class",
+   "name": "M2NLayout",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "单张量在一侧的 mesh+placement。",
+   "tags": [
+    "m2n",
+    "layout"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    189,
+    199
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_common.py:check_placements",
+   "type": "function",
+   "name": "check_placements",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "拒绝 nccl_m2n 无法表达的 placement 组合。",
+   "tags": [
+    "m2n",
+    "validation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    202,
+    224
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_common.py:resolve_layout",
+   "type": "function",
+   "name": "resolve_layout",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "为张量配对 m2n 应看到的 mesh（replicated 需尺寸 1 轴）。",
+   "tags": [
+    "m2n",
+    "layout"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    227,
+    245
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_common.py:validate_layout",
+   "type": "function",
+   "name": "validate_layout",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "校验解析后布局并返回所需本地形状。",
+   "tags": [
+    "m2n",
+    "validation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    248,
+    271
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_common.py:expected_local_shape",
+   "type": "function",
+   "name": "expected_local_shape",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "校验参数源布局并返回本地形状。",
+   "tags": [
+    "m2n",
+    "shapes"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    274,
+    283
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_common.py:check_transferable",
+   "type": "function",
+   "name": "check_transferable",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "拒绝 m2n 无法传输的参数。",
+   "tags": [
+    "m2n",
+    "validation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    286,
+    297
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_common.py:_max_partition_overlaps",
+   "type": "function",
+   "name": "_max_partition_overlaps",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "任一分区相交的最大其他分区数。",
+   "tags": [
+    "m2n",
+    "partitions"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    308,
+    325
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_common.py:check_plan_limits",
+   "type": "function",
+   "name": "check_plan_limits",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "拒绝逐分片扇入/扇出超 M2N 能力的计划。",
+   "tags": [
+    "m2n",
+    "limits"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    328,
+    358
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_common.py:validate_transfer_plan",
+   "type": "function",
+   "name": "validate_transfer_plan",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "校验完整有序源→目的传输计划。",
+   "tags": [
+    "m2n",
+    "validation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    361,
+    386
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/m2n_common.py:M2NParamMeta",
+   "type": "class",
+   "name": "M2NParamMeta",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "显式携带 m2n 源布局的 ParamMeta（引擎据此规划 reshard）。",
+   "tags": [
+    "m2n",
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    390,
+    399
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_common.py:m2n_param_meta",
+   "type": "function",
+   "name": "m2n_param_meta",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "由 ParamMeta 构建 m2n 源布局（1-D 源或按 rank 序全量持有）。",
+   "tags": [
+    "m2n",
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    402,
+    434
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/m2n_common.py:M2NWireParam",
+   "type": "class",
+   "name": "M2NWireParam",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "init 握手中单参数的 JSON 安全源元数据。",
+   "tags": [
+    "m2n",
+    "wire-format"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    438,
+    503
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_common.py:source_plan_digest",
+   "type": "function",
+   "name": "source_plan_digest",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "有序源 wire 计划的 rank 无关 digest。",
+   "tags": [
+    "m2n",
+    "digest"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    506,
+    516
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_common.py:complete_plan_digest",
+   "type": "function",
+   "name": "complete_plan_digest",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "已协商源+目的计划的 digest。",
+   "tags": [
+    "m2n",
+    "digest"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    519,
+    543
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_common.py:check_source_plan_agreement",
+   "type": "function",
+   "name": "check_source_plan_agreement",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "校验所有参与者携带相同源计划。",
+   "tags": [
+    "m2n",
+    "agreement"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    546,
+    626
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_common.py:check_complete_plan_agreement",
+   "type": "function",
+   "name": "check_complete_plan_agreement",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "要求所有 rank 接受同一完整传输计划。",
+   "tags": [
+    "m2n",
+    "agreement"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    629,
+    690
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_common.py:check_runtime_ready_agreement",
+   "type": "function",
+   "name": "check_runtime_ready_agreement",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "要求所有 rank 在 NCCL init 前完成本地资源准备。",
+   "tags": [
+    "m2n",
+    "agreement"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    693,
+    727
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_common.py:check_data_plane_agreement",
+   "type": "function",
+   "name": "check_data_plane_agreement",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "NCCL init 前协商 rendezvous 身份。",
+   "tags": [
+    "m2n",
+    "agreement"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    730,
+    800
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_common.py:publish_destination_placements",
+   "type": "function",
+   "name": "publish_destination_placements",
+   "filePath": "vllm/distributed/weight_transfer/m2n_common.py",
+   "summary": "把 worker 侧目的计划发布给组内所有 rank（trainer 须按相同顺序发 reshard）。",
+   "tags": [
+    "m2n",
+    "agreement",
+    "placements"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    813,
+    859
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/m2n_engine.py:M2NWeightTransferInitInfo",
+   "type": "class",
+   "name": "M2NWeightTransferInitInfo",
+   "filePath": "vllm/distributed/weight_transfer/m2n_engine.py",
+   "summary": "worker 侧 init 信息：rendezvous+完整传输计划（布局静态，只随 init 走一次）。",
+   "tags": [
+    "m2n",
+    "init-info"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    89,
+    190
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/m2n_engine.py:M2NWeightTransferUpdateInfo",
+   "type": "class",
+   "name": "M2NWeightTransferUpdateInfo",
+   "filePath": "vllm/distributed/weight_transfer/m2n_engine.py",
+   "summary": "逐轮更新信息：本轮 chunk 携带的参数名序（形状/dtype/布局已 init 定死）。",
+   "tags": [
+    "m2n",
+    "update-info"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    194,
+    202
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/m2n_engine.py:M2NWeightTransferEngine",
+   "type": "class",
+   "name": "M2NWeightTransferEngine",
+   "filePath": "vllm/distributed/weight_transfer/m2n_engine.py",
+   "summary": "推理侧 M2N 引擎（9 个方法）：每参数一次 reshard 从 trainer 布局直达 engine 布局。",
+   "tags": [
+    "m2n",
+    "engine"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    210,
+    599
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_layout.py:_destination_placements",
+   "type": "function",
+   "name": "_destination_placements",
+   "filePath": "vllm/distributed/weight_transfer/m2n_layout.py",
+   "summary": "把一个张量分片放到配置的目的 mesh 轴。",
+   "tags": [
+    "m2n",
+    "placements"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    55,
+    60
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/m2n_layout.py:M2NDestination",
+   "type": "class",
+   "name": "M2NDestination",
+   "filePath": "vllm/distributed/weight_transfer/m2n_layout.py",
+   "summary": "单个 checkpoint 参数在本 worker 的落点（缓冲+placement）。",
+   "tags": [
+    "m2n",
+    "destination"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    64,
+    76
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_layout.py:_base_loader_shard_dim",
+   "type": "function",
+   "name": "_base_loader_shard_dim",
+   "filePath": "vllm/distributed/weight_transfer/m2n_layout.py",
+   "summary": "取已知安全 loader 声明的 shard dim，未知 loader fail-closed 拒绝。",
+   "tags": [
+    "m2n",
+    "loaders",
+    "fail-closed"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    79,
+    141
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_layout.py:_validated_shard_dim",
+   "type": "function",
+   "name": "_validated_shard_dim",
+   "filePath": "vllm/distributed/weight_transfer/m2n_layout.py",
+   "summary": "对双侧形状校验 loader 声明的 shard 维。",
+   "tags": [
+    "m2n",
+    "validation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    144,
+    162
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/m2n_layout.py:resolve_parameter_destinations",
+   "type": "function",
+   "name": "resolve_parameter_destinations",
+   "filePath": "vllm/distributed/weight_transfer/m2n_layout.py",
+   "summary": "构建本 worker 的目的计划（逐 checkpoint 参数一条，placement 相对推理 mesh）。",
+   "tags": [
+    "m2n",
+    "destination",
+    "plan"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    165,
+    261
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/m2n_trainer.py:M2NTrainerInitInfo",
+   "type": "class",
+   "name": "M2NTrainerInitInfo",
+   "filePath": "vllm/distributed/weight_transfer/m2n_trainer.py",
+   "summary": "trainer 侧 M2N init 信息（rank 即共享 communicator 内 rank）。",
+   "tags": [
+    "m2n",
+    "init-info"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    68,
+    154
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/m2n_trainer.py:M2NTrainerWeightTransferEngine",
+   "type": "class",
+   "name": "M2NTrainerWeightTransferEngine",
+   "filePath": "vllm/distributed/weight_transfer/m2n_trainer.py",
+   "summary": "trainer 侧 M2N 引擎（11 个方法）：全 rank 入组参与全部 reshard，各发各的本地分片。",
+   "tags": [
+    "m2n",
+    "trainer-engine"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    157,
+    612
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/nccl_common.py:decode_nccl_unique_id",
+   "type": "function",
+   "name": "decode_nccl_unique_id",
+   "filePath": "vllm/distributed/weight_transfer/nccl_common.py",
+   "summary": "校验 rendezvous 模式并解码预共享 unique id。",
+   "tags": [
+    "nccl",
+    "rendezvous"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    36,
+    72
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/nccl_common.py:NCCLWeightTransferInitInfo",
+   "type": "class",
+   "name": "NCCLWeightTransferInitInfo",
+   "filePath": "vllm/distributed/weight_transfer/nccl_common.py",
+   "summary": "NCCL 系后端 worker 侧 init 信息（kw_only 便于向后加字段）。",
+   "tags": [
+    "nccl",
+    "init-info"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    76,
+    119
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/nccl_common.py:worker_init_payload",
+   "type": "function",
+   "name": "worker_init_payload",
+   "filePath": "vllm/distributed/weight_transfer/nccl_common.py",
+   "summary": "序列化 worker init 信息（丢弃未设的 rendezvous 字段）。",
+   "tags": [
+    "nccl",
+    "serialization"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    122,
+    127
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/nccl_common.py:build_worker_init_payload",
+   "type": "function",
+   "name": "build_worker_init_payload",
+   "filePath": "vllm/distributed/weight_transfer/nccl_common.py",
+   "summary": "构建 worker init payload 的共享助手。",
+   "tags": [
+    "nccl",
+    "serialization"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    130,
+    147
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/nccl_common.py:run_trainer_rendezvous",
+   "type": "function",
+   "name": "run_trainer_rendezvous",
+   "filePath": "vllm/distributed/weight_transfer/nccl_common.py",
+   "summary": "trainer 侧 rendezvous 执行入口。",
+   "tags": [
+    "nccl",
+    "rendezvous"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    150,
+    158
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/nccl_common.py:NCCLRendezvous",
+   "type": "class",
+   "name": "NCCLRendezvous",
+   "filePath": "vllm/distributed/weight_transfer/nccl_common.py",
+   "summary": "trainer init 用的 TCP rendezvous 字段（Structural protocol）。",
+   "tags": [
+    "nccl",
+    "rendezvous"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    161,
+    171
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/nccl_common.py:stateless_init_metadata_group",
+   "type": "function",
+   "name": "stateless_init_metadata_group",
+   "filePath": "vllm/distributed/weight_transfer/nccl_common.py",
+   "summary": "只建 metadata 一致性用的 TCPStore 组。",
+   "tags": [
+    "nccl",
+    "tcp-store"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    174,
+    191
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/nccl_common.py:stateless_init_process_group",
+   "type": "function",
+   "name": "stateless_init_process_group",
+   "filePath": "vllm/distributed/weight_transfer/nccl_common.py",
+   "summary": "用 StatelessProcessGroup 建组（不依赖全局组）。",
+   "tags": [
+    "nccl",
+    "process-group"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    194,
+    214
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/nccl_common.py:uid_init_process_group",
+   "type": "function",
+   "name": "uid_init_process_group",
+   "filePath": "vllm/distributed/weight_transfer/nccl_common.py",
+   "summary": "从预共享 ncclUniqueId 字节入组（torch-free 路线）。",
+   "tags": [
+    "nccl",
+    "unique-id"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    217,
+    236
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/nccl_common.py:worker_init_metadata_group",
+   "type": "function",
+   "name": "worker_init_metadata_group",
+   "filePath": "vllm/distributed/weight_transfer/nccl_common.py",
+   "summary": "不建 NCCL 只入 trainer↔worker TCP metadata 组。",
+   "tags": [
+    "nccl",
+    "metadata-group"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    247,
+    259
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/nccl_common.py:worker_init_process_group",
+   "type": "function",
+   "name": "worker_init_process_group",
+   "filePath": "vllm/distributed/weight_transfer/nccl_common.py",
+   "summary": "在推理 worker 上建 trainer↔worker NCCL 组（跨 worker 唯一 rank 计算）。",
+   "tags": [
+    "nccl",
+    "process-group"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    262,
+    291
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/nccl_common.py:trainer_init",
+   "type": "function",
+   "name": "trainer_init",
+   "filePath": "vllm/distributed/weight_transfer/nccl_common.py",
+   "summary": "trainer 侧 NCCL 进程组初始化（当前 CUDA 设备）。",
+   "tags": [
+    "nccl",
+    "trainer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    294,
+    332
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/nccl_engine.py:NCCLTrainerInitInfo",
+   "type": "class",
+   "name": "NCCLTrainerInitInfo",
+   "filePath": "vllm/distributed/weight_transfer/nccl_engine.py",
+   "summary": "dense NCCL 后端 trainer init 信息（sender 即 NCCL rank0，无需 rank offset）。",
+   "tags": [
+    "nccl",
+    "init-info"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    54,
+    81
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/nccl_engine.py:NCCLWeightTransferUpdateInfo",
+   "type": "class",
+   "name": "NCCLWeightTransferUpdateInfo",
+   "filePath": "vllm/distributed/weight_transfer/nccl_engine.py",
+   "summary": "dense NCCL 逐轮更新信息（packed 与缓冲几何为 must-agree 线参）。",
+   "tags": [
+    "nccl",
+    "update-info"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    85,
+    114
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/nccl_engine.py:NCCLWeightTransferEngine",
+   "type": "class",
+   "name": "NCCLWeightTransferEngine",
+   "filePath": "vllm/distributed/weight_transfer/nccl_engine.py",
+   "summary": "dense NCCL worker 侧引擎（6 个方法）：broadcast 接收打包权重并逐层 reload。",
+   "tags": [
+    "nccl",
+    "engine"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    117,
+    245
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/nccl_engine.py:NCCLTrainerWeightTransferEngine",
+   "type": "class",
+   "name": "NCCLTrainerWeightTransferEngine",
+   "filePath": "vllm/distributed/weight_transfer/nccl_engine.py",
+   "summary": "trainer 侧 NCCL 引擎（9 个方法）：rank0 持 communicator 驱动完整更新往返。",
+   "tags": [
+    "nccl",
+    "trainer-engine"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    248,
+    494
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/packed_tensor.py:unpack_tensor",
+   "type": "function",
+   "name": "unpack_tensor",
+   "filePath": "vllm/distributed/weight_transfer/packed_tensor.py",
+   "summary": "把打包 uint8 张量解包为命名张量列表（视图，零拷贝）。",
+   "tags": [
+    "packing",
+    "unpack"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    27,
+    55
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/packed_tensor.py:PackedChunk",
+   "type": "class",
+   "name": "PackedChunk",
+   "filePath": "vllm/distributed/weight_transfer/packed_tensor.py",
+   "summary": "打包进单个连续 uint8 缓冲的结果。",
+   "tags": [
+    "packing",
+    "chunk"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    59,
+    66
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/packed_tensor.py:pack_tensors",
+   "type": "function",
+   "name": "pack_tensors",
+   "filePath": "vllm/distributed/weight_transfer/packed_tensor.py",
+   "summary": "从迭代器消费张量打包进连续 uint8 缓冲（到容量为止）。",
+   "tags": [
+    "packing"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    69,
+    140
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/packed_tensor.py:packed_nccl_broadcast_producer",
+   "type": "function",
+   "name": "packed_nccl_broadcast_producer",
+   "filePath": "vllm/distributed/weight_transfer/packed_tensor.py",
+   "summary": "trainer 侧打包 NCCL broadcast（元数据+数据两段）。",
+   "tags": [
+    "packing",
+    "nccl",
+    "producer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    146,
+    193
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/packed_tensor.py:packed_nccl_broadcast_consumer",
+   "type": "function",
+   "name": "packed_nccl_broadcast_consumer",
+   "filePath": "vllm/distributed/weight_transfer/packed_tensor.py",
+   "summary": "worker 侧打包 broadcast 消费与视图解包。",
+   "tags": [
+    "packing",
+    "nccl",
+    "consumer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    196,
+    296
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/packed_tensor.py:PackedIpcChunk",
+   "type": "class",
+   "name": "PackedIpcChunk",
+   "filePath": "vllm/distributed/weight_transfer/packed_tensor.py",
+   "summary": "单 packed chunk 的元数据+IPC 句柄。",
+   "tags": [
+    "packing",
+    "ipc"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    303,
+    310
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/packed_tensor.py:packed_ipc_producer",
+   "type": "function",
+   "name": "packed_ipc_producer",
+   "filePath": "vllm/distributed/weight_transfer/packed_tensor.py",
+   "summary": "打包进可复用 IPC 缓冲并 yield 句柄。",
+   "tags": [
+    "packing",
+    "ipc",
+    "producer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    313,
+    390
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/packed_tensor.py:PackedBufferImporter",
+   "type": "class",
+   "name": "PackedBufferImporter",
+   "filePath": "vllm/distributed/weight_transfer/packed_tensor.py",
+   "summary": "消费侧 packed IPC 缓冲映射的单槽缓存（跨进程引用计数正确配对）。",
+   "tags": [
+    "packing",
+    "ipc",
+    "importer"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    393,
+    429
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/packed_tensor.py:packed_ipc_consumer",
+   "type": "function",
+   "name": "packed_ipc_consumer",
+   "filePath": "vllm/distributed/weight_transfer/packed_tensor.py",
+   "summary": "解包单个 packed IPC chunk 为命名张量（rebuild_cuda_tensor 重建）。",
+   "tags": [
+    "packing",
+    "ipc",
+    "consumer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    432,
+    491
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/sharded_rdt_common.py:check_ray_rdt_version",
+   "type": "function",
+   "name": "check_ray_rdt_version",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "summary": "拒绝低于测试基线的 Ray 版本。",
+   "tags": [
+    "rdt",
+    "ray",
+    "version-check"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    53,
+    78
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/sharded_rdt_common.py:register_nixl_memory",
+   "type": "function",
+   "name": "register_nixl_memory",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "summary": "用平台 NIXL 包向 Ray 注册张量。",
+   "tags": [
+    "rdt",
+    "nixl",
+    "registration"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    81,
+    88
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/sharded_rdt_common.py:assign_producer_indices",
+   "type": "function",
+   "name": "assign_producer_indices",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "summary": "consumer_idx 绑定的 producer（全局索引）集合。",
+   "tags": [
+    "rdt",
+    "assignment"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    91,
+    99
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/sharded_rdt_common.py:RdtRouter",
+   "type": "class",
+   "name": "RdtRouter",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "summary": "按 NAME 决定每个权重由哪个 producer 供给并在绑定后发送（owner_sets 去重）的消费侧路由器。",
+   "tags": [
+    "rdt",
+    "routing"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    102,
+    343
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/sharded_rdt_common.py:buffer_alloc_bytes",
+   "type": "function",
+   "name": "buffer_alloc_bytes",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "summary": "为 nbytes 定 NIXL 缓冲/环形槽尺寸（请求+预置下限+对齐）。",
+   "tags": [
+    "rdt",
+    "buffer"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    346,
+    352
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:_Chunk",
+   "type": "class",
+   "name": "_Chunk",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "summary": "单次打包 pull 及其后处理（模块拷贝可跨 chunk）。",
+   "tags": [
+    "rdt",
+    "chunk"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    86,
+    113
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:_CallPlan",
+   "type": "class",
+   "name": "_CallPlan",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "summary": "单次 sync 的纯静态计划（pre_free 分组等），一次构建反复执行。",
+   "tags": [
+    "rdt",
+    "plan"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    117,
+    128
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:_PendingPull",
+   "type": "class",
+   "name": "_PendingPull",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "summary": "已派发未阻塞 ray.get 的 pull（targets/blob 须强引用到期）。",
+   "tags": [
+    "rdt",
+    "pending"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    132,
+    143
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:_ProcItem",
+   "type": "class",
+   "name": "_ProcItem",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "summary": "交给后台 scatter 线程的已落地 pull（results 别名环形槽）。",
+   "tags": [
+    "rdt",
+    "scatter"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    147,
+    156
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:ShardedRDTWeightTransferInitInfo",
+   "type": "class",
+   "name": "ShardedRDTWeightTransferInitInfo",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "summary": "sharded RDT 后端 init 信息。",
+   "tags": [
+    "rdt",
+    "init-info"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    160,
+    252
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:ShardedRDTWeightTransferUpdateInfo",
+   "type": "class",
+   "name": "ShardedRDTWeightTransferUpdateInfo",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "summary": "sharded RDT 更新信息（刻意为空：计划为纯函数）。",
+   "tags": [
+    "rdt",
+    "update-info"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    256,
+    264
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:ShardedRDTWeightTransferEngine",
+   "type": "class",
+   "name": "ShardedRDTWeightTransferEngine",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "summary": "消费侧 RDT/NIXL 引擎（35 个方法）：BAKE 定型+逐轮执行，只拉本 worker 消费的切片，需 ray executor+nixl。",
+   "tags": [
+    "rdt",
+    "pull-based",
+    "engine"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    267,
+    1452
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/weight_transfer/sharded_rdt_engine.py:_plan_digest",
+   "type": "function",
+   "name": "_plan_digest",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "summary": "单 consumer 对单 producer 的按序 pull digest。",
+   "tags": [
+    "rdt",
+    "digest"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1455,
+    1469
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/sharded_rdt_trainer.py:_SharedPack",
+   "type": "class",
+   "name": "_SharedPack",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_trainer.py",
+   "summary": "槽共享组的单代 chunk rendezvous 状态。",
+   "tags": [
+    "rdt",
+    "rendezvous"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    133,
+    145
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/sharded_rdt_trainer.py:ShardedRDTTrainerInitInfo",
+   "type": "class",
+   "name": "ShardedRDTTrainerInitInfo",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_trainer.py",
+   "summary": "sharded RDT trainer init 信息（各 rank 相同仅 rank 不同，只带 must-agree 线参）。",
+   "tags": [
+    "rdt",
+    "init-info"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    149,
+    187
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/sharded_rdt_trainer.py:_RDTProducerServer",
+   "type": "class",
+   "name": "_RDTProducerServer",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_trainer.py",
+   "summary": "每 rank 的 NIXL serve 面：内部 Ray actor 经 CUDA IPC 共享 trainer GPU，持有 gather 缓存与逐 consumer serve 会话。",
+   "tags": [
+    "rdt",
+    "ray-actor",
+    "producer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    190,
+    797
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/sharded_rdt_trainer.py:ShardedRDTTrainerWeightTransferEngine",
+   "type": "class",
+   "name": "ShardedRDTTrainerWeightTransferEngine",
+   "filePath": "vllm/distributed/weight_transfer/sharded_rdt_trainer.py",
+   "summary": "trainer 侧 sharded-RDT 引擎（20 个方法）：pull 型不广播，拥有每 rank producer actor。",
+   "tags": [
+    "rdt",
+    "trainer-engine"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    800,
+    1478
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/sparse_nccl_engine.py:SparseWeightPatch",
+   "type": "class",
+   "name": "SparseWeightPatch",
+   "filePath": "vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "summary": "checkpoint 坐标系下的稀疏补丁（名+形状+平坦索引）。",
+   "tags": [
+    "sparse",
+    "patch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    55,
+    62
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/sparse_nccl_engine.py:SparseNCCLTrainerInitInfo",
+   "type": "class",
+   "name": "SparseNCCLTrainerInitInfo",
+   "filePath": "vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "summary": "sparse NCCL trainer init 信息（与 dense 同形 rendezvous）。",
+   "tags": [
+    "sparse",
+    "init-info"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    66,
+    77
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/sparse_nccl_engine.py:SparseNCCLWeightTransferUpdateInfo",
+   "type": "class",
+   "name": "SparseNCCLWeightTransferUpdateInfo",
+   "filePath": "vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "summary": "sparse NCCL 逐轮更新信息。",
+   "tags": [
+    "sparse",
+    "update-info"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    81,
+    110
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/sparse_nccl_engine.py:SparseNCCLWeightTransferEngine",
+   "type": "class",
+   "name": "SparseNCCLWeightTransferEngine",
+   "filePath": "vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "summary": "稀疏 NCCL worker 引擎（6 个方法）：接收 checkpoint 坐标补丁经模型原生 loader 映射到本地参数。",
+   "tags": [
+    "sparse",
+    "engine"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    113,
+    191
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/weight_transfer/sparse_nccl_engine.py:SparseNCCLTrainerWeightTransferEngine",
+   "type": "class",
+   "name": "SparseNCCLTrainerWeightTransferEngine",
+   "filePath": "vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "summary": "trainer 侧稀疏引擎（10 个方法）：rank0 广播 (indices, values) 平坦补丁。",
+   "tags": [
+    "sparse",
+    "trainer-engine"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    194,
+    367
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "function:vllm/distributed/weight_transfer/base.py:_stack_key",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "function:vllm/distributed/weight_transfer/base.py:layerwise_groups",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "function:vllm/distributed/weight_transfer/base.py:layerwise_groups",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "function:vllm/distributed/weight_transfer/base.py:materialize_full_tensor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "function:vllm/distributed/weight_transfer/base.py:materialize_full_tensor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:Replicate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:Replicate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:Shard",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:Shard",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:ParamMeta",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:ParamMeta",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightSource",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightSource",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "function:vllm/distributed/weight_transfer/base.py:_dtensor_layout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:ModuleSource",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:ModuleSource",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferInitInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferInitInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:TrainerInitInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:TrainerInitInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferUpdateInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferUpdateInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferInitRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferInitRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferUpdateRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferUpdateRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferEngine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferEngine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:VLLMWeightSyncClient",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:VLLMWeightSyncClient",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:TrainerWeightTransferEngine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "class:vllm/distributed/weight_transfer/base.py:TrainerWeightTransferEngine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/clients.py",
+   "target": "function:vllm/distributed/weight_transfer/clients.py:_json_safe_update_info",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/clients.py",
+   "target": "class:vllm/distributed/weight_transfer/clients.py:HTTPVLLMWeightSyncClient",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/clients.py",
+   "target": "class:vllm/distributed/weight_transfer/clients.py:HTTPVLLMWeightSyncClient",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/clients.py",
+   "target": "class:vllm/distributed/weight_transfer/clients.py:RayVLLMWeightSyncClient",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/clients.py",
+   "target": "class:vllm/distributed/weight_transfer/clients.py:RayVLLMWeightSyncClient",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/factory.py",
+   "target": "class:vllm/distributed/weight_transfer/factory.py:WeightTransferEngineFactory",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/factory.py",
+   "target": "class:vllm/distributed/weight_transfer/factory.py:WeightTransferEngineFactory",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/factory.py",
+   "target": "class:vllm/distributed/weight_transfer/factory.py:WeightTransferTrainerFactory",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/factory.py",
+   "target": "class:vllm/distributed/weight_transfer/factory.py:WeightTransferTrainerFactory",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/ipc_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCWeightTransferInitInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/ipc_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCWeightTransferInitInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/ipc_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCTrainerInitInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/ipc_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCTrainerInitInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/ipc_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCWeightTransferUpdateInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/ipc_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCWeightTransferUpdateInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/ipc_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCWeightTransferEngine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/ipc_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCWeightTransferEngine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/ipc_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCTrainerWeightTransferEngine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/ipc_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCTrainerWeightTransferEngine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:prepare_m2n_local_runtime",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:prepare_m2n_local_runtime",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:create_m2n_communicator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:create_m2n_communicator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:import_m2n",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:import_m2n",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_common.py:M2NMesh",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_common.py:M2NMesh",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_common.py:M2NLayout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_common.py:M2NLayout",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:check_placements",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:check_placements",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:resolve_layout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:resolve_layout",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:validate_layout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:validate_layout",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:expected_local_shape",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:expected_local_shape",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:check_transferable",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:check_transferable",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:_max_partition_overlaps",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:check_plan_limits",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:check_plan_limits",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:validate_transfer_plan",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:validate_transfer_plan",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_common.py:M2NParamMeta",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_common.py:M2NParamMeta",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:m2n_param_meta",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:m2n_param_meta",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_common.py:M2NWireParam",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_common.py:M2NWireParam",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:source_plan_digest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:source_plan_digest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:complete_plan_digest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:complete_plan_digest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:check_source_plan_agreement",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:check_source_plan_agreement",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:check_complete_plan_agreement",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:check_complete_plan_agreement",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:check_runtime_ready_agreement",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:check_runtime_ready_agreement",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:check_data_plane_agreement",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:check_data_plane_agreement",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:publish_destination_placements",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:publish_destination_placements",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_engine.py:M2NWeightTransferInitInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_engine.py:M2NWeightTransferInitInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_engine.py:M2NWeightTransferUpdateInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_engine.py:M2NWeightTransferUpdateInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_engine.py:M2NWeightTransferEngine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_engine.py:M2NWeightTransferEngine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_layout.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_layout.py:_destination_placements",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_layout.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_layout.py:M2NDestination",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_layout.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_layout.py:M2NDestination",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_layout.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_layout.py:_base_loader_shard_dim",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_layout.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_layout.py:_validated_shard_dim",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_layout.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_layout.py:resolve_parameter_destinations",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_layout.py",
+   "target": "function:vllm/distributed/weight_transfer/m2n_layout.py:resolve_parameter_destinations",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_trainer.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_trainer.py:M2NTrainerInitInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_trainer.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_trainer.py:M2NTrainerInitInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_trainer.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_trainer.py:M2NTrainerWeightTransferEngine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_trainer.py",
+   "target": "class:vllm/distributed/weight_transfer/m2n_trainer.py:M2NTrainerWeightTransferEngine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:decode_nccl_unique_id",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:decode_nccl_unique_id",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "class:vllm/distributed/weight_transfer/nccl_common.py:NCCLWeightTransferInitInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "class:vllm/distributed/weight_transfer/nccl_common.py:NCCLWeightTransferInitInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:worker_init_payload",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:worker_init_payload",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:build_worker_init_payload",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:build_worker_init_payload",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:run_trainer_rendezvous",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:run_trainer_rendezvous",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "class:vllm/distributed/weight_transfer/nccl_common.py:NCCLRendezvous",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "class:vllm/distributed/weight_transfer/nccl_common.py:NCCLRendezvous",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:stateless_init_metadata_group",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:stateless_init_metadata_group",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:stateless_init_process_group",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:stateless_init_process_group",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:uid_init_process_group",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:uid_init_process_group",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:worker_init_metadata_group",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:worker_init_metadata_group",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:worker_init_process_group",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:worker_init_process_group",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:trainer_init",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "function:vllm/distributed/weight_transfer/nccl_common.py:trainer_init",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/nccl_engine.py:NCCLTrainerInitInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/nccl_engine.py:NCCLTrainerInitInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/nccl_engine.py:NCCLWeightTransferUpdateInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/nccl_engine.py:NCCLWeightTransferUpdateInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/nccl_engine.py:NCCLWeightTransferEngine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/nccl_engine.py:NCCLWeightTransferEngine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/nccl_engine.py:NCCLTrainerWeightTransferEngine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/nccl_engine.py:NCCLTrainerWeightTransferEngine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "target": "function:vllm/distributed/weight_transfer/packed_tensor.py:unpack_tensor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "target": "function:vllm/distributed/weight_transfer/packed_tensor.py:unpack_tensor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "target": "class:vllm/distributed/weight_transfer/packed_tensor.py:PackedChunk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "target": "class:vllm/distributed/weight_transfer/packed_tensor.py:PackedChunk",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "target": "function:vllm/distributed/weight_transfer/packed_tensor.py:pack_tensors",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "target": "function:vllm/distributed/weight_transfer/packed_tensor.py:pack_tensors",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "target": "function:vllm/distributed/weight_transfer/packed_tensor.py:packed_nccl_broadcast_producer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "target": "function:vllm/distributed/weight_transfer/packed_tensor.py:packed_nccl_broadcast_producer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "target": "function:vllm/distributed/weight_transfer/packed_tensor.py:packed_nccl_broadcast_consumer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "target": "function:vllm/distributed/weight_transfer/packed_tensor.py:packed_nccl_broadcast_consumer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "target": "class:vllm/distributed/weight_transfer/packed_tensor.py:PackedIpcChunk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "target": "class:vllm/distributed/weight_transfer/packed_tensor.py:PackedIpcChunk",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "target": "function:vllm/distributed/weight_transfer/packed_tensor.py:packed_ipc_producer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "target": "function:vllm/distributed/weight_transfer/packed_tensor.py:packed_ipc_producer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "target": "class:vllm/distributed/weight_transfer/packed_tensor.py:PackedBufferImporter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "target": "class:vllm/distributed/weight_transfer/packed_tensor.py:PackedBufferImporter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "target": "function:vllm/distributed/weight_transfer/packed_tensor.py:packed_ipc_consumer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "target": "function:vllm/distributed/weight_transfer/packed_tensor.py:packed_ipc_consumer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "target": "function:vllm/distributed/weight_transfer/sharded_rdt_common.py:check_ray_rdt_version",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "target": "function:vllm/distributed/weight_transfer/sharded_rdt_common.py:check_ray_rdt_version",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "target": "function:vllm/distributed/weight_transfer/sharded_rdt_common.py:register_nixl_memory",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "target": "function:vllm/distributed/weight_transfer/sharded_rdt_common.py:register_nixl_memory",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "target": "function:vllm/distributed/weight_transfer/sharded_rdt_common.py:assign_producer_indices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "target": "function:vllm/distributed/weight_transfer/sharded_rdt_common.py:assign_producer_indices",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "target": "class:vllm/distributed/weight_transfer/sharded_rdt_common.py:RdtRouter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "target": "class:vllm/distributed/weight_transfer/sharded_rdt_common.py:RdtRouter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "target": "function:vllm/distributed/weight_transfer/sharded_rdt_common.py:buffer_alloc_bytes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "target": "function:vllm/distributed/weight_transfer/sharded_rdt_common.py:buffer_alloc_bytes",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:_Chunk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:_CallPlan",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:_PendingPull",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:_ProcItem",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:ShardedRDTWeightTransferInitInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:ShardedRDTWeightTransferInitInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:ShardedRDTWeightTransferUpdateInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:ShardedRDTWeightTransferUpdateInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:ShardedRDTWeightTransferEngine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:ShardedRDTWeightTransferEngine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "function:vllm/distributed/weight_transfer/sharded_rdt_engine.py:_plan_digest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_trainer.py",
+   "target": "class:vllm/distributed/weight_transfer/sharded_rdt_trainer.py:_SharedPack",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_trainer.py",
+   "target": "class:vllm/distributed/weight_transfer/sharded_rdt_trainer.py:ShardedRDTTrainerInitInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_trainer.py",
+   "target": "class:vllm/distributed/weight_transfer/sharded_rdt_trainer.py:ShardedRDTTrainerInitInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_trainer.py",
+   "target": "class:vllm/distributed/weight_transfer/sharded_rdt_trainer.py:_RDTProducerServer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_trainer.py",
+   "target": "class:vllm/distributed/weight_transfer/sharded_rdt_trainer.py:ShardedRDTTrainerWeightTransferEngine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_trainer.py",
+   "target": "class:vllm/distributed/weight_transfer/sharded_rdt_trainer.py:ShardedRDTTrainerWeightTransferEngine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sparse_nccl_engine.py:SparseWeightPatch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sparse_nccl_engine.py:SparseWeightPatch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sparse_nccl_engine.py:SparseNCCLTrainerInitInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sparse_nccl_engine.py:SparseNCCLTrainerInitInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sparse_nccl_engine.py:SparseNCCLWeightTransferUpdateInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sparse_nccl_engine.py:SparseNCCLWeightTransferUpdateInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sparse_nccl_engine.py:SparseNCCLWeightTransferEngine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sparse_nccl_engine.py:SparseNCCLWeightTransferEngine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sparse_nccl_engine.py:SparseNCCLTrainerWeightTransferEngine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "target": "class:vllm/distributed/weight_transfer/sparse_nccl_engine.py:SparseNCCLTrainerWeightTransferEngine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/__init__.py",
+   "target": "file:vllm/distributed/weight_transfer/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/__init__.py",
+   "target": "file:vllm/distributed/weight_transfer/clients.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/__init__.py",
+   "target": "file:vllm/distributed/weight_transfer/factory.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "file:vllm/config/parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/base.py",
+   "target": "file:vllm/config/weight_transfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/clients.py",
+   "target": "file:vllm/distributed/weight_transfer/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/factory.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/factory.py",
+   "target": "file:vllm/config/weight_transfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/factory.py",
+   "target": "file:vllm/distributed/weight_transfer/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/factory.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/ipc_engine.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/ipc_engine.py",
+   "target": "file:vllm/config/weight_transfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/ipc_engine.py",
+   "target": "file:vllm/distributed/weight_transfer/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/ipc_engine.py",
+   "target": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/ipc_engine.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/ipc_engine.py",
+   "target": "file:vllm/model_executor/model_loader/mtp_validation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/ipc_engine.py",
+   "target": "file:vllm/model_executor/model_loader/reload/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "file:vllm/distributed/weight_transfer/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "target": "file:vllm/utils/nccl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_engine.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_engine.py",
+   "target": "file:vllm/config/weight_transfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_engine.py",
+   "target": "file:vllm/distributed/weight_transfer/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_engine.py",
+   "target": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_engine.py",
+   "target": "file:vllm/distributed/weight_transfer/m2n_layout.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_engine.py",
+   "target": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_engine.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_engine.py",
+   "target": "file:vllm/model_executor/model_loader/mtp_validation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_engine.py",
+   "target": "file:vllm/model_executor/model_loader/reload/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_layout.py",
+   "target": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_layout.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_layout.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_layout.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_trainer.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_trainer.py",
+   "target": "file:vllm/distributed/weight_transfer/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_trainer.py",
+   "target": "file:vllm/distributed/weight_transfer/m2n_common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_trainer.py",
+   "target": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/m2n_trainer.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "file:vllm/config/parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "file:vllm/distributed/device_communicators/pynccl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "file:vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "file:vllm/distributed/weight_transfer/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "target": "file:vllm/utils/nccl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_engine.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_engine.py",
+   "target": "file:vllm/config/weight_transfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_engine.py",
+   "target": "file:vllm/distributed/device_communicators/pynccl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_engine.py",
+   "target": "file:vllm/distributed/weight_transfer/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_engine.py",
+   "target": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_engine.py",
+   "target": "file:vllm/distributed/weight_transfer/packed_tensor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_engine.py",
+   "target": "file:vllm/model_executor/model_loader/mtp_validation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/nccl_engine.py",
+   "target": "file:vllm/model_executor/model_loader/reload/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "target": "file:vllm/distributed/nixl_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "file:vllm/config/weight_transfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "file:vllm/distributed/weight_transfer/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "file:vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "file:vllm/distributed/weight_transfer/sharded_rdt_fake.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "file:vllm/model_executor/model_loader/reload/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "file:vllm/model_executor/model_loader/reload/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_trainer.py",
+   "target": "file:vllm/distributed/weight_transfer/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_trainer.py",
+   "target": "file:vllm/distributed/weight_transfer/sharded_rdt_common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_trainer.py",
+   "target": "file:vllm/distributed/weight_transfer/sharded_rdt_engine.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sharded_rdt_trainer.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "target": "file:vllm/config/weight_transfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "target": "file:vllm/distributed/device_communicators/pynccl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "target": "file:vllm/distributed/weight_transfer/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "target": "file:vllm/distributed/weight_transfer/nccl_common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/weight_transfer/sparse_nccl_engine.py",
+   "target": "file:vllm/model_executor/model_loader/checkpoint_weight_patch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/base.py:ModuleSource",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightSource",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCWeightTransferInitInfo",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferInitInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCTrainerInitInfo",
+   "target": "class:vllm/distributed/weight_transfer/base.py:TrainerInitInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCWeightTransferUpdateInfo",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferUpdateInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCWeightTransferEngine",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferEngine",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCTrainerWeightTransferEngine",
+   "target": "class:vllm/distributed/weight_transfer/base.py:TrainerWeightTransferEngine",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/m2n_common.py:M2NParamMeta",
+   "target": "class:vllm/distributed/weight_transfer/base.py:ParamMeta",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/m2n_engine.py:M2NWeightTransferInitInfo",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferInitInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/m2n_engine.py:M2NWeightTransferUpdateInfo",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferUpdateInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/m2n_engine.py:M2NWeightTransferEngine",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferEngine",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/m2n_trainer.py:M2NTrainerInitInfo",
+   "target": "class:vllm/distributed/weight_transfer/base.py:TrainerInitInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/m2n_trainer.py:M2NTrainerWeightTransferEngine",
+   "target": "class:vllm/distributed/weight_transfer/base.py:TrainerWeightTransferEngine",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/nccl_common.py:NCCLWeightTransferInitInfo",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferInitInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/nccl_engine.py:NCCLTrainerInitInfo",
+   "target": "class:vllm/distributed/weight_transfer/base.py:TrainerInitInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/nccl_engine.py:NCCLWeightTransferUpdateInfo",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferUpdateInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/nccl_engine.py:NCCLWeightTransferEngine",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferEngine",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/nccl_engine.py:NCCLTrainerWeightTransferEngine",
+   "target": "class:vllm/distributed/weight_transfer/base.py:TrainerWeightTransferEngine",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:ShardedRDTWeightTransferInitInfo",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferInitInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:ShardedRDTWeightTransferUpdateInfo",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferUpdateInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:ShardedRDTWeightTransferEngine",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferEngine",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/sharded_rdt_trainer.py:ShardedRDTTrainerInitInfo",
+   "target": "class:vllm/distributed/weight_transfer/base.py:TrainerInitInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/sharded_rdt_trainer.py:ShardedRDTTrainerWeightTransferEngine",
+   "target": "class:vllm/distributed/weight_transfer/base.py:TrainerWeightTransferEngine",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/sparse_nccl_engine.py:SparseNCCLTrainerInitInfo",
+   "target": "class:vllm/distributed/weight_transfer/base.py:TrainerInitInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/sparse_nccl_engine.py:SparseNCCLWeightTransferUpdateInfo",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferUpdateInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/sparse_nccl_engine.py:SparseNCCLWeightTransferEngine",
+   "target": "class:vllm/distributed/weight_transfer/base.py:WeightTransferEngine",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/sparse_nccl_engine.py:SparseNCCLTrainerWeightTransferEngine",
+   "target": "class:vllm/distributed/weight_transfer/base.py:TrainerWeightTransferEngine",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/nccl_engine.py:NCCLTrainerWeightTransferEngine",
+   "target": "function:vllm/distributed/weight_transfer/packed_tensor.py:packed_nccl_broadcast_producer",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/nccl_engine.py:NCCLWeightTransferEngine",
+   "target": "function:vllm/distributed/weight_transfer/packed_tensor.py:packed_nccl_broadcast_consumer",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCTrainerWeightTransferEngine",
+   "target": "function:vllm/distributed/weight_transfer/packed_tensor.py:packed_ipc_producer",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/ipc_engine.py:IPCWeightTransferEngine",
+   "target": "function:vllm/distributed/weight_transfer/packed_tensor.py:packed_ipc_consumer",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/m2n_engine.py:M2NWeightTransferEngine",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:check_data_plane_agreement",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/m2n_engine.py:M2NWeightTransferEngine",
+   "target": "function:vllm/distributed/weight_transfer/m2n_common.py:publish_destination_placements",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/weight_transfer/sharded_rdt_engine.py:ShardedRDTWeightTransferEngine",
+   "target": "class:vllm/distributed/weight_transfer/sharded_rdt_common.py:RdtRouter",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

@@ -1,0 +1,37 @@
+# 批次 07：内核追踪与 AF_XDP 与 bpfilter（8 条）
+
+本批覆盖 awesome-ebpf 清单的三个小节：Kernel Tracing（4 条）、AF_XDP（2 条）、bpfilter（2 条），时间跨度 2016-2019 年，恰是 eBPF 从"网络包过滤器"扩展为"内核可观测性+包处理+防火墙通用引擎"的关键三年。质量分布两极：Hongli Lai 的 bpftrace 教程（id=58）与 kernel.org 的 AF_XDP 官方文档（id=79）是全批最有分量的两篇，前者是迄今最好的 eBPF 追踪入门叙事之一，后者是 XDP 高速包处理的权威参考；82 号 FRnOG 幻灯片意外地完整（17 页全录），单独扛起 bpfilter 小节。缺内容的三条（59/60 SlideShare 反爬壳页、81 Cilium 博客正文抓空）均为抓取失败而非资源本身劣质。对学习者的建议：以 58+79 为主干精读，80/82 做 RFC 期历史语境补充，59/60/81 跳过（81 主题可由 82 覆盖）。
+
+---
+
+## [58] Full-system dynamic tracing on Linux using eBPF and bpftrace
+
+Hongli Lai（Phusion Passenger 作者）2019-01 的长文教程，是本批质量最高的一篇。核心内容：①tracing 的定义——事件（syscall/函数调用/定时器/缺页/上下文切换）触发小程序执行，无需重编译/重启目标应用、低开销，适合生产环境；②历史脉络——DTrace（Sun 发明，CDDL 许可与 GPL 不兼容导致 Linux 错过，2018 年 Oracle 重新以 GPL 授权为时已晚，Linux 生态靠 kprobes/tracepoints/uprobes/USDT 有机生长出替代品）；③事件源四件套辨析——kprobes（任意内核函数，免注释但跨版本不稳定）vs kernel tracepoints（`TRACE_EVENT` 宏手工埋点，稳定且带丰富上下文）vs uprobes（用户态函数）vs USDT（用户态静态埋点，且 `DTRACE_PROBE` 宏源码级兼容 DTrace）；④eBPF 本质——内核内高性能 VM，只能通过 map（键值存储）与用户态交互、无循环保证有界执行；前 eBPF 时代 SystemTap 编译成内核模块的脆弱性对比；⑤实操——Ubuntu 18.04 安装、11 条 one-liner、I/O 计时脚本逐段拆解（kretprobe 需 `/@start[tid]/` 过滤防半程捕获取负时间）、USDT 探针例子、以及用 `usdt:/tmp/libc:memory_arena_new` 探针实验证明 glibc ptmalloc 每建一个新线程就新开 arena（不管锁竞争）——解释 Ruby 内存高的真实案例。亮点坑：bpftrace issue 328——USDT provider name 必须等于二进制文件名，否则找不到探针（libc-2.27.so 需 symlink 成 libc）。对学习者：这是把"Linux 追踪生态为什么长这样"讲得最透彻的入门文，`/sys/kernel/debug/tracing/events/*/format` 查参数结构 + grep 头文件查 MADV_DONTNEED 值的套路值得学。对 AI agent：本地路径 `web/md/58.md`，可 grep 关键词 `kprobes`、`USDT`、`memory_arena_new`、`DTRACE_PROBE1`、`bpftrace -l`、`args->`。
+
+## [59] Meet-cute between eBPF and Kernel Tracing
+
+内容缺失：SlideShare 反爬挑战页（"JavaScript is disabled"），本地 md 只剩 13 行壳页，无幻灯片正文。从 URL（slideshare.net/meet-cutebetweenebpfandtracing/62446985）可知是 eBPF 与内核追踪结合主题的演讲幻灯片，62446985 这个编号段（2017 年前后）结合 id=60 同系列推断，可能是 Koren / VIAVI 等早期 eBPF tracing 推广材料。无实质内容可提炼，跳过。对 AI agent：`web/md/59.md` 无可用内容，需原 URL 重抓（SlideShare 需 JS 渲染或走 r.jina.ai 通道）。
+
+## [60] Linux Kernel Tracing
+
+内容缺失：与 59 同因，SlideShare 反爬挑战页，无幻灯片正文。URL 编号 65201573 对应 2017 年中期的"Linux Kernel Tracing"综合演讲（该时期此标题的常见作者是 Sasha Goldshtein，但抓取内容为零无法核实，不作断言）。跳过不编造。对 AI agent：`web/md/60.md` 不可用；若需该主题，本批 id=58 文内引用的 Julia Evans《Linux tracing systems》博客（jvns.ca/blog/2017/07/05/linux-tracing-systems/）是更可靠的同类概览。
+
+## [61] Linux BPF Superpowers
+
+Brendan Gregg 2016-03-05 博文，Facebook Performance @Scale 2016 演讲（30 分钟视频）的导流帖，正文短但史料价值高。要点：①命名钉版——"我们不再叫它 eBPF（extended Berkeley Packet Filter），直接叫 BPF"，并半开玩笑征集新 backronym（Bytecode Probe Framework?）；②BPF 定位——内核内字节码机器，用途从 tracing 到虚拟网络（vSwitch），Alexei Starovoitov 主导（时在 Facebook），Netflix/Cisco/PLUMgrid 多公司贡献；③演示案例 off-CPU analysis（BPF 使 off-CPU 时间分析成为可能）与 gethostlatency（系统级 DNS 查询延迟监测，无需重启任何进程，插桩 wget/curl 的 gethostbyname）；④bcc 工具家族 2016 年全景图（execsnoop/opensnoop/ext4slower/tcpretrans/tcpconnect/runqlat 等从 DTraceToolkit 移植），要求内核 ≥4.1，Ubuntu 16.04 是分水岭。对学习者：这篇是 eBPF "出圈"时刻的一手记录，配合 PDF 幻灯片（brendangregg.com/Slides/PerformanceAtScale2016_LinuxBPFSuperpowers.pdf）食用更佳；历史上它标志 BPF 从网络子系统走向 observability 主舞台。对 AI agent：`web/md/61.md` 可 grep `gethostlatency`、`off-CPU`、`bcc_tracing_tools_2016`、`4.1`；正文含大量站点导航噪音，正文区在 L96-155。
+
+## [79] AF_XDP（kernel.org 官方文档）
+
+Linux 内核官方文档 AF_XDP 页（当前 7.4.0-rc1 快照，Magnus Karlsson/Björn Töpel 等 Intel 系作者署名 credits），是 XDP 高速包处理到用户态的权威参考。核心机制：①AF_XDP socket（XSK）= 专为高性能包处理优化的地址族，XDP 程序通过 `bpf_redirect_map()` 把 ingress 帧重定向到用户态内存；②UMEM——用户态分配的等大 chunk 内存区（malloc/mmap/huge pages 均可），经 `XDP_UMEM_REG` 注册给内核，RX/TX 可共享同一 UMEM 免拷贝，重传包只换描述符不搬数据；③四种环（ring）——UMEM 侧 FILL（用户态交出缓冲区给内核收包）+ COMPLETION（内核归还缓冲区），socket 侧 RX + TX；全部为单生产者/单消费者 head/tail 环，size 必须 2 的幂；④分发靠 BPF_MAP_TYPE_XSKMAP，XDP 程序查表重定向，socket 必须绑定到匹配的 netdev+queue_id 否则丢包——**必须加载 XDP 程序且 XSKMAP 至少放一个 socket 才能收到流量**；⑤两种模式 XDP_SKB（通用 copy 回退，任意网卡可用）/XDP_DRV（驱动原生，仍有一次 copy 到用户态；bind flag XDP_ZEROCOPY 可强制零拷贝）；⑥XDP_SHARED_UMEM 跨 socket/跨 queue/跨网卡共享内存的两种用法、XDP_USE_NEED_WAKEUP 省 syscall 优化（官方建议总是开启）、multi-buffer（XDP_USE_SG + XDP_PKT_CONTD 标志，copy 模式上限 CONFIG_MAX_SKB_FRAGS+1、可移植代码限 18 frag，零拷贝上限查 netlink NETDEV_A_DEV_XDP_ZC_MAX_SEGS）；⑦FAQ 实战坑：绑了 queue 0 收不到包因为 NIC 每核一个 queue——用 `ethtool -L combined 1` 或 ntuple 规则导流；同一 UMEM 缓冲区同时喂 FILL 和 TX 环会导致包损坏。重要勘误：文档明确警告"不要参考 2017 年的 AF_PACKET v4 论文，几乎所有东西都改了"，应看 LPC 2018 论文与 LWN 750845。对学习者：写任何 AF_XDP 应用的必读文档，环所有权转移模型（用户态持有→FILL→内核→RX→用户态处理→TX→COMPLETION→用户态）是理解一切性能特征的钥匙。对 AI agent：`web/md/79.md` 可 grep `XDP_UMEM_REG`、`XSKMAP`、`XDP_PKT_CONTD`、`need_wakeup`、`ethtool -L`、`xdp.frags`；示例代码 `samples/bpf/xdpsock` 与 xdp-project/bpf-examples。
+
+## [80] Fast Packet Processing in Linux with AF_XDP（FOSDEM 2018）
+
+FOSDEM 2018 SDN/NFV devroom 演讲页（Magnus Karlsson + Björn Töpel，Intel，30 分钟），本地 md 是议程页含完整 abstract + 讲者介绍 + slides PDF 与视频 mp4 附件链接，非幻灯片正文。Abstract 有实质干货：①动机——DPI 等专用包处理因复杂度常年跑在用户态，以太网 40→100→200 Gbit/s 演进使"高速原始以太网帧直达 Linux 用户态"成为刚需；②设计四支柱——true zero-copy、lock-less 数据结构、消除 syscall、同时遵守 Linux 的隔离与安全规则（对比 DPDK 的接管网卡方式）；③性能数据——微基准最高 **40x** 提升、**tcpdump 场景 20x**（对比旧 AF_PACKET raw socket）；④当时状态——处于 netdev 邮件列表 RFC 阶段（2018-02，尚未进主线），已实现 Intel I40e NIC 与 veth 支持；⑤定位为 XDP 的扩展而非独立机制，且论证了 DPDK 等 SDK 可用 AF_XDP 获得鲁棒性/易用性/硬件无关性（后来 DPDK 确实加了 AF_XDP PMD，证言兑现）。讲者背景也有信息量：Karlsson 长期底层软件/微处理器设计，Töpel 做过 Skype P2P 栈与高频交易平台。对学习者：这是 AF_XDP 主线化前夜的第一手推广材料，与 79 号官方文档对照读可见 2018 RFC→2024+ multi-buffer 的完整演进；slides 在 fosdem_2018_v3.pdf（archive.fosdem.org 可下），视频 video.fosdem.org/2018/H.1301/af_xdp.mp4。对 AI agent：`web/md/80.md` 可 grep `40x`、`AF_PACKET`、`I40E`、`DPDK`、`zero-copy`；正文区在 L43-90。
+
+## [81] Why is the kernel community replacing iptables with BPF?（Cilium 博客）
+
+内容缺失：本地 md 只有标题与来源头（cilium.io/blog/2018/04/17），正文抓取为空（L8 后整个空白）。从 URL 与标题可判定这是 Cilium 官方博客 2018-04-17 的名文——由 BPF 核心维护者撰写的"iptables 为何被 BPF 取代"论证文（nftables 与 bpfilter 之争的 BPF 阵营檄文），与本批 82 号 FRnOG 幻灯片第 14-15 页引用的社区辩论同题互补，但正文未落地，具体论点不作编造。跳过。对 AI agent：`web/md/81.md` 不可用；若需该主题一手材料，用 82 号 PDF（本地全录）+ 其引用的 LWN 747551《BPF comes to the firewalls》/ LWN 749108《Designing ELF modules》替代，或对原 URL 重抓。
+
+## [82] bpfilter: Linux firewall with eBPF sauce（FRnOG 演讲幻灯片）
+
+Quentin Monnet（Netronome，现 Cilium/eBPF 文档维护者）2018-03-16 巴黎 FRnOG 演讲的 17 页幻灯片，pdf-txt 全文完整，是 bpfilter RFC 期最清晰的架构讲解。核心内容：①bpfilter = iptables 的 eBPF 新后端——iptables 二进制不动、规则被翻译成 eBPF 程序挂到 XDP/tc；②最大胆的设计是 bpfilter.ko——"新形态内核模块"：ELF 文件却跑在**用户态**（user mode helpers/UMH 机制，特殊线程、全权限、root namespace），随内核树构建但兼容 modprobe/modinfo，目标是好开发/好调试/缩攻击面（崩不了内核）/数据面内核-控制面用户态解耦，经 bpf() syscall 与内核通信；③辨析三件易混物——xt_bpf（Netfilter hook 挂 classic BPF 字节码，幻灯片还展示了 Cloudflare 那条匹配 example.com DNS 查询的 cBPF 字节码写法）、nftables（iptables 正统继任者）、NetBSD NFP 防火墙（cBPF+JIT）；④实战演示——`iptables -A INPUT -d 10.0.0.4/32 -j DROP` 一条规则翻译成 26 条 eBPF 指令（指令 #19 即 `ntohl(10.0.0.4)=0x400000a` 的比对），用 `bpftool prog dump xlated` 可见；⑤性能——单条 drop 规则 64B 包，Xeon E5-2630 v3 + Agilio CX 40Gbps，iptables/nftables/bpfilter 对比（结论页仅"40 Gbps"一行，图未 OCR 成数字，定性为 bpfilter 领先）；⑥社区反应 68 回复：nftables 速度已有大改进但 Netfilter 硬件卸载采纳不佳、iptables 100% 行为复刻不可能、为什么基于 iptables 而非 nftables（iptables 至少再活十年）、ELF 模块安全性质疑（回应：有 BPF verifier，不比传统内核模块更不安全）、"BPF usability 差"被驳"Simply not true"。署名钉版：RFC "net: add bpfilter" 2018-02 由 Daniel Borkmann 发 netdev，幻灯片称代码出自 Miller/Starovoitov/Borkmann。历史后验：bpfilter 最终未按此形态进主线，2020 年后项目转向（bpfilter 换了维护者与实现路线，如今是 userspace + BPF 的 daemon 形态），本幻灯片是"UMH ELF 内核模块"这一未竟路线的最佳存档。对学习者：把"防火墙规则=数据包过滤器=BPF 本源"这层血缘讲透了——BPF 名字里的 Packet Filter 回到防火墙场景完成闭环。对 AI agent：`web/pdf-txt/82.txt` 可 grep `UMH`、`user mode helpers`、`bpfilter.ko`、`xt_bpf`、`ntohl`、`bpf_redirect`；引用链接 mail-archive netdev msg217095、LWN 747551/749108 可作扩展检索词。

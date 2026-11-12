@@ -1,0 +1,30 @@
+# DeepWiki 索引 — openucx/ucc
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-11-11
+> 结构 25 页 · 全文 333005 字符
+
+- [1 UCC Overview](1-ucc-overview.md)
+  - [1.1 Architecture Overview](1.1-architecture-overview.md)
+  - [1.2 Building and Configuration](1.2-building-and-configuration.md)
+- [2 Core Components](2-core-components.md)
+  - [2.1 UCC API](2.1-ucc-api.md)
+  - [2.2 Context and Team Management](2.2-context-and-team-management.md)
+  - [2.3 Collective Operations](2.3-collective-operations.md)
+- [3 Transport Layers](3-transport-layers.md)
+  - [3.1 UCP Transport Layer](3.1-ucp-transport-layer.md)
+  - [3.2 NCCL Transport Layer](3.2-nccl-transport-layer.md)
+  - [3.3 SHARP Transport Layer](3.3-sharp-transport-layer.md)
+  - [3.4 MLX5 Transport Layer](3.4-mlx5-transport-layer.md)
+- [4 Memory Components](4-memory-components.md)
+  - [4.1 CUDA Memory Component](4.1-cuda-memory-component.md)
+- [5 Collective Algorithms](5-collective-algorithms.md)
+  - [5.1 Knomial Algorithms](5.1-knomial-algorithms.md)
+  - [5.2 Topology-Aware Algorithms](5.2-topology-aware-algorithms.md)
+- [6 Testing Framework](6-testing-framework.md)
+  - [6.1 Google Test Framework](6.1-google-test-framework.md)
+  - [6.2 MPI Testing](6.2-mpi-testing.md)
+- [7 Supporting Components](7-supporting-components.md)
+  - [7.1 Base Interfaces](7.1-base-interfaces.md)
+  - [7.2 Scheduling and Progress](7.2-scheduling-and-progress.md)
+  - [7.3 Configuration System](7.3-configuration-system.md)
+  - [7.4 Component Framework](7.4-component-framework.md)

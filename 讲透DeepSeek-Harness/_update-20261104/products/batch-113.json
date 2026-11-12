@@ -1,0 +1,117 @@
+{
+  "nodes": [
+    {
+      "id": "document:packages/settings/README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "packages/settings/README.md",
+      "summary": "settings 包组总览：通过插件 Config schema 派生的表单编辑运行中插件配置，active profile patch 存储编辑、Loader 应用；组内仅 settings 一个包（ctx key `settings`）。",
+      "tags": ["documentation", "package-group", "settings", "configuration", "overview"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:packages/settings/settings/README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "packages/settings/settings/README.md",
+      "summary": "dsh-settings 包参考文档：编辑插件以 .volatile() 声明的字段并查看生效值，表单按 profile entry id 标识插件、保留 secret、拒绝过期写入；含旧版 settings.yaml 一次性导入迁移与 autoGenerate 表单策略说明。",
+      "tags": ["documentation", "package-reference", "settings", "volatile-config", "forms"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:packages/settings/settings/package.json",
+      "type": "config",
+      "name": "package.json",
+      "filePath": "packages/settings/settings/package.json",
+      "summary": "@deepseek-ai/dsh-settings 包清单：运行时依赖 dsh-util-values、dsh-config-editor、cordis-plugin-loader、cosmokit 与 yaml，peer 含 schemastery/dsh-session；导出 ./types 子路径与 locale 资源。",
+      "tags": ["configuration", "package-manifest", "exports", "dependencies"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:packages/settings/settings/src/schema.ts",
+      "type": "file",
+      "name": "schema.ts",
+      "filePath": "packages/settings/settings/src/schema.ts",
+      "summary": "从插件 Config schema 派生可编辑表单与纯值：plainConfig 剥离运行时引用、plainSchema 深拷贝 schema 并对 secret 字段去默认值/对其余默认值做 redactSecrets 脱敏、volatileForm 选取 volatile 子树、projectForm 只投影 schema 声明字段（!!js 表达式整体保留）、isVolatilePath 校验可热编辑路径。",
+      "tags": ["utility", "schema", "form-projection", "config", "redaction"],
+      "complexity": "moderate",
+      "languageNotes": "基于 vendored schemastery 的 z schema 树（meta/dict/inner/list）递归遍历；isVolatile 引用 cosmokit 判定 volatile 配置节点。"
+    },
+    {
+      "id": "function:packages/settings/settings/src/schema.ts:plainConfig",
+      "type": "function",
+      "name": "plainConfig",
+      "filePath": "packages/settings/settings/src/schema.ts",
+      "lineRange": [10, 17],
+      "summary": "递归剥解配置快照中的运行时引用（isVolatile 取 .get()），数组与对象逐层转换，返回适合脱敏与表单使用的普通值。",
+      "tags": ["utility", "recursion", "volatile", "normalization"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:packages/settings/settings/src/schema.ts:plainSchema",
+      "type": "function",
+      "name": "plainSchema",
+      "filePath": "packages/settings/settings/src/schema.ts",
+      "lineRange": [19, 31],
+      "summary": "以 schema.toJSON() 深拷贝构造纯 schema，walk 递归删除 volatile 元数据；role 为 secret 的节点删除 default/required，其余节点的默认值经 redactSecrets 脱敏。",
+      "tags": ["utility", "schema", "redaction", "deep-copy"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:packages/settings/settings/src/schema.ts:volatileForm",
+      "type": "function",
+      "name": "volatileForm",
+      "filePath": "packages/settings/settings/src/schema.ts",
+      "lineRange": [37, 47],
+      "summary": "选取 schema 中最近的 volatile 祖先覆盖的字段子集构成表单 schema；根即 volatile 则整体 plainSchema 化，object 类型递归过滤子字段，无任何 live 字段时返回 undefined。",
+      "tags": ["utility", "schema", "volatile", "form-projection"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:packages/settings/settings/src/schema.ts:projectForm",
+      "type": "function",
+      "name": "projectForm",
+      "filePath": "packages/settings/settings/src/schema.ts",
+      "lineRange": [59, 67],
+      "summary": "只投影 schema 声明过的字段值（剔除普通配置）；!!js 表达式对象（单一 __jsExpr 键）整体保留不做逐字段投影。",
+      "tags": ["utility", "projection", "schema", "filtering"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:packages/settings/settings/src/schema.ts:isVolatilePath",
+      "type": "function",
+      "name": "isVolatilePath",
+      "filePath": "packages/settings/settings/src/schema.ts",
+      "lineRange": [74, 79],
+      "summary": "校验一条表单编辑的字段路径是否位于 schema 声明的 volatile 节点之下，沿 dict 子树递归下行。",
+      "tags": ["utility", "validation", "volatile", "schema"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:packages/settings/settings/tsconfig.json",
+      "type": "config",
+      "name": "tsconfig.json",
+      "filePath": "packages/settings/settings/tsconfig.json",
+      "summary": "dsh-settings 的 TypeScript 项目引用配置：src→lib/types 输出，引用 vendor 三件（cosmokit/cordis/schemastery/loader）与 util/brand、util/values、boot/config-editor。",
+      "tags": ["configuration", "typescript", "project-references", "build-system"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {"source": "file:packages/settings/settings/src/schema.ts", "target": "file:packages/settings/settings/src/redact.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:packages/settings/settings/src/schema.ts", "target": "function:packages/settings/settings/src/schema.ts:plainConfig", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:packages/settings/settings/src/schema.ts", "target": "function:packages/settings/settings/src/schema.ts:plainSchema", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:packages/settings/settings/src/schema.ts", "target": "function:packages/settings/settings/src/schema.ts:volatileForm", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:packages/settings/settings/src/schema.ts", "target": "function:packages/settings/settings/src/schema.ts:projectForm", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:packages/settings/settings/src/schema.ts", "target": "function:packages/settings/settings/src/schema.ts:isVolatilePath", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:packages/settings/settings/src/schema.ts", "target": "function:packages/settings/settings/src/schema.ts:plainConfig", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:packages/settings/settings/src/schema.ts", "target": "function:packages/settings/settings/src/schema.ts:volatileForm", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:packages/settings/settings/src/schema.ts", "target": "function:packages/settings/settings/src/schema.ts:projectForm", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:packages/settings/settings/src/schema.ts", "target": "function:packages/settings/settings/src/schema.ts:isVolatilePath", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "document:packages/settings/README.md", "target": "document:packages/settings/settings/README.md", "type": "related", "direction": "forward", "weight": 0.5},
+    {"source": "document:packages/settings/settings/README.md", "target": "file:packages/settings/settings/src/schema.ts", "type": "documents", "direction": "forward", "weight": 0.5},
+    {"source": "document:packages/settings/settings/README.md", "target": "file:packages/settings/settings/src/index.ts", "type": "documents", "direction": "forward", "weight": 0.5},
+    {"source": "config:packages/settings/settings/package.json", "target": "file:packages/settings/settings/src/index.ts", "type": "configures", "direction": "forward", "weight": 0.6},
+    {"source": "config:packages/settings/settings/tsconfig.json", "target": "file:packages/settings/settings/src/schema.ts", "type": "configures", "direction": "forward", "weight": 0.6}
+  ]
+}

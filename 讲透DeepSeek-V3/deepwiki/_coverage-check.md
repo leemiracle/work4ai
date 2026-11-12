@@ -1,18 +1,12 @@
-# DeepWiki 抓取覆盖率检查
+# Coverage Check
 
-- _links.txt 链接总数: 33
-- 实际 md 文件数: 33
-- 缺失页: 0
-- 空页(<= 500B): 0
+- repo: deepseek-ai/DeepSeek-V3
+- fetched: 2026-10-30
+- 结构清单页数: 33
+- 落盘页数: 33
 
-## 结论
-**100% 覆盖**：全部链接均有对应 Markdown 文件且非空。
+- 覆盖: 33/33 (100%)
 
-## 抽查 3 页
-
-| 页面 | 大小(B) | 状态 | 检查 |
-|---|---|---|---|
-| 2.3-web-interface-and-api-access | 7439 | 正常 | PASS |
-| 2-getting-started | 6084 | 正常 | PASS |
-| 4.4-multi-token-prediction-(mtp) | 7555 | 正常 | PASS |
-
+## 全层级对账终判（dw_reconcile_dir.py, 2026-10-30）
+- 结构全层级 33 页 vs 落盘 33 页（结构外/三级页 extra 0）
+- 终判: TRUE_100

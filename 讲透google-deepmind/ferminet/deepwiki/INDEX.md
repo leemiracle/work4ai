@@ -1,0 +1,33 @@
+# DeepWiki 索引 — google-deepmind/ferminet
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 285838 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation and Setup](1.1-installation-and-setup.md)
+  - [1.2 Quick Start Guide](1.2-quick-start-guide.md)
+- [2 Configuration System](2-configuration-system.md)
+  - [2.1 Base Configuration](2.1-base-configuration.md)
+  - [2.2 System Configurations](2.2-system-configurations.md)
+- [3 Core Training Pipeline](3-core-training-pipeline.md)
+  - [3.1 Training Loop Architecture](3.1-training-loop-architecture.md)
+  - [3.2 Loss Functions and Optimization](3.2-loss-functions-and-optimization.md)
+- [4 Neural Network Architectures](4-neural-network-architectures.md)
+  - [4.1 FermiNet Architecture](4.1-ferminet-architecture.md)
+  - [4.2 PsiFormer Architecture](4.2-psiformer-architecture.md)
+  - [4.3 Network Building Blocks](4.3-network-building-blocks.md)
+- [5 Physics and Mathematics](5-physics-and-mathematics.md)
+  - [5.1 Hamiltonian and Energy Calculation](5.1-hamiltonian-and-energy-calculation.md)
+  - [5.2 MCMC Sampling](5.2-mcmc-sampling.md)
+  - [5.3 Observables and Density Matrix](5.3-observables-and-density-matrix.md)
+- [6 Advanced Features](6-advanced-features.md)
+  - [6.1 Periodic Boundary Conditions](6.1-periodic-boundary-conditions.md)
+  - [6.2 Excited States and SCF Integration](6.2-excited-states-and-scf-integration.md)
+- [7 Utilities and Development](7-utilities-and-development.md)
+  - [7.1 Checkpointing and State Management](7.1-checkpointing-and-state-management.md)
+  - [7.2 Logging and Statistics](7.2-logging-and-statistics.md)
+  - [7.3 Multi-host and Distribution](7.3-multi-host-and-distribution.md)
+- [8 Testing and Code Quality](8-testing-and-code-quality.md)
+  - [8.1 Test Suite Overview](8.1-test-suite-overview.md)
+  - [8.2 Physics Validation and Testing](8.2-physics-validation-and-testing.md)
+  - [8.3 Code Quality and CI](8.3-code-quality-and-ci.md)

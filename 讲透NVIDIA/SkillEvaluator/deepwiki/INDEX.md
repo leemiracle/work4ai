@@ -1,0 +1,33 @@
+# DeepWiki 索引 — NVIDIA/SkillEvaluator
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 206611 字符
+
+- [1 SkillEvaluator Overview](1-skillevaluator-overview.md)
+  - [1.1 Getting Started: Installation and Quickstart](1.1-getting-started-installation-and-quickstart.md)
+  - [1.2 Configuration and Environment Variables](1.2-configuration-and-environment-variables.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 Data Models and Skill Schema](2.1-data-models-and-skill-schema.md)
+  - [2.2 LLM and Embedding Provider Layer](2.2-llm-and-embedding-provider-layer.md)
+  - [2.3 CLI Surface and Command Routing](2.3-cli-surface-and-command-routing.md)
+- [3 Tier 1: Validation](3-tier-1-validation.md)
+  - [3.1 Schema, Quality, and Rubric Checks](3.1-schema-quality-and-rubric-checks.md)
+  - [3.2 Security, PII, and Unicode Checks](3.2-security-pii-and-unicode-checks.md)
+  - [3.3 Policy, Profiles, and Validation Reporting](3.3-policy-profiles-and-validation-reporting.md)
+- [4 Tier 2: Deduplication and Semantic Analysis](4-tier-2-deduplication-and-semantic-analysis.md)
+  - [4.1 Inter-Skill Similarity Check](4.1-inter-skill-similarity-check.md)
+  - [4.2 Intra-Skill Context Deduplication](4.2-intra-skill-context-deduplication.md)
+- [5 Tier 3: Live Agent Evaluation](5-tier-3-live-agent-evaluation.md)
+  - [5.1 Eval Dataset Generation](5.1-eval-dataset-generation.md)
+  - [5.2 Harbor Runner and Sandbox Environments](5.2-harbor-runner-and-sandbox-environments.md)
+  - [5.3 NVIDIA Build Bridge and Agent Compatibility](5.3-nvidia-build-bridge-and-agent-compatibility.md)
+  - [5.4 Grading, Metrics, and Tier 3 Reporting](5.4-grading-metrics-and-tier-3-reporting.md)
+  - [5.5 Reference Skills](5.5-reference-skills.md)
+- [6 CI/CD Integration and OSS Compliance](6-ci-cd-integration-and-oss-compliance.md)
+  - [6.1 GitHub Actions CI Integration](6.1-github-actions-ci-integration.md)
+  - [6.2 OSS Boundary Enforcement](6.2-oss-boundary-enforcement.md)
+  - [6.3 Contributing and Development Workflow](6.3-contributing-and-development-workflow.md)
+- [7 Testing Infrastructure](7-testing-infrastructure.md)
+  - [7.1 Validator and Reporting Tests](7.1-validator-and-reporting-tests.md)
+  - [7.2 Tier 3 and Harbor Tests](7.2-tier-3-and-harbor-tests.md)
+- [8 Glossary](8-glossary.md)

@@ -1,0 +1,1088 @@
+---
+hide:
+  - navigation
+---
+
+# C++ API Usage
+
+This guide covers C++ initialization, RX/TX workflows, buffer lifecycle calls, file
+writing, utility helpers, and status codes. The function calls below follow the
+six-step lifecycle introduced in the [API Guide](index.md): init → RX/TX → access
+→ free → shutdown. Include the canonical public header,
+[`daqiri/daqiri.h`](https://github.com/NVIDIA/daqiri/blob/main/include/daqiri/daqiri.h),
+in C++ applications.
+
+For the terminology used here (*burst*, *segment*, *flow*, *queue*, *memory
+region*, *zero-copy ownership*, *RX reorder*), keep the
+[Concepts](../concepts.md) page open in a second tab.
+
+## Version Metadata
+
+DAQIRI package versions use CalVer in `YYYY.MM.PATCH` form. The public
+`daqiri/daqiri.h` header includes `daqiri/version.h`, which exposes compile-time
+macros and inline C++ helpers:
+
+```cpp
+#include <daqiri/daqiri.h>
+
+static_assert(DAQIRI_VERSION_YEAR >= 2026);
+const char *package_version = daqiri::version_string();
+int abi = daqiri::abi_version();
+```
+
+`DAQIRI_ABI_VERSION` / `daqiri::abi_version()` is the shared-library ABI version
+and is intentionally separate from the CalVer package version. The YAML
+`common.version` field remains the configuration schema version.
+
+## Initialization
+
+```cpp
+#include <daqiri/daqiri.h>
+
+// Initialize from a YAML config file
+auto status = daqiri::daqiri_init("path/to/config.yaml");
+
+// Or build the configuration in code
+daqiri::NetworkConfig config;
+// Populate configuration struct
+auto status = daqiri::daqiri_init(config);
+```
+
+`daqiri_init()` checks the configuration, prepares packet memory, and starts the selected engine.
+It returns `Status::SUCCESS` when DAQIRI is ready.
+
+`MemoryKind::HUGE` is an explicit hugetlb request for DAQIRI-owned memory. DAQIRI does not
+substitute regular or transparent-hugepage memory when the requested hugetlb allocation is
+unavailable; initialization fails instead. Use `MemoryKind::HOST` or `MemoryKind::HOST_PINNED` when regular host memory is
+intended. Callers supplying an external memory binding remain responsible for its backing.
+
+Only one engine may be active in a process. Calling `daqiri_init()` again before
+`shutdown()` returns `Status::INTERNAL_ERROR` and leaves the running engine unchanged.
+After `shutdown()` completes, a later `daqiri_init()` creates a fresh engine instance and
+allocates/registers its resources again.
+
+### Application-owned memory regions
+
+Applications that need allocations in a specific CUDA context (including MPS applications) can
+bind their own storage to configured memory-region names. Query the engine-adjusted requirements
+first; the returned capacity includes packet headroom, slot alignment, and any DPDK buffer-count
+safety adjustment.
+
+```cpp
+daqiri::NetworkConfig config;
+if (daqiri::parse_network_config("config.yaml", config) != daqiri::Status::SUCCESS) {
+  throw std::runtime_error("invalid DAQIRI config");
+}
+
+daqiri::MemoryRegionRequirements requirements;
+daqiri::get_memory_region_requirements(config, requirements);
+const auto& rx = requirements.at("RX_GPU");
+
+void* rx_gpu = nullptr;
+cudaMalloc(&rx_gpu, rx.capacity);  // Uses the application's current context.
+daqiri::MemoryRegionBindings bindings{{"RX_GPU", {rx_gpu, rx.capacity}}};
+
+if (daqiri::daqiri_init(config, bindings) != daqiri::Status::SUCCESS) {
+  cudaFree(rx_gpu);
+  throw std::runtime_error("DAQIRI initialization failed");
+}
+
+// Return every outstanding burst before shutdown.
+daqiri::shutdown();
+cudaFree(rx_gpu);
+```
+
+Bindings may cover only some regions; DAQIRI allocates the rest. Bound memory is borrowed, so its
+allocation and CUDA context must remain alive until `shutdown()` completes. DAQIRI deregisters it
+from the NIC but never frees, unpins, or unmaps it. Direct TCP/UDP sockets reject bindings because
+their configured regions are not packet pools. DPDK also rejects externally bound `huge` regions:
+EAL assumes ownership of pre-existing hugepage mappings during initialization and unmaps them at
+cleanup. External `huge` regions remain supported by ibverbs/RDMA.
+
+If GPU RX `reorder_configs` are configured for Raw Ethernet (`stream_type: "raw"`), set
+one CUDA stream per GPU reorder plan before pulling reordered bursts. CPU reorder configs do not use a
+CUDA stream. See the [Configuration YAML Reference](configuration.md#rx-reorder-configs)
+for reorder configuration constraints.
+
+```cpp
+cudaStream_t stream = /* your stream */;
+auto st = daqiri::set_reorder_cuda_stream("rx_port", "rx_reorder_0", stream);
+if (st != daqiri::Status::SUCCESS) {
+    // handle setup error
+}
+```
+
+## Receiving Packets
+
+### RX Step 1: Get a burst
+
+```cpp
+daqiri::BurstParams *burst;
+int port_id = 0;
+int queue_id = 0;
+auto status = daqiri::get_rx_burst(&burst, port_id, queue_id);
+```
+
+`get_rx_burst()` is non-blocking. It returns `Status::SUCCESS` when a burst is
+available. When no burst is ready, engines return `Status::NULL_PTR` or `Status::NOT_READY`;
+applications should handle both as an empty poll. There are also overloads that dequeue from
+any queue on a port, or from any queue on any port:
+
+```cpp
+// From any queue on port 0
+daqiri::get_rx_burst(&burst, 0);
+
+// From any queue on any port (round-robin)
+daqiri::get_rx_burst(&burst);
+```
+
+For an ibverbs RX queue configured with `poll_mode: direct`, the calling thread performs one
+bounded check for ready packets inside `get_rx_burst()`. A successful call returns the packets
+currently ready, up to 256, without a DAQIRI RX worker or handoff ring. Exactly one thread may
+poll each direct queue. Continue using the normal burst-free APIs; released packet buffers are
+recycled by a subsequent direct poll. An empty direct poll returns `Status::NOT_READY`. Indirect
+mode remains the default.
+
+### RX Step 2: Access packet data
+
+For a single-segment configuration (CPU-only or batched GPU):
+
+```cpp
+for (int i = 0; i < daqiri::get_num_packets(burst); i++) {
+    void *pkt = daqiri::get_packet_ptr(burst, i);
+    uint32_t len = daqiri::get_packet_length(burst, i);
+    daqiri::FlowId flow = daqiri::get_packet_flow_id(burst, i);
+    uint64_t rx_ts_ns = 0;
+    if (daqiri::get_packet_rx_timestamp(burst, i, &rx_ts_ns) == daqiri::Status::SUCCESS) {
+        // rx_ts_ns is a PTP epoch timestamp in nanoseconds.
+    }
+    // process packet...
+}
+```
+
+RX hardware timestamps are available only when DAQIRI is configured with
+`rx.hardware_timestamps: true` and the NIC and driver support hardware timestamps.
+DAQIRI returns unsigned 64-bit PTP epoch nanoseconds in the same clock domain as
+a PTP-synchronized `CLOCK_REALTIME`. Device-clock ticks are not part of the public API.
+On the raw ibverbs engine, DAQIRI requests mlx5 real-time CQ timestamps only when
+the device advertises that format. Devices without that capability stay on the
+default mlx5 device-clock CQ format, and DAQIRI converts those raw ticks to
+nanoseconds before returning them.
+**WARNING: PTP synchronization is required.** DAQIRI does not validate the NIC or system clock
+configuration. Timestamp values are invalid if the clocks are not PTP-synchronized.
+For reordered aggregate bursts,
+`get_packet_rx_timestamp(burst, 0, &ts)` returns the timestamp of the first source
+packet accepted into the aggregate.
+
+For header-data split (two segments):
+
+```cpp
+for (int i = 0; i < daqiri::get_num_packets(burst); i++) {
+    void *hdr = daqiri::get_segment_packet_ptr(burst, 0, i);  // CPU pointer
+    void *pay = daqiri::get_segment_packet_ptr(burst, 1, i);  // GPU pointer
+    uint32_t hdr_len = daqiri::get_segment_packet_length(burst, 0, i);
+    uint32_t pay_len = daqiri::get_segment_packet_length(burst, 1, i);
+}
+```
+
+### RX Step 3: Free buffers
+
+When you are done processing, free the burst to return buffers to the pool:
+
+```cpp
+// Free all packets and the burst metadata
+daqiri::free_all_packets_and_burst_rx(burst);
+```
+
+You can also free individual packets or segments if your pipeline releases buffers
+incrementally:
+
+```cpp
+// Free a single packet (all segments)
+daqiri::free_packet(burst, idx);
+
+// Free one segment of a packet
+daqiri::free_packet_segment(burst, seg, idx);
+
+// Free all packets for one segment, then the burst
+daqiri::free_all_segment_packets(burst, seg);
+daqiri::free_rx_burst(burst);
+```
+
+## Dynamic RX Flows
+
+Raw Ethernet RX flows can be added and deleted after `daqiri_init()` on the
+`dpdk` and raw `ibverbs` engines. This supports queues-only startup configs,
+including `rx.flow_isolation: true` with no initial `rx.flows`. Static YAML
+flows still use explicit configured IDs and are not deletable through this API.
+The legacy `FlowRuleConfig::action_` field remains the shorthand for a queue
+action; set `FlowAction::id_` for direct steering or `FlowAction::ids_` for a
+queue list. A list with one entry is direct steering, while two or more entries
+automatically enable flow-affine IPv4/UDP five-tuple RSS. `FlowRuleConfig::actions_`
+is the ordered form used when a dynamic
+RX rule needs hardware VLAN pop or tunnel decapsulation before queue delivery.
+Dynamic TX transform flows are not part of v1; configure TX encapsulation/push
+rules statically under `tx.flows`.
+
+```cpp
+daqiri::FlowRuleConfig flow;
+flow.name_ = "udp_5000";
+flow.action_.type_ = daqiri::FlowType::QUEUE;
+flow.action_.id_ = 0;
+flow.match_.type_ = daqiri::FlowMatchType::IPV4_UDP;
+flow.match_.udp_dst_ = 5000;
+
+daqiri::FlowOpId add_op = 0;
+auto st = daqiri::add_rx_flow_async(0, flow, &add_op);
+if (st != daqiri::Status::SUCCESS) {
+    // invalid port/queue/match, unsupported backend, or no flow IDs available
+}
+
+daqiri::FlowId flow_id = 0;
+daqiri::FlowOpResult result;
+while (flow_id == 0) {
+    st = daqiri::poll_flow_op(&result);
+    if (st == daqiri::Status::NOT_READY) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        continue;
+    }
+    if (st != daqiri::Status::SUCCESS) {
+        // handle poll error
+        break;
+    }
+    if (result.op_id_ == add_op) {
+        if (result.status_ != daqiri::Status::SUCCESS) {
+            // handle flow create failure
+            break;
+        }
+        flow_id = result.flow_id_;
+    }
+}
+```
+
+To distribute distinct IPv4/UDP flows across two queues, replace the scalar
+target with a queue list:
+
+```cpp
+flow.action_.ids_ = {0, 1};
+```
+
+The queue list must be non-empty, duplicate-free, and contain only configured RX
+queue IDs. Each unchanged five tuple remains on one queue; approximately even
+packet totals require many distinct tuples with reasonably balanced traffic.
+Tunnel decapsulation hashes the inner tuple. Multi-queue RSS is not available for
+eCPRI flows or flows referenced by an RX reorder configuration. Hardware creation
+failure is reported by the static initialization or dynamic operation completion;
+DAQIRI does not silently select one queue.
+
+For a dynamic VXLAN decap rule, use ordered actions and make the final action
+the target queue:
+
+```cpp
+daqiri::FlowRuleConfig decap;
+decap.name_ = "vxlan_decap_5000";
+
+daqiri::FlowAction tunnel;
+tunnel.type_ = daqiri::FlowType::TUNNEL_DECAP;
+tunnel.tunnel_.type_ = daqiri::TunnelType::VXLAN;
+tunnel.tunnel_.outer_eth_src_ = "02:00:00:00:00:01";
+tunnel.tunnel_.outer_eth_dst_ = "02:00:00:00:00:02";
+tunnel.tunnel_.outer_ipv4_src_ = "192.0.2.1";
+tunnel.tunnel_.outer_ipv4_dst_ = "192.0.2.2";
+tunnel.tunnel_.outer_udp_dst_ = 4789;
+tunnel.tunnel_.vni_ = 100;
+decap.actions_.push_back(tunnel);
+
+daqiri::FlowAction queue;
+queue.type_ = daqiri::FlowType::QUEUE;
+queue.id_ = 0;
+decap.actions_.push_back(queue);
+
+decap.match_.type_ = daqiri::FlowMatchType::IPV4_UDP;
+decap.match_.udp_dst_ = 5000;
+```
+
+Packets matching a dynamic rule are marked with the same `FlowId` returned by
+the add completion, so `get_packet_flow_id()` gives the handle to pass to
+`delete_flow_async()`. `poll_flow_op()` returns `Status::NOT_READY` when no flow
+operation has completed yet. A dynamic flow is deletable only after its add
+completion has been polled successfully. Deleting a flow that is still pending returns
+`Status::INVALID_PARAMETER`.
+
+Multiple RX flows can be added as one operation. On DPDK this maps to a single
+template queue push when the IPv4/UDP template path is available. The raw
+`ibverbs` engine installs the batch synchronously and reports one software
+completion. In both cases, `poll_flow_op()` returns one batch completion when all
+creates in the batch have resolved.
+
+```cpp
+std::vector<daqiri::FlowRuleConfig> flows;
+flows.push_back(flow);
+flows.push_back(flow);
+flows.back().name_ = "udp_5001";
+flows.back().match_.udp_dst_ = 5001;
+
+daqiri::FlowOpId batch_op = 0;
+st = daqiri::add_rx_flows_async(0, flows, &batch_op);
+
+std::vector<daqiri::FlowId> flow_ids;
+while (flow_ids.empty()) {
+    st = daqiri::poll_flow_op(&result);
+    if (st == daqiri::Status::NOT_READY) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        continue;
+    }
+    if (st == daqiri::Status::SUCCESS && result.op_id_ == batch_op) {
+        flow_ids = result.flow_ids_;
+    }
+}
+```
+
+For batch completions, `flow_ids_` is in the same order as the input rules. If
+the completion status is not `SUCCESS`, nonzero entries were installed and zero
+entries were not installed.
+
+```cpp
+daqiri::FlowOpId delete_op = 0;
+auto delete_status = daqiri::delete_flow_async(flow_id, &delete_op);
+```
+
+Dynamic flow support is RX-only in v1. Socket, RDMA/RoCE, and software loopback
+engines return `NOT_SUPPORTED`; tunnel/VLAN transform actions are accepted only
+by raw DPDK and raw ibverbs. Raw ibverbs dynamic flows currently share one
+internal matcher priority. Avoid overlapping match criteria because mlx5 does
+not define the relative order of same-priority matchers.
+
+## Runtime Queues and Memory Regions
+
+The raw `ibverbs` engine can add and remove RX queues, TX queues, and memory
+regions after `daqiri_init()`. Other engines return `NOT_SUPPORTED`. Each call
+returns an operation ID; poll `poll_resource_op()` until its matching
+`ResourceOpResult` is available.
+
+```cpp
+daqiri::MemoryRegionConfig mr{/* populate name, kind, affinity, access,
+                                buf_size, num_bufs, and owned */};
+daqiri::ResourceOpId op = 0;
+const auto accepted = daqiri::add_memory_region_async(mr, &op);
+if (accepted != daqiri::Status::SUCCESS) {
+    throw std::runtime_error("resource request was rejected");
+}
+
+// Keep completions for other in-flight operations instead of discarding them.
+std::unordered_map<daqiri::ResourceOpId, daqiri::ResourceOpResult> completions;
+auto wait_for_resource = [&](daqiri::ResourceOpId wanted) {
+    while (completions.find(wanted) == completions.end()) {
+        daqiri::ResourceOpResult completed;
+        const auto poll_status = daqiri::poll_resource_op(&completed);
+        if (poll_status == daqiri::Status::NOT_READY) {
+            continue;
+        }
+        if (poll_status != daqiri::Status::SUCCESS) {
+            throw std::runtime_error("resource completion polling failed");
+        }
+        completions.insert_or_assign(completed.op_id_, std::move(completed));
+    }
+    auto result = std::move(completions.at(wanted));
+    completions.erase(wanted);
+    return result;
+};
+
+const daqiri::ResourceOpResult result = wait_for_resource(op);
+```
+
+Owned regions use the same host, pinned-host, strict-hugetlb, and GPU memory kinds as startup
+regions. Runtime `HUGE` regions are mapped independently; the shared raw-ibverbs arenas apply to
+DAQIRI-owned startup regions. The overload accepting `ExternalMemoryRegion` registers but never
+frees caller-owned storage. A runtime queue may reference startup or runtime regions.
+
+Queue removal is drain-based. It stops accepting new work and completes only
+after application-held RX packet storage, reordered output, or TX work has been
+returned/completed. Therefore applications must continue polling
+`poll_resource_op()` and release held bursts. Removing an MR still referenced by
+a queue or by a software/hardware reorder output returns `RESOURCE_IN_USE`.
+Removing an RX queue referenced by a static or dynamic flow or RSS destination
+also returns `RESOURCE_IN_USE`; delete dynamic flows first. Static startup flows
+remain immutable.
+
+Runtime queue batch sizes cannot exceed the capacity used to create the engine's
+metadata pools. The raw ibverbs engine always reserves room for batches of at
+least 256 packets; a larger startup queue raises that capacity. To migrate to a
+differently sized MR without reinitializing DAQIRI, add the new MR and queue,
+redirect dynamic flows, then remove the old queue and MR.
+
+Queue topology changes briefly quiesce and rebuild the ibverbs worker groups so
+queues sharing a `cpu_core` continue to use one round-robin poller. NIC queues
+and application-held buffers on unrelated queues remain allocated throughout.
+
+## Reordered RX Bursts
+
+For an overview of what RX reorder is and when to use it, see
+[Concepts → RX Packet Aggregation and Reorder](../concepts.md#rx-packet-aggregation-and-reorder).
+This section covers how to consume reordered bursts from C++.
+
+Reordered RX bursts can be identified from `burst->hdr.hdr.burst_flags`:
+
+- `DAQIRI_BURST_FLAG_REORDERED` means the burst contains one aggregated reorder buffer.
+- `DAQIRI_BURST_FLAG_REORDER_TIMEOUT` means that aggregate was emitted by the timeout path
+  rather than by filling the configured `packets_per_batch`.
+- `DAQIRI_BURST_FLAG_DIRECT_PLACED` means hardware wrote every payload directly into its final
+  aggregate slot. DAQIRI withholds replacement RX credits for those slots until the caller frees
+  the burst, so holding a direct-placed burst applies backpressure and may drop the next cycle.
+- For reordered bursts, `burst->hdr.hdr.max_pkt` is the logical number of source packets in the
+  aggregate, while `burst->hdr.hdr.num_pkts` remains `1` because the consumer receives one
+  aggregate buffer.
+- The aggregate batch number is available through `daqiri::get_reorder_burst_info(...)`.
+  For `seq_batch_number`, this is the configured batch-number field. For
+  `seq_packets_per_batch`, it is derived as `sequence_number / packets_per_batch`, so sequence
+  numbers `0..1023` map to batch `0` when `packets_per_batch` is `1024`, `1024..2047` map to
+  batch `1`, and so on.
+
+```cpp
+daqiri::ReorderBurstInfo info{};
+if ((burst->hdr.hdr.burst_flags & daqiri::DAQIRI_BURST_FLAG_REORDERED) != 0U) {
+    if (burst->event != nullptr) {
+        cudaEventSynchronize(burst->event);
+    }
+    auto st = daqiri::get_reorder_burst_info(burst, &info);
+    if (st == daqiri::Status::SUCCESS) {
+        // info.batch_id identifies the aggregate batch.
+        daqiri::ReorderMissingInfo missing{};
+        if (daqiri::get_reorder_missing_info(burst, &missing) == daqiri::Status::SUCCESS) {
+            // Bit i == 1 means sequence slot i is missing; storage is valid until free.
+        }
+    }
+}
+```
+
+### GPU packet processing on reordered bursts
+
+When using batched GPU mode, packets arrive in CUDA-addressable buffers, each at an
+arbitrary GPU address. Launch your own CUDA work directly on the packet pointers. Packet
+reordering and aggregation should be configured through `rx.reorder_configs`; see
+`raw_reorder_seq_bench.cpp` and `raw_reorder_quantize_bench.cpp` for complete examples
+that consume DAQIRI's built-in reordered bursts.
+
+```cpp
+__global__ void noop_packet_kernel(void *packet) {
+    (void)packet;
+}
+
+if (daqiri::get_num_packets(burst) > 0) {
+    void *packet = daqiri::get_packet_ptr(burst, 0);
+    noop_packet_kernel<<<1, 1, 0, stream>>>(packet);
+}
+
+// Free once the kernel completes
+daqiri::free_all_packets_and_burst_rx(burst);
+```
+
+## Transmitting Packets
+
+### Runtime named endpoints (raw ibverbs)
+
+A runtime endpoint binds a unique name and numeric `EndpointId` to one configured
+raw-ibverbs interface and an Ethernet/IPv4/UDP destination. Creating the endpoint
+validates the interface and destination fields, parses the addresses once,
+obtains the source MAC from the NIC, and caches a binary header template for
+subsequent sends.
+
+```cpp
+daqiri::RawUdpEndpointConfig endpoint;
+endpoint.name_ = "camera-0";
+endpoint.interface_ = "nic0";       // Config name or PCI address.
+endpoint.dst_mac_ = "02:00:00:00:00:02";
+endpoint.src_ipv4_ = "192.0.2.1";
+endpoint.dst_ipv4_ = "192.0.2.2";
+endpoint.src_port_ = 5000;
+endpoint.dst_port_ = 5001;
+endpoint.mtu_ = 1514;               // Maximum L2 frame bytes, excluding FCS.
+
+daqiri::EndpointId endpoint_id = daqiri::INVALID_ENDPOINT_ID;
+if (daqiri::add_endpoint(endpoint, &endpoint_id) != daqiri::Status::SUCCESS) {
+    // Invalid interface/address, duplicate name, or unsupported engine.
+}
+
+// Resolve once outside a hot path when only the configured name is known.
+daqiri::EndpointId resolved = daqiri::INVALID_ENDPOINT_ID;
+daqiri::get_endpoint_id("camera-0", &resolved);
+
+daqiri::delete_endpoint(endpoint_id);  // The name overload is also available.
+```
+
+Endpoint IDs are process-local and remain valid until deletion or DAQIRI
+shutdown. An endpoint does not bind to a TX queue; the queue is selected for each
+submission. The DPDK, socket, and RDMA engines return `NOT_SUPPORTED`. These
+APIs establish endpoint lifecycle and cached wire metadata; pointer-range
+submission by `EndpointId` is the next layer of the large-buffer TX path.
+
+The raw-ibverbs engine supports up to 4096 active runtime endpoints. Endpoint names
+are used only by the lifecycle APIs. Submission by `EndpointId` directly indexes
+a preallocated, cache-line-aligned, NUMA-local slot containing only the cached
+header, MTU, and interface ID; it does not lock or search the name map. Deleted
+slots may be reused, but generation-tagged IDs keep stale handles invalid.
+
+See [`daqiri_example_named_endpoints`](https://github.com/nvidia/daqiri/blob/main/examples/named_endpoints_example.cpp)
+and its [TX/RX configuration](https://github.com/nvidia/daqiri/blob/main/examples/daqiri_example_named_endpoints_tx_rx.yaml)
+for a complete raw-ibverbs example using payload-only GPU buffers.
+
+### TX Step 1: Allocate a burst
+
+```cpp
+auto burst = daqiri::create_tx_burst_params();
+daqiri::set_header(burst, port_id, queue_id, batch_size, num_segments);
+
+auto status = daqiri::get_tx_packet_burst(burst);
+if (status != daqiri::Status::SUCCESS) {
+    // No buffers available, retry later
+}
+```
+
+You can check availability before allocating:
+
+```cpp
+if (daqiri::is_tx_burst_available(burst)) {
+    daqiri::get_tx_packet_burst(burst);
+}
+```
+
+For connection-oriented transports such as TCP socket mode, attach the connection ID before
+sending when you need to target a specific peer. RX bursts from those transports can be
+inspected with the matching getter:
+
+```cpp
+daqiri::set_connection_id(burst, conn_id);
+auto rx_conn_id = daqiri::get_connection_id(rx_burst);
+```
+
+### TX Step 2: Fill packets
+
+Use the header helper functions for standard UDP packets:
+
+```cpp
+for (int i = 0; i < daqiri::get_num_packets(burst); i++) {
+    daqiri::set_eth_header(burst, i, dst_mac);
+    daqiri::set_ipv4_header(burst, i, ip_payload_len, IPPROTO_UDP, src_ip, dst_ip);
+    daqiri::set_udp_header(burst, i, udp_payload_len, src_port, dst_port);
+    daqiri::set_udp_payload(burst, i, payload_ptr, payload_size);
+    daqiri::set_packet_lengths(burst, i, {total_pkt_len});
+}
+```
+
+Or construct raw packets by writing directly into the packet buffer returned by
+`get_packet_ptr()`.
+
+Raw ibverbs TX supports one to four segments, in both direct and indirect mode.
+The NIC gathers them in queue memory-region order into one packet. For example,
+use segment 0 for Ethernet/IPv4/UDP, segment 1 for an application header, and
+segment 2 for a CPU/GPU payload:
+
+```cpp
+// Fill each segment through get_segment_packet_ptr(burst, segment, packet).
+daqiri::set_packet_lengths(burst, i, {42, message_header_bytes, payload_bytes});
+```
+
+Keep the network header together in segment 0 for the existing header helpers.
+Set its IPv4 and UDP lengths to include every following segment. Segment buffers
+remain owned by their TX packet until completion; gathering does not share an
+allocation between different packets. `get_packet_length()` returns segment 0's
+length; use the segment-length getters or `get_burst_tot_byte()` for all data
+segments.
+
+### TX Step 3: Send
+
+```cpp
+daqiri::send_tx_burst(burst);
+```
+
+When using a runtime endpoint, select the queue at submission instead of binding
+it to the endpoint:
+
+```cpp
+daqiri::send_tx_burst(endpoint_id, queue_id, burst);
+```
+
+The burst must have been acquired from the same queue, so its existing
+`port_id` and `q_id` must identify `queue_id` on the endpoint's interface. This
+checked overload copies the endpoint's cached 42-byte Ethernet/IPv4/UDP template
+directly into each mlx5 SEND WQE. It patches the IPv4 and UDP lengths there and
+leaves both checksum fields zero for the existing mlx5 hardware-checksum flags.
+One to four registered data segments gather the UDP payload in segment order.
+Packet buffers therefore contain payload only; applications do not reserve or
+populate Ethernet/IP/UDP header bytes. Separate segments can hold application
+headers, metadata, and a GPU payload.
+
+Set every segment's length before submission. Each segment must fit its queue's
+packet-buffer slot, and the sum of segment lengths plus the inline network header
+must fit the endpoint MTU and IPv4/UDP length limits. Endpoint-aware SEND WQEs
+occupy two 64-byte WQEBBs for one to three gathered segments, or three WQEBBs for
+four segments; enhanced MPW is bypassed for these bursts.
+
+The overload returns `INVALID_PARAMETER` without consuming the burst when the
+endpoint, interface, queue, header reservation, or frame length is invalid. A
+endpoint can be used on different queues for different bursts. Requests sent on
+different queues have no cross-queue ordering guarantee.
+
+In the default indirect mode, the burst is enqueued to the TX worker thread, which sends it to
+the NIC via DMA. A raw ibverbs queue configured with `poll_mode: direct` requires `batch_size`
+to be omitted and `num_pkts == 1`. The calling thread submits the packet synchronously and
+manages transmit progress. `BurstParams` is only an ownership handle; neither the metadata nor
+packet data is handed to another core.
+
+`send_tx_burst()` takes ownership of the burst on success and when transmit capacity is
+temporarily exhausted. In direct mode, `SUCCESS` means the packet has been submitted to the NIC;
+the packet buffer is reclaimed by a later caller-driven operation. On
+`NO_SPACE_AVAILABLE` it has already freed the packet reservation and metadata. In both
+cases the application must **not** free or otherwise access the burst afterwards.
+Other failures leave ownership with the caller, who must retry or free the burst.
+A second direct acquisition before the pending packet is sent or freed
+returns `NOT_READY`; zero- or multi-packet direct requests return `INVALID_PARAMETER`.
+
+### Shared TX segments
+
+Raw ibverbs indirect queues with `buffer_mode: shared` can clone a complete,
+application-owned TX burst before either copy is submitted:
+
+```cpp
+daqiri::BurstParams* second = nullptr;
+auto status = daqiri::clone_tx_burst(original, 1u << 2, &second);
+// [network header A][message header A][payload P]
+// [network header B][message header B][payload P]
+```
+
+Bit `s` retains segment `s`; other segments receive private CPU copies with the
+same lengths. The example supports independent IP and message headers and one
+shared CPU/GPU payload. Four segments use `1u << 3` to share the final payload.
+Masks may select several segments. Endpoint sends can share segment 0 of a
+payload-only burst; the endpoint supplies each send's inline network header.
+Clone-of-clone references point directly to storage, so the original metadata
+may be recycled independently. Source and clone must use the same TX queue.
+RX, cross-queue references, private GPU copies, and byte-range slices are unsupported.
+
+Finish producing the payload and synchronize GPU writes before cloning. Shared
+bytes are immutable while multiple descriptors or sends retain them. Header
+helpers reject shared segment-0 writes with `RESOURCE_IN_USE`; raw pointer
+writes remain the caller's responsibility. Each burst has independent lengths
+and scheduling; clones start without a TX timestamp or custom application metadata.
+
+On clone failure, the output is null and the source is unchanged. Invalid masks,
+released segments, edited packet pointers, and excessive lengths are rejected.
+Private GPU segments return `NOT_SUPPORTED`. Submit or cancel each resulting
+burst separately. `SUCCESS` and `NO_SPACE_AVAILABLE` consume a submitted burst;
+other send failures retain caller ownership. `free_all_packets_and_burst_tx()`
+cancels in any allocation order. Segment and packet frees clear the corresponding
+references; an incomplete burst cannot be submitted. For shared queues,
+`free_tx_metadata()` and `free_tx_burst()` also release any unsent references
+still attached to that metadata.
+
+Storage returns to its segment pool only after the last descriptor or locally
+completed send releases it. An unsent clone pins the payload even after the
+original send completes. `wait_for_tx_idle()` waits for accepted sends, not
+unsent clones; runtime queue deletion waits for both. A CQ error pins possibly
+DMA-visible buffers until successful QP destruction during shutdown. Shutdown
+invalidates all outstanding application handles. Keep the queue's existing
+single-producer discipline for allocation, cloning, and submission.
+
+### Timed Transmission
+
+Raw Ethernet transport supports ConnectX-6 Dx and later. Packet pacing and
+precise timed transmission require ConnectX-7 or later:
+
+```cpp
+daqiri::set_packet_tx_time(burst, idx, ptp_timestamp_ns);
+```
+
+`ptp_timestamp_ns` is an unsigned 64-bit PTP epoch-nanosecond value in the same clock
+domain as a PTP-synchronized `CLOCK_REALTIME`. Device-clock ticks are not accepted.
+**WARNING: PTP synchronization is required.** DAQIRI does not validate the NIC or system clock
+configuration. Scheduled transmission is invalid if the clocks are not PTP-synchronized.
+
+## Writing Bursts to Storage
+
+Received bursts can be written to local storage either as raw packet data or as a classic
+pcap capture. Raw writes create one output file per packet named
+`<file_prefix>_<packet_index>` and truncate existing files. PCAP writes append full
+packets to `<file_prefix>.pcap`; DAQIRI writes the pcap headers directly and does not
+depend on `libpcap`.
+
+Host-backed packet segments use standard POSIX file writes and do not require GPUDirect
+Storage. CUDA device-backed packet segments require `DAQIRI_ENABLE_GDS=ON` and working
+NVIDIA cuFile support. If a device-backed segment is encountered without GDS support,
+DAQIRI logs a warning and returns `NOT_SUPPORTED`.
+
+For regular cuFile/GDS mode, the runtime system must also have the `nvidia-fs` kernel
+module loaded and the destination storage stack supported by cuFile. Check with:
+
+```bash
+lsmod | grep nvidia_fs
+/usr/local/cuda/gds/tools/gdscheck.py -p
+```
+
+The target filesystem must pass cuFile validation before DAQIRI can register the output
+file. For local NVMe, `gdscheck.py -p` should report `NVMe : Supported`; ext4 mounts
+must expose `data=ordered`, while XFS is also supported by GDS.
+
+For raw writes, the `packet_data_offset` argument skips bytes from the logical packet
+before writing. For header-data split bursts, DAQIRI walks segment 0, segment 1, and any
+later segments as one contiguous packet, so an offset that skips the CPU header can write
+only the GPU payload.
+
+```cpp
+auto st = daqiri::daqiri_write_raw_to_file(
+    burst,
+    "/mnt/nvme/capture",
+    "packet_group_0",
+    60);
+if (st != daqiri::Status::SUCCESS) {
+    // handle write error
+}
+```
+
+PCAP writes always include full logical packets and append packet records by default. If
+the pcap file does not exist or is empty, DAQIRI writes a classic pcap v2.4 global
+header first. If it already exists, it must contain a compatible Ethernet,
+microsecond-resolution pcap header.
+
+```cpp
+auto st = daqiri::daqiri_write_pcap_to_file(
+    burst,
+    "/mnt/nvme/capture",
+    "packet_group_0");
+```
+
+For asynchronous writes, keep the burst and its packet buffers alive until the file-write
+handle completes:
+
+```cpp
+daqiri::FileWriteHandle *handle = nullptr;
+auto st = daqiri::daqiri_write_raw_to_file_async(
+    burst, "/mnt/nvme/capture", "packet_group_0", 60, &handle);
+
+daqiri::FileWriteStatus status{};
+if (st == daqiri::Status::SUCCESS) {
+    st = daqiri::daqiri_file_write_wait(handle, &status);
+    daqiri::daqiri_file_write_destroy(handle);
+}
+```
+
+The async API is a DAQIRI handle rather than a CUDA stream because one burst can fan out
+to many file offsets and, for device-backed segments, cuFile handles. Host-backed
+segments may complete during submission. Device-backed segments use cuFile batch I/O,
+which is submitted and polled with a `CUfileBatchHandle_t`.
+
+See `examples/gds_write_example.cpp` for a sample that sends one deterministic burst and
+writes raw or pcap output with the synchronous API, the asynchronous API, or both. Use
+`daqiri_example_gds_write_sw_loopback.yaml` for local software loopback, or
+`daqiri_example_gds_write_tx_rx.yaml` after replacing its PCIe, MAC, and IP placeholders
+to send real Ethernet/IPv4/UDP frames out of a NIC and receive them back through a
+hardware RX port.
+
+### Writing Raw Packets to S3
+
+Build with `DAQIRI_ENABLE_S3=ON` to upload raw packet objects through AWS SDK
+for C++. This path uses normal S3 `PutObject` requests, so it can target Amazon
+S3 or an S3-compatible service. It is not a cuObject/RDMA path.
+
+Before creating the writer, choose a bucket and region, configure AWS
+credentials through the SDK provider chain, grant `s3:PutObject` on the target
+prefix, and make sure the host can reach the S3 endpoint. For S3-compatible
+stores, set `endpoint_override` and `path_style` if that service requires them.
+
+```cpp
+daqiri::S3WriterConfig cfg;
+cfg.bucket = "daqiri-captures";
+cfg.region = "us-west-2";
+cfg.max_inflight_uploads = 8;
+
+daqiri::S3Writer *writer = nullptr;
+auto st = daqiri::daqiri_s3_writer_create(cfg, &writer);
+
+daqiri::S3WriteHandle *handle = nullptr;
+if (st == daqiri::Status::SUCCESS) {
+    st = daqiri::daqiri_write_raw_to_s3_objects_async(
+        writer,
+        burst,
+        "runs/run42/packet",
+        60,
+        &handle);
+    if (st == daqiri::Status::SUCCESS) {
+        daqiri::free_all_packets_and_burst_rx(burst);
+        burst = nullptr;
+    }
+}
+
+daqiri::S3WriteStatus s3_status{};
+if (st == daqiri::Status::SUCCESS) {
+    st = daqiri::daqiri_s3_write_wait(handle, &s3_status);
+    daqiri::daqiri_s3_write_destroy(handle);
+}
+if (burst != nullptr) {
+    daqiri::free_all_packets_and_burst_rx(burst);
+}
+if (writer != nullptr) {
+    daqiri::daqiri_s3_writer_destroy(writer);
+}
+```
+
+Object keys mirror raw file naming: `object_prefix_<packet_index>`. DAQIRI
+copies each packet's post-offset logical bytes into owned host staging memory
+before submission, so the burst may be released after
+`daqiri_write_raw_to_s3_objects_async()` succeeds. Header-data split and other
+multi-segment packets are concatenated into one object. The first S3 version
+uses one single-part `PutObject` per packet. Objects larger than 5 GiB return
+`NOT_SUPPORTED`, and multipart/burst aggregation is future work.
+
+The Python bindings expose the same C++ writer when both
+`DAQIRI_BUILD_PYTHON=ON` and `DAQIRI_ENABLE_S3=ON` are used:
+
+```python
+cfg = daqiri.S3WriterConfig()
+cfg.bucket = "daqiri-captures"
+cfg.region = "us-west-2"
+
+writer = daqiri.S3Writer(cfg)
+try:
+    status = writer.write_raw_objects(
+        burst,
+        "runs/run42/packet",
+        packet_data_offset=60,
+    )
+finally:
+    daqiri.free_all_packets_and_burst_rx(burst)
+    writer.destroy()
+```
+
+## Utility Functions
+
+```cpp
+// Get MAC address of a port
+char mac[6];
+daqiri::get_mac_addr(port_id, mac);
+
+// Look up port ID by interface name or PCIe address
+int port = daqiri::get_port_id("rx_port");
+
+// Traffic control
+daqiri::drop_all_traffic(port_id);    // drop all incoming packets
+daqiri::allow_all_traffic(port_id);   // restore normal traffic
+
+// Drain stale packets from a queue
+daqiri::flush_port_queue(port_id, queue_id);
+
+// Print NIC statistics
+daqiri::print_stats();
+
+// Shutdown and cleanup
+daqiri::shutdown();
+```
+
+## OpenTelemetry Metrics
+
+OpenTelemetry metrics are disabled by default and add no runtime instrumentation when
+DAQIRI is built without `DAQIRI_ENABLE_OTEL_METRICS=ON`. Metrics-enabled builds register
+observable counters through the OpenTelemetry C++ API:
+
+| Metric | Unit |
+| --- | --- |
+| `daqiri.rx.packets` | `{packet}` |
+| `daqiri.tx.packets` | `{packet}` |
+| `daqiri.rx.bytes` | `By` |
+| `daqiri.tx.bytes` | `By` |
+| `daqiri.dropped.packets` | `{packet}` |
+
+All metrics include `daqiri.engine`, `daqiri.interface.name`, `daqiri.port.id`, and
+`daqiri.queue.id`. Drop metrics also include `daqiri.drop.reason`.
+
+DAQIRI only owns library instrumentation. Applications remain responsible for
+configuring the OpenTelemetry C++ SDK, metric readers, and exporters.
+
+## Function Reference
+
+This section summarizes the C++ functions available through `daqiri/daqiri.h`. The
+workflow sections above show the common call order and ownership rules.
+
+### Initialization, Parsing, and Lifecycle
+
+| Function | Purpose |
+| --- | --- |
+| `version_string()` | Return the DAQIRI package version as `YYYY.MM.PATCH`. |
+| `version_year()` / `version_month()` / `version_patch()` | Return the CalVer components. |
+| `abi_version()` | Return the DAQIRI shared-library ABI version. |
+| `daqiri_init(NetworkConfig &config)` | Initialize DAQIRI from an already-populated config object. |
+| `daqiri_init(config, bindings)` | Initialize with non-owning external memory bindings. |
+| `daqiri_init(const std::string &yaml_string_or_path)` | Initialize from a YAML string or YAML file path. |
+| `daqiri_init_from_yaml_string(const std::string &yaml_string)` | Initialize from YAML content. |
+| `daqiri_init_from_yaml_file(const std::string &yaml_path)` | Initialize from a YAML file path. |
+| `parse_network_config(...)` | Parse YAML into `NetworkConfig` without starting the engine. |
+| `get_memory_region_requirements(config, requirements)` | Return effective slot size, count, capacity, and alignment. |
+| `get_engine_type()` | Return the active engine type after initialization. |
+| `get_engine_type(config)` | Return the engine type selected by a config object. |
+| `shutdown()` | Stop DAQIRI and release engine-owned resources. |
+| `print_stats()` | Print engine statistics. |
+
+### Burst Metadata
+
+| Function | Purpose |
+| --- | --- |
+| `create_burst_params()` | Allocate generic burst metadata. |
+| `create_tx_burst_params()` | Allocate TX burst metadata. |
+| `set_header(burst, port, q, num, segs)` | Set burst port, queue, packet count, and segment count metadata. |
+| `set_num_packets(burst, num)` / `get_num_packets(burst)` | Set or read the number of packets in a burst. |
+| `get_q_id(burst)` | Return the queue ID recorded on a burst. |
+| `get_burst_tot_byte(burst)` | Return the burst total-byte counter. |
+
+### Packet and Segment Access
+
+| Function | Purpose |
+| --- | --- |
+| `get_packet_ptr(burst, idx)` | Return the segment-0 packet pointer. |
+| `get_segment_packet_ptr(burst, seg, idx)` | Return a packet pointer for a specific segment. |
+| `get_packet_length(burst, idx)` | Return the logical packet length. |
+| `get_segment_packet_length(burst, seg, idx)` | Return the length of one packet segment. |
+| `get_packet_flow_id(burst, idx)` | Return the matched `FlowId`, or `0` when no flow matched. |
+| `get_packet_rx_timestamp(burst, idx, &timestamp_ns)` | Return the hardware RX timestamp when enabled and available. |
+
+### Dynamic RX Flow Lifecycle
+
+| Function | Purpose |
+| --- | --- |
+| `add_rx_flow_async(port, flow, &op_id)` | Enqueue a dynamic RX flow create. The add completion returns the allocated `FlowId`. |
+| `add_rx_flows_async(port, flows, &op_id)` | Enqueue a dynamic RX flow batch create. One completion returns allocated `FlowId`s in input order. |
+| `delete_flow_async(flow_id, &op_id)` | Enqueue deletion of an active dynamic flow. Static YAML flows and unknown IDs return `INVALID_PARAMETER`. |
+| `poll_flow_op(&result)` | Return one completed flow operation, or `NOT_READY` when none are ready. |
+| `add_memory_region_async(config[, binding], &op_id)` | Add an owned or externally bound raw-ibverbs memory region. |
+| `delete_memory_region_async(name, &op_id)` | Delete an unused raw-ibverbs memory region. |
+| `add_rx_queue_async(port, config, &op_id)` / `add_tx_queue_async(...)` | Add a runtime raw-ibverbs queue. |
+| `delete_rx_queue_async(port, queue, &op_id)` / `delete_tx_queue_async(...)` | Begin drain-based queue removal. |
+| `poll_resource_op(&result)` | Return one completed resource operation, or `NOT_READY`. |
+
+### RX and Reorder
+
+| Function | Purpose |
+| --- | --- |
+| `get_rx_burst(&burst, port, q)` | Dequeue a burst from a specific port and queue. |
+| `get_rx_burst(&burst, port)` | Dequeue from any queue on a specific port. |
+| `get_rx_burst(&burst)` | Dequeue from any queue on any port. |
+| `get_rx_burst(&burst, conn_id, server)` | Dequeue from an RDMA/socket connection ring. |
+| `get_connection_id(burst)` | Read the transport connection ID recorded on an RX burst. |
+| `set_reorder_cuda_stream(interface_name, reorder_name, stream)` | Set the CUDA stream for a configured GPU reorder plan. |
+| `get_reorder_burst_info(burst, &info)` | Read metadata for a reordered aggregate burst. |
+| `get_reorder_missing_info(burst, &info)` | Read the burst-owned missing-slot bitmap. |
+
+### TX and Header Fill
+
+| Function | Purpose |
+| --- | --- |
+| `is_tx_burst_available(burst)` | Check whether buffers are available for a TX burst. |
+| `get_tx_packet_burst(burst)` | Populate a TX burst with packet buffers. |
+| `set_connection_id(burst, conn_id)` | Attach a transport connection ID to a TX burst (socket/RDMA). |
+| `clone_tx_burst(source, mask, &clone)` | Retain selected TX segments and privately copy CPU segments on shared-mode raw ibverbs queues. |
+| `send_tx_burst(burst)` | Enqueue a populated TX burst. |
+| `send_tx_burst(endpoint_id, queue_id, burst)` | Inline cached raw-UDP headers, gather payload pointers, and enqueue an ibverbs burst on the selected queue. |
+| `add_endpoint(config, &endpoint_id)` | Add a named raw-UDP endpoint to the active ibverbs engine. |
+| `get_endpoint_id(name, &endpoint_id)` | Resolve an endpoint name outside the TX hot path. |
+| `delete_endpoint(endpoint_id)` | Delete a runtime endpoint. A name overload is also available. |
+| `set_packet_lengths(burst, idx, lens)` | Set segment lengths for one packet. |
+| `set_all_packet_lengths(burst, lens)` | Set segment lengths for every packet in a burst. |
+| `set_packet_tx_time(burst, idx, time)` | Set scheduled transmit time for one packet (ConnectX-7+). |
+| `set_eth_header(burst, idx, dst_addr)` | Fill the Ethernet destination header. |
+| `set_ipv4_header(burst, idx, ip_len, proto, src_host, dst_host)` | Fill an IPv4 header. |
+| `set_udp_header(burst, idx, udp_len, src_port, dst_port)` | Fill a UDP header. |
+| `set_udp_payload(burst, idx, data, len)` | Copy UDP payload bytes. |
+| `rdma_set_header(burst, op_code, conn_id, is_server, num_pkts, wr_id, local_mr_name)` | Fill RDMA TX metadata. |
+| `rdma_get_opcode(burst)` | Return the RDMA operation code recorded on a burst. |
+
+### Buffer Release
+
+| Function | Purpose |
+| --- | --- |
+| `free_packet(burst, idx)` | Free all segments for one packet. |
+| `free_packet_segment(burst, seg, idx)` | Free one segment for one packet. |
+| `free_all_segment_packets(burst, seg)` | Free one segment across all packets in a burst. |
+| `free_segment_packets_and_burst(burst, seg)` | Free one segment across all packets and free burst metadata. |
+| `free_all_packets_and_burst_rx(burst)` | Free all RX packet buffers and RX burst metadata. |
+| `free_all_packets_and_burst_tx(burst)` | Free all TX packet buffers and TX burst metadata. |
+| `free_rx_burst(burst)` / `free_tx_burst(burst)` | Free burst metadata only. |
+| `free_rx_metadata(burst)` / `free_tx_metadata(burst)` | Free RX or TX metadata only. |
+
+### File I/O
+
+| Function | Purpose |
+| --- | --- |
+| `daqiri_write_raw_to_file(burst, absolute_path, file_prefix, packet_data_offset)` | Write each packet to a separate raw binary file. |
+| `daqiri_write_raw_to_file_async(..., &handle)` | Submit asynchronous raw packet writes. |
+| `daqiri_write_pcap_to_file(burst, absolute_path, file_prefix)` | Append burst packets to a classic pcap file. |
+| `daqiri_write_pcap_to_file_async(..., &handle)` | Submit asynchronous pcap writes. |
+| `daqiri_file_write_poll(handle, &status)` | Poll an asynchronous file-write handle. |
+| `daqiri_file_write_wait(handle, &status)` | Wait for asynchronous file writes to complete. |
+| `daqiri_file_write_destroy(handle)` | Release asynchronous file-write resources. |
+| `daqiri_s3_writer_create(config, &writer)` | Create an AWS SDK-backed S3 raw object writer. |
+| `daqiri_write_raw_to_s3_objects_async(writer, burst, object_prefix, packet_data_offset, &handle)` | Submit asynchronous raw packet uploads to S3. |
+| `daqiri_s3_write_poll(handle, &status)` | Poll asynchronous S3 uploads. |
+| `daqiri_s3_write_wait(handle, &status)` | Wait for asynchronous S3 uploads to complete. |
+| `daqiri_s3_write_destroy(handle)` | Release asynchronous S3 upload resources. |
+| `daqiri_s3_writer_destroy(writer)` | Release an S3 writer. |
+
+### Ports, Traffic, Socket, and RDMA
+
+Raw userspace TX must supply a destination MAC because transmitting a completed
+Ethernet frame bypasses the kernel route and ARP processing used by sockets.
+The raw ibverbs engine can perform that lookup explicitly:
+
+```cpp
+char dst_mac[6] = {};
+daqiri::Status status = daqiri::resolve_ipv4_mac(port, "192.0.2.20", dst_mac, 3000);
+if (status != daqiri::Status::SUCCESS) {
+  // Stop before sending data packets.
+}
+```
+
+The result is a snapshot, not a managed DAQIRI neighbor entry. Reuse it for
+packet templates to keep the data path efficient, and call
+`resolve_ipv4_mac()` again if the peer, gateway, route, link, or network
+namespace may have changed. DAQIRI does not refresh previously returned MAC
+addresses in the background. If the port also has DAQIRI RX queues, configure
+`rx.flow_isolation: true` so unmatched ARP traffic stays on the kernel path; a
+TX-only interface with no `rx.queues` needs no `rx` section. See
+[Destination MAC resolution](../concepts.md#destination-mac-resolution) for the
+full ownership model.
+
+| Function | Purpose |
+| --- | --- |
+| `get_mac_addr(port, mac)` | Copy a port MAC address into a six-byte buffer. |
+| `resolve_ipv4_mac(port, dst, mac, timeout_ms)` | Resolve an IPv4 destination's next-hop MAC through the raw ibverbs port's Linux route and ARP table. `dst` may be a host-order `uint32_t` or a dotted-decimal string. |
+| `format_eth_addr(dst, addr)` | Convert a `xx:xx:xx:xx:xx:xx` MAC string into a six-byte buffer. Invalid input zeroes the buffer. |
+| `get_port_id(key)` | Resolve an interface name or PCIe address to a port ID. |
+| `get_num_rx_queues(port_id)` | Return the configured or engine-reported RX queue count. |
+| `drop_all_traffic(port)` | Install a high-priority drop rule on a port. |
+| `allow_all_traffic(port)` | Remove a drop rule installed by `drop_all_traffic()`. |
+| `flush_port_queue(port, queue)` | Drain stale packets from a port queue. |
+| `socket_connect_to_server(server_addr, server_port, &conn_id)` | Connect a socket client to a server. |
+| `socket_connect_to_server(server_addr, server_port, src_addr, &conn_id)` | Connect a socket client using an explicit source address. |
+| `socket_get_port_queue(conn_id, &port, &queue)` | Resolve a socket connection to port/queue routing. |
+| `socket_get_server_conn_id(server_addr, server_port, &conn_id)` | Look up a server-side socket connection ID. |
+| `socket_setsockopt(conn_id, level, optname, optval, optlen)` | Apply a Linux `setsockopt` option to an existing TCP/UDP socket connection. |
+| `rdma_connect_to_server(server_addr, server_port, &conn_id)` | Connect an RDMA client to a server. |
+| `rdma_connect_to_server(server_addr, server_port, src_addr, &conn_id)` | Connect an RDMA client using an explicit source address. |
+| `rdma_get_port_queue(conn_id, &port, &queue)` | Resolve an RDMA connection to port/queue routing. |
+| `rdma_get_server_conn_id(server_addr, server_port, &conn_id)` | Look up a server-side RDMA connection ID. |
+
+## Status Codes
+
+All functions that can fail return `daqiri::Status`:
+
+| Status | Meaning |
+|--------|---------|
+| `SUCCESS` | Operation completed successfully |
+| `NULL_PTR` | Burst or internal pointer not initialized / no data ready |
+| `NO_FREE_BURST_BUFFERS` | Metadata buffer pool exhausted (increase `tx/rx_meta_buffers`) |
+| `NO_FREE_PACKET_BUFFERS` | Packet buffer pool exhausted (free buffers faster or increase `num_bufs`) |
+| `NOT_READY` | Operation cannot proceed yet / no data ready |
+| `INVALID_PARAMETER` | Invalid argument passed |
+| `NO_SPACE_AVAILABLE` | Ring or queue is full |
+| `NOT_SUPPORTED` | Operation not supported by the current engine or build options |
+| `GENERIC_FAILURE` | Unspecified failure |
+| `CONNECT_FAILURE` | RDMA connection failed |
+| `INTERNAL_ERROR` | Internal error in the engine |
+| `RESOURCE_IN_USE` | A queue or memory region still has a live dependency or outstanding ownership |
+| `ALREADY_EXISTS` | A runtime resource already uses the requested name or queue ID |

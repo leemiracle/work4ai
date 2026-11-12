@@ -2,6 +2,8 @@
 
 > DeepSeek 开源 Agent Harness 全量知识库——DeepWiki 39 页全量 + 中文知识图谱（3368 节点/5160 边/12 层架构/16 步导览）+ 新人上手指南 + 14 篇重要文件精讲。
 > 生成于 2026-09-04，仓库 commit `76fda729`（v0.1.2-rc.1，master）。
+>
+> ⬆ **2026-11-03 版本代差刷新**：仓库已更新至 **0.2.2-alpha.3**（8bd073392e，10,607 commits 增量）——本文以下内容基于 0.1.2，主线架构叙事仍成立但接口细节过时一代；新增 22 个中英双语文档主题（capability-seams/agent-lifecycle/event-producer-consumer/tool-execution-pipeline 等）。**差异摘要见 [refresh-20261103.md](./refresh-20261103.md)**，接口引用请以仓内 `docs/*.zh.md` 为准。
 
 ## 项目一句话
 

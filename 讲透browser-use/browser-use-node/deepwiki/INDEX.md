@@ -1,0 +1,32 @@
+# DeepWiki 索引 — browser-use/browser-use-node
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-30
+> 结构 27 页 · 全文 236236 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Package Structure](1.1-package-structure.md)
+  - [1.2 Getting Started](1.2-getting-started.md)
+- [2 Core Concepts](2-core-concepts.md)
+  - [2.1 BrowserUse Client](2.1-browseruse-client.md)
+  - [2.2 Tasks API](2.2-tasks-api.md)
+  - [2.3 API Resources](2.3-api-resources.md)
+  - [2.4 Error Handling](2.4-error-handling.md)
+- [3 Real-time Features](3-real-time-features.md)
+  - [3.1 Task Streaming](3.1-task-streaming.md)
+  - [3.2 Webhook System](3.2-webhook-system.md)
+  - [3.3 Next.js Integration](3.3-next.js-integration.md)
+- [4 CLI Tools](4-cli-tools.md)
+  - [4.1 CLI Overview](4.1-cli-overview.md)
+  - [4.2 Webhook Forwarding](4.2-webhook-forwarding.md)
+- [5 Advanced Features](5-advanced-features.md)
+  - [5.1 Structured Output](5.1-structured-output.md)
+  - [5.2 Authentication](5.2-authentication.md)
+  - [5.3 File Operations](5.3-file-operations.md)
+- [6 Examples and Guides](6-examples-and-guides.md)
+  - [6.1 Basic Usage Examples](6.1-basic-usage-examples.md)
+  - [6.2 Streaming Examples](6.2-streaming-examples.md)
+  - [6.3 Webhook Integration Examples](6.3-webhook-integration-examples.md)
+- [7 Reference](7-reference.md)
+  - [7.1 API Documentation](7.1-api-documentation.md)
+  - [7.2 Configuration Reference](7.2-configuration-reference.md)
+  - [7.3 Release Management](7.3-release-management.md)

@@ -1,0 +1,42 @@
+# DeepWiki 索引 — NVIDIA/go-nvlib
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 30 页 · 全文 587946 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+- [3 GPU Device Management](3-gpu-device-management.md)
+  - [3.1 Device Discovery and Enumeration](3.1-device-discovery-and-enumeration.md)
+  - [3.2 Device Properties and Queries](3.2-device-properties-and-queries.md)
+  - [3.3 Device Identifiers](3.3-device-identifiers.md)
+- [4 Multi-Instance GPU (MIG)](4-multi-instance-gpu-mig.md)
+  - [4.1 MIG Device Discovery](4.1-mig-device-discovery.md)
+  - [4.2 MIG Profiles](4.2-mig-profiles.md)
+  - [4.3 MIG Profile Attributes](4.3-mig-profile-attributes.md)
+- [5 Hardware Topology Discovery](5-hardware-topology-discovery.md)
+  - [5.1 PCI Device Discovery](5.1-pci-device-discovery.md)
+  - [5.2 MDEV and vGPU Management](5.2-mdev-and-vgpu-management.md)
+  - [5.3 PCI ID Database](5.3-pci-id-database.md)
+- [6 NVML Bindings Reference](6-nvml-bindings-reference.md)
+  - [6.1 NVML Initialization and Core Operations](6.1-nvml-initialization-and-core-operations.md)
+  - [6.2 NVML Device Interface](6.2-nvml-device-interface.md)
+  - [6.3 NVML vGPU Operations](6.3-nvml-vgpu-operations.md)
+  - [6.4 NVML Return Codes and Error Handling](6.4-nvml-return-codes-and-error-handling.md)
+- [7 System Information Package](7-system-information-package.md)
+- [8 Testing](8-testing.md)
+  - [8.1 Testing Framework](8.1-testing-framework.md)
+  - [8.2 Mock Implementations](8.2-mock-implementations.md)
+- [9 Building and Development](9-building-and-development.md)
+  - [9.1 Build System](9.1-build-system.md)
+  - [9.2 CI/CD Pipeline](9.2-ci-cd-pipeline.md)
+  - [9.3 Code Quality Tools](9.3-code-quality-tools.md)
+- [10 Dependencies and Module Management](10-dependencies-and-module-management.md)
+  - [10.1 Module Dependencies](10.1-module-dependencies.md)
+  - [10.2 Vendoring and Reproducible Builds](10.2-vendoring-and-reproducible-builds.md)
+
+## 附：结构清单外的页
+- [MDEV Lifecycle Management](x1-mdev-lifecycle-management.md)
+- [PCI Device Classification](x2-pci-device-classification.md)
+- [PCI Resource Information](x3-pci-resource-information.md)
+- [Parent Device Discovery](x4-parent-device-discovery.md)
+- [SR-IOV Support](x5-sr-iov-support.md)

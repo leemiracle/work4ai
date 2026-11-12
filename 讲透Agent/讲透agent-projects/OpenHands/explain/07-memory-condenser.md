@@ -1,0 +1,51 @@
+# 07 · openhands/memory/：Memory 召回器与 Condenser 压缩器家族
+
+## 1. 角色定位
+
+`openhands/memory/` 是 OpenHands 的"长期记忆"子系统，承担两个正交职责：**知识召回**（`memory.py` 的 `Memory` 类，监听 EventStream 里的 `RecallAction` 并以 `RecallObservation` 回灌微代理知识）与**历史压缩**（`condenser/` 家族，把无限增长的对话事件流压成能塞进 LLM 上下文窗口的 `View`）。它属于全仓罕见的**跨代际共享层**：整个文件族没有一个 `Legacy-V0` 头注（对比 `openhands/controller/agent_controller.py:1-7` 的弃用横幅），V0 的 AgentController 与 V1 的 software-agent-sdk 两代 agent 核心都直接消费它（`openhands/agenthub/codeact_agent/codeact_agent.py:100` 在构造期创建 condenser）。在"V0 2026-04-01 移除"的大背景下，这里是少数确定能活过重构的资产，读懂它等于读懂 OpenHands 对"上下文管理"的全部哲学。
+
+## 2. 内部结构
+
+**Memory 类**（`openhands/memory/memory.py:42`）构造即全量加载：`__init__` 在订阅事件流（`openhands/memory/memory.py:65-69`，`EventStreamSubscriber.MEMORY` 槽位）后立刻调 `_load_global_microagents()`（`openhands/memory/memory.py:82`）与 `_load_user_microagents()`（`openhands/memory/memory.py:85`）。全局目录 `GLOBAL_MICROAGENTS_DIR`（`openhands/memory/memory.py:34-37`）指向包根旁的 `skills/` 目录——即公开发布的公共微代理；用户目录 `USER_MICROAGENTS_DIR`（`openhands/memory/memory.py:39`）是 `~/.openhands/microagents/`，`_load_user_microagents` 甚至会 `os.makedirs(..., exist_ok=True)` 主动建目录（`openhands/memory/memory.py:304`）。
+
+事件处理分两支（`_on_event`，`openhands/memory/memory.py:91-138`）：`RecallType.WORKSPACE_CONTEXT` 分支（`openhands/memory/memory.py:98-113`）在首条用户消息时触发，`_on_workspace_context_recall`（`openhands/memory/memory.py:140-223`）把所有 repo 微代理内容用空行拼接成 `repo_instructions`（`openhands/memory/memory.py:158-161`），连同仓库名/分支/运行时端口/自定义 secrets 描述一起打包成 `RecallObservation`；`RecallType.KNOWLEDGE` 分支（`openhands/memory/memory.py:117-133`）允许用户与 agent 双方消息触发，`_find_microagent_knowledge`（`openhands/memory/memory.py:243-270`）遍历全部 knowledge 微代理调 `match_trigger(query)`（`openhands/memory/memory.py:259-261`）做关键词触发。两个分支都设置 `_cause = event.id`（`openhands/memory/memory.py:110`、`openhands/memory/memory.py:130`）——这是释放执行流等待的关键：controller 靠 cause 链配对"请求-响应"。另有 `get_microagent_mcp_tools`（`openhands/memory/memory.py:320-336`）从 repo 微代理元数据掏 `mcp_tools` 配置（"always active"注释，`openhands/memory/memory.py:328`）。
+
+**View**（`openhands/memory/view.py:13`）是事件的线性视图容器，`from_events`（`openhands/memory/view.py:50-96`）实现"尊重既有压缩语义"的重建：收集 `CondensationAction.forgotten` ID 集合并把 condensation 动作自身也遗忘（`openhands/memory/view.py:54-57`），从最后一次 condensation 取摘要并按 `summary_offset` 插回 `AgentCondensationObservation`（`openhands/memory/view.py:67-80`），末尾倒扫检测"未被处理的压缩请求"（`openhands/memory/view.py:84-90`）——这个 `unhandled_condensation_request` 布尔是全家族 `should_condense` 的公共触发器之一。`@overload` 三签名（`openhands/memory/view.py:34-38`）让 View 同时支持 int/slice 索引。
+
+**Condenser 抽象**（`openhands/memory/condenser/condenser.py:44`）只有两个核心成员：`condense(View) -> View | Condensation` 抽象方法（`openhands/memory/condenser/condenser.py:91-102`）与 `condensed_history(state)`（`openhands/memory/condenser/condenser.py:104-115`，先写 LLM 元数据再进 `metadata_batch` 上下文）。`metadata_batch`（`openhands/memory/condenser/condenser.py:83-89`）是 contextmanager，finally 里把诊断批次写进 `State.extra_data['condenser_meta']`（键常量 `CONDENSER_METADATA_KEY`，`openhands/memory/condenser/condenser.py:16`）——压缩器做了什么、花了多少 token，全部落账。子类 `RollingCondenser`（`openhands/memory/condenser/condenser.py:169`）加 `should_condense`/`get_condensation` 两个抽象（`openhands/memory/condenser/condenser.py:177-183`），默认 `condense`（`openhands/memory/condenser/condenser.py:185-193`）实现"到阈值就产 Condensation，否则原样返回"。注册表 `CONDENSER_REGISTRY`（`openhands/memory/condenser/condenser.py:34`）映射 config 类→实现类，`from_config`（`openhands/memory/condenser/condenser.py:147-166`）查表实例化。
+
+**十个实现**（`openhands/memory/condenser/impl/__init__.py:29-41` 导出 11 个符号）按激进程度排：
+- `NoOpCondenser`（`openhands/memory/condenser/impl/no_op_condenser.py:8-13`）：原样返回，等价关闭。
+- `RecentEventsCondenser`（`openhands/memory/condenser/impl/recent_events_condenser.py:8`）：head+tail 硬切片（`openhands/memory/condenser/impl/recent_events_condenser.py:17-22`）。
+- `AmortizedForgettingCondenser`（`openhands/memory/condenser/impl/amortized_forgetting_condenser.py:13`）：超过 `max_size` 就砍到一半（`openhands/memory/condenser/impl/amortized_forgetting_condenser.py:40-55`），无摘要，纯遗忘。
+- `ObservationMaskingCondenser`（`openhands/memory/condenser/impl/observation_masking_condenser.py:11`）：注意力窗口外的观察替换成 `<MASKED>` 占位（`openhands/memory/condenser/impl/observation_masking_condenser.py:19-28`）。
+- `BrowserOutputCondenser`（`openhands/memory/condenser/impl/browser_output_condenser.py:11`）：倒序遍历只留最近 N 条浏览器观察，旧页面降级为"Visited URL ... Content omitted"（`openhands/memory/condenser/impl/browser_output_condenser.py:21-40`）——截图/可达树 token 大户的定向手术。
+- `ConversationWindowCondenser`（`openhands/memory/condenser/impl/conversation_window_condenser.py:16`）：唯一由 `view.unhandled_condensation_request` 单独触发（`openhands/memory/condenser/impl/conversation_window_condenser.py:176-177`），保留系统消息/首用户消息/Recall 对（`openhands/memory/condenser/impl/conversation_window_condenser.py:43-100`），非必要事件砍半并剔掉切片头部的悬空观察（`openhands/memory/condenser/impl/conversation_window_condenser.py:114-139`）。
+- `LLMSummarizingCondenser`（`openhands/memory/condenser/impl/llm_summarizing_condenser.py:17`）：遗忘区事件+上轮摘要喂给 LLM 生成结构化摘要（prompt 含 USER_CONTEXT/TASK_TRACKING/CODE_STATE/VERSION_CONTROL_STATUS 段，`openhands/memory/condenser/impl/llm_summarizing_condenser.py:72-118`；调用点 `openhands/memory/condenser/impl/llm_summarizing_condenser.py:140-146`），产出带 `summary_offset` 的 `CondensationAction`（`openhands/memory/condenser/impl/llm_summarizing_condenser.py:151-158`）。
+- `LLMAttentionCondenser`（`openhands/memory/condenser/impl/llm_attention_condenser.py:23`）：构造期校验模型支持 `response_schema`（`openhands/memory/condenser/impl/llm_attention_condenser.py:46-52`），让 LLM 给事件 ID 按重要性排序（`openhands/memory/condenser/impl/llm_attention_condenser.py:62-85` 的 json_schema 强约束），再反算遗忘集（`openhands/memory/condenser/impl/llm_attention_condenser.py:108-114`）。
+- `StructuredSummaryCondenser`（`openhands/memory/condenser/impl/structured_summary_condenser.py:162`，329 行）：要求 function calling，走 `StateSummary` 结构化工具调用（`openhands/memory/condenser/impl/structured_summary_condenser.py:25`、`:190`）。
+- `CondenserPipeline`（`openhands/memory/condenser/impl/pipeline.py:12`）：串接任意多个 condenser，遇 `Condensation` 提前断链（`openhands/memory/condenser/impl/pipeline.py:34-40`）；`from_config` 递归建链（`openhands/memory/condenser/impl/pipeline.py:46`）。
+
+## 3. 外部连接
+
+`Memory` 的消费方有四处：`openhands/server/session/agent_session.py:465` 实例化挂进会话、`openhands/core/loop.py:13`、`openhands/core/setup.py:32`、`openhands/core/main.py:44` 与 `openhands/server/routes/conversation.py:24` 均 import。它上游依赖 `openhands/microagent` 包的 `load_microagents_from_dir`（`openhands/memory/memory.py:20-25`）与 runtime 的 `RuntimeStatus`（`openhands/memory/memory.py:27`），状态回报走 `asyncio.run_coroutine_threadsafe`（`openhands/memory/memory.py:391-393`）。
+
+Condenser 的装配入口在 `openhands/agenthub/codeact_agent/codeact_agent.py:100`：`Condenser.from_config(self.config.condenser, llm_registry)`。消费闭环在 `openhands/agenthub/codeact_agent/codeact_agent.py:207-213` 的 match 语句——`case View(...)` 取压缩后事件与遗忘集，`case Condensation(action=...)` 直接把压缩动作当本步动作返回（controller 把它写回事件流，下步 step 用新 View 重来）。**注册机制是模块级副作用**：`openhands/memory/condenser/__init__.py:1` 一行 `import openhands.memory.condenser.impl  # noqa F401` 触发十个实现的文件尾 `register_config(...)`（如 `openhands/memory/condenser/impl/no_op_condenser.py:22`、`openhands/memory/condenser/impl/llm_summarizing_condenser.py:182`）——不 import impl 就查不到注册表，这是全家桶能被 `from_config` 找到的唯一原因。`State.view` 属性（`openhands/controller/state/state.py:305-318`）用 history 长度做校验和缓存 `View.from_events`，是 condenser 输入侧的缓存层。
+
+## 4. 数据流
+
+以一次"上下文超限自愈"为线：LLM 调用抛 context window 错 → `AgentController._step` 捕获后发 `CondensationRequestAction`（`openhands/controller/agent_controller.py:951-954`）→ 该事件入流 → 下一步 `agent.step` 里 `View.from_events` 检测到尾部存在未被 condensation 覆盖的请求（`openhands/memory/view.py:84-90`），`unhandled_condensation_request=True` → `LLMSummarizingCondenser.should_condense`（`openhands/memory/condenser/impl/llm_summarizing_condenser.py:160-161`）返回真 → `get_condensation` 生成摘要事件 → `CondensationAction` 回流 → View 重建时遗忘集生效、摘要插回 offset → LLM 重试成功。知识召回线则是：用户首条消息 → `RecallAction(WORKSPACE_CONTEXT)` → Memory 两级目录加载好的微代理内容拼进 `RecallObservation` → cause 配对释放等待 → 模板层把 repo_instructions/microagent_knowledge 注入系统提示。
+
+## 5. 设计决策
+
+三个决策值得咀嚼。其一，**注册表+副作用 import**（`openhands/memory/condenser/__init__.py:1`）而不是显式字典：换来的是新增实现零中心改动，代价是 `CONDENSER_REGISTRY` 实际住在 `condenser.py` 命名空间、`openhands/memory/condenser/__init__.py:12` 的 `__all__` 声明了却没直接 import 它——阅读者容易误解来源。其二，**`View`/`Condensation` 双返回类型**（`openhands/memory/condenser/condenser.py:92`）：压缩器既能"给结果"（View）也能"给动作"（Condensation 需要进事件流才能生效），后者本质是把压缩持久化为事件——重启/恢复后 `View.from_events` 重放压缩语义，无损恢复（`openhands/memory/view.py:50-96`）。其三，**摘要型 condenser 显式关掉 prompt caching**（`openhands/memory/condenser/impl/llm_summarizing_condenser.py:167-172` 注释"付了 cache write 的钱却永远等不到 read"）——每次摘要都是全新 prompt，这是对成本模型的诚实工程。在 Legacy-V0→V1 语境下，这套机制没有随 V0 弃用，因为它是"事件流为中心"架构的直接产物：V1 的 SDK 换了 controller/agent，但事件流与压缩语义原样继承。
+
+## 6. 新人提示
+
+- **锚点勘误**：`GLOBAL_MICROAGENTS_DIR` 指向的是 `skills/` 目录（`openhands/memory/memory.py:34-37`），不是叫 `microagents` 的目录——目录叫什么在两代间改过名，代码注释仍说 "typically OpenHands/skills (i.e., the PUBLIC microagents)"（`openhands/memory/memory.py:80-82`）。
+- `Memory.__init__` 是**会话级全量加载**：每个会话都重新扫两个目录，微代理文件多时有 IO 成本；好处是热更新目录即可生效。
+- `on_event` 里的 `asyncio.get_event_loop().run_until_complete`（`openhands/memory/memory.py:89`）在已运行 loop 的场景会抛错——它假设的是同步回调线程环境，别在 async 上下文直接调。
+- 十个实现里只有 `ConversationWindowCondenser.should_condense`（`openhands/memory/condenser/impl/conversation_window_condenser.py:176-177`）不响应 `len(view) > max_size`，只响应未处理压缩请求——它专治"context window 错误风暴"，与 `StuckDetector` 第五场景（`openhands/controller/stuck.py:409-462` 的 10 连 condensation 检测）构成双保险。
+- `LLMAttentionCondenser` 对不支持 `response_schema` 的模型直接构造抛错（`openhands/memory/condenser/impl/llm_attention_condenser.py:50-52`），配置错了在会话创建期就炸，不是运行中期。
+- `CondenserPipeline.metadata_batch`（`openhands/memory/condenser/impl/pipeline.py:22-32`）重写了父类上下文管理器，因为 State 不透传给链中各 condenser，只能事后逐个 `write_metadata` 收账——扩展 pipeline 时要记得这条约定。
+- 安全视角：微代理内容会被 `_find_microagent_knowledge` 原样注入对话（`openhands/memory/memory.py:263-269`），仓库里放的恶意 `.openhands/microagent` 文件等于直接提示注入载体；`load_user_workspace_microagents`（`openhands/memory/memory.py:272-286`）在 clone 仓库后由 agent_session 调用，第三方 repo 的微代理会进入你的会话——这正是 security/invariant 线存在的理由之一。

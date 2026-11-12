@@ -1,0 +1,31 @@
+# DeepWiki 索引 — android/ndk-samples
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-23
+> 结构 26 页 · 全文 306984 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Repository Architecture](1.1-repository-architecture.md)
+  - [1.2 Getting Started](1.2-getting-started.md)
+- [2 Build System](2-build-system.md)
+  - [2.1 Dependency Management](2.1-dependency-management.md)
+  - [2.2 Convention Plugins](2.2-convention-plugins.md)
+  - [2.3 CMake Integration](2.3-cmake-integration.md)
+  - [2.4 CI/CD and Code Quality](2.4-ci-cd-and-code-quality.md)
+- [3 Basic JNI Samples](3-basic-jni-samples.md)
+  - [3.1 Hello JNI](3.1-hello-jni.md)
+  - [3.2 Prebuilt Libraries](3.2-prebuilt-libraries.md)
+  - [3.3 NEON Optimization](3.3-neon-optimization.md)
+- [4 Native Activity Applications](4-native-activity-applications.md)
+  - [4.1 Basic Native Activity](4.1-basic-native-activity.md)
+  - [4.2 Choreographer and Animation](4.2-choreographer-and-animation.md)
+- [5 Graphics Samples](5-graphics-samples.md)
+  - [5.1 Teapot Samples](5.1-teapot-samples.md)
+  - [5.2 Vulkan Rendering](5.2-vulkan-rendering.md)
+- [6 Audio Samples](6-audio-samples.md)
+  - [6.1 Native Audio](6.1-native-audio.md)
+  - [6.2 Oboe Audio](6.2-oboe-audio.md)
+- [7 Camera Samples](7-camera-samples.md)
+  - [7.1 Basic Camera](7.1-basic-camera.md)
+- [8 Advanced Samples](8-advanced-samples.md)
+  - [8.1 Memory Sanitizers](8.1-memory-sanitizers.md)
+  - [8.2 Neural Network Samples](8.2-neural-network-samples.md)

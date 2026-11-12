@@ -1,0 +1,255 @@
+# xRep
+
+`cuphoton.xrep` reprojects two-dimensional images onto celestial WCS grids.
+It can derive a north-up grid or use an existing image as the destination.
+It supports bilinear and Lanczos-3 interpolation, optional mask propagation,
+relative-area scaling, and shared-grid stacks. Its CLI group is
+`cuphoton xrep`.
+
+## Install and smoke test
+
+```bash
+# CUDA 13
+uv sync --locked --extra dev --extra gpu
+uv run python examples/run_quickstarts.py --component xrep --require-gpu
+
+# CPU
+uv sync --locked --extra dev --extra torch
+uv run python examples/run_quickstarts.py \
+  --component xrep --profile cpu
+```
+
+Automatic selection prefers CuPy, then CUDA PyTorch, then CPU. The resolved
+backend and timings are written to `summary.json`. Explicit `--backend torch`
+can also run on a CPU-only host; `--backend cpu` selects the NumPy reference.
+
+## FITS reading
+
+`--fits-reader auto` uses xDR for supported FITS images on GPU
+workflows and Astropy on CPU workflows. `--fits-reader astropy` selects CPU
+decoding; `--fits-reader xdr` requires xDR. CuPy reprojection consumes
+decoded device arrays directly. Output images retain the usual host-array and
+FITS contracts. Summaries record the selected reader and any fallback under
+`fits_reads`.
+
+FITS-consuming commands, including benchmarks and backend comparisons,
+accept `--xdr-postprocess`, `--xdr-gzip-decoder`, and
+`--xdr-decompression-backend`. Python FITS APIs and workflow helpers accept
+the corresponding `xdr_options` keys `postprocess`, `gzip_decoder`, and
+`decompression_backend`. For example, use `--xdr-decompression-backend cuda`
+or `xdr_options={"decompression_backend": "cuda"}` to select CUDA
+decompression when the reader uses xDR. See
+[xDR runtime choices](xdr.md#runtime-choices) for values and automatic
+capability selection.
+
+The same choices reach image, mask, and stack reads. Omitted keys use xDR
+defaults; `fits_reader` continues to select the reader. Header-only WCS
+inspection does not use these decompression controls.
+
+WCS mapping and target-grid setup read headers and dimensions without
+decompressing image pixels. Reading with xDR does not by itself imply native
+GPUDirect Storage; it can also decode images using KvikIO compatibility I/O.
+
+## Inspect and reproject one image
+
+The FITS input must contain a 2D image and a valid celestial WCS in the selected
+HDU:
+
+```bash
+uv run cuphoton xrep inspect-image --input /path/to/image.fits
+
+uv run cuphoton xrep reproject-image \
+  --input /path/to/image.fits \
+  --backend auto \
+  --interpolation lanczos3 \
+  --write-fits \
+  --output-dir /path/to/runs
+```
+
+By default, the workflow derives the target grid from the source WCS.
+Provide a reference sky position and pixel scale for controlled
+cross-image comparisons. Validate the output bounding box, WCS alignment,
+flux behavior, and mask footprint.
+
+## Reproject a stack
+
+```bash
+uv run cuphoton xrep reproject-stack \
+  --inputs /path/to/a.fits,/path/to/b.fits,/path/to/c.fits \
+  --backend auto \
+  --output-dir /path/to/runs
+```
+
+Stack members are mapped to one grid and bounding box. The run writes a stacked
+NumPy array, optional mask stack, and a summary of the shared grid and each
+member.
+
+### Use an existing image as the destination
+
+`reproject-stack --target-wcs` uses a selected FITS image HDU's full celestial
+WCS and exact `(height, width)`. `--target-hdu` selects its zero-based HDU index;
+omitting it selects the first 2D image. The output origin is `(0, 0)` on that
+image, and the destination dimensions stay fixed for every input footprint.
+
+```bash
+uv run cuphoton xrep reproject-stack \
+  --inputs a.fits,b.fits \
+  --target-wcs destination.fits --target-hdu 1 \
+  --backend cpu --mapping-grid-step 1 --write-fits \
+  --output-dir runs
+```
+
+The target retains rotation, reference-pixel shifts, and SIP distortion.
+Lookup-table distortions are unsupported. `--grid-crval-ra`,
+`--grid-crval-dec`, and `--pixel-scale-arcsec` conflict with `--target-wcs`.
+Interpolation and relative-area scaling use their existing settings; pixels
+outside each source footprint retain the normal NaN fill and invalid mask.
+`--mapping-grid-step 1` evaluates the WCS mapping at every pixel; larger values
+retain the existing coarse-grid approximation, which interpolates the target's
+SIP distortion, so the workflow emits a `RuntimeWarning` when a SIP target is
+combined with a step above 1.
+
+The summary records the selected target HDU, dimensions, and serialized WCS
+header. FITS output retains that WCS, including SIP coefficients. Read the
+celestial WCS from a stack cube with `WCS(header, naxis=2)`. Each input remains
+a separate stack member.
+
+Python callers can pass `Grid.from_wcs(target_wcs)` and
+`output_bbox=BBox(0, 0, width, height)` to `build_stack_spec_from_fits`.
+
+## Compare implementations
+
+```bash
+uv run cuphoton xrep compare-backends \
+  --input /path/to/image.fits \
+  --backends cpu,cupy \
+  --output-dir /path/to/runs
+
+uv run cuphoton xrep benchmark-backend-variants \
+  --input /path/to/image.fits \
+  --variants cupy-elementwise,cupy-raw \
+  --mask-cases none,mask \
+  --output-dir /path/to/runs
+```
+
+Parity checks compare images and masks; benchmark runs keep host and device
+timings separate. Use the same grid, interpolation, dtype, and area-scaling
+policy when comparing results.
+
+## Python API
+
+The curated API exposes grid and bounding-box types, reprojection
+specifications, mapping preparation, FITS helpers, single-array reprojections,
+masked image reprojections, and stack reprojections:
+
+```python
+from cuphoton.xrep import BBox, ReprojectionSpec, reproject_array
+
+spec = ReprojectionSpec(mapping=mapping, output_bbox=BBox(0, 0, 256, 256))
+result = reproject_array(image, spec, backend="cpu")
+```
+
+Use one prepared geometry to reproject an image, variance, and integer mask
+together:
+
+```python
+from cuphoton.xrep import prepare_reprojection, reproject_masked_array
+
+prepared = prepare_reprojection(spec, source_shape=image.shape)
+result = reproject_masked_array(
+    image,
+    variance,
+    mask,
+    spec,
+    backend="cpu",
+    prepared=prepared,
+)
+```
+
+Masked reprojections use squared normalized interpolation weights for variance,
+square the relative-area Jacobian, and preserve mask neighborhoods by exact
+bitwise OR over every nonzero contributor in the selected interpolation
+kernel. The returned variance is a diagonal approximation; callers tracking
+interpolation-induced covariance need to carry it separately. Pass
+`variance_fill_value` to `reproject_masked_array` to set an out-of-footprint
+variance sentinel independently of the image `fill_value`; it defaults to
+NaN. Finite variance values must be nonnegative; NaN and positive infinity
+remain available as no-data representations.
+
+On the CuPy backend, `reproject_array_device` keeps results on the GPU. Pass
+`source_variance=` to propagate a variance plane there. The variance uses the
+same prepared mapping and interpolation kernel as the image, with the
+interpolation weights squared and the relative-area factor squared, where the
+image uses the weights and the factor to the first power. The result's
+`variance` field holds the device array and is `None` when no variance is
+given. As in `reproject_masked_array`, the variance is diagonal
+(interpolation-induced covariance is not represented) and
+`variance_fill_value` sets the out-of-footprint value, NaN by default.
+Unlike `reproject_masked_array`, the device path does not check variance
+values, since that would need a device-to-host transfer: negative input
+variance gives negative output variance.
+
+`resampling_weights_at` returns the interpolation weights the reprojection
+applies at the destination pixels nearest the given positions, together with
+the sub-pixel phase of the source coordinate, the local Jacobian of the
+mapping, and a per-position `is_translation` flag. Pass the `ReprojectionSpec`
+to read the kernel options from it, and the `PreparedReprojection` the
+reprojection used to read the same source coordinates it used:
+
+```python
+from cuphoton.xrep import resampling_weights_at
+
+taps = resampling_weights_at(
+    spec,
+    x,
+    y,
+    prepared=prepared,
+    source_shape=image.shape,
+)
+taps.weights         # (N, k, k), rows along source y, columns along source x
+taps.phase           # (N, 2) sub-pixel fractions of the source coordinate
+taps.jacobian        # (N, 2, 2) d(source) / d(destination)
+taps.is_translation  # (N,) false where the local mapping rotates or scales
+taps.offsets         # (k,) tap offsets from the floor of the source coordinate
+```
+
+`mapping` may also be a bare `PreparedReprojection` or the
+destination-to-source callable, with `interpolation`, `lanczos_a`,
+`two_a_footprint` and `source_origin` passed by hand. Positions are rounded to
+the nearest destination pixel with round-half-to-even (`numpy.rint`), and are
+pixels of the output grid in every form. A prepared mapping reproduces the
+source coordinates used by the reprojection exactly. A spec or callable
+mapping is evaluated at the
+destination pixels, which agrees with the reprojection only when
+`mapping_grid_step` is 1 or the mapping is affine: with the default coarse
+grid and a non-affine mapping (a WCS pair, for example) the reprojection
+interpolates the mapping bilinearly between grid nodes and the phase differs,
+so pass the prepared mapping.
+
+The weights exclude relative-area scaling. With `area_scaling=True`,
+reprojection multiplies the weighted image by `prepared.relative_area` and
+the weighted variance by its square.
+
+Each `(k, k)` block sums to one, or is all zero where the reprojection fills
+the pixel instead of resampling it: a non-finite source coordinate, or one
+outside `[0, width - 1] x [0, height - 1]`, which a prepared mapping knows
+from its `valid` array and the other forms know only when `source_shape` is
+given. `source_shape` also zeroes and renormalizes the taps outside the source
+as the reprojection does at its edges; without it the weights are the
+interior weights. `is_translation` compares the local Jacobian with the
+identity (`translation_tolerance`, `1e-3` by default). For an affine mapping
+within that tolerance, each phase coordinate drifts by less than 0.05 source
+pixels from the center to a corner of a 51 pixel window. Where the flag is
+true, one set of weights locally approximates the window. Where the forward
+and backward differences of the mapping
+disagree by more than `seam_tolerance` source pixels (0.5 by default), as at
+a seam between tiled reference frames, the Jacobian uses the shorter one so
+the seam is not read as a rotation. Noise models that need the weights take
+the `weights` array; they do not depend on xRep.
+
+The `reproject_array` API ORs the nonzero bilinear mask neighborhood even when
+the image interpolation is Lanczos-3. Use `reproject_masked_array` when the
+mask must cover every nonzero contributor in the selected image kernel.
+
+See [Data and artifact contracts](../data-artifacts.md#xrep-fits-and-arrays)
+for persisted run files and coordinate conventions.

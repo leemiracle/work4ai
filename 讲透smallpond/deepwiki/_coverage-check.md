@@ -1,18 +1,12 @@
-# DeepWiki 抓取覆盖率检查
+# Coverage Check
 
-- _links.txt 链接总数: 29
-- 实际 md 文件数: 29
-- 缺失页: 0
-- 空页(<= 500B): 0
+- repo: deepseek-ai/smallpond
+- fetched: 2026-10-30
+- 结构清单页数: 29
+- 落盘页数: 29
 
-## 结论
-**100% 覆盖**：全部链接均有对应 Markdown 文件且非空。
+- 覆盖: 29/29 (100%)
 
-## 抽查 3 页
-
-| 页面 | 大小(B) | 状态 | 检查 |
-|---|---|---|---|
-| 4.1-reading-and-writing-data | 6998 | 正常 | PASS |
-| 7.1-cicd-pipeline | 7966 | 正常 | PASS |
-| 5.1-graysort-benchmark | 8753 | 正常 | PASS |
-
+## 全层级对账终判（dw_reconcile_dir.py, 2026-10-30）
+- 结构全层级 29 页 vs 落盘 31 页（结构外/三级页 extra 2）
+- 终判: TRUE_100

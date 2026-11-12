@@ -1,0 +1,40 @@
+# DeepWiki 索引 — allenai/molmo-motion
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 31 页 · 全文 312974 字符
+
+- [1 MolmoMotion Overview](1-molmomotion-overview.md)
+  - [1.1 Getting Started & Quickstart](1.1-getting-started-quickstart.md)
+  - [1.2 Repository Layout & Project Configuration](1.2-repository-layout-project-configuration.md)
+- [2 Core Model Architecture](2-core-model-architecture.md)
+  - [2.1 Public API: MolmoMotion & MolmoMotionProcessor](2.1-public-api-molmomotion-molmomotionprocessor.md)
+  - [2.2 Molmo2Trajectory: Backbone & Point Feature Injection](2.2-molmo2trajectory-backbone-point-feature-injection.md)
+  - [2.3 Vision Backbone: ViT, Pooling & Connector](2.3-vision-backbone-vit-pooling-connector.md)
+  - [2.4 LLM Decoder & Trajectory Tokenization](2.4-llm-decoder-trajectory-tokenization.md)
+  - [2.5 HuggingFace Model Export](2.5-huggingface-model-export.md)
+- [3 Data Pipeline & Preprocessing](3-data-pipeline-preprocessing.md)
+  - [3.1 Dataset Registry & Trajectory3DDataset](3.1-dataset-registry-trajectory3ddataset.md)
+  - [3.2 Multimodal Preprocessing & Collation](3.2-multimodal-preprocessing-collation.md)
+  - [3.3 Data Loader & Dataset Mixture](3.3-data-loader-dataset-mixture.md)
+- [4 Training](4-training.md)
+  - [4.1 Launch Scripts & Training Recipes](4.1-launch-scripts-training-recipes.md)
+  - [4.2 Trainer, Optimizer & Checkpointing](4.2-trainer-optimizer-checkpointing.md)
+- [5 Evaluation & PointMotionBench](5-evaluation-pointmotionbench.md)
+  - [5.1 PointMotionBench: Benchmark Construction & Datasets](5.1-pointmotionbench-benchmark-construction-datasets.md)
+  - [5.2 Evaluation Drivers & Metrics](5.2-evaluation-drivers-metrics.md)
+- [6 Data Generation Pipeline (MolmoMotion-1M)](6-data-generation-pipeline-molmomotion-1m.md)
+  - [6.1 Pipeline Stages 1–3: Grounding, SLAM & 2D Tracking](6.1-pipeline-stages-1-3-grounding-slam-2d-tracking.md)
+  - [6.2 Pipeline Stages 4–6: 3D Lifting, Filtering & Clip Extraction](6.2-pipeline-stages-4-6-3d-lifting-filtering-clip-extraction.md)
+  - [6.3 Third-Party Tools: AllTracker, SAM3 & ViPE](6.3-third-party-tools-alltracker-sam3-vipe.md)
+  - [6.4 Pipeline Configuration & Running the Pipeline](6.4-pipeline-configuration-running-the-pipeline.md)
+- [7 Robotics Integration (MolmoBot)](7-robotics-integration-molmobot.md)
+  - [7.1 MolmoBot Finetuning Recipe](7.1-molmobot-finetuning-recipe.md)
+  - [7.2 MolmoSpaces Data Preparation & Evaluation](7.2-molmospaces-data-preparation-evaluation.md)
+- [8 Testing & Development Utilities](8-testing-development-utilities.md)
+  - [8.1 Test Suite](8.1-test-suite.md)
+  - [8.2 Utility Modules & Infrastructure](8.2-utility-modules-infrastructure.md)
+- [9 Glossary](9-glossary.md)
+
+## 附：补页（第三轮）
+- [6.1 Pipeline Stages 1–3: Grounding, SLAM & 2D Tracking](x1-pipeline-stages-13-grounding-slam-2d-tracking.md)
+- [6.2 Pipeline Stages 4–6: 3D Lifting, Filtering & Clip Extraction](x2-pipeline-stages-46-3d-lifting-filtering-clip-extraction.md)

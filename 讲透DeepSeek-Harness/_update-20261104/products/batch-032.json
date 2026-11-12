@@ -1,0 +1,1947 @@
+{
+ "nodes": [
+  {
+   "id": "document:packages/sandbox/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/sandbox/README.md",
+   "summary": "sandbox 包组 README：进程限制 seam、各平台后端（bwrap/Landlock/Seatbelt/Windows ACL）、共享 policy resolver 与 Windows 写限制档的组级导读。",
+   "tags": [
+    "documentation",
+    "package-group",
+    "sandbox"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/sandbox/sandbox/src/diagnostics.ts",
+   "type": "file",
+   "name": "diagnostics.ts",
+   "filePath": "packages/sandbox/sandbox/src/diagnostics.ts",
+   "summary": "沙箱运行器失败与文件效果拒绝的分类器：isRunnerSpawnFailure 只在 cwd 可用且 ENOENT/EACCES 的 path/syscall 精确指向 argv[0] 时归因运行器；classifyRunnerFailure 按 exit-code 门+informational 行排除+fatal 签名把 runner 崩溃与被拒绝的命令区分开。",
+   "tags": [
+    "classification",
+    "error-diagnostics",
+    "sandbox",
+    "utility"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox/src/diagnostics.ts:isRunnerSpawnFailure",
+   "type": "function",
+   "name": "isRunnerSpawnFailure",
+   "filePath": "packages/sandbox/sandbox/src/diagnostics.ts",
+   "lineRange": [
+    33,
+    47
+   ],
+   "summary": "在独立验证 spawn cwd 可进入后，仅当 Node ENOENT/EACCES 的 error.path 恰等于 runner argv[0]（或 path 缺席且 syscall 精确为 spawn <runner>）时判定为运行器自身解析/执行失败。",
+   "tags": [
+    "classification",
+    "spawn-error",
+    "attribution"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox/src/diagnostics.ts:classifyRunnerFailure",
+   "type": "function",
+   "name": "classifyRunnerFailure",
+   "filePath": "packages/sandbox/sandbox/src/diagnostics.ts",
+   "lineRange": [
+    65,
+    87
+   ],
+   "summary": "对一个已结算进程按后端结构化规则分类运行器失败：要求非零退出、可选 exit-code 门、排除 informational 行后命中 fatal 签名，返回首个证据行。",
+   "tags": [
+    "classification",
+    "runner-failure",
+    "rules"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox/src/diagnostics.ts:matchesSignature",
+   "type": "function",
+   "name": "matchesSignature",
+   "filePath": "packages/sandbox/sandbox/src/diagnostics.ts",
+   "lineRange": [
+    96,
+    100
+   ],
+   "summary": "非零退出 + stderr 大小写不敏感子串命中签名集合时判定为该后端方言的文件效果拒绝。",
+   "tags": [
+    "classification",
+    "denial",
+    "signatures"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/sandbox/sandbox/src/escalation.ts",
+   "type": "file",
+   "name": "escalation.ts",
+   "filePath": "packages/sandbox/sandbox/src/escalation.ts",
+   "summary": "沙箱提权（escalation）词汇与编排的唯一家：严格变宽阶梯 WIDER_MODES、参数配对校验、model-facing 拒绝/提示标记，以及 approveEscalation 在任何执行前经结构化审批闭包解决 sandbox_permissions 请求的 fail-closed 序列；经结构化 EscalationApprover 形状避免依赖 approval/agent 包。",
+   "tags": [
+    "escalation",
+    "approval",
+    "model-facing",
+    "validation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox/src/escalation.ts:validateEscalationArgs",
+   "type": "function",
+   "name": "validateEscalationArgs",
+   "filePath": "packages/sandbox/sandbox/src/escalation.ts",
+   "lineRange": [
+    52,
+    62
+   ],
+   "summary": "校验工具 schema 无法表达的参数配对：sandbox_permissions 与 justification 必须同来同往，且 justification 为非空句。",
+   "tags": [
+    "validation",
+    "escalation",
+    "argument-pairing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox/src/escalation.ts:sandboxDenialMarker",
+   "type": "function",
+   "name": "sandboxDenialMarker",
+   "filePath": "packages/sandbox/sandbox/src/escalation.ts",
+   "lineRange": [
+    72,
+    74
+   ],
+   "summary": "生成模型可见的统一拒绝标记行（kernel 拒绝 bash 文件效果与 fs fence 拒绝 mutation 共用同一词汇）。",
+   "tags": [
+    "model-facing",
+    "denial-marker",
+    "i18n-free"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox/src/escalation.ts:escalationHintMarker",
+   "type": "function",
+   "name": "escalationHintMarker",
+   "filePath": "packages/sandbox/sandbox/src/escalation.ts",
+   "lineRange": [
+    85,
+    87
+   ],
+   "summary": "拒绝时随行携带的同轮提权提示行：指引模型用 sandbox_permissions+justification 重试并由审批通道询问用户。",
+   "tags": [
+    "model-facing",
+    "escalation-hint",
+    "model-visible-text"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox/src/escalation.ts:sandboxPermissionsDescription",
+   "type": "function",
+   "name": "sandboxPermissionsDescription",
+   "filePath": "packages/sandbox/sandbox/src/escalation.ts",
+   "lineRange": [
+    96,
+    98
+   ],
+   "summary": "生成 sandbox_permissions 参数的模型可见描述文案（承载所有 enforcing 工具族的提权规则说明）。",
+   "tags": [
+    "model-facing",
+    "tool-schema",
+    "description"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox/src/escalation.ts:approveEscalation",
+   "type": "function",
+   "name": "approveEscalation",
+   "filePath": "packages/sandbox/sandbox/src/escalation.ts",
+   "lineRange": [
+    172,
+    206
+   ],
+   "summary": "执行前解决一次沙箱提权请求：重复当前模式直接返回；严格变宽才走审批闭包，窄化/无审批服务/无 agent/非授权结果一律抛错；审批 reason 自带审计信息并以 assertNever 收尾封闭 outcome 联合。",
+   "tags": [
+    "escalation",
+    "approval",
+    "fail-closed",
+    "lifecycle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/sandbox/sandbox/src/index.ts",
+   "summary": "同世界进程限制能力 seam 的 Service Definition（ctx.sandbox）：定义 SandboxMode/SandboxExecutionPolicy/SandboxPolicy/ConfinedArgv/RunnerFailureRule 词汇，抽象 SandboxProvider.confine 必须返回强制 argv 或 fail-closed；re-export escalation/roots/diagnostics 的公共面。",
+   "tags": [
+    "service-definition",
+    "capability-seam",
+    "type-definition",
+    "sandbox"
+   ],
+   "complexity": "complex",
+   "languageNotes": "declare module 扩展 cordis Context 注入 sandbox 属性；policy 逐调用携带而非固定在 provider 上（两个 consumer 可同刻以不同 policy 限制）。"
+  },
+  {
+   "id": "class:packages/sandbox/sandbox/src/index.ts:SandboxUnavailableError",
+   "type": "class",
+   "name": "SandboxUnavailableError",
+   "filePath": "packages/sandbox/sandbox/src/index.ts",
+   "lineRange": [
+    139,
+    152
+   ],
+   "summary": "HarnessError 子类（SANDBOX_UNAVAILABLE）：请求的限制模式在本机无可用后端时抛出，错误文案列明各平台安装途径并拒绝未限制执行。",
+   "tags": [
+    "error-type",
+    "fail-closed",
+    "error-handling"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/sandbox/sandbox/src/index.ts:SandboxUnsupportedPolicyError",
+   "type": "class",
+   "name": "SandboxUnsupportedPolicyError",
+   "filePath": "packages/sandbox/sandbox/src/index.ts",
+   "lineRange": [
+    155,
+    160
+   ],
+   "summary": "HarnessError 子类（SANDBOX_UNSUPPORTED_POLICY）：后端可用但不支持所请求的策略（如 Windows ACL 不支持额外可写目录）。",
+   "tags": [
+    "error-type",
+    "unsupported-policy",
+    "error-handling"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/sandbox/sandbox/src/index.ts:SandboxProvider",
+   "type": "class",
+   "name": "SandboxProvider",
+   "filePath": "packages/sandbox/sandbox/src/index.ts",
+   "lineRange": [
+    174,
+    193
+   ],
+   "summary": "抽象沙箱服务（extends Service，注册名 'sandbox'）：唯一抽象方法 confine 把调用方即将 spawn 的精确 argv 包装为限制执行 argv；禁止静默未限制直通，多运行器链用功能性探测仲裁，唯一候选可跳过探测。",
+   "tags": [
+    "service-definition",
+    "abstract-service",
+    "sandbox",
+    "cordis-plugin"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/sandbox/sandbox/src/roots.ts",
+   "type": "file",
+   "name": "roots.ts",
+   "filePath": "packages/sandbox/sandbox/src/roots.ts",
+   "summary": "workspace-write 可写根派生的唯一家：canonicalPath 用 realpathSync.native 取执行层真实比较的规范路径（darwin /tmp=/private/tmp），workspaceWritableRoots/writableRoots 产出去重 allow-list，显式额外目录拒绝 symlink 与非目录。Seatbelt 与 fs fence 在此对齐，防止\"bash 能写 /tmp 而写工具不能\"的不对称。",
+   "tags": [
+    "path-canonicalization",
+    "allow-list",
+    "workspace-write",
+    "utility"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/sandbox/sandbox/src/roots.ts:SandboxInvalidRootError",
+   "type": "class",
+   "name": "SandboxInvalidRootError",
+   "filePath": "packages/sandbox/sandbox/src/roots.ts",
+   "lineRange": [
+    23,
+    28
+   ],
+   "summary": "HarnessError 子类（SANDBOX_INVALID_ROOT）：显式目录 grant 缺失、非目录或经 symlink 重定向时抛出。",
+   "tags": [
+    "error-type",
+    "validation",
+    "error-handling"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox/src/roots.ts:additionalRoot",
+   "type": "function",
+   "name": "additionalRoot",
+   "filePath": "packages/sandbox/sandbox/src/roots.ts",
+   "lineRange": [
+    31,
+    45
+   ],
+   "summary": "校验一个显式额外目录 grant：realpathSync.native 解析后必须仍是目录且物理路径等于拼写路径（symlink grant 不支持，因为会重定向授权）。",
+   "tags": [
+    "validation",
+    "symlink-rejection",
+    "grant"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox/src/roots.ts:canonicalPath",
+   "type": "function",
+   "name": "canonicalPath",
+   "filePath": "packages/sandbox/sandbox/src/roots.ts",
+   "lineRange": [
+    57,
+    68
+   ],
+   "summary": "把配置/平台报告的根解析为执行层实际比较的规范路径；解析失败时原样返回（缺失根保守地什么也不匹配，而非发明回退路径）。",
+   "tags": [
+    "canonicalization",
+    "realpath",
+    "conservative-fallback"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox/src/roots.ts:workspaceWritableRoots",
+   "type": "function",
+   "name": "workspaceWritableRoots",
+   "filePath": "packages/sandbox/sandbox/src/roots.ts",
+   "lineRange": [
+    82,
+    85
+   ],
+   "summary": "工作区自有可写根（workspace root + 显式额外目录）的规范去重 allow-list 派生；read-only 模式返回空。",
+   "tags": [
+    "allow-list",
+    "workspace-write",
+    "file-policy"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox/src/roots.ts:writableRoots",
+   "type": "function",
+   "name": "writableRoots",
+   "filePath": "packages/sandbox/sandbox/src/roots.ts",
+   "lineRange": [
+    97,
+    100
+   ],
+   "summary": "一次受限执行可写的全部根：workspaceWritableRoots 加上 host /tmp 与 os.tmpdir()（缺平台 temp 区会拒绝模式承诺的能力）。",
+   "tags": [
+    "allow-list",
+    "temp-areas",
+    "file-policy"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/sandbox/sandbox/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/sandbox/sandbox/README.md",
+   "summary": "dsh-sandbox 包参考文档：限制一条命令、模式与 enforcement、被拒调用与提权的使用与维护者指南。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "sandbox"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/sandbox/sandbox/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/sandbox/sandbox/package.json",
+   "summary": "@deepseek-ai/dsh-sandbox 包清单：抽象沙箱 seam（ctx.sandbox），同世界限制词汇与 SandboxProvider 契约。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "sandbox"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/sandbox/sandbox-local/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/sandbox/sandbox-local/README.md",
+   "summary": "dsh-sandbox-local 包参考文档：Linux/macOS/Windows 本地后端的选择、配置、受限执行与 enforcement、失败恢复指南。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "sandbox-local"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/sandbox/sandbox-local/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/sandbox/sandbox-local/package.json",
+   "summary": "@deepseek-ai/dsh-sandbox-local 包清单：本地进程沙箱后端集合（bwrap、npm 分发的 landlock-run launcher、macOS Seatbelt、Windows ACL rung）。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "sandbox-local"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/sandbox/sandbox-local/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/sandbox/sandbox-local/src/index.ts",
+   "summary": "本地沙箱 provider：按平台先选链（linux bwrap→landlock、darwin seatbelt、win32 windows-acl）再对多候选链做一次性功能性探测；缺失或不可用的限制 fail-closed 而非返回原 argv。windows-acl 档持有写 grant（workspace 常驻 ACE 复用缓存 + 每会话可撤销私有 temp grant，dispose 时撤销）。",
+   "tags": [
+    "service-provider",
+    "sandbox",
+    "runner-chain",
+    "probing"
+   ],
+   "complexity": "complex",
+   "languageNotes": "DENIAL_SIGNATURES/RUNNER_FAILURE_RULES 按运行器方言携带 stderr 证据规则；windows-acl 宣称 partial enforcement（NTFS 硬链接别名、读不受限）。"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-local/src/index.ts:defaultProbeWindowsAcl",
+   "type": "function",
+   "name": "defaultProbeWindowsAcl",
+   "filePath": "packages/sandbox/sandbox-local/src/index.ts",
+   "lineRange": [
+    101,
+    113
+   ],
+   "summary": "windows-acl 功能性探测：以 read-only 模式（零 grant、无 ACL 变更）包 cmd /c exit 0，退出 0 证明 runner 能创建受限 token 并在其下 spawn 子进程；win32 链是唯一候选产品从不探测，此探测为 override 链保留。",
+   "tags": [
+    "probing",
+    "windows-acl",
+    "functional-test"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/sandbox/sandbox-local/src/index.ts:LocalSandboxProvider",
+   "type": "class",
+   "name": "LocalSandboxProvider",
+   "filePath": "packages/sandbox/sandbox-local/src/index.ts",
+   "lineRange": [
+    252,
+    584
+   ],
+   "summary": "Cordis Service Provider（extends SandboxProvider，ctx.sandbox，default export，static Config 含 runnerCommand/probeTimeoutMs）：confine 按选定运行器方言包装 argv；配置的 runnerCommand 跳过探测直接断言 full enforcement；缓存链裁决与 windows-acl 写 grant（workspaceWriteSid 常驻 ACE + 每会话/工作区随机私有 temp 目录与独立 SID，dispose 撤销）。",
+   "tags": [
+    "service-provider",
+    "sandbox",
+    "acl-grants",
+    "cordis-plugin"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/sandbox/sandbox-local/src/profiles.ts",
+   "type": "file",
+   "name": "profiles.ts",
+   "filePath": "packages/sandbox/sandbox-local/src/profiles.ts",
+   "summary": "本地沙箱 provider 的平台 profile 构建器：bwrap 挂载参数、Landlock launcher grant、Seatbelt SBPL profile；Seatbelt 与 fs fence 共用 writableRoots 派生以钉死两者 grant 不会漂移。",
+   "tags": [
+    "profile-builder",
+    "bwrap",
+    "landlock",
+    "seatbelt"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-local/src/profiles.ts:bwrapProfileArgs",
+   "type": "function",
+   "name": "bwrapProfileArgs",
+   "filePath": "packages/sandbox/sandbox-local/src/profiles.ts",
+   "lineRange": [
+    16,
+    23
+   ],
+   "summary": "把文件效果策略表达为 bwrap 挂载参数（ro-bind 根、独立 PID/proc、workspace-write 时 tmpfs /tmp + bind 各可写根）。",
+   "tags": [
+    "bwrap",
+    "mount-profile",
+    "sandbox-profile"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-local/src/profiles.ts:landlockProfileArgs",
+   "type": "function",
+   "name": "landlockProfileArgs",
+   "filePath": "packages/sandbox/sandbox-local/src/profiles.ts",
+   "lineRange": [
+    30,
+    36
+   ],
+   "summary": "把策略表达为 Landlock launcher 的读写 allow-list grant 参数（readOnly 全根，readWrite 含 /dev/null 与各可写根）。",
+   "tags": [
+    "landlock",
+    "grant-args",
+    "sandbox-profile"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-local/src/profiles.ts:seatbeltProfileArgs",
+   "type": "function",
+   "name": "seatbeltProfileArgs",
+   "filePath": "packages/sandbox/sandbox-local/src/profiles.ts",
+   "lineRange": [
+    53,
+    60
+   ],
+   "summary": "把策略表达为 sandbox-exec 参数与 SBPL profile 字符串（deny file-write* + 逐根 subpath allow），SBPL 字符串经反斜杠/引号转义。",
+   "tags": [
+    "seatbelt",
+    "sbpl",
+    "profile"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/sandbox/sandbox-local/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/sandbox/sandbox-local/tsconfig.json",
+   "summary": "包级 TypeScript 配置：extends tsconfig.base.json，project references 指向 cordis/schemastery vendor 与 sandbox、session、sandbox-windows-acl 依赖。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/sandbox/sandbox-policy/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/sandbox/sandbox-policy/README.md",
+   "summary": "dsh-sandbox-policy 包参考文档：最小配置、切换会话模式、失败恢复等共享逐调用 policy resolver 的使用指南。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "sandbox-policy"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/sandbox/sandbox-policy/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/sandbox/sandbox-policy/package.json",
+   "summary": "@deepseek-ai/dsh-sandbox-policy 包清单：逐调用沙箱 policy resolver 与当前模型上下文（部署回退 + 每会话模式与 workspace root）。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "sandbox-policy"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/sandbox/sandbox-policy/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/sandbox/sandbox-policy/src/index.ts",
+   "summary": "沙箱策略唯一家（ctx.sandboxPolicy）：部署回退 + 每会话解析（模式、workspace-write 根、额外可写目录）与 sandbox/mode 事件投影；每次 agent 请求前把解析出的 policy 写入 cache-safe 运行时上下文快照，agent loop 记为模型历史使 replay 重建相同模式而无需改系统提示词。",
+   "tags": [
+    "service-provider",
+    "policy-resolution",
+    "session-projection",
+    "cordis-plugin"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-policy/src/index.ts:renderPolicyContext",
+   "type": "function",
+   "name": "renderPolicyContext",
+   "filePath": "packages/sandbox/sandbox-policy/src/index.ts",
+   "lineRange": [
+    60,
+    79
+   ],
+   "summary": "按模式渲染模型可见的策略上下文文案（read-only/workspace-write/danger-full-access 三态，workspace-write 列出 workspace 根与额外目录），不盘点已挂载能力。",
+   "tags": [
+    "model-facing",
+    "policy-context",
+    "rendering"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/sandbox/sandbox-policy/src/index.ts:SandboxPolicyService",
+   "type": "class",
+   "name": "SandboxPolicyService",
+   "filePath": "packages/sandbox/sandbox-policy/src/index.ts",
+   "lineRange": [
+    134,
+    215
+   ],
+   "summary": "Cordis Service（ctx.sandboxPolicy，default export，static inject=['sessionProjections']）：持有部署默认模式与回退根；Service.init 注册 sandboxMode 会话投影（sandbox/mode 事件 fold）并向 systemPrompt 贡献 sandbox:policy 上下文节；resolve 按 显式批准模式 > 会话 override > 部署默认 解析逐调用策略。",
+   "tags": [
+    "service-provider",
+    "policy-resolution",
+    "session-projection",
+    "cordis-plugin"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:packages/sandbox/sandbox-policy/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/sandbox/sandbox-policy/tsconfig.json",
+   "summary": "包级 TypeScript 配置：references 指向 vendor cordis/schemastery 与 agent、sandbox、session、session-projection、system-prompt 依赖。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/sandbox/sandbox-policy/tsdown.config.ts",
+   "type": "config",
+   "name": "tsdown.config.ts",
+   "filePath": "packages/sandbox/sandbox-policy/tsdown.config.ts",
+   "summary": "tsdown 打包配置：把 src/index.ts 打成运行时 bundle 的构建入口声明。",
+   "tags": [
+    "configuration",
+    "bundler",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/sandbox/sandbox-windows-acl/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/sandbox/sandbox-windows-acl/README.md",
+   "summary": "dsh-sandbox-windows-acl 包参考文档：受限 token 进程限制的 Direct API、限制边界（读写不对称、控制台隔离缺失）、失败恢复指南。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "windows-acl"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "document:packages/sandbox/sandbox-windows-acl/assets/diagnose-windows-sandbox-acl/SKILL.md",
+   "type": "document",
+   "name": "SKILL.md",
+   "filePath": "packages/sandbox/sandbox-windows-acl/assets/diagnose-windows-sandbox-acl/SKILL.md",
+   "summary": "打包的 Windows 沙箱 ACL 诊断 skill 定义（frontmatter name/description）：一条命令诊断并修复 DSH 沙箱访问拒绝，说明输出解读与修复后行为。",
+   "tags": [
+    "skill-definition",
+    "diagnostics",
+    "windows-acl",
+    "asset"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/sandbox/sandbox-windows-acl/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/sandbox/sandbox-windows-acl/package.json",
+   "summary": "@deepseek-ai/dsh-sandbox-windows-acl 包清单：Windows ACL 写限制沙箱后端（受限 token spawn + 能力 SID 写 allow-list），含 koffi FFI 依赖与打包 skill 资产。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "windows-acl"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/sandbox/sandbox-windows-acl/src/acl-skill.ts",
+   "type": "file",
+   "name": "acl-skill.ts",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/acl-skill.ts",
+   "summary": "注册打包的 Windows 沙箱 ACL 诊断 skill：provider 持有私有的资源目录拷贝（使外部 PowerShell 在包处于 ASAR/SEA 内时仍可执行资源），dispose 移除拷贝。",
+   "tags": [
+    "skill-registration",
+    "resource-copy",
+    "windows-acl"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/acl-skill.ts:registerAclDiagnosisSkill",
+   "type": "function",
+   "name": "registerAclDiagnosisSkill",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/acl-skill.ts",
+   "lineRange": [
+    44,
+    76
+   ],
+   "summary": "向 skills registry 注册诊断 skill：mkdtemp 私有目录拷贝 SKILL.md 与 PowerShell 脚本、解析 YAML frontmatter 取 description，ctx.effect generator 保证 dispose 时递归删除目录；资产缺失/无效即注册失败。",
+   "tags": [
+    "skill-registration",
+    "ctx-effect",
+    "filesystem"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "type": "file",
+   "name": "acl.ts",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "summary": "ACL 编辑助手：经 SetEntriesInAclW + SetNamedSecurityInfoW 授予/撤销目录上的能力 SID；每次 grant 在一次调用里施加三处编辑（能力 SID allow ACE、去掉 world SID FILE_DELETE_CHILD 的 Deny ACE、Low no-write-up 强制标签）；读-合并-写序列跑在 per-path 独占 LockFileEx 锁下防并发沙箱实例互踩。",
+   "tags": [
+    "win32-api",
+    "acl",
+    "ffi",
+    "concurrency-control"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:buildExplicitAccess",
+   "type": "function",
+   "name": "buildExplicitAccess",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "lineRange": [
+    47,
+    62
+   ],
+   "summary": "打包一条 EXPLICIT_ACCESS_W（48 字节，布局经 abi-probe.cpp 验证）：perms/mode/inheritance/Trustee 按偏移写入；ambient-delete deny 把继承收窄到容器。",
+   "tags": [
+    "struct-packing",
+    "win32-api",
+    "ffi"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:lockFilePath",
+   "type": "function",
+   "name": "lockFilePath",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "lineRange": [
+    73,
+    76
+   ],
+   "summary": "推导目录锁文件路径（目标目录下基于路径哈希的命名），供 withPathLock 互斥。",
+   "tags": [
+    "locking",
+    "path-hash",
+    "concurrency"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:withPathLock",
+   "type": "function",
+   "name": "withPathLock",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "lineRange": [
+    93,
+    127
+   ],
+   "summary": "以 LockFileEx 独占锁串行化对同一路径 DACL 的读-合并-写序列，保证并发沙箱实例不互相覆盖 ACE；异常时解锁并传播。",
+   "tags": [
+    "locking",
+    "mutex",
+    "win32-api"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:buildLowLabelAcl",
+   "type": "function",
+   "name": "buildLowLabelAcl",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "lineRange": [
+    169,
+    188
+   ],
+   "summary": "构建 Low 完整性 no-write-up 标签 ACL（SACL 形态），使每个被授予目录携带 Low 强制标签以通过受限 token 的完整性检查。",
+   "tags": [
+    "integrity-label",
+    "sacl",
+    "win32-api"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:mergeAndApply",
+   "type": "function",
+   "name": "mergeAndApply",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "lineRange": [
+    229,
+    266
+   ],
+   "summary": "读目录当前 DACL、合并新 EXPLICIT_ACCESS 条目、经 SetNamedSecurityInfoW 一次写回；每次 API 调用都检查并带 API 名+精确 Win32 错误码+格式化系统文本+受影响路径上报。",
+   "tags": [
+    "dacl-merge",
+    "win32-api",
+    "error-reporting"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:hasExactEntry",
+   "type": "function",
+   "name": "hasExactEntry",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "lineRange": [
+    286,
+    302
+   ],
+   "summary": "检查当前 DACL 是否已含语义等价的指定 ACE 条目（grant 复用的 exact-ACE skip 判定基础）。",
+   "tags": [
+    "ace-inspection",
+    "idempotency",
+    "acl"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:hasForeignGrant",
+   "type": "function",
+   "name": "hasForeignGrant",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "lineRange": [
+    337,
+    351
+   ],
+   "summary": "检测 DACL 上是否已有其他来源的写授权（防止在非本沙箱管理的目录上误施加/撤销 grant）。",
+   "tags": [
+    "ace-inspection",
+    "ownership-check",
+    "acl"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:grantWrite",
+   "type": "function",
+   "name": "grantWrite",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "lineRange": [
+    377,
+    414
+   ],
+   "summary": "对一个目录授予写能力：已含完全相同 ACE 时 O(1) 跳过（跨会话复用缓存），否则三编辑合并写回并递归传播到子树。",
+   "tags": [
+    "acl-grant",
+    "idempotency",
+    "tree-propagation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:revokeWrite",
+   "type": "function",
+   "name": "revokeWrite",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "lineRange": [
+    431,
+    448
+   ],
+   "summary": "从目录撤销能力 SID 的授权（REVOKE_ACCESS 以 0 权限掩码移除 trustee 的全部 ACE）。",
+   "tags": [
+    "acl-revoke",
+    "win32-api",
+    "windows"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "type": "file",
+   "name": "ffi.ts",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "summary": "koffi FFI 绑定层：win32/win32Sync 惰性打开 Win32 API 绑定表（每服务器一次），提供指针槽分配、缓冲区编码、按偏移解码 u8/u16/u32/指针、SID 二进制比较与 GetTempPathW 等助手；dsh-lazy-require 保证 koffi 只在 Windows 路径加载。",
+   "tags": [
+    "ffi",
+    "koffi",
+    "win32-api",
+    "memory-helpers"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/ffi.ts:sameSidAt",
+   "type": "function",
+   "name": "sameSidAt",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "lineRange": [
+    209,
+    229
+   ],
+   "summary": "按 SID 二进制布局（Revision/SubAuthorityCount/Authority/SubAuthorities）比较两个内存中的 SID 是否相等。",
+   "tags": [
+    "sid-comparison",
+    "binary-layout",
+    "ffi"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/ffi.ts:bindings",
+   "type": "function",
+   "name": "bindings",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "lineRange": [
+    233,
+    279
+   ],
+   "summary": "构建 koffi Win32 API 绑定表（ConvertStringSidToSidW/SetEntriesInAclW/SetNamedSecurityInfoW/CreateProcessAsTokenW 等），每服务器生命周期只执行一次。",
+   "tags": [
+    "koffi",
+    "binding-table",
+    "lazy-init"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/ffi.ts:win32",
+   "type": "function",
+   "name": "win32",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "lineRange": [
+    285,
+    287
+   ],
+   "summary": "异步获取（并缓存）Win32 绑定表——全包 FFI 调用的公共入口；同步变体为 win32Sync。",
+   "tags": [
+    "ffi-entry",
+    "lazy-binding",
+    "ffi"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/ffi.ts:getTempPath",
+   "type": "function",
+   "name": "getTempPath",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "lineRange": [
+    302,
+    314
+   ],
+   "summary": "经 GetTempPathW FFI 调用取系统 temp 目录（避免 Node os.tmpdir 与 Win32 语义差异）。",
+   "tags": [
+    "win32-api",
+    "temp-path",
+    "windows"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/sandbox/sandbox-windows-acl/src/grant.ts",
+   "type": "file",
+   "name": "grant.ts",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/grant.ts",
+   "summary": "服务端写 grant 物化：sandbox seam 为每 workspace 持有一个常驻 grant、为每个活跃会话/工作区对持有一个可撤销 temp grant；workspace 身份经确定性派生与常驻 ACE 存活，temp 身份派生自随机私有路径、重启后刻意全新。",
+   "tags": [
+    "grant-materialization",
+    "acl",
+    "lifecycle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/sandbox/sandbox-windows-acl/src/grant.ts:AclWriteGrant",
+   "type": "class",
+   "name": "AclWriteGrant",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/grant.ts",
+   "lineRange": [
+    32,
+    142
+   ],
+   "summary": "一个写 SID 的 provider 生命周期 grant 物化：记录该 SID 已授权的目录（standing 工作区路径 dispose 不撤销——它们是跨会话复用缓存；temp 路径 dispose 撤销）；add 失败即抛、由调用方 dispose 已授权部分。",
+   "tags": [
+    "grant-lifecycle",
+    "standing-ace",
+    "revocation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "summary": "Windows ACL 写限制沙箱后端（镜像 huoyaoyuan/windows-acl-restrict-poc@10e4dfb 机制并补齐失败处理）：WRITE_RESTRICTED token 的 restricting SID 含 workspace/temp 写 SID，由本沙箱加进所属目录 DACL——交集检查恰在任一能力有 Write ACE 处放行写；token 降为 Low 完整性、每个被授予目录带 Low no-write-up 标签与 ambient-delete deny。与 POC 不同：每个 API 失败都抛 API 名+精确 Win32 码，子进程绝不未限制启动。",
+   "tags": [
+    "sandbox-backend",
+    "restricted-token",
+    "windows-acl",
+    "fail-closed"
+   ],
+   "complexity": "complex",
+   "languageNotes": "已知边界：写受限而读/网络/进程可见性不受限；控制台隔离不可用；grants 是真实目录上的常驻 ACE 变更。"
+  },
+  {
+   "id": "function:packages/sandbox/sandbox-windows-acl/src/index.ts:freeSidBestEffort",
+   "type": "function",
+   "name": "freeSidBestEffort",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "lineRange": [
+    139,
+    152
+   ],
+   "summary": "尽力释放一个可选 SID 同时保留失败对象，供兄弟清理路径聚合上报。",
+   "tags": [
+    "cleanup",
+    "best-effort",
+    "disposal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/sandbox/sandbox-windows-acl/src/index.ts:AclSandbox",
+   "type": "class",
+   "name": "AclSandbox",
+   "filePath": "packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "lineRange": [
+    163,
+    448
+   ],
+   "summary": "单个写受限沙箱实例（token + 写 SID grant + spawn）：构造器穷举校验模式/SID/temp 参数组合；init fail-closed（任一 Win32 失败撤销 temp grant 并抛）；dispose 撤销 temp、保留 standing workspace ACE、释放全部 SID 并汇报每个清理失败；manageDacls:false 时调用方自持 grant。",
+   "tags": [
+    "sandbox-instance",
+    "lifecycle",
+    "fail-closed",
+    "restricted-token"
+   ],
+   "complexity": "complex"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/sandbox/sandbox/src/diagnostics.ts",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/escalation.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/escalation.ts",
+   "target": "file:packages/sandbox/sandbox/src/locales.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/escalation.ts",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/index.ts",
+   "target": "file:packages/sandbox/sandbox/src/escalation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/index.ts",
+   "target": "file:packages/sandbox/sandbox/src/roots.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/index.ts",
+   "target": "file:packages/sandbox/sandbox/src/diagnostics.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/roots.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/roots.ts",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-local/src/index.ts",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-local/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-local/src/index.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-local/src/index.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-local/src/index.ts",
+   "target": "file:packages/sandbox/sandbox-local/src/profiles.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-local/src/profiles.ts",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-policy/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-policy/src/index.ts",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-policy/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-policy/src/index.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-policy/src/index.ts",
+   "target": "file:packages/core/system-prompt/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-policy/src/index.ts",
+   "target": "file:packages/sandbox/sandbox-policy/src/session-mode.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/acl-skill.ts",
+   "target": "file:packages/skill/skill/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/win32-abi.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "target": "file:packages/util/lazy-require/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "target": "file:packages/subprocess/win32-process/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/win32-abi.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/grant.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/grant.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/grant.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/grant.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/win32-abi.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "target": "file:packages/subprocess/win32-process/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/path-boundary.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/spawn.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/token.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/win32-abi.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/grant.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/workspace-sid.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/acl-skill.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/diagnostics.ts",
+   "target": "function:packages/sandbox/sandbox/src/diagnostics.ts:isRunnerSpawnFailure",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/diagnostics.ts",
+   "target": "function:packages/sandbox/sandbox/src/diagnostics.ts:classifyRunnerFailure",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/diagnostics.ts",
+   "target": "function:packages/sandbox/sandbox/src/diagnostics.ts:matchesSignature",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/escalation.ts",
+   "target": "function:packages/sandbox/sandbox/src/escalation.ts:validateEscalationArgs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/escalation.ts",
+   "target": "function:packages/sandbox/sandbox/src/escalation.ts:sandboxDenialMarker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/escalation.ts",
+   "target": "function:packages/sandbox/sandbox/src/escalation.ts:escalationHintMarker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/escalation.ts",
+   "target": "function:packages/sandbox/sandbox/src/escalation.ts:sandboxPermissionsDescription",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/escalation.ts",
+   "target": "function:packages/sandbox/sandbox/src/escalation.ts:approveEscalation",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/index.ts",
+   "target": "class:packages/sandbox/sandbox/src/index.ts:SandboxUnavailableError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/index.ts",
+   "target": "class:packages/sandbox/sandbox/src/index.ts:SandboxUnsupportedPolicyError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/index.ts",
+   "target": "class:packages/sandbox/sandbox/src/index.ts:SandboxProvider",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/roots.ts",
+   "target": "class:packages/sandbox/sandbox/src/roots.ts:SandboxInvalidRootError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/roots.ts",
+   "target": "function:packages/sandbox/sandbox/src/roots.ts:additionalRoot",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/roots.ts",
+   "target": "function:packages/sandbox/sandbox/src/roots.ts:canonicalPath",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/roots.ts",
+   "target": "function:packages/sandbox/sandbox/src/roots.ts:workspaceWritableRoots",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/roots.ts",
+   "target": "function:packages/sandbox/sandbox/src/roots.ts:writableRoots",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-local/src/index.ts",
+   "target": "function:packages/sandbox/sandbox-local/src/index.ts:defaultProbeWindowsAcl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-local/src/index.ts",
+   "target": "class:packages/sandbox/sandbox-local/src/index.ts:LocalSandboxProvider",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-local/src/profiles.ts",
+   "target": "function:packages/sandbox/sandbox-local/src/profiles.ts:bwrapProfileArgs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-local/src/profiles.ts",
+   "target": "function:packages/sandbox/sandbox-local/src/profiles.ts:landlockProfileArgs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-local/src/profiles.ts",
+   "target": "function:packages/sandbox/sandbox-local/src/profiles.ts:seatbeltProfileArgs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-policy/src/index.ts",
+   "target": "function:packages/sandbox/sandbox-policy/src/index.ts:renderPolicyContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-policy/src/index.ts",
+   "target": "class:packages/sandbox/sandbox-policy/src/index.ts:SandboxPolicyService",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/acl-skill.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/acl-skill.ts:registerAclDiagnosisSkill",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:buildExplicitAccess",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:lockFilePath",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:withPathLock",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:buildLowLabelAcl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:mergeAndApply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:hasExactEntry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:hasForeignGrant",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:grantWrite",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:revokeWrite",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/ffi.ts:sameSidAt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/ffi.ts:bindings",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/ffi.ts:win32",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/ffi.ts:getTempPath",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/grant.ts",
+   "target": "class:packages/sandbox/sandbox-windows-acl/src/grant.ts:AclWriteGrant",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/index.ts:freeSidBestEffort",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "target": "class:packages/sandbox/sandbox-windows-acl/src/index.ts:AclSandbox",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/diagnostics.ts",
+   "target": "function:packages/sandbox/sandbox/src/diagnostics.ts:isRunnerSpawnFailure",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/diagnostics.ts",
+   "target": "function:packages/sandbox/sandbox/src/diagnostics.ts:classifyRunnerFailure",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/diagnostics.ts",
+   "target": "function:packages/sandbox/sandbox/src/diagnostics.ts:matchesSignature",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/escalation.ts",
+   "target": "function:packages/sandbox/sandbox/src/escalation.ts:validateEscalationArgs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/escalation.ts",
+   "target": "function:packages/sandbox/sandbox/src/escalation.ts:sandboxDenialMarker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/escalation.ts",
+   "target": "function:packages/sandbox/sandbox/src/escalation.ts:escalationHintMarker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/escalation.ts",
+   "target": "function:packages/sandbox/sandbox/src/escalation.ts:sandboxPermissionsDescription",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/escalation.ts",
+   "target": "function:packages/sandbox/sandbox/src/escalation.ts:approveEscalation",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/index.ts",
+   "target": "class:packages/sandbox/sandbox/src/index.ts:SandboxUnavailableError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/index.ts",
+   "target": "class:packages/sandbox/sandbox/src/index.ts:SandboxUnsupportedPolicyError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/index.ts",
+   "target": "class:packages/sandbox/sandbox/src/index.ts:SandboxProvider",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/roots.ts",
+   "target": "class:packages/sandbox/sandbox/src/roots.ts:SandboxInvalidRootError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/roots.ts",
+   "target": "function:packages/sandbox/sandbox/src/roots.ts:canonicalPath",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/roots.ts",
+   "target": "function:packages/sandbox/sandbox/src/roots.ts:workspaceWritableRoots",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox/src/roots.ts",
+   "target": "function:packages/sandbox/sandbox/src/roots.ts:writableRoots",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-local/src/index.ts",
+   "target": "class:packages/sandbox/sandbox-local/src/index.ts:LocalSandboxProvider",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-local/src/profiles.ts",
+   "target": "function:packages/sandbox/sandbox-local/src/profiles.ts:bwrapProfileArgs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-local/src/profiles.ts",
+   "target": "function:packages/sandbox/sandbox-local/src/profiles.ts:landlockProfileArgs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-local/src/profiles.ts",
+   "target": "function:packages/sandbox/sandbox-local/src/profiles.ts:seatbeltProfileArgs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-policy/src/index.ts",
+   "target": "class:packages/sandbox/sandbox-policy/src/index.ts:SandboxPolicyService",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/acl-skill.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/acl-skill.ts:registerAclDiagnosisSkill",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:buildExplicitAccess",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:lockFilePath",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:buildLowLabelAcl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:grantWrite",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/acl.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/acl.ts:revokeWrite",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/ffi.ts:sameSidAt",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/ffi.ts:win32",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/ffi.ts",
+   "target": "function:packages/sandbox/sandbox-windows-acl/src/ffi.ts:getTempPath",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/grant.ts",
+   "target": "class:packages/sandbox/sandbox-windows-acl/src/grant.ts:AclWriteGrant",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "target": "class:packages/sandbox/sandbox-windows-acl/src/index.ts:AclSandbox",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:packages/sandbox/sandbox/src/index.ts:SandboxUnavailableError",
+   "target": "class:packages/llm/llm/src/error.ts:HarnessError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:packages/sandbox/sandbox/src/index.ts:SandboxUnsupportedPolicyError",
+   "target": "class:packages/llm/llm/src/error.ts:HarnessError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:packages/sandbox/sandbox/src/roots.ts:SandboxInvalidRootError",
+   "target": "class:packages/llm/llm/src/error.ts:HarnessError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:packages/sandbox/sandbox-local/src/index.ts:LocalSandboxProvider",
+   "target": "class:packages/sandbox/sandbox/src/index.ts:SandboxProvider",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:packages/sandbox/sandbox-local/src/index.ts:LocalSandboxProvider",
+   "target": "class:packages/sandbox/sandbox-windows-acl/src/grant.ts:AclWriteGrant",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "document:packages/sandbox/README.md",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/sandbox/sandbox/README.md",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/sandbox/sandbox-local/README.md",
+   "target": "file:packages/sandbox/sandbox-local/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/sandbox/sandbox-policy/README.md",
+   "target": "file:packages/sandbox/sandbox-policy/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/sandbox/sandbox-windows-acl/README.md",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/sandbox/sandbox-windows-acl/assets/diagnose-windows-sandbox-acl/SKILL.md",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/acl-skill.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/sandbox/sandbox/package.json",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/sandbox/sandbox-local/package.json",
+   "target": "file:packages/sandbox/sandbox-local/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/sandbox/sandbox-local/tsconfig.json",
+   "target": "file:packages/sandbox/sandbox-local/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/sandbox/sandbox-policy/package.json",
+   "target": "file:packages/sandbox/sandbox-policy/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/sandbox/sandbox-policy/tsconfig.json",
+   "target": "file:packages/sandbox/sandbox-policy/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/sandbox/sandbox-windows-acl/package.json",
+   "target": "file:packages/sandbox/sandbox-windows-acl/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  }
+ ]
+}

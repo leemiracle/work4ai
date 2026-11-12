@@ -1,116 +1,126 @@
-> 来源: [https://deepwiki.com/deepseek-ai/TileKernels/1-tilekernels-overview](https://deepwiki.com/deepseek-ai/TileKernels/1-tilekernels-overview)
-> DeepWiki deepseek-ai/TileKernels
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/TileKernels · page 1 TileKernels Overview · fetched 2026-10-30 -->
 
 # TileKernels Overview
 
-  Relevant source files 
- - [.editorconfig](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/.editorconfig)
- - [.gitignore](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/.gitignore)
- - [LICENSE](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/LICENSE)
- - [README.md](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/README.md?plain=1)
- - [pyproject.toml](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/pyproject.toml)
- 
-  TileKernels is a library of high-performance GPU kernels designed for Large Language Model (LLM) operations. These kernels are authored using [TileLang](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/TileLang) a domain-specific language (DSL) that enables writing optimized CUDA kernels directly in Python [README.md1-3](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/README.md?plain=1#L1-L3)
+<details>
+<summary>Relevant source files</summary>
 
- The project focuses on maximizing hardware utilization for compute-intensive and memory-bound operations, targeting modern NVIDIA architectures (SM90/SM100) [README.md4-23](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/README.md?plain=1#L4-L23)
+The following files were used as context for generating this wiki page:
 
- 
-## Hardware and Software Requirements
+- [LICENSE](LICENSE)
+- [README.md](README.md)
+- [tile_kernels/__init__.py](tile_kernels/__init__.py)
 
- TileKernels is optimized for cutting-edge NVIDIA hardware and requires a modern software stack to support TileLang's JIT compilation and execution.
+</details>
 
- 
+
+
+TileKernels is a high-performance kernel library implemented in [TileLang](https://github.com/tile-ai/tilelang), designed for Large Language Model (LLM) training and inference workloads [README.md:1-3](). It provides optimized operators for mixture-of-experts routing, Engram gating, quantization, manifold hyper-connections (mHC), rotary position embeddings, and random number generation [README.md:11-20](). 
+
+A key feature of TileKernels is its dual-backend support: it runs natively on NVIDIA CUDA architectures (SM90/SM100) and Huawei Ascend NPUs, sharing a unified Python API that automatically dispatches to the correct hardware backend [README.md:3-9]().
+
+## Requirements and Supported Backends
+
+TileKernels targets modern hardware accelerators and requires an up-to-date software stack for JIT compilation via TileLang [README.md:21-32]().
+
 | Requirement | Minimum Version / Specification |
-|---|---|
-| GPU Architecture | NVIDIA SM90 (Hopper) or SM100 (Blackwell) README.md22 |
-| CUDA Toolkit | 13.1 or higher README.md23 |
-| Python | 3.10 or higher README.md19 |
-| PyTorch | 2.10 or higher README.md20 |
-| TileLang | 0.1.9 or higher README.md21 |
+| :--- | :--- |
+| **Python** | 3.12 or higher [README.md:23]() |
+| **PyTorch** | 2.13 or higher [README.md:24]() |
+| **TileLang** | 0.1.15 or higher [README.md:25]() |
+| **NVIDIA CUDA Backend** | NVIDIA SM90 or SM100 GPU, CUDA Toolkit 13.1+ [README.md:26-28]() |
+| **Huawei Ascend Backend** | Ascend 950 NPU, CANN 9.2.0+ [README.md:29-31]() |
 
- For installation instructions and environment setup, see **[Getting Started: Installation and Configuration](https://deepwiki.com/deepseek-ai/TileKernels/1.1-getting-started:-installation-and-configuration)**.
+For installation steps, configuration flags, and test commands, see **[Getting Started: Installation and Configuration](#1.1)**.
 
- 
-## Core Subsystems
+Sources: [README.md:21-32]()
 
- The library is organized into specialized modules, each targeting a specific component of modern LLM architectures.
+## Module Map and Package Architecture
 
- 
-### 1. Mixture of Experts (MoE) & Gating
+The library is organized into modular sub-packages under `tile_kernels/`, exposing core operations, reference implementations, modeling wrappers, and test harnesses [README.md:73-86](). 
 
- Handles the complex routing logic required for MoE models, including top-k selection, token-to-expert mapping, and fused dispatch/reduction operations [README.md9-10](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/README.md?plain=1#L9-L10)
+*   `tile_kernels/engram/`: Engram gating kernels, signed-sqrt sigmoid gating, fused RMSNorm, and weight gradient reduction [README.md:15]().
+*   `tile_kernels/mhc/`: Manifold HyperConnection kernels including Sinkhorn normalization, expand, and mix pipelines [README.md:16]().
+*   `tile_kernels/moe/`: Mixture of Experts routing, top-k expert selection, and scoring helpers [README.md:13]().
+*   `tile_kernels/quant/`: Low-precision casting (FP8 e4m3, FP4 e2m1) across per-token, per-block, and per-channel granularities, plus fused SwiGLU and normalization [README.md:14]().
+*   `tile_kernels/rand/`: Random number generation kernels and seed management [README.md:18]().
+*   `tile_kernels/transform/`: Rotary Position Embedding (`rope`) kernels [README.md:17]().
+*   `tile_kernels/modeling/`: High-level `torch.autograd.Function` wrappers (such as `EngramGateFn`) for differentiable integration into PyTorch models [README.md:19]().
+*   `tile_kernels/torch/`: PyTorch-native reference implementations used as ground truth for numeric validation [README.md:84]().
+*   `tile_kernels/testing/`: Testing utilities, benchmarking fixtures, and pytest plugins [README.md:83]().
 
- 
- - **Key Directories:** `tile_kernels/moe/` [README.md60](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/README.md?plain=1#L60-L60)
- 
- 
-### 2. Quantization
+For a complete breakdown of file hierarchies and the `_kernel.py` / `_cuda.py` / `_asc.py` file triple pattern, see **[Repository Layout and Package Structure](#1.2)**.
 
- Provides high-performance casting kernels for low-precision formats (FP8, FP4, E5M6). This module includes fused operations like SwiGLU+Quantization to minimize memory round-trips [README.md11-12](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/README.md?plain=1#L11-L12)
+Sources: [README.md:11-20](), [README.md:73-86]()
 
- 
- - **Key Directories:** `tile_kernels/quant/` [README.md61](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/README.md?plain=1#L61-L61)
- 
- 
-### 3. Engram & Manifold HyperConnection (mHC)
+## System Architecture and Code Entity Mapping
 
- Implements specialized gating and connection mechanisms. Engram features fused RMSNorm and backward passes, while mHC provides Sinkhorn normalization and mix splitting [README.md13-14](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/README.md?plain=1#L13-L14)
+The diagram below maps high-level functional subsystems to their underlying code entities within the `tile_kernels` package structure (`tile_kernels/__init__.py`) [tile_kernels/__init__.py:1-15]().
 
- 
- - **Key Directories:** `tile_kernels/engram/`, `tile_kernels/mhc/` [README.md63-64](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/README.md?plain=1#L63-L64)
- 
- 
-### 4. Modeling & Autograd
+### Module to Code Entity Mapping
+```mermaid
+graph TD
+    subgraph "Public API [tile_kernels/__init__.py]"
+        Init["tile_kernels"]
+    end
 
- The `modeling` layer wraps low-level TileLang kernels into `torch.autograd.Function` objects, allowing them to be used as standard differentiable layers in PyTorch models [README.md15](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/README.md?plain=1#L15-L15)
+    subgraph "Sub-packages [tile_kernels/]"
+        Engram["engram/"]
+        Mhc["mhc/"]
+        Moe["moe/"]
+        Quant["quant/"]
+        Transform["transform/"]
+        Rand["rand/"]
+        Modeling["modeling/"]
+        Torch["torch/"]
+        Testing["testing/"]
+    end
 
- 
- - **Key Directories:** `tile_kernels/modeling/` [README.md65](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/README.md?plain=1#L65-L65)
- 
- For a detailed breakdown of the file system, see **[Repository Layout and Package Structure](https://deepwiki.com/deepseek-ai/TileKernels/1.2-repository-layout-and-package-structure)**.
-
- 
-## System Relationship Diagram
-
- The following diagram illustrates how TileKernels bridges the gap between high-level PyTorch modeling and low-level GPU hardware via TileLang.
-
- 
-### Logic to Code Entity Mapping
-
- "Entity Mapping: PyTorch to TileLang"
-
- 
+    Init --> Engram
+    Init --> Mhc
+    Init --> Moe
+    Init --> Quant
+    Init --> Transform
+    Init --> Rand
+    Init --> Modeling
+    Init --> Torch
+    Init --> Testing
 ```
+Sources: [tile_kernels/__init__.py:1-15]()
 
+### Dual-Backend Execution Flow
+```mermaid
+graph LR
+    subgraph "User Code"
+        PyTorchAPI["torch.autograd.Function / Python API"]
+    end
+
+    subgraph "Dispatcher [*_kernel.py]"
+        Dispatcher["is_ascend() check"]
+    end
+
+    subgraph "Hardware Backends"
+        CUDA["CUDA Backend (*_cuda.py) <br/> SM90 / SM100"]
+        Ascend["Ascend NPU Backend (*_asc.py) <br/> CANN 9.2.0+"]
+    end
+
+    PyTorchAPI --> Dispatcher
+    Dispatcher -->|NVIDIA GPU| CUDA
+    Dispatcher -->|Huawei NPU| Ascend
 ```
+Sources: [README.md:3-9](), [tile_kernels/__init__.py:1-35]()
 
- Sources: [README.md59-68](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/README.md?plain=1#L59-L68) [pyproject.toml23-26](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/pyproject.toml#L23-L26)
-
- 
-### Data Flow Overview
-
- "Data Flow: From Model to Hardware"
-
- 
-```
-
-```
-
- Sources: [README.md3-5](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/README.md?plain=1#L3-L5) [README.md22](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/README.md?plain=1#L22-L22)
-
- 
 ## Child Pages
 
- 
- - **[Getting Started: Installation and Configuration](https://deepwiki.com/deepseek-ai/TileKernels/1.1-getting-started:-installation-and-configuration)**: Guide on setting up the environment, installing the `tile-kernels` package, and configuring global SM settings.
- - **[Repository Layout and Package Structure](https://deepwiki.com/deepseek-ai/TileKernels/1.2-repository-layout-and-package-structure)**: A deep dive into the directory organization, including the purpose of `testing/`, `torch/` reference implementations, and core kernel directories.
- 
- 
+*   **[Getting Started: Installation and Configuration](#1.1)** — Installation instructions, environment setup, test execution with `TK_TEST_LEVEL`, and runtime configuration APIs in `tile_kernels/config.py`.
+*   **[Repository Layout and Package Structure](#1.2)** — Overview of top-level directories, the per-kernel file triple convention (`*_kernel.py`, `*_cuda.py`, `*_asc.py`), and symbol re-exporting.
+*   **[Development Workflow and Tooling](#1.3)** — Contributor guidelines including pre-commit hooks, ruff formatting, style rules, and licensing.
+
+---
+**Sources:**
+- [README.md:1-106]()
+- [tile_kernels/__init__.py:1-39]()
+- [LICENSE:1-21]()
+
 ---
 
- **Sources:**
-
- 
- - [README.md1-23](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/README.md?plain=1#L1-L23)
- - [README.md59-68](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/README.md?plain=1#L59-L68)
- - [pyproject.toml1-47](https://github.com/deepseek-ai/TileKernels/blob/36d9e45d/pyproject.toml#L1-L47)

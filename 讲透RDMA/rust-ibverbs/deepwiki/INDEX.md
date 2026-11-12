@@ -1,0 +1,32 @@
+# DeepWiki 索引 — jonhoo/rust-ibverbs
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-11-11
+> 结构 27 页 · 全文 171202 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Safety Model and Design Philosophy](1.2-safety-model-and-design-philosophy.md)
+- [2 Crate Architecture](2-crate-architecture.md)
+  - [2.1 ibverbs-sys: FFI Bindings Layer](2.1-ibverbs-sys-ffi-bindings-layer.md)
+  - [2.2 ibverbs: Safe API Layer](2.2-ibverbs-safe-api-layer.md)
+- [3 Core RDMA Concepts and Resource Lifecycle](3-core-rdma-concepts-and-resource-lifecycle.md)
+  - [3.1 Device Discovery and Context](3.1-device-discovery-and-context.md)
+  - [3.2 Protection Domain and Memory Regions](3.2-protection-domain-and-memory-regions.md)
+  - [3.3 Addressing: GIDs, LIDs, and Address Handles](3.3-addressing-gids-lids-and-address-handles.md)
+- [4 Queue Pairs](4-queue-pairs.md)
+  - [4.1 Transport Types and QueuePair Lifecycle](4.1-transport-types-and-queuepair-lifecycle.md)
+  - [4.2 Sending, Receiving, and Doorbell Batching](4.2-sending-receiving-and-doorbell-batching.md)
+  - [4.3 Shared Receive Queues (SRQ)](4.3-shared-receive-queues-srq.md)
+- [5 Completion Queues and Event Handling](5-completion-queues-and-event-handling.md)
+  - [5.1 CompletionQueue: Polling and WorkCompletions](5.1-completionqueue-polling-and-workcompletions.md)
+  - [5.2 Event-Driven Completions and CompletionChannel](5.2-event-driven-completions-and-completionchannel.md)
+- [6 Optional Features](6-optional-features.md)
+  - [6.1 RDMA Connection Manager (rdmacm feature)](6.1-rdma-connection-manager-rdmacm-feature.md)
+  - [6.2 AWS Elastic Fabric Adapter (efa feature)](6.2-aws-elastic-fabric-adapter-efa-feature.md)
+- [7 Examples](7-examples.md)
+  - [7.1 Data-Path Examples (loopback, doorbell_batching, event_loop)](7.1-data-path-examples-loopback-doorbell-batching-event-loop.md)
+  - [7.2 Connection and Device Examples (rdmacm_connect, efa_srd, devinfo)](7.2-connection-and-device-examples-rdmacm-connect-efa-srd-devinfo.md)
+- [8 Testing and CI](8-testing-and-ci.md)
+  - [8.1 Integration Test Suite](8.1-integration-test-suite.md)
+  - [8.2 CI/CD Workflows](8.2-ci-cd-workflows.md)
+- [9 Glossary](9-glossary.md)

@@ -1,0 +1,30 @@
+# DeepWiki 索引 — openai/openai-security-bots
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 212639 字符
+
+- [1 Overview](1-overview.md)
+- [2 System Architecture](2-system-architecture.md)
+- [3 Shared Components](3-shared-components.md)
+  - [3.1 Bot Framework and Handler Base Classes](3.1-bot-framework-and-handler-base-classes.md)
+  - [3.2 Slack Client and Utilities](3.2-slack-client-and-utilities.md)
+  - [3.3 Shared Library Tests](3.3-shared-library-tests.md)
+- [4 SDLC Slackbot](4-sdlc-slackbot.md)
+  - [4.1 Setup and Configuration](4.1-setup-and-configuration.md)
+  - [4.2 Core Logic and Event Handling](4.2-core-logic-and-event-handling.md)
+  - [4.3 AI Integration and Prompts](4.3-ai-integration-and-prompts.md)
+  - [4.4 Database Schema and Data Models](4.4-database-schema-and-data-models.md)
+  - [4.5 Google Docs Integration](4.5-google-docs-integration.md)
+  - [4.6 Dependencies and Build System](4.6-dependencies-and-build-system.md)
+- [5 Incident Response Slackbot](5-incident-response-slackbot.md)
+  - [5.1 Event Handlers and Workflow](5.1-event-handlers-and-workflow.md)
+  - [5.2 AI-Powered Incident Analysis](5.2-ai-powered-incident-analysis.md)
+  - [5.3 Configuration and Templates](5.3-configuration-and-templates.md)
+  - [5.4 Database and Data Management](5.4-database-and-data-management.md)
+  - [5.5 Alert Feed and Scripting](5.5-alert-feed-and-scripting.md)
+  - [5.6 Setup and Deployment](5.6-setup-and-deployment.md)
+- [6 Triage Slackbot](6-triage-slackbot.md)
+  - [6.1 AI-Powered Request Categorization](6.1-ai-powered-request-categorization.md)
+  - [6.2 Setup and Configuration](6.2-setup-and-configuration.md)
+- [7 Development and Build System](7-development-and-build-system.md)
+- [8 Glossary](8-glossary.md)

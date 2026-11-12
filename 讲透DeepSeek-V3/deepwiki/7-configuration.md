@@ -1,164 +1,247 @@
-> 来源: [https://deepwiki.com/deepseek-ai/DeepSeek-V3/7-configuration](https://deepwiki.com/deepseek-ai/DeepSeek-V3/7-configuration)
-> DeepWiki deepseek-ai/DeepSeek-V3
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/DeepSeek-V3 · page 7 Configuration · fetched 2026-10-30 -->
 
 # Configuration
 
-  Relevant source files 
- - [inference/configs/config_671B.json](https://github.com/deepseek-ai/DeepSeek-V3/blob/9b4e9788/inference/configs/config_671B.json)
- 
-  This page documents the configuration system for DeepSeek-V3, including the structure of configuration files, how they are loaded and used throughout the codebase, and how configuration parameters map to model architecture components. For detailed documentation of individual configuration parameters, see [Configuration Options](https://deepwiki.com/deepseek-ai/DeepSeek-V3/7.1-configuration-options). For information about different model size configurations available, see [Model Sizes](https://deepwiki.com/deepseek-ai/DeepSeek-V3/7.2-model-sizes).
+<details>
+<summary>Relevant source files</summary>
 
- 
+The following files were used as context for generating this wiki page:
+
+- [inference/configs/config_671B.json](inference/configs/config_671B.json)
+
+</details>
+
+
+
+This page documents the configuration system for DeepSeek-V3, including the structure of configuration files, how they are loaded and used throughout the codebase, and how configuration parameters map to model architecture components. For detailed documentation of individual configuration parameters, see [Configuration Options](#7.1). For information about different model size configurations available, see [Model Sizes](#7.2).
+
 ## Overview
 
- The DeepSeek-V3 configuration system uses JSON files to define all architectural hyperparameters for model instantiation. Configuration files specify dimensions, layer counts, MoE topology, attention parameters, LoRA ranks, and quantization settings. The configuration drives the construction of all model components from embedding layers through transformer blocks to output projections.
+The DeepSeek-V3 configuration system uses JSON files to define all architectural hyperparameters for model instantiation. Configuration files specify dimensions, layer counts, MoE topology, attention parameters, LoRA ranks, and quantization settings. The configuration drives the construction of all model components from embedding layers through transformer blocks to output projections.
 
- **Sources:** [inference/configs/config_671B.json1-22](https://github.com/deepseek-ai/DeepSeek-V3/blob/9b4e9788/inference/configs/config_671B.json#L1-L22)
+**Sources:** [inference/configs/config_671B.json:1-22]()
 
- 
 ## Configuration File Structure
 
- Configuration files are stored in the `inference/configs/` directory and follow a flat JSON schema. The primary configuration file for the 671B parameter model is `config_671B.json`:
+Configuration files are stored in the `inference/configs/` directory and follow a flat JSON schema. The primary configuration file for the 671B parameter model is `config_671B.json`:
 
- 
+```json
+{
+    "vocab_size": 129280,
+    "dim": 7168,
+    "inter_dim": 18432,
+    "moe_inter_dim": 2048,
+    "n_layers": 61,
+    "n_dense_layers": 3,
+    "n_heads": 128,
+    "n_routed_experts": 256,
+    "n_shared_experts": 1,
+    "n_activated_experts": 8,
+    "n_expert_groups": 8,
+    "n_limited_groups": 4,
+    "route_scale": 2.5,
+    "score_func": "sigmoid",
+    "q_lora_rank": 1536,
+    "kv_lora_rank": 512,
+    "qk_nope_head_dim": 128,
+    "qk_rope_head_dim": 64,
+    "v_head_dim": 128,
+    "dtype": "fp8"
+}
 ```
 
-```
+The configuration file contains no nested structures - all parameters are defined at the top level for straightforward parsing and validation.
 
- The configuration file contains no nested structures - all parameters are defined at the top level for straightforward parsing and validation.
+**Sources:** [inference/configs/config_671B.json:1-22]()
 
- **Sources:** [inference/configs/config_671B.json1-22](https://github.com/deepseek-ai/DeepSeek-V3/blob/9b4e9788/inference/configs/config_671B.json#L1-L22)
-
- 
 ## Configuration Loading Process
 
- 
 ### ModelArgs Dataclass
 
- Configuration parameters are loaded into a `ModelArgs` dataclass defined in `model.py`. This dataclass provides type safety and default values for all configuration parameters. The loading process follows this workflow:
+Configuration parameters are loaded into a `ModelArgs` dataclass defined in `model.py`. This dataclass provides type safety and default values for all configuration parameters. The loading process follows this workflow:
 
- 
+```mermaid
+flowchart LR
+    ConfigFile["config_671B.json<br/>(JSON file)"]
+    LoadJSON["json.load()<br/>(Parse JSON)"]
+    ModelArgs["ModelArgs<br/>(dataclass)"]
+    Transformer["Transformer<br/>(model instance)"]
+    
+    ConfigFile --> LoadJSON
+    LoadJSON --> ModelArgs
+    ModelArgs --> Transformer
 ```
 
-```
+**Diagram 1: Configuration Loading Pipeline**
 
- **Diagram 1: Configuration Loading Pipeline**
+The configuration dictionary is unpacked directly into the `ModelArgs` constructor, which validates parameter types and applies any necessary transformations before model instantiation.
 
- The configuration dictionary is unpacked directly into the `ModelArgs` constructor, which validates parameter types and applies any necessary transformations before model instantiation.
+**Sources:** [inference/configs/config_671B.json:1-22]()
 
- **Sources:** [inference/configs/config_671B.json1-22](https://github.com/deepseek-ai/DeepSeek-V3/blob/9b4e9788/inference/configs/config_671B.json#L1-L22)
-
- 
 ## Configuration Parameter Categories
 
- Configuration parameters are organized into several logical categories that control different aspects of the model architecture:
+Configuration parameters are organized into several logical categories that control different aspects of the model architecture:
 
- 
 | Category | Parameters | Purpose |
-|---|---|---|
-| Model Dimensions | vocab_size, dim, inter_dim, moe_inter_dim | Define vocabulary size and hidden dimensions for embeddings and feed-forward layers |
-| Layer Structure | n_layers, n_dense_layers | Specify total transformer layers (61) and initial dense layers (3) |
-| Attention | n_heads, q_lora_rank, kv_lora_rank, qk_nope_head_dim, qk_rope_head_dim, v_head_dim | Control Multi-head Latent Attention configuration with LoRA and RoPE/NOPE dimensions |
-| MoE Topology | n_routed_experts, n_shared_experts, n_activated_experts, n_expert_groups, n_limited_groups | Define expert routing with 256 total experts, 8 activated per token, and expert grouping |
-| Routing | route_scale, score_func | Configure routing mechanism using sigmoid scoring with scale factor 2.5 |
-| Quantization | dtype | Specify weight precision (fp8 or bf16) |
+|----------|-----------|---------|
+| **Model Dimensions** | `vocab_size`, `dim`, `inter_dim`, `moe_inter_dim` | Define vocabulary size and hidden dimensions for embeddings and feed-forward layers |
+| **Layer Structure** | `n_layers`, `n_dense_layers` | Specify total transformer layers (61) and initial dense layers (3) |
+| **Attention** | `n_heads`, `q_lora_rank`, `kv_lora_rank`, `qk_nope_head_dim`, `qk_rope_head_dim`, `v_head_dim` | Control Multi-head Latent Attention configuration with LoRA and RoPE/NOPE dimensions |
+| **MoE Topology** | `n_routed_experts`, `n_shared_experts`, `n_activated_experts`, `n_expert_groups`, `n_limited_groups` | Define expert routing with 256 total experts, 8 activated per token, and expert grouping |
+| **Routing** | `route_scale`, `score_func` | Configure routing mechanism using sigmoid scoring with scale factor 2.5 |
+| **Quantization** | `dtype` | Specify weight precision (fp8 or bf16) |
 
- **Sources:** [inference/configs/config_671B.json1-22](https://github.com/deepseek-ai/DeepSeek-V3/blob/9b4e9788/inference/configs/config_671B.json#L1-L22)
+**Sources:** [inference/configs/config_671B.json:1-22]()
 
- 
 ## Configuration-Architecture Mapping
 
- The following diagram illustrates how configuration parameters map to specific architectural components in the model implementation:
+The following diagram illustrates how configuration parameters map to specific architectural components in the model implementation:
 
- 
+```mermaid
+graph TB
+    subgraph Config["config_671B.json"]
+        vocab_size["vocab_size: 129280"]
+        dim["dim: 7168"]
+        inter_dim["inter_dim: 18432"]
+        moe_inter_dim["moe_inter_dim: 2048"]
+        n_layers["n_layers: 61"]
+        n_dense_layers["n_dense_layers: 3"]
+        n_heads["n_heads: 128"]
+        n_routed_experts["n_routed_experts: 256"]
+        n_activated_experts["n_activated_experts: 8"]
+        q_lora_rank["q_lora_rank: 1536"]
+        kv_lora_rank["kv_lora_rank: 512"]
+        qk_nope_head_dim["qk_nope_head_dim: 128"]
+        qk_rope_head_dim["qk_rope_head_dim: 64"]
+        v_head_dim["v_head_dim: 128"]
+        dtype["dtype: fp8"]
+    end
+    
+    subgraph ModelPy["model.py Components"]
+        ParallelEmbedding["ParallelEmbedding<br/>(tok_embeddings)"]
+        TransformerBlock["TransformerBlock<br/>(layers 0-60)"]
+        Attention["Attention<br/>(MLA implementation)"]
+        MoE["MoE<br/>(DeepSeekMoE)"]
+        Gate["Gate<br/>(routing)"]
+        ColumnLinear["ColumnParallelLinear<br/>(output projection)"]
+    end
+    
+    vocab_size --> ParallelEmbedding
+    vocab_size --> ColumnLinear
+    dim --> ParallelEmbedding
+    dim --> TransformerBlock
+    
+    n_layers -.controls.-> TransformerBlock
+    n_dense_layers -.first 3 layers.-> TransformerBlock
+    
+    dim --> Attention
+    n_heads --> Attention
+    q_lora_rank --> Attention
+    kv_lora_rank --> Attention
+    qk_nope_head_dim --> Attention
+    qk_rope_head_dim --> Attention
+    v_head_dim --> Attention
+    
+    dim --> MoE
+    moe_inter_dim --> MoE
+    n_routed_experts --> MoE
+    n_activated_experts --> Gate
+    
+    inter_dim -.dense layers.-> TransformerBlock
+    
+    dtype -.quantization.-> ParallelEmbedding
+    dtype -.quantization.-> MoE
+    dtype -.quantization.-> Attention
 ```
 
-```
+**Diagram 2: Configuration Parameter to Code Entity Mapping**
 
- **Diagram 2: Configuration Parameter to Code Entity Mapping**
+This diagram shows the direct relationships between configuration parameters and the classes/components they instantiate. Note that:
 
- This diagram shows the direct relationships between configuration parameters and the classes/components they instantiate. Note that:
+- `vocab_size` and `dim` control the `ParallelEmbedding` size
+- `n_layers` (61) defines the total number of `TransformerBlock` instances
+- `n_dense_layers` (3) specifies that layers 0-2 use standard FFN with `inter_dim`
+- Layers 3-60 use `MoE` components with `moe_inter_dim` and expert parameters
+- Attention parameters control the `Attention` module's LoRA and RoPE/NOPE configuration
+- `dtype` affects quantization across all linear layers
 
- 
- - `vocab_size` and `dim` control the `ParallelEmbedding` size
- - `n_layers` (61) defines the total number of `TransformerBlock` instances
- - `n_dense_layers` (3) specifies that layers 0-2 use standard FFN with `inter_dim`
- - Layers 3-60 use `MoE` components with `moe_inter_dim` and expert parameters
- - Attention parameters control the `Attention` module's LoRA and RoPE/NOPE configuration
- - `dtype` affects quantization across all linear layers
- 
- **Sources:** [inference/configs/config_671B.json1-22](https://github.com/deepseek-ai/DeepSeek-V3/blob/9b4e9788/inference/configs/config_671B.json#L1-L22)
+**Sources:** [inference/configs/config_671B.json:1-22]()
 
- 
 ## Configuration Usage in Code
 
- Configuration is typically loaded at model initialization time. The standard pattern involves:
+Configuration is typically loaded at model initialization time. The standard pattern involves:
 
- 
- - Loading the JSON configuration file
- - Constructing a `ModelArgs` instance from the configuration dictionary
- - Passing `ModelArgs` to the `Transformer` constructor
- - The `Transformer` uses configuration parameters to instantiate all sub-components
- 
- 
+1. Loading the JSON configuration file
+2. Constructing a `ModelArgs` instance from the configuration dictionary
+3. Passing `ModelArgs` to the `Transformer` constructor
+4. The `Transformer` uses configuration parameters to instantiate all sub-components
+
 ### Dense vs MoE Layer Selection
 
- A critical aspect of the configuration is the distinction between dense and MoE layers:
+A critical aspect of the configuration is the distinction between dense and MoE layers:
 
- 
+```mermaid
+flowchart TD
+    Config["ModelArgs<br/>n_layers=61<br/>n_dense_layers=3"]
+    LayerLoop["for layer_id in range(n_layers)"]
+    
+    Condition{"layer_id < n_dense_layers?"}
+    
+    DenseLayer["TransformerBlock<br/>with FeedForward<br/>(uses inter_dim)"]
+    
+    MoELayer["TransformerBlock<br/>with MoE<br/>(uses moe_inter_dim)"]
+    
+    Config --> LayerLoop
+    LayerLoop --> Condition
+    Condition -->|"Yes (0-2)"| DenseLayer
+    Condition -->|"No (3-60)"| MoELayer
 ```
 
-```
+**Diagram 3: Layer Type Selection Logic**
 
- **Diagram 3: Layer Type Selection Logic**
+The first `n_dense_layers` (3) use standard feed-forward networks with `inter_dim` (18,432) as the intermediate dimension. The remaining 58 layers use MoE with `moe_inter_dim` (2,048) per expert.
 
- The first `n_dense_layers` (3) use standard feed-forward networks with `inter_dim` (18,432) as the intermediate dimension. The remaining 58 layers use MoE with `moe_inter_dim` (2,048) per expert.
+**Sources:** [inference/configs/config_671B.json:4-7]()
 
- **Sources:** [inference/configs/config_671B.json4-7](https://github.com/deepseek-ai/DeepSeek-V3/blob/9b4e9788/inference/configs/config_671B.json#L4-L7)
-
- 
 ## Configuration Validation
 
- The `ModelArgs` dataclass enforces type safety and provides validation for configuration parameters:
+The `ModelArgs` dataclass enforces type safety and provides validation for configuration parameters:
 
- 
- - **Dimension consistency**: `dim` must be divisible by `n_heads` for proper attention head splitting
- - **MoE constraints**: `n_routed_experts` must be divisible by `n_expert_groups`
- - **LoRA dimensions**: `q_lora_rank` and `kv_lora_rank` define the compressed latent space
- - **Head dimensions**: `qk_nope_head_dim + qk_rope_head_dim` defines the per-head dimension for queries/keys
- - **Layer structure**: `n_dense_layers` must be less than `n_layers`
- 
- Invalid configurations will raise errors during model initialization, preventing runtime failures.
+- **Dimension consistency**: `dim` must be divisible by `n_heads` for proper attention head splitting
+- **MoE constraints**: `n_routed_experts` must be divisible by `n_expert_groups`
+- **LoRA dimensions**: `q_lora_rank` and `kv_lora_rank` define the compressed latent space
+- **Head dimensions**: `qk_nope_head_dim + qk_rope_head_dim` defines the per-head dimension for queries/keys
+- **Layer structure**: `n_dense_layers` must be less than `n_layers`
 
- **Sources:** [inference/configs/config_671B.json1-22](https://github.com/deepseek-ai/DeepSeek-V3/blob/9b4e9788/inference/configs/config_671B.json#L1-L22)
+Invalid configurations will raise errors during model initialization, preventing runtime failures.
 
- 
+**Sources:** [inference/configs/config_671B.json:1-22]()
+
 ## Configuration and Model Parallelism
 
- Configuration parameters interact with model parallelism settings (world size, rank) to determine shard sizes:
+Configuration parameters interact with model parallelism settings (world size, rank) to determine shard sizes:
 
- 
 | Parameter | Sharding Strategy |
-|---|---|
-| vocab_size | Partitioned across ranks in ParallelEmbedding |
-| n_routed_experts | Each rank loads n_routed_experts // world_size experts |
-| dim | Split for ColumnParallelLinear (output features) |
-| dim | Split for RowParallelLinear (input features) |
+|-----------|------------------|
+| `vocab_size` | Partitioned across ranks in `ParallelEmbedding` |
+| `n_routed_experts` | Each rank loads `n_routed_experts // world_size` experts |
+| `dim` | Split for `ColumnParallelLinear` (output features) |
+| `dim` | Split for `RowParallelLinear` (input features) |
 
- The configuration file itself does not specify parallelism settings - these are provided through environment variables (`WORLD_SIZE`, `RANK`, `LOCAL_RANK`) at runtime. The model code combines configuration parameters with parallelism settings to compute local dimensions.
+The configuration file itself does not specify parallelism settings - these are provided through environment variables (`WORLD_SIZE`, `RANK`, `LOCAL_RANK`) at runtime. The model code combines configuration parameters with parallelism settings to compute local dimensions.
 
- **Sources:** [inference/configs/config_671B.json2-9](https://github.com/deepseek-ai/DeepSeek-V3/blob/9b4e9788/inference/configs/config_671B.json#L2-L9)
+**Sources:** [inference/configs/config_671B.json:2-9]()
 
- 
 ## Configuration Extension Points
 
- While the 671B configuration is the primary production configuration, the system supports arbitrary configurations through the same JSON schema. New model sizes can be defined by creating additional configuration files (e.g., `config_16B.json`, `config_236B.json`) with appropriate parameter values. See [Model Sizes](https://deepwiki.com/deepseek-ai/DeepSeek-V3/7.2-model-sizes) for documentation of available configurations.
+While the 671B configuration is the primary production configuration, the system supports arbitrary configurations through the same JSON schema. New model sizes can be defined by creating additional configuration files (e.g., `config_16B.json`, `config_236B.json`) with appropriate parameter values. See [Model Sizes](#7.2) for documentation of available configurations.
 
- The configuration system is designed for extensibility:
+The configuration system is designed for extensibility:
+- New parameters can be added to `ModelArgs` with default values
+- Existing parameters can be overridden for experimentation
+- Configuration files can be programmatically generated for architecture search
 
- 
- - New parameters can be added to `ModelArgs` with default values
- - Existing parameters can be overridden for experimentation
- - Configuration files can be programmatically generated for architecture search
- 
- **Sources:** [inference/configs/config_671B.json1-22](https://github.com/deepseek-ai/DeepSeek-V3/blob/9b4e9788/inference/configs/config_671B.json#L1-L22)
+**Sources:** [inference/configs/config_671B.json:1-22]()
+
+---
+

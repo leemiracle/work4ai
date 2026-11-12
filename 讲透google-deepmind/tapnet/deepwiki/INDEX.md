@@ -1,0 +1,32 @@
+# DeepWiki 索引 — google-deepmind/tapnet
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 199838 字符
+
+- [1 Overview](1-overview.md)
+- [2 Models](2-models.md)
+  - [2.1 TAPIR](2.1-tapir.md)
+  - [2.2 BootsTAPIR](2.2-bootstapir.md)
+  - [2.3 Online TAPIR](2.3-online-tapir.md)
+  - [2.4 TAPNext](2.4-tapnext.md)
+  - [2.5 TAPNext++](2.5-tapnext.md)
+  - [2.6 TAP-Net](2.6-tap-net.md)
+  - [2.7 TRAJAN](2.7-trajan.md)
+- [3 Benchmarks and Datasets](3-benchmarks-and-datasets.md)
+  - [3.1 TAP-Vid](3.1-tap-vid.md)
+  - [3.2 RoboTAP](3.2-robotap.md)
+  - [3.3 TAPVid-3D](3.3-tapvid-3d.md)
+- [4 Demos and Applications](4-demos-and-applications.md)
+  - [4.1 Colab Demos](4.1-colab-demos.md)
+  - [4.2 Live Camera Demo](4.2-live-camera-demo.md)
+  - [4.3 Rainbow Visualization](4.3-rainbow-visualization.md)
+  - [4.4 Clustering Demo](4.4-clustering-demo.md)
+- [5 Development](5-development.md)
+  - [5.1 Training](5.1-training.md)
+  - [5.2 Model Components](5.2-model-components.md)
+  - [5.3 Installation and Dependencies](5.3-installation-and-dependencies.md)
+- [6 Framework Support](6-framework-support.md)
+  - [6.1 JAX Implementation](6.1-jax-implementation.md)
+  - [6.2 PyTorch Implementation](6.2-pytorch-implementation.md)
+- [7 Evaluation Metrics](7-evaluation-metrics.md)
+- [8 Glossary](8-glossary.md)

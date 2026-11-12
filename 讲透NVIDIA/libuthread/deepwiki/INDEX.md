@@ -1,0 +1,33 @@
+# DeepWiki 索引 — NVIDIA/libuthread
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 379494 字符
+
+- [1 Home](1-home.md)
+- [2 Getting Started](2-getting-started.md)
+  - [2.1 Building the Library](2.1-building-the-library.md)
+  - [2.2 Basic Usage Example](2.2-basic-usage-example.md)
+- [3 Core Concepts](3-core-concepts.md)
+  - [3.1 Memory Latency Hiding](3.1-memory-latency-hiding.md)
+  - [3.2 User-Level Threading Model](3.2-user-level-threading-model.md)
+  - [3.3 Thread Pool and Queue Management](3.3-thread-pool-and-queue-management.md)
+- [4 API Reference](4-api-reference.md)
+  - [4.1 Resource Management Functions](4.1-resource-management-functions.md)
+  - [4.2 Thread Lifecycle Functions](4.2-thread-lifecycle-functions.md)
+  - [4.3 Execution Control Functions](4.3-execution-control-functions.md)
+- [5 Architecture and Implementation](5-architecture-and-implementation.md)
+  - [5.1 Context Switching Mechanism](5.1-context-switching-mechanism.md)
+  - [5.2 x86_64 Implementation](5.2-x86-64-implementation.md)
+  - [5.3 ARM64 (aarch64) Implementation](5.3-arm64-aarch64-implementation.md)
+  - [5.4 Thread State Machine](5.4-thread-state-machine.md)
+- [6 Building and Testing](6-building-and-testing.md)
+  - [6.1 Build System Architecture](6.1-build-system-architecture.md)
+  - [6.2 Unit Tests](6.2-unit-tests.md)
+- [7 Development Guide](7-development-guide.md)
+  - [7.1 Contributing Guidelines](7.1-contributing-guidelines.md)
+  - [7.2 Code Style and Formatting](7.2-code-style-and-formatting.md)
+  - [7.3 CI/CD Pipeline](7.3-ci-cd-pipeline.md)
+  - [7.4 Project Structure](7.4-project-structure.md)
+- [8 Legal and Security](8-legal-and-security.md)
+  - [8.1 License](8.1-license.md)
+  - [8.2 Security Policy](8.2-security-policy.md)

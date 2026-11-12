@@ -1,0 +1,100 @@
+# Development
+
+| Command                  | Description                                |
+| ------------------------ | ------------------------------------------ |
+| `pnpm run build`         | Build the library                          |
+| `pnpm run dev`           | Launch the MCP inspector for local testing |
+| `pnpm run lint`          | Lint source files                          |
+| `pnpm run test`          | Run unit tests                             |
+| `pnpm run test:watch`    | Run unit tests in watch mode               |
+| `pnpm run test:coverage` | Run unit tests with coverage               |
+| `pnpm run test:types`    | Type-check source and tests                |
+| `pnpm run ci`            | Run the full CI pipeline                   |
+
+## Architecture
+
+### Entry Points
+
+The package has two entry points:
+
+- **`./dist/index.js`** (`nve` command) - Interactive CLI using Yargs with Inquirer for prompts
+- **`./dist/mcp/index.js`** (`nve mcp` command) - MCP server using `@modelcontextprotocol/server`
+
+### Tool System
+
+The CLI **dynamically loads tools from `@internals/tools`** at runtime rather than defining tools itself. This architecture provides:
+
+- **Decorator-based discovery** - Tools marked with `@tool()` decorator are auto-discovered
+- **Schema-driven** - JSON Schema definitions drive argument parsing and validation
+- **Consistent interface** - All tools return `{status, message, result}` structure
+- **Mode-specific registration** - Each entry point registers only tools that declare support for that mode
+
+### Implementation Details
+
+#### CLI Mode (`src/index.ts`)
+
+- Sets `process.env.ELEMENTS_ENV = 'cli'`
+- Creates Yargs instance with dynamic command registration
+- **Interactive prompts** - Uses Inquirer when required arguments are missing
+- **Argument parsing** - Converts JSON Schema properties to Yargs positional/optional arguments
+- **Result rendering** - Uses `renderResult()` to format output (markdown, JSON, reports)
+
+Example tool registration:
+
+```typescript
+// Dynamically registers CLI-supported tools as Yargs commands
+tools.filter(tool => tool.metadata.support & ToolSupport.CLI).forEach(tool => {
+  yargs.command(
+    tool.command,
+    tool.description,
+    // Build arguments from JSON Schema
+    (yargs) => buildYargsOptions(yargs, tool.inputSchema),
+    // Execute tool and render result
+    async (argv) => {
+      const result = await tool.handler(argv);
+      renderResult(result);
+    }
+  );
+});
+```
+
+#### MCP Mode (`src/mcp/index.ts`)
+
+- Sets `process.env.ELEMENTS_ENV = 'mcp'`
+- Serves an MCP server factory over stdio
+- **Tool registration** - Registers MCP-supported tools with the MCP server using Zod schemas
+- **Prompt registration** - Registers four reference-backed prompts (artifact, doctor, create-project, migrate)
+- **Structured output** - Returns results with status, message, and structured content
+
+Example MCP tool registration:
+
+```typescript
+// Convert JSON Schema to Zod and register with MCP
+server.registerTool(
+  tool.toolName,
+  {
+    description: tool.description,
+    inputSchema: jsonSchemaToZod(tool.inputSchema)
+  },
+  async params => tool(params)
+);
+```
+
+## Data Flow
+
+```
+Components Build → custom-elements.json
+                ↓
+          Metadata Pipeline
+                ↓
+         Static JSON Files
+                ↓
+      @internals/tools (services)
+                ↓
+         @nvidia-elements/cli
+                ↓
+        ┌───────┴────────┐
+        ↓                ↓
+    CLI Mode         MCP Mode
+  (Interactive)   (AI Integration)
+```

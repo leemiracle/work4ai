@@ -1,0 +1,1171 @@
+{
+ "nodes": [
+  {
+   "id": "file:packages/session/session-projection-cache/src/spec.ts",
+   "type": "file",
+   "name": "spec.ts",
+   "filePath": "packages/session/session-projection-cache/src/spec.ts",
+   "summary": "投影缓存域规格：checkpointRow/checkpointIdentity/checkpointRecord 记录与行结构、projectionCacheDomainSpec 声明 session_projcache 存储域（per-record 布局）——身份含格式世代/seed/继承切割，ver 不匹配即弃行不迁移。",
+   "tags": [
+    "schema-definition",
+    "storage-domain",
+    "checkpoint"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "document:packages/session/session-stats/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/session/session-stats/README.md",
+   "summary": "dsh-session-stats 包英文主文档：经公开 sessionStats 投影值向客户端提供全会话 turn/step 计数与 LLM/工具/首 token/解码墙钟时间——数字来自完整持久日志，分页与压缩不改变；无全会话统计时客户端可用窗口计数替代。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/session/session-stats/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/session/session-stats/package.json",
+   "summary": "@deepseek-ai/dsh-session-stats 包清单：sessionStats 全日志计数与墙钟时间投影单元，仅依赖 zod，peer 依赖 llm/session/session-projection/cordis。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-stats/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/session/session-stats/src/index.ts",
+   "summary": "Cordis 函数插件（name/inject/apply）：向 ctx.sessionProjections 注册 sessionStats 投影单元，注册挂在本插件 fiber 的 effect 上（卸载即移除键）；插件只拥有 fold，交付归 seam。",
+   "tags": [
+    "cordis-plugin",
+    "projection-provider",
+    "session-stats"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-stats/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/session/session-stats/src/index.ts",
+   "lineRange": [
+    28,
+    30
+   ],
+   "summary": "注册 sessionStats 投影单元到投影注册表。",
+   "tags": [
+    "cordis-plugin",
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-stats/src/projection.ts",
+   "type": "file",
+   "name": "projection.ts",
+   "filePath": "packages/session/session-stats/src/projection.ts",
+   "summary": "sessionStats 投影单元（纯 fold）：step/end（非 assistant/message）是步数权威（finally 里每进入步恰一条，完成/失败/取消/max-tokens 都计）；墙钟字段逐一镜像客户端窗口 fold——模型时间 step/start→assistant/message、首 token 取首个非空增量块（跨 llm/retry 存活）、解码跨首 token→组装消息、工具时间按 callId 配对 tool/call→tool/result。",
+   "tags": [
+    "projection",
+    "pure-fold",
+    "statistics"
+   ],
+   "complexity": "complex",
+   "languageNotes": "状态为纯 JSON（持久化缓存前置条件）；未变引用零下游工作是 seam 的 Object.is 契约。"
+  },
+  {
+   "id": "function:packages/session/session-stats/src/projection.ts:usageOutputTokens",
+   "type": "function",
+   "name": "usageOutputTokens",
+   "filePath": "packages/session/session-stats/src/projection.ts",
+   "lineRange": [
+    100,
+    104
+   ],
+   "summary": "从 usage 记录提取输出 token 数（缺失即 0）。",
+   "tags": [
+    "utility",
+    "token-usage"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-stats/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/session/session-stats/src/types.ts",
+   "summary": "sessionStats 投影的公开类型：视图值即累计总量（turns/steps/llmMs/toolMs/ttftMs/ttftSteps/decodeMs/decodeTokens）。",
+   "tags": [
+    "type-definition",
+    "statistics"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/session/session-telemetry/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/session/session-telemetry/README.md",
+   "summary": "dsh-session-telemetry 包英文主文档：部署可发送会话活动的有序副本供报告而保持规范会话日志不变——部署选择一个报告后端、可在交付前逐条 redact 出站副本（无规则则原样出进程）；交接非阻塞，投递尽力而为，崩溃可能丢队列记录。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/session/session-telemetry/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/session/session-telemetry/package.json",
+   "summary": "@deepseek-ai/dsh-session-telemetry 包清单：SessionTelemetryBackend seam（捕获/投影/redact/交接），零依赖，peer 依赖 agent/session/cordis。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-telemetry/src/coordinator.ts",
+   "type": "file",
+   "name": "coordinator.ts",
+   "filePath": "packages/session/session-telemetry/src/coordinator.ts",
+   "summary": "遥测捕获协调器（305 行）：live 捕获订阅 session 火龙带+agent/error 中继，按 canonical Session 事件构造逻辑记录并过 session-telemetry/record waterfall（部署挂 redaction 规则，无则透传）后交后端；每个同步 handler 自包含，坏后端不饿死其他订阅者（cordis emit stop-on-throw）不碰 agent 循环；handoffCursor 是文档化的模块级 WeakMap 例外（HMR 重采用续传）。",
+   "tags": [
+    "coordinator",
+    "capture",
+    "redaction",
+    "waterfall"
+   ],
+   "complexity": "complex",
+   "languageNotes": "模块级 handoffCursor WeakMap 是 registrations-are-effects 纪律的窄例外：cordis 无 HMR 状态交接 API，按 Session 对象键控是唯一允许重采用 fiber 续传的进程内生命周期。"
+  },
+  {
+   "id": "class:packages/session/session-telemetry/src/coordinator.ts:SessionTelemetryCoordinator",
+   "type": "class",
+   "name": "SessionTelemetryCoordinator",
+   "filePath": "packages/session/session-telemetry/src/coordinator.ts",
+   "lineRange": [
+    75,
+    253
+   ],
+   "summary": "179 行捕获协调器：adopt 扫描已活会话（热重载不重放 created）、captureEvent 构造记录过 waterfall、deliver/hintFlush 后端交接与游标推进、contain 隔离后端故障；live/on-demand 两种捕获模式。",
+   "tags": [
+    "coordinator",
+    "capture",
+    "containment"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-telemetry/src/coordinator.ts:shutdownRecord",
+   "type": "function",
+   "name": "shutdownRecord",
+   "filePath": "packages/session/session-telemetry/src/coordinator.ts",
+   "lineRange": [
+    259,
+    267
+   ],
+   "summary": "从会话 shutdown 状态构造终态运营记录。",
+   "tags": [
+    "operational-record",
+    "shutdown"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-telemetry/src/coordinator.ts:severityOf",
+   "type": "function",
+   "name": "severityOf",
+   "filePath": "packages/session/session-telemetry/src/coordinator.ts",
+   "lineRange": [
+    270,
+    282
+   ],
+   "summary": "捕获时预映射严重级别（error 事件 isError/turn-end 错误原因/agent-error，其余 info）。",
+   "tags": [
+    "severity",
+    "mapping"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-telemetry/src/coordinator.ts:identityOf",
+   "type": "function",
+   "name": "identityOf",
+   "filePath": "packages/session/session-telemetry/src/coordinator.ts",
+   "lineRange": [
+    291,
+    305
+   ],
+   "summary": "从会话与事件构造记录身份（会话 id+事件 seq）。",
+   "tags": [
+    "identity"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-telemetry/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/session/session-telemetry/src/index.ts",
+   "summary": "SessionTelemetryBackend Service Definition（ctx.sessionTelemetry）：拥有报告的捕获侧——每事件一记录的账本镜像、记录内容、捕获时机（采用/逐 append 火龙带/生命周期转发）、live 与 on-demand 两模式与 HMR 游标；emit 下游（批处理/重试/排队/丢失策略）归后端；session-telemetry/record waterfall 是 redaction 扩展点（最内 next 透传，无监听即原样达后端）。",
+   "tags": [
+    "service-definition",
+    "telemetry",
+    "waterfall",
+    "redaction"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/session/session-telemetry/src/index.ts:SessionTelemetryBackend",
+   "type": "class",
+   "name": "SessionTelemetryBackend",
+   "filePath": "packages/session/session-telemetry/src/index.ts",
+   "lineRange": [
+    148,
+    172
+   ],
+   "summary": "抽象 Service 子类（Service Definition 'sessionTelemetry'，implements SessionTelemetrySink）：声明抽象 sharing（部署选择的共享模式）/emit/shutdown 与可选 flush；emit 契约唯一归属在 Sink 声明处，具体后端（如 OTel）继承实现。",
+   "tags": [
+    "service-definition",
+    "abstract",
+    "telemetry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/session/session-telemetry-otel/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/session/session-telemetry-otel/README.md",
+   "summary": "dsh-session-telemetry-otel 包英文主文档：适配器注入 otel，共享 OTel 插件建独立 Session-log 通道；授权/redaction/身份/scope 版本/配置/shutdown 截止时间归本包所有。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/session/session-telemetry-otel/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/session/session-telemetry-otel/package.json",
+   "summary": "@deepseek-ai/dsh-session-telemetry-otel 包清单：反馈授权的 Session 日志经字节受限 OpenTelemetry HTTP 请求上传，依赖 @opentelemetry/api-logs+schemastery，peer 依赖反馈/llm/session/telemetry/anonymous-user-id/otel/cordis。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-telemetry-otel/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/session/session-telemetry-otel/src/index.ts",
+   "summary": "OpenTelemetry Service Provider（278 行）：OpenTelemetrySessionBackend 继承 SessionTelemetryBackend，FEEDBACK_ONLY 模式接 SDK 管线+on-demand 协调器（仅本会话显式反馈授权重放，fork seed 不授权），DISABLED 不建 SDK 状态只警告反馈留本地；拥有资源身份与外层 shutdown 截止，报告器拥有字节受限 SDK 投递。",
+   "tags": [
+    "service-provider",
+    "opentelemetry",
+    "feedback-authorization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-telemetry-otel/src/index.ts:isFeedback",
+   "type": "function",
+   "name": "isFeedback",
+   "filePath": "packages/session/session-telemetry-otel/src/index.ts",
+   "lineRange": [
+    43,
+    51
+   ],
+   "summary": "判定事件是否本会话的显式反馈授权（继承区间内的不算；feedback/record 与本会话的 message-put/delete）。",
+   "tags": [
+    "authorization",
+    "feedback"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-telemetry-otel/src/index.ts:resolveMode",
+   "type": "function",
+   "name": "resolveMode",
+   "filePath": "packages/session/session-telemetry-otel/src/index.ts",
+   "lineRange": [
+    54,
+    63
+   ],
+   "summary": "解析共享模式默认值并拒绝未知运行时值（传输设置前 fail-closed）。",
+   "tags": [
+    "config-resolution",
+    "fail-closed"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-telemetry-otel/src/index.ts:sharingStatusFor",
+   "type": "function",
+   "name": "sharingStatusFor",
+   "filePath": "packages/session/session-telemetry-otel/src/index.ts",
+   "lineRange": [
+    71,
+    78
+   ],
+   "summary": "把序列化模式映射到 seam 的后端无关共享词表（feedback-only/disabled）。",
+   "tags": [
+    "mapping",
+    "sharing-policy"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/session/session-telemetry-otel/src/index.ts:OpenTelemetrySessionBackend",
+   "type": "class",
+   "name": "OpenTelemetrySessionBackend",
+   "filePath": "packages/session/session-telemetry-otel/src/index.ts",
+   "lineRange": [
+    144,
+    276
+   ],
+   "summary": "133 行后端插件：static inject sessions+otel；emit 映射严重级别到 OTel SeverityNumber，shutdown 在外层截止时间内走 SDK 完整关闭路径；FEEDBACK_ONLY 才装 SDK 管线。",
+   "tags": [
+    "service-provider",
+    "opentelemetry",
+    "lifecycle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:packages/session/session-telemetry-otel/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/session/session-telemetry-otel/tsconfig.json",
+   "summary": "包级 TS 配置：extends 仓根 base，rootDir=src、outDir=lib/types，references 覆盖遥测/反馈/llm/session 等 peer。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/session/session-title/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/session/session-title/README.md",
+   "summary": "dsh-session-title 包英文主文档：给每个会话一个客户端可见标题——来自首个合格人类消息、可选异步生成器或显式用户改名；接受后的标题经 replay/resume/分页持久但永不进模型输入；自动生成不拖延主 agent 响应，新标题请求取代旧工作。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/session/session-title/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/session/session-title/package.json",
+   "summary": "@deepseek-ai/dsh-session-title 包清单：日志背书的标题服务与 provider 注册表，依赖 util-values/schemastery/zod，peer 依赖 agent/brand/llm/session/session-projection/cordis。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-title/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/session/session-title/src/index.ts",
+   "summary": "会话标题服务（855 行）：titleProjectionDefinition 是 'title' 投影单元（快照=title+来源+eventSeq）；SessionTitleService（ctx.sessionTitle）注入 sessions/sessionProjections/agents——日志 fold 之上提供 get/rename/refresh、provider 注册面、fallback 生成（词数/字节双限）与生命周期管理（ownerFiber、AbortController、inFlight 排水），llm/stream waterfall 以 global+prepend 观察主请求不阻塞。",
+   "tags": [
+    "service-definition",
+    "title",
+    "provider-registry",
+    "projection"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-title/src/index.ts:foldSessionTitle",
+   "type": "function",
+   "name": "foldSessionTitle",
+   "filePath": "packages/session/session-title/src/index.ts",
+   "lineRange": [
+    288,
+    298
+   ],
+   "summary": "从事件日志折叠最新已记录标题（findLast session/title 事件），不咨询可变元数据。",
+   "tags": [
+    "fold",
+    "title"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/session/session-title/src/index.ts:SessionTitleInvalidError",
+   "type": "class",
+   "name": "SessionTitleInvalidError",
+   "filePath": "packages/session/session-title/src/index.ts",
+   "lineRange": [
+    87,
+    89
+   ],
+   "summary": "标题值非法（规范化后为空等）的稳定错误。",
+   "tags": [
+    "error-handling",
+    "validation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/session/session-title/src/index.ts:SessionTitleService",
+   "type": "class",
+   "name": "SessionTitleService",
+   "filePath": "packages/session/session-title/src/index.ts",
+   "lineRange": [
+    301,
+    853
+   ],
+   "summary": "553 行 Service：构造期校验冻结配置；Service.init 注册 title+titleInput 两个投影单元并挂 session/event、llm/stream（prepend 不阻塞主请求）、session/disposed 三类监听；register 验证 provider、startPending 调度、supersede 取代旧工作、appendFallback 兜底，dispose 经 effect 排水 inFlight。",
+   "tags": [
+    "service-definition",
+    "lifecycle",
+    "provider-registry"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/session/session-title/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/session/session-title/src/types.ts",
+   "summary": "标题服务公开类型：SessionTitleSnapshot/Source/UserMessage/EventData、ModelIdentity、TitleProjection 与 provider 相关接口。",
+   "tags": [
+    "type-definition",
+    "title"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/session/session-title/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/session/session-title/tsconfig.json",
+   "summary": "包级 TS 配置：extends 仓根 base，rootDir=src、outDir=lib/types，references 覆盖投影/llm/session 等。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/session/session-title-first-prompt-llm/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/session/session-title-first-prompt-llm/README.md",
+   "summary": "dsh-session-title-first-prompt-llm 包英文主文档：经 ctx.llm 摘要首个合格人类消息作为可选 ctx.sessionTitle provider——注册 first-prompt 节奏，仅当全新非 fork 会话首次生成 fallback 时自动运行，结果归属该消息精确 seq；自动失败保留 fallback，仅经 refresh() 重试。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/session/session-title-first-prompt-llm/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/session/session-title-first-prompt-llm/package.json",
+   "summary": "@deepseek-ai/dsh-session-title-first-prompt-llm 包清单：首消息 LLM 标题 provider，依赖 util-values/schemastery，peer 依赖 llm/session/session-title/session-title-llm/cordis。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-title-first-prompt-llm/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/session/session-title-first-prompt-llm/src/index.ts",
+   "summary": "first-prompt 标题 provider 插件（167 行）：自带系统指令/JSON 框架/输出解析（首非空行+去整行星号强调），复用 dsh-session-title-llm 的执行模块；apply 向 ctx.sessionTitle.register 注册 generate——取请求首条人类消息执行辅助 LLM 请求，结果归属其精确 seq。",
+   "tags": [
+    "cordis-plugin",
+    "title-provider",
+    "llm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-title-first-prompt-llm/src/index.ts:resolveConfig",
+   "type": "function",
+   "name": "resolveConfig",
+   "filePath": "packages/session/session-title-first-prompt-llm/src/index.ts",
+   "lineRange": [
+    65,
+    72
+   ],
+   "summary": "解析校验 provider 配置（route/target/字节/token/超时策略）。",
+   "tags": [
+    "config-resolution"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-title-first-prompt-llm/src/index.ts:systemPrompt",
+   "type": "function",
+   "name": "systemPrompt",
+   "filePath": "packages/session/session-title-first-prompt-llm/src/index.ts",
+   "lineRange": [
+    81,
+    89
+   ],
+   "summary": "构造标题生成系统指令（单行标题、禁 Markdown）。",
+   "tags": [
+    "prompt"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-title-first-prompt-llm/src/index.ts:titleFromOutput",
+   "type": "function",
+   "name": "titleFromOutput",
+   "filePath": "packages/session/session-title-first-prompt-llm/src/index.ts",
+   "lineRange": [
+    107,
+    113
+   ],
+   "summary": "从模型输出取标题：首非空行，整行星号强调去标记（内含标记则保留原行）。",
+   "tags": [
+    "parsing",
+    "title"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-title-first-prompt-llm/src/index.ts:titleFromResponse",
+   "type": "function",
+   "name": "titleFromResponse",
+   "filePath": "packages/session/session-title-first-prompt-llm/src/index.ts",
+   "lineRange": [
+    116,
+    137
+   ],
+   "summary": "从 LLM 响应取标题：拒绝 tool-calls/max-tokens 终态，文本块拼接后规范化，空标题抛错。",
+   "tags": [
+    "parsing",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-title-first-prompt-llm/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/session/session-title-first-prompt-llm/src/index.ts",
+   "lineRange": [
+    145,
+    167
+   ],
+   "summary": "注册 first-prompt provider：generate 取请求首条人类消息，经共享执行模块发起标题请求并返回标题+seq 归属+模型。",
+   "tags": [
+    "cordis-plugin",
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/session/session-title-first-prompt-llm/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/session/session-title-first-prompt-llm/tsconfig.json",
+   "summary": "包级 TS 配置：extends 仓根 base，rootDir=src、outDir=lib/types。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/session/session-title-llm/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/session/session-title-llm/README.md",
+   "summary": "dsh-session-title-llm 包英文主文档：在一致的执行控制下执行一次准备好的辅助标题请求——各 provider 自带系统指令/用户输入/来源归属/推理选择/输出解释；本包解析路由、限制输入输出与端到端时长、保持调用者取消全程有效、记录精确模型可见请求并组装流。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/session/session-title-llm/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/session/session-title-llm/package.json",
+   "summary": "@deepseek-ai/dsh-session-title-llm 包清单：标题 provider 的共享 LLM 生成策略，依赖 util-values/schemastery，peer 依赖 llm/session/session-title/timeout/cordis。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "document:packages/session/session-stats/README.md",
+   "target": "file:packages/session/session-stats/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/session/session-stats/package.json",
+   "target": "file:packages/session/session-stats/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/session/session-stats/src/index.ts",
+   "target": "function:packages/session/session-stats/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-stats/src/index.ts",
+   "target": "function:packages/session/session-stats/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-stats/src/projection.ts",
+   "target": "function:packages/session/session-stats/src/projection.ts:usageOutputTokens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "document:packages/session/session-telemetry/README.md",
+   "target": "file:packages/session/session-telemetry/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/session/session-telemetry/package.json",
+   "target": "file:packages/session/session-telemetry/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/session/session-telemetry/src/coordinator.ts",
+   "target": "class:packages/session/session-telemetry/src/coordinator.ts:SessionTelemetryCoordinator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-telemetry/src/coordinator.ts",
+   "target": "class:packages/session/session-telemetry/src/coordinator.ts:SessionTelemetryCoordinator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-telemetry/src/coordinator.ts",
+   "target": "function:packages/session/session-telemetry/src/coordinator.ts:shutdownRecord",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-telemetry/src/coordinator.ts",
+   "target": "function:packages/session/session-telemetry/src/coordinator.ts:severityOf",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-telemetry/src/coordinator.ts",
+   "target": "function:packages/session/session-telemetry/src/coordinator.ts:identityOf",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-telemetry/src/index.ts",
+   "target": "class:packages/session/session-telemetry/src/index.ts:SessionTelemetryBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-telemetry/src/index.ts",
+   "target": "class:packages/session/session-telemetry/src/index.ts:SessionTelemetryBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "document:packages/session/session-telemetry-otel/README.md",
+   "target": "file:packages/session/session-telemetry-otel/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/session/session-telemetry-otel/package.json",
+   "target": "file:packages/session/session-telemetry-otel/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/session/session-telemetry-otel/src/index.ts",
+   "target": "function:packages/session/session-telemetry-otel/src/index.ts:isFeedback",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-telemetry-otel/src/index.ts",
+   "target": "function:packages/session/session-telemetry-otel/src/index.ts:resolveMode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-telemetry-otel/src/index.ts",
+   "target": "function:packages/session/session-telemetry-otel/src/index.ts:sharingStatusFor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-telemetry-otel/src/index.ts",
+   "target": "class:packages/session/session-telemetry-otel/src/index.ts:OpenTelemetrySessionBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-telemetry-otel/src/index.ts",
+   "target": "class:packages/session/session-telemetry-otel/src/index.ts:OpenTelemetrySessionBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "config:packages/session/session-telemetry-otel/tsconfig.json",
+   "target": "file:packages/session/session-telemetry-otel/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "document:packages/session/session-title/README.md",
+   "target": "file:packages/session/session-title/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/session/session-title/package.json",
+   "target": "file:packages/session/session-title/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/session/session-title/src/index.ts",
+   "target": "function:packages/session/session-title/src/index.ts:foldSessionTitle",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-title/src/index.ts",
+   "target": "function:packages/session/session-title/src/index.ts:foldSessionTitle",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-title/src/index.ts",
+   "target": "class:packages/session/session-title/src/index.ts:SessionTitleInvalidError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-title/src/index.ts",
+   "target": "class:packages/session/session-title/src/index.ts:SessionTitleInvalidError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-title/src/index.ts",
+   "target": "class:packages/session/session-title/src/index.ts:SessionTitleService",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-title/src/index.ts",
+   "target": "class:packages/session/session-title/src/index.ts:SessionTitleService",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "config:packages/session/session-title/tsconfig.json",
+   "target": "file:packages/session/session-title/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "document:packages/session/session-title-first-prompt-llm/README.md",
+   "target": "file:packages/session/session-title-first-prompt-llm/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/session/session-title-first-prompt-llm/package.json",
+   "target": "file:packages/session/session-title-first-prompt-llm/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/session/session-title-first-prompt-llm/src/index.ts",
+   "target": "function:packages/session/session-title-first-prompt-llm/src/index.ts:resolveConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-title-first-prompt-llm/src/index.ts",
+   "target": "function:packages/session/session-title-first-prompt-llm/src/index.ts:systemPrompt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-title-first-prompt-llm/src/index.ts",
+   "target": "function:packages/session/session-title-first-prompt-llm/src/index.ts:titleFromOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-title-first-prompt-llm/src/index.ts",
+   "target": "function:packages/session/session-title-first-prompt-llm/src/index.ts:titleFromResponse",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-title-first-prompt-llm/src/index.ts",
+   "target": "function:packages/session/session-title-first-prompt-llm/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-title-first-prompt-llm/src/index.ts",
+   "target": "function:packages/session/session-title-first-prompt-llm/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "config:packages/session/session-title-first-prompt-llm/tsconfig.json",
+   "target": "file:packages/session/session-title-first-prompt-llm/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "document:packages/session/session-title-llm/README.md",
+   "target": "file:packages/session/session-title-llm/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/session/session-title-llm/package.json",
+   "target": "file:packages/session/session-title-llm/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/session/session-projection-cache/src/spec.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-projection-cache/src/spec.ts",
+   "target": "file:packages/storage/storage-domain/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-projection-cache/src/spec.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-stats/src/index.ts",
+   "target": "file:packages/session/session-stats/src/projection.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-stats/src/index.ts",
+   "target": "file:packages/session/session-stats/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-stats/src/projection.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-stats/src/projection.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-stats/src/types.ts",
+   "target": "file:packages/session/session-projection/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-telemetry/src/coordinator.ts",
+   "target": "file:packages/session/session-telemetry/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-telemetry/src/coordinator.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-telemetry/src/coordinator.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-telemetry/src/index.ts",
+   "target": "file:packages/session/session-telemetry/src/coordinator.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-telemetry/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-telemetry-otel/src/index.ts",
+   "target": "file:packages/identity/anonymous-user-id/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-telemetry-otel/src/index.ts",
+   "target": "file:packages/feedback/command-feedback/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-telemetry-otel/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-telemetry-otel/src/index.ts",
+   "target": "file:packages/feedback/message-feedback/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-telemetry-otel/src/index.ts",
+   "target": "file:packages/telemetry/otel/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-telemetry-otel/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-telemetry-otel/src/index.ts",
+   "target": "file:packages/session/session-telemetry/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-title/src/index.ts",
+   "target": "file:packages/session/session-title/src/normalize.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-title/src/index.ts",
+   "target": "file:packages/session/session-title/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-title/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-title/src/index.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-title/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-title/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-title/src/index.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-title/src/index.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-title/src/types.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-title/src/types.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-title-first-prompt-llm/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-title-first-prompt-llm/src/index.ts",
+   "target": "file:packages/session/session-title/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-title-first-prompt-llm/src/index.ts",
+   "target": "file:packages/session/session-title-llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-title-first-prompt-llm/src/index.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

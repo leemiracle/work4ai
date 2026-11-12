@@ -1,0 +1,42 @@
+# DeepWiki 索引 — NVIDIA/mctp
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 32 页 · 全文 590848 字符
+
+- [1 Overview](1-overview.md)
+- [2 Core Components](2-core-components.md)
+  - [2.1 mctpd Daemon](2.1-mctpd-daemon.md)
+  - [2.2 mctp CLI Utility](2.2-mctp-cli-utility.md)
+  - [2.3 Supporting Tools](2.3-supporting-tools.md)
+- [3 Architecture and Protocols](3-architecture-and-protocols.md)
+  - [3.1 System Architecture](3.1-system-architecture.md)
+  - [3.2 MCTP Control Protocol](3.2-mctp-control-protocol.md)
+  - [3.3 Netlink Interface](3.3-netlink-interface.md)
+  - [3.4 Kernel Interface](3.4-kernel-interface.md)
+- [4 D-Bus Interface](4-d-bus-interface.md)
+  - [4.1 BusOwner1 Interface](4.1-busowner1-interface.md)
+  - [4.2 Endpoint1 Interface](4.2-endpoint1-interface.md)
+  - [4.3 Network1 Interface](4.3-network1-interface.md)
+  - [4.4 Bridge Management](4.4-bridge-management.md)
+- [5 Building and Installation](5-building-and-installation.md)
+  - [5.1 Build System](5.1-build-system.md)
+  - [5.2 Build Options and Configuration](5.2-build-options-and-configuration.md)
+  - [5.3 Dependencies](5.3-dependencies.md)
+- [6 Testing](6-testing.md)
+  - [6.1 Test Framework](6.1-test-framework.md)
+  - [6.2 Test Environment Simulation](6.2-test-environment-simulation.md)
+  - [6.3 Writing Tests](6.3-writing-tests.md)
+- [7 Development Guide](7-development-guide.md)
+  - [7.1 Code Structure](7.1-code-structure.md)
+  - [7.2 Error Handling and Recovery](7.2-error-handling-and-recovery.md)
+  - [7.3 Extending mctpd](7.3-extending-mctpd.md)
+- [8 Troubleshooting and Debugging](8-troubleshooting-and-debugging.md)
+- [9 Reference](9-reference.md)
+  - [9.1 MCTP Control Commands](9.1-mctp-control-commands.md)
+  - [9.2 D-Bus API Reference](9.2-d-bus-api-reference.md)
+  - [9.3 Configuration Reference](9.3-configuration-reference.md)
+
+## 附：结构清单外的页
+- [Configuration](x1-configuration.md)
+- [Daemon Architecture](x2-daemon-architecture.md)
+- [Endpoint Management](x3-endpoint-management.md)

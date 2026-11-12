@@ -1,0 +1,30 @@
+# DeepWiki 索引 — NVIDIA/TensorRT-Incubator
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 307222 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Tripy/nvtripy Package](1.1-tripy-nvtripy-package.md)
+  - [1.2 MLIR-TensorRT Project](1.2-mlir-tensorrt-project.md)
+  - [1.3 Architecture and Components](1.3-architecture-and-components.md)
+- [2 Tripy User Guide](2-tripy-user-guide.md)
+  - [2.1 Getting Started](2.1-getting-started.md)
+  - [2.2 Module System](2.2-module-system.md)
+  - [2.3 Tensor Operations](2.3-tensor-operations.md)
+  - [2.4 Compilation and Execution](2.4-compilation-and-execution.md)
+  - [2.5 Plugins and Custom Operations](2.5-plugins-and-custom-operations.md)
+  - [2.6 Quantization](2.6-quantization.md)
+- [3 Tripy Examples](3-tripy-examples.md)
+  - [3.1 NanoGPT](3.1-nanogpt.md)
+  - [3.2 ResNet50](3.2-resnet50.md)
+  - [3.3 SAM2 (Segment Anything Model v2)](3.3-sam2-segment-anything-model-v2.md)
+- [4 MLIR-TensorRT Technical Documentation](4-mlir-tensorrt-technical-documentation.md)
+  - [4.1 TensorRT Dialect](4.1-tensorrt-dialect.md)
+  - [4.2 Compilation Pipelines](4.2-compilation-pipelines.md)
+  - [4.3 Runtime System](4.3-runtime-system.md)
+  - [4.4 StableHLO Integration](4.4-stablehlo-integration.md)
+- [5 Development Guide](5-development-guide.md)
+  - [5.1 Building and Installation](5.1-building-and-installation.md)
+  - [5.2 Testing Framework](5.2-testing-framework.md)
+  - [5.3 Contributing Guidelines](5.3-contributing-guidelines.md)
+  - [5.4 CI/CD Pipeline](5.4-ci-cd-pipeline.md)

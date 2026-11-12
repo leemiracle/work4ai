@@ -1,0 +1,42 @@
+# DeepWiki 索引 — NVIDIA/container-canary
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 32 页 · 全文 323827 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation](1.1-installation.md)
+  - [1.2 Quick Start](1.2-quick-start.md)
+- [2 User Guide](2-user-guide.md)
+  - [2.1 CLI Reference](2.1-cli-reference.md)
+  - [2.2 Writing Validator Manifests](2.2-writing-validator-manifests.md)
+  - [2.3 Example Validators](2.3-example-validators.md)
+- [3 Architecture](3-architecture.md)
+  - [3.1 System Components](3.1-system-components.md)
+  - [3.2 Validation Flow](3.2-validation-flow.md)
+  - [3.3 Container Abstraction](3.3-container-abstraction.md)
+  - [3.4 Probe Execution](3.4-probe-execution.md)
+  - [3.5 Terminal UI](3.5-terminal-ui.md)
+- [4 Developer Guide](4-developer-guide.md)
+  - [4.1 Building from Source](4.1-building-from-source.md)
+  - [4.2 Running Tests](4.2-running-tests.md)
+  - [4.3 Code Quality](4.3-code-quality.md)
+  - [4.4 Contributing](4.4-contributing.md)
+- [5 API Reference](5-api-reference.md)
+  - [5.1 Validator Type](5.1-validator-type.md)
+  - [5.2 Check Type](5.2-check-type.md)
+  - [5.3 Probe Type](5.3-probe-type.md)
+  - [5.4 Configuration Loading](5.4-configuration-loading.md)
+  - [5.5 Schema Validation](5.5-schema-validation.md)
+- [6 CI/CD and Releases](6-ci-cd-and-releases.md)
+  - [6.1 Continuous Integration](6.1-continuous-integration.md)
+  - [6.2 Release Process](6.2-release-process.md)
+  - [6.3 Build Metadata](6.3-build-metadata.md)
+- [7 Dependencies](7-dependencies.md)
+  - [7.1 Core Dependencies](7.1-core-dependencies.md)
+  - [7.2 Dependency Management](7.2-dependency-management.md)
+- [8 Glossary](8-glossary.md)
+
+## 附：结构清单外的页
+- [Manifest Structure](x1-manifest-structure.md)
+- [Probe Configuration](x2-probe-configuration.md)
+- [Probe Types](x3-probe-types.md)

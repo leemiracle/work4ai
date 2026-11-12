@@ -1,0 +1,33 @@
+# DeepWiki 索引 — microsoft/SecRL
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 216953 字符
+
+- [1 ExCyTIn-Bench Overview](1-excytin-bench-overview.md)
+  - [1.1 Getting Started & Setup](1.1-getting-started-setup.md)
+  - [1.2 Repository Structure & Key Concepts](1.2-repository-structure-key-concepts.md)
+- [2 SecGym Environment](2-secgym-environment.md)
+  - [2.1 ExcytinEnv: The Gymnasium Interface](2.1-excytinenv-the-gymnasium-interface.md)
+  - [2.2 Database Layer: Setup, Schema & Data Pipeline](2.2-database-layer-setup-schema-data-pipeline.md)
+  - [2.3 PII Anonymization Pipeline](2.3-pii-anonymization-pipeline.md)
+  - [2.4 LLM Evaluator](2.4-llm-evaluator.md)
+- [3 LLM Agents](3-llm-agents.md)
+  - [3.1 Agent Utilities & Base Classes](3.1-agent-utilities-base-classes.md)
+  - [3.2 BaselineAgent & PromptSauceAgent](3.2-baselineagent-promptsauceagent.md)
+  - [3.3 ReAct & Reflexion Agents](3.3-react-reflexion-agents.md)
+  - [3.4 ExPeL Agent: Experience-Based Learning](3.4-expel-agent-experience-based-learning.md)
+- [4 Question & Attack Graph Generation](4-question-attack-graph-generation.md)
+  - [4.1 AlertGraph: Incident Graph Construction](4.1-alertgraph-incident-graph-construction.md)
+  - [4.2 QAGen: Synthetic Question Generation](4.2-qagen-synthetic-question-generation.md)
+  - [4.3 Question Dataset & Train/Test Splits](4.3-question-dataset-train-test-splits.md)
+- [5 Running Experiments](5-running-experiments.md)
+  - [5.1 Experiment Execution (run_exp.py)](5.1-experiment-execution-run-exp.py.md)
+  - [5.2 Result Analysis & Benchmarking](5.2-result-analysis-benchmarking.md)
+  - [5.3 Experiment Logs & Trajectory Format](5.3-experiment-logs-trajectory-format.md)
+- [6 Security Incidents & Incident Reports](6-security-incidents-incident-reports.md)
+  - [6.1 Incident Scenarios & Attack Types](6.1-incident-scenarios-attack-types.md)
+  - [6.2 Database Schema Reference](6.2-database-schema-reference.md)
+- [7 Notebooks & Exploratory Tools](7-notebooks-exploratory-tools.md)
+  - [7.1 Graph Construction & Exploration Notebooks](7.1-graph-construction-exploration-notebooks.md)
+  - [7.2 Question Splitting & ReAct Example Notebooks](7.2-question-splitting-react-example-notebooks.md)
+- [8 Glossary](8-glossary.md)

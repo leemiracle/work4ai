@@ -1,0 +1,301 @@
+<!--
+  SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  SPDX-License-Identifier: Apache-2.0
+-->
+
+# Contributing
+
+Want to contribute to NodeWright-Packages?
+
+## Code of Conduct
+
+This project is governed by the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md). By participating you are expected to uphold it. Report unacceptable behavior to GitHub_Conduct@nvidia.com. See [Community standards](#community-standards) for how reports are handled.
+
+## Governance
+
+Maintainers, decision-making, and the process for becoming a maintainer are documented in [GOVERNANCE.md](GOVERNANCE.md) and [MAINTAINERS.md](MAINTAINERS.md). Path-level review ownership is in [`.github/CODEOWNERS`](.github/CODEOWNERS).
+
+## Developer Certificate of Origin and commit signing
+
+Every commit, from every contributor and maintainers included, must be both **signed off** and **cryptographically signed**:
+
+```bash
+git commit -s -S -m "your message"
+```
+
+- `-s` (lowercase) adds a `Signed-off-by` trailer, certifying the [Developer Certificate of Origin 1.1](#what-you-are-certifying) reproduced below.
+- `-S` (uppercase) attaches a GPG or SSH signature, proving the commit came from you.
+
+The two are independent, and neither implies the other. Use both, on every commit. A branch ruleset enforces **Require signed commits** on `main`, but that rule only sees the squash or merge commit GitHub creates and signs itself, not the commits on your branch. The [Commit Requirements](.github/workflows/commit-requirements.yaml) workflow comments on any pull request carrying a commit that is missing one that applies to it; bot commits and the sign-off on merge commits are exempt, as described below.
+
+The `Signed-off-by` trailer should name the commit author, and must be a real name:
+
+```text
+Signed-off-by: Joe Smith <joe.smith@email.com>
+```
+
+Sorry, no pseudonyms or anonymous contributions.
+
+What the automated check actually verifies is narrower than the rule above: for each commit not authored by a bot, that the signature verified, and that a `Signed-off-by` trailer is present unless the commit is a merge. Merge commits are exempt from sign-off because GitHub's "Update branch" and merge buttons author them with no trailer and no way to add one, and a merge introduces no new authorship to certify; they still have to be signed. It does not compare the trailer's address to the author's, because GitHub's `NNN+user@users.noreply.github.com` aliases make that mismatch common and harmless. Reviewers still enforce the rest.
+
+### One-time setup
+
+Do this once and `-S` becomes automatic, so the only flag you have to remember is `-s`.
+
+Your commit identity, which is what lands in the `Signed-off-by` trailer:
+
+```bash
+git config user.name "Your Name"
+git config user.email "your.email@example.com"
+```
+
+Use an address GitHub has verified on your account, otherwise GitHub will not mark the commit as verified. This is separate from your signing key and does not have to match it.
+
+Then a signing key, which GitHub must also know about. Follow GitHub's guide to [generate a GPG or SSH signing key and add it to your account](https://docs.github.com/en/authentication/managing-commit-signature-verification), then point git at it. For SSH:
+
+```bash
+git config gpg.format ssh
+git config user.signingkey ~/.ssh/id_ed25519.pub   # the public key, not the private one
+```
+
+For GPG, leave `gpg.format` unset and use the key ID from `gpg --list-secret-keys --keyid-format=long`:
+
+```bash
+git config user.signingkey <key-id>
+```
+
+Finally, sign every commit without having to remember `-S`:
+
+```bash
+git config commit.gpgsign true
+```
+
+### Forgot to sign or sign off?
+
+Fix the most recent commit and re-push:
+
+```bash
+git commit --amend -s -S --no-edit
+git push --force-with-lease origin your-branch
+```
+
+Fix every commit on the branch at once. Check first whether the branch contains merge commits, because a plain rebase drops them and takes any merge-only content with them:
+
+```bash
+git log --oneline --merges origin/main..HEAD   # empty output means the branch is linear
+```
+
+For a linear branch:
+
+```bash
+git rebase --exec 'git commit --amend -s -S --no-edit' origin/main
+```
+
+For a branch with merge commits, preserve the topology:
+
+```bash
+git rebase --rebase-merges --exec 'git commit --amend -s -S --no-edit' origin/main
+```
+
+Either way, confirm the rewrite changed nothing but the signatures before you push:
+
+```bash
+git range-diff @{u}...HEAD
+git push --force-with-lease origin your-branch
+```
+
+Re-signing rewrites every commit, which outdates the inline comments reviewers have already left. If the pull request is already under review, say on it that you force-pushed.
+
+### What you are certifying
+
+By signing off you certify the following, from [developercertificate.org](https://developercertificate.org/):
+
+```text
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+1 Letterman Drive
+Suite D4700
+San Francisco, CA, 94129
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
+
+## Claiming an Issue
+
+Every issue you work on must be assigned to you before you start, and it stays assigned to you until it closes or you release it. The assignee is how everyone else knows an issue is taken; an issue with a branch behind it and nobody assigned invites duplicate work. This applies to everyone, maintainers included.
+
+Claim an issue by commenting on it, and a bot will handle the assignment:
+
+- `/assign`: assign the issue to yourself (only if it is currently unassigned).
+- `/assign @user`: assign one other person (only if the issue is unassigned).
+- `/unassign`: release your claim on the issue.
+
+We use a single-owner model: an issue is assigned to at most one person. `/assign` is refused while the issue already has an assignee, and `/unassign` only ever removes your own claim, so nobody can drop someone else's. GitHub only lets you assign the commenter/self, someone who has commented on the issue, a user with write access, or an org member with read access; if a requested user cannot be assigned, the bot replies to say so. `/assign` is also refused when the person being assigned is already at the [work-in-progress limit](#work-in-progress-limit) for issues, and the bot lists the issues they hold. Claiming an Epic or Initiative is never refused, since those do not count toward the limit.
+
+Maintainers with write access can also assign themselves from the issue sidebar. The rule is the same either way: assigned first, then work.
+
+If you stop working on an issue, `/unassign` so someone else can pick it up.
+
+### Work-in-progress limit
+
+Each contributor may have at most **three open pull requests** and at most **three assigned issues** at a time. This applies to every contributor, maintainers included. Draft pull requests count toward the limit; pull requests opened by Dependabot do not. Issues whose type is Epic or Initiative do not count either: they track a body of work across many pull requests, so whoever owns one claims its sub-issues individually and those count.
+
+At the limit, get something merged or closed, or release an issue with `/unassign`, before you take on more. Pull requests opened past the limit may be closed. The `/assign` bot will not assign an issue past the limit, except an Epic or Initiative, and an issue assigned past it from the sidebar may be unassigned. A few changes that someone is actively driving land sooner than a long queue that neither the author nor the reviewers can keep up with, and a short queue keeps the changes that matter easy to find.
+
+## Open an issue first
+
+Every pull request starts with an issue that is assigned to its author. Open one from the [issue templates](https://github.com/NVIDIA/nodewright-packages/issues/new/choose), or find an existing one and claim it as described in [Claiming an Issue](#claiming-an-issue). The issue is where we confirm the change is wanted, agree on an approach, and tell you if something similar is already in flight, all of which are cheaper to sort out before you have a branch. A pull request with no linked issue, or whose issue is assigned to someone else, may be closed and asked to start over from the issue. This applies to maintainers too.
+
+Three exceptions:
+
+- **Trivial changes**, such as typo and formatting fixes, broken links, and comment corrections, can go straight to a pull request.
+- **Automated dependency updates** from Dependabot need no issue.
+- **Security vulnerabilities never start with a public issue.** Report them through [SECURITY.md](SECURITY.md) instead. PSIRT owns triage and the disclosure date and will coordinate the fix with you, including the pull request itself, so that nothing reveals the issue before the embargo lifts.
+
+Reference the issue in your pull request description with `closes #1234` so it closes on merge. This applies only to public issues: a pull request that fixes a security report must never reference the non-public report, in its title, its description, or its commits.
+
+## Verifying your change before you open a pull request
+
+**Use the Makefile.** CI does, so running the same targets on your machine runs the gate itself rather than an approximation of it. The PR build runs `make validate-standalone` or `make validate-inherited` for every changed package, `make test-deps` followed by that package's pytest suite, and `make test-harness` when `tests/helpers/` changed. The License Headers workflow runs `make license-check`.
+
+Run these from the repository root, scoped to what you changed:
+
+```bash
+# A package changed. <name> is the package directory, for example nvidia-tuned.
+make validate-standalone PACKAGE=<name>   # standalone package, no FROM on a *-packages image
+make validate-inherited PACKAGE=<name>    # inherited package: builds the image, then validates it
+make test-package PACKAGE=<name>          # that package's integration tests
+
+# The shared test harness under tests/helpers/ changed.
+make test-harness
+
+# Any source file changed (*.py, *.sh, *.yaml, *.yml, Dockerfile).
+make license-check                        # exactly what the License Headers workflow runs
+make license-fmt                          # adds or refreshes the headers if that check fails
+
+# A shell script changed.
+shellcheck path/to/script.sh
+
+# A workflow under .github/workflows/ changed.
+actionlint
+```
+
+`make test` runs every package's suite in parallel. CI never does that, because it only tests the packages a pull request touches, so reach for `make test-package` first and keep `make test` for changes to the shared harness or tooling.
+
+Two prerequisites are yours to supply, and the Makefile installs neither:
+
+- **A running container runtime.** Everything except `make license-check` needs one: the validation targets run the agent image, and the tests build and run throwaway containers. The validation targets use `podman` when it is on `PATH` and `docker` otherwise, but the test harness talks to Docker specifically (it drives `docker-py` and shells out to `docker build`), so Podman needs a Docker-compatible socket and a `docker` command.
+- **A local Go toolchain**, for `make license-fmt` and `make license-check`. Both run [`google/addlicense`](https://github.com/google/addlicense) through `go run`.
+
+The Python test dependencies are not yours to supply. `make test-deps` runs as a prerequisite of every test target and installs them into a `venv/` at the repository root, so a missing pytest is never a reason to skip a suite. `make help` lists every target.
+
+[DEVELOPER.md](DEVELOPER.md) has the longer form of all of this, including the macOS `TMPDIR` trap that makes every test fail with an error that does not point at the cause.
+
+On a fork, running the checks locally is the fast path rather than the slow one. Workflow runs from a fork wait for a maintainer to approve them by hand, so a round trip through CI costs hours where the same checks locally cost minutes.
+
+Not every check blocks. ShellCheck is advisory today: it annotates findings without failing the build, and the workflow's stated goal is to make it a required check once the existing findings reach zero. Treat a new finding in a file you touched as yours to fix rather than as something CI let through. Commitlint does block, on both the commit messages and the pull request title; see [Code Style](#code-style).
+
+### Testing a package change on real hardware
+
+Green checks do not mean a package change has been tested. ShellCheck, the integration tests and the license check look at the shape of a change: whether the script parses, whether the lifecycle scripts run to completion in a container, whether `config.json` matches the schema. They say very little about its effect on a host. Packages touch bootloaders, tuned profiles, drivers, disks and similar node state, and none of that is reachable from a container in CI.
+
+So a change to a package has to be exercised on a real node, and the pull request has to say on what. This is not a formality. A maintainer reviewing your change often does not have the hardware to reproduce it, which means an untested package change is not something review can catch. You are the person best placed to verify it, and usually the only one.
+
+Say, in the pull request:
+
+- the OS and version you ran on,
+- the relevant hardware, including the GPU model and driver version where the change depends on them,
+- how you applied the package: through the operator, or by running the lifecycle scripts on the node directly,
+- what you observed before and after, naming the command or file you checked.
+
+If you cannot test on hardware, say that explicitly rather than leaving it unsaid. That is a useful answer: it tells review what risk it is accepting and lets a maintainer decide whether to find a node to try it on. Silence is not a useful answer, because a pull request that says nothing looks exactly like one that was tested.
+
+## Stay with your pull request
+
+Opening the pull request is the start of the work, not the end of it. Every one costs a maintainer time they do not get back: someone reads the change, thinks about it, and writes a review. That cost is paid whether or not anyone answers the review. Answer review comments, rebase when you are asked to, and say something if you get stuck or lose interest in a change. A pull request that is opened and abandoned is worse than one that was never opened, because the review still happened.
+
+If it goes quiet from our side, ping it; that is welcome and it is the fastest way to get it moving. If it goes quiet from yours, a bot nudges you after 7 days of inactivity, the pull request is marked stale at 14 days, and it is closed 7 days after that. Closing is not a judgment on the change and it is not final: reopen it whenever you are ready to pick it back up. The `lifecycle/frozen` and `do-not-merge` labels exempt a pull request from all of it when the work is deliberately parked.
+
+The same consideration is behind the [work-in-progress limit](#work-in-progress-limit) of three open pull requests per contributor. If you have a batch of changes in mind, get the first few merged before opening the rest.
+
+## AI-Assisted Contributions Policy
+
+We welcome the use of AI tools (e.g., Claude, GitHub Copilot, ChatGPT) to help you write code, brainstorm, or refactor. However, we maintain a strict human-in-the-loop policy for all submissions:
+
+- **Full accountability**: By submitting a PR, you (the human author) accept full responsibility for the code: its correctness, security, maintainability, and license compliance. "The AI wrote it" is not an acceptable explanation for bugs or security flaws.
+- **Understand what you submit**: Do not submit AI-generated code you do not fully understand. Reviewers expect you to explain and defend every line of code in your PR.
+- **Follow the project rules**: Coding assistants must follow the guidance in [`AGENTS.md`](AGENTS.md), including running the linters and keeping docs in sync.
+- **Say so, and say what you verified**: if an AI tool wrote a meaningful part of the change, note that in the pull request, and state which checks you ran, which you could not, and what hardware you tested on. All of that belongs in the pull request body rather than in a reply after someone asks. This is not about discouraging the tooling; it is about knowing how much of the verification burden has already been carried, because a change nobody has run is a change the reviewer has to run.
+
+## Code Style
+
+We use [Conventional Commits](https://www.conventionalcommits.org/) for our commit messages.
+
+## License Header
+
+Source files (`*.py`, `*.sh`, `*.yaml`/`*.yml`, `Dockerfile`) carry the full Apache 2.0
+header defined in `.github/license-header.tmpl`. Markdown and other docs do not need one.
+Add or refresh headers with:
+
+```bash
+make license-fmt
+```
+
+This wraps [`google/addlicense`](https://github.com/google/addlicense) (run via `go run`,
+so a local Go toolchain is required); it is idempotent and never duplicates a header.
+Run `make license-check` to verify without modifying files; CI runs the same check on
+every PR.
+
+## Community standards
+
+We enforce the [Code of Conduct](CODE_OF_CONDUCT.md) in every project space: issues, pull requests, discussions, and any venue where someone is representing NodeWright Packages.
+
+### Reporting
+
+Send reports to GitHub_Conduct@nvidia.com. Include what happened, where, when, and links if the incident is public. You do not need to be the target of the behavior to report it.
+
+### Response timeline
+
+- **Acknowledgement within 3 business days.** You get a confirmation that the report was received and who is handling it.
+- **Resolution within 14 business days** for most reports. If an investigation needs longer, we tell you that before day 14 and give an updated estimate.
+- **Immediate action** for ongoing harassment, threats, or doxxing, ahead of the full investigation.
+
+Reporter identity is shared only with the people investigating. Outcomes follow the [Enforcement Guidelines](CODE_OF_CONDUCT.md#enforcement-guidelines) ladder: correction, warning, temporary ban, permanent ban.
+
+### Out of scope
+
+The following are handled elsewhere, not through a conduct report:
+
+- **Security vulnerabilities**: see [SECURITY.md](SECURITY.md). Do not file a public issue.
+- **Technical disagreements**, including rejected pull requests and design decisions you disagree with. Escalate through the process in [GOVERNANCE.md](GOVERNANCE.md#decision-making).
+- **Conduct in venues unrelated to NodeWright**, unless it creates a credible safety risk for someone in this community.
+- **NVIDIA employment or HR matters**, which go through NVIDIA's internal channels.

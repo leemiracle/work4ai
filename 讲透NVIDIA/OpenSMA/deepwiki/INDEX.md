@@ -1,0 +1,30 @@
+# DeepWiki 索引 — NVIDIA/OpenSMA
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 221274 字符
+
+- [1 OpenSMA Overview](1-opensma-overview.md)
+- [2 Build and Test Infrastructure](2-build-and-test-infrastructure.md)
+  - [2.1 UBS Build System](2.1-ubs-build-system.md)
+  - [2.2 Testing Framework](2.2-testing-framework.md)
+  - [2.3 Self-Tests and Validation](2.3-self-tests-and-validation.md)
+- [3 Security Protocols](3-security-protocols.md)
+  - [3.1 SPDM Protocol Implementation](3.1-spdm-protocol-implementation.md)
+  - [3.2 PLDM Firmware Update](3.2-pldm-firmware-update.md)
+- [4 Transport Layer](4-transport-layer.md)
+  - [4.1 MCTP Core Services](4.1-mctp-core-services.md)
+  - [4.2 MCTP Platform Integration](4.2-mctp-platform-integration.md)
+- [5 Hardware Drivers](5-hardware-drivers.md)
+  - [5.1 USB Device Driver](5.1-usb-device-driver.md)
+  - [5.2 GPIO Driver System](5.2-gpio-driver-system.md)
+  - [5.3 Inter-Process Communication](5.3-inter-process-communication.md)
+  - [5.4 Flash and Crypto Management](5.4-flash-and-crypto-management.md)
+  - [5.5 I2C, I3C, and SPI Drivers](5.5-i2c-i3c-and-spi-drivers.md)
+- [6 System Services](6-system-services.md)
+  - [6.1 Bootloader and Watchdog](6.1-bootloader-and-watchdog.md)
+  - [6.2 Logging System](6.2-logging-system.md)
+  - [6.3 Telemetry and Power Management](6.3-telemetry-and-power-management.md)
+- [7 Project Configuration and Boards](7-project-configuration-and-boards.md)
+  - [7.1 mcxn547helloworld Project](7.1-mcxn547helloworld-project.md)
+  - [7.2 p3957_cxx and testrunner Projects](7.2-p3957-cxx-and-testrunner-projects.md)
+- [8 Glossary](8-glossary.md)

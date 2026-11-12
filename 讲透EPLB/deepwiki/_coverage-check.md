@@ -1,18 +1,12 @@
-# DeepWiki 抓取覆盖率检查
+# Coverage Check
 
-- _links.txt 链接总数: 10
-- 实际 md 文件数: 10
-- 缺失页: 0
-- 空页(<= 500B): 0
+- repo: deepseek-ai/EPLB
+- fetched: 2026-10-30
+- 结构清单页数: 10
+- 落盘页数: 10
 
-## 结论
-**100% 覆盖**：全部链接均有对应 Markdown 文件且非空。
+- 覆盖: 10/10 (100%)
 
-## 抽查 3 页
-
-| 页面 | 大小(B) | 状态 | 检查 |
-|---|---|---|---|
-| 3.1-rebalance_experts-function | 6669 | 正常 | PASS |
-| 2.3-balanced-packing-algorithm | 5566 | 正常 | PASS |
-| 2-architecture-and-core-concepts | 7638 | 正常 | PASS |
-
+## 全层级对账终判（dw_reconcile_dir.py, 2026-10-30）
+- 结构全层级 10 页 vs 落盘 10 页（结构外/三级页 extra 0）
+- 终判: TRUE_100

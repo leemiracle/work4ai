@@ -1,0 +1,3283 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/model_executor/kernels/attention/dsa/candidate_blocks.py",
+   "type": "file",
+   "name": "candidate_blocks.py",
+   "filePath": "vllm/model_executor/kernels/attention/dsa/candidate_blocks.py",
+   "summary": "DSA（DeepSeek sparse attention）候选块选择 triton kernel：block 打分（NaN 容错）、候选存储、标志与掩码四 kernel，select_candidate_blocks/apply_candidate_mask 两个入口。",
+   "tags": [
+    "triton",
+    "sparse-attention",
+    "dsa",
+    "topk"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/attention/dsa/candidate_blocks.py:select_candidate_blocks",
+   "type": "function",
+   "name": "select_candidate_blocks",
+   "filePath": "vllm/model_executor/kernels/attention/dsa/candidate_blocks.py",
+   "lineRange": [
+    157,
+    225
+   ],
+   "summary": "按 block 分数选出每请求 top-k 候选块（排序+存储）。",
+   "tags": [
+    "triton",
+    "candidate-selection"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/attention/dsa/candidate_blocks.py:apply_candidate_mask",
+   "type": "function",
+   "name": "apply_candidate_mask",
+   "filePath": "vllm/model_executor/kernels/attention/dsa/candidate_blocks.py",
+   "lineRange": [
+    228,
+    271
+   ],
+   "summary": "把候选块集合转为稀疏掩码（供 logits kernel 消费）。",
+   "tags": [
+    "triton",
+    "mask"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "type": "file",
+   "name": "sparse_mqa_logits.py",
+   "filePath": "vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "summary": "DSA 稀疏 MQA logits triton kernel（501 行）：deep_select 探测/布局校验、候选块→稀疏索引转换、topk 重映射、prefill 分块与 paged decode 两路 logits 计算（deep_gemm 可选）。",
+   "tags": [
+    "triton",
+    "sparse-attention",
+    "mqa",
+    "dsa"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py:has_deep_select",
+   "type": "function",
+   "name": "has_deep_select",
+   "filePath": "vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "lineRange": [
+    46,
+    52
+   ],
+   "summary": "探测 deep_select（DeepSeek 稀疏选择 kernel）可用性。",
+   "tags": [
+    "capability",
+    "deep-gemm"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py:candidate_blocks_to_sparse_indices",
+   "type": "function",
+   "name": "candidate_blocks_to_sparse_indices",
+   "filePath": "vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "lineRange": [
+    184,
+    256
+   ],
+   "summary": "候选块集合转 logits kernel 需要的稀疏索引布局。",
+   "tags": [
+    "triton",
+    "indices"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py:sparse_mqa_logits_prefill_chunk",
+   "type": "function",
+   "name": "sparse_mqa_logits_prefill_chunk",
+   "filePath": "vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "lineRange": [
+    315,
+    401
+   ],
+   "summary": "prefill 分块路径：块内因果约束下的稀疏 logits。",
+   "tags": [
+    "triton",
+    "prefill"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py:sparse_mqa_logits_paged_decode",
+   "type": "function",
+   "name": "sparse_mqa_logits_paged_decode",
+   "filePath": "vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "lineRange": [
+    404,
+    501
+   ],
+   "summary": "decode 分页路径：按候选块稀疏读 cache 算 logits。",
+   "tags": [
+    "triton",
+    "decode",
+    "paged"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py:sparse_topk_remap",
+   "type": "function",
+   "name": "sparse_topk_remap",
+   "filePath": "vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "lineRange": [
+    259,
+    312
+   ],
+   "summary": "稀疏 topk 结果重映射回全局块号。",
+   "tags": [
+    "triton",
+    "remap"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/model_executor/kernels/linear/__init__.py",
+   "summary": "linear kernel 中枢（1452 行，重组期稳定导入面）：集中再导出 scaled_mm/mixed_precision/mxfp4/mxfp6/mxfp8/nvfp4 全家族 kernel，并实现按量化格式+后端+形状的统一选择器族（choose/init/register_linear_kernel）。模块头注释钉版：即将按 provider 重组目录，本文件维持导入稳定。",
+   "tags": [
+    "kernel-registry",
+    "dispatch",
+    "factory",
+    "linear"
+   ],
+   "complexity": "complex",
+   "languageNotes": "70 条再导出 imports；选择器按 quant→backend→shape 三级过滤（_resolve_backend_kernels/_filter_kernels_by_backend）。"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/linear/__init__.py:choose_mp_linear_kernel",
+   "type": "function",
+   "name": "choose_mp_linear_kernel",
+   "filePath": "vllm/model_executor/kernels/linear/__init__.py",
+   "lineRange": [
+    887,
+    955
+   ],
+   "summary": "混合精度 kernel 统一选择器（遍历注册表按 can_implement 打分）。",
+   "tags": [
+    "dispatch",
+    "mixed-precision"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/linear/__init__.py:choose_scaled_mm_linear_kernel",
+   "type": "function",
+   "name": "choose_scaled_mm_linear_kernel",
+   "filePath": "vllm/model_executor/kernels/linear/__init__.py",
+   "lineRange": [
+    675,
+    743
+   ],
+   "summary": "scaled_mm kernel 选择器（FP8 系按 batch-invariance 与后端能力过滤）。",
+   "tags": [
+    "dispatch",
+    "fp8"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/linear/__init__.py:init_fp8_linear_kernel",
+   "type": "function",
+   "name": "init_fp8_linear_kernel",
+   "filePath": "vllm/model_executor/kernels/linear/__init__.py",
+   "lineRange": [
+    746,
+    832
+   ],
+   "summary": "FP8 linear kernel 初始化（权重预处理委托给选中 kernel）。",
+   "tags": [
+    "factory",
+    "fp8"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/linear/__init__.py:init_nvfp4_linear_kernel",
+   "type": "function",
+   "name": "init_nvfp4_linear_kernel",
+   "filePath": "vllm/model_executor/kernels/linear/__init__.py",
+   "lineRange": [
+    1191,
+    1309
+   ],
+   "summary": "NVFP4 kernel 初始化（格式转换+scale 预处理）。",
+   "tags": [
+    "factory",
+    "nvfp4"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/linear/__init__.py:register_linear_kernel",
+   "type": "function",
+   "name": "register_linear_kernel",
+   "filePath": "vllm/model_executor/kernels/linear/__init__.py",
+   "lineRange": [
+    1312,
+    1362
+   ],
+   "summary": "向注册表登记自定义 linear kernel（扩展点）。",
+   "tags": [
+    "registry",
+    "extension"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/base.py",
+   "type": "file",
+   "name": "base.py",
+   "filePath": "vllm/model_executor/kernels/linear/base.py",
+   "summary": "linear kernel 公共基座：MMLinearKernel（ABC+Generic，8 方法：can_implement/weight预处理/apply 全契约）与 Params/FP8Params 参数包——全部 scaled_mm 系 kernel 的父抽象。",
+   "tags": [
+    "base-class",
+    "abc",
+    "linear",
+    "shared"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/base.py:MMLinearKernel",
+   "type": "class",
+   "name": "MMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/base.py",
+   "lineRange": [
+    96,
+    317
+   ],
+   "summary": "泛型 kernel 基类（ConfigT/ParamsT）：声明 process_weights_after_loading 与 apply 的统一接口。",
+   "tags": [
+    "base-class",
+    "generics"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/base.py:Params",
+   "type": "class",
+   "name": "Params",
+   "filePath": "vllm/model_executor/kernels/linear/base.py",
+   "lineRange": [
+    18,
+    70
+   ],
+   "summary": "kernel 参数包基类（权重/scale/形状元数据）。",
+   "tags": [
+    "data-model",
+    "params"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/base.py:FP8Params",
+   "type": "class",
+   "name": "FP8Params",
+   "filePath": "vllm/model_executor/kernels/linear/base.py",
+   "lineRange": [
+    74,
+    89
+   ],
+   "summary": "FP8 专属参数包（weight_scale 双向字段）。",
+   "tags": [
+    "data-model",
+    "fp8"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_bf16_dotprod.py",
+   "type": "file",
+   "name": "_ll_bf16_dotprod.py",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/_ll_bf16_dotprod.py",
+   "summary": "低时延 BF16 GEMM 的 dotprod 形态 CuteDSL kernel（LLBf16Dotprod，9 方法）：m=1 单 token 投影专用的 PDL 协同 kernel。",
+   "tags": [
+    "cutedsl",
+    "gemm",
+    "bf16",
+    "low-latency"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/cute_dsl/_ll_bf16_dotprod.py:LLBf16Dotprod",
+   "type": "class",
+   "name": "LLBf16Dotprod",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/_ll_bf16_dotprod.py",
+   "lineRange": [
+    10,
+    367
+   ],
+   "summary": "BF16 dotprod kernel（内联 PTX 级实现）。",
+   "tags": [
+    "cutedsl",
+    "kernel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_bf16_splitk.py",
+   "type": "file",
+   "name": "_ll_bf16_splitk.py",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/_ll_bf16_splitk.py",
+   "summary": "低时延 BF16 GEMM 的 split-K 形态（LLBf16SplitK，7 方法）：N 维超宽时按 K 拆分多 CTA 并行（含远程共享内存写原语 st_shared_remote_f32）。",
+   "tags": [
+    "cutedsl",
+    "gemm",
+    "splitk",
+    "bf16"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/cute_dsl/_ll_bf16_splitk.py:LLBf16SplitK",
+   "type": "class",
+   "name": "LLBf16SplitK",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/_ll_bf16_splitk.py",
+   "lineRange": [
+    40,
+    585
+   ],
+   "summary": "split-K BF16 kernel（分布式共享内存 reduce）。",
+   "tags": [
+    "cutedsl",
+    "splitk"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_fp32w_dotprod.py",
+   "type": "file",
+   "name": "_ll_fp32w_dotprod.py",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/_ll_fp32w_dotprod.py",
+   "summary": "FP32 权重低时延 GEMM dotprod kernel（LLFp32WDotprod，13 方法）：BF16 激活×FP32 主权重（在线量化前的高精度路径）。",
+   "tags": [
+    "cutedsl",
+    "gemm",
+    "fp32",
+    "low-latency"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/cute_dsl/_ll_fp32w_dotprod.py:LLFp32WDotprod",
+   "type": "class",
+   "name": "LLFp32WDotprod",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/_ll_fp32w_dotprod.py",
+   "lineRange": [
+    10,
+    451
+   ],
+   "summary": "FP32W dotprod kernel 主体。",
+   "tags": [
+    "cutedsl",
+    "kernel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_router_common.py",
+   "type": "file",
+   "name": "_ll_router_common.py",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/_ll_router_common.py",
+   "summary": "低时延 GEMM 路由公共件：CuteDSL 可用性/cute context/当前 stream/PDL 开关/dtype 映射/fake tensor 构造与输入校验——ll_bf16/ll_fp32w 路由层共用。",
+   "tags": [
+    "cutedsl",
+    "router",
+    "shared",
+    "utility"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/linear/cute_dsl/_ll_router_common.py:is_cutedsl_available",
+   "type": "function",
+   "name": "is_cutedsl_available",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/_ll_router_common.py",
+   "lineRange": [
+    17,
+    32
+   ],
+   "summary": "探测 CUTLASS CuteDSL 导入可用性。",
+   "tags": [
+    "capability"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/linear/cute_dsl/_ll_router_common.py:use_pdl",
+   "type": "function",
+   "name": "use_pdl",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/_ll_router_common.py",
+   "lineRange": [
+    53,
+    56
+   ],
+   "summary": "programmatic dependent launch 开关判定。",
+   "tags": [
+    "pdl",
+    "launch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "type": "file",
+   "name": "gemm_rs_ar.py",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "summary": "GEMM+ReduceScatter/AllReduce 融合 CuteDSL kernel（1177 行）：Sm100GemmRsAr 主体（multimem.ld_reduce/st NVLink 多播原语）+GemmRsAr 包装，GEMM 尾声直接做 MNNVL 通信，init/maybe_init/warmup/get 全套生命周期。",
+   "tags": [
+    "cutedsl",
+    "gemm",
+    "mnnvl",
+    "multimem",
+    "fusion"
+   ],
+   "complexity": "complex",
+   "languageNotes": "multimem.ld_reduce_16B/multimem.st_16B 是 NVLink SHARP 多播 PTX 指令的 DSL 封装；nanosleep 用于跨 rank 同步退避。"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py:Sm100GemmRsAr",
+   "type": "class",
+   "name": "Sm100GemmRsAr",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "lineRange": [
+    113,
+    866
+   ],
+   "summary": "SM100 GEMM+RS/AR kernel 主体（6 方法：编译/绑定/启动）。",
+   "tags": [
+    "cutedsl",
+    "sm100"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py:GemmRsAr",
+   "type": "class",
+   "name": "GemmRsAr",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "lineRange": [
+    869,
+    1083
+   ],
+   "summary": "对外包装（5 方法）：workspace 管理+按形状选 kernel。",
+   "tags": [
+    "cutedsl",
+    "wrapper"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py:maybe_init_gemm_rs_ar",
+   "type": "function",
+   "name": "maybe_init_gemm_rs_ar",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "lineRange": [
+    1105,
+    1154
+   ],
+   "summary": "按 TP 组/形状/平台判定并惰性初始化（不可用返回 None）。",
+   "tags": [
+    "factory",
+    "capability"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py:multimem_ld_reduce_16B",
+   "type": "function",
+   "name": "multimem_ld_reduce_16B",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "lineRange": [
+    59,
+    91
+   ],
+   "summary": "NVLink multimem.ld_reduce 16B 原语（多播读+归约）。",
+   "tags": [
+    "ptx",
+    "multimem",
+    "mnnvl"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/cute_dsl/ll_bf16.py",
+   "type": "file",
+   "name": "ll_bf16.py",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/ll_bf16.py",
+   "summary": "BF16 低时延 GEMM 路由层：LLBf16Gemm（10 方法）按 m 值与形状在 dotprod/splitK 间分派，arch 调优配置表。",
+   "tags": [
+    "cutedsl",
+    "gemm",
+    "router",
+    "bf16"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/cute_dsl/ll_bf16.py:LLBf16Gemm",
+   "type": "class",
+   "name": "LLBf16Gemm",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/ll_bf16.py",
+   "lineRange": [
+    97,
+    333
+   ],
+   "summary": "BF16 GEMM 路由器（warmup 与按 m 分派）。",
+   "tags": [
+    "cutedsl",
+    "router"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/linear/cute_dsl/ll_bf16.py:ll_bf16_gemm",
+   "type": "function",
+   "name": "ll_bf16_gemm",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/ll_bf16.py",
+   "lineRange": [
+    340,
+    350
+   ],
+   "summary": "模块级便捷入口。",
+   "tags": [
+    "entry-point"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/cute_dsl/ll_fp32w.py",
+   "type": "file",
+   "name": "ll_fp32w.py",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/ll_fp32w.py",
+   "summary": "FP32 权重低时延 GEMM 路由层：LLFp32WGemm（6 方法，VllmJitKernel 子类）注册 JIT warmup。",
+   "tags": [
+    "cutedsl",
+    "gemm",
+    "fp32",
+    "jit-warmup"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/cute_dsl/ll_fp32w.py:LLFp32WGemm",
+   "type": "class",
+   "name": "LLFp32WGemm",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/ll_fp32w.py",
+   "lineRange": [
+    63,
+    194
+   ],
+   "summary": "FP32W GEMM（VllmJitKernel 封装，按编译键缓存）。",
+   "tags": [
+    "cutedsl",
+    "jit"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/cute_dsl/skinny_gemm.py",
+   "type": "file",
+   "name": "skinny_gemm.py",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/skinny_gemm.py",
+   "summary": "瘦批 GEMM（ShapeDynamicSkinnyGemm，10 方法）：m 极小（1-16）时的形状动态特化 kernel，kimi_k3 specialized_decode 的投影底座。",
+   "tags": [
+    "cutedsl",
+    "gemm",
+    "skinny",
+    "low-latency"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/cute_dsl/skinny_gemm.py:ShapeDynamicSkinnyGemm",
+   "type": "class",
+   "name": "ShapeDynamicSkinnyGemm",
+   "filePath": "vllm/model_executor/kernels/linear/cute_dsl/skinny_gemm.py",
+   "lineRange": [
+    43,
+    262
+   ],
+   "summary": "按形状动态编译的瘦批 GEMM（含 warmup 注册）。",
+   "tags": [
+    "cutedsl",
+    "skinny"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "type": "file",
+   "name": "MPLinearKernel.py",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "summary": "混合精度 linear kernel 公共基座：MPLinearLayerConfig（层配置 dataclass）与 MPLinearKernel ABC（7 方法：can_implement/process_weights/apply 统一契约）——全部 W4A16/W4A8/WNA16 kernel 的父抽象。",
+   "tags": [
+    "base-class",
+    "abc",
+    "mixed-precision",
+    "shared"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py:MPLinearKernel",
+   "type": "class",
+   "name": "MPLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "lineRange": [
+    33,
+    93
+   ],
+   "summary": "混合精度 kernel ABC。",
+   "tags": [
+    "abc",
+    "base-class"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py:MPLinearLayerConfig",
+   "type": "class",
+   "name": "MPLinearLayerConfig",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "lineRange": [
+    23,
+    30
+   ],
+   "summary": "层配置（权重位数/scale 类型/组形状）。",
+   "tags": [
+    "data-model",
+    "config"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/mixed_precision/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/__init__.py",
+   "summary": "mixed_precision 子包入口：再导出全家族 kernel 与 choose_mp_linear_kernel 选择器。",
+   "tags": [
+    "barrel",
+    "kernel-registry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/mixed_precision/conch.py",
+   "type": "file",
+   "name": "conch.py",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/conch.py",
+   "summary": "Conch（K-AI conch kernel 库）适配 kernel：ConchLinearKernel 包装 conch GEMM 支持 W4A16 系。",
+   "tags": [
+    "mixed-precision",
+    "conch",
+    "w4a16"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/mixed_precision/conch.py:ConchLinearKernel",
+   "type": "class",
+   "name": "ConchLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/conch.py",
+   "lineRange": [
+    23,
+    153
+   ],
+   "summary": "MPLinearKernel 子类（4 方法）。",
+   "tags": [
+    "kernel",
+    "conch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/mixed_precision/cpu.py",
+   "type": "file",
+   "name": "cpu.py",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/cpu.py",
+   "summary": "CPU WNA16 kernel：CPUWNA16LinearKernel 按 ISA（AVX512/AMX 等 _get_isa_hint）分派后端实现。",
+   "tags": [
+    "mixed-precision",
+    "cpu",
+    "wna16"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/mixed_precision/cpu.py:CPUWNA16LinearKernel",
+   "type": "class",
+   "name": "CPUWNA16LinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/cpu.py",
+   "lineRange": [
+    21,
+    209
+   ],
+   "summary": "CPU 权重量化 kernel（6 方法）。",
+   "tags": [
+    "kernel",
+    "cpu"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/mixed_precision/cutlass.py",
+   "type": "file",
+   "name": "cutlass.py",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/cutlass.py",
+   "summary": "CUTLASS W4A8 kernel 适配：CutlassW4A8LinearKernel。",
+   "tags": [
+    "mixed-precision",
+    "cutlass",
+    "w4a8"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/mixed_precision/cutlass.py:CutlassW4A8LinearKernel",
+   "type": "class",
+   "name": "CutlassW4A8LinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/cutlass.py",
+   "lineRange": [
+    21,
+    128
+   ],
+   "summary": "MPLinearKernel 子类（5 方法）。",
+   "tags": [
+    "kernel",
+    "cutlass"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/mixed_precision/exllama.py",
+   "type": "file",
+   "name": "exllama.py",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/exllama.py",
+   "summary": "ExLlama(V2) W4A16 kernel 适配：ExllamaLinearKernel（GPTQ 系经典路径）。",
+   "tags": [
+    "mixed-precision",
+    "exllama",
+    "gptq"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/mixed_precision/exllama.py:ExllamaLinearKernel",
+   "type": "class",
+   "name": "ExllamaLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/exllama.py",
+   "lineRange": [
+    19,
+    146
+   ],
+   "summary": "MPLinearKernel 子类（4 方法）。",
+   "tags": [
+    "kernel",
+    "exllama"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/mixed_precision/humming.py",
+   "type": "file",
+   "name": "humming.py",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/humming.py",
+   "summary": "Hummingbird（Humming kernel 库）WNA16 适配：HummingLinearKernel。",
+   "tags": [
+    "mixed-precision",
+    "humming",
+    "wna16"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/mixed_precision/humming.py:HummingLinearKernel",
+   "type": "class",
+   "name": "HummingLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/humming.py",
+   "lineRange": [
+    24,
+    94
+   ],
+   "summary": "MPLinearKernel 子类（4 方法）。",
+   "tags": [
+    "kernel",
+    "humming"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/mixed_precision/machete.py",
+   "type": "file",
+   "name": "machete.py",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/machete.py",
+   "summary": "Machete（Meta HIP W4A16 kernel）适配：MacheteLinearKernel。",
+   "tags": [
+    "mixed-precision",
+    "machete",
+    "rocm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/mixed_precision/machete.py:MacheteLinearKernel",
+   "type": "class",
+   "name": "MacheteLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/machete.py",
+   "lineRange": [
+    22,
+    126
+   ],
+   "summary": "MPLinearKernel 子类（4 方法）。",
+   "tags": [
+    "kernel",
+    "machete"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/mixed_precision/marlin.py",
+   "type": "file",
+   "name": "marlin.py",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/marlin.py",
+   "summary": "Marlin W4A16/W4A8 kernel 适配：MarlinLinearKernel（fp4/int4/fp8 权重多格式，GPU 老牌通用路径）。",
+   "tags": [
+    "mixed-precision",
+    "marlin",
+    "gptq"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/mixed_precision/marlin.py:MarlinLinearKernel",
+   "type": "class",
+   "name": "MarlinLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/marlin.py",
+   "lineRange": [
+    30,
+    201
+   ],
+   "summary": "MPLinearKernel 子类（4 方法）。",
+   "tags": [
+    "kernel",
+    "marlin"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna3_w4a16.py",
+   "type": "file",
+   "name": "rdna3_w4a16.py",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/rdna3_w4a16.py",
+   "summary": "RDNA3（gfx11x）HIP W4A16 kernel 适配：RDNA3W4A16LinearKernel。",
+   "tags": [
+    "mixed-precision",
+    "rocm",
+    "rdna3"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/mixed_precision/rdna3_w4a16.py:RDNA3W4A16LinearKernel",
+   "type": "class",
+   "name": "RDNA3W4A16LinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/rdna3_w4a16.py",
+   "lineRange": [
+    27,
+    162
+   ],
+   "summary": "MPLinearKernel 子类（4 方法）。",
+   "tags": [
+    "kernel",
+    "rdna3"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "type": "file",
+   "name": "rdna_hybrid_w4a16.py",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "summary": "RDNA 混合 W4A16 kernel（886 行，最重的 MP 适配）：gfx1151 专属 skinny 格式 triton kernel（int4 pair→fp16x2 展开）、按 gfx 代数/显存预算的配置选择、int4 打包（exllama shuffle 兼容）与 dequant 工具，RDNAHybridW4A16LinearKernel 收尾。",
+   "tags": [
+    "mixed-precision",
+    "rocm",
+    "gfx1151",
+    "triton"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py:RDNAHybridW4A16LinearKernel",
+   "type": "class",
+   "name": "RDNAHybridW4A16LinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "lineRange": [
+    711,
+    886
+   ],
+   "summary": "混合路径 kernel（5 方法）：按批大在 skinny triton 与 ROCm 原生路径间切换。",
+   "tags": [
+    "kernel",
+    "hybrid"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py:triton_w4a16_skinny_fmt_gemm",
+   "type": "function",
+   "name": "triton_w4a16_skinny_fmt_gemm",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "lineRange": [
+    389,
+    524
+   ],
+   "summary": "skinny 格式 W4A16 GEMM 启动器（gfx1151 主路径）。",
+   "tags": [
+    "triton",
+    "skinny"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py:dequantize_w4a16",
+   "type": "function",
+   "name": "dequantize_w4a16",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "lineRange": [
+    598,
+    616
+   ],
+   "summary": "调试/校验用反量化。",
+   "tags": [
+    "dequantization",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py",
+   "type": "file",
+   "name": "triton_w4a16.py",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py",
+   "summary": "通用 triton W4A16 kernel（490 行）：triton_w4a16_gemm_kernel（fused dequant+GEMM）+impl/fake 分离，TritonW4A16LinearKernel 收尾（各平台兜底路径）。",
+   "tags": [
+    "mixed-precision",
+    "triton",
+    "w4a16"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py:TritonW4A16LinearKernel",
+   "type": "class",
+   "name": "TritonW4A16LinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py",
+   "lineRange": [
+    302,
+    490
+   ],
+   "summary": "MPLinearKernel 子类（4 方法）。",
+   "tags": [
+    "kernel",
+    "triton"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py:triton_w4a16_gemm",
+   "type": "function",
+   "name": "triton_w4a16_gemm",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py",
+   "lineRange": [
+    291,
+    299
+   ],
+   "summary": "便捷入口（分派 impl/fake）。",
+   "tags": [
+    "entry-point"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/mixed_precision/xpu.py",
+   "type": "file",
+   "name": "xpu.py",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/xpu.py",
+   "summary": "Intel XPU 双 kernel：XPUwNa16LinearKernel（WNA16）与 XPUW4A8IntLinearKernel（INT 激活 W4A8）。",
+   "tags": [
+    "mixed-precision",
+    "xpu",
+    "intel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/mixed_precision/xpu.py:XPUwNa16LinearKernel",
+   "type": "class",
+   "name": "XPUwNa16LinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/xpu.py",
+   "lineRange": [
+    19,
+    106
+   ],
+   "summary": "XPU WNA16 kernel。",
+   "tags": [
+    "kernel",
+    "xpu"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/mixed_precision/xpu.py:XPUW4A8IntLinearKernel",
+   "type": "class",
+   "name": "XPUW4A8IntLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/xpu.py",
+   "lineRange": [
+    109,
+    215
+   ],
+   "summary": "XPU INT 激活 W4A8 kernel。",
+   "tags": [
+    "kernel",
+    "xpu",
+    "int8"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/mixed_precision/zentorch.py",
+   "type": "file",
+   "name": "zentorch.py",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/zentorch.py",
+   "summary": "ZenTorch（AMD CPU 优化库）WNA16 适配：ZentorchWNA16LinearKernel 继承 CPUWNA16 kernel 复用配置解析。",
+   "tags": [
+    "mixed-precision",
+    "cpu",
+    "zentorch",
+    "amd"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/mixed_precision/zentorch.py:ZentorchWNA16LinearKernel",
+   "type": "class",
+   "name": "ZentorchWNA16LinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/mixed_precision/zentorch.py",
+   "lineRange": [
+    37,
+    302
+   ],
+   "summary": "CPUWNA16 子类（5 方法，调 zentorch 后端 GEMM）。",
+   "tags": [
+    "kernel",
+    "zentorch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/mxfp4/aiter.py",
+   "type": "file",
+   "name": "aiter.py",
+   "filePath": "vllm/model_executor/kernels/linear/mxfp4/aiter.py",
+   "summary": "ROCm Aiter MXFP4 linear kernel 适配：AiterMxfp4LinearKernel（含 fp4 scale swizzle 布局判定）。",
+   "tags": [
+    "mxfp4",
+    "aiter",
+    "rocm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/mxfp4/aiter.py:AiterMxfp4LinearKernel",
+   "type": "class",
+   "name": "AiterMxfp4LinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/mxfp4/aiter.py",
+   "lineRange": [
+    157,
+    256
+   ],
+   "summary": "MxFp4LinearKernel 子类（5 方法）。",
+   "tags": [
+    "kernel",
+    "aiter"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/mxfp4/base.py",
+   "type": "file",
+   "name": "base.py",
+   "filePath": "vllm/model_executor/kernels/linear/mxfp4/base.py",
+   "summary": "MXFP4 linear kernel 公共基座：MxFp4LinearLayerConfig 与 MxFp4LinearKernel ABC（6 方法）——flashinfer/marlin/aiter/xpu/emulation 等 MXFP4 实现的父抽象。",
+   "tags": [
+    "base-class",
+    "abc",
+    "mxfp4"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/mxfp4/base.py:MxFp4LinearKernel",
+   "type": "class",
+   "name": "MxFp4LinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/mxfp4/base.py",
+   "lineRange": [
+    32,
+    93
+   ],
+   "summary": "MXFP4 kernel ABC。",
+   "tags": [
+    "abc",
+    "mxfp4"
+   ],
+   "complexity": "moderate"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/model_executor/kernels/attention/dsa/candidate_blocks.py",
+   "target": "file:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/attention/dsa/candidate_blocks.py",
+   "target": "file:vllm/model_executor/layers/indexer_topk.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/attention/dsa/candidate_blocks.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/attention/dsa/candidate_blocks.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/attention/dsa/candidate_blocks.py",
+   "target": "function:vllm/model_executor/kernels/attention/dsa/candidate_blocks.py:select_candidate_blocks",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/attention/dsa/candidate_blocks.py",
+   "target": "function:vllm/model_executor/kernels/attention/dsa/candidate_blocks.py:apply_candidate_mask",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/attention/dsa/candidate_blocks.py",
+   "target": "function:vllm/model_executor/kernels/attention/dsa/candidate_blocks.py:select_candidate_blocks",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "target": "file:vllm/model_executor/layers/indexer_topk.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "target": "file:vllm/utils/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "target": "function:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py:has_deep_select",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "target": "function:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py:candidate_blocks_to_sparse_indices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "target": "function:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py:sparse_mqa_logits_prefill_chunk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "target": "function:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py:sparse_mqa_logits_paged_decode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "target": "function:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py:sparse_topk_remap",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "target": "function:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py:sparse_mqa_logits_paged_decode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "target": "function:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py:sparse_mqa_logits_prefill_chunk",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/config/quantization.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/conch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/cpu.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/cutlass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/dynamic_4bit.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/exllama.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/humming.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/machete.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/marlin.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna3_w4a16.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/xpu.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/zentorch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp4/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp4/aiter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp4/b12x.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp4/emulation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp4/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp4/humming.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp4/marlin.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp4/pytorch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp4/rdna3_hip.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp4/xpu.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp6/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp6/emulation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp6/humming.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp8/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp8/b12x.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp8/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp8/emulation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp8/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp8/humming.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp8/marlin.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp8/pytorch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp8/rocm_native.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp8/xpu.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/nvfp4/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/nvfp4/b12x.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/nvfp4/cutlass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/nvfp4/emulation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/nvfp4/fbgemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/nvfp4/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/nvfp4/humming.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/nvfp4/marlin.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/nvfp4/pytorch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/aiter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/b12x.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/cpu.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/humming.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/marlin.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/xpu.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/zentorch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/humming/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "function:vllm/model_executor/kernels/linear/__init__.py:choose_mp_linear_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "function:vllm/model_executor/kernels/linear/__init__.py:choose_scaled_mm_linear_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "function:vllm/model_executor/kernels/linear/__init__.py:init_fp8_linear_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "function:vllm/model_executor/kernels/linear/__init__.py:init_nvfp4_linear_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "function:vllm/model_executor/kernels/linear/__init__.py:register_linear_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "function:vllm/model_executor/kernels/linear/__init__.py:choose_mp_linear_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "target": "function:vllm/model_executor/kernels/linear/__init__.py:register_linear_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/base.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/base.py",
+   "target": "class:vllm/model_executor/kernels/linear/base.py:MMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/base.py",
+   "target": "class:vllm/model_executor/kernels/linear/base.py:Params",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/base.py",
+   "target": "class:vllm/model_executor/kernels/linear/base.py:FP8Params",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/base.py",
+   "target": "class:vllm/model_executor/kernels/linear/base.py:MMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_bf16_dotprod.py",
+   "target": "class:vllm/model_executor/kernels/linear/cute_dsl/_ll_bf16_dotprod.py:LLBf16Dotprod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_bf16_dotprod.py",
+   "target": "class:vllm/model_executor/kernels/linear/cute_dsl/_ll_bf16_dotprod.py:LLBf16Dotprod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_bf16_splitk.py",
+   "target": "class:vllm/model_executor/kernels/linear/cute_dsl/_ll_bf16_splitk.py:LLBf16SplitK",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_bf16_splitk.py",
+   "target": "class:vllm/model_executor/kernels/linear/cute_dsl/_ll_bf16_splitk.py:LLBf16SplitK",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_fp32w_dotprod.py",
+   "target": "class:vllm/model_executor/kernels/linear/cute_dsl/_ll_fp32w_dotprod.py:LLFp32WDotprod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_fp32w_dotprod.py",
+   "target": "class:vllm/model_executor/kernels/linear/cute_dsl/_ll_fp32w_dotprod.py:LLFp32WDotprod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_router_common.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_router_common.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_router_common.py",
+   "target": "function:vllm/model_executor/kernels/linear/cute_dsl/_ll_router_common.py:is_cutedsl_available",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_router_common.py",
+   "target": "function:vllm/model_executor/kernels/linear/cute_dsl/_ll_router_common.py:use_pdl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_router_common.py",
+   "target": "function:vllm/model_executor/kernels/linear/cute_dsl/_ll_router_common.py:is_cutedsl_available",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "target": "file:vllm/cute_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp8/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/mxfp8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "target": "class:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py:Sm100GemmRsAr",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "target": "class:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py:GemmRsAr",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "target": "function:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py:maybe_init_gemm_rs_ar",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "target": "function:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py:multimem_ld_reduce_16B",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "target": "class:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py:GemmRsAr",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/ll_bf16.py",
+   "target": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_bf16_dotprod.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/ll_bf16.py",
+   "target": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_bf16_splitk.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/ll_bf16.py",
+   "target": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_router_common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/ll_bf16.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/ll_bf16.py",
+   "target": "class:vllm/model_executor/kernels/linear/cute_dsl/ll_bf16.py:LLBf16Gemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/ll_bf16.py",
+   "target": "function:vllm/model_executor/kernels/linear/cute_dsl/ll_bf16.py:ll_bf16_gemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/ll_bf16.py",
+   "target": "class:vllm/model_executor/kernels/linear/cute_dsl/ll_bf16.py:LLBf16Gemm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/ll_fp32w.py",
+   "target": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_fp32w_dotprod.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/ll_fp32w.py",
+   "target": "file:vllm/model_executor/kernels/linear/cute_dsl/_ll_router_common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/ll_fp32w.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/ll_fp32w.py",
+   "target": "class:vllm/model_executor/kernels/linear/cute_dsl/ll_fp32w.py:LLFp32WGemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/ll_fp32w.py",
+   "target": "class:vllm/model_executor/kernels/linear/cute_dsl/ll_fp32w.py:LLFp32WGemm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/cute_dsl/ll_fp32w.py:LLFp32WGemm",
+   "target": "class:vllm/model_executor/warmup/jit_warmup.py:VllmJitKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/skinny_gemm.py",
+   "target": "file:vllm/model_executor/kernels/linear/cute_dsl/_skinny_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/skinny_gemm.py",
+   "target": "file:vllm/model_executor/warmup/cutedsl_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/skinny_gemm.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/skinny_gemm.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/skinny_gemm.py",
+   "target": "class:vllm/model_executor/kernels/linear/cute_dsl/skinny_gemm.py:ShapeDynamicSkinnyGemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/cute_dsl/skinny_gemm.py",
+   "target": "class:vllm/model_executor/kernels/linear/cute_dsl/skinny_gemm.py:ShapeDynamicSkinnyGemm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "target": "file:vllm/scalar_type.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py:MPLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py:MPLinearLayerConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py:MPLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/conch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/cpu.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/cutlass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/dynamic_4bit.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/exllama.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/humming.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/machete.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/marlin.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna3_w4a16.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/xpu.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/__init__.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/zentorch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/conch.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/conch.py",
+   "target": "file:vllm/model_executor/parameter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/conch.py",
+   "target": "file:vllm/scalar_type.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/conch.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/conch.py:ConchLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/conch.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/conch.py:ConchLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/mixed_precision/conch.py:ConchLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py:MPLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/cpu.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/cpu.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/cpu.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/cpu.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/cpu.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/cpu.py",
+   "target": "file:vllm/scalar_type.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/cpu.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/cpu.py:CPUWNA16LinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/cpu.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/cpu.py:CPUWNA16LinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/mixed_precision/cpu.py:CPUWNA16LinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py:MPLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/cutlass.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/cutlass.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/cutlass.py",
+   "target": "file:vllm/model_executor/layers/quantization/input_quant_fp8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/cutlass.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/cutlass.py",
+   "target": "file:vllm/model_executor/parameter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/cutlass.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/cutlass.py",
+   "target": "file:vllm/scalar_type.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/cutlass.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/cutlass.py:CutlassW4A8LinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/cutlass.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/cutlass.py:CutlassW4A8LinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/mixed_precision/cutlass.py:CutlassW4A8LinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py:MPLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/exllama.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/exllama.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/exllama.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/exllama.py",
+   "target": "file:vllm/model_executor/parameter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/exllama.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/exllama.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/exllama.py",
+   "target": "file:vllm/scalar_type.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/exllama.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/exllama.py:ExllamaLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/exllama.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/exllama.py:ExllamaLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/mixed_precision/exllama.py:ExllamaLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py:MPLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/humming.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/humming.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/humming/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/humming.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/humming.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/humming.py",
+   "target": "file:vllm/utils/humming.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/humming.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/humming.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/humming.py:HummingLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/humming.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/humming.py:HummingLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/mixed_precision/humming.py:HummingLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py:MPLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/machete.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/machete.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/machete.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/machete_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/machete.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/machete.py",
+   "target": "file:vllm/model_executor/parameter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/machete.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/machete.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/machete.py:MacheteLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/machete.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/machete.py:MacheteLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/mixed_precision/machete.py:MacheteLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py:MPLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/marlin.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/marlin.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/marlin.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/marlin_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/marlin.py",
+   "target": "file:vllm/model_executor/parameter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/marlin.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/marlin.py",
+   "target": "file:vllm/scalar_type.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/marlin.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/marlin.py:MarlinLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/marlin.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/marlin.py:MarlinLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/mixed_precision/marlin.py:MarlinLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py:MPLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna3_w4a16.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna3_w4a16.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna3_w4a16.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna3_w4a16.py",
+   "target": "file:vllm/model_executor/parameter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna3_w4a16.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna3_w4a16.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna3_w4a16.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna3_w4a16.py",
+   "target": "file:vllm/scalar_type.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna3_w4a16.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/rdna3_w4a16.py:RDNA3W4A16LinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna3_w4a16.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/rdna3_w4a16.py:RDNA3W4A16LinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/mixed_precision/rdna3_w4a16.py:RDNA3W4A16LinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py:MPLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "file:vllm/model_executor/layers/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "file:vllm/model_executor/parameter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "file:vllm/scalar_type.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "file:vllm/utils/mem_constants.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "file:vllm/utils/mem_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "file:vllm/utils/platform_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "file:vllm/v1/core/kv_cache_planning.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "file:vllm/v1/worker/gpu/attn_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py:RDNAHybridW4A16LinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "function:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py:triton_w4a16_skinny_fmt_gemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "function:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py:dequantize_w4a16",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py:RDNAHybridW4A16LinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/mixed_precision/rdna_hybrid_w4a16.py:RDNAHybridW4A16LinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py:MPLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py",
+   "target": "file:vllm/model_executor/parameter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py",
+   "target": "file:vllm/scalar_type.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py:TritonW4A16LinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py",
+   "target": "function:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py:triton_w4a16_gemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py:TritonW4A16LinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/mixed_precision/triton_w4a16.py:TritonW4A16LinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py:MPLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/xpu.py",
+   "target": "file:vllm/_xpu_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/xpu.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/xpu.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/xpu.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/xpu.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/xpu.py",
+   "target": "file:vllm/scalar_type.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/xpu.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/xpu.py:XPUwNa16LinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/xpu.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/xpu.py:XPUW4A8IntLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/xpu.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/xpu.py:XPUwNa16LinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/mixed_precision/xpu.py:XPUwNa16LinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py:MPLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/mixed_precision/xpu.py:XPUW4A8IntLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py:MPLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/zentorch.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/zentorch.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/zentorch.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/MPLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/zentorch.py",
+   "target": "file:vllm/model_executor/kernels/linear/mixed_precision/cpu.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/zentorch.py",
+   "target": "file:vllm/model_executor/kernels/linear/zentorch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/zentorch.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/zentorch.py",
+   "target": "file:vllm/scalar_type.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/zentorch.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/zentorch.py:ZentorchWNA16LinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mixed_precision/zentorch.py",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/zentorch.py:ZentorchWNA16LinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/mixed_precision/zentorch.py:ZentorchWNA16LinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/mixed_precision/cpu.py:CPUWNA16LinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mxfp4/aiter.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mxfp4/aiter.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mxfp4/aiter.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mxfp4/aiter.py",
+   "target": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mxfp4/aiter.py",
+   "target": "file:vllm/model_executor/kernels/linear/mxfp4/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mxfp4/aiter.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mxfp4/aiter.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mxfp4/aiter.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mxfp4/aiter.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mxfp4/aiter.py",
+   "target": "class:vllm/model_executor/kernels/linear/mxfp4/aiter.py:AiterMxfp4LinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mxfp4/aiter.py",
+   "target": "class:vllm/model_executor/kernels/linear/mxfp4/aiter.py:AiterMxfp4LinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/mxfp4/aiter.py:AiterMxfp4LinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/mxfp4/base.py:MxFp4LinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mxfp4/base.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mxfp4/base.py",
+   "target": "class:vllm/model_executor/kernels/linear/mxfp4/base.py:MxFp4LinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/mxfp4/base.py",
+   "target": "class:vllm/model_executor/kernels/linear/mxfp4/base.py:MxFp4LinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

@@ -1,0 +1,32 @@
+# DeepWiki 索引 — miurla/babyagi-ui
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 287174 字符
+
+- [1 BabyAGI-UI Overview](1-babyagi-ui-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 System Architecture](1.2-system-architecture.md)
+- [2 User Interface Components](2-user-interface-components.md)
+  - [2.1 AgentView Component](2.1-agentview-component.md)
+  - [2.2 Agent Message System](2.2-agent-message-system.md)
+  - [2.3 Agent Task Components](2.3-agent-task-components.md)
+  - [2.4 Agent Configuration Components](2.4-agent-configuration-components.md)
+  - [2.5 Sidebar and Settings](2.5-sidebar-and-settings.md)
+- [3 Agent Architecture](3-agent-architecture.md)
+  - [3.1 BabyAGI Base Agent](3.1-babyagi-base-agent.md)
+  - [3.2 BabyDeerAGI](3.2-babydeeragi.md)
+  - [3.3 BabyElfAGI](3.3-babyelfagi.md)
+  - [3.4 Agent Skills System](3.4-agent-skills-system.md)
+- [4 Core Utilities](4-core-utilities.md)
+  - [4.1 Message Formatting Utilities](4.1-message-formatting-utilities.md)
+  - [4.2 Hook Utilities](4.2-hook-utilities.md)
+  - [4.3 Objective Finding Utilities](4.3-objective-finding-utilities.md)
+- [5 API Endpoints](5-api-endpoints.md)
+  - [5.1 Agent API](5.1-agent-api.md)
+  - [5.2 Agent Utility APIs](5.2-agent-utility-apis.md)
+- [6 Internationalization (i18n)](6-internationalization-i18n.md)
+  - [6.1 Localization Files](6.1-localization-files.md)
+  - [6.2 Translation System](6.2-translation-system.md)
+- [7 Examples and Usage](7-examples-and-usage.md)
+  - [7.2 Headless Examples](7.2-headless-examples.md)
+- [8 Development and Customization](8-development-and-customization.md)

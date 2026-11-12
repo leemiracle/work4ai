@@ -1,0 +1,31 @@
+# DeepWiki 索引 — allenai/ai2thor
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-30
+> 结构 26 页 · 全文 348902 字符
+
+- [1 AI2-THOR Overview](1-ai2-thor-overview.md)
+- [2 Installation and Setup](2-installation-and-setup.md)
+- [3 Core Agent System](3-core-agent-system.md)
+  - [3.1 Agent Controllers](3.1-agent-controllers.md)
+  - [3.2 Agent Manager and Coordination](3.2-agent-manager-and-coordination.md)
+- [4 Python API and Communication](4-python-api-and-communication.md)
+  - [4.1 Controller Class](4.1-controller-class.md)
+  - [4.2 Build System and Deployment](4.2-build-system-and-deployment.md)
+- [5 Specialized Agent Types](5-specialized-agent-types.md)
+  - [5.1 Articulated Agents](5.1-articulated-agents.md)
+  - [5.2 Robot Controller and Testing](5.2-robot-controller-and-testing.md)
+  - [5.3 Debug and Development Tools](5.3-debug-and-development-tools.md)
+- [6 Scenes and Environments](6-scenes-and-environments.md)
+  - [6.1 Physics Scenes](6.1-physics-scenes.md)
+  - [6.2 Procedural Generation](6.2-procedural-generation.md)
+  - [6.3 Scene Assets and Models](6.3-scene-assets-and-models.md)
+- [7 Object Interaction System](7-object-interaction-system.md)
+  - [7.1 SimObjPhysics Framework](7.1-simobjphysics-framework.md)
+  - [7.2 Interactive Behaviors](7.2-interactive-behaviors.md)
+  - [7.3 Object State Changes](7.3-object-state-changes.md)
+- [8 Content Creation and Management](8-content-creation-and-management.md)
+  - [8.1 Asset Management Pipeline](8.1-asset-management-pipeline.md)
+  - [8.2 Visual Customization](8.2-visual-customization.md)
+- [9 WebGL Integration](9-webgl-integration.md)
+- [10 Performance and Benchmarking](10-performance-and-benchmarking.md)
+- [11 Unity Project Configuration](11-unity-project-configuration.md)

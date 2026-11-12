@@ -1,0 +1,46 @@
+---
+name: bcm
+description: Inspect Base Command Manager (BCM) inventory and health evidence, and make explicitly requested changes when Base Command Manager edit mode is enabled.
+---
+
+<!--
+SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+SPDX-License-Identifier: Apache-2.0
+-->
+
+# Base Command Manager (BCM) Cluster Inspection
+
+Use this skill when a user asks about node inventory, node categories, cluster health, or why a node is or was unavailable.
+
+BCM device inventory can include machines outside the current Kubernetes cluster. Correlate device names and addresses with Kubernetes membership and scheduler or service evidence; report physical inventory separately from membership in a particular cluster. A BCM pod or node label alone does not prove that this session has BCM tools or that the service is healthy. Check available tools and returned evidence before claiming access or health.
+
+For Base Command Manager inventory and managed-health evidence, use Base Command Manager tools. This routing applies to BCM operations only. Workload logs, in-container diagnostics and runtime corrections use the workload’s configured scheduler or execution tools; an inventory question does not make BCM the execution provider for later tasks. For inventory, category, Kubernetes cluster, schedulability, and node state questions, prefer `bcm_execute_cmsh` because it uses the Base Command Manager read-only CMSH profile. Use `bcm_get_info`, `bcm_search_tools`, `bcm_execute_tool`, or `bcm_search_notes` for non-CMSH evidence. Do not call `bcm_health` just to start a normal `/cluster-management` request; it may be slow on large clusters. Do not invent CMSH modes or subcommands; `cluster` is not a valid CMSH mode for this workflow, and `device health ...` / `device; use <node>; health` are not valid commands.
+
+When Base Command Manager or NVIDIA Mission Control command syntax, modes, concepts, or operational behavior are unclear, search the seeded Base Command Manager manuals and NMC guides before guessing. These documents are normal markdown files, not Base Command Manager MCP tools and not the `SKILL.md` file. Never call `bcm_search_docs`; that tool is not available. Use `exec` with read-only shell commands against `/sandbox/workspace/skills/bcm/docs`, for example `find /sandbox/workspace/skills/bcm/docs -type f`, `grep -R <term> /sandbox/workspace/skills/bcm/docs`, and `sed -n`. If running outside OpenShell, the same documents are also staged at `/home/node/.openclaw/workspace/docs`. Then return to Base Command Manager MCP tools for live cluster evidence.
+
+Some Base Command Manager MCP deployments may disable CMSH. If `bcm_execute_cmsh` is absent or returns an error, continue with `bcm_get_info`, `bcm_search_tools`, and `bcm_execute_tool` evidence. Do not claim node inventory or schedulability from CMSH unless `bcm_execute_cmsh` returned that evidence.
+
+Never use Base Command Manager MCP `slurm.*` tools for failed-job RCA, Slurm job ids, `sacct`, `scontrol`, Slurm logs, or root-cause questions. Those requests belong to the configured Slurm evidence route, not this Base Command Manager skill.
+
+Prefer read-only commands and evidence sources. `bcm_execute_cmsh` always uses the readonly Base Command Manager identity and never requests approval. Make a provisioning, power, category, or scheduler change only when the user explicitly requests it and `bcm_execute_cmsh_admin` is available. The admin tool always uses edit capability and may require approval; never use another tool or shell command to bypass a rejection. When HITL is enabled, wait for the approval result; after denial or timeout, give a brief plain-text final response that the action was not performed. If Base Command Manager MCP tools are unavailable, say that the Base Command Manager evidence source is unavailable and answer only from Kubernetes, Slurm, or observability evidence that is present.
+
+Before every CMSH mutation, verify its syntax through the read-only `bcm_execute_cmsh` tool using the relevant mode followed by `help <command>`. Help-only requests do not require approval. Construct the admin request from the returned usage text. Never infer mutation syntax or retry a failed mutation with an unverified variation. If help is unavailable or does not document the requested operation, stop and report that the command could not be verified.
+
+For node questions, separate current state from historical symptoms. Report node name, current schedulability, category or role if known, observed health state, and the exact Base Command Manager MCP evidence used.
+
+For a brief health overview, use `bcm_node_health_summary` and report the native status text. Distinguish a node being up from its health checks passing; a failure without details is only a symptom. For full health status, individual check results, or deeper RCA, use the read-only `bcm_execute_cmsh` command `device; latesthealthdata -n <node-list>`. This documented command returns the latest health data for the selected nodes and does not require Edit mode. Preserve each check's status and timestamp, and distinguish disabled or filtered checks from passing checks. Use `device; help latesthealthdata` for supported options; do not guess health subcommands.
+
+For `is <node> schedulable?`, use Base Command Manager evidence first. If CMSH is available, use `device; use <node>; show`; otherwise use available Base Command Manager MCP registry tools and notes, and be explicit that schedulability could not be confirmed from CMSH. Do not continue into unrelated hardware or Slurm recovery workflows.
+
+Useful read-only CMSH examples:
+
+Pass CMSH commands as the same semicolon-separated command string used by `cmsh -c`.
+
+- `device; list`
+- `device; status`
+- `device; use <node>; show`
+- `category; list`
+- `kubernetes; list`
+- `kubernetes; foreach * (show)`
+
+For broad cluster summaries, combine `bcm_get_info` with `bcm_execute_cmsh` command strings such as `kubernetes; list`, `category; list`, and `device; list`. For a short inventory, summarize the first rows returned by `device; list`; do not use shell pipes or `limit` inside CMSH.

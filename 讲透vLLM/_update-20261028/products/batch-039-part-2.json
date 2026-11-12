@@ -1,0 +1,1447 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "type": "file",
+   "name": "routed_expert_gemm.py",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "summary": "低批量路由专家 GEMM 绑定层（1-8 行 decode）：RoutedExpertGemm 把 route kernel（或融合 front）与 GEMM1/GEMM2 对绑到一个 MoE 层的 TRT-LLM-gen MXFP4 专家张量上；build_routed_expert_gemms 逐 runner 探测可用性。",
+   "tags": [
+    "moe",
+    "gemm",
+    "mxfp4",
+    "binding"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "type": "file",
+   "name": "routed_expert_gemm_cute.py",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "summary": "持久化 block-scaled GEMM kernel 对（改编 FlashInfer BSD 低延迟 GEMM）：RoutedExpertGemm 基类在路由记录的 (权重块,token 块) 工作项上做持久 128x8 tcgen05 tile，GEMM1（SwiGLU 后 MXFP8 量化）与 GEMM2（BF16 行输出）各带自己的 epilogue，专家权重 evict-first。",
+   "tags": [
+    "cute-dsl",
+    "gemm",
+    "tcgen05",
+    "persistent-kernel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py",
+   "type": "file",
+   "name": "routed_expert_route_cute.py",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py",
+   "summary": "路由 kernel：从预计算 top-k id 构建 expert-major 8 行 tile 置换与两 GEMM 共读的记录（专家位图+逐专家行掩码），PDL 允许依赖 kernel 即刻发射。",
+   "tags": [
+    "cute-dsl",
+    "routing",
+    "permutation",
+    "pdl"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py",
+   "type": "file",
+   "name": "step.py",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py",
+   "summary": "专用 decode 步的单 MoE 层：MoEStep 运行 stock MoE 并可把 top-k 归约留给下一个融合边界（deferred finalize）。",
+   "tags": [
+    "moe",
+    "decode-step",
+    "deferred-finalize"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/__init__.py",
+   "summary": "runtime 包标记文件，仅含 SPDX 头。",
+   "tags": [
+    "package-marker",
+    "runtime",
+    "specialized-decode"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "type": "file",
+   "name": "decode.py",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "summary": "专用 decode 执行器 SpecializedDecode：对 ≤FUSED_MHC_MAX_ROWS 的纯 decode FULL graph 步运行 backbone 的解码层（Boundaries/AttentionStep/MoEStep/EngramPrefetch 组合）；所有 TP 决策只读全 rank 共享的 host 状态，side stream 在 run 返回前 join 以保证捕获完整。",
+   "tags": [
+    "executor",
+    "decode",
+    "cuda-graph",
+    "orchestration"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py",
+   "type": "file",
+   "name": "metadata_graphs.py",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py",
+   "summary": "AttnMetadataCudaGraphs：CUDA graph 捕获期按 graph key 记录注意力元数据构建、重放期回放（每 key 一次 eager 构建）。",
+   "tags": [
+    "cuda-graph",
+    "attention-metadata",
+    "replay"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py",
+   "type": "file",
+   "name": "model_state.py",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py",
+   "summary": "DeepSeek V4.1 专用 decode 的 model state：权重加载后构建执行器、按 forward 判定专用路径是否接管、构造按 key 填充的 dummy decode 批。",
+   "tags": [
+    "model-state",
+    "specialized-decode",
+    "factory"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:FrontConfig",
+   "type": "class",
+   "name": "FrontConfig",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "summary": "路由器 DSv4 top-k 参数配置。",
+   "tags": [
+    "moe",
+    "config",
+    "router"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    108,
+    114
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:Routing",
+   "type": "class",
+   "name": "Routing",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "summary": "GEMM1/2 从 route 或 front 读取的路由输入描述。",
+   "tags": [
+    "moe",
+    "routing",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    118,
+    127
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:RoutedExpertGemm",
+   "type": "class",
+   "name": "RoutedExpertGemm",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "summary": "绑定一层的 route/front kernel 与 GEMM 对（TRT-LLM-gen MXFP4 专家张量上）。",
+   "tags": [
+    "moe",
+    "gemm",
+    "binding"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    130,
+    318
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:RoutedExpertGemm",
+   "type": "class",
+   "name": "RoutedExpertGemm",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "summary": "持久 block-scaled GEMM 基类（改编 FlashInfer）：路由记录工作项上 128x8 tcgen05 tile，累加器双缓冲于 tensor memory。",
+   "tags": [
+    "cute-dsl",
+    "gemm",
+    "persistent-kernel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    126,
+    789
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:RoutedExpertGemm2",
+   "type": "class",
+   "name": "RoutedExpertGemm2",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "summary": "GEMM2：BF16 行输出（tile 置换序）。",
+   "tags": [
+    "cute-dsl",
+    "gemm",
+    "bf16"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    798,
+    873
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:RoutedExpertGemm1",
+   "type": "class",
+   "name": "RoutedExpertGemm1",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "summary": "GEMM1：clamped SwiGLU 后 MXFP8 量化（tile 置换行）。",
+   "tags": [
+    "cute-dsl",
+    "gemm",
+    "mxfp8"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1073,
+    1284
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py:RoutedExpertRoute",
+   "type": "class",
+   "name": "RoutedExpertRoute",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py",
+   "summary": "路由 kernel：预计算 top-k id → 专家 major 8 行 tile 置换+记录。",
+   "tags": [
+    "cute-dsl",
+    "routing",
+    "permutation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    169,
+    235
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py:MoEStep",
+   "type": "class",
+   "name": "MoEStep",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py",
+   "summary": "专用 decode 步的单 MoE 层执行（可推迟 finalize）。",
+   "tags": [
+    "moe",
+    "decode-step",
+    "finalize"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    72,
+    135
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:DecodeStep",
+   "type": "class",
+   "name": "DecodeStep",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "summary": "一步的 host 侧门控 NamedTuple（按行数）。",
+   "tags": [
+    "decode",
+    "gates",
+    "namedtuple"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    70,
+    99
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:LayerPlan",
+   "type": "class",
+   "name": "LayerPlan",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "summary": "单层执行计划 NamedTuple。",
+   "tags": [
+    "decode",
+    "plan",
+    "namedtuple"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    134,
+    139
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:SpecializedDecode",
+   "type": "class",
+   "name": "SpecializedDecode",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "summary": "专用 decode 执行器：FULL graph 纯 decode 步的层循环编排（6 方法）。",
+   "tags": [
+    "executor",
+    "decode",
+    "cuda-graph"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    142,
+    362
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py:AttnMetadataCudaGraphs",
+   "type": "class",
+   "name": "AttnMetadataCudaGraphs",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py",
+   "summary": "按 graph key 记录/回放注意力元数据构建。",
+   "tags": [
+    "cuda-graph",
+    "attention-metadata",
+    "replay"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    56,
+    224
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py:DeepseekV41SpecializedDecodeModelState",
+   "type": "class",
+   "name": "DeepseekV41SpecializedDecodeModelState",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py",
+   "summary": "构建并持有专用 decode 执行器的 model state。",
+   "tags": [
+    "model-state",
+    "factory",
+    "specialized-decode"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    62,
+    178
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:check_weights",
+   "type": "function",
+   "name": "check_weights",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "summary": "校验权重是 kernel 要求的 TRT-LLM-gen 布局否则抛错。",
+   "tags": [
+    "weights",
+    "validation",
+    "layout"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    424,
+    470
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:_unsupported_reason",
+   "type": "function",
+   "name": "_unsupported_reason",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "summary": "路由专家不能走 GEMM 对的原因。",
+   "tags": [
+    "moe",
+    "eligibility",
+    "diagnostics"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    473,
+    498
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:_front_config",
+   "type": "function",
+   "name": "_front_config",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "summary": "融合 front 对该路由器的配置（或不可用原因）。",
+   "tags": [
+    "moe",
+    "front",
+    "config"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    501,
+    536
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:front_applies",
+   "type": "function",
+   "name": "front_applies",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "summary": "本次调用融合 front 能否替换路由器 top-k。",
+   "tags": [
+    "moe",
+    "front",
+    "eligibility"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    539,
+    559
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:build_routed_expert_gemms",
+   "type": "function",
+   "name": "build_routed_expert_gemms",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "summary": "为每个支持的 MoE runner 构建 RoutedExpertGemm（否则 None）。",
+   "tags": [
+    "moe",
+    "factory",
+    "gemm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    562,
+    615
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:clamped_swiglu_x2",
+   "type": "function",
+   "name": "clamped_swiglu_x2",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "summary": "两 token 的 clamped SwiGLU（up/gate 各自限幅）。",
+   "tags": [
+    "swiglu",
+    "clamp",
+    "cute-dsl"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    974,
+    991
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:quantize_e4m3x2",
+   "type": "function",
+   "name": "quantize_e4m3x2",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "summary": "两块值乘逆尺度饱和量化为 E4M3。",
+   "tags": [
+    "quantization",
+    "e4m3",
+    "cute-dsl"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1032,
+    1050
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:ue8m0_code",
+   "type": "function",
+   "name": "ue8m0_code",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "summary": "正 scale 的 UE8M0 码（上取整到 2 的幂）。",
+   "tags": [
+    "quantization",
+    "ue8m0",
+    "cute-dsl"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1054,
+    1070
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py:clear_scratch",
+   "type": "function",
+   "name": "clear_scratch",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py",
+   "summary": "清零专家位图与行掩码（block barrier 保序）。",
+   "tags": [
+    "routing",
+    "scratch",
+    "clearing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    73,
+    84
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py:zero_record",
+   "type": "function",
+   "name": "zero_record",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py",
+   "summary": "清零记录（build_record 的 barrier 前序）。",
+   "tags": [
+    "routing",
+    "record",
+    "clearing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    88,
+    101
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py:build_record",
+   "type": "function",
+   "name": "build_record",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py",
+   "summary": "从 top-k id 构建置换与记录（全线程可见）。",
+   "tags": [
+    "routing",
+    "permutation",
+    "record"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    105,
+    166
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py:deferred_finalize",
+   "type": "function",
+   "name": "deferred_finalize",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py",
+   "summary": "块内让专家把 top-k 归约留给融合边界。",
+   "tags": [
+    "moe",
+    "deferred",
+    "context"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    43,
+    53
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py:defers_finalize",
+   "type": "function",
+   "name": "defers_finalize",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py",
+   "summary": "ffn 专家能否推迟归约。",
+   "tags": [
+    "moe",
+    "eligibility",
+    "gemm-pair"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    56,
+    69
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:step_gates",
+   "type": "function",
+   "name": "step_gates",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "summary": "rows 行的步门控（0<rows<=FUSED_MHC_MAX_ROWS）。",
+   "tags": [
+    "decode",
+    "gates",
+    "host-state"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    102,
+    112
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:captures_pure_decode",
+   "type": "function",
+   "name": "captures_pure_decode",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "summary": "被捕获 forward 是否 FULL 纯 decode 图。",
+   "tags": [
+    "cuda-graph",
+    "predicate",
+    "decode"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    115,
+    131
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py:padded_decode_batch",
+   "type": "function",
+   "name": "padded_decode_batch",
+   "filePath": "vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py",
+   "summary": "按 key 运行时步填充的 dummy 均匀 decode 批。",
+   "tags": [
+    "decode",
+    "dummy-batch",
+    "padding"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    35,
+    59
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/trtllm_mxfp4_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/moe_output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/ops/cute_dsl/primitives.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_front_cute.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/trtllm_mxfp4_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/moe_output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/runner/shared_experts.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/model_executor/kernels/mhc/triton.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/model_executor/layers/sparse_mqa_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/deepseek_v41/common/engram.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/deepseek_v41/common/ops/query_quant.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/flashinfer_sparse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/attention/indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/attention/sparse_mla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/attention/step.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/boundary/boundary.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/engram/prefetch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py",
+   "target": "file:vllm/compilation/cudagraph_pool.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py",
+   "target": "file:vllm/models/deepseek_v41/compressor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/flashinfer_sparse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py",
+   "target": "file:vllm/v1/attention/backends/mla/sparse_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py",
+   "target": "file:vllm/v1/worker/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/model_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py",
+   "target": "file:vllm/v1/worker/gpu/block_table.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py",
+   "target": "file:vllm/v1/worker/gpu/mm/encoder_cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py",
+   "target": "file:vllm/v1/worker/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:FrontConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:Routing",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:RoutedExpertGemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:check_weights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:_unsupported_reason",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:_front_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:front_applies",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:build_routed_expert_gemms",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:RoutedExpertGemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:RoutedExpertGemm2",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:RoutedExpertGemm1",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:clamped_swiglu_x2",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:quantize_e4m3x2",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:ue8m0_code",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py:RoutedExpertRoute",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py:clear_scratch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py:zero_record",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py:build_record",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py:MoEStep",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py:deferred_finalize",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py:defers_finalize",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:DecodeStep",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:LayerPlan",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:SpecializedDecode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:step_gates",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:captures_pure_decode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py:AttnMetadataCudaGraphs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py:DeepseekV41SpecializedDecodeModelState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py:padded_decode_batch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:FrontConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:Routing",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:RoutedExpertGemm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:check_weights",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:front_applies",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:build_routed_expert_gemms",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:RoutedExpertGemm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:RoutedExpertGemm2",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:RoutedExpertGemm1",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:clamped_swiglu_x2",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:quantize_e4m3x2",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:ue8m0_code",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py:RoutedExpertRoute",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py:clear_scratch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py:zero_record",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py:build_record",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py:MoEStep",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py:deferred_finalize",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py:defers_finalize",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:DecodeStep",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:LayerPlan",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:SpecializedDecode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:step_gates",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:captures_pure_decode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/metadata_graphs.py:AttnMetadataCudaGraphs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py:DeepseekV41SpecializedDecodeModelState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py:padded_decode_batch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:RoutedExpertGemm2",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:RoutedExpertGemmKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:RoutedExpertGemm1",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:RoutedExpertGemmKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:SpecializedDecode",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/boundary/boundary.py:Boundaries",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:SpecializedDecode",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/attention/step.py:AttentionStep",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:SpecializedDecode",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/step.py:MoEStep",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:SpecializedDecode",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/engram/prefetch.py:EngramPrefetch",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:build_routed_expert_gemms",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:RoutedExpertGemm",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:RoutedExpertGemm",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py:RoutedExpertRoute",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:RoutedExpertGemm",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm_cute.py:RoutedExpertGemmKernel",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_gemm.py:RoutedExpertGemm",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_front_cute.py:RoutedExpertFront",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py:build_record",
+   "target": "function:vllm/models/deepseek_v41/nvidia/specialized_decode/moe/routed_expert_route_cute.py:clear_scratch",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/model_state.py:DeepseekV41SpecializedDecodeModelState",
+   "target": "class:vllm/models/deepseek_v41/nvidia/specialized_decode/runtime/decode.py:SpecializedDecode",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

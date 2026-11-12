@@ -1,0 +1,30 @@
+# DeepWiki 索引 — NVIDIA/pyxis
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 450786 字符
+
+- [1 Home](1-home.md)
+- [2 Getting Started](2-getting-started.md)
+- [3 Architecture](3-architecture.md)
+  - [3.1 SPANK Plugin Integration](3.1-spank-plugin-integration.md)
+  - [3.2 Component Overview](3.2-component-overview.md)
+- [4 Container Lifecycle Manager](4-container-lifecycle-manager.md)
+  - [4.1 Initialization & Setup](4.1-initialization-setup.md)
+  - [4.2 Container Creation](4.2-container-creation.md)
+  - [4.3 Namespace Management](4.3-namespace-management.md)
+  - [4.4 Environment & Execution](4.4-environment-execution.md)
+  - [4.5 Cleanup & Teardown](4.5-cleanup-teardown.md)
+- [5 Configuration System](5-configuration-system.md)
+- [6 Argument Parsing](6-argument-parsing.md)
+- [7 Enroot Integration](7-enroot-integration.md)
+- [8 Image Import Strategies](8-image-import-strategies.md)
+- [9 Container Cleanup](9-container-cleanup.md)
+- [10 Build System](10-build-system.md)
+- [11 Packaging & Distribution](11-packaging-distribution.md)
+- [12 Testing Infrastructure](12-testing-infrastructure.md)
+  - [12.1 Container Image Tests](12.1-container-image-tests.md)
+  - [12.2 Feature Tests](12.2-feature-tests.md)
+  - [12.3 Validation & Error Tests](12.3-validation-error-tests.md)
+- [13 Utility Functions](13-utility-functions.md)
+- [14 Data Structures](14-data-structures.md)
+- [15 Development & CI](15-development-ci.md)

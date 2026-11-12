@@ -1,0 +1,1959 @@
+{
+ "nodes": [
+  {
+   "id": "file:packages/session/session-format-v3-to-v4/src/extension-identities.ts",
+   "type": "file",
+   "name": "extension-identities.ts",
+   "filePath": "packages/session/session-format-v3-to-v4/src/extension-identities.ts",
+   "summary": "冻结的 released V3 第一方事件词表 RELEASED_V3_EVENT_TYPES（不继承当前 Session 事件表的增删）；namespaceV3OpaqueEvent 把未知历史事件加 plugin: 命名空间后透传。",
+   "tags": [
+    "schema-definition",
+    "event-vocabulary",
+    "frozen-inventory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/extension-identities.ts:namespaceV3OpaqueEvent",
+   "type": "function",
+   "name": "namespaceV3OpaqueEvent",
+   "filePath": "packages/session/session-format-v3-to-v4/src/extension-identities.ts",
+   "lineRange": [
+    75,
+    79
+   ],
+   "summary": "把 V3 不透明历史事件类型改为 plugin: 前缀命名空间形式后返回。",
+   "tags": [
+    "namespacing",
+    "opaque-events"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-format-v3-to-v4/src/facts.ts",
+   "type": "file",
+   "name": "facts.ts",
+   "filePath": "packages/session/session-format-v3-to-v4/src/facts.ts",
+   "summary": "父 catalog 的历史子事实处理：historicalChildCatalogSource 从子 artifact 收集紧凑身份证据（childId/childCreatedAt/descriptor），childCatalogSource 校验跨迁移 JSON 接口提供的补充证据，childCatalogFact 只解释已知描述符的发现字段。",
+   "tags": [
+    "catalog-facts",
+    "child-evidence",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/facts.ts:historicalChildCatalogSource",
+   "type": "function",
+   "name": "historicalChildCatalogSource",
+   "filePath": "packages/session/session-format-v3-to-v4/src/facts.ts",
+   "lineRange": [
+    12,
+    24
+   ],
+   "summary": "从已验证的历史子 artifact（subagent 且有直接父）提取紧凑身份与描述符证据；支持的描述符发现字段非法时抛错。",
+   "tags": [
+    "catalog-facts",
+    "evidence-collection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/facts.ts:childCatalogSource",
+   "type": "function",
+   "name": "childCatalogSource",
+   "filePath": "packages/session/session-format-v3-to-v4/src/facts.ts",
+   "lineRange": [
+    31,
+    39
+   ],
+   "summary": "校验跨迁移 JSON 接口传入的子身份证据（childId/descriptor 必备、计数安全整数），描述符解释推迟到父成员关系确定后。",
+   "tags": [
+    "validation",
+    "evidence"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/facts.ts:childCatalogFact",
+   "type": "function",
+   "name": "childCatalogFact",
+   "filePath": "packages/session/session-format-v3-to-v4/src/facts.ts",
+   "lineRange": [
+    46,
+    64
+   ],
+   "summary": "仅解释已知历史描述符（version 1-3）的发现字段，恰有一个受支持自有描述符时产出 catalog 事实，否则返回 undefined。",
+   "tags": [
+    "catalog-facts",
+    "descriptor"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/facts.ts:catalogFact",
+   "type": "function",
+   "name": "catalogFact",
+   "filePath": "packages/session/session-format-v3-to-v4/src/facts.ts",
+   "lineRange": [
+    72,
+    84
+   ],
+   "summary": "校验组装后的 catalog 事实记录形态。",
+   "tags": [
+    "validation",
+    "catalog-facts"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/facts.ts:childCatalogSubject",
+   "type": "function",
+   "name": "childCatalogSubject",
+   "filePath": "packages/session/session-format-v3-to-v4/src/facts.ts",
+   "lineRange": [
+    91,
+    93
+   ],
+   "summary": "从子证据提取诊断主题文本。",
+   "tags": [
+    "utility",
+    "diagnostics"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-format-v3-to-v4/src/fork-result.ts",
+   "type": "file",
+   "name": "fork-result.ts",
+   "filePath": "packages/session/session-format-v3-to-v4/src/fork-result.ts",
+   "summary": "V4 fork 生成的 not-started 工具结果身份校验：forked-tool-result-<callId>-<n> 形态的 message.id、TOOL_NOT_STARTED 错误码、append/replace 两种 surfaceOp 下的序列与 sourceEventSeqs 一致性，不改其身份与文本。",
+   "tags": [
+    "validation",
+    "fork",
+    "tool-result"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/fork-result.ts:assertV4ForkResult",
+   "type": "function",
+   "name": "assertV4ForkResult",
+   "filePath": "packages/session/session-format-v3-to-v4/src/fork-result.ts",
+   "lineRange": [
+    10,
+    40
+   ],
+   "summary": "校验 fork 生成结果的完整身份链：id 前缀/数字后缀、callId 一致、内容单文本块、surfaceOp 与 sourceEventSeqs 的序列边界。",
+   "tags": [
+    "validation",
+    "fork",
+    "identity"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/session/session-format-v3-to-v4/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/session/session-format-v3-to-v4/src/index.ts",
+   "summary": "包入口 barrel：再导出 releasedV3SessionFormatCodec、V4 header/关系断言、restorer、历史子证据收集与 RELEASED_V3_EVENT_TYPES。",
+   "tags": [
+    "entry-point",
+    "barrel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-format-v3-to-v4/src/message-sources.ts",
+   "type": "file",
+   "name": "message-sources.ts",
+   "filePath": "packages/session/session-format-v3-to-v4/src/message-sources.ts",
+   "summary": "V4 消息来源准入：所有声明消息槽必须带生产者自有 source.kind（非 plugin 字符串），保留未知归属；行级准入拒绝退役的 plugin 包装来源语法（不完整消息留给解码层）。",
+   "tags": [
+    "validation",
+    "message-sources",
+    "admission"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/message-sources.ts:assertV4MessageSources",
+   "type": "function",
+   "name": "assertV4MessageSources",
+   "filePath": "packages/session/session-format-v3-to-v4/src/message-sources.ts",
+   "lineRange": [
+    18,
+    23
+   ],
+   "summary": "遍历事件声明的消息槽校验生产者归属（kind 必须生产者自有）。",
+   "tags": [
+    "validation",
+    "message-sources"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/message-sources.ts:assertV4SourceRowAdmission",
+   "type": "function",
+   "name": "assertV4SourceRowAdmission",
+   "filePath": "packages/session/session-format-v3-to-v4/src/message-sources.ts",
+   "lineRange": [
+    29,
+    42
+   ],
+   "summary": "物理行级来源准入：即使可恢复行损坏也先拒绝退役来源语法。",
+   "tags": [
+    "validation",
+    "admission"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-format-v3-to-v4/src/migration.ts",
+   "type": "file",
+   "name": "migration.ts",
+   "filePath": "packages/session/session-format-v3-to-v4/src/migration.ts",
+   "summary": "V3→V4 迁移：sessionFormatV3ToV4 仅声明 header 迁移，createStage 默认抛「需要显式子证据（含空数组）」；createSessionFormatV3ToV4(children) 绑定父级子证据后产出可用迁移，ReleasedV3ToV4Stage 按时间排序子事实、在源事件转换（来源改名/工具结果提升/内容命名空间化/引用重映射）后追加 subagent/catalog 事实。",
+   "tags": [
+    "migration",
+    "session-format",
+    "catalog-completion"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/migration.ts:createSessionFormatV3ToV4",
+   "type": "function",
+   "name": "createSessionFormatV3ToV4",
+   "filePath": "packages/session/session-format-v3-to-v4/src/migration.ts",
+   "lineRange": [
+    34,
+    39
+   ],
+   "summary": "绑定一个父会话的完整历史子证据（空数组=无子）到 V3→V4 迁移声明，产出独立 stage 实例。",
+   "tags": [
+    "factory",
+    "migration",
+    "child-evidence"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/session/session-format-v3-to-v4/src/migration.ts:ReleasedV3ToV4Stage",
+   "type": "class",
+   "name": "ReleasedV3ToV4Stage",
+   "filePath": "packages/session/session-format-v3-to-v4/src/migration.ts",
+   "lineRange": [
+    41,
+    175
+   ],
+   "summary": "135 行迁移阶段：维护 seq 映射、源/目标切割、turn/step 状态、重启观察（补发 interrupted turn/end）、子 catalog 候选排序与 finish 时的事实追加；transformEvent 串联来源改写、工具结果提升、内容迁移与引用重映射。",
+   "tags": [
+    "migration-stage",
+    "state-machine",
+    "catalog-completion"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/session/session-format-v3-to-v4/src/references.ts",
+   "type": "file",
+   "name": "references.ts",
+   "filePath": "packages/session/session-format-v3-to-v4/src/references.ts",
+   "summary": "V3→V4 引用重映射：remapV3References 把载荷中审计过的同 artifact 序列引用改写到目标坐标，捕获的世代与属主本地计数保持 opaque。",
+   "tags": [
+    "seq-remapping",
+    "references"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/references.ts:remapV3References",
+   "type": "function",
+   "name": "remapV3References",
+   "filePath": "packages/session/session-format-v3-to-v4/src/references.ts",
+   "lineRange": [
+    18,
+    68
+   ],
+   "summary": "按事件类型重映射 sourceEventSeqs/区间/surfaceOp 等引用到目标坐标，越界或未映射引用抛错。",
+   "tags": [
+    "seq-remapping",
+    "payload"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/session/session-format-v3-to-v4/src/relationships.ts",
+   "type": "file",
+   "name": "relationships.ts",
+   "filePath": "packages/session/session-format-v3-to-v4/src/relationships.ts",
+   "summary": "V4 原生关系校验（385 行）：Relationships 类单遍维护 turn/step/受保护 head/compaction/工具生命周期/dispatch/retry/命令状态机；不完整尾部保留其未决事务；notStartedRepair 与 titleSources 是两大特例裁决器。",
+   "tags": [
+    "validation",
+    "event-relationships",
+    "state-machine"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/session/session-format-v3-to-v4/src/relationships.ts:Relationships",
+   "type": "class",
+   "name": "Relationships",
+   "filePath": "packages/session/session-format-v3-to-v4/src/relationships.ts",
+   "lineRange": [
+    52,
+    330
+   ],
+   "summary": "279 行关系折叠器：requireTurn/requireStep/closeTools/developer/foldSurface/tool/dispatch/retry/compact 等方法按事件类型维护全部生命周期账目，accept 收尾断言无未决事务。",
+   "tags": [
+    "validation",
+    "state-machine",
+    "lifecycle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/relationships.ts:notStartedRepair",
+   "type": "function",
+   "name": "notStartedRepair",
+   "filePath": "packages/session/session-format-v3-to-v4/src/relationships.ts",
+   "lineRange": [
+    332,
+    347
+   ],
+   "summary": "判定未启动工具修复模式的特例（event/data/message/callId 四元组裁决）。",
+   "tags": [
+    "validation",
+    "repair-pattern"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/relationships.ts:titleSources",
+   "type": "function",
+   "name": "titleSources",
+   "filePath": "packages/session/session-format-v3-to-v4/src/relationships.ts",
+   "lineRange": [
+    349,
+    375
+   ],
+   "summary": "标题事件来源裁决：标题请求文本与被引用事件文本深度相等（isDeepStrictEqual）。",
+   "tags": [
+    "validation",
+    "title-sources"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/relationships.ts:assertV4LifecycleRelationships",
+   "type": "function",
+   "name": "assertV4LifecycleRelationships",
+   "filePath": "packages/session/session-format-v3-to-v4/src/relationships.ts",
+   "lineRange": [
+    382,
+    385
+   ],
+   "summary": "对完整 V4 artifact 执行生命周期关系校验入口（委托 Relationships 折叠）。",
+   "tags": [
+    "validation",
+    "lifecycle"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-format-v3-to-v4/src/retired-syntax.ts",
+   "type": "file",
+   "name": "retired-syntax.ts",
+   "filePath": "packages/session/session-format-v3-to-v4/src/retired-syntax.ts",
+   "summary": "退役语法硬拒绝：解释型内容槽中的 released tool-result 包装块、退役 header/PTC 标签在可恢复物理行失败后仍拒绝；工具参数、replay 状态、schema 参数与嵌套扩展值保持 opaque。",
+   "tags": [
+    "validation",
+    "retired-syntax",
+    "refusal"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/retired-syntax.ts:assertV4RetiredSyntax",
+   "type": "function",
+   "name": "assertV4RetiredSyntax",
+   "filePath": "packages/session/session-format-v3-to-v4/src/retired-syntax.ts",
+   "lineRange": [
+    24,
+    75
+   ],
+   "summary": "拒绝退役原生语法：内容中的 tool-result 包装块、遗留 header/PTC 标签等 V4 已移除形态。",
+   "tags": [
+    "validation",
+    "refusal"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/session/session-format-v3-to-v4/src/sources.ts",
+   "type": "file",
+   "name": "sources.ts",
+   "filePath": "packages/session/session-format-v3-to-v4/src/sources.ts",
+   "summary": "V3 插件来源转换与声明消息遍历：RENAMED_PRODUCERS 表把五个遗留插件名映射为当前生产者 kind（如 dsh-compaction-basic→compact-basic、@deepseek-ai/dsh-system-prompt→runtime-context），同名单保持、其余加 plugin: 前缀；mapEventMessages 只访问第一方事件载荷携带的消息槽。",
+   "tags": [
+    "migration",
+    "producer-kinds",
+    "message-traversal"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/sources.ts:mapEventMessages",
+   "type": "function",
+   "name": "mapEventMessages",
+   "filePath": "packages/session/session-format-v3-to-v4/src/sources.ts",
+   "lineRange": [
+    12,
+    36
+   ],
+   "summary": "遍历事件声明的全部消息槽（user/developer/system/assistant/tool 及 inbox/title-llm-request 数组）应用变换，未变时共享原引用。",
+   "tags": [
+    "traversal",
+    "messages"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/sources.ts:rewritePluginSource",
+   "type": "function",
+   "name": "rewritePluginSource",
+   "filePath": "packages/session/session-format-v3-to-v4/src/sources.ts",
+   "lineRange": [
+    74,
+    90
+   ],
+   "summary": "把 V3 插件字符串来源改写为当前生产者 kind（改名表/同名单/plugin: 前缀三路）。",
+   "tags": [
+    "transformation",
+    "producer-kinds"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/sources.ts:rewriteV3MessageSource",
+   "type": "function",
+   "name": "rewriteV3MessageSource",
+   "filePath": "packages/session/session-format-v3-to-v4/src/sources.ts",
+   "lineRange": [
+    99,
+    106
+   ],
+   "summary": "消息级来源改写入口：按角色解析并改写 source 结构。",
+   "tags": [
+    "transformation",
+    "message-sources"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-format-v3-to-v4/src/system-message.ts",
+   "type": "file",
+   "name": "system-message.ts",
+   "filePath": "packages/session/session-format-v3-to-v4/src/system-message.ts",
+   "summary": "系统消息字段原生校验（先于物理恢复丢弃行）：image 附件的 mediaType 白名单（png/jpeg/webp/gif）、宽高正数、可选原始尺寸；独立于历史消息表示、保留附加 JSON 字段。",
+   "tags": [
+    "validation",
+    "system-message",
+    "admission"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/system-message.ts:assertV4SystemMessageFields",
+   "type": "function",
+   "name": "assertV4SystemMessageFields",
+   "filePath": "packages/session/session-format-v3-to-v4/src/system-message.ts",
+   "lineRange": [
+    37,
+    64
+   ],
+   "summary": "校验系统消息载荷字段与内嵌图片附件结构，保留额外 JSON 字段。",
+   "tags": [
+    "validation",
+    "system-message"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/session/session-format-v3-to-v4/src/testing/validation.ts",
+   "type": "file",
+   "name": "validation.ts",
+   "filePath": "packages/session/session-format-v3-to-v4/src/testing/validation.ts",
+   "summary": "测试门面：经原生 codec 编码再 strict 解码回放 artifact，做词表无关的往返校验。",
+   "tags": [
+    "test-support",
+    "validation",
+    "roundtrip"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/testing/validation.ts:assertReleasedV4Artifact",
+   "type": "function",
+   "name": "assertReleasedV4Artifact",
+   "filePath": "packages/session/session-format-v3-to-v4/src/testing/validation.ts",
+   "lineRange": [
+    9,
+    15
+   ],
+   "summary": "把 artifact 经 releasedV4SessionFormatCodec 编码后 strict 解码回放，校验往返无损。",
+   "tags": [
+    "test-support",
+    "roundtrip"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-format-v3-to-v4/src/tool-role.ts",
+   "type": "file",
+   "name": "tool-role.ts",
+   "filePath": "packages/session/session-format-v3-to-v4/src/tool-role.ts",
+   "summary": "V4 一等 tool 角色消息：liftToolResult 把 released V3 的 user 角色包装 tool/result 行提升为第一方 tool 角色消息（先验证包装再丢弃，未知字段以 plugin:message:/plugin:result: 前缀保留不合并属主），assertV4ToolResultMessage 校验原生形态。",
+   "tags": [
+    "migration",
+    "tool-role",
+    "message-lifting"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/tool-role.ts:liftToolResult",
+   "type": "function",
+   "name": "liftToolResult",
+   "filePath": "packages/session/session-format-v3-to-v4/src/tool-role.ts",
+   "lineRange": [
+    36,
+    71
+   ],
+   "summary": "提升包装工具结果：校验 wrapper（toolCallId/content/isError）、拒绝嵌套结果，产出带 tool 角色消息的等价事件。",
+   "tags": [
+    "transformation",
+    "tool-result",
+    "refusal"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/tool-role.ts:assertV4ToolResultMessage",
+   "type": "function",
+   "name": "assertV4ToolResultMessage",
+   "filePath": "packages/session/session-format-v3-to-v4/src/tool-role.ts",
+   "lineRange": [
+    78,
+    112
+   ],
+   "summary": "校验原生 V4 tool/result 消息形态（角色、来源、内容结构）。",
+   "tags": [
+    "validation",
+    "tool-result"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "type": "file",
+   "name": "validation.ts",
+   "filePath": "packages/session/session-format-v3-to-v4/src/validation.ts",
+   "summary": "V4 原生元数据与世代自有关系校验：assertReleasedV4Header 精确 header 断言；restoreReleasedV4Artifact 串联退役语法/系统字段/工具消息/fork 结果/交付接受/生命周期关系校验；assertReleasedV4Relationships 为关系专用入口。",
+   "tags": [
+    "validation",
+    "session-format",
+    "restore"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/validation.ts:assertReleasedV4Header",
+   "type": "function",
+   "name": "assertReleasedV4Header",
+   "filePath": "packages/session/session-format-v3-to-v4/src/validation.ts",
+   "lineRange": [
+    19,
+    42
+   ],
+   "summary": "V4 header 精确断言：成员集合、id/计数/isSeeded/cwd 绝对路径/origin 限定 subagent。",
+   "tags": [
+    "validation",
+    "header"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/validation.ts:restoreReleasedV4Artifact",
+   "type": "function",
+   "name": "restoreReleasedV4Artifact",
+   "filePath": "packages/session/session-format-v3-to-v4/src/validation.ts",
+   "lineRange": [
+    52,
+    81
+   ],
+   "summary": "完整 V4 还原：继承切割对账、未知类型须 ignorable、密集 seq，逐事件串联五类原生准入后执行生命周期关系校验。",
+   "tags": [
+    "restore",
+    "validation",
+    "lifecycle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/validation.ts:validateDeliveryAccepted",
+   "type": "function",
+   "name": "validateDeliveryAccepted",
+   "filePath": "packages/session/session-format-v3-to-v4/src/validation.ts",
+   "lineRange": [
+    89,
+    100
+   ],
+   "summary": "校验交付接受事件载荷：格式版本与当前一致、throughSeq 水位形态合法。",
+   "tags": [
+    "validation",
+    "delivery-accepted"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-format-v3-to-v4/src/validation.ts:assertReleasedV4Relationships",
+   "type": "function",
+   "name": "assertReleasedV4Relationships",
+   "filePath": "packages/session/session-format-v3-to-v4/src/validation.ts",
+   "lineRange": [
+    110,
+    130
+   ],
+   "summary": "关系专用入口：对 artifact 执行 V4 生命周期关系断言（词表感知）。",
+   "tags": [
+    "validation",
+    "relationships"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/session/session-format-v3-to-v4/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/session/session-format-v3-to-v4/tsconfig.json",
+   "summary": "包级 TS 配置：extends 仓根 base，rootDir=src、outDir=lib/types，references 指向 session-format 与 v2-to-v3。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-format-v3-to-v4/tsdown.config.ts",
+   "type": "file",
+   "name": "tsdown.config.ts",
+   "filePath": "packages/session/session-format-v3-to-v4/tsdown.config.ts",
+   "summary": "v3-to-v4 包的 tsdown 打包配置：lib/types/index.js 入口 ESM 输出，无 dts。",
+   "tags": [
+    "build-system",
+    "configuration",
+    "bundler"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/session/session-log-deepseek/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/session/session-log-deepseek/README.md",
+   "summary": "dsh-session-log-deepseek 包英文主文档：为官方 DeepSeek LLM API 请求注入增量规范会话日志上传——函数插件注入 ctx.sessions 与 ctx.deepseekLlmApiExtensions，拥有 dsh_session_log 请求字段与派生接受水位的 session-log-deepseek/delivery-accepted 持久事件。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/session/session-log-deepseek/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/session/session-log-deepseek/package.json",
+   "summary": "@deepseek-ai/dsh-session-log-deepseek 包清单：依赖 dsh-brand/dsh-util-values/schemastery，peer 依赖 cordis、deepseek-llm-api-extensions 与 dsh-session。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-log-deepseek/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/session/session-log-deepseek/src/index.ts",
+   "summary": "Cordis 函数插件（name/inject/Config/apply 导出）：SessionLogDeepSeekService 作为 Service Provider 注册 dsh_session_log 请求扩展——每请求计算接受水位后的待上传前缀、按 maxBytes 贪心装填事件（超限阻塞警告每会话一次），accept 回调追加 delivery-accepted 事件；exclusions 注册表面供属主插件排除请求。",
+   "tags": [
+    "cordis-plugin",
+    "service-provider",
+    "session-log",
+    "request-extension"
+   ],
+   "complexity": "complex",
+   "languageNotes": "Cordis 双角色：Service 子类（Service Definition+Provider 'sessionLogDeepSeek'）同时是 Consumer（inject deepseekLlmApiExtensions/sessions）；接受水位折叠缓存在 WeakMap（每 Session 独立状态但无全局 owner——按 Session 归属）。"
+  },
+  {
+   "id": "function:packages/session/session-log-deepseek/src/index.ts:wireHeader",
+   "type": "function",
+   "name": "wireHeader",
+   "filePath": "packages/session/session-log-deepseek/src/index.ts",
+   "lineRange": [
+    74,
+    87
+   ],
+   "summary": "把逻辑 Session header 翻译为外部请求线的原始 JSON 字段（brand 转字符串、可选成员省略）。",
+   "tags": [
+    "serialization",
+    "wire-format"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-log-deepseek/src/index.ts:wireEvent",
+   "type": "function",
+   "name": "wireEvent",
+   "filePath": "packages/session/session-log-deepseek/src/index.ts",
+   "lineRange": [
+    90,
+    123
+   ],
+   "summary": "把规范事件翻译为线上原始数字形态：surface 事件带操作与来源、编译期 seq brand 转 Number。",
+   "tags": [
+    "serialization",
+    "wire-format"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-log-deepseek/src/index.ts:jsonBytes",
+   "type": "function",
+   "name": "jsonBytes",
+   "filePath": "packages/session/session-log-deepseek/src/index.ts",
+   "lineRange": [
+    135,
+    144
+   ],
+   "summary": "计算值的 UTF-8 JSON 序列化字节数（maxBytes 预算的度量原语）。",
+   "tags": [
+    "utility",
+    "byte-budget"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-log-deepseek/src/index.ts:acceptedThrough",
+   "type": "function",
+   "name": "acceptedThrough",
+   "filePath": "packages/session/session-log-deepseek/src/index.ts",
+   "lineRange": [
+    151,
+    185
+   ],
+   "summary": "扫描会话日志中的 delivery-accepted 事件推导接受水位（同版本+同会话的最大 throughSeq），折叠结果按 Session 缓存在 WeakMap。",
+   "tags": [
+    "watermark",
+    "acceptance-fold",
+    "restart-recovery"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/session/session-log-deepseek/src/index.ts:SessionLogDeepSeekService",
+   "type": "class",
+   "name": "SessionLogDeepSeekService",
+   "filePath": "packages/session/session-log-deepseek/src/index.ts",
+   "lineRange": [
+    188,
+    281
+   ],
+   "summary": "Service 子类（Service Definition+Provider）：构造时向 deepseekLlmApiExtensions 注册 dsh_session_log 准备器（排除规则→水位→快照→按字节预算装填），registerExclusion 暴露 ctx.effect 登记的排除注册面。",
+   "tags": [
+    "service-definition",
+    "service-provider",
+    "request-extension"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-log-deepseek/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/session/session-log-deepseek/src/index.ts",
+   "lineRange": [
+    289,
+    291
+   ],
+   "summary": "插件 apply 入口：实例化并挂载 SessionLogDeepSeekService。",
+   "tags": [
+    "cordis-plugin",
+    "entry-point"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-log-deepseek/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/session/session-log-deepseek/src/types.ts",
+   "summary": "无损增量上传的 wire 类型：SessionLogUploadRequest/Exclusion（同步无副作用谓词）、DeepSeekSessionLogWireHeader/WireEvent/WireSurfaceOp（brand 转原始数字的判别联合）。",
+   "tags": [
+    "type-definition",
+    "wire-format"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/session/session-log-deepseek/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/session/session-log-deepseek/tsconfig.json",
+   "summary": "包级 TS 配置：extends 仓根 base，rootDir=src、outDir=lib/types，references 覆盖 peer 依赖。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/session/session-persistence/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/session/session-persistence/README.md",
+   "summary": "dsh-session-persistence 包英文主文档：后端无关的持久会话事件日志 API——create/open/inspect/list/append/read/flush/close 保持连续 append-only 历史，flush 是唯一持久性屏障，读者永见撕裂尾部；附后端实现者契约与 JSONL 后端指引。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/session/session-persistence/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/session/session-persistence/package.json",
+   "summary": "@deepseek-ai/dsh-session-persistence 包清单（抽象持久 seam ctx.sessionPersistence）：仅依赖 dsh-util-values，peer 依赖 cordis/dsh-brand/dsh-session/dsh-timeout。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-persistence/src/errors.ts",
+   "type": "file",
+   "name": "errors.ts",
+   "filePath": "packages/session/session-persistence/src/errors.ts",
+   "summary": "持久 seam 的稳定失败类型：八个具名错误类覆盖未找到/已存在/已被写持有/只读违规/所有权丢失（跨进程租约层声明）/句柄已关/损坏/格式不支持；sessionFormatVersionRefusal 产出方向感知的拒绝文案（新版→升级 harness，旧版→无升级路径）。",
+   "tags": [
+    "error-handling",
+    "persistence",
+    "type-definition"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/session/session-persistence/src/errors.ts:SessionPersistenceNotFoundError",
+   "type": "class",
+   "name": "SessionPersistenceNotFoundError",
+   "filePath": "packages/session/session-persistence/src/errors.ts",
+   "lineRange": [
+    13,
+    19
+   ],
+   "summary": "请求的 Session 身份在此调用者可见范围内无持久日志。",
+   "tags": [
+    "error-handling",
+    "not-found"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/session/session-persistence/src/errors.ts:SessionAlreadyExistsError",
+   "type": "class",
+   "name": "SessionAlreadyExistsError",
+   "filePath": "packages/session/session-persistence/src/errors.ts",
+   "lineRange": [
+    22,
+    28
+   ],
+   "summary": "create 命中已存在的持久 Session 身份。",
+   "tags": [
+    "error-handling",
+    "conflict"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/session/session-persistence/src/errors.ts:SessionAlreadyOwnedError",
+   "type": "class",
+   "name": "SessionAlreadyOwnedError",
+   "filePath": "packages/session/session-persistence/src/errors.ts",
+   "lineRange": [
+    31,
+    37
+   ],
+   "summary": "写打开时发现该会话已绑定活动写句柄。",
+   "tags": [
+    "error-handling",
+    "ownership"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/session/session-persistence/src/errors.ts:SessionReadOnlyError",
+   "type": "class",
+   "name": "SessionReadOnlyError",
+   "filePath": "packages/session/session-persistence/src/errors.ts",
+   "lineRange": [
+    40,
+    49
+   ],
+   "summary": "读句柄上的变更操作（append/flush）被拒绝。",
+   "tags": [
+    "error-handling",
+    "read-only"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/session/session-persistence/src/errors.ts:SessionOwnershipLostError",
+   "type": "class",
+   "name": "SessionOwnershipLostError",
+   "filePath": "packages/session/session-persistence/src/errors.ts",
+   "lineRange": [
+    59,
+    65
+   ],
+   "summary": "写句柄所有权永久丢失（租约到期/续期失败/属主记录变更）；为跨进程租约层声明，随仓内进程内后端从不抛出。",
+   "tags": [
+    "error-handling",
+    "lease",
+    "ownership"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/session/session-persistence/src/errors.ts:SessionHandleClosedError",
+   "type": "class",
+   "name": "SessionHandleClosedError",
+   "filePath": "packages/session/session-persistence/src/errors.ts",
+   "lineRange": [
+    68,
+    77
+   ],
+   "summary": "close() 之后对句柄的任何操作被拒绝。",
+   "tags": [
+    "error-handling",
+    "closed-handle"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/session/session-persistence/src/errors.ts:SessionPersistenceCorruptionError",
+   "type": "class",
+   "name": "SessionPersistenceCorruptionError",
+   "filePath": "packages/session/session-persistence/src/errors.ts",
+   "lineRange": [
+    93,
+    102
+   ],
+   "summary": "后端读取成功但持久内容未通过校验（损坏）。",
+   "tags": [
+    "error-handling",
+    "corruption"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/session/session-persistence/src/errors.ts:SessionFormatUnsupportedError",
+   "type": "class",
+   "name": "SessionFormatUnsupportedError",
+   "filePath": "packages/session/session-persistence/src/errors.ts",
+   "lineRange": [
+    111,
+    121
+   ],
+   "summary": "日志完好但本运行时无法忠实解释（header 版本不支持或事件类型未知）；带后端 artifact 位置供诊断，与损坏错误严格区分。",
+   "tags": [
+    "error-handling",
+    "format-refusal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-persistence/src/errors.ts:sessionFormatVersionRefusal",
+   "type": "function",
+   "name": "sessionFormatVersionRefusal",
+   "filePath": "packages/session/session-persistence/src/errors.ts",
+   "lineRange": [
+    133,
+    137
+   ],
+   "summary": "方向感知的版本拒绝文案：更新版本提示升级 harness、更旧版本声明无升级路径——用户必须看到 upgrade 而非 corrupt。",
+   "tags": [
+    "error-handling",
+    "diagnostics"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-persistence/src/handle.ts",
+   "type": "file",
+   "name": "handle.ts",
+   "filePath": "packages/session/session-persistence/src/handle.ts",
+   "summary": "持久 seam 的句柄契约（纯接口）：SessionHandle 是单属主状态而非共享服务——read 只观察（读不回退、可与他人写并存），append 要求首事件 seq 等于存储 next-seq，flush 是唯一持久性屏障，close 幂等不可取消（Symbol.asyncDispose 委托）；含跨句柄新鲜度保证的精确陈述。",
+   "tags": [
+    "service-definition",
+    "interface",
+    "persistence",
+    "durability"
+   ],
+   "complexity": "moderate"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/extension-identities.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/extension-identities.ts:namespaceV3OpaqueEvent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/extension-identities.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/extension-identities.ts:namespaceV3OpaqueEvent",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/facts.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/facts.ts:historicalChildCatalogSource",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/facts.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/facts.ts:historicalChildCatalogSource",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/facts.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/facts.ts:childCatalogSource",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/facts.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/facts.ts:childCatalogSource",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/facts.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/facts.ts:childCatalogFact",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/facts.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/facts.ts:childCatalogFact",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/facts.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/facts.ts:catalogFact",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/facts.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/facts.ts:catalogFact",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/facts.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/facts.ts:childCatalogSubject",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/facts.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/facts.ts:childCatalogSubject",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/fork-result.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/fork-result.ts:assertV4ForkResult",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/fork-result.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/fork-result.ts:assertV4ForkResult",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/message-sources.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/message-sources.ts:assertV4MessageSources",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/message-sources.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/message-sources.ts:assertV4MessageSources",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/message-sources.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/message-sources.ts:assertV4SourceRowAdmission",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/message-sources.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/message-sources.ts:assertV4SourceRowAdmission",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/migration.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/migration.ts:createSessionFormatV3ToV4",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/migration.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/migration.ts:createSessionFormatV3ToV4",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/migration.ts",
+   "target": "class:packages/session/session-format-v3-to-v4/src/migration.ts:ReleasedV3ToV4Stage",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/references.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/references.ts:remapV3References",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/references.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/references.ts:remapV3References",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/relationships.ts",
+   "target": "class:packages/session/session-format-v3-to-v4/src/relationships.ts:Relationships",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/relationships.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/relationships.ts:notStartedRepair",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/relationships.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/relationships.ts:titleSources",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/relationships.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/relationships.ts:assertV4LifecycleRelationships",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/relationships.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/relationships.ts:assertV4LifecycleRelationships",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/retired-syntax.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/retired-syntax.ts:assertV4RetiredSyntax",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/retired-syntax.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/retired-syntax.ts:assertV4RetiredSyntax",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/sources.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/sources.ts:mapEventMessages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/sources.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/sources.ts:mapEventMessages",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/sources.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/sources.ts:rewritePluginSource",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/sources.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/sources.ts:rewritePluginSource",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/sources.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/sources.ts:rewriteV3MessageSource",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/sources.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/sources.ts:rewriteV3MessageSource",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/system-message.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/system-message.ts:assertV4SystemMessageFields",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/system-message.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/system-message.ts:assertV4SystemMessageFields",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/testing/validation.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/testing/validation.ts:assertReleasedV4Artifact",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/testing/validation.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/testing/validation.ts:assertReleasedV4Artifact",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/tool-role.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/tool-role.ts:liftToolResult",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/tool-role.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/tool-role.ts:liftToolResult",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/tool-role.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/tool-role.ts:assertV4ToolResultMessage",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/tool-role.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/tool-role.ts:assertV4ToolResultMessage",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/validation.ts:assertReleasedV4Header",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/validation.ts:assertReleasedV4Header",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/validation.ts:restoreReleasedV4Artifact",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/validation.ts:restoreReleasedV4Artifact",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/validation.ts:validateDeliveryAccepted",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/validation.ts:validateDeliveryAccepted",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/validation.ts:assertReleasedV4Relationships",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "target": "function:packages/session/session-format-v3-to-v4/src/validation.ts:assertReleasedV4Relationships",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "config:packages/session/session-format-v3-to-v4/tsconfig.json",
+   "target": "file:packages/session/session-format-v3-to-v4/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/tsdown.config.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "document:packages/session/session-log-deepseek/README.md",
+   "target": "file:packages/session/session-log-deepseek/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/session/session-log-deepseek/package.json",
+   "target": "file:packages/session/session-log-deepseek/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/session/session-log-deepseek/src/index.ts",
+   "target": "function:packages/session/session-log-deepseek/src/index.ts:wireHeader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-log-deepseek/src/index.ts",
+   "target": "function:packages/session/session-log-deepseek/src/index.ts:wireEvent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-log-deepseek/src/index.ts",
+   "target": "function:packages/session/session-log-deepseek/src/index.ts:jsonBytes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-log-deepseek/src/index.ts",
+   "target": "function:packages/session/session-log-deepseek/src/index.ts:acceptedThrough",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-log-deepseek/src/index.ts",
+   "target": "function:packages/session/session-log-deepseek/src/index.ts:acceptedThrough",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-log-deepseek/src/index.ts",
+   "target": "class:packages/session/session-log-deepseek/src/index.ts:SessionLogDeepSeekService",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-log-deepseek/src/index.ts",
+   "target": "class:packages/session/session-log-deepseek/src/index.ts:SessionLogDeepSeekService",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-log-deepseek/src/index.ts",
+   "target": "function:packages/session/session-log-deepseek/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-log-deepseek/src/index.ts",
+   "target": "function:packages/session/session-log-deepseek/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "config:packages/session/session-log-deepseek/tsconfig.json",
+   "target": "file:packages/session/session-log-deepseek/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "document:packages/session/session-persistence/README.md",
+   "target": "file:packages/session/session-persistence/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/session/session-persistence/package.json",
+   "target": "file:packages/session/session-persistence/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/errors.ts",
+   "target": "class:packages/session/session-persistence/src/errors.ts:SessionPersistenceNotFoundError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/errors.ts",
+   "target": "class:packages/session/session-persistence/src/errors.ts:SessionPersistenceNotFoundError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/errors.ts",
+   "target": "class:packages/session/session-persistence/src/errors.ts:SessionAlreadyExistsError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/errors.ts",
+   "target": "class:packages/session/session-persistence/src/errors.ts:SessionAlreadyExistsError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/errors.ts",
+   "target": "class:packages/session/session-persistence/src/errors.ts:SessionAlreadyOwnedError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/errors.ts",
+   "target": "class:packages/session/session-persistence/src/errors.ts:SessionAlreadyOwnedError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/errors.ts",
+   "target": "class:packages/session/session-persistence/src/errors.ts:SessionReadOnlyError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/errors.ts",
+   "target": "class:packages/session/session-persistence/src/errors.ts:SessionReadOnlyError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/errors.ts",
+   "target": "class:packages/session/session-persistence/src/errors.ts:SessionOwnershipLostError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/errors.ts",
+   "target": "class:packages/session/session-persistence/src/errors.ts:SessionOwnershipLostError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/errors.ts",
+   "target": "class:packages/session/session-persistence/src/errors.ts:SessionHandleClosedError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/errors.ts",
+   "target": "class:packages/session/session-persistence/src/errors.ts:SessionHandleClosedError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/errors.ts",
+   "target": "class:packages/session/session-persistence/src/errors.ts:SessionPersistenceCorruptionError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/errors.ts",
+   "target": "class:packages/session/session-persistence/src/errors.ts:SessionPersistenceCorruptionError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/errors.ts",
+   "target": "class:packages/session/session-persistence/src/errors.ts:SessionFormatUnsupportedError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/errors.ts",
+   "target": "class:packages/session/session-persistence/src/errors.ts:SessionFormatUnsupportedError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/errors.ts",
+   "target": "function:packages/session/session-persistence/src/errors.ts:sessionFormatVersionRefusal",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/errors.ts",
+   "target": "function:packages/session/session-persistence/src/errors.ts:sessionFormatVersionRefusal",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/extension-identities.ts",
+   "target": "file:packages/session/session-format/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/facts.ts",
+   "target": "file:packages/session/session-format/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/fork-result.ts",
+   "target": "file:packages/session/session-format/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/index.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/codec.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/index.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/extension-identities.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/index.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/facts.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/index.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/migration.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/index.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/index.ts",
+   "target": "file:packages/session/session-format-v2-to-v3/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/message-sources.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/sources.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/message-sources.ts",
+   "target": "file:packages/session/session-format/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/migration.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/content.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/migration.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/extension-identities.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/migration.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/facts.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/migration.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/references.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/migration.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/sources.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/migration.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/tool-role.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/migration.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/migration.ts",
+   "target": "file:packages/session/session-format/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/migration.ts",
+   "target": "file:packages/session/session-format-v2-to-v3/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/references.ts",
+   "target": "file:packages/session/session-format/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/relationships.ts",
+   "target": "file:packages/session/session-format/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/retired-syntax.ts",
+   "target": "file:packages/session/session-format/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/sources.ts",
+   "target": "file:packages/session/session-format/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/system-message.ts",
+   "target": "file:packages/session/session-format/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/testing/validation.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/codec.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/testing/validation.ts",
+   "target": "file:packages/session/session-format/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/tool-role.ts",
+   "target": "file:packages/session/session-format/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/developer.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/facts.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/fork-result.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/message-sources.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/relationships.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/retired-syntax.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/system-message.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "target": "file:packages/session/session-format-v3-to-v4/src/tool-role.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-format-v3-to-v4/src/validation.ts",
+   "target": "file:packages/session/session-format/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-log-deepseek/src/index.ts",
+   "target": "file:packages/session/session-log-deepseek/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-log-deepseek/src/index.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-log-deepseek/src/index.ts",
+   "target": "file:packages/llm/deepseek-llm-api-extensions/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-log-deepseek/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-log-deepseek/src/index.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-log-deepseek/src/types.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-log-deepseek/src/types.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-log-deepseek/src/types.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/errors.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-persistence/src/handle.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

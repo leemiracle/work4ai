@@ -1,0 +1,205 @@
+<p align="center">
+  <picture>
+    <img alt="Ailoy" src="https://brekkylab.github.io/ailoy/img/ailoy-logo-letter.png" width="352" style="max-width: 50%;">
+  </picture>
+</p>
+
+<h3 align="center">Comprehensive library for building intelligent AI agents</h3>
+<p align="center">
+  <img src="https://cdn.simpleicons.org/python" width="16"/> <a href="https://pypi.org/project/ailoy-py/"><img src="https://img.shields.io/pypi/v/ailoy-py?color=blue&label=ailoy-py" alt="PyPI"></a>
+  <img src="https://cdn.simpleicons.org/nodedotjs" width="16"/> <a href="https://www.npmjs.com/package/ailoy-node"><img src="https://img.shields.io/npm/v/ailoy-node?label=ailoy-node&color=339933" alt="npm node"></a>
+  <img src="https://cdn.simpleicons.org/webassembly" width="16"/> <a href="https://www.npmjs.com/package/ailoy-web"><img src="https://img.shields.io/npm/v/ailoy-web?label=ailoy-web&color=654ff0" alt="npm web"></a>
+</p>
+
+</p>
+<p align="center">
+  <a href="https://brekkylab.github.io/ailoy/"><img src="https://img.shields.io/badge/docs-eng-5a9cae" alt="Documentation"></a>
+  <a href="https://brekkylab.github.io/ailoy/ko/"><img src="https://img.shields.io/badge/docs-kor-5a9cae" alt="Documentation"></a>
+  <a href="https://discord.gg/27rx3EJy3P"><img src="https://img.shields.io/badge/Discord-7289DA?logo=discord&logoColor=white" alt="Discord"></a>
+  <a href="https://x.com/ailoy_co"><img src="https://img.shields.io/badge/X-000000?logo=x&logoColor=white" alt="X"></a>
+</p>
+
+<br>
+
+## 🚀 Quick Start
+
+See how easy to use Ailoy through below examples.
+
+### Get your agent just in _a single line of code_
+
+Check out the simplest python example to build your agent with local models.
+
+```sh
+pip install ailoy-py
+```
+
+```python
+import ailoy as ai
+
+# Create an agent with a local model in a single line of code.
+agent = ai.Agent(ai.LangModel.new_local_sync("Qwen/Qwen3-8B"))
+
+# Get the response from the agent simply by calling the `run` method.
+response = agent.run("Explain quantum computing in one sentence")
+print(response.contents[0].text)
+```
+
+### Easy to integrate LLM APIs
+
+Here's the simple javascript example with LLM APIs.
+
+```sh
+npm install ailoy-node
+```
+
+```js
+import * as ai from "ailoy-node";
+
+async function main() {
+  const lm = await ai.LangModel.newStreamAPI(
+    "OpenAI", // spec
+    "gpt-5", // modelName
+    "YOUR_OPENAI_API_KEY" // apiKey
+  );
+  const agent = new ai.Agent(lm);
+  for await (const resp of agent.run("Please give me a short poem about AI")) {
+    if (resp.message.contents[0].type === "text") {
+      console.log(resp.message.contents[0].text);
+    }
+  }
+}
+
+main().catch((err) => {
+  console.error("Error:", err);
+});
+```
+
+### Browser-Native AI (WebAssembly)
+
+You can build your agent entirely in the browser using WebAssembly just in a few lines of code.
+
+```sh
+npm install ailoy-web
+```
+
+```typescript
+import * as ai from "ailoy-web";
+
+// Check WebGPU support
+const { supported } = await ai.isWebGPUSupported();
+
+// Run AI entirely in the browser - no server needed!
+const agent = new ai.Agent(await ai.LangModel.newLocal("Qwen/Qwen3-0.6B"));
+```
+
+### Quick-customizable Web Agent UI Template
+
+Just **Clone** to build your own web agent in minutes.
+
+- https://github.com/brekkylab/ailoy-web-ui
+
+<br/>
+
+## 🔥 Key Features
+
+### Simple Framework and Powerful Features for AI Agents
+
+- No boilerplate, no complex setup
+- **Reasoning**: Extend thinking effortlessly
+- **Multi-Modal Inputs**: Process both text and images
+- **Extensible Tool Calling**: User-defined functions and **Model Context Protocol (MCP)** tools
+- **Retrieval-Augmented Generation (RAG)**: Integrates external knowledge bases without boilerplate
+
+### Cross-Platform & Multi-Language APIs
+
+- Provide <img src="https://cdn.simpleicons.org/python" width="16"/> **Python** and <img src="https://cdn.simpleicons.org/javascript" width="16"/> **JavaScript** APIs
+
+- Support <img src="https://www.microsoft.com/favicon.ico?v2" width="16"/> **Windows**, <img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" width="16"/> **Linux**, and <img src="https://www.apple.com/favicon.ico" width="16"/> **macOS**
+
+- Support Synchronous and Asynchronous APIs
+
+### Support Web-browser Native AI (WebAssembly)
+
+- Run AI entirely in the browser - no server needed!
+
+### Flexible Model Adoption
+
+- Supports both **local AI** execution and **cloud AI** providers
+- Effortlessly switch between open-source and AI services
+- Minimal software dependencies — deploy anywhere, from **cloud** to **edge**
+
+### Rust-Powered <img src="https://cdn.simpleicons.org/rust" width="16"/>
+
+- Fast, memory-safe, minimal dependencies
+- Best choice for edge computing and low-resource devices
+
+### Documentation & Community
+
+- [Documentation (Eng.)](https://brekkylab.github.io/ailoy/)
+- [Documentation (Kor.)](https://brekkylab.github.io/ailoy/ko/)
+
+- [Discord Community](https://discord.gg/27rx3EJy3P) - Join to ask questions, share your projects, and get help.
+
+<br/>
+
+## Example Projects
+
+| Project                                            | Description                          |
+| -------------------------------------------------- | ------------------------------------ |
+| [Gradio Chatbot](./examples/gradio_chatbot)        | Web UI chatbot with tool integration |
+| [Web Assistant](./examples/web-assistant-ui)       | Browser-based AI assistant (WASM)    |
+| [RAG Electron App](./examples/simple_rag_electron) | Desktop app with document Q&A        |
+| [MCP Integration](./examples/mcp_examples)         | GitHub & Playwright tools via MCP    |
+
+<br/>
+
+## Installation
+
+> [!WARNING]
+> Ailoy is under active development. APIs may change with version updates.
+
+### Python
+
+```sh
+pip install ailoy-py
+```
+
+### Node.js
+
+```sh
+npm install ailoy-node
+```
+
+### Browser (WebAssembly)
+
+```sh
+npm install ailoy-web
+```
+
+## Support Specifications
+
+### Supported AI Models
+
+| Type        | Provider & Models                                                                                                                                  |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Local Model | <img src="https://assets.alicdn.com/g/qwenweb/qwen-webui-fe/0.0.239/static/favicon.png" width="16"/> Qwen3 (0.6B, 1.7B, 4B, 8B, 14B, 32B, 30B-A3B) |
+| Cloud API   | <img src="https://openai.com/favicon.svg" width="16"/> OpenAI (GPT)                                                                                |
+| Cloud API   | <img src="https://claude.ai/favicon.ico" width="16"/> Anthropic (Claude)                                                                           |
+| Cloud API   | <img src="https://gemini.google/images/spark_4c.png" width="16"/> Google (Gemini)                                                                  |
+| Cloud API   | <img src="https://console.x.ai/_next/static/media/favicon.20ac9181.ico" width="16"/> xAI (Grok)                                                    |
+
+### Supported Languags
+
+| Language   | Version           |
+| ---------- | ----------------- |
+| Python     | 3.10+             |
+| JavaScript | ES5+, Node.js 20+ |
+
+### Supported Platforms
+
+| Supported Platform | System Requirements (for Local AI) |
+| ------------------ | ---------------------------------- |
+| Windows            | Vulkan 1.4 compatible GPU          |
+| Linux              | Vulkan 1.4 compatible GPU          |
+| macOS              | Apple Silicon with Metal           |
+| Web Browser        | WebGPU with shader-f16 support     |

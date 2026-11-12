@@ -1,0 +1,197 @@
+# Releasing kubectl-nv
+
+A release is the GitHub release page carrying the binaries, the checksums and
+an SBOM. Pushing a `v*` tag runs `.github/workflows/release.yaml`, which builds
+the artifacts with GoReleaser and creates a **draft** release. The draft is
+never published automatically: a maintainer reviews it and publishes it by
+hand.
+
+Everything below is run by a maintainer on their own machine, except where it
+says the workflow does it.
+
+## 1. Check the version
+
+There is nothing to bump. The version comes from the tag: GoReleaser stamps it
+into the binary with `-X main.version={{.Version}}` (`.goreleaser.yaml`), so a
+binary built from `vX.Y.Z` reports `X.Y.Z`. `make build` stamps the Makefile's
+`VERSION` instead, which only labels a local build.
+
+## 2. Check the tree
+
+```bash
+make lint
+make test
+make release-snapshot
+```
+
+`make release-snapshot` runs GoReleaser with `--snapshot --skip=sbom` and
+leaves the four binaries under `dist/`:
+
+```bash
+ls dist/*/kubectl-nv
+```
+
+The SBOM step is skipped locally because it needs syft, which the release
+workflow installs for itself. Everything else, including the archives and the
+checksums file, is built exactly as it will be on a tag.
+
+## 3. Tag
+
+Tags are signed, and the tag has to reach the NVIDIA repository rather than
+your fork. In a clone made by forking, `origin` is the fork and the NVIDIA
+repository is usually `upstream`, so check first:
+
+```bash
+git remote -v
+```
+
+Push to whichever remote shows `github.com/NVIDIA/kubectl-nv`:
+
+```bash
+git tag -s vX.Y.Z -m "vX.Y.Z"
+git push upstream vX.Y.Z
+```
+
+The workflow only runs on `NVIDIA/kubectl-nv`, so a tag pushed to a fork builds
+nothing.
+
+## 4. Review the draft
+
+The workflow creates a draft release on
+<https://github.com/NVIDIA/kubectl-nv/releases>. Before publishing, check that:
+
+- the four archives are attached: linux and darwin, amd64 and arm64
+- the checksums file is attached, and one SBOM per archive, so four
+- the notes list every pull request merged since the previous tag, under the
+  categories described in [Labels and release notes](#labels-and-release-notes)
+- the tag name and the version reported by a downloaded binary agree
+  (`kubectl-nv --version`)
+
+The draft opens with the header GoReleaser renders from `.goreleaser.yaml`. On
+a minor or major release that header is three empty sections, Highlights,
+Breaking changes and Upgrade notes; fill them in now, or delete the ones with
+nothing to say. On a patch release it is one sentence saying the release
+carries fixes only, and there is nothing to fill in.
+
+Downloading one archive and verifying it against the checksums file, the same
+way the installation documentation tells users to, is a worthwhile last check.
+
+## 5. Publish
+
+Publish the draft from the release page. That makes the artifacts public and
+the page is what `docs/installation.md` points users at.
+
+## Which release you are cutting
+
+The five steps above are the same for every release. What changes is the
+branch you run them on and the tag you push.
+
+### Minor and major releases
+
+Cut these from `main`:
+
+```bash
+git checkout main
+git pull upstream main
+```
+
+Run the five steps and tag `vX.Y.0`. Once the draft is published, cut the
+maintenance branch from that tag, so that a later patch release does not have
+to carry anything that landed on `main` afterwards:
+
+```bash
+git branch release-X.Y vX.Y.0
+git push upstream release-X.Y
+```
+
+A major release is the same with `X` raised and `Y` back at 0, plus the
+Breaking changes section of the header filled in.
+
+### Patch releases
+
+A fix lands on `main` first, always. Nothing is ever committed straight to a
+maintenance branch, so that the next minor release cannot lose it.
+
+With the fix merged on `main`, take its commit onto the maintenance branch:
+
+```bash
+git checkout release-X.Y
+git pull upstream release-X.Y
+git cherry-pick -x <sha of the fix on main>
+```
+
+`-x` records the commit it came from in the message, which is what tells a
+reader later where the fix originated. Repeat for each fix, in the order they
+landed on `main`.
+
+Then run the five steps on `release-X.Y` and tag `vX.Y.Z` there:
+
+```bash
+git tag -s vX.Y.Z -m "vX.Y.Z"
+git push upstream vX.Y.Z
+```
+
+The notes compare the tag against the previous tag, so a patch release lists
+the pull requests that carried the fixes you picked.
+
+### Release candidates
+
+A release candidate is tagged `vX.Y.0-rc.N`, starting at `rc.1`, on the branch
+the release itself will come from. `release.prerelease` is `auto` in
+`.goreleaser.yaml`, which reads the prerelease part off the tag, so the draft
+is marked as a prerelease and GitHub does not offer it as the latest release.
+
+A release candidate has patch number 0, so its header carries the same
+Highlights, Breaking changes and Upgrade notes sections as the release it leads
+to.
+
+## Labels and release notes
+
+The notes on the release page are generated by GitHub from the pull requests
+merged since the previous tag, and grouped by `.github/release.yml`. The label
+on a pull request decides where it appears:
+
+| Label | Section |
+| --- | --- |
+| `breaking-change` | Breaking changes |
+| `feature` | Features |
+| `bug` | Fixes |
+| `documentation` | Documentation |
+| `dependencies` | Dependencies, applied by Dependabot already |
+| `maintenance` | Maintenance |
+| `skip-changelog` | nowhere: the pull request is left out of the notes |
+
+A pull request carrying none of these lands under Other changes, which is the
+catch-all and the last category. A pull request is never lost by going
+unlabelled: if nobody labels anything, the whole release is one Other changes
+list of every pull request merged since the previous tag. The labels only
+decide how the list is split up.
+
+Categories are matched top down and the first one wins, so a pull request
+labelled both `bug` and `documentation` appears under Fixes.
+
+### Creating the labels, once
+
+`feature`, `bug`, `documentation`, `dependencies` and `maintenance` already
+exist on the repository. Two of the labels the notes use do not, and have to be
+created before a pull request can carry them. This is run once, by a maintainer
+with write access:
+
+```bash
+gh label create breaking-change --repo NVIDIA/kubectl-nv \
+  --color d73a4a --description "Changes behaviour that users depend on"
+gh label create skip-changelog --repo NVIDIA/kubectl-nv \
+  --color ededed --description "Keep out of the release notes"
+```
+
+`gh label create --help` describes the command as creating a new label, or
+updating an existing one with `--force`, so without `--force` a label that is
+already there is not changed.
+
+`gh label list --repo NVIDIA/kubectl-nv` shows the result.
+
+## Not part of a release yet
+
+There is no krew index for kubectl-nv, and the release does not produce a krew
+manifest. The roadmap puts a central krew index submission at v0.5.0; until
+then, installation is from the release page or from source.

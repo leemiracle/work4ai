@@ -1,0 +1,32 @@
+# DeepWiki 索引 — huggingface/datablations
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 260540 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Repository Structure](1.1-repository-structure.md)
+  - [1.2 Getting Started](1.2-getting-started.md)
+- [2 Data Processing Pipeline](2-data-processing-pipeline.md)
+  - [2.1 Datasets](2.1-datasets.md)
+  - [2.2 Deduplication](2.2-deduplication.md)
+  - [2.3 Data Ablation Techniques](2.3-data-ablation-techniques.md)
+- [3 Model Training](3-model-training.md)
+  - [3.1 Training Configuration](3.1-training-configuration.md)
+  - [3.2 Megatron-DeepSpeed Setup](3.2-megatron-deepspeed-setup.md)
+  - [3.3 Experiment Types](3.3-experiment-types.md)
+  - [3.4 Stability Studies](3.4-stability-studies.md)
+- [4 Evaluation Framework](4-evaluation-framework.md)
+  - [4.1 Rank Evaluation](4.1-rank-evaluation.md)
+  - [4.2 Generative Evaluation](4.2-generative-evaluation.md)
+  - [4.3 bAbI Evaluation](4.3-babi-evaluation.md)
+- [5 Scaling Laws and Analysis](5-scaling-laws-and-analysis.md)
+  - [5.1 Parametric Fitting](5.1-parametric-fitting.md)
+  - [5.2 Chinchilla Scaling Laws](5.2-chinchilla-scaling-laws.md)
+  - [5.3 Return on Allocation](5.3-return-on-allocation.md)
+  - [5.4 IsoFLOP Analysis](5.4-isoflop-analysis.md)
+  - [5.5 IsoLoss Analysis](5.5-isoloss-analysis.md)
+- [6 Visualization Tools](6-visualization-tools.md)
+  - [6.1 Training Progress Visualization](6.1-training-progress-visualization.md)
+  - [6.2 Performance Analysis Plots](6.2-performance-analysis-plots.md)
+- [7 Research Findings](7-research-findings.md)
+  - [7.1 Publications and Presentations](7.1-publications-and-presentations.md)

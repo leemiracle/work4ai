@@ -1,0 +1,1460 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/compilation/compiler_interface.py",
+   "type": "file",
+   "name": "compiler_interface.py",
+   "filePath": "vllm/compilation/compiler_interface.py",
+   "summary": "编译器接口层：CompilerInterface 抽象 + InductorAdaptor（torch 2.5-2.7）/InductorStandaloneAdaptor（2.8+ 独立产物）/EagerAdaptor，AlwaysHitShapeEnv 与 functorch/inductor 配置补丁。",
+   "tags": [
+    "compiler",
+    "inductor",
+    "adaptor",
+    "interface"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/compilation/cuda_graph.py",
+   "type": "file",
+   "name": "cuda_graph.py",
+   "filePath": "vllm/compilation/cuda_graph.py",
+   "summary": "CUDA graph 包装：CUDAGraphWrapper 捕获/重放 runnable（含属性透传与 offloader 配合），CUDAGraphLogging 聚合捕获统计表。",
+   "tags": [
+    "cudagraph",
+    "capture-replay",
+    "logging"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/compilation/cudagraph_pool.py",
+   "type": "file",
+   "name": "cudagraph_pool.py",
+   "filePath": "vllm/compilation/cudagraph_pool.py",
+   "summary": "CUDA graph 捕获内存池选择：sleep 模式下用 cuMem graph pool，profiling 捕获留在池外以便释放。",
+   "tags": [
+    "cudagraph",
+    "memory-pool",
+    "cumem"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/compilation/decorators.py",
+   "type": "file",
+   "name": "decorators.py",
+   "filePath": "vllm/compilation/decorators.py",
+   "summary": "support_torch_compile 装饰器族（826 行）：从类型注解/环境变量决定动态维度、AOT 编译函数磁盘加载（源码未变校验）、guards 丢弃与 FX 包装，含 ignore/mm-encoder 条件编译。",
+   "tags": [
+    "torch-compile",
+    "decorator",
+    "aot",
+    "dynamo"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/compilation/monitor.py",
+   "type": "file",
+   "name": "monitor.py",
+   "filePath": "vllm/compilation/monitor.py",
+   "summary": "编译监控：monitor_torch_compile 计时并管理 depyf 调试，monitor_profiling_run 断言 profile 期无后端编译，graph 捕获开关。",
+   "tags": [
+    "compilation",
+    "monitoring",
+    "timing"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/compilation/partition_rules.py",
+   "type": "file",
+   "name": "partition_rules.py",
+   "filePath": "vllm/compilation/partition_rules.py",
+   "summary": "Dynamo 图切分规则：should_split 按节点判定（注意力边界），inductor_partition_rule_context 临时注册平台自定义切分规则。",
+   "tags": [
+    "dynamo",
+    "partitioning",
+    "rules"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/compilation/piecewise_backend.py",
+   "type": "file",
+   "name": "piecewise_backend.py",
+   "filePath": "vllm/compilation/piecewise_backend.py",
+   "summary": "分段编译后端 PiecewiseBackend：管理 shape 区间（RangeEntry）→ 每区间一份编译子图的匹配与执行，create_concrete_args 把符号维换成具体尺寸。",
+   "tags": [
+    "piecewise",
+    "compilation",
+    "shape-ranges"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/compilation/wrapper.py",
+   "type": "file",
+   "name": "wrapper.py",
+   "filePath": "vllm/compilation/wrapper.py",
+   "summary": "torch.compile 包装：TorchCompileWithNoGuardsWrapper 非 STOCK_TORCH_COMPILE 模式丢弃全部 guards；reset_compile_wrapper 为弹性 EP 清理编译模型与已捕获 CUDA graph。",
+   "tags": [
+    "torch-compile",
+    "wrapper",
+    "guards",
+    "reset"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/compiler_interface.py:CompilerInterface",
+   "type": "class",
+   "name": "CompilerInterface",
+   "filePath": "vllm/compilation/compiler_interface.py",
+   "summary": "编译器接口：缓存初始化/编译/序列化钩子。",
+   "tags": [
+    "compiler",
+    "interface",
+    "abc"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    45,
+    126
+   ]
+  },
+  {
+   "id": "class:vllm/compilation/compiler_interface.py:AlwaysHitShapeEnv",
+   "type": "class",
+   "name": "AlwaysHitShapeEnv",
+   "filePath": "vllm/compilation/compiler_interface.py",
+   "summary": "恒命中的 shape 环境：避免重复 Dynamo 字节码编译。",
+   "tags": [
+    "shape-env",
+    "dynamo",
+    "optimization"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    129,
+    167
+   ]
+  },
+  {
+   "id": "class:vllm/compilation/compiler_interface.py:InductorStandaloneAdaptor",
+   "type": "class",
+   "name": "InductorStandaloneAdaptor",
+   "filePath": "vllm/compilation/compiler_interface.py",
+   "summary": "Inductor 独立产物适配器（torch 2.8+，计划默认启用）。",
+   "tags": [
+    "inductor",
+    "adaptor",
+    "standalone"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    262,
+    471
+   ]
+  },
+  {
+   "id": "class:vllm/compilation/compiler_interface.py:InductorAdaptor",
+   "type": "class",
+   "name": "InductorAdaptor",
+   "filePath": "vllm/compilation/compiler_interface.py",
+   "summary": "Inductor 适配器（torch 2.5-2.7 版本）。",
+   "tags": [
+    "inductor",
+    "adaptor",
+    "legacy"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    474,
+    766
+   ]
+  },
+  {
+   "id": "class:vllm/compilation/compiler_interface.py:EagerAdaptor",
+   "type": "class",
+   "name": "EagerAdaptor",
+   "filePath": "vllm/compilation/compiler_interface.py",
+   "summary": "Eager 直通适配器。",
+   "tags": [
+    "eager",
+    "adaptor",
+    "noop"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    820,
+    834
+   ]
+  },
+  {
+   "id": "class:vllm/compilation/cuda_graph.py:CUDAGraphStat",
+   "type": "class",
+   "name": "CUDAGraphStat",
+   "filePath": "vllm/compilation/cuda_graph.py",
+   "summary": "单次 graph 捕获统计（未垫/垫后 token 数与运行模式）。",
+   "tags": [
+    "cudagraph",
+    "stats",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    33,
+    37
+   ]
+  },
+  {
+   "id": "class:vllm/compilation/cuda_graph.py:CUDAGraphLogging",
+   "type": "class",
+   "name": "CUDAGraphLogging",
+   "filePath": "vllm/compilation/cuda_graph.py",
+   "summary": "CUDA graph 指标聚合与表格日志。",
+   "tags": [
+    "cudagraph",
+    "logging",
+    "aggregate"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    40,
+    124
+   ]
+  },
+  {
+   "id": "class:vllm/compilation/cuda_graph.py:CUDAGraphWrapper",
+   "type": "class",
+   "name": "CUDAGraphWrapper",
+   "filePath": "vllm/compilation/cuda_graph.py",
+   "summary": "给 runnable 加捕获/重放能力的包装器（7 方法，属性透传）。",
+   "tags": [
+    "cudagraph",
+    "wrapper",
+    "capture-replay"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    145,
+    362
+   ]
+  },
+  {
+   "id": "class:vllm/compilation/piecewise_backend.py:PiecewiseBackend",
+   "type": "class",
+   "name": "PiecewiseBackend",
+   "filePath": "vllm/compilation/piecewise_backend.py",
+   "summary": "分段编译后端：shape 区间→编译子图匹配与执行（8 方法）。",
+   "tags": [
+    "piecewise",
+    "backend",
+    "shape-ranges"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    86,
+    379
+   ]
+  },
+  {
+   "id": "class:vllm/compilation/wrapper.py:TorchCompileWithNoGuardsWrapper",
+   "type": "class",
+   "name": "TorchCompileWithNoGuardsWrapper",
+   "filePath": "vllm/compilation/wrapper.py",
+   "summary": "丢弃全部 guards 的 torch.compile 包装（非 STOCK_TORCH_COMPILE 模式，9 方法）。",
+   "tags": [
+    "torch-compile",
+    "wrapper",
+    "no-guards"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    64,
+    310
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/compiler_interface.py:initialize_inductor_cache",
+   "type": "function",
+   "name": "initialize_inductor_cache",
+   "filePath": "vllm/compilation/compiler_interface.py",
+   "summary": "把 inductor/triton 缓存重定向到模型缓存子目录。",
+   "tags": [
+    "inductor",
+    "cache",
+    "initialization"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    29,
+    42
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/compiler_interface.py:_get_vllm_functorch_config",
+   "type": "function",
+   "name": "_get_vllm_functorch_config",
+   "filePath": "vllm/compilation/compiler_interface.py",
+   "summary": "vLLM 编译时施加的 functorch 配置覆盖。",
+   "tags": [
+    "functorch",
+    "config",
+    "override"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    170,
+    178
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/compiler_interface.py:get_inductor_factors",
+   "type": "function",
+   "name": "get_inductor_factors",
+   "filePath": "vllm/compilation/compiler_interface.py",
+   "summary": "inductor 编译的 hash 因子。",
+   "tags": [
+    "inductor",
+    "hash",
+    "factors",
+    "cache-key"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    181,
+    201
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/compiler_interface.py:is_compile_cache_enabled",
+   "type": "function",
+   "name": "is_compile_cache_enabled",
+   "filePath": "vllm/compilation/compiler_interface.py",
+   "summary": "编译缓存是否启用。",
+   "tags": [
+    "cache",
+    "predicate",
+    "config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    204,
+    218
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/compiler_interface.py:_patch_standalone_compile_atomic_save",
+   "type": "function",
+   "name": "_patch_standalone_compile_atomic_save",
+   "filePath": "vllm/compilation/compiler_interface.py",
+   "summary": "torch<2.10 的 CompiledArtifact 原子保存 backport（pytorch#162432）。",
+   "tags": [
+    "backport",
+    "torch",
+    "atomic-save"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    221,
+    259
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/compiler_interface.py:trigger_inductor_lazy_init",
+   "type": "function",
+   "name": "trigger_inductor_lazy_init",
+   "filePath": "vllm/compilation/compiler_interface.py",
+   "summary": "提前触发 inductor 每进程一次的惰性初始化。",
+   "tags": [
+    "inductor",
+    "lazy-init",
+    "warmup"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    792,
+    817
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/cudagraph_pool.py:capture_outside_cumem_pool",
+   "type": "function",
+   "name": "capture_outside_cumem_pool",
+   "filePath": "vllm/compilation/cudagraph_pool.py",
+   "summary": "捕获留在 cuMem 池外（profiling 期间可释放）。",
+   "tags": [
+    "cudagraph",
+    "pool",
+    "profiling"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    22,
+    29
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/cudagraph_pool.py:capture_pool",
+   "type": "function",
+   "name": "capture_pool",
+   "filePath": "vllm/compilation/cudagraph_pool.py",
+   "summary": "产出捕获池：sleep 模式下用 cuMem graph pool。",
+   "tags": [
+    "cudagraph",
+    "pool",
+    "cumem"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    33,
+    45
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/decorators.py:ignore_torch_compile",
+   "type": "function",
+   "name": "ignore_torch_compile",
+   "filePath": "vllm/compilation/decorators.py",
+   "summary": "让类忽略 support_torch_compile 的装饰器。",
+   "tags": [
+    "decorator",
+    "ignore",
+    "conditional"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    61,
+    77
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/decorators.py:support_torch_compile",
+   "type": "function",
+   "name": "support_torch_compile",
+   "filePath": "vllm/compilation/decorators.py",
+   "summary": "给类 forward 加编译支持的主装饰器（动态维度/环境变量/enable_if）。",
+   "tags": [
+    "decorator",
+    "torch-compile",
+    "entry-point"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    121,
+    260
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/decorators.py:_verify_source_unchanged",
+   "type": "function",
+   "name": "_verify_source_unchanged",
+   "filePath": "vllm/compilation/decorators.py",
+   "summary": "校验源码未变（AOT 缓存失效检测）。",
+   "tags": [
+    "aot",
+    "source",
+    "verification"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    273,
+    289
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/decorators.py:_try_load_aot_compiled_fn",
+   "type": "function",
+   "name": "_try_load_aot_compiled_fn",
+   "filePath": "vllm/compilation/decorators.py",
+   "summary": "尝试从磁盘加载 AOT 编译函数。",
+   "tags": [
+    "aot",
+    "disk",
+    "loading"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    292,
+    348
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/decorators.py:_support_torch_compile",
+   "type": "function",
+   "name": "_support_torch_compile",
+   "filePath": "vllm/compilation/decorators.py",
+   "summary": "装饰器内部实现（417 行）：dynamo 捕获、guards 丢弃与 FX 包装。",
+   "tags": [
+    "decorator",
+    "dynamo",
+    "internals"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    351,
+    767
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/decorators.py:maybe_use_cudagraph_partition_wrapper",
+   "type": "function",
+   "name": "maybe_use_cudagraph_partition_wrapper",
+   "filePath": "vllm/compilation/decorators.py",
+   "summary": "临时设置/取消自定义 cudagraph 分区包装的上下文。",
+   "tags": [
+    "cudagraph",
+    "partition",
+    "context"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    771,
+    825
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/monitor.py:monitor_torch_compile",
+   "type": "function",
+   "name": "monitor_torch_compile",
+   "filePath": "vllm/compilation/monitor.py",
+   "summary": "计时 torch.compile 并管理 depyf 调试的上下文。",
+   "tags": [
+    "monitor",
+    "timing",
+    "depyf"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    18,
+    68
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/monitor.py:monitor_profiling_run",
+   "type": "function",
+   "name": "monitor_profiling_run",
+   "filePath": "vllm/compilation/monitor.py",
+   "summary": "计时初始 profiling run 并断言无后端编译。",
+   "tags": [
+    "monitor",
+    "profiling",
+    "assertion"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    72,
+    95
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/partition_rules.py:should_split",
+   "type": "function",
+   "name": "should_split",
+   "filePath": "vllm/compilation/partition_rules.py",
+   "summary": "按 dynamo 节点判定是否切分（注意力边界）。",
+   "tags": [
+    "dynamo",
+    "partitioning",
+    "predicate"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    14,
+    36
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/partition_rules.py:inductor_partition_rule_context",
+   "type": "function",
+   "name": "inductor_partition_rule_context",
+   "filePath": "vllm/compilation/partition_rules.py",
+   "summary": "临时注册 Inductor 平台自定义切分规则的上下文。",
+   "tags": [
+    "inductor",
+    "partitioning",
+    "rules"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    40,
+    74
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/piecewise_backend.py:create_concrete_args",
+   "type": "function",
+   "name": "create_concrete_args",
+   "filePath": "vllm/compilation/piecewise_backend.py",
+   "summary": "把符号维替换为具体尺寸构造 Fake 示例输入。",
+   "tags": [
+    "fake-args",
+    "symbolic",
+    "concrete"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    37,
+    76
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/wrapper.py:_compilation_context",
+   "type": "function",
+   "name": "_compilation_context",
+   "filePath": "vllm/compilation/wrapper.py",
+   "summary": "编译设置上下文：提高 dynamo 缓存上限（qwen2.5-vl 需要）。",
+   "tags": [
+    "dynamo",
+    "cache-limits",
+    "context"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    33,
+    50
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/wrapper.py:reset_compile_wrapper",
+   "type": "function",
+   "name": "reset_compile_wrapper",
+   "filePath": "vllm/compilation/wrapper.py",
+   "summary": "为弹性 EP 清理编译模型与已捕获 CUDA graph。",
+   "tags": [
+    "elastic-ep",
+    "reset",
+    "cleanup"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    313,
+    364
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "file:vllm/compilation/counter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "file:vllm/env_override.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "file:vllm/utils/hashing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/cuda_graph.py",
+   "target": "file:vllm/compilation/counter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/cuda_graph.py",
+   "target": "file:vllm/compilation/cudagraph_pool.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/cuda_graph.py",
+   "target": "file:vllm/compilation/monitor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/cuda_graph.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/cuda_graph.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/cuda_graph.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/cuda_graph.py",
+   "target": "file:vllm/model_executor/offloader/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/cuda_graph.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/cuda_graph.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/cudagraph_pool.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/cudagraph_pool.py",
+   "target": "file:vllm/device_allocator/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/cudagraph_pool.py",
+   "target": "file:vllm/distributed/device_communicators/pynccl_allocator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/cudagraph_pool.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "file:vllm/compilation/backends.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "file:vllm/compilation/caching.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "file:vllm/compilation/caching.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "file:vllm/compilation/counter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "file:vllm/compilation/cuda_graph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "file:vllm/compilation/monitor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "file:vllm/compilation/wrapper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/monitor.py",
+   "target": "file:vllm/compilation/counter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/monitor.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/monitor.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/partition_rules.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/piecewise_backend.py",
+   "target": "file:vllm/compilation/backends.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/piecewise_backend.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/piecewise_backend.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/piecewise_backend.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/wrapper.py",
+   "target": "file:vllm/compilation/counter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/wrapper.py",
+   "target": "file:vllm/compilation/counter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/wrapper.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/wrapper.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/wrapper.py",
+   "target": "file:vllm/env_override.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/wrapper.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/wrapper.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/wrapper.py",
+   "target": "file:vllm/utils/nvtx_pytorch_hooks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "class:vllm/compilation/compiler_interface.py:CompilerInterface",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "class:vllm/compilation/compiler_interface.py:AlwaysHitShapeEnv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "class:vllm/compilation/compiler_interface.py:InductorStandaloneAdaptor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "class:vllm/compilation/compiler_interface.py:InductorAdaptor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "class:vllm/compilation/compiler_interface.py:EagerAdaptor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "function:vllm/compilation/compiler_interface.py:initialize_inductor_cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "function:vllm/compilation/compiler_interface.py:_get_vllm_functorch_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "function:vllm/compilation/compiler_interface.py:get_inductor_factors",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "function:vllm/compilation/compiler_interface.py:is_compile_cache_enabled",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "function:vllm/compilation/compiler_interface.py:_patch_standalone_compile_atomic_save",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "function:vllm/compilation/compiler_interface.py:trigger_inductor_lazy_init",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/cuda_graph.py",
+   "target": "class:vllm/compilation/cuda_graph.py:CUDAGraphStat",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/cuda_graph.py",
+   "target": "class:vllm/compilation/cuda_graph.py:CUDAGraphLogging",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/cuda_graph.py",
+   "target": "class:vllm/compilation/cuda_graph.py:CUDAGraphWrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/piecewise_backend.py",
+   "target": "class:vllm/compilation/piecewise_backend.py:PiecewiseBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/piecewise_backend.py",
+   "target": "function:vllm/compilation/piecewise_backend.py:create_concrete_args",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/wrapper.py",
+   "target": "class:vllm/compilation/wrapper.py:TorchCompileWithNoGuardsWrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/wrapper.py",
+   "target": "function:vllm/compilation/wrapper.py:_compilation_context",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/wrapper.py",
+   "target": "function:vllm/compilation/wrapper.py:reset_compile_wrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/cudagraph_pool.py",
+   "target": "function:vllm/compilation/cudagraph_pool.py:capture_outside_cumem_pool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/cudagraph_pool.py",
+   "target": "function:vllm/compilation/cudagraph_pool.py:capture_pool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "function:vllm/compilation/decorators.py:ignore_torch_compile",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "function:vllm/compilation/decorators.py:support_torch_compile",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "function:vllm/compilation/decorators.py:_verify_source_unchanged",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "function:vllm/compilation/decorators.py:_try_load_aot_compiled_fn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "function:vllm/compilation/decorators.py:_support_torch_compile",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "function:vllm/compilation/decorators.py:maybe_use_cudagraph_partition_wrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/monitor.py",
+   "target": "function:vllm/compilation/monitor.py:monitor_torch_compile",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/monitor.py",
+   "target": "function:vllm/compilation/monitor.py:monitor_profiling_run",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/partition_rules.py",
+   "target": "function:vllm/compilation/partition_rules.py:should_split",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/partition_rules.py",
+   "target": "function:vllm/compilation/partition_rules.py:inductor_partition_rule_context",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "class:vllm/compilation/compiler_interface.py:CompilerInterface",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "class:vllm/compilation/compiler_interface.py:AlwaysHitShapeEnv",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "class:vllm/compilation/compiler_interface.py:InductorStandaloneAdaptor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "class:vllm/compilation/compiler_interface.py:InductorAdaptor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "class:vllm/compilation/compiler_interface.py:EagerAdaptor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "function:vllm/compilation/compiler_interface.py:initialize_inductor_cache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "function:vllm/compilation/compiler_interface.py:get_inductor_factors",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "function:vllm/compilation/compiler_interface.py:is_compile_cache_enabled",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/compiler_interface.py",
+   "target": "function:vllm/compilation/compiler_interface.py:trigger_inductor_lazy_init",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/cuda_graph.py",
+   "target": "class:vllm/compilation/cuda_graph.py:CUDAGraphStat",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/cuda_graph.py",
+   "target": "class:vllm/compilation/cuda_graph.py:CUDAGraphLogging",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/cuda_graph.py",
+   "target": "class:vllm/compilation/cuda_graph.py:CUDAGraphWrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/piecewise_backend.py",
+   "target": "class:vllm/compilation/piecewise_backend.py:PiecewiseBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/piecewise_backend.py",
+   "target": "function:vllm/compilation/piecewise_backend.py:create_concrete_args",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/wrapper.py",
+   "target": "class:vllm/compilation/wrapper.py:TorchCompileWithNoGuardsWrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/wrapper.py",
+   "target": "function:vllm/compilation/wrapper.py:reset_compile_wrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/cudagraph_pool.py",
+   "target": "function:vllm/compilation/cudagraph_pool.py:capture_outside_cumem_pool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/cudagraph_pool.py",
+   "target": "function:vllm/compilation/cudagraph_pool.py:capture_pool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "function:vllm/compilation/decorators.py:ignore_torch_compile",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "function:vllm/compilation/decorators.py:support_torch_compile",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/decorators.py",
+   "target": "function:vllm/compilation/decorators.py:maybe_use_cudagraph_partition_wrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/monitor.py",
+   "target": "function:vllm/compilation/monitor.py:monitor_torch_compile",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/monitor.py",
+   "target": "function:vllm/compilation/monitor.py:monitor_profiling_run",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/partition_rules.py",
+   "target": "function:vllm/compilation/partition_rules.py:should_split",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/partition_rules.py",
+   "target": "function:vllm/compilation/partition_rules.py:inductor_partition_rule_context",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/compiler_interface.py:InductorAdaptor",
+   "target": "class:vllm/compilation/compiler_interface.py:CompilerInterface",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/compiler_interface.py:InductorStandaloneAdaptor",
+   "target": "class:vllm/compilation/compiler_interface.py:CompilerInterface",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/compiler_interface.py:EagerAdaptor",
+   "target": "class:vllm/compilation/compiler_interface.py:CompilerInterface",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/wrapper.py:TorchCompileWithNoGuardsWrapper",
+   "target": "function:vllm/compilation/monitor.py:monitor_torch_compile",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/cuda_graph.py:CUDAGraphWrapper",
+   "target": "function:vllm/compilation/cudagraph_pool.py:capture_pool",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/compilation/wrapper.py:reset_compile_wrapper",
+   "target": "class:vllm/compilation/wrapper.py:TorchCompileWithNoGuardsWrapper",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

@@ -1,0 +1,2352 @@
+# Coder — the in-process AI coding agent
+
+The right-side coder panel is moon-ide's own coding agent. Unlike
+the [Slack chat panel](slack-chat.md) (a thin chat client over
+somebody else's bot), the coder owns its loop end-to-end: it talks
+to LLMs directly, dispatches its own tool calls, and routes every
+tool call through the active [`WorkspaceHost`](architecture.md#workspacehost-phase-2)
+so a containerized workspace gets a containerized agent without
+extra plumbing.
+
+[ADR 0010](decisions/0010-coder-rewrite-not-acp.md) explains why
+we don't host ACP. [ADR 0011](decisions/0011-rename-moon-agent-to-moon-remote.md)
+explains why the crate is `moon-coder`. Sub-phase work breakdown:
+[`roadmaps/phase-06-coder.md`](roadmaps/phase-06-coder.md).
+
+## Why we own the loop
+
+ACP is a protocol for driving somebody else's agent binary. The
+agents the team would actually pick aren't ACP-native, and the ones
+that are (pi-coding-agent) are TS-first — adopting one means a Node
+sidecar or fs/bash tools in JS land, breaking the architecture
+invariant. Owning the loop in Rust is a few hundred lines around
+`reqwest` + an SSE parser + a tool dispatcher, and every tool is a
+moon-core method that already respects `WorkspaceHost`.
+
+## Loop shape
+
+The vocabulary borrows from
+[pi-agent-core](https://github.com/badlogic/pi-mono/tree/main/packages/agent)
+but the wire shape is flatter:
+
+```
+prompt(msg)
+├─ user_message               { id, text }
+├─ assistant_message_start    { id }                        // fires on first content OR thinking delta
+├─ assistant_thinking_delta   { id, delta }*                // optional, before/interleaved with content
+├─ assistant_message_delta    { id, delta }*                // SSE chunks of the answer
+├─ assistant_message_end      { id, text, thinking? }       // canonical full content + reasoning
+├─ tool_call                  { id, name, args }*           // one per call (assembled)
+├─ tool_result                { id, result, is_error }*     // when each tool finishes
+│
+├─ assistant_message_start    { id' }                       // next iteration if tools fired
+├─ …
+└─ turn_complete | aborted | error                          // exactly one of the three
+```
+
+Mirrored 1:1 in `src/lib/protocol.ts:CoderEvent`. Stable IDs let the
+frontend reconcile deltas onto one bubble; `assistant_message_end`'s
+`text` / `thinking` are authoritative if concatenated deltas drift.
+
+Reasoning traces stream as `assistant_thinking_delta` (we accept both
+`reasoning_content` and `reasoning` on the wire) and render as a
+collapsible block that auto-collapses on `assistant_message_end`.
+Models without a trace simply never emit thinking deltas.
+
+Tool calls stream incrementally off the SSE wire but the loop only
+fires `tool_call` once the call is fully assembled — partial JSON is
+not useful to render. Tool calls in one assistant turn dispatch
+sequentially; parallel dispatch lands when a real workload needs it.
+
+Tool rows render collapsed by default; expanded bodies mount lazily
+on first expand so a long tool-heavy session doesn't pay a
+grammar-load + highlight pass per row on initial paint (test plan
+0076). The transcript is windowed — only a slice of rows is in the
+DOM, growing on scroll-up and capped at 300 mounted rows (test plan
+0093 covers the mechanics). `Ctrl+F` (with focus inside the panel)
+opens a find-in-transcript bar — CSS Custom Highlight API, same
+machinery as the markdown preview's find — that only matches loaded
+rows; Enter / Shift+Enter step through matches, Esc closes. Matches
+track the DOM, so streamed deltas and lazily mounted rows refresh
+the count without moving the user's position.
+
+Three control surfaces:
+
+- **Abort** (`Esc`): cancels the in-flight HTTP / SSE / tool call.
+  The session keeps the partial assistant message and completed tool
+  calls. A queued steer is **not** dropped — the spawn loop's
+  `Err(Aborted)` branch sees the still-pending steer and loops back
+  to drain it into a fresh turn (use `Ctrl+Up` to un-queue instead).
+  The cancel token is raced
+  against _every_ network await in a turn — route resolution (which
+  may trigger an OAuth token refresh), the HTTP send, the SSE read
+  loop, and the 401-retry refresh — so Esc lands immediately
+  regardless of which phase the turn is in. Inference and auth HTTP
+  clients also carry a connect timeout so a black-holed endpoint
+  can't park a turn even if nobody clicks stop.
+- **Steer** (Enter while streaming / running tools): the composer
+  stays editable mid-turn. The message is queued and shows up
+  immediately as a muted "queued" placeholder bubble, parked at the
+  position where it was sent. The running loop drains the queue
+  before its next LLM call — including one extra round-trip when a
+  steer arrives during the final assistant message. Steers are
+  persisted at drain time (the chat-completions shape forbids a user
+  message between an assistant `tool_calls` and its results).
+  **Drained steers land at the bottom of the transcript, not where
+  they were parked.** A steer typed mid-turn is sent before the
+  answer that was still streaming, but the model never saw it when
+  producing that answer — so parking the bubble there would
+  misrepresent causality. On drain the runner removes the
+  placeholder (`SteerDrained { id }`) and re-appends the message as
+  a fresh `UserMessage { queued: false, new id, drain-time ts }` at
+  the end of the transcript, matching where it lands in
+  `session.messages` and in the JSONL (after the in-flight answer).
+  The queued placeholder is thus purely provisional; the revert
+  ordinal counts only non-queued user rows, so removal is
+  ordinal-neutral. An **un-queue** (`Ctrl+Up` on the desktop, an
+  "un-queue" chip on the companion) is the one case where
+  `SteerDrained` is _not_ followed by a re-append — the message went
+  back into the composer. Until drained, the queue lives on the
+  session runtime, which outlives a session switch and a folder
+  switch — so a reopen replays the undrained steers (queued rows,
+  same ids) on top of the disk-driven transcript. Only a process
+  restart loses them.
+- **Go now** (a "go now" button on the queued row): the user typed a
+  steer mid-turn but doesn't want to wait for the running turn to
+  settle. Cancels the current turn (like abort) and lets the spawn
+  loop drain that steer into a fresh turn immediately — no `Aborted`
+  flash, just the old thinking fading into the new turn. The affordance
+  lives on the queued message in the transcript, not in the composer,
+  so it targets the exact steer it's attached to (`coder_drain_steer_now`
+  by id on the desktop, `coder_drain_steer_now` over the bridge on the
+  companion). A stale click — the runner already drained the queue at its
+  last iteration top — is a silent no-op. The loop-back mints a fresh
+  `CancellationToken` for the drained turn: `CancellationToken` is
+  one-shot, so the just-cancelled token can't be reused — the new
+  `run_turn` would bail at its iteration-top guard before the steer
+  drains, spinning the loop forever with `busy` stuck and stop dead.
+- **Follow-up** (Alt+Enter while idle-but-just-finished): future —
+  not implemented. Sending while idle starts a fresh turn.
+
+Keymap matches the Slack panel (Enter sends, Shift+Enter newline).
+
+## Authentication
+
+### HF OAuth Device Authorization Grant (RFC 8628)
+
+The IDE registers a public OAuth app on Hugging Face Hub with client
+ID **`7977dff4-917a-4cf9-a726-dd45e25faa5f`**. No client secret.
+Scopes asked upfront:
+
+| Scope              | Used by     | What it gets us                                                                                                                                                          |
+| ------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `inference-api`    | LLM calls   | Call HF Inference Providers' router endpoint                                                                                                                             |
+| `contribute-repos` | Bucket sync | Create + push to the per-workspace trace bucket. The minimum scope that allows `create-repo` + `push`; deliberately not `manage-repos` (which would also grant deletion) |
+
+`read-billing` and `email` are deliberately not requested.
+
+### Flow
+
+1. User clicks "Sign in with Hugging Face". `moon-coder` `POST`s
+   `https://huggingface.co/oauth/device` with the client id + scopes.
+2. The IDE shows the returned `user_code` in a modal with an "Open in
+   browser" button for `verification_uri`.
+3. Background poll against `https://huggingface.co/oauth/token`
+   (`grant_type=…:device_code`) until it returns `access_token`,
+   `refresh_token`, `expires_in`.
+4. The triple persists to the OS keyring as one JSON blob under
+   `service=moon-ide`, `account=hf-oauth` (same keyring backend as
+   the Slack panel).
+5. The IDE pulls the user's profile (`/api/whoami-v2`) for the panel
+   header; cached in `AppState.coder.identity`.
+
+### Refresh
+
+The HTTP middleware refreshes the access token when
+`expires_at - now < 60 s` and on a 401 (one retry), writing the new
+triple back to the keyring. The refresh round trip is raced against
+the turn's cancel token and capped by a 30 s client timeout, so a
+stalled OAuth endpoint can't hang an in-flight turn (Esc aborts
+immediately; otherwise the timeout surfaces a transport error). A
+failed refresh drops the keyring entry, fires `coder:disconnected`,
+and the panel returns to the sign-in empty state; sessions and the
+bucket pointer stay.
+
+### Disconnect
+
+Explicit "Disconnect" (confirmed by a modal) drops the keyring entry
+and clears in-memory identity. We don't revoke server-side — HF's
+revoke endpoint isn't reliably documented for device-flow tokens, so
+the confirm dialog links the user's HF settings instead. Mid-session
+token rejection follows the same path plus a toast.
+
+## Providers
+
+### Day-1: HF Inference Providers (only)
+
+One HTTP client, OpenAI-compatible schema, against
+`https://router.huggingface.co/v1` (`POST /chat/completions`,
+streaming SSE, bearer token). The model field carries HF's
+provider-routing slug verbatim (`Qwen/Qwen3.5-397B-A17B:scaleway`);
+the IDE doesn't parse it.
+
+#### Default models
+
+Hardcoded in `crates/moon-coder/src/defaults.rs`:
+
+- **`standard`** → `Qwen/Qwen3.5-397B-A17B:scaleway` — the agent
+  loop and every sub-agent.
+- **`cheap`** → `Qwen/Qwen3-Coder-30B-A3B-Instruct:scaleway` —
+  everything that doesn't need tool calls: session titles,
+  branch/commit suggesters, compaction summaries, folder summaries.
+
+These are fallbacks; the user picks freely at runtime.
+
+### Model picker
+
+A cog in the panel header opens a popover with:
+
+- **Standard model** / **Cheap model** — wire model ids sent verbatim
+  to the router, click-to-fill from the live `/v1/models` catalog.
+  The Standard list is pre-filtered to tool-capable models.
+- **Default provider** — UI hint used to auto-suffix the picked model
+  with `:provider`; only applied when the catalog row actually has
+  that route.
+- **Bill to** — sent as `X-HF-Bill-To` on every inference request;
+  sourced from `identity.orgs`.
+
+Picks live in `AppState.coder.*` and hot-swap into the runner's
+`CoderModels` snapshot on save; mid-turn changes apply to the next
+round-trip. Per-session model in the JSONL header is informational
+metadata only — the runner reads the active pick from `CoderModels`.
+
+The composer placeholder names the model the next turn will use
+(`Ask <model>…`). It reads `resolved_standard_model` off the
+settings payload — a read-only field the runner fills on read (and
+ignores on write) so the fallback chain (provider pick → HF pick →
+hardcoded default) lives in one place.
+
+Why HF as primary: the team's home turf, one auth flow, billing via
+the user's HF account, and provider-routed access to everything the
+team uses. Other providers are additive.
+
+### Custom OpenAI-compatible endpoints (OpenRouter, Anthropic, local)
+
+`AppState.coder.providers` is a `Vec<CoderProviderConfig>`:
+
+```rust
+struct CoderProviderConfig {
+    id: String,           // opaque "prov-<unix-ms>-<rand>"
+    label: String,
+    kind: ProviderKind,   // custom | open_router | anthropic
+    base_url: String,     // OpenAI-compat /v1 root, or API host for anthropic
+    standard_model: String,
+    cheap_model: String,
+    has_api_key: bool,    // server-set off the keyring
+}
+```
+
+The HF route stays implicit (`active_provider: None`). Switching to a
+user provider sets `active_provider = Some(id)`; `X-HF-Bill-To` is
+suppressed off the wire when one is active. API keys live in the
+keyring (`account=coder-provider:<id>`) and never round-trip through
+the model-settings read. The 401-refresh behaviour stays HF-only — a
+user provider that 401s surfaces the error. 429s are retried on every
+route with exponential backoff (2 s doubling to a 2 min ceiling,
+honouring a longer numeric `Retry-After`) before surfacing; the wait
+is cancel-aware so Esc still aborts immediately.
+
+`kind` discriminates the wire shape:
+
+- `custom` — free-form OpenAI-compatible endpoint (vLLM, Ollama,
+  llama.cpp, LiteLLM, …).
+- `open_router` — same wire path as `custom`, but the picker knows
+  the URL preset / key dashboard, and Anthropic prompt-cache markers
+  fire on `anthropic/*` slugs. The picker also shows the credit
+  balance (`coder_openrouter_credits` → `OpenRouterCredits`): account
+  remaining from `GET /credits`, per-key usage and optional spend cap
+  from `GET /key` — both authenticate with the stored inference key,
+  no provisioning key needed. Fetch failures render "unavailable" and
+  never block the rest of the modal.
+- `anthropic` — Anthropic native (`/v1/messages`) via
+  `crates/moon-coder/src/anthropic.rs`: different auth headers,
+  system prompt as a top-level field, `tool_use` / `tool_result`
+  content blocks, its own SSE grammar, and adjacent same-role
+  messages merged (the API rejects consecutive same-role turns).
+
+For the built-in presets the picker locks `base_url` and requires a
+`standard_model` pick before saving (there's no per-preset hardcoded
+default). A blank `cheap_model` falls back to `standard_model` on the
+same provider.
+
+#### Per-workspace provider lock
+
+`active_provider` is global state, so flipping it in one workspace
+bleeds into all others — the right default, but some repos want a
+pin (e.g. one that depends on Anthropic prompt-cache quality). The
+opt-out is `WorkspaceSession::coder_provider_lock` (`Hf` or
+`User { id }`) in the workspace's `session.json`; the runner's
+effective provider is the lock when set, else the global pick. The
+picker shows the effective value with a "Locked to X" label. A stale
+pin falls back to HF with a `tracing::warn!`.
+
+#### Extended / adaptive thinking (native Anthropic)
+
+Three contract points the native adapter must honour (details in
+`anthropic.rs`):
+
+1. **Request thinking** on the modern adaptive models
+   (`type: "adaptive"`, `display: "summarized"`, no `budget_tokens`)
+   so reasoning actually streams back; send no `thinking` object to
+   any other model (Haiku in its cheap role wants none).
+2. **Round-trip signed thinking blocks.** The API requires the
+   unmodified signed block to be echoed back ahead of `tool_use`
+   blocks on tool turns, or the next round-trip 400s. The blocks are
+   carried opaque on the assistant message (`thinking_blocks`); only
+   the native Anthropic path populates them, so the OpenAI-compat
+   wire body is unchanged.
+3. **Survive reload.** Signed blocks persist into the session JSONL
+   as moon-specific fields on the pi `thinking` content blocks, so a
+   session reopened mid-tool-loop replays without a 400.
+
+`max_tokens` **fails open**: 32 K for everything except the families
+whose hard output cap is lower (Haiku, Claude 3), which get 8 K. The
+list of exceptions is a denylist on purpose — an allowlist silently
+capped every model released after it was written at 8 K, which shows
+up as answers cut off mid-sentence, not as an error (see
+[ADR 0045](decisions/0045-output-cap-continuation.md)). Thinking is
+incompatible with forced tool choice and `temperature` / `top_k`; we
+send none of those.
+
+#### Truncated answers (`stop_reason: "length"`)
+
+A response that stops at the output ceiling is a fragment, never a
+final answer. There are two halves to this, because the ceiling can
+land in prose or inside a tool call:
+
+- **Prose.** Both the parent loop and the sub-agent loop re-ask, up
+  to `OUTPUT_CAP_CONTINUATIONS` times, by appending a visible user
+  sentinel telling the model to resume where it stopped. The parent
+  renders the continuation as a second assistant bubble; a sub-agent
+  joins its fragments so the parent receives one report. If the
+  budget runs out with the answer still truncated, the sub-agent
+  report ends with an explicit `[Report truncated: …]` marker rather
+  than pretending to be complete.
+- **Tool calls.** A tool call whose arguments don't parse as JSON is
+  **refused, never dispatched** — nothing is written or run — and the
+  model gets a tool result saying the arguments were cut off and how
+  to recover (chunk the write, or use `edit_file`). This is the
+  large-`write_file` case; the previous behaviour passed `{}` to the
+  tool, which surfaced as "missing field `path`" and sent the model
+  straight back into the same oversized call. Calls that parse still
+  run, including in a response that was truncated after them. The
+  refusal **quotes the model's own raw arguments back** (clipped to
+  ~512 chars) plus the recovery hint: a bare parser message ("expected
+  value at line 1 column 10") names a position, not the mistake, and
+  a model emitting the same malformed shape every round can't
+  self-repair from it — observed with GLM-5.3 writing `"args": ,`
+  (key with no value) eleven consecutive `mcp_call` rounds. A
+  round in which **every** tool call was refused counts toward
+  `BROKEN_TOOL_CALL_ROUNDS` (3); when consecutive fully-refused
+  rounds exceed it the turn fails with a `BrokenToolCallLoop` error
+  instead of burning prompt tokens on round N+1 (same posture as the
+  empty-shell retry cap). Any round with at least one dispatchable
+  call resets the counter. The broken assistant turn still lands in
+  history (the refusal result answers it), and strict routers validate
+  replayed `tool_calls[].function.arguments` as JSON — the
+  OpenAI-compat wire builder repairs an unparseable blob to `{}` at
+  request time so the session's next round-trip isn't 400'd wholesale
+  (ADR 0076; the loop breaker and self-descriptive refusal are
+  ADR 0078).
+
+#### Prompt caching (Anthropic, native or via OpenRouter)
+
+Anthropic prompt caching is opt-in, so the IDE enables it on every
+Anthropic-bound request: the native path marks blocks with
+`cache_control: {type: "ephemeral"}` directly; the OpenRouter path
+flips only the marked messages onto the blocks-array shape (other
+providers see a byte-identical no-caching wire shape). Two
+breakpoints per request: end of the system prompt (the big static
+piece) and end of the last non-assistant message (so the next
+round-trip's prefix lookup hits everything stable). 5-minute TTL —
+the 1-hour tier costs 5× and buys nothing for an interactive loop.
+
+Cache usage comes back on the streaming `usage` chunk and flows
+through `TokenUsage` → the `ContextRing` tooltip. Anthropic's native
+`input_tokens` excludes the cached portion, so the adapter rolls
+cache reads/writes back into `prompt_tokens` before the runner sees
+it — the ring denominator and compaction trigger need the full input.
+
+### Later: Anthropic OAuth (Claude Pro / Max)
+
+A second OAuth flow in its own keyring slot, when somebody wants
+subscription billing. Not in the initial sub-phases.
+
+## Tool surface
+
+Every tool is a moon-core method dispatched through the active
+`WorkspaceHost`. The schema is JSON-Schema in the LLM request; the
+implementations are typed Rust:
+
+| Tool             | Signature                                                                                                                   | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `read_file`      | `(path, start_line?, end_line?) -> { content, start_line, end_line, total_lines, truncated, mtime_ms }`                     | Lines prefixed `<line_no>\|<line>`; 1-based inclusive range, clamped to EOF with the effective range echoed back. Path routing per [§ Path resolution](#path-resolution-and-cross-folder-routing).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `write_file`     | `(path, content) -> { path, bytes_written, mtime_ms }`                                                                      | Creates missing parent directories automatically (`mkdir -p`), sandboxed to the workspace root.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `edit_file`      | `(path, find, replace, occurrence?) -> { path, bytes_written, mtime_ms, occurrence, total_matches, match_mode }`            | Exact match first, then escalating fuzzy stages (escape-leakage, backslash-run, indent-tolerant, whitespace-collapsing); `match_mode` reports which one hit. Non-unique match without `occurrence` errors with the matching line numbers.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `list_dir`       | `(path) -> DirEntry[]`                                                                                                      | Gitignore-aware, same walk as the file tree.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `grep`           | `(pattern, case_sensitive?, max_matches?) -> { pattern, matches, count, truncated }`                                        | `path:line: text` hits; long lines capped at 500 chars so one minified-bundle hit can't blow the context. Backed by the `ignore`/ripgrep dep.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `bash`           | `(cmd, timeout_ms?, detach?) -> { cmd, target, stdout, stderr, exit_code } \| { detached, id, pid, log_path, cmd, target }` | `docker exec … bash -c` when the workspace shell container is `Running`, else host `bash -lc` — same probe terminals and LSP use, with a per-session force-host override ([ADR 0022](decisions/0022-coder-host-mode-override.md)) read live at dispatch time, so a mid-turn toggle re-routes the next command ([ADR 0041](decisions/0041-live-host-mode-toggle.md)). `target` echoes `"host"` / `"container"`. The non-interactive container bash still honors `.nvmrc` — moon-base's `$BASH_ENV` runs the fnm switch per command ([containers.md](containers.md#the-moon-base-image)). `detach: true` spawns a background process and returns immediately with an `id` — see [ADR 0034](decisions/0034-detached-background-processes.md). While a foreground command runs, its output streams live to the panel as `tool_output_delta` events (live-only; an interrupt or timeout still returns the partial output — [ADR 0085](decisions/0085-session-scoped-background-processes.md)). |
+| `read_process`   | `(id, wait_ms?, tail_bytes?) -> { id, running, exit_code, tail, cmd, target }`                                              | Poll a detached background process. Tails the log file; `wait_ms` blocks until exit (capped 10 min). Ids stay valid **across turns** — processes are session-scoped and settled entries are retained ([ADR 0085](decisions/0085-session-scoped-background-processes.md), revising [ADR 0034](decisions/0034-detached-background-processes.md)'s per-turn kill).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `stop_process`   | `(id) -> { id, killed, exit_code, cmd, target }`                                                                            | Kill a detached background process if still running. See [ADR 0034](decisions/0034-detached-background-processes.md). Every settlement — natural exit, `stop_process` (or the panel's stop button), or a cleanup kill (sub-agent settle / IDE shutdown) — emits a live-only `background_process_exited` event carrying the spawning call's `tool_call_id`, so the panel flips the `bash` row from `detached · running` to `detached · exit N` / `detached · killed` ([ADR 0075](decisions/0075-background-process-exit-events.md)).                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `list_terminals` | `() -> { folder, count, terminals[] }`                                                                                      | The user's open terminals **for this project**. Only advertised when there's at least one. See [§ Reading the user's terminals](#reading-the-users-terminals).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `read_terminal`  | `(id, lines?) -> { id, target, cwd, running, exit_code, lines_returned, truncated, output }`                                | Rendered tail of one terminal's output. Read-only; same gating as `list_terminals`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `task`           | `(task, folder?, mode?, system_prompt?, detach?) -> { result, … } \| { detached, subagent_id, status }`                     | Delegates to a sub-agent — see [§ Sub-agents](#sub-agents). Parent-only; up to 4 run in parallel. `detach: true` returns a handle immediately and runs in the background ([ADR 0053](decisions/0053-detached-task-subagents.md)).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `task_collect`   | `(subagent_id, wait_ms?) -> { status, result? }`                                                                            | Fetch a detached sub-agent's report; `wait_ms` blocks until it settles (capped 60 s). See [ADR 0053](decisions/0053-detached-task-subagents.md).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `task_steer`     | `(subagent_id, text) -> { status }`                                                                                         | Queue a steering message into a running detached sub-agent; delivered at its next iteration top, same as a user steer ([ADR 0071](decisions/0071-steer-detached-subagents.md)).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `task_abort`     | `(subagent_id) -> { status }`                                                                                               | Cancel a running detached sub-agent (scoped to that run only). See [ADR 0053](decisions/0053-detached-task-subagents.md).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `web_search`     | `(query, max_results?) -> { query, results, count }`                                                                        | Tavily SERP. Only advertised when a key is configured. See [§ Web search](#web-search).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `web_fetch`      | `(url) -> { url, markdown, truncated, bytes }`                                                                              | Jina Reader markdown extraction; `http`/`https` only, 200 kB cap. Always available.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `mcp_list_tools` | `(server) -> { server, tools, count }`                                                                                      | Tool catalog of one enabled MCP server. Only advertised when the workspace has enabled servers. See [§ MCP servers](#mcp-servers).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `mcp_call`       | `(server, tool, args?) -> { server, tool, content }`                                                                        | Invoke one MCP tool. Same gating as `mcp_list_tools`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `ask_user`       | `(questions[…]) -> { status, answers? }`                                                                                    | Pause the turn for multiple-choice questions. Parent-only. See [§ Ask user tool](#ask-user-tool).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `todo_write`     | `(todos[], merge?) -> current full list`                                                                                    | Session-scoped plan. See [§ Todo list tool](#todo-list-tool).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+
+Possible later additions, as separate commits when proven needed:
+LSP wrappers (`goto_definition`, `find_references`, `hover`),
+read-only git wrappers, `apply_diff`, `editor_open`.
+
+### Manual re-apply (recovery)
+
+`write_file` / `edit_file` rows expose a tucked-away "re-apply to
+disk" affordance: a cog inside the **expanded** tool body opening a
+one-item menu (the extra click guards against an accidental
+`write_file` clobber). It re-dispatches the recorded call's args
+through the registry against the current file — the recovery hatch
+for "I reset / clobbered that file and want the agent's edit back"
+without re-running the turn. Scoped to the two file-writing tools;
+re-running `bash` / read / network calls out of band has no
+recovery value. Pure side-effect: nothing is appended to the
+transcript or JSONL, and the same turn-end format-on-save pass
+runs so the bytes match the original turn. A dispatch failure
+(e.g. an `edit_file` whose `find` no longer matches) surfaces as a
+flash. The call resolves against the active folder's **visible**
+session, so the lookup is by `tool_call_id` within that
+transcript.
+
+### Todo list tool
+
+`todo_write` keeps a small in-context plan, same shape as the
+Cursor / pi-mono convention (`todos: [{ id, content, status }]`,
+`merge: bool`, status vocabulary
+`pending | in_progress | completed | cancelled`).
+
+Semantics:
+
+- **Session-scoped.** Each call persists the full post-merge list as
+  a `TodosUpdate` record; replay seeds from the last one. Reset on
+  new session; survives compaction (the plan is orthogonal to the
+  folded prefix).
+- The tool result is the current full list, mirrored to the
+  frontend's per-folder `coder.todos` bucket.
+- `merge: true` updates by id (unknown ids appended, unmentioned ids
+  untouched); `merge: false` replaces wholesale; `todos: []` clears.
+- "One item `in_progress` at a time" is prompt-enforced, not
+  tool-enforced.
+- Available to sub-agents too, as their own separate scratchpads.
+
+UI: a `done / total` pill in the panel header (parent list only)
+expanding to a popover, plus a per-call transcript body so the plan's
+evolution is visible. The agent owns the list — the user can't tick
+items by hand.
+
+### Ask user tool
+
+`ask_user` pauses the turn for one or more multiple-choice questions
+and blocks until the user answers. Parent-only (sub-agents have no
+panel to answer through). Args (`questions[]`, at least one):
+
+| Field            | Type              | Notes                                                                  |
+| ---------------- | ----------------- | ---------------------------------------------------------------------- |
+| `id`             | `string`          | Stable per-question id; answers key back to it.                        |
+| `question`       | `string`          | Question text.                                                         |
+| `options`        | `[{ id, label }]` | At least 2 per question.                                               |
+| `allow_multiple` | `bool`            | Multi-select with confirm when `true`; single-select submits on click. |
+
+A custom free-form answer is always available — there is no
+`allow_other` flag to opt into.
+
+Flow: the loop emits a normal `tool_call` (the panel renders an
+always-open interactive card instead of a collapsed row) and parks a
+oneshot on the session's `PromptRegistry`, keyed by `tool_call_id`.
+The user either answers the card (`coder_respond_to_prompt` →
+`{ status: "answered", answers: […] }`) or skips by sending a normal
+composer message (`{ status: "skipped" }` — the typed message
+proceeds as a steer). Aborting the turn resolves the tool as
+`Aborted` like any interrupted tool.
+
+A parked prompt is a background turn the moment the user navigates
+away; the answer routes to whichever runtime holds the prompt, and
+reopening the session re-renders the card in its waiting state
+rather than painting it errored. The session list and folder bar
+show a "needs input" cue that takes precedence over "running".
+
+A cold restart (IDE quit + relaunch) also resumes a parked prompt
+instead of erroring it: the `ask_user` call's args survive in the
+Assistant record, so `open_session` re-dispatches the call via the
+same `resume_tool_calls` path the resume-from-assistant gesture
+uses, which
+re-parks a fresh oneshot and the card re-renders interactive.
+Answering it resolves the oneshot and the turn continues. Only
+`ask_user` orphans resume this way — a mixed orphan tail (an
+`ask_user` plus a side-effecting tool that never returned) falls
+back to the interrupted-result path so we never blindly re-run
+tools with side effects.
+
+Prompt guidance: not for clarification the agent could resolve by
+reading files, and not as a "should I proceed?" confirmation — only
+for genuine forks where the user's intent is the missing input.
+
+### Reading the user's terminals
+
+`list_terminals` / `read_terminal` let a session see the terminals
+the user has open **for its own project** and read what they
+printed ([ADR 0048](decisions/0048-coder-reads-terminals.md)), so
+"the dev server is erroring" is answerable by reading the dev
+server instead of starting a second one through `bash`.
+
+- **Read-only.** There is no write / resize / close counterpart:
+  the agent runs its own commands with `bash` (`detach` for long
+  ones), and the user's terminals stay the user's.
+- **Folder-scoped.** Every terminal is tagged at open time with
+  the bound folder it was opened for; both tools only see
+  terminals matching the session's routing folder, so a worktree
+  session sees its worktree's terminals and not its parent's. A
+  terminal from another project is refused like an unknown id,
+  listing this project's ids for recovery. Sub-agents get the same
+  surface against their own target folder.
+- **Advertised only while the project has a terminal open** (same
+  posture as the MCP meta-tools). The tool list is rebuilt every
+  turn, so they appear as soon as the user opens one.
+- **Output is what's on screen.** Each terminal keeps a bounded
+  ring of raw PTY bytes (256 kB) which a read replays through a
+  throwaway terminal emulator: escape sequences applied,
+  `\r`-redrawn progress lines collapsed to their final state. The
+  UI's own xterm.js scrollback is larger and independent, so a
+  read can reach less far back than the user can scroll.
+- **Lifetime is the tab's.** A terminal whose shell exited stays
+  readable (`running: false` plus its exit code) and is dropped
+  when the tab closes.
+- Reads default to 200 lines, capped at 2000 lines / 100 kB per
+  call, with `truncated` set when anything was dropped. Terminals
+  can hold output the user didn't mean to share; the tool
+  description says so and tells the model not to quote back more
+  than the task needs.
+
+### Web search
+
+Two tools, both pure outbound HTTP from the IDE process (no
+`WorkspaceHost` involved):
+
+- **`web_search`** via Tavily — clean JSON shape, free tier covers
+  interactive-editor usage, and it's the SERP API agent-trained
+  models already know. Per-user key in the keyring
+  (`account=coder-web-search:tavily`), set/cleared in the
+  model-settings popover; the tool is only advertised when a key is
+  configured.
+- **`web_fetch`** via Jina Reader (`https://r.jina.ai/<url>`) — one
+  `reqwest::get`, zero deps, good extraction quality. No key needed.
+  200 kB cap with `truncated: true` so the model fetches a narrower
+  sub-page instead of re-fetching.
+
+Two tools rather than a "search and synthesise" black box: the agent
+decides whether snippets suffice or a full read is worth the tokens,
+and auto-compaction already handles the context-growth failure mode.
+Neither tool is mode-gated — both are read-only against the world.
+Errors surface as `is_error: true` tool results with the provider's
+verbatim error body.
+
+### MCP servers
+
+MCP (Model Context Protocol) servers reach the model through a
+**meta-tool surface**, not direct tool exposure ([ADR 0033](decisions/0033-coder-mcp.md)):
+`mcp_list_tools(server)` returns a server's tool catalog on demand,
+`mcp_call(server, tool, args)` invokes one. The enabled-server list
+(id + a model-facing description) rides in the meta-tool
+descriptions plus an `enum` on `server`; per-server schemas only
+cost context when actually fetched. Neither tool is advertised when
+the workspace has no enabled servers, and neither is mode-gated
+(same posture as `bash` — sub-agents get them too).
+
+- **Presets + customs.** One hardcoded preset: `playwright`
+  (`npx -y @playwright/mcp@<pinned> --browser chromium --headless`
+  — version pinned in `mcp.rs::PLAYWRIGHT_MCP_VERSION`, bundled
+  Chromium so it doesn't require real Google Chrome; headless
+  because the coder drives via snapshots, not a window on the
+  dev's display). The browser's system dependencies and the
+  chromium revision that exact MCP version expects ship in
+  moon-base (a unit test keeps the two pins in sync) — the MCP
+  server hard-gates launches on its own dep check, which no
+  user-space env fix can reach through `docker exec` (ADR 0033).
+  The preset's model-facing description tells the coder to omit
+  `filename` on screenshots: the image returns inline, while a
+  named file saves into the workspace root with no usable path
+  in the reply (ADR 0033, amendment 2026-08-06).
+  Custom servers — label, command + args (stdio transport
+  only), per-server env overrides, description — live per
+  workspace on `WorkspaceSession.coder_mcp`, managed from the
+  model-settings modal's "MCP servers" section via the
+  `coder_mcp_*` commands.
+- **Per-workspace enable set**, following the provider-lock
+  precedent. Toggles write through immediately; the next turn's
+  tool list reflects them.
+- **Servers run where the workspace runs**: `docker exec -i` when
+  the workspace shell container is `Running`, host otherwise —
+  the same probe as `bash`. There is no per-server run-target
+  knob (one existed briefly and was removed unused, ADR 0033).
+- **Bound folders are declared via the MCP `roots` capability**,
+  active folder first, in the spawn target's path space. That's
+  how a server learns which directories the session is about;
+  playwright derives both its output dir and its file-access
+  sandbox from `roots[0]`, so the active folder is readable and
+  writable without per-server path workarounds. Servers that ask
+  for something we don't implement get a `-32601` reply rather
+  than silence.
+- **No per-server path policy in the client.** Where a server
+  writes its artefacts follows from the roots it was given —
+  playwright puts them in `<roots[0]>/.playwright-mcp` — so the
+  coder carries no `--output-dir` pin and does not rewrite
+  `filename` arguments. Container-local paths in tool results
+  (`/workspace/<folder>/…`) are rewritten to host paths before the
+  model sees them, for every bound folder's mount, so a reported
+  screenshot path feeds straight into `read_file`.
+- **Tool-result images are first-class.** MCP `image` content
+  blocks (screenshots) and `read_file` on an image file (png /
+  jpg / gif / webp, ≤ 3 MB) both reach the model as typed image
+  blocks: the tool result's `"images"` key leaves the JSON text
+  projection and is re-attached per provider (Anthropic nested
+  `tool_result` blocks; on the OpenAI-compat wire, `image_url`
+  parts in a synthetic user message emitted after the tool run —
+  `tool` content stays string-only because strict backends 422 a
+  content-parts array there, see
+  [ADR 0072](decisions/0072-tool-image-hoisting.md)). Images
+  persist as pi `image` content blocks so reopened sessions
+  re-send them; compaction shows the summary model a count, not
+  pixels. The panel and companion render them as thumbnails with
+  a full-size lightbox; JSON fallback views strip the `images`
+  key so the base64 never dumps into a `<pre>`.
+- **Result text is capped at 100 kB** (`mcp.rs::RESULT_TEXT_MAX_BYTES`),
+  with a truncation note telling the model the total size and to
+  narrow the query. Built-in tools bound their own output, but an
+  MCP server can return anything, and one unbounded dump inside
+  the compaction keep-window can wedge a session into a
+  compaction-per-turn loop (a 331 kB `browser_run_code_unsafe`
+  result did exactly that). Image blocks are exempt — they ride
+  the typed `images` path, never the text projection.
+- **Captured PNGs are re-encoded to lossless WebP** before they
+  enter the history — same pixels, ~40% fewer bytes on every
+  subsequent round-trip. An image is re-sent for the rest of the
+  session, so its bytes are paid once per turn, and the HF router
+  caps a request body at 5 MiB. See [ADR 0049](decisions/0049-image-payload-budget.md).
+  A user context-window override is **authoritative** (raises past a
+  stale catalog value as well as capping below it — routers list
+  128k for models that ship 1M); the unknown-model cold-start
+  fallback is 256k. Cache visibility: OpenAI-style
+  `prompt_tokens_details.cached_tokens` folds into
+  `cache_read_input_tokens`, so cache reporting works on HF routes too.
+  The `token_usage` event also carries a session-lifetime scoreboard
+  (`session_cache_hits` / `session_requests`: provider-reported
+  round-trips that hit the cache out of all made, folded from
+  persisted `Usage` records on reopen, bumped live) — the desktop
+  ring and companion token bar render it as `⚡hits/requests`, so
+  "is caching working for this session?" doesn't depend on the last
+  request alone. Sub-agent inner usage events carry `0/0` (no
+  scoreboard).
+- **Output budget + cap continuations.** Every agent-shaped
+  streaming call — the turn and sub-agent loops, the iteration-cap
+  wrap-ups (parent and sub-agent), and both compaction summary
+  paths (in-session and chunked) — sends an explicit `max_tokens`:
+  min(32k, window − prompt − slop) via `turn_output_budget`, never
+  the provider default. Some HF deployments default to 2,048, which
+  reasoning models burn entirely on thinking and then loop through
+  continuations without ever answering. (The short utility calls —
+  auto-rename, commit/branch suggestions, terminal command — ride
+  the default on purpose: tiny prompts, tiny answers, and a 2k cap
+  is not a constraint on a commit message.) On a `length` stop the
+  runner injects a continuation sentinel (max 3); when the cut
+  response was thinking-only, the sentinel quotes the tail of the
+  lost reasoning (reasoning is not replayed to the model outside
+  the native Anthropic path, so "continue where you stopped" is
+  otherwise impossible).
+- **Model rotation on transient errors.** A user-authored fallback chain
+  (`CoderModelSettings.rotation`, persisted in `state.json`; edited
+  via the companion provider card's "Fallbacks" row, the desktop
+  model modal's Fallbacks editor (HF section; reorder/remove/add,
+  applied on save), or
+  `moon-remote model --rotation "a,b,c"`): full wire slugs — any
+  models, any `:provider` flavors — tried in order when a request's
+  transient-status backoff schedule (429 and the 502/503/504
+  gateway/overload class; plain 500s deliberately don't retry) is
+  exhausted, one quick retry each. First
+  _successful_ response wins; a fallback failing for another reason
+  (bad slug, wrong route) is skipped. Explicit rather than derived
+  from catalog siblings: the user knows which providers they trust.
+  When the failed model is itself in the chain the order starts
+  after it and wraps. A rescue **sticks for the rest of the
+  turn** (task-local, like the session-affinity hint): subsequent
+  round-trips go straight to the fallback instead of re-eating the
+  primary's ladder every iteration, which also keeps the fallback's
+  prompt cache warm; the primary re-enters at the end of the chain
+  each time (recovery clears the stickiness). The stickiness
+  evaporates at turn end — the next turn starts from the user's
+  pick. If the whole chain fails, the original error surfaces as
+  before. Backoff sleeps and rotations emit a live-only
+  `retry_backoff` event (model, status, attempt/max, delay*ms,
+  rotated_to) — both frontends render it as a countdown bar,
+  cleared by the next live event of any other kind. The runner also
+  keeps the current wait per session in memory and re-emits it (with
+  the \_remaining* delay) when a client opens the session mid-backoff,
+  so arriving during a two-minute sleep explains itself instead of
+  showing a bare spinner. `token_usage` carries the **effective
+  model** for the round-trip (the pick, or the turn's sticky
+  rotation fallback); the companion shows it above the token bar and
+  the desktop ring's tooltip lists it.
+- **`/models` shape tolerance.** Provider probes and catalog fetches
+  accept OpenAI's `{"data": [...]}`, a bare `[...]` (Together, some
+  vLLM builds), and `{"models": [...]}` (Ollama-flavoured gateways).
+  Probe and catalog share the tolerance on purpose: a probe that
+  rejects a shape the catalog accepts blocks the provider from
+  being added at all.
+- **Windowed-safe reverts.** `coder_revert_to_message` accepts
+  `user_from_end` (index counted from the last user message
+  backwards) alongside the absolute `user_ordinal`. The companion
+  must use from-end: its windowed transcript clips the head, and
+  counting rows in the window undercuts the absolute ordinal —
+  a live bug truncated a 3000-message session at message ~70.
+  `truncate_before_user_record` now also writes a rolling
+  `<id>.jsonl.bak` before rewriting (and refuses to truncate if the
+  backup fails), so an ordinal bug can no longer destroy a
+  transcript unrecoverably.
+- **JSONL append integrity.** Appends to a session file are
+  serialized per-path and written record+newline in a single
+  buffer — parallel sub-agent spawns append `SubagentSpawned` to
+  the parent's file concurrently and used to tear lines
+  (`}{`-joins) that the reader then skipped with a warn.
+- **Steer chronology on turn start.** A send that _starts_ a turn
+  drains any parked steers (e.g. worker-message notices on an idle
+  coordinator, ADR 0062) into the history _before_ its own prompt,
+  so the model, the JSONL, and both UIs see true arrival order —
+  previously the loop-top drain appended older messages after the
+  newer prompt.
+  HF-route requests carry `X-HF-Session-Id` (a UUID derived from the
+  session/sub-agent id, task-local-scoped around each turn) so the
+  router pins fireworks-ai's replica-local prompt cache per session
+  (`x-session-affinity`); other providers ignore it. Verified live:
+  fireworks-ai and zai-org report and hit their caches, baseten
+  caches some models but not others, scaleway reports nothing.
+- **Lifecycle**: spawned lazily on first use, kept alive across
+  turns (a playwright browser session persists between calls) and
+  are keyed per **server × session**: parallel agents (coordinator
+  fleets) each get their own server instance — one shared playwright
+  meant every worker fought over the same browser's current tab. The
+  playwright preset runs `--isolated` so concurrent instances don't
+  contend on a persistent profile lock. Instances are reaped on
+  worker retire / session delete, when a sub-agent's loop settles,
+  and by an idle-grace reaper at turn end (10 min with no new turn —
+  interactive browser back-and-forth keeps its page; abandoned
+  standalone sessions don't leak a chromium),
+  killed on disable / remove / IDE exit / a host↔container mode
+  toggle (ADR 0041 — the connection is bound to wherever it
+  spawned, so the flip respawns it on the new target), respawned
+  on the next call after a crash.
+- An MCP-level `isError` result throws, per the error model below.
+
+### Error model
+
+Tools **throw** on failure (`Result::Err` becomes `isError: true` in
+the tool result). Returning "ERROR: …" as content is banned — it
+confuses the model (the
+[explicit pi convention](https://github.com/badlogic/pi-mono/blob/main/packages/agent/README.md#error-handling)).
+
+### Permissions
+
+No popups. The user's safety boundary is the workspace container
+(Phase 2), not a per-call confirm dialog; the panel header shows a
+"running on host" / "running in container" indicator so the boundary
+is visible. If we ever add an explicitly destructive built-in (none
+today), it gets a one-time confirm — but `bash` itself is not gated.
+
+### What the LLM sees as system prompt
+
+Concatenated, in this order:
+
+1. Hardcoded base prompt (workspace-aware).
+2. **`AGENTS.md`** from the active workspace root (case-insensitive,
+   `CLAUDE.md` fallback, AGENTS.md wins when both exist). Verbatim up
+   to a 20 KB cap with a `… (truncated)` sentinel.
+3. **`.moon/AGENTS.md`** — personal, gitignored per-dev overrides,
+   as a separate section layered above the project rules
+   (personal > team > base). Same cap/truncation. Because it's
+   gitignored, a worktree checkout never contains it: worktree
+   sessions inherit the **parent project's** copy (a deliberately
+   placed worktree-local file still wins).
+4. **Skills** discovered from `skills/`, `.claude/skills/`,
+   `.cursor/skills*/`, `.agents/skills/` (`SKILL.md` with `name` +
+   `description` frontmatter per the
+   [agent-skills standard](https://agentskills.io)). Only the
+   descriptions are listed; bodies load via `read_file` on demand.
+
+No skill installer — skills are file conventions.
+
+## Sessions
+
+### Multi-session per project
+
+Every bound folder can host multiple concurrently-running sessions
+([ADR 0016](decisions/0016-coder-concurrent-sessions.md)). Each
+session has its own chat history, cancel handle, composer draft, and
+context ring; switching folders or sessions never touches another
+session's running turn.
+
+Tools captured by a running turn close over the **session's bound
+folder**, not the live active folder — switching folders mid-turn
+cannot redirect tool calls. This includes the coordinator tools
+(ADR 0030): `spawn_worker` creates the worktree off and files the
+worker under the **coordinator's own project** by default, or under a
+different bound folder when `folder` is passed (e.g. one created by
+`init_repo` / `clone_repo`). With `worktree: false` the worker runs
+**in place** instead ([ADR 0070](decisions/0070-in-place-workers.md)):
+no worktree, no branch — the session drives the target folder's own
+checkout (uncommitted state included), so its edits and commits land
+on the currently checked-out branch alongside anything else working
+there. `base_branch` is refused in-place (switching the shared tree's
+branch under the user), `merge_worker_changes` refuses (nothing to
+merge), `discard_worker_worktree` is the usual no-op, and passing an
+existing worker's worktree as `folder` puts a second worker inside
+that same checkout. The shared-tree race is accepted — the
+coordinator opts in explicitly and is told the tree is shared.
+`clone_repo` / `init_repo` /
+`workspace_scm_status` anchor to the coordinator's own folder too.
+`abort` targets the active folder's visible session only; sign-out is
+the one global cancel.
+
+A direct user message into a coordinator-spawned worker **notifies the
+coordinator and nothing more**
+([ADR 0043](decisions/0043-user-message-notifies-coordinator.md)): the
+coordinator's session receives a notice naming the worker and quoting
+the message (truncated to 200 characters), on every such message. The
+notice's wording tracks delivery: a message into a worker whose turn
+is mid-flight is reported as _queued_ (the worker has not seen it
+yet), not as delivered. The
+notice **parks in the coordinator's steer queue and never wakes it**
+([ADR 0062](decisions/0062-parked-coordinator-notices.md)) — a running
+turn drains it at the next iteration boundary; an idle coordinator
+holds it (a queued row, with "go now" as the manual wake) until its
+next turn, typically the worker's own `TurnComplete` dispatch packet.
+
+The links survive restarts
+([ADR 0065](decisions/0065-restart-resilient-worker-links.md)): the
+worker's header carries its orchestrator id, the coordinator's JSONL
+carries the fleet (spawn records flagged `worker: true` — not
+`worktree_root`, which in-place workers lack (ADR 0070) — minus
+`WorkerDetached` records appended on disconnect / retire / spawn
+rollback), and a coordinator's cold remount re-registers the fleet,
+respawns the dispatch feeder, and quietly remounts surviving workers.
+
+Worker events, by contrast, **do wake** an idle coordinator (ADR
+0030's events-as-messages feeder): a worker's `TurnComplete`, and a
+worker parking an `ask_user` prompt. The needs-input packet quotes
+the questions (ids and options, capped) so the coordinator can
+`respond_to_worker_prompt` immediately; `observe_worker` /
+`list_workers` also carry the parked prompt's args as
+`pending_prompt` while `needs_input` is set.
+Nothing else changes: the worker stays hooked up, dispatch packets
+keep flowing, and every control tool keeps working on it. Both the
+desktop composer and the phone notify; coordinator traffic (`send_to`)
+doesn't. Viewing a worker, aborting it from the panel, and answering
+its `ask_user` card notify nobody.
+
+Because both the coordinator and the user can speak into the same
+worker session, coordinator-originated messages (`spawn_worker`'s
+seed task, `steer_worker`) carry `from_coordinator: true` on the
+`user_message` event and the persisted user record (an ignored
+`fromCoordinator` field on the pi wire), and the transcript badges
+them **coordinator** instead of **you** — on the desktop and the
+phone. Human-typed messages, sentinels, and coordinator-_bound_
+notices (feeder wakes) stay unmarked.
+
+The explicit counterpart is the session bar's **disconnect** button,
+shown only on a coordinator-spawned worker
+([ADR 0052](decisions/0052-disconnect-worker-from-coordinator.md)):
+it unhooks the worker — the feeder stops forwarding, the coordinator
+gets one final notice, and its mutating control tools
+(`steer_worker`, `abort_worker`, `respond_to_worker_prompt`,
+`commit_worker_changes`, `merge_worker_changes`,
+`discard_worker_worktree`) start refusing it. The worker keeps its
+transcript, branch, and worktree, and an in-flight turn runs to
+completion; clicking the button a second time cancels that turn.
+
+The inverse is the **`/attach` composer command**
+([ADR 0084](decisions/0084-composer-slash-commands.md)): attach an
+**existing** session to a coordinator as a worker — adopt a session
+the user has been driving, or re-attach a disconnected one. Typed in
+a coordinator's composer it picks the session to adopt; typed in an
+ordinary session it picks the coordinator to hand the session to
+(same operation, argument order flipped). After the attach the link
+is indistinguishable from a spawned worker's: registry + dispatch
+feeder, `orchestrator_session_id` header stamp (rewritten on disk —
+attach targets an already-persisted session), a coordinator-side
+`SubagentSpawned { worker: true }` record so the ADR 0065 rebuild
+survives restarts, and a **parked** notice (ADR 0062) with a branch
+snapshot so the coordinator plans from the handover state at its
+next turn. A worker still attached to a _different_ coordinator is
+refused (disconnect it there first); disconnected residue is purged
+and re-linked. No task is seeded — the notice tells the coordinator
+to read the worker's state before dispatching. The synthetic spawn
+record's `tool_call_id` matches no tool row, so no collapsed card
+renders in the coordinator transcript; the parked notice and
+`list_workers` are the visible surface.
+
+Slash commands are a composer surface: a single-line draft starting
+with `/` mounts a completion menu (same interaction grammar as the
+`@`-mention picker — arrows / Enter / Tab / Escape, mouse picks);
+picking an `/attach` target executes immediately and the command
+never reaches the model. A leading `/` that resolves to no known
+command falls through to a plain send, so prose starting with `/`
+still works. **`/detach`** is the inverse: typed in an attached
+worker it disconnects that session (no argument — same as the session
+bar's disconnect button); typed in a coordinator it lists the
+coordinator's still-attached workers to pick from. It only appears in
+the menu where it can act. New commands ride the same rail when a
+concrete need shows up.
+
+The session bar's fleet affordance follows a three-state probe
+(`none` / `attached` / `disconnected`), re-run on session switch, on
+the visible session's busy flip, and after every attach / detach: an
+attached worker shows the disconnect button; a disconnected worker
+whose final turn is still running shows a warning-tinted "stop the
+turn now" variant; everything else shows nothing.
+
+`coder:event` payloads are wrapped in a
+`CoderEventEnvelope { folder, session_id, event }` so the frontend
+routes updates to the right per-`(folder, session)` bucket.
+Sub-agent events carry the **parent's** coordinates. A few
+folder-scoped variants (`folder_summary_ready`, `hub_sync_*`,
+`session_list_changed` — a list invalidation is about the folder's
+sessions dir, never one runtime, and the frontend drops folder-level
+events found inside a session bucket) arrive
+with an empty `session_id`, and `workspace_folders_changed` is
+workspace-global — the frontend re-fetches the workspace snapshot when
+a coordinator binds or unbinds a folder
+([ADR 0044](decisions/0044-idempotent-worktree-removal.md)), the one
+folder-set change no UI command returns a snapshot for.
+
+`AppState.coder.last_session_by_folder` records the last-visible
+session per project and is restored when the panel first mounts a
+folder. Hydration is gated on a workspace-ready signal so it doesn't
+race the launch-time tab-restore loop's active-folder switching. A
+stale pointer (JSONL deleted out-of-band) falls through to the
+sessions list and self-heals on the next open/send. Background turns
+don't survive a process restart.
+
+Selection order on a folder switch (and on first hydration) is
+**last opened, else most recent**, scoped to the target worktree
+context. `last_session_by_folder` is keyed by the **actual** active
+folder path (the worktree path when a worktree is active), so a
+parent and each of its worktrees each remember their own last-opened
+session. The pointer wins when it still exists on disk; otherwise the
+most-recently-active session whose `worktree_root` matches the context
+takes over. Pure mtime is the fallback only — it must never win over a
+still-valid last-opened pointer, or a just-finished background turn
+in another session would hijack the one the user actually had open.
+
+The session list paints per-row status: **needs input** (parked on
+`ask_user`; takes precedence over running), **running** (busy), and
+**finished** (turn ended while the user wasn't following; cleared on
+open). Folder-bar glyphs mirror the same three states as rollups of the
+per-session flags, scoped by worktree context: a worktree session's
+state shows only on its worktree row, never on the parent row (the
+parent row counts sessions rooted at the parent itself).
+Reopening a still-running session preserves these states: the replay
+batch's trailing `TurnComplete` terminator clears the pip, so `Replay`
+carries an `in_flight` flag and the frontend re-asserts **running** /
+**needs input** after applying the batch.
+
+The **running** pip is event-driven but reconciled against the
+backend: every sessions-list refresh also fetches
+`coder_running_sessions` (the ids with a turn in flight in the active
+folder) and asserts those pips on. Events alone miss turns that
+started before the panel was listening — a coordinator's workers
+spawned while the user was in another folder, a webview reload, a
+lagged event pump. The reconcile is positive-only; clearing stays
+with the live `turn_complete` / `aborted` / `error` events so a stale
+fetch can't blank a genuinely running pip. (The companion seeds from
+the same method.)
+
+The `coder_status` probe the panel fires on every folder switch is a
+second reconcile of the same shape: it overwrites the visible
+session's `busy` from the backend, so it resolves the visible session
+through the active folder's **coder root** (ADR 0028) — the same
+routing `send` / `open_session` use. Anything keyed by the raw
+active-folder path would read an empty per-worktree bucket and blank
+the running pip the replay's `in_flight` flag just re-asserted.
+
+The same running / finished signal also surfaces at the OS level —
+a status dot on the window icon and on the always-visible
+per-workspace tray icon, and a taskbar flash when a turn settles
+unfocused — driven by a backend count of live turn loops, not the
+frontend flags. See
+[ADR 0058](decisions/0058-agent-activity-indicator.md) and
+[ADR 0061](decisions/0061-persistent-tray-icon.md).
+
+### On disk
+
+Append-only JSONL at
+`<XDG_DATA_HOME>/moon-ide/coder-sessions/<project-slug>/<session-id>.jsonl`.
+The slug is `<basename>-<8-char FNV-1a hex>` of the folder's absolute
+path — deterministic, collision-free across same-basename folders.
+
+**No folder bound** (empty workspace): sessions are allowed and file
+under the slug of the **scratch root** — the user's home directory,
+canonicalised. The scratch root is never registered in
+`WorkspaceRegistry`; the coder synthesises a home-rooted folder entry
+on demand for exactly that path. `bash` and relative paths run from
+home, absolute host paths work through the out-of-workspace arm
+(ADR 0025), and a scratch session never routes to the workspace shell
+container, never gets format-on-save, and reads no project rules. A
+scratch coordinator can bootstrap the workspace — `init_repo` /
+`clone_repo` land at `~/<name>` — after which the new folder's
+sessions are separate from the scratch ones (scratch sessions stay
+filed under home). See
+[ADR 0074](decisions/0074-coder-sessions-without-a-folder.md).
+
+The first line is a header; every subsequent line is one record in
+**[pi](https://pi.dev)'s session-log wire shape**, so the file
+uploads to a HF dataset and renders in the Hub's pi trace viewer.
+The in-memory enum is `SessionRecord`; conversion happens at the
+serialise/deserialise boundary in `sessions.rs`.
+
+```jsonl
+{"type":"session","version":3,"id":"sess-...","timestamp":"2026-05-18T12:14:33.421Z","cwd":"/workspace/moon-ide","title":"implement bucket sync","created_at_ms":1746440000123,"updated_at_ms":1746440045871,"model":"anthropic/claude-sonnet-4.5"}
+{"type":"message","timestamp":"2026-05-18T12:14:34.001Z","message":{"role":"user","content":"do the thing","timestamp":1746440074001}}
+{"type":"message","timestamp":"2026-05-18T12:14:38.220Z","message":{"role":"assistant","content":[{"type":"text","text":"sure…"},{"type":"toolCall","id":"call_1","name":"read_file","arguments":{"path":"…"}}],"provider":"anthropic","model":"claude-sonnet-4.5","stopReason":"toolUse","usage":{"input":1234,"output":56,"totalTokens":1290},"timestamp":1746440078220}}
+{"type":"message","timestamp":"2026-05-18T12:14:38.310Z","message":{"role":"toolResult","toolCallId":"call_1","toolName":"read_file","content":[{"type":"text","text":"…"}],"isError":false,"timestamp":1746440078310}}
+{"type":"compaction","timestamp":"2026-05-18T12:20:01.000Z","summary":"earlier turns: …","details":{"messages_compacted":42,"messages_kept":6}}
+{"type":"message","timestamp":"2026-05-18T12:14:45.000Z","message":{"role":"custom","customType":"moon_title_update","display":false,"details":{"title":"add bucket sync upload task"},"timestamp":1746440085000}}
+```
+
+Schema `3` tracks pi's current format for the fields we use, **minus
+its tree structure** — Moon sessions are linear (no in-place
+branching), so pi's `id` / `parentId` entry linking would be dead
+weight and we omit it. What we do carry from pi v3:
+
+- A `timestamp` on every body line: ISO-8601 on the entry envelope
+  (pi's `SessionEntryBase.timestamp`) and Unix-ms inside each
+  message (pi's per-message `timestamp`). Both come from the moment
+  the row is flushed in `append_record`. Records are not stamped
+  in-memory, so the rare revert/rewrite path re-stamps surviving
+  rows with the rewrite instant rather than preserving the
+  originals. The `UserMessage` / `AssistantMessageEnd` events carry
+  the same time as `created_at_ms` (live `now`, persisted on
+  replay), and the panel reveals it as a wall-clock label next to
+  the `you` / `coder` header on row hover (full date in the
+  `title`).
+- `stopReason` on assistant rows (`stop` | `length` | `toolUse` |
+  `error` | `aborted`), normalised from the provider's finish/stop
+  reason by `inference::normalize_stop_reason`.
+- `toolName` on tool-result rows, so the viewer labels results
+  without cross-referencing the assistant record.
+- `durationMs` on tool-result rows: the tool's wall-clock execution
+  time as measured by the dispatcher, carried on the live
+  `tool_result` event and replayed on reopen so historical rows keep
+  their real durations (before this, a reopened transcript showed
+  every tool as `0ms` — the frontend can only diff its own event
+  arrival times, which are back-to-back during replay). Absent on
+  synthetic interrupted-tool sentinels and pre-existing records; the
+  panel falls back to the local arrival-time diff.
+
+Mapping notes (details live in `sessions.rs`):
+
+- `User` / `Assistant` / `Tool` / `Compaction` map natively to pi
+  rows. Fully-empty assistant turns (no text, no thinking, no tool
+  calls) are not persisted and are dropped on load — re-inflating one
+  trips Anthropic's non-whitespace-text 400. At runtime an empty
+  shell is also never a valid _final_ answer: the turn loop (parent
+  and sub-agent) retries the round-trip up to
+  `EMPTY_RESPONSE_RETRIES` times, then fails the turn with
+  `CoderError::EmptyResponse` — previously the turn ended as a
+  phantom success and a sub-agent reported an empty result.
+- The per-assistant `provider` + `model` stamp reflects the route
+  that actually served that round-trip, not the header's seed.
+- `Usage` folds onto the prior assistant line's `usage` block on
+  write and is re-emitted as a stand-alone record on load.
+- Moon-specific records (`TitleUpdate`, `TodosUpdate`,
+  `SubagentSpawned`, `SubagentFinished`, `Error`, `SummaryState`)
+  ride in pi `custom` rows with `display:false` and a `moon_*`
+  `customType`; the pi viewer skips them silently. `Error` is
+  appended when a turn fails with a non-recoverable backend error
+  (auth, decode, provider 400); without it the on-disk transcript
+  trails off mid-tool-loop and the failure is invisible to anyone
+  debugging from the JSONL after the fact. It doesn't shape the
+  in-memory `messages` slice on reload — an error ended the turn, so
+  it isn't history the next turn sends.
+- Image attachments split the data-URL into pi's `data` + `mimeType`
+  on write and re-prefix on load.
+
+The header carries pi-required keys plus our extras; pi's schemas
+tolerate unknown keys. The system prompt isn't persisted — reopening
+re-adds the current default, so prompt updates apply retroactively.
+`updated_at_ms` is frozen at first persistence; recency for the
+sessions list comes from the file's mtime (free — every append
+touches it — and it keeps appends O(1) and crash-safe).
+
+**The sessions list reads a trailer, not the transcript.** Listing a
+project's sessions only needs the fold (`title` / `last_error` /
+`interrupted`), but the fold's inputs live anywhere in the file — a
+title update or an error record at the very end changes it — so a
+header-only read is wrong and a full read is O(transcript bytes
+parsed) per session per refresh. The structural fix is a
+`SummaryState` record (`moon_summary`) appended **when a turn
+settles** (complete / abort / error, plus the auto-rename's
+`TitleUpdate`), carrying the fold plus a `bytes_len` anchor: the
+file's byte length at the moment the record was written (a
+self-reference the writer converges with a small fixpoint over the
+JSON digit count). `load_summary` reads an 8 KiB tail window and
+takes the newest trailer whose `bytes_len` still matches the on-disk
+size; anything that moves the file past the anchor — a new turn's
+first append, a revert/resume rewrite, a `Usage` fold into the
+trailing assistant line — invalidates it, and old sessions predate
+trailers entirely, so all of those fall back to the original full
+fold. No migration (pre-stability): the fallback is correctness, the
+trailer is the fast path.
+
+Sessions deliberately don't live in the project tree: they're
+personal history, not project artefacts, and putting them under VCS
+would litter `git status` or force a blind `.gitignore` entry.
+
+Lazy persistence: an empty session has no file on disk; the header is
+written on the first record. A crash loses at most the in-flight
+event.
+
+### Interrupted tool calls (orphan recovery)
+
+If a turn stops mid-tool (Esc, panel close, quit), the assistant's
+`tool_calls` hit disk but the matching tool record didn't — and every
+chat-completions API 400s on an unpaired `tool_calls`. Two recovery
+points:
+
+- **At abort time** (same process): the runner appends a synthetic
+  `Tool` message carrying an "interrupted" payload for each orphan,
+  persists it, and emits an errored `tool_result` so the panel flips
+  the row.
+- **At reload time**: `open_session` synthesises the same in-memory
+  tool messages and errored events for any orphan it finds, but
+  doesn't mutate the JSONL — load is read-only; the abort-time path
+  is the canonical writer. Idempotent when abort-time recovery
+  already ran.
+
+Reopening a session whose turn is **still running** (a background
+turn the user clicks back to) skips the errored-event synthesis
+entirely: the turn's currently-executing tools — a running `task`
+sub-agent, a long `bash`, a parked `ask_user` prompt — are orphans
+on disk (their tool records land only on completion) but not
+interrupted. Their rows replay in the running state and the live
+turn's real results flip them. The same exemption applies to a
+still-running sub-agent's own replayed transcript.
+
+Elapsed time is **wall-clock from the backend, both directions**:
+`tool_call` carries `started_at_ms` and `tool_result` carries
+`duration_ms`, so neither a running row's ticking counter nor a
+finished row's readout is derived from when the frontend happened to
+observe the event. Without the former, clicking back into a session
+restarts every running row's timer from zero — most visibly a `task`
+sub-agent that's been going for minutes. On replay `started_at_ms` is
+the enclosing assistant record's line timestamp (written immediately
+before the batch dispatches).
+
+Replay ships as **one batched `Replay` event**, not
+one-emit-per-record — Tauri dispatch overhead made a 1000-row session
+take seconds to open otherwise. Live turns stay one-event-per-emit.
+
+Reducer contract: **a transcript row's id is its identity, and
+`tool_call` is an upsert on that id, not an append.** A mid-turn
+reopen replays the persisted assistant record, which carries the
+_whole_ tool-call batch (it's written before the first tool
+dispatches), and the still-running turn then emits its own
+`tool_call` for every call that hadn't started yet — so the same id
+legitimately arrives twice. Re-dispatched calls (resume from
+assistant, resumed `ask_user`) reuse the model's original id for the
+same reason. Appending instead of upserting duplicates the row and
+trips the keyed `{#each}`'s `each_key_duplicate`, which kills the
+panel until a reload. Holds for the desktop panel, the sub-agent
+pop-out, and the phone companion.
+
+**Tool-call ids are unique per session, enforced by moon, not the
+provider.** Some OpenAI-compat providers mint ids that are only
+unique within one assistant message (`bash:0`, `bash:1`, …, the
+counter resetting every message — seen from Kimi-K3 via Baseten).
+Under the upsert contract a recycled id is catastrophic: a new call
+whose id matches an already-finished row is silently dropped, so the
+tool runs without ever appearing in the transcript, and its result
+overwrites the old row. The runner therefore remaps collisions on a
+fresh response to `{id}-dupN` (N ≥ 2) before anything observes them —
+events, `messages`, the persisted record, and dispatch all agree —
+and `sessions::load` applies the same remapping to old transcripts at
+parse time (each `Tool` / `SubagentSpawned` record re-pairs with the
+latest prior use of its original id, matching the live pairing
+order). The suffix is alphanumeric-safe so Anthropic's id charset
+stays satisfied.
+
+### Revert, replay, and edit & resend
+
+Every user message row reveals three hover affordances:
+
+- **Replay from here** — drops that message and everything after it,
+  then re-sends the same prompt verbatim (re-run the turn without a
+  composer round-trip). No confirm (the same prompt fires again, so
+  nothing is lost).
+- **Edit & resend** — same truncation, but the dropped prompt loads
+  back into the composer for the user to tweak before sending. No
+  confirm (the text isn't lost).
+- **Revert to here** — drops that message and everything after it
+  from disk and memory, full stop. Modal-confirmed (it permanently
+  rewrites the transcript with no re-send).
+
+Revert and edit-and-resend route through
+`coder_revert_to_message(user_ordinal)`; replay routes through
+`coder_replay_from_message(user_ordinal)`, which is the same
+truncation immediately followed by a `send` of the dropped prompt
+(it auth-gates **before** the truncation, so a signed-out replay
+fails clean without rewriting the JSONL). The anchor is the 0-based
+ordinal among the transcript's user records, because row ids are
+minted fresh on every replay and aren't reload-stable. Queued
+(undrained) steers are skipped by the ordinal count since they
+aren't on disk yet. All three are refused while a turn is in flight.
+After truncation the backend drops the mounted runtime and re-opens
+the session so the trimmed transcript repaints through the normal
+replay path.
+
+### Resume from a mid-turn agent response
+
+A mid-turn assistant row (one whose `tool_calls` are non-empty and
+are followed by `Tool` records before the next user message) reveals
+a fourth hover affordance: **Replay from here**. This is a different
+operation from the user-message replay above — it resumes the
+tool-loop from that checkpoint rather than re-sending a prompt.
+
+Routes through
+`coder_resume_from_tool_call(tool_call_id)`, anchored on the
+**persisted tool-call id** of the first call the assistant row
+issued — ids are unique and nothing needs to count, so nothing can
+drift between what the panel renders and what the backend indexes.
+(The desktop previously sent an ordinal counted over _visible
+assistant rows_ while the backend counted _assistant records with
+tool calls_; the two sets diverge by every tool-only assistant
+record — a bare call with no prose renders tool rows but no
+assistant row — and on a long coordinator session the drift passed
+70 records, so a "replay from a few messages up" cut ~40 messages
+too high and swallowed the thread the user was answering. The
+companion hit the same class of bug first and switched to the id
+anchor; the desktop now matches. The bridge's ordinal variant
+remains only as its fallback.) The backend truncates the JSONL to
+keep everything up
+to **and including** the target `Assistant` record, drops its `Tool`
+records (and everything after), then mutates the existing runtime's
+`messages` in place (rebuilt from the surviving records without
+orphan-recovery — the kept tool calls are about to be re-dispatched,
+not marked as interrupted). It fires a `SessionLoaded` + `Replay`
+(with `in_flight: true`) so the frontend clears and rebuilds to the
+checkpoint state — `SessionLoaded` carries the ADR 0028 / ADR 0030
+optional header fields (`worktree_branch`, `committed_branch`,
+`mode`) so the worktree chip and coordinator badge survive the
+rebuild without waiting on a sessions-list refresh — then spawns
+the turn loop on the same runtime with
+the kept `Assistant`'s `tool_calls` as a resume parameter. The model
+is **not** re-prompted for that round-trip — its existing tool calls
+execute fresh against current workspace state, and the turn loop
+continues with the new results in context. Auth-gates before the
+truncation (same posture as `coder_replay_from_message`). Refused
+while a turn is in flight. No confirm (tool calls re-execute fresh,
+nothing is lost). After the re-dispatch, subsequent iterations make
+normal LLM calls with the fresh tool results in `messages`.
+
+### Retry a failed turn
+
+A **trailing** error row (and only a trailing one — anything earlier
+is history, since a later turn already ran past it) carries a
+`retry` button, routed through `coder_retry_last_turn`
+([ADR 0046](decisions/0046-retry-a-failed-turn.md)). Unlike the
+three affordances above it truncates nothing: everything the dead
+turn completed is already persisted and still valid, the `Error`
+record stays on disk, the row stays in the transcript, and the retry
+appends below it. That's also what retires the button — rows past it
+mean it's no longer the tail. The backend re-runs orphan recovery
+first (the failure path, unlike abort, can leave a mid-dispatch tool
+call unanswered, which the providers reject) and then spawns the
+turn loop with no resume parameter, i.e. "call the model again with
+the messages we have". Auth-gated, refused mid-turn, and refused on
+a session with no messages.
+
+### Auto-rename
+
+After the first turn of a fresh session finishes — successfully,
+aborted, or errored — a one-shot cheap-model call produces a 4-6 word
+title, replacing the truncated-prompt fallback in memory, persisting
+as a `TitleUpdate` record, and emitting `session_title_updated`.
+"Any outcome" matters because long tool-heavy first turns are
+routinely Esc'd; failures keep the truncated-prompt fallback. Runs
+once per session, and **not at all** for a session that was already
+titled at creation — a coordinator-spawned worker keeps the name the
+coordinator gave it ([ADR 0042](decisions/0042-named-worker-branches.md)).
+
+### Sidebar UI
+
+Two views sharing the right-side slot (`rightPanel.kind === 'coder'`):
+
+- **Session view** — transcript + composer, with a sticky
+  `← Sessions | <title> | +` strip. Default view when a session
+  exists. A coordinator (orchestrator) session — `mode:
+"coordinator"` on the header (ADR 0030) — shows a `coordinator`
+  badge left of the title and a coordinator-specific empty-state
+  hint ("delegates each task to a worker in its own worktree");
+  the worktree chip renders the same as on a regular session.
+- **Sessions list** — a row per persisted session (title + relative
+  time), with hover affordances for "open trace" and delete
+  (confirmed), plus the per-row status cues described above. A
+  coordinator row carries a short `coord` badge after the title so
+  orchestrator sessions are visually distinct from hand-started
+  ones. A search box above the rows filters by transcript content:
+  the debounced query goes to `coder_search_sessions`, which scans
+  the on-disk JSONLs (summaries carry no transcript text) and
+  returns matching ids — matching parsed records, not raw JSONL
+  bytes, so base64 image payloads can't false-positive.
+
+`+` from either view opens a fresh empty session with focus in the
+composer; empty sessions don't persist until the first message. The
+sparkles button beside `+` opens a fresh **coordinator** session
+instead.
+
+### Open the raw trace in the editor
+
+Session rows, the session header, and the sub-agent pop-out all
+expose a `</>` button that resolves the JSONL's absolute host path
+(`coder_session_jsonl_path`) and opens it via the same host-direct
+file mechanism `Ctrl+O` uses (test plan 0051) — the trace always
+lives on the host's `XDG_DATA_HOME`, even for containerized
+projects. The tab is editable (power-user inspection; a corrupted
+line just gets skipped with a warn on next load) and doesn't
+auto-tail. Empty sessions surface a toast instead of a phantom tab.
+
+### Composer attachments
+
+- `Ctrl+L` from a terminal pane attaches the highlighted
+  scrollback instead, as a `<terminal_output>` block carrying the
+  source terminal's id — so the model can follow up with
+  `read_terminal` on that exact terminal rather than treating the
+  paste as all there is (the id is absent for a capture whose
+  terminal can't be identified, and a since-closed terminal fails
+  the read with the usual recovery hint).
+- `Ctrl+L` attaches the active editor selection (also works from
+  diff panes, review sections, and both sides of a commit diff —
+  the snippet text is captured verbatim, so quoting a historical
+  blob hands the model the right bytes even when the working tree
+  has moved on): inserts an inline
+  `@path:start-end` token at the caret, adds a chip above the
+  textarea, opens the panel, focuses the composer. Chips dedupe by
+  `(path, range)`; every press still inserts a fresh inline token.
+- Chips and inline tokens stay in sync both ways: removing a chip
+  strips its tokens; editing a token out of the prose drops the
+  chip. Tokens delete as one atomic block on Backspace/Delete.
+- Typing `@` opens an inline file picker backed by the same search
+  the command palette uses. Picking inserts `@path` — **pointer
+  only, no contents attached**: the model calls `read_file` if it
+  needs the bytes, which keeps prompts bounded on big picks.
+  `Ctrl+L` on a selection is the one "send me the bytes" gesture.
+
+#### Wire shape (matches Cursor)
+
+Prose stays intact with `@`-tokens inline; captured snippet contents
+land in a trailing `<context>` block:
+
+```
+explain the difference between @src/lib/foo.ts:48-50 and
+@src/lib/foo.ts:63-67
+
+<context>
+<code_selection path="src/lib/foo.ts" lines="48-50">
+[lines 48-50 verbatim]
+</code_selection>
+<code_selection path="src/lib/foo.ts" lines="63-67">
+[lines 63-67 verbatim]
+</code_selection>
+</context>
+```
+
+This is the wire shape Cursor ships, which models have seen in
+training. The wrapper element is a sufficient delimiter — no fencing
+needed. Empty draft + attachments is a valid send. The snapshot is
+captured at attach time — later file edits don't change what the
+agent sees. No implicit "active file" hint ships with a turn.
+
+### Image attachments
+
+Pasting images into the composer attaches them as thumbnail chips
+(cap: 4 MB per image, 10 per send). On send they ship as a separate
+`images` argument and go on the wire as OpenAI-compatible
+`image_url` data-URL blocks. Persisted on the `User` record
+(`skip_serializing_if` empty, so old transcripts keep their shape)
+and replayed as clickable thumbnails.
+
+Video is deliberately unsupported: there is no portable wire format
+(Anthropic has no video block; the HF router chat-completion schema
+defines only `text` and `image_url` parts; `video_url` is a
+non-standard vendor extension). If a real need surfaces, the viable
+path is client-side frame extraction into ordinary image attachments,
+which the existing pipeline and byte budget already handle.
+
+### Non-vision models
+
+Some models take no image input (DeepSeek, most Qwen text models);
+the HF router 400s the entire request when an `image_url` block
+reaches one. Capability is detected from the catalogs
+(`architecture.input_modalities` on the HF router and OpenRouter —
+model-level, no per-provider granularity; hardcoded `true` for
+Anthropic; unknown for vLLM/Ollama/LiteLLM) and cached per slug in
+`CoderModels::vision` alongside `context_windows`. Unknown is
+treated as vision-capable everywhere — wrongly stripping pixels
+from a capable model is worse than an explainable provider error.
+See [ADR 0069](decisions/0069-non-vision-models.md).
+
+Behaviour when the active model is known non-vision:
+
+- **Wire strip, history intact.** At request-encode time every
+  image block degrades to a
+  `[image omitted: the active model does not accept image input]`
+  text block. The session's stored attachments are untouched, so a
+  session with screenshots in history survives a switch to a
+  text-only model and restores the pixels on switching back.
+- **Tools say so up front.** `read_file` on an image errors instead
+  of attaching pixels; MCP `image` result blocks render as a
+  "not attached" note pointing at text alternatives (e.g. an
+  accessibility snapshot instead of a screenshot).
+- **UI.** The picker badges known non-vision models ("no vision",
+  not filtered — they're legitimate picks); the composer refuses
+  image pastes with a reason when
+  `CoderModelSettings.resolved_standard_supports_images` is `false`.
+
+### Image byte budget
+
+Vision input is billed per tile, so images are cheap in tokens and
+expensive in bytes — a 1440x900 screenshot runs ~1,700 tokens and
+200-500 kB. Token-triggered compaction therefore cannot see a request
+body filling up with screenshots, and a session can sit far under its
+context window while every request is rejected as too large.
+
+Two mechanisms, both in `crates/moon-coder/src/images.rs`:
+
+- PNG attachments are re-encoded to lossless WebP at capture, once.
+- Past a per-route byte ceiling (HF router only, since that's the
+  route with a 5 MiB body cap) or a provider attachment-count cap
+  (Scaleway hard-rejects at 60; we hold 50), the oldest attachments
+  are dropped from the **outgoing copy** of the history. The session,
+  its JSONL and the panel keep every image, so raising the budget
+  restores them. The byte ceiling/floor gap is deliberate: dropping
+  an image rewrites the prompt prefix, so trimming rarely and deeply
+  costs one prompt-cache miss instead of one per screenshot.
+
+Rationale, measurements and rejected encodings: [ADR 0049](decisions/0049-image-payload-budget.md).
+Budget planning runs **before** compaction in the turn loop: the
+in-session compaction summary replays the elision set, and marking
+fresh screenshots only afterwards let a summary request ship them
+un-elided (a 413 loop the budget could never break). User providers
+opt in via `payload_cap_mb` on their config (settable from both the
+desktop provider form and the phone add-provider form): the wire
+budget ceilings at ~85 % of the cap, floor at half — HF keeps its
+built-in budget. Sub-agents run the same budget over their own
+history with their own sticky set, and both the parent's and the
+sub-agent's iteration-cap wrap-up call replay the elision set — the
+one request that must not fail can't be the one that ships every
+screenshot.
+
+### Compaction
+
+See [§ Token accounting and auto-compaction](#token-accounting-and-auto-compaction).
+
+## Bucket sync (HF buckets)
+
+Buckets are HF Hub's S3-like object storage backed by Xet
+([guide](https://huggingface.co/docs/huggingface_hub/guides/buckets)).
+moon-coder uses one bucket per workspace, owned by the user or one of
+their orgs, so traces render in the Hub's
+[pi trace viewer](https://huggingface.co/docs/hub/en/storage-bucket-trace-viewer).
+
+### Connect flow
+
+A workspace starts unbound. The panel header's cloud-sync button
+opens the settings modal; when unbound, a "Connect" CTA opens the
+connect modal: **Owner** (user namespace or org), **Name** (defaults
+to `<workspace-basename>-traces`, validated against Hub repo-name
+rules), **Visibility** (private default). Create POSTs
+`/api/buckets/<owner>/<name>`, writes a README, and persists the
+binding onto `WorkspaceSession.coder_hub_bucket`. `409 Conflict` is
+treated as success (adopt the existing bucket; `contribute-repos`
+403s later if we don't actually own it).
+
+After create, `autosync` defaults to **false** — connecting alone
+never pushes anything. The header icon tints accent when bound.
+
+### On-Hub layout
+
+```text
+<owner>/<name>
+├── README.md                            ← generated once at create time
+├── moon-ide-7e985eb6/                   ← one directory per bound folder
+│   ├── sess-1779.....-abc.jsonl
+│   └── sub-1779....-x.jsonl             ← sub-agents share their folder's directory
+└── moon-landing-fa837b35/
+	└── sess-1781.....-ghi.jsonl
+```
+
+The directory key is the same `<basename>-<fnv8>` slug used locally,
+so local ↔ Hub paths line up 1:1. The bucket holds nothing else —
+no manifests, no extra nesting. The README is a short generated
+stub; the trace viewer keys off blob path + `.jsonl`.
+
+### Sync paths
+
+Two entry points, one implementation:
+
+- **Manual** — a cloud-up icon per session row pushes that session
+  immediately, regardless of `autosync`.
+- **Autosync** — the runner's `TurnComplete` handler enqueues a sync
+  with a 2 s debounce per `(workspace_id, session_id)`,
+  fire-and-forget.
+
+Upload: skip if the recorded uploaded byte-length matches the file
+(nothing new); otherwise fetch a short-lived Xet write token, push
+the bytes through `hf-xet`, bind the resulting hash at
+`<folder-slug>/<id>.jsonl` via the batch API, and persist the new
+`(bytes, at_ms)`. `HubSyncStarted` / `HubSyncFinished` events drive
+the per-row idle / syncing / synced / failed decoration.
+
+### PR body prefill
+
+The SCM panel's **Open PR** button (create path only — GitHub
+ignores query params on an existing PR) appends
+`?body=<footer>` to the `pull/new/<branch>` URL, where the footer
+links the currently open session's trace viewer URL. Gated on a
+bound bucket **and** an `uploaded` marker for that session (the
+viewer 404s otherwise). Best-effort: any miss opens the plain
+create-PR URL. Scoped deliberately to the one open session — no
+branch-matching across the session list until someone asks.
+
+### Failure mode
+
+A failed upload is a `tracing::warn!` plus a red cloud icon with the
+error in its tooltip. Local JSONL stays the source of truth; the next
+sync retries from scratch. No status-bar pip — a Hub blip shouldn't
+drag the workspace status red.
+
+### Disconnect
+
+Clears `WorkspaceSession.coder_hub_bucket` (including the uploaded
+cache) but never deletes the bucket — that's a web-UI action.
+Reconnecting to the same bucket re-uploads everything once; Xet dedup
+makes the bytes nearly free.
+
+### What never leaves the host
+
+- HF access / refresh tokens and provider API keys (keyring only).
+- File contents the agent reads **do** end up in the JSONL and
+  therefore in the bucket once a sync lands. NDA workspaces should
+  leave autosync off (the default) and not click Upload on sensitive
+  sessions.
+
+## Token accounting and auto-compaction
+
+### Token usage report
+
+The runner emits `CoderEvent::TokenUsage` three times per
+round-trip: pre-call (estimate anchored on the previous turn's exact
+usage plus bytes/4 of what was appended since), mid-stream (throttled
+estimate so long generations visibly fill the ring), and post-call
+(exact provider figures off the streaming `usage` chunk, requested
+via `stream_options: { include_usage: true }`).
+
+```ts
+{
+  kind: 'token_usage',
+  prompt_tokens: number,
+  completion_tokens: number,
+  total_tokens: number,
+  context_window: number,
+  source: 'provider' | 'estimate'   // estimate = bytes/4 fallback, tooltip shows ≈
+}
+```
+
+`context_window` is sourced from each provider's models catalog,
+cached in `CoderModels::context_windows` (primed at startup and
+refreshed by picker fetches), falling back to a small static table
+and finally 128k with a warn. The picker also exposes per-slug
+**user caps** (`context_window_overrides`) that clamp the catalog
+value — for models that advertise 1M but degrade past ~250k, capping
+arms compaction earlier and keeps the ring honest.
+
+The `ContextRing` in the panel header fills to
+`prompt_tokens / context_window`: muted < 60 %, warning < 80 %,
+danger ≥ 80 %; pulses during compaction.
+
+### Auto-compaction
+
+When `prompt_tokens / context_window ≥ 0.80`
+(`COMPACT_THRESHOLD`), the next loop iteration compacts before
+sending:
+
+1. Keep the most recent 6 user turns (`RECENT_USER_TURNS_KEPT`); the
+   oldest of those is the cut point.
+2. Obtain the summary (intent, decisions, files touched, state,
+   next steps) — **in-session first** (ADR 0067): one summarise
+   instruction is appended to the live conversation and the driver
+   model answers it, with the request byte-identical to the
+   previous round-trip up to that instruction (same model, system
+   prompt, tools, image elisions) so the provider's prompt cache
+   covers the whole prefix. The interaction is never persisted.
+   Taken only while `prompt + instruction + summary output`
+   provably fits the window (the call passes an explicit
+   `max_tokens` sized to the remaining headroom). Otherwise — or
+   when the in-session call errors, replies empty, or calls a tool
+   despite the instruction — fall back to the **chunked
+   out-of-band** pass: render the prefix to text and summarise it
+   with the standard model in window-sized chunks, merging with a
+   final pass, recursing if needed. Per-chunk failures are
+   tolerated; the pass only gives up if every call fails. (The
+   standard model is used, not the cheap model, because the cheap
+   model's actual per-route context window can be smaller than the
+   standard model's — the catalog's max-across-providers lookup
+   overestimates the cheap model's limit, which 400'd the summary
+   call every turn and made compaction a silent no-op.)
+3. Replace the prefix with one synthetic system message carrying the
+   summary at `messages[1]` (the composed system prompt at
+   `messages[0]` is recomposed fresh every turn anyway).
+
+The on-disk JSONL is **not** rewritten — full history stays for
+pop-out / audit. Instead a
+`Compaction { summary, messages_compacted, messages_kept }` record is
+appended so replay reaches the same compacted shape;
+`messages_kept` is load-bearing (folding the whole prefix on reload
+would drop the retained recent turns). After a fold the runner
+re-anchors `last_usage` on an estimate of the compacted prompt so
+the guard stays armed and re-fires if one pass didn't get under
+threshold.
+
+`compaction_started` / `compaction_complete` events render as an
+interleaved transcript row — a "compacting…" pip flipping to a
+`<details>` with the summary — which scrolls away naturally,
+stacks on repeat compactions, and survives reopen via replay.
+While the pass runs, `compaction_progress` heartbeats stream live
+progress into the row (and the ring's tooltip): estimated summary
+tokens written so far (the summary call streams its output) plus
+`part i of N` / merge-pass counters when the prefix was chunked.
+Not persisted — replayed rows flip straight to done. If every
+summary call fails, compaction is skipped and the agent continues
+with the uncompacted prompt.
+
+Sub-agents run the same pass at the same threshold against their own
+history. Threshold, retained-turn count, and the summary prompt are
+hardcoded ("hardcode first, configure later").
+
+One edge case: if the retained recent turns alone exceed the window
+(a burst of huge tool results), compaction mitigates but can't get
+under the limit. When the only thing in the compactable prefix is a
+prior compaction summary (all `System` messages — happens when the
+kept turns contain exactly `RECENT_USER_TURNS_KEPT` user messages),
+the pass bails instead of re-summarising the summary: re-summarising
+a summary produces a same-size replacement, never gets under
+threshold, and would spin the loop forever wasting one LLM
+round-trip per iteration. Rare and self-limiting.
+
+### Iteration cap and final wrap-up
+
+The parent loop caps at `MAX_TURN_ITERATIONS` = 200 tool-call
+round-trips per prompt. Hitting the cap appends a sentinel user
+message and runs one final tools-disabled round-trip so the model
+writes its best answer from what it gathered; the sentinel persists
+and renders like any user message. Per-tool errors are unrelated —
+they flow back as `is_error: true` results the model can recover
+from.
+
+## Sub-agents
+
+The parent's loop exposes the `task` tool. One call dispatches one
+sub-agent; by default the parent's tool call **awaits the report**
+(synchronous). `detach: true` instead returns a handle immediately and
+runs the sub-agent in the background — see § Detached sub-agents below.
+Multiple synchronous `task` calls in one assistant message run
+concurrently (4-permit semaphore). The wire name is `task` (what every
+agent product calls this); Rust internals keep the `subagent` naming.
+
+For a concurrent batch, each call's `ToolResult` event fires the
+moment that sub-agent finishes — not when its earlier siblings do —
+so the panel can stop that row's elapsed timer while the rest of the
+batch is still running. The conversation-history push is the mirror
+image: results land on `messages` in the model's original tool-call
+order once the whole batch resolves, so the next round-trip and any
+persisted replay stay deterministic. (Firing events in call order
+instead left finished-but-later rows pinned in the live "running…"
+state until the longest sibling settled.)
+
+```jsonschema
+task(
+  task: string,                    // self-contained; sub-agent doesn't see the parent's transcript
+  folder?: string,                 // basename of a bound folder, default = parent's active folder
+  mode?: "research" | "agent",     // default = "agent"
+  system_prompt?: string,          // overrides the mode-default prompt
+  detach?: boolean                 // default false; true = run in background, return a handle
+) -> {
+  result: string,                  // synchronous: the only string the parent's model sees
+  sub_session_id: string,          // pop-out lookup key, stable across restarts
+  tokens_used_estimate: number,
+  mode: "research" | "agent",
+  iterations_used: number
+}
+// detach: true instead returns immediately:
+//   { detached: true, subagent_id: string, status: "running" }
+```
+
+There is deliberately no per-call model selector — sub-agents inherit
+the parent's standard model. (A `fast | large` selector existed and
+was dropped: it biased the parent against delegating non-trivial
+work.)
+
+Sub-agents also inherit the parent session's **host-mode override**
+([ADR 0022](decisions/0022-coder-host-mode-override.md)) as a live
+shared flag ([ADR 0082](decisions/0082-inherited-host-mode.md)): a
+force-host parent's delegated `bash` runs on the host too, and a
+mid-run toggle re-routes the sub-agent's next command (ADR 0041
+semantics, one level down). Nested and detached runs ride the same
+handle; a user-resumed sub-agent re-resolves the flag from the
+parent's runtime, falling back to auto when the parent is unmounted.
+
+### Modes
+
+- **`research`** — read-only intent: `read_file`, `list_dir`,
+  `grep`, `bash`. The shell stays available for inspection commands
+  (`git log`, `cargo check`, …); "no mutation via bash" is
+  prompt-enforced, while `write_file` / `edit_file` are blocked at
+  the dispatch boundary regardless.
+- **`agent`** — full toolkit, same capabilities as the parent.
+  (Renamed from `coder`: the parent model treated a `coder`
+  sub-agent as less capable and hesitated to delegate; `agent`
+  reads as "another instance of you".)
+
+Top-level sessions are always `agent`; mode is a sub-agent concept.
+
+### Nested sub-agents ([ADR 0081](decisions/0081-nested-research-subagents.md))
+
+An `agent`-mode sub-agent gets a **trimmed `task`** of its own:
+research-only (no `mode`), synchronous-only (no `detach`), no
+`system_prompt` override — just `task` + optional `folder`. This gives
+delegated refactors the same context-preservation lever the parent
+has for read-heavy legwork. Depth is capped at 2 by tool-list shape:
+`research` sub-agents never see the tool. A nested call passing
+`mode: "agent"` or `detach: true` errors (actionable, not coerced).
+Nested calls dispatch sequentially (the sub-agent loop has no
+homogeneous-batch path); the nested run's cancel token is a child of
+the outer's, so aborts cascade all the way down. Nested spawns emit
+the same top-level `SubagentSpawned` / `SubagentFinished` events and
+single-wrapped `SubagentEvent`s as depth-1 runs, so the pop-out hosts
+a collapsed card under the outer transcript's `task` row and "← Back"
+unwinds one level at a time.
+
+### Folder targeting
+
+Sub-agents target one already-bound folder (basename, or absolute
+path as fallback); unbound targets error so the model can recover.
+Since the parent's own fs tools reach any bound folder (see below),
+sub-agents are for **delegation**, not access: context isolation
+(read 30 files, report a paragraph), parallelism, or scoped
+self-contained work.
+
+### Freshness pre-fetch
+
+Sub-agent spawn kicks off a best-effort, fire-and-forget `git fetch`
+against the target folder's `WorkspaceHost`, throttled to one per
+folder per 5 minutes. Rationale: the active folder has a periodic
+auto-fetch (test plan 0064) but a sibling may be stale, and
+review-style sub-agent prompts read `origin/main`. Fetch-only —
+never pull/merge, so no working-tree mutation; failures are
+swallowed quietly.
+
+### Budget
+
+Sub-agents share the parent's `MAX_TURN_ITERATIONS` cap (a tighter
+50-iteration cap existed and bailed real refactors mid-flight).
+Hitting the cap triggers the same tools-disabled final wrap-up,
+prefixed so the parent knows the budget ran out. The old byte-budget
+cap was removed when auto-compaction shipped. A report that runs into
+the provider's _output_-token ceiling is continued rather than
+returned as a fragment — see § Truncated answers. There is no
+wall-clock timeout: a sub-agent is bounded by iterations and by
+cancellation, not by a clock.
+
+### Detached sub-agents ([ADR 0053](decisions/0053-detached-task-subagents.md))
+
+`task({ ..., detach: true })` runs the sub-agent in the **background**
+and returns a handle immediately — the parent keeps working instead of
+parking the turn behind a blocking call. It's the async counterpart to
+the synchronous default, for slow independent work (a long test suite,
+a background audit) whose report isn't needed before the parent's next
+step. Detached runs share everything else with synchronous ones: same
+modes, same folder targeting, same nested-delegation rules
+(§ Nested sub-agents — a detached `agent` run may spawn nested
+research sub-agents, which are themselves always synchronous), same
+JSONL + collapsed card + pop-out.
+
+The lifecycle surface:
+
+- **`task_collect(subagent_id, wait_ms?)`** fetches the report once
+  the run settles (`{ status: "done", result, … }` / `"error"` /
+  `"aborted"`), or returns `{ status: "running" }` while in flight.
+  `wait_ms` (capped 60 s) parks until it settles, so the model can
+  wait without busy-polling — the `read_process` shape (ADR 0034).
+- **The finish wakes the parent.** A per-parent feeder watches for the
+  run's `SubagentFinished` and injects a steer-style message pointing
+  at `task_collect` — the coordinator's events-as-messages pattern
+  (ADR 0030 §a) keyed to sub-agent ids. The wake is a pointer, not the
+  report, preserving `task`'s context-isolation property.
+- **`task_steer(subagent_id, text)`** queues a steering message into a
+  running detached run ([ADR 0071](decisions/0071-steer-detached-subagents.md))
+  — delivered at the top of the
+  sub-agent's next iteration, the same channel the pop-out composer
+  uses. The row is tagged `from_coordinator` in the sub-agent's
+  transcript so it reads as agent-sent, not user-sent. Settled runs
+  return `{ status: "not_running" }`; only the spawning session's own
+  detached ids are steerable (synchronous runs have no handle and the
+  parent is blocked on them anyway).
+- **`task_abort(subagent_id)`** cancels the run's own token — scoped
+  to the one sub-agent, never the parent turn or its siblings. The
+  user-level abort (Esc) cascades to a session's live detached runs.
+- **Handles are in-memory.** A restart loses live runs (their JSONLs
+  stay on disk); `task_collect` on a lost id says so rather than
+  hanging. A settled run's report stays collectable (repeatably) until
+  the parent session is deleted — the wake is only a pointer, and the
+  parent may not reach its `task_collect` until several turns later.
+  A detached run outlives its spawning turn, so it flushes
+  its own format-on-save queue when it settles (as a user-resumed
+  sub-agent already does).
+
+Detached spawns skip the homogeneous-batch parallel path (a detached
+call returns instantly, so the `join_all`-then-report shape doesn't
+apply) — the sequential dispatch routes them through the same detached
+spawn, keeping one code path.
+
+### Persistence
+
+Sub-agent JSONLs live at
+`<sessions-dir>/<parent-folder-slug>/<parent-session-id>/<sub-id>.jsonl`
+— keyed by the **parent's** folder (sub-agents belong to the project
+that originated them), grouped per parent session, created lazily,
+and deleted with the parent. `list_sessions` reads the slug dir flat
+so only top-level sessions land in the picker; "open trace" routes
+`sub-...` ids through a scan of parent subdirs. The header carries
+`parent_session_id` + `parent_tool_call_id` + `subagent_mode` (and
+`subagent_target_folder` when it differs from the parent's).
+
+Nested sub-agents ([ADR 0081](decisions/0081-nested-research-subagents.md))
+reuse the top-level `parent_session_id`, so their JSONLs land **flat
+in the same directory** as the outer's — no nested subdirs, and
+deletion with the parent covers them for free. The nested
+`SubagentSpawned` / `SubagentFinished` records go into the **outer
+sub-agent's** JSONL (where the spawning `task` tool call lives);
+replay recurses through them one level.
+
+### UI
+
+Sub-agents render as collapsed cards under the parent's `task` row:
+folder, mode badge, status pip, result preview, token footer. Click
+pops out a dedicated transcript view (same row components, different
+rows source) with a back arrow. The pop-out opens with the task as a
+user-message row (the runner live-mirrors it, and the wrap-up
+sentinel, as wrapped `UserMessage` events — matching what replay
+reconstructs from the JSONL's `User` records), so the transcript
+always shows what the sub-agent was asked to do. Sub-agent user
+rows render as markdown (the task is model-authored prose with
+headings / bullets / fences); parent user rows stay plain text.
+
+Transcript markdown autolinks standalone `#123` issue/PR references
+to the active folder's remote (`fs_git_remote_web_url`, `/issues/N`
+— GitHub and Forgejo both redirect PRs); references inside existing
+links or code spans are
+untouched, and the render caches key off the repo URL so a folder
+swap can't serve another repo's links. Same rule as the companion.
+
+The pop-out has a composer (`coder_continue_subagent`) with two
+behaviours keyed off the run state:
+
+- **Running → mid-flight steer.** Same contract as parent steers:
+  the row renders queued immediately, drains into the sub-agent's
+  history at the top of its next iteration (persisting at drain
+  time — the placeholder is removed via `SteerDrained` and the
+  message re-appended at the bottom as a fresh `UserMessage`, same
+  as the parent loop), and a steer that lands during the final
+  assistant message buys one extra round-trip instead of being
+  dropped. Steers still queued when the run settles are discarded
+  (their rows are removed on `SubagentFinished`).
+- **Finished → follow-up.** The sub-agent resumes: history is
+  rebuilt from its JSONL, the text lands as a new user message, and
+  a fresh detached loop runs against the same target folder and
+  mode. The parent agent is deliberately not involved — its history
+  still ends at the original `task` tool result; follow-ups are
+  user ↔ sub-agent only. The card flips back to `running` (the
+  re-emitted `SubagentSpawned` merges into the existing card /
+  transcript instead of resetting them). Resume requires the
+  target folder to still be bound and the JSONL to exist on disk;
+  otherwise the send is refused and the draft is kept.
+
+While a sub-agent runs — original dispatch or resume — the pop-out
+header shows a stop button (`coder_abort_subagent`) that cancels
+just that sub-agent: a dispatch run's token is a child of the
+parent turn's, so the parent and sibling sub-agents keep going (the
+parent sees the `task` call return `Aborted`). `SubagentSpawned` / `SubagentFinished`
+records on the parent's JSONL rebuild the cards on reload, and the
+sub-agent's own JSONL replays into the pop-out; a missing sub-agent
+file degrades to card-only with a warn.
+
+### Bound folders system-prompt section
+
+The parent's system prompt (rebuilt every turn) lists every bound
+folder with the absolute path the model should use — `/workspace/<name>`
+when the workspace shell container is `Running`, real host paths
+otherwise, probed the same way `bash` routes so the two can't drift —
+plus a 2-3 sentence description per folder. A worktree folder has no
+mount of its own, so container mode renders it at the path that
+actually exists: `/workspace/<parent>/.worktrees/<slug>` (ADR 0040).
+For a worktree session the active marker names the branch, and the
+parent project's row warns that paths addressing it resolve into the
+worktree, instead of the generic "sibling, reach via `task`".
+Descriptions are generated by the cheap model from each folder's
+manifest files (AGENTS.md first, then README.md, Cargo.toml,
+package.json, pyproject.toml), cached under
+`<XDG_DATA_HOME>/moon-ide/folder-summaries/` keyed on a content
+hash. Generation is detached and never blocks a turn — a missing
+summary renders as `(summary still generating)`; a
+`folder_summary_ready` event fires when one lands. Worktree folders
+are skipped by the generator and reuse their parent's summary (same
+codebase, no duplicate model spend). With no folders bound the
+section is absent and a scratch session instead gets a "No folders
+bound" section: home as cwd, absolute-path tools, no project rules
+(ADR 0074).
+
+### Path resolution and cross-folder routing
+
+`ToolRegistry::resolve_target` classifies each path argument as
+`InWorkspace { folder, relative }` (dispatch through that folder's
+`WorkspaceHost`) or `OutOfWorkspace { abs_path }`:
+
+1. **Absolute path under a bound folder's root** → that folder
+   (longest root wins when folders nest).
+2. **Synthetic `/workspace/<name>/...`** → the bound folder with that
+   basename; an unbound name errors with the list of bound folders so
+   the model can self-correct. Works in host mode too, but the prompt
+   only advertises it in container mode.
+3. **Bare-basename relative** (`<sibling-name>/foo.rs`) → same
+   routing as the synthetic form.
+4. **`./<sibling-name>/foo.rs`** → opt-out; resolves inside the
+   active folder (for directories that legitimately share a
+   sibling's basename).
+5. **Absolute path outside every bound root** → `OutOfWorkspace`,
+   served by container-aware primitives that mirror `bash`'s target
+   (`docker exec` when the container runs, host fs otherwise).
+   Arbitrary-path read/write/list is the point — see
+   [ADR 0025](decisions/0025-coder-arbitrary-path-fs.md). No
+   format-on-save outside a project.
+6. **Other relative paths** → active folder, keeping the historical
+   `..`-escape rejection.
+
+For a **worktree session**, a resolution landing on the worktree's
+parent project collapses into the worktree with the same relative
+path — the parent addressed by name or path means "my project", and
+the session's work must stay on its branch (ADR 0040). A path
+spelling out this worktree's own `.worktrees/<slug>/…` tail strips to
+worktree-relative; a path into a _different_ worktree under the same
+parent is left as addressed.
+
+This routing applies to `read_file`, `list_dir`, `write_file`, and
+`edit_file`. `grep` and `bash` stay scoped to the session's folder —
+a sub-agent against the target folder is the way to search or run
+commands elsewhere. `grep` validates that its root directory exists
+and errors loudly otherwise (a scratch session's root is real, but a
+bad one must not read as "0 matches"). Sub-agents share the registry,
+so the same rules apply to them; depth is capped at 2 by tool-list
+shape — `agent`-mode sub-agents see only the trimmed research-only
+`task`, `research` sub-agents see none ([ADR 0081](decisions/0081-nested-research-subagents.md)).
+
+### Project-bar git status: surgical refresh
+
+Cross-folder edits need to reach the project bar's per-folder
+`+N ~N -N` badges, but the fs-watcher only sees the active folder.
+The frontend parses each parent `tool_call`'s `path` with the same
+routing rule, collects target folders in a debounce window, and
+refreshes only those on turn boundaries. Anything ambiguous (`bash`,
+`grep`, sub-agent activity, missing path) fans out to refreshing
+every bound folder — correctness over cleverness.
+
+## Worktree sessions
+
+A session can opt into running in its own **git worktree** — an
+isolated working directory on a fresh branch, sharing the repo's
+object store — so several agents work the same project at once
+without stomping each other. The deliverable is the branch: each
+isolated agent accumulates its work (staged, unstaged, or committed)
+on its own branch, and the user turns each into its own commit / PR
+through the normal SCM flow. There is no forced merge-back. Opt-in is
+**per session** (a "new isolated session" affordance beside the
+ordinary `+`); an ordinary session drives the folder's main working
+tree as before. Full rationale and rejected alternatives:
+[ADR 0028](decisions/0028-coder-worktree-sessions.md).
+
+### The worktree is a bound folder
+
+The worktree directory is registered as a first-class bound workspace
+folder, so the file tree, SCM panel, per-folder git-change badges,
+diff view, review comments, terminal, and LSP all light up for it
+unchanged — it's just another repo root with its own `WorkspaceHost`
+and git mutex. A folder `origin` discriminator marks it as a
+session-worktree: it renders **nested under its parent** in the
+folder bar with a branch glyph, its lifecycle is tied to its owning
+session, and it is pruned (not merely unbound) when discarded.
+
+### Ownership vs. routing
+
+The session stays **owned by its parent folder** — its JSONL persists
+under the parent's slug and it appears in the parent's session list,
+where the user started it. Only **tool routing** diverges: the
+session's fs / `bash` / `grep` / git tools run against the worktree's
+host. Two optional header fields carry the binding:
+
+```
+worktree_root:   Option<String>   // absolute path of the worktree checkout
+worktree_branch: Option<String>   // branch the worktree is on
+```
+
+At turn time the runner resolves `cx.folder` to
+`folder_for_path(worktree_root)` when set, mirroring the
+`subagent_target_folder` precedent. The fields elide when `None`
+(ordinary sessions keep a byte-identical header); the schema version
+bumps to `4`. A worktree session's **sub-agents inherit the routing**
+— they default to the parent's active folder, now the worktree — so
+all of one agent's parallel work lands on the one branch. Naming the
+parent project explicitly doesn't escape it either: a `task` with
+`folder: "<parent>"` collapses to the worktree, and file-tool paths
+that resolve to the parent are re-routed into the checkout
+(ADR 0040 — see § Path resolution).
+
+### Location, naming, lifecycle
+
+Worktrees live **inside the parent repo** at
+`<parent>/.worktrees/<branch-slug>`, created with `git worktree add
+--relative-paths` (git >= 2.48) and hidden from the parent's
+`git status` via `.git/info/exclude` — see
+[ADR 0029](decisions/0029-worktrees-inside-parent.md). Riding the
+parent's bind mount means the checkout is reachable in the container
+at `/workspace/<parent>/.worktrees/<slug>` with no mount or repair
+machinery of its own. The branch defaults to `moon/agent-<short-id>`
+at creation (no diff to summarise yet) and is renameable; an AI
+suggestion can replace it after the first turn.
+
+A **coordinator-spawned worker** skips that default: `spawn_worker`
+requires a `name` and the branch is `moon/<name-slug>`
+([ADR 0042](decisions/0042-named-worker-branches.md)), so the branch,
+the worktree directory, the session row's branch chip, and the
+session's **title** all read as the work the worker was given. The
+worker also **snapshots the coordinator's host-mode override** at
+spawn ([ADR 0082](decisions/0082-inherited-host-mode.md)): a
+force-host coordinator mints force-host workers, each keeping its own
+independent toggle from there on.
+
+An isolated session can either start a **fresh** `moon/agent-<id>`
+branch off the parent's current `HEAD` (the default), or be based on
+an **existing** branch — local, or a remote one DWIM-created locally
+the way `git switch` does. The latter is how you set an agent working
+on a colleague's branch: it's checked out only in the worktree, so the
+parent's checkout (and every other agent) is left undisturbed. The
+`BranchSwitcher` palette exposes this as a per-row "start isolated
+agent" action (local branches and open-PR head refs); the coder
+panel's worktree button covers the fresh-branch default.
+
+Created on opt-in (`git worktree add`), re-bound at startup (the
+folder's `origin` rides `session.json`, with disk adoption as the
+backstop — see ADR 0079 below), and **pruned** by the
+worktree row's `×` — run against the parent repo and guarded by a
+re-confirm when the worktree is dirty. Deleting the owning session
+keeps the worktree (the branch is the deliverable you may still PR).
+The **branch is never deleted by the IDE**: it's left in place for a
+later PR.
+
+Removal is **idempotent** ([ADR 0044](decisions/0044-idempotent-worktree-removal.md)):
+when the checkout is already gone from disk — an agent ran `git
+worktree remove` in a shell, someone `rm -rf`'d it — closing the row
+forgets the stale git metadata (unlock + `git worktree prune`) and
+unbinds without erroring. A checkout that's still there behaves as
+before, so a dirty-tree refusal still drives the force re-confirm.
+A **half-gone** checkout — git already forgot it but ignored
+leftovers (`node_modules`, build output) kept the directory alive,
+where `git worktree remove` fails "is not a working tree" with or
+without `--force` — is refused without force and deleted with it
+([ADR 0068](decisions/0068-stale-worktree-leftovers.md)), so the row
+can always be closed.
+A coordinator cleans up after its own workers with
+`discard_worker_worktree`, which does the same thing plus clears the
+worktree routing on the worker's session; it refuses a running worker
+and a dirty worktree (without `force`), and keeps the branch. It is
+idempotent too ([ADR 0064](decisions/0064-worker-retirement.md)): a
+checkout that's already gone — merged-and-removed, reconciled away, or
+discarded twice — is an `already_gone` no-op, never an error. Once a
+worker's work is landed and its worktree discarded, the coordinator
+drops it from its fleet with `retire_worker` (same ADR): the worker
+leaves `list_workers` and stops waking the coordinator, while its
+session, transcript, and branch stay untouched. The usual pair
+collapses to one call: `discard_worker_worktree` takes
+`retire: true`, and both tools take `worker_ids` for batch cleanup
+(per-worker results; one failure doesn't stop the rest).
+
+Staleness is also **reconciled without a click**
+([ADR 0063](decisions/0063-stale-worktree-reconciliation.md)): at the
+end of every coder turn, a bound worktree folder whose checkout is
+gone from disk is forgotten, unbound, and announced via
+`WorkspaceFoldersChanged` — so a `git worktree remove` run through
+`bash` drops out of the project bar when the turn ends. The same
+moment also **adopts** checkouts added out-of-band (terminal, or an
+in-container `git worktree add`) via the disk sweep below, announced
+through the same event. Startup restore skips (and forgets) a
+persisted worktree folder whose checkout vanished while the IDE was
+closed, instead of re-binding a dead row.
+
+**Disk is the source of truth for worktree rows**
+([ADR 0079](decisions/0079-worktree-adoption-from-disk.md)): at
+startup, on every folder-add, and at every coder turn end, each bound
+project folder sweeps `git worktree list` for checkouts under its
+`.worktrees/` and binds any that aren't bound yet (branch label from
+git). A corrupted
+`session.json` — or a checkout whose owning session was deleted —
+no longer strands the row: it reappears in the folder bar, where
+`×` deletes it and the merge button lands it. Worktrees the user
+created outside `.worktrees/` are never adopted (`×` deletes; it
+must never aim at a user-made checkout), detached-HEAD worktrees are
+skipped, and a persisted-but-dead binding is still dropped as above.
+The sweep never changes the active folder and never fails startup.
+
+**Container-written absolute links are repaired on adoption.** An
+agent inside the dev container can bypass the host-side
+`git worktree add --relative-paths` creation path (the `bash` tool
+can't intercept a raw git call) and burn absolute `/workspace/…`
+paths into both git link files — the checkout's `.git` pointer and
+the metadata `gitdir`. Host git then can't resolve the worktree at
+all (it flags it `prunable`), and its `worktree list` reports the
+container path. Because the bind-mount layout is 1:1
+(`/workspace/<parent-basename>/…` ↔ `<host-parent>/…`), the sweep
+translates a container-shaped reported path back to its host
+equivalent and rewrites both links to the relative form
+`--relative-paths` would have written, then adopts the row. A link
+naming anything outside the parent's mount is left alone — it may be
+valid, and rewriting a link we can't place would corrupt it.
+
+#### The worktree button is context-aware
+
+- **On the sessions list** it starts a fresh isolated session in a new
+  worktree (a new `moon/agent-<id>` branch off `HEAD`).
+- **Inside a session** it _moves that session_ into a worktree,
+  conversation and all (`coder_move_session_to_worktree`): the header
+  gains `worktree_root`, so from the next turn its tools run in the
+  worktree, while the session stays in the same per-project list. The
+  branch follows the user's intent — on a **non-default** branch the
+  worktree checks out _that_ branch and the main tree is reset to the
+  default branch (keep the same PR, free the main tree); on the
+  **default** branch (or detached) it forks a fresh `moon/agent-<id>`.
+  The switch-then-add runs atomically under the git lock and **refuses
+  a dirty tree** (commit or stash first) rather than risk carrying
+  uncommitted work to the wrong branch. The button disables once the
+  session is already in a worktree. So "I want a new isolated session
+  while in one" is `+` (new blank session) then the worktree button.
+
+### A session is tied to a branch
+
+Every session carries a branch — the deliverable. A worktree session's
+branch is its checkout's; a main-tree session's is whatever `HEAD`
+landed on the last time the user committed with it open (a fresh
+"commit on new branch" or a plain commit; `committed_branch` on the
+header, rewritten in place, most-recent wins, preferred over the
+worktree's initial branch once set). A blank, never-committed
+non-worktree session has no branch yet.
+
+The session list (and the open session's header) shows that branch as
+a chip. Clicking it goes to **wherever the branch currently lives**,
+resolved live rather than from which field set it:
+
+- the branch is checked out in a bound worktree → focus that worktree
+  folder (the file tree / SCM follow; the per-project session list
+  stays put, so nothing about the conversation is lost);
+- otherwise → `git switch` the active folder to it (git's own refusal
+  on a dirty tree is surfaced as-is).
+
+So after juggling several agents across several branches off `main`,
+you return to a past session and land on its branch — or its
+worktree — in one click instead of hunting for the name.
+
+A future direction (not built): when you want to revisit a session's
+branch but an agent is mid-run on the current one, switching the
+shared tree would disturb it — so we may offer to _reopen the old
+session in a worktree on its branch_ instead, and possibly lean on
+worktrees automatically once multiple agents are running concurrently.
+
+The git primitives (`git_worktree_add` / `_list` / `_remove`)
+serialise behind the per-folder git mutex ([ADR 0015](decisions/0015-git-serialisation.md)).
+In a containerised workspace, isolated sessions run their tooling
+**in the container** so builds use the container toolchain. The
+worktree lives **inside the parent repo** at `<parent>/.worktrees/<branch>`
+with `git worktree add --relative-paths` ([ADR 0029](decisions/0029-worktrees-inside-parent.md)),
+so it rides the parent's bind mount and its relative git links resolve
+the same on the host and in the container — no separate mount, no
+`git worktree repair`, and host git keeps working when the container is
+down. `/.worktrees/` is added to the parent's `.git/info/exclude` so it
+never dirties the parent's `git status`. Each worktree is
+`git worktree lock`ed (unlocked before removal). This needs git >= 2.48
+on the host (worktree creation errors with an "update git" message
+otherwise) and in moon-base (built from source); see ADR 0029 for the
+`extensions.relativeWorktrees` repo-config caveat.
+
+## UI placement
+
+A right-side panel docked to the editor area. Chat and coder are
+mutually exclusive tenants of a single right-side slot — one width,
+toggle between them; the mounted surface (or `null`) lives on
+`AppState.right_panel` and restores across launches. Toggleable from
+the status bar, the command palette (`Coder: Toggle Panel`), and the
+`F6` / `Shift+F6` focus rotation.
+
+Top-to-bottom: identity card (when signed in) → session list /
+sticky session header → transcript → session controls → composer.
+Empty states: "Sign in with Hugging Face" when signed out; identity
+card + "+ New session" when signed in with no session.
+
+## Frontend ↔ backend boundary
+
+Tauri commands in `src-tauri/src/commands/coder.rs`:
+
+| Command                                                 | Purpose                                                                                                               |
+| ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `coder_start_device_flow()`                             | Returns `{ user_code, verification_uri, expires_in, interval }`; background poll runs in `moon-coder`                 |
+| `coder_status()`                                        | `{ signed_in, identity?, busy, bash_target?, force_host_override }` — coder-root visible session (ADR 0028)           |
+| `coder_sign_out()`                                      | Drops keyring + identity                                                                                              |
+| `coder_list_sessions()`                                 | Per-session summaries for the list view                                                                               |
+| `coder_search_sessions(query)`                          | Ids of sessions whose title or transcript contains the query (case-insensitive); powers the list's search box         |
+| `coder_open_session(id?)`                               | Load `id`, or create a new session; returns the active id                                                             |
+| `coder_delete_session(id)`                              | Removes JSONL (+ sub-agent subdir)                                                                                    |
+| `coder_session_jsonl_path(id)`                          | Resolves a session id (parent or sub-agent) to its on-disk path; powers "open trace"                                  |
+| `coder_send(text, images, session_id?)`                 | Send / steer, targeted at the composer's session id (ADR 0066); `null` falls back to the visible session              |
+| `coder_abort()`                                         | Cancels the visible session's in-flight turn                                                                          |
+| `coder_continue_subagent(subagent_id, text)`            | Steers a running sub-agent, or resumes a finished one with a follow-up; `false` when nothing to continue              |
+| `coder_abort_subagent(subagent_id)`                     | Cancels one sub-agent's own token; parent turn and siblings unaffected                                                |
+| `coder_respond_to_prompt(call_id, response)`            | Resolves a parked `ask_user` prompt; returns `false` when nothing's parked                                            |
+| `coder_revert_to_message(user_ordinal)`                 | Truncates the visible session; returns the dropped prompt for edit-and-resend. Refused mid-turn                       |
+| `coder_replay_from_message(user_ordinal)`               | Truncates to before the message, then re-sends the same prompt (re-run the turn). Refused mid-turn                    |
+| `coder_resume_from_tool_call(tool_call_id)`             | Truncates to the issuing assistant message (kept), re-dispatches its tool calls, continues the turn. Refused mid-turn |
+| `coder_rerun_tool_call(tool_call_id)`                   | Reapplies a recorded `write_file` / `edit_file` to disk (recovery); transcript untouched                              |
+| `coder_set_model(slug)` / `coder_set_model_settings(…)` | Model picks                                                                                                           |
+| `coder_*_provider*` commands                            | Custom-provider CRUD, probe, per-provider catalog, keyring-only API-key set/clear                                     |
+| `coder_set_sync_enabled(enabled)`                       | Per-workspace bucket-sync toggle                                                                                      |
+| `coder_mcp_*` commands                                  | MCP server rows, per-workspace enable toggle, custom-server add/remove (see [§ MCP servers](#mcp-servers))            |
+
+Push events: `coder:event` (every loop event, envelope-wrapped),
+`coder:signed_out`, `coder:sync_state`.
+
+## Failure modes
+
+| Scenario                                     | UI behaviour                                                                                      |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| User has no HF token                         | "Sign in with Hugging Face" empty state                                                           |
+| Device-flow polling expires                  | Modal shows "code expired, retry"                                                                 |
+| Token rejected by `/whoami-v2` after refresh | Toast + return to empty state; keyring cleared                                                    |
+| `router.huggingface.co` 5xx                  | Streaming surfaces an error; "Retry" button performs a `continue()` against the existing context  |
+| Provider 429 (rate limit)                    | Retried in place with exponential backoff (2 s → 2 min); surfaces like a 5xx once retries run out |
+| Tool throws                                  | LLM gets `isError: true` + the message; loop continues                                            |
+| Bucket creation 4xx (e.g. quota)             | Sync marked delayed; sessions stay local                                                          |
+| `hf-xet` upload partial-fail                 | Retry on next sync; per-row icon flips red with error tooltip                                     |
+| Network down                                 | Streaming aborts; same retry surface as 5xx                                                       |
+
+## Out of scope (explicitly)
+
+- **Pluggable agent binaries** (ACP) — superseded by ADR 0010.
+- **Plan mode** — the team can write plans into `AGENTS.md`.
+- **Permission popups** — see "Permissions" above.
+- **MCP beyond the meta-tool surface** — stdio transport and a
+  curated preset list only ([ADR 0033](decisions/0033-coder-mcp.md));
+  HTTP/SSE transports, direct per-tool exposure, and MCP resources /
+  prompts wait for a concrete need.
+- **Per-sub-agent abort UI** — parent abort cascades to all live
+  sub-agents; individual cancel buttons wait for a real need.
+- **Depth ≥ 3 sub-agent trees** — `agent`-mode sub-agents may spawn
+  nested `research` sub-agents ([ADR 0081](decisions/0081-nested-research-subagents.md));
+  anything deeper — or nested `agent` mode, detached nesting,
+  parallel nested batches — waits for a real need.
+- **Skill packages / installable skills** — file conventions only.
+- **Bucket browser** ("import session from bucket") — bucket is
+  backup-only at first.
+- **Multi-account** — one HF account per install.
+- **Detached / cross-restart agent runs** — turns already run
+  independently of panel visibility, but a process restart kills
+  in-flight turns (the runtime map is in-memory). Surviving restarts
+  needs an always-on `moon-core` clients attach to — the same shape
+  the [companion](companion.md) and remote-host stories converge on.
+  Until then, keep the loop owned by `moon-core`, observed by
+  clients, never by a UI lifetime.
+
+## Cross-spec touch-points
+
+- [`architecture.md`](architecture.md) — the agent loop lives in
+  moon-core; the UI never touches LLMs directly.
+- [`protocol.md`](protocol.md) — `coder.*` methods replace the old
+  `acp.*` sketch.
+- [`slack-chat.md`](slack-chat.md) — the "real agent in the IDE"
+  pointer re-points here.
+- [`containers.md`](containers.md) — the agent is a moon-core
+  component in the Tauri shell; its bash / fs tools cross into the
+  container the way the terminal does.
+- **Reasoning depth pick** (modal + companion): medium / high /
+  xhigh / max, or cleared. Cleared is the default and sends
+  `reasoning_effort` **not at all** — provider default; a set
+  value rides the OpenAI-compatible request verbatim. Persisted in
+  `state.json` alongside the picks; CLI:
+  `moon-remote model --reasoning xhigh` (empty string clears).
+  Anthropic native route ignores it (its thinking config is
+  budget-based, separate).
+- **Compaction cut is tool-boundary-safe** (ADR-worthy): the
+  summary cut snaps forward past any Tool run whose owning
+  Assistant survived (and drops a leading orphan Tool run), so the
+  wire never carries a tool result without its assistant tool_call.
+  Strict routers (Kimi K3 via the HF router) 400 the request
+  otherwise; this is the resume-after-restart failure mode.
+- **Tool messages carry `name` on the wire**: every `role:tool`
+  message echoes the tool name (from the record`s `toolName`, or
+resolved off the owning assistant`s tool_calls for synthesized
+  orphans). Kimi K3 via the HF router requires a resolvable tool
+  name — either the message carries `name`/`tool`, or it
+  order-matches the preceding assistant tool_call. We relied on
+  order-matching alone; any drift (compaction cut, replay, orphan
+  synthesis) 400`d the resume. Carrying `name` makes every tool
+  result self-resolving.
+- **WebP stays, with a PNG fallback on rejection**: captured PNGs
+  are re-encoded to lossless WebP at capture (ADR 0049, −43%
+  base64). Strict vision loaders (Kimi K3 via the HF router) 400 a
+  lossless WebP with "cannot identify image file". On that error the
+  stream path downconverts the _latest_ WebP in a cloned wire copy
+  back to PNG and retries once; the session's stored WebP is
+  untouched, and reload also upconverts stored WebP→PNG so
+  already-stuck sessions recover. The byte budget elision still
+  guards the HF wire independently.
+- **Sessions-list fold is payload-free**: the summary fold
+  classifies each line from the raw `Value` (role / customType /
+  title / has-toolCalls) instead of running `pi_wire_to_records`,
+  which built an `ImageAttachment` (base64 copy) per tool-result
+  image. That dominated the fold on image-heavy sessions — 57
+  sessions went from ~8 s to ~0.25 s. The summary needs record kind,
+  title, and tool-call presence only.

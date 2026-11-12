@@ -1,0 +1,30 @@
+# DeepWiki 索引 — microsoft/eureka-ml-insights
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 321224 字符
+
+- [1 Overview](1-overview.md)
+- [2 Architecture](2-architecture.md)
+  - [2.1 Pipeline System](2.1-pipeline-system.md)
+  - [2.2 Configuration System](2.2-configuration-system.md)
+- [3 Model System](3-model-system.md)
+  - [3.1 Model Classes](3.1-model-classes.md)
+  - [3.2 Model Configurations](3.2-model-configurations.md)
+  - [3.3 Inference](3.3-inference.md)
+- [4 Data Processing](4-data-processing.md)
+  - [4.1 Data Readers and Loaders](4.1-data-readers-and-loaders.md)
+  - [4.2 Data Transformations](4.2-data-transformations.md)
+  - [4.3 Task-Specific Utilities](4.3-task-specific-utilities.md)
+- [5 Benchmarks](5-benchmarks.md)
+  - [5.1 Vision and Image Understanding](5.1-vision-and-image-understanding.md)
+  - [5.2 Mathematical Reasoning](5.2-mathematical-reasoning.md)
+  - [5.3 Question Answering and Knowledge](5.3-question-answering-and-knowledge.md)
+  - [5.4 Business Logic and Calendaring](5.4-business-logic-and-calendaring.md)
+- [6 Metrics and Evaluation](6-metrics-and-evaluation.md)
+  - [6.1 Metrics Framework](6.1-metrics-framework.md)
+  - [6.2 Aggregators and Reporting](6.2-aggregators-and-reporting.md)
+  - [6.3 Task-Specific Metrics](6.3-task-specific-metrics.md)
+- [7 Testing and Development](7-testing-and-development.md)
+  - [7.1 Test Framework](7.1-test-framework.md)
+  - [7.2 Documentation Website](7.2-documentation-website.md)
+- [8 Getting Started](8-getting-started.md)

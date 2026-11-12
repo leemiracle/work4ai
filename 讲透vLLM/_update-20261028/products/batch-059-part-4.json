@@ -1,0 +1,812 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/runner/shared_experts.py",
+   "type": "file",
+   "name": "shared_experts.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/runner/shared_experts.py",
+   "summary": "SharedExperts：共享专家模块与执行顺序枚举（相对路由专家的前后）。",
+   "tags": [
+    "moe",
+    "shared-experts",
+    "order"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py",
+   "type": "file",
+   "name": "topk_weight_and_reduce.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py",
+   "summary": "top-k 权重应用与归约的四实现：delegate（委托）/no-op（已融合）/contiguous (m,topk,K)/naive-batched (E,m,K)。",
+   "tags": [
+    "moe",
+    "top-k",
+    "reduce",
+    "strategies"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py",
+   "type": "file",
+   "name": "unquantized_fused_moe_method.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py",
+   "summary": "未量化 MoE 方法：BF16/BF16 专家的 apply 与权重加载（FusedMoEMethodBase+CustomOp）。",
+   "tags": [
+    "moe",
+    "unquantized",
+    "method"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/utils.py",
+   "summary": "MoE 工具集（27 函数）：融合共享专家判定、逐专家 token 计数、全局→本地 top-k 重映射、FP8/INT8/MXFP4/NVFP4 输入量化族、swiglu limit 融合与 TD(gather) 路径三态解析。",
+   "tags": [
+    "moe",
+    "utils",
+    "quantization",
+    "dispatch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/runner/shared_experts.py:SharedExpertsOrder",
+   "type": "class",
+   "name": "SharedExpertsOrder",
+   "filePath": "vllm/model_executor/layers/fused_moe/runner/shared_experts.py",
+   "summary": "共享专家执行顺序 IntEnum。",
+   "tags": [
+    "order",
+    "enum",
+    "shared-experts"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    26,
+    37
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/runner/shared_experts.py:SharedExperts",
+   "type": "class",
+   "name": "SharedExperts",
+   "filePath": "vllm/model_executor/layers/fused_moe/runner/shared_experts.py",
+   "summary": "共享专家模块（9 方法）。",
+   "tags": [
+    "shared-experts",
+    "module",
+    "impl"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    40,
+    193
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py:TopKWeightAndReduceDelegate",
+   "type": "class",
+   "name": "TopKWeightAndReduceDelegate",
+   "filePath": "vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py",
+   "summary": "委托实现（专家层自行做权重应用+归约）。",
+   "tags": [
+    "delegate",
+    "top-k",
+    "reduce"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    11,
+    40
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py:TopKWeightAndReduceNoOP",
+   "type": "class",
+   "name": "TopKWeightAndReduceNoOP",
+   "filePath": "vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py",
+   "summary": "no-op：fused_experts 输出已加权归约。",
+   "tags": [
+    "noop",
+    "top-k",
+    "reduce"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    43,
+    75
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py:TopKWeightAndReduceContiguous",
+   "type": "class",
+   "name": "TopKWeightAndReduceContiguous",
+   "filePath": "vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py",
+   "summary": "(m, topk, K) 连续输出的加权归约。",
+   "tags": [
+    "contiguous",
+    "reduce",
+    "top-k"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    78,
+    118
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py:TopKWeightAndReduceNaiveBatched",
+   "type": "class",
+   "name": "TopKWeightAndReduceNaiveBatched",
+   "filePath": "vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py",
+   "summary": "(E, m, K) 批式输出的加权归约。",
+   "tags": [
+    "batched",
+    "reduce",
+    "top-k"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    121,
+    179
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py:UnquantizedFusedMoEMethod",
+   "type": "class",
+   "name": "UnquantizedFusedMoEMethod",
+   "filePath": "vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py",
+   "summary": "未量化 MoE 方法（13 方法）。",
+   "tags": [
+    "unquantized",
+    "method",
+    "moe"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    47,
+    359
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/utils.py:resolve_layer_fused_shared_expert",
+   "type": "function",
+   "name": "resolve_layer_fused_shared_expert",
+   "filePath": "vllm/model_executor/layers/fused_moe/utils.py",
+   "summary": "解析该层是否走 AITER 融合共享专家。",
+   "tags": [
+    "shared-expert",
+    "aiter",
+    "resolver"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    55,
+    130
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/utils.py:count_expert_num_tokens",
+   "type": "function",
+   "name": "count_expert_num_tokens",
+   "filePath": "vllm/model_executor/layers/fused_moe/utils.py",
+   "summary": "每专家 token 计数（调试/统计）。",
+   "tags": [
+    "counting",
+    "experts",
+    "stats"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    202,
+    238
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/utils.py:remap_topk_to_local",
+   "type": "function",
+   "name": "remap_topk_to_local",
+   "filePath": "vllm/model_executor/layers/fused_moe/utils.py",
+   "summary": "全局专家 id→本地 id（非本地/无效置 -1）。",
+   "tags": [
+    "remap",
+    "top-k",
+    "local"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    268,
+    305
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/utils.py:_fp8_quantize",
+   "type": "function",
+   "name": "_fp8_quantize",
+   "filePath": "vllm/model_executor/layers/fused_moe/utils.py",
+   "summary": "FP8 输入量化（块 shape 感知）。",
+   "tags": [
+    "fp8",
+    "quantization",
+    "fp8-main"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    326,
+    351
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/utils.py:moe_kernel_quantize_input",
+   "type": "function",
+   "name": "moe_kernel_quantize_input",
+   "filePath": "vllm/model_executor/layers/fused_moe/utils.py",
+   "summary": "按 MoE kernel 要求统一量化输入的入口。",
+   "tags": [
+    "quantization",
+    "inputs",
+    "dispatch"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    464,
+    538
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/utils.py:fi_moe_largest_bucket",
+   "type": "function",
+   "name": "fi_moe_largest_bucket",
+   "filePath": "vllm/model_executor/layers/fused_moe/utils.py",
+   "summary": "估计 FlashInfer MoE autotune 最大 token 桶。",
+   "tags": [
+    "flashinfer",
+    "bucket",
+    "estimate"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    566,
+    581
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/utils.py:swiglu_limit_func",
+   "type": "function",
+   "name": "swiglu_limit_func",
+   "filePath": "vllm/model_executor/layers/fused_moe/utils.py",
+   "summary": "swiglu limit 融合函数选择（torch/pad-aware kernel）。",
+   "tags": [
+    "swiglu",
+    "limit",
+    "dispatch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    687,
+    702
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/utils.py:resolve_moe_use_td",
+   "type": "function",
+   "name": "resolve_moe_use_td",
+   "filePath": "vllm/model_executor/layers/fused_moe/utils.py",
+   "summary": "VLLM_TRITON_USE_TD 三态解析（未设按硬件定）。",
+   "tags": [
+    "td",
+    "resolver",
+    "triton"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    736,
+    748
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/shared_experts.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/shared_experts.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/shared_experts.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/shared_experts.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/shared_experts.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/shared_experts.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/shared_experts.py",
+   "target": "file:vllm/v1/worker/ubatching.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/modular_kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/fused_moe_method_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/moe_output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/oracle/unquantized.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/runner/shared_experts.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/config_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/fp8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/int8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/mxfp4_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/mxfp6_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/mxfp8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/nvfp4_emulation_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/w8a8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/shared_experts.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/runner/shared_experts.py:SharedExpertsOrder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/shared_experts.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/runner/shared_experts.py:SharedExperts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py:TopKWeightAndReduceDelegate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py:TopKWeightAndReduceNoOP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py:TopKWeightAndReduceContiguous",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py:TopKWeightAndReduceNaiveBatched",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py:UnquantizedFusedMoEMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/utils.py:resolve_layer_fused_shared_expert",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/utils.py:count_expert_num_tokens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/utils.py:remap_topk_to_local",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/utils.py:_fp8_quantize",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/utils.py:moe_kernel_quantize_input",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/utils.py:fi_moe_largest_bucket",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/utils.py:swiglu_limit_func",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/utils.py:resolve_moe_use_td",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/shared_experts.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/runner/shared_experts.py:SharedExpertsOrder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/runner/shared_experts.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/runner/shared_experts.py:SharedExperts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py:TopKWeightAndReduceDelegate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py:TopKWeightAndReduceNoOP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py:TopKWeightAndReduceContiguous",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py:TopKWeightAndReduceNaiveBatched",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py:UnquantizedFusedMoEMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/utils.py:resolve_layer_fused_shared_expert",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/utils.py:count_expert_num_tokens",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/utils.py:remap_topk_to_local",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/utils.py:moe_kernel_quantize_input",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/utils.py:fi_moe_largest_bucket",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/utils.py:swiglu_limit_func",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/utils.py:resolve_moe_use_td",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py:UnquantizedFusedMoEMethod",
+   "target": "class:vllm/model_executor/layers/fused_moe/fused_moe_method_base.py:FusedMoEMethodBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py:TopKWeightAndReduceDelegate",
+   "target": "class:vllm/model_executor/layers/fused_moe/modular_kernel.py:TopKWeightAndReduce",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py:TopKWeightAndReduceNoOP",
+   "target": "class:vllm/model_executor/layers/fused_moe/modular_kernel.py:TopKWeightAndReduce",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py:TopKWeightAndReduceContiguous",
+   "target": "class:vllm/model_executor/layers/fused_moe/modular_kernel.py:TopKWeightAndReduce",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py:TopKWeightAndReduceNaiveBatched",
+   "target": "class:vllm/model_executor/layers/fused_moe/modular_kernel.py:TopKWeightAndReduce",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

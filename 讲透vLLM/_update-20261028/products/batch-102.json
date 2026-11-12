@@ -1,0 +1,4666 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/transformers_utils/chat_templates/registry.py",
+   "type": "file",
+   "name": "registry.py",
+   "filePath": "vllm/transformers_utils/chat_templates/registry.py",
+   "summary": "内置聊天模板 fallback 注册表：按 model_type 映射到本目录 .jinja 模板（blip-2/deepseek_ocr/deepseek_vl_v2/minicpm 系等），MiniCPM 按版本号动态选择 4.5 专用或 chatml 模板，支持运行时注册覆盖。",
+   "tags": [
+    "chat-template",
+    "registry",
+    "fallback",
+    "model-specific"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/transformers_utils/chat_templates/registry.py:_get_minicpmv_chat_template_fallback",
+   "type": "function",
+   "name": "_get_minicpmv_chat_template_fallback",
+   "filePath": "vllm/transformers_utils/chat_templates/registry.py",
+   "summary": "按 tokenizer 路径中的版本号（4.5/4_5）为 MiniCPM 选择专用模板，其余回落 chatml。",
+   "tags": [
+    "chat-template",
+    "minicpm",
+    "fallback"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    16,
+    22
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/chat_templates/registry.py:register_chat_template_fallback_path",
+   "type": "function",
+   "name": "register_chat_template_fallback_path",
+   "filePath": "vllm/transformers_utils/chat_templates/registry.py",
+   "summary": "注册/覆盖某 model_type 的内置模板 fallback 路径，重复注册打 warning。",
+   "tags": [
+    "chat-template",
+    "registry",
+    "extension"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    44,
+    56
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/chat_templates/registry.py:get_chat_template_fallback_path",
+   "type": "function",
+   "name": "get_chat_template_fallback_path",
+   "filePath": "vllm/transformers_utils/chat_templates/registry.py",
+   "summary": "查表取 model_type 的 fallback 模板路径，可调用条目（如 MiniCPM 选择器）以 tokenizer 名求值。",
+   "tags": [
+    "chat-template",
+    "registry",
+    "lookup"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    59,
+    70
+   ]
+  },
+  {
+   "id": "file:vllm/transformers_utils/config.py",
+   "type": "file",
+   "name": "config.py",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "HF 配置加载中枢：可插拔 ConfigParser 体系（HF/Mistral 双格式自动探测）、LazyConfigDict 延迟注册表、RoPE 参数修补（含 transformers 验证器 monkey-patch）、mrope 探测、speculators/池化/sentence-transformers/safetensors 元数据等全套配置工具函数。",
+   "tags": [
+    "config",
+    "huggingface",
+    "loader",
+    "rope"
+   ],
+   "complexity": "complex",
+   "languageNotes": "CONFIG_FIELD_ALIASES 把各家族模型对同一字段的不同拼写（n_head_kv/n_routed_experts 等）归一到 vLLM 命名；对 transformers 5 的 rope 验证器按 model_type 打补丁。"
+  },
+  {
+   "id": "class:vllm/transformers_utils/config.py:LazyConfigDict",
+   "type": "class",
+   "name": "LazyConfigDict",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "dict 子类：_CONFIG_REGISTRY 的惰性容器，取值为字符串时才真正 import vllm.transformers_utils.configs 取类，避免启动期全量加载。",
+   "tags": [
+    "config",
+    "lazy-loading",
+    "registry"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    112,
+    119
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/config.py:HFConfigParser",
+   "type": "class",
+   "name": "HFConfigParser",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "HF config.json 解析器：识别 model_type（含 speculators/architectures/hf_overrides 推断）、打 rope 验证补丁、gemma4_text 等特殊构造、注册表类直通与 AutoConfig 回退。",
+   "tags": [
+    "config",
+    "parser",
+    "huggingface"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    342,
+    468
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/config.py:MistralConfigParser",
+   "type": "class",
+   "name": "MistralConfigParser",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "Mistral params.json 格式解析器：从 mistral-common 原始 config 构造 vLLM 侧 PreTrainedConfig。",
+   "tags": [
+    "config",
+    "parser",
+    "mistral"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    471,
+    525
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:is_rope_parameters_nested",
+   "type": "function",
+   "name": "is_rope_parameters_nested",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "判断 config 的 rope_parameters 是否为嵌套（逐层）形态。",
+   "tags": [
+    "rope",
+    "config",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    222,
+    230
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:_install_hf_config_validator",
+   "type": "function",
+   "name": "_install_hf_config_validator",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "给 PreTrainedConfig 安装/复用 vLLM 的配置校验钩子（宽松化 HF 校验）。",
+   "tags": [
+    "config",
+    "monkey-patch",
+    "validation"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    246,
+    272
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:_patch_hf_transformers_validate_rope",
+   "type": "function",
+   "name": "_patch_hf_transformers_validate_rope",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "对 sarvam_mla 等模型临时替换 transformers 的 rope 参数验证器，绕过上游对非标 theta 的拒绝。",
+   "tags": [
+    "rope",
+    "monkey-patch",
+    "compatibility"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    275,
+    303
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:_patch_hf_transformers_nested_rope_validation",
+   "type": "function",
+   "name": "_patch_hf_transformers_nested_rope_validation",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "对 laguna/gemma4_text 打嵌套 rope_parameters 验证补丁，兼容逐层 RoPE 字典形态。",
+   "tags": [
+    "rope",
+    "monkey-patch",
+    "compatibility"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    306,
+    339
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:get_config_parser",
+   "type": "function",
+   "name": "get_config_parser",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "按 config_format 从注册表取对应解析器（'hf'/'mistral'/自定义）。",
+   "tags": [
+    "config",
+    "parser",
+    "registry"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    540,
+    544
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:register_config_parser",
+   "type": "function",
+   "name": "register_config_parser",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "注册自定义 config_format 解析器：校验格式名与解析器类型并写入注册表。",
+   "tags": [
+    "config",
+    "extension",
+    "registry"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    547,
+    597
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:patch_legacy_rope_type",
+   "type": "function",
+   "name": "patch_legacy_rope_type",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "旧式 rope_type/default 语义修补：norope/linear 等历史取值映射到现代 rope_scaling 结构。",
+   "tags": [
+    "rope",
+    "config",
+    "legacy-compat"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    609,
+    665
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:patch_rope_parameters",
+   "type": "function",
+   "name": "patch_rope_parameters",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "把现代 rope_scaling 字段名（rope_type→type 等）归一化。",
+   "tags": [
+    "rope",
+    "config",
+    "normalization"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    668,
+    687
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:iter_rope_parameters",
+   "type": "function",
+   "name": "iter_rope_parameters",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "迭代 config 中全部 RoPE 参数条目（含逐层嵌套形态）。",
+   "tags": [
+    "rope",
+    "config",
+    "iterator"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    690,
+    699
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:uses_mrope",
+   "type": "function",
+   "name": "uses_mrope",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "判断 config（或其 text_config）是否使用多维 RoPE（mrope_section 存在）。",
+   "tags": [
+    "rope",
+    "mrope",
+    "detection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    733,
+    739
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:thinker_uses_mrope",
+   "type": "function",
+   "name": "thinker_uses_mrope",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "对 thinker/llm 复合结构探测内层 thinker 是否用 mrope。",
+   "tags": [
+    "rope",
+    "mrope",
+    "detection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    742,
+    752
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:mrope_num_dims",
+   "type": "function",
+   "name": "mrope_num_dims",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "解析 mrope_section 计算多模态 RoPE 维度数（含 None 全 1 维兜底）。",
+   "tags": [
+    "rope",
+    "mrope",
+    "calculation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    755,
+    771
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:maybe_override_with_speculators",
+   "type": "function",
+   "name": "maybe_override_with_speculators",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "对带 speculators_config 的模型把 EAGLE 等 speculator 配置合并进主 config（draft 模型来源/方法归一）。",
+   "tags": [
+    "speculative-decoding",
+    "config",
+    "merge"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    800,
+    876
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:get_config",
+   "type": "function",
+   "name": "get_config",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "配置加载主入口：自动探测 HF/Mistral 格式（params.json 优先判 Mistral），经对应解析器 + with_retry 容错 HF 缓存刷新竞态，再做 rope/别名/序列化修补。",
+   "tags": [
+    "config",
+    "entry-point",
+    "loader"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    879,
+    1008
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:get_pooling_config",
+   "type": "function",
+   "name": "get_pooling_config",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "解析 sentence-transformers modules.json 提取池化/归一化配置并归一为 vLLM 池化类型。",
+   "tags": [
+    "pooling",
+    "sentence-transformers",
+    "config"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1012,
+    1093
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:get_sentence_transformer_tokenizer_config",
+   "type": "function",
+   "name": "get_sentence_transformer_tokenizer_config",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "从 sentence-transformers checkpoint 读取 tokenizer 配置（1_Pooling 等模块目录约定）。",
+   "tags": [
+    "sentence-transformers",
+    "tokenizer",
+    "config"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1110,
+    1165
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:maybe_register_config_serialize_by_value",
+   "type": "function",
+   "name": "maybe_register_config_serialize_by_value",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "对含不可序列化成员的自定义 config 注册按值序列化器（模型加载/引擎重建时安全传输）。",
+   "tags": [
+    "config",
+    "serialization",
+    "compatibility"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1168,
+    1241
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:get_hf_text_config",
+   "type": "function",
+   "name": "get_hf_text_config",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "取多模态模型的内层 text_config（无则原样返回）。",
+   "tags": [
+    "config",
+    "multimodal",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1258,
+    1272
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:try_get_generation_config",
+   "type": "function",
+   "name": "try_get_generation_config",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "尽力加载 GenerationConfig（本地/HF 宽松模式），失败返回 None。",
+   "tags": [
+    "config",
+    "generation",
+    "loader"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1275,
+    1301
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:try_get_safetensors_metadata",
+   "type": "function",
+   "name": "try_get_safetensors_metadata",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "尽力读取 checkpoint 的 safetensors 头部 metadata（__metadata__ 键），失败返回空。",
+   "tags": [
+    "safetensors",
+    "metadata",
+    "loader"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1304,
+    1320
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:try_get_tokenizer_config",
+   "type": "function",
+   "name": "try_get_tokenizer_config",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "尽力读取 tokenizer_config.json，失败返回空 dict。",
+   "tags": [
+    "tokenizer",
+    "config",
+    "loader"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1323,
+    1335
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:try_get_dense_modules",
+   "type": "function",
+   "name": "try_get_dense_modules",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "从 modules.json 提取 sentence-transformers/pylate 的 Dense 模块结构（in/out 维度）。",
+   "tags": [
+    "sentence-transformers",
+    "dense",
+    "config"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1339,
+    1367
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:get_sentence_transformers_chat_template_kwargs",
+   "type": "function",
+   "name": "get_sentence_transformers_chat_template_kwargs",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "解析 sentence-transformers 的 chat template 专用 kwargs（模板内容与加载参数），含 v4/v5 兼容处理。",
+   "tags": [
+    "sentence-transformers",
+    "chat-template",
+    "config"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1371,
+    1449
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:get_safetensors_params_metadata",
+   "type": "function",
+   "name": "get_safetensors_params_metadata",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "汇总 safetensors 文件 metadata 得出参数级信息（权重量化方法/生产者等）。",
+   "tags": [
+    "safetensors",
+    "metadata",
+    "quantization"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1485,
+    1534
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:checkpoint_has_lm_head",
+   "type": "function",
+   "name": "checkpoint_has_lm_head",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "探测 checkpoint 是否含独立 lm_head 权重（safetensors 键名扫描）。",
+   "tags": [
+    "checkpoint",
+    "lm-head",
+    "detection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1538,
+    1553
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/config.py:_maybe_retrieve_max_pos_from_hf",
+   "type": "function",
+   "name": "_maybe_retrieve_max_pos_from_hf",
+   "filePath": "vllm/transformers_utils/config.py",
+   "summary": "对疑似长上下文模型从 HF 侧尽力取 max_position_embeddings。",
+   "tags": [
+    "config",
+    "max-position-embeddings",
+    "utility"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1569,
+    1589
+   ]
+  },
+  {
+   "id": "file:vllm/transformers_utils/config_parser_base.py",
+   "type": "file",
+   "name": "config_parser_base.py",
+   "filePath": "vllm/transformers_utils/config_parser_base.py",
+   "summary": "配置解析器抽象接口：parse(model, trust_remote_code, revision, code_revision, **kwargs) 返回 (config_dict, PreTrainedConfig)，是自定义 config_format 扩展点的契约。",
+   "tags": [
+    "config",
+    "abstract-base",
+    "extension-point"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/transformers_utils/config_parser_base.py:ConfigParserBase",
+   "type": "class",
+   "name": "ConfigParserBase",
+   "filePath": "vllm/transformers_utils/config_parser_base.py",
+   "summary": "配置解析器 ABC：唯一抽象方法 parse，HF/Mistral 及用户自定义解析器均实现此契约。",
+   "tags": [
+    "abstract-base",
+    "config",
+    "parser"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    10,
+    20
+   ]
+  },
+  {
+   "id": "file:vllm/transformers_utils/configs/radio.py",
+   "type": "file",
+   "name": "radio.py",
+   "filePath": "vllm/transformers_utils/configs/radio.py",
+   "summary": "Radio 视觉塔的 PreTrainedConfig 定义：model_name 驱动的架构维度查表 + 图像归一化默认值。",
+   "tags": [
+    "configuration",
+    "vision",
+    "data-model"
+   ],
+   "complexity": "moderate",
+   "languageNotes": "moderate"
+  },
+  {
+   "id": "class:vllm/transformers_utils/configs/radio.py:RadioConfig",
+   "type": "class",
+   "name": "RadioConfig",
+   "filePath": "vllm/transformers_utils/configs/radio.py",
+   "summary": "NVIDIA Radio 视觉模型配置：按 timm ViT 名称查表（VIT_TIMM_DIM_BY_NAME）补全 hidden/layers/heads/mlp 维度，附 OpenAI CLIP 归一化均值方差默认值。",
+   "tags": [
+    "vision-encoder",
+    "timm",
+    "configuration"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    24,
+    111
+   ]
+  },
+  {
+   "id": "file:vllm/transformers_utils/configs/speculators/algos.py",
+   "type": "file",
+   "name": "algos.py",
+   "filePath": "vllm/transformers_utils/configs/speculators/algos.py",
+   "summary": "speculator 算法配置变换注册表：register_speculator 装饰器登记 update_* 函数，覆盖 eagle3/peagle/dflash/dflash2/dspark 各算法把 draft 专属字段合并进 Transformers 配置字典。",
+   "tags": [
+    "speculative-decoding",
+    "config",
+    "registry",
+    "eagle"
+   ],
+   "complexity": "moderate",
+   "languageNotes": "SUPPORTED_SPECULATORS_TYPES 注册表由 SpeculatorsConfig.from_pretrained 按 method 字段分发调用。"
+  },
+  {
+   "id": "function:vllm/transformers_utils/configs/speculators/algos.py:register_speculator",
+   "type": "function",
+   "name": "register_speculator",
+   "filePath": "vllm/transformers_utils/configs/speculators/algos.py",
+   "summary": "装饰器：按算法名登记 update 函数进 SUPPORTED_SPECULATORS_TYPES。",
+   "tags": [
+    "registry",
+    "decorator",
+    "speculative-decoding"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    7,
+    12
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/configs/speculators/algos.py:update_eagle3",
+   "type": "function",
+   "name": "update_eagle3",
+   "filePath": "vllm/transformers_utils/configs/speculators/algos.py",
+   "summary": "Eagle-3 配置变换：draft_vocab_size/target_hidden_size/norm 位置与 aux hidden state 层号等字段迁移。",
+   "tags": [
+    "eagle3",
+    "speculative-decoding",
+    "config"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    16,
+    50
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/configs/speculators/algos.py:update_peagle",
+   "type": "function",
+   "name": "update_peagle",
+   "filePath": "vllm/transformers_utils/configs/speculators/algos.py",
+   "summary": "pEAGLE 配置变换：draft 模型与目标模型字段对齐合并。",
+   "tags": [
+    "peagle",
+    "speculative-decoding",
+    "config"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    54,
+    87
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/configs/speculators/algos.py:update_dflash",
+   "type": "function",
+   "name": "update_dflash",
+   "filePath": "vllm/transformers_utils/configs/speculators/algos.py",
+   "summary": "DFlash speculator 配置变换：draft 层/深度等字段迁移。",
+   "tags": [
+    "dflash",
+    "speculative-decoding",
+    "config"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    91,
+    126
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/configs/speculators/algos.py:update_dflash2",
+   "type": "function",
+   "name": "update_dflash2",
+   "filePath": "vllm/transformers_utils/configs/speculators/algos.py",
+   "summary": "DFlash2 配置变换：新一代字段的兼容归并。",
+   "tags": [
+    "dflash2",
+    "speculative-decoding",
+    "config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    130,
+    149
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/configs/speculators/algos.py:update_dspark",
+   "type": "function",
+   "name": "update_dspark",
+   "filePath": "vllm/transformers_utils/configs/speculators/algos.py",
+   "summary": "DSpark speculator 配置变换：字段最全的一支（draft 结构与目标锚点等）。",
+   "tags": [
+    "dspark",
+    "speculative-decoding",
+    "config"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    153,
+    209
+   ]
+  },
+  {
+   "id": "file:vllm/transformers_utils/configs/speculators/base.py",
+   "type": "file",
+   "name": "base.py",
+   "filePath": "vllm/transformers_utils/configs/speculators/base.py",
+   "summary": "speculators 模型配置基类：字段动态 setattr + from_pretrained/extract/build speculative config 四段式。",
+   "tags": [
+    "configuration",
+    "speculative-decoding",
+    "data-model"
+   ],
+   "complexity": "moderate",
+   "languageNotes": "moderate"
+  },
+  {
+   "id": "class:vllm/transformers_utils/configs/speculators/base.py:SpeculatorsConfig",
+   "type": "class",
+   "name": "SpeculatorsConfig",
+   "filePath": "vllm/transformers_utils/configs/speculators/base.py",
+   "summary": "speculators 家族模型配置（model_type='speculators'）：from_pretrained 按 method 分发到 algos 注册表做字段变换，并能把结果反向构造成 vLLM speculative config。",
+   "tags": [
+    "speculative-decoding",
+    "configuration",
+    "factory"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    15,
+    137
+   ]
+  },
+  {
+   "id": "file:vllm/transformers_utils/configs/step3_vl.py",
+   "type": "file",
+   "name": "step3_vl.py",
+   "filePath": "vllm/transformers_utils/configs/step3_vl.py",
+   "summary": "Step3-VL 三层配置定义：Step3VisionEncoderConfig/Step3TextConfig/Step3VLConfig（encoder-decoder 形态的 VL 模型）。",
+   "tags": [
+    "configuration",
+    "vision-language",
+    "step3"
+   ],
+   "complexity": "simple",
+   "languageNotes": "moderate"
+  },
+  {
+   "id": "class:vllm/transformers_utils/configs/step3_vl.py:Step3VLConfig",
+   "type": "class",
+   "name": "Step3VLConfig",
+   "filePath": "vllm/transformers_utils/configs/step3_vl.py",
+   "summary": "Step3-VL 顶层配置：聚合 vision encoder（63 层/1792 维）与 text 配置为复合结构。",
+   "tags": [
+    "step3",
+    "vision-language",
+    "configuration"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    149,
+    178
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/configs/step3_vl.py:Step3VisionEncoderConfig",
+   "type": "class",
+   "name": "Step3VisionEncoderConfig",
+   "filePath": "vllm/transformers_utils/configs/step3_vl.py",
+   "summary": "Step3 视觉编码器配置：hidden 1792/63 层/patch 14/quick_gelu 等默认值。",
+   "tags": [
+    "configuration",
+    "vision-encoder",
+    "step3"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    8,
+    35
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/configs/step3_vl.py:Step3TextConfig",
+   "type": "class",
+   "name": "Step3TextConfig",
+   "filePath": "vllm/transformers_utils/configs/step3_vl.py",
+   "summary": "Step3 文本主干配置（Step3TextForCausalLM 架构）。",
+   "tags": [
+    "configuration",
+    "text-model",
+    "step3"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    38,
+    146
+   ]
+  },
+  {
+   "id": "file:vllm/transformers_utils/configs/step5.py",
+   "type": "file",
+   "name": "step5.py",
+   "filePath": "vllm/transformers_utils/configs/step5.py",
+   "summary": "Step5 家族配置：PerceptionEncoderConfig（Step3p7/Step5 共享视觉塔）+ Step5Config 文本主干 + Step5VLConfig 复合。",
+   "tags": [
+    "configuration",
+    "vision-language",
+    "step5"
+   ],
+   "complexity": "simple",
+   "languageNotes": "moderate"
+  },
+  {
+   "id": "class:vllm/transformers_utils/configs/step5.py:Step5VLConfig",
+   "type": "class",
+   "name": "Step5VLConfig",
+   "filePath": "vllm/transformers_utils/configs/step5.py",
+   "summary": "Step5-VL 顶层配置：组合 Step5Config 文本主干与共享 perception encoder。",
+   "tags": [
+    "step5",
+    "vision-language",
+    "configuration"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    211,
+    257
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/configs/step5.py:PerceptionEncoderConfig",
+   "type": "class",
+   "name": "PerceptionEncoderConfig",
+   "filePath": "vllm/transformers_utils/configs/step5.py",
+   "summary": "共享感知编码器配置：width 1536/47 层/rope2d/attn pooler 等视觉塔参数。",
+   "tags": [
+    "configuration",
+    "vision-encoder",
+    "perception"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    8,
+    52
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/configs/step5.py:Step5Config",
+   "type": "class",
+   "name": "Step5Config",
+   "filePath": "vllm/transformers_utils/configs/step5.py",
+   "summary": "Step5 文本模型配置（hidden 5120 默认等）。",
+   "tags": [
+    "configuration",
+    "text-model",
+    "step5"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    55,
+    208
+   ]
+  },
+  {
+   "id": "file:vllm/transformers_utils/configs/ultravox.py",
+   "type": "file",
+   "name": "ultravox.py",
+   "filePath": "vllm/transformers_utils/configs/ultravox.py",
+   "summary": "Ultravox 配置（源自 fixie-ai 适配）：音频+文本双骨干复合配置。",
+   "tags": [
+    "configuration",
+    "audio",
+    "data-model"
+   ],
+   "complexity": "moderate",
+   "languageNotes": "moderate"
+  },
+  {
+   "id": "class:vllm/transformers_utils/configs/ultravox.py:UltravoxConfig",
+   "type": "class",
+   "name": "UltravoxConfig",
+   "filePath": "vllm/transformers_utils/configs/ultravox.py",
+   "summary": "Ultravox 音频-语言模型配置：audio/text 双骨干（子 config 或 model_id 引用）、audio_token_index/stack_factor 投影参数；__setattr__ 惰性加载 text_config，需要时回读 config.json 补齐。",
+   "tags": [
+    "audio",
+    "configuration",
+    "ultravox"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    10,
+    120
+   ]
+  },
+  {
+   "id": "file:vllm/transformers_utils/deepseek_v4_utils.py",
+   "type": "file",
+   "name": "deepseek_v4_utils.py",
+   "filePath": "vllm/transformers_utils/deepseek_v4_utils.py",
+   "summary": "DeepSeek-V4 系配置兼容工具：读取 legacy compress_ratios，或从上游 layer_types+compress_rates 推导逐层压缩比并补回 MTP 层的 0。",
+   "tags": [
+    "deepseek",
+    "compression",
+    "config-compat"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/transformers_utils/deepseek_v4_utils.py:get_compress_ratios",
+   "type": "function",
+   "name": "get_compress_ratios",
+   "filePath": "vllm/transformers_utils/deepseek_v4_utils.py",
+   "summary": "逐层压缩比（0=滑窗）提取：优先 legacy compress_ratios，否则由 compress_rates×layer_types 推导并追加 MTP 层的 0；非 V4 配置返回空表。",
+   "tags": [
+    "deepseek",
+    "compress-ratios",
+    "compatibility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    6,
+    18
+   ]
+  },
+  {
+   "id": "file:vllm/transformers_utils/dynamic_module.py",
+   "type": "file",
+   "name": "dynamic_module.py",
+   "filePath": "vllm/transformers_utils/dynamic_module.py",
+   "summary": "trust_remote_code 动态模块加载的安全包装：复用 transformers get_class_from_dynamic_module 但吞掉全部异常返回 None（可关 warning），ModelScope/HF 场景给出对应日志。",
+   "tags": [
+    "dynamic-module",
+    "trust-remote-code",
+    "loader"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/transformers_utils/dynamic_module.py:try_get_class_from_dynamic_module",
+   "type": "function",
+   "name": "try_get_class_from_dynamic_module",
+   "filePath": "vllm/transformers_utils/dynamic_module.py",
+   "summary": "尝试经 transformers 动态模块机制取远端代码类：先 resolve_trust_remote_code 再 get_class_from_dynamic_module，任何异常降级为 warning + None。",
+   "tags": [
+    "dynamic-module",
+    "error-tolerance",
+    "loader"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    16,
+    69
+   ]
+  },
+  {
+   "id": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "type": "file",
+   "name": "model_arch_config_convertor.py",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "HF config → ModelArchitectureConfig 转换器体系：基类提供层/头/vocab/hidden/dtype/KV 头/专家数/量化归一等全套读取（含异构逐层配置与字段别名），29 个模型专属子类覆盖特例，MODEL_ARCH_CONFIG_CONVERTORS 按 model_type 分发。",
+   "tags": [
+    "model-architecture",
+    "config-conversion",
+    "registry",
+    "heterogeneous-layers"
+   ],
+   "complexity": "complex",
+   "languageNotes": "get_per_layer_hf_configs 是异构 checkpoint 的唯一判定位；is_deepseek_mla 列出全部 MLA 系 model_type（deepseek_v2-v41、glm5_next、kimi_k2 等）并以 compress_ratios 区分 V4 检查 head_dim/kv_lora_rank。"
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "class",
+   "name": "ModelArchConfigConvertorBase",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "转换器基类：绑定 hf_config/hf_text_config，提供 per-layer 异构配置、attention/KV 头、专家、dtype、量化配置（ModelOpt/压缩张量归一）、DeepSeek MLA 判定、max_model_len 推导等读取接口。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "base-class"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    31,
+    458
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:CohereAsrModelArchConfigConvertor",
+   "type": "class",
+   "name": "CohereAsrModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Cohere ASR：attention/头/KV 头读取覆盖 + mm_prefix_lm 判定。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    461,
+    483
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:MambaModelArchConfigConvertor",
+   "type": "class",
+   "name": "MambaModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Mamba 状态空间模型：head_size/KV 头返回空。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    486,
+    491
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:TerratorchModelArchConfigConvertor",
+   "type": "class",
+   "name": "TerratorchModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "TerraTorch（timm_wrapper）：head_size/KV 头返回空。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    494,
+    499
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:Zamba2ModelArchConfigConvertor",
+   "type": "class",
+   "name": "Zamba2ModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Zamba2 混合架构：head_size 覆盖。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    502,
+    504
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:FalconModelArchConfigConvertor",
+   "type": "class",
+   "name": "FalconModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Falcon（含 RefinedWeb）：KV 头从多头查询配置读取。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    507,
+    523
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:DbrxModelArchConfigConvertor",
+   "type": "class",
+   "name": "DbrxModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Dbrx MoE：KV 头走 n_head_kv 别名。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    526,
+    532
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:NemotronNasModelArchConfigConvertor",
+   "type": "class",
+   "name": "NemotronNasModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Nemotron-NAS 异构块配置：逐层 KV 头推导。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    535,
+    551
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:DeepSeekMTPModelArchConfigConvertor",
+   "type": "class",
+   "name": "DeepSeekMTPModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "DeepSeek MTP draft：层数取 nextn 预测层数。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    554,
+    556
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:DeepseekV4ModelArchConfigConvertor",
+   "type": "class",
+   "name": "DeepseekV4ModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "DeepSeek-V4：mm_prefix_lm 判定 + 压缩比感知的构造。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    559,
+    590
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:MimoMTPModelArchConfigConvertor",
+   "type": "class",
+   "name": "MimoMTPModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Mimo MTP draft：层数覆盖。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    593,
+    595
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:MimoV2ModelArchConfigConvertor",
+   "type": "class",
+   "name": "MimoV2ModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Mimo V2：剥离 attention_chunk_size 的构造处理。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    609,
+    619
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:Qwen3_5ModelArchConfigConvertor",
+   "type": "class",
+   "name": "Qwen3_5ModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Qwen3.5：多层 config 形态的构造适配。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    622,
+    651
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:Qwen3ASRModelArchConfigConvertor",
+   "type": "class",
+   "name": "Qwen3ASRModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Qwen3 ASR：语音模型 config 形态适配。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    654,
+    664
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:Qwen3OmniMoeModelArchConfigConvertor",
+   "type": "class",
+   "name": "Qwen3OmniMoeModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Qwen3-Omni MoE：多专家 config 适配。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    667,
+    689
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:MimoV2MTPModelArchConfigConvertor",
+   "type": "class",
+   "name": "MimoV2MTPModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Mimo V2 MTP：构造 + 层数覆盖。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    692,
+    708
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:GLM4MoeMTPModelArchConfigConvertor",
+   "type": "class",
+   "name": "GLM4MoeMTPModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "GLM-4 MoE MTP draft：层数覆盖。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    711,
+    713
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:ErnieMTPModelArchConfigConvertor",
+   "type": "class",
+   "name": "ErnieMTPModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "ERNIE MTP draft：层数覆盖。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    716,
+    718
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:Qwen3NextMTPModelArchConfigConvertor",
+   "type": "class",
+   "name": "Qwen3NextMTPModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Qwen3-Next MTP draft：层数覆盖。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    721,
+    723
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:Qwen4ExpMTPModelArchConfigConvertor",
+   "type": "class",
+   "name": "Qwen4ExpMTPModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Qwen4-Exp MTP draft：层数覆盖。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    726,
+    732
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:BailingHybridMTPModelArchConfigConvertor",
+   "type": "class",
+   "name": "BailingHybridMTPModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Bailing Hybrid MTP draft：层数覆盖。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    735,
+    737
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:BailingHybridV3MTPModelArchConfigConvertor",
+   "type": "class",
+   "name": "BailingHybridV3MTPModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Bailing Hybrid V3 MTP draft：纯标记子类。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    740,
+    743
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:Qwen3_5MTPModelArchConfigConvertor",
+   "type": "class",
+   "name": "Qwen3_5MTPModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Qwen3.5 MTP draft：层数覆盖。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    746,
+    748
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:Step3p5MTPModelArchConfigConvertor",
+   "type": "class",
+   "name": "Step3p5MTPModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Step3.5 MTP：层数覆盖 + 逐层 HF 配置读取。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    751,
+    763
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:PanguUltraMoeMTPModelArchConfigConvertor",
+   "type": "class",
+   "name": "PanguUltraMoeMTPModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "盘古 Ultra MoE MTP：层数覆盖。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    766,
+    768
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:LongCatFlashModelArchConfigConvertor",
+   "type": "class",
+   "name": "LongCatFlashModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "LongCat-Flash：主模型特例。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    771,
+    774
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:LongCatFlashMTPModelArchConfigConvertor",
+   "type": "class",
+   "name": "LongCatFlashMTPModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "LongCat-Flash MTP：层数覆盖。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    777,
+    779
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:Gemma4MTPModelArchConfigConvertor",
+   "type": "class",
+   "name": "Gemma4MTPModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Gemma4 MTP：hidden size + 层数覆盖。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    782,
+    791
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:Gemma4ModelArchConfigConvertor",
+   "type": "class",
+   "name": "Gemma4ModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "Gemma4（含 diffusion_gemma 系）：mm_prefix_lm 判定。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    794,
+    801
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/model_arch_config_convertor.py:MossAudioModelArchConfigConvertor",
+   "type": "class",
+   "name": "MossAudioModelArchConfigConvertor",
+   "filePath": "vllm/transformers_utils/model_arch_config_convertor.py",
+   "summary": "MossAudio：音频-语言复合 config 的全套维度读取与 max_model_len 推导。 继承 ModelArchConfigConvertorBase。",
+   "tags": [
+    "model-architecture",
+    "conversion",
+    "model-specific"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    804,
+    845
+   ]
+  },
+  {
+   "id": "file:vllm/transformers_utils/processor.py",
+   "type": "file",
+   "name": "processor.py",
+   "filePath": "vllm/transformers_utils/processor.py",
+   "summary": "HF processor 加载中枢：get_processor/get_image_processor/get_video_processor/get_feature_extractor 四族加载器（本地注册类优先、AutoX 回退、快照路径解析），mm kwargs 类型/键位提取与 lru_cache 缓存变体，并内置 transformers v4→v5 远端代码兼容补丁。",
+   "tags": [
+    "processor",
+    "huggingface",
+    "loader",
+    "compatibility"
+   ],
+   "complexity": "complex",
+   "languageNotes": "_transformers_v4_compatibility_import/_init 为 transformers v5 移除的 ChatTemplateLoadKwargs/optional_attributes 提供兼容垫片；缓存变体剔除动态 kwargs 保证可哈希。"
+  },
+  {
+   "id": "class:vllm/transformers_utils/processor.py:HashableDict",
+   "type": "class",
+   "name": "HashableDict",
+   "filePath": "vllm/transformers_utils/processor.py",
+   "summary": "可哈希 dict：冻结键值构造 hash，供 lru_cache 缓存含 dict 参数的 processor 加载。",
+   "tags": [
+    "utility",
+    "caching",
+    "hashable"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    85,
+    91
+   ]
+  },
+  {
+   "id": "class:vllm/transformers_utils/processor.py:HashableList",
+   "type": "class",
+   "name": "HashableList",
+   "filePath": "vllm/transformers_utils/processor.py",
+   "summary": "可哈希 list：供缓存含 list 参数的调用。",
+   "tags": [
+    "utility",
+    "caching",
+    "hashable"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    94,
+    98
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/processor.py:_transformers_v4_compatibility_import",
+   "type": "function",
+   "name": "_transformers_v4_compatibility_import",
+   "filePath": "vllm/transformers_utils/processor.py",
+   "summary": "transformers v5 兼容：为远端代码补回被移除的 ChatTemplateLoadKwargs 别名。",
+   "tags": [
+    "compatibility",
+    "transformers-v5",
+    "monkey-patch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    38,
+    47
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/processor.py:_transformers_v4_compatibility_init",
+   "type": "function",
+   "name": "_transformers_v4_compatibility_init",
+   "filePath": "vllm/transformers_utils/processor.py",
+   "summary": "transformers v5 兼容：拦截 ProcessorMixin 子类的 optional_attributes 传参并预置到实例（Molmo2 等远端代码）。",
+   "tags": [
+    "compatibility",
+    "transformers-v5",
+    "monkey-patch"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    50,
+    74
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/processor.py:_merge_mm_kwargs",
+   "type": "function",
+   "name": "_merge_mm_kwargs",
+   "filePath": "vllm/transformers_utils/processor.py",
+   "summary": "合并用户 mm_processor_kwargs 与默认值并按 kwargs 类型过滤非法键。",
+   "tags": [
+    "multimodal",
+    "kwargs",
+    "merge"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    110,
+    135
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/processor.py:get_processor_config",
+   "type": "function",
+   "name": "get_processor_config",
+   "filePath": "vllm/transformers_utils/processor.py",
+   "summary": "读取 preprocessor_config.json 为 dict。",
+   "tags": [
+    "processor",
+    "config",
+    "loader"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    138,
+    151
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/processor.py:get_processor_cls_name_from_config",
+   "type": "function",
+   "name": "get_processor_cls_name_from_config",
+   "filePath": "vllm/transformers_utils/processor.py",
+   "summary": "从 processor config 的 processor_class 字段取 vLLM 注册处理器类名。",
+   "tags": [
+    "processor",
+    "registry",
+    "lookup"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    154,
+    163
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/processor.py:get_video_processor_cls_name_from_config",
+   "type": "function",
+   "name": "get_video_processor_cls_name_from_config",
+   "filePath": "vllm/transformers_utils/processor.py",
+   "summary": "从 config 解析视频处理器类名（含 HF 映射与远程类回退）。",
+   "tags": [
+    "processor",
+    "video",
+    "lookup"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    166,
+    192
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/processor.py:get_processor",
+   "type": "function",
+   "name": "get_processor",
+   "filePath": "vllm/transformers_utils/processor.py",
+   "summary": "主加载器：本地注册类优先于 AutoProcessor，快照路径解析（非权重文件快照/revision 阴影规避），失败时给出 trust_remote_code 提示，并把 tokenizer.name_or_path 回报为 Hub ID。",
+   "tags": [
+    "processor",
+    "loader",
+    "entry-point"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    208,
+    285
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/processor.py:get_processor_kwargs_type",
+   "type": "function",
+   "name": "get_processor_kwargs_type",
+   "filePath": "vllm/transformers_utils/processor.py",
+   "summary": "从处理器 __call__ 签名提取 mm kwargs 的类型标注。",
+   "tags": [
+    "processor",
+    "introspection",
+    "kwargs"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    292,
+    320
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/processor.py:get_processor_kwargs_keys",
+   "type": "function",
+   "name": "get_processor_kwargs_keys",
+   "filePath": "vllm/transformers_utils/processor.py",
+   "summary": "提取处理器支持的 kwargs 键集合（含父类链）。",
+   "tags": [
+    "processor",
+    "introspection",
+    "kwargs"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    324,
+    354
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/processor.py:cached_get_processor_without_dynamic_kwargs",
+   "type": "function",
+   "name": "cached_get_processor_without_dynamic_kwargs",
+   "filePath": "vllm/transformers_utils/processor.py",
+   "summary": "剔除动态 kwargs 后 lru_cache 缓存 get_processor 的变体。",
+   "tags": [
+    "processor",
+    "caching",
+    "loader"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    357,
+    390
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/processor.py:cached_processor_from_config",
+   "type": "function",
+   "name": "cached_processor_from_config",
+   "filePath": "vllm/transformers_utils/processor.py",
+   "summary": "按 ModelConfig 缓存 processor 加载的便捷封装。",
+   "tags": [
+    "processor",
+    "caching",
+    "loader"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    393,
+    404
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/processor.py:get_feature_extractor",
+   "type": "function",
+   "name": "get_feature_extractor",
+   "filePath": "vllm/transformers_utils/processor.py",
+   "summary": "加载特征提取器（本地注册优先，AutoFeatureExtractor 回退）。",
+   "tags": [
+    "feature-extractor",
+    "loader"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    407,
+    440
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/processor.py:get_image_processor",
+   "type": "function",
+   "name": "get_image_processor",
+   "filePath": "vllm/transformers_utils/processor.py",
+   "summary": "加载图像处理器（注册类/AutoImageProcessor，含 kwargs 类型校验）。",
+   "tags": [
+    "image-processor",
+    "loader",
+    "multimodal"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    458,
+    493
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/processor.py:get_video_processor",
+   "type": "function",
+   "name": "get_video_processor",
+   "filePath": "vllm/transformers_utils/processor.py",
+   "summary": "加载视频处理器（类名解析 + AutoVideoProcessor 回退）。",
+   "tags": [
+    "video-processor",
+    "loader",
+    "multimodal"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    511,
+    546
+   ]
+  },
+  {
+   "id": "file:vllm/transformers_utils/repo_utils.py",
+   "type": "file",
+   "name": "repo_utils.py",
+   "filePath": "vllm/transformers_utils/repo_utils.py",
+   "summary": "模型仓库交互工具层：共享 HfApi（带 vLLM library tag）、revision 解析为 commit、指数退避 with_retry、列仓文件/模式过滤/Mistral 判定、非权重文件快照下载与本地缓存优先读取。",
+   "tags": [
+    "huggingface",
+    "repo",
+    "downloader",
+    "retry"
+   ],
+   "complexity": "complex",
+   "languageNotes": "resolve_revision 提前把分支解析成 commit 防 HF 缓存刷新竞态；try_get_local_file 走 HF_HUB_OFFLINE 缓存路径。"
+  },
+  {
+   "id": "function:vllm/transformers_utils/repo_utils.py:hf_api",
+   "type": "function",
+   "name": "hf_api",
+   "filePath": "vllm/transformers_utils/repo_utils.py",
+   "summary": "惰性创建共享 HfApi 实例（user_agent 附 vLLM 版本）。",
+   "tags": [
+    "huggingface",
+    "api",
+    "singleton"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    33,
+    41
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/repo_utils.py:resolve_revision",
+   "type": "function",
+   "name": "resolve_revision",
+   "filePath": "vllm/transformers_utils/repo_utils.py",
+   "summary": "尽力把 revision 解析为 commit hash（防分支移动竞态），本地路径/ModelScope/Hub 错误时原样返回。",
+   "tags": [
+    "huggingface",
+    "revision",
+    "resilience"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    52,
+    93
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/repo_utils.py:with_retry",
+   "type": "function",
+   "name": "with_retry",
+   "filePath": "vllm/transformers_utils/repo_utils.py",
+   "summary": "通用重试包装：指数退避（fatal_errors 直抛），供配置加载等容错调用。",
+   "tags": [
+    "retry",
+    "resilience",
+    "utility"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    99,
+    132
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/repo_utils.py:list_repo_files",
+   "type": "function",
+   "name": "list_repo_files",
+   "filePath": "vllm/transformers_utils/repo_utils.py",
+   "summary": "列出仓库文件（本地目录直读，Hub 走 API，ModelScope 分支），异常友好化。",
+   "tags": [
+    "huggingface",
+    "file-listing"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    137,
+    171
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/repo_utils.py:list_filtered_repo_files",
+   "type": "function",
+   "name": "list_filtered_repo_files",
+   "filePath": "vllm/transformers_utils/repo_utils.py",
+   "summary": "列仓库文件并按 allow/ignore 模式过滤。",
+   "tags": [
+    "huggingface",
+    "file-listing",
+    "filter"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    174,
+    206
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/repo_utils.py:any_pattern_in_repo_files",
+   "type": "function",
+   "name": "any_pattern_in_repo_files",
+   "filePath": "vllm/transformers_utils/repo_utils.py",
+   "summary": "判断仓库文件是否命中任一模式。",
+   "tags": [
+    "huggingface",
+    "pattern",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    209,
+    227
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/repo_utils.py:is_mistral_model_repo",
+   "type": "function",
+   "name": "is_mistral_model_repo",
+   "filePath": "vllm/transformers_utils/repo_utils.py",
+   "summary": "探测仓库是否 Mistral 官方（params.json 存在且 HF id 前缀匹配）。",
+   "tags": [
+    "mistral",
+    "detection",
+    "huggingface"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    230,
+    242
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/repo_utils.py:file_exists",
+   "type": "function",
+   "name": "file_exists",
+   "filePath": "vllm/transformers_utils/repo_utils.py",
+   "summary": "检查仓库（或本地路径）中某文件是否存在。",
+   "tags": [
+    "huggingface",
+    "existence-check"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    245,
+    258
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/repo_utils.py:file_or_path_exists",
+   "type": "function",
+   "name": "file_or_path_exists",
+   "filePath": "vllm/transformers_utils/repo_utils.py",
+   "summary": "model 可为本地路径或 repo id 的存在性检查合一。",
+   "tags": [
+    "huggingface",
+    "existence-check",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    262,
+    283
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/repo_utils.py:get_model_path",
+   "type": "function",
+   "name": "get_model_path",
+   "filePath": "vllm/transformers_utils/repo_utils.py",
+   "summary": "把 model 名解析为本地路径（存在即用）。",
+   "tags": [
+    "model",
+    "path",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    286,
+    304
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/repo_utils.py:_snapshot_non_weight_files",
+   "type": "function",
+   "name": "_snapshot_non_weight_files",
+   "filePath": "vllm/transformers_utils/repo_utils.py",
+   "summary": "把非权重文件快照下载到缓存目录（allow_patterns 过滤）。",
+   "tags": [
+    "huggingface",
+    "snapshot",
+    "download"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    337,
+    354
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/repo_utils.py:get_non_weight_snapshot_path",
+   "type": "function",
+   "name": "get_non_weight_snapshot_path",
+   "filePath": "vllm/transformers_utils/repo_utils.py",
+   "summary": "取非权重文件快照路径（远端代码处理器加载时防 revision 阴影）。",
+   "tags": [
+    "huggingface",
+    "snapshot",
+    "path"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    357,
+    378
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/repo_utils.py:_try_download_from_hf_hub",
+   "type": "function",
+   "name": "_try_download_from_hf_hub",
+   "filePath": "vllm/transformers_utils/repo_utils.py",
+   "summary": "从 HF Hub 尽力下载单文件到本地，失败返回 None。",
+   "tags": [
+    "huggingface",
+    "download",
+    "resilience"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    381,
+    415
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/repo_utils.py:get_hf_file_bytes",
+   "type": "function",
+   "name": "get_hf_file_bytes",
+   "filePath": "vllm/transformers_utils/repo_utils.py",
+   "summary": "读取仓库单文件字节（本地直读优先）。",
+   "tags": [
+    "huggingface",
+    "file-io"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    418,
+    431
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/repo_utils.py:try_get_local_file",
+   "type": "function",
+   "name": "try_get_local_file",
+   "filePath": "vllm/transformers_utils/repo_utils.py",
+   "summary": "离线优先：从 HF 缓存或本地路径尽力取文件路径，取不到返回 None。",
+   "tags": [
+    "huggingface",
+    "offline",
+    "cache"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    434,
+    462
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/repo_utils.py:get_hf_file_to_dict",
+   "type": "function",
+   "name": "get_hf_file_to_dict",
+   "filePath": "vllm/transformers_utils/repo_utils.py",
+   "summary": "把仓库 JSON 文件读为 dict（本地/远端自适应，异常返回 None）。",
+   "tags": [
+    "huggingface",
+    "json",
+    "loader"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    465,
+    490
+   ]
+  },
+  {
+   "id": "file:vllm/transformers_utils/runai_utils.py",
+   "type": "file",
+   "name": "runai_utils.py",
+   "filePath": "vllm/transformers_utils/runai_utils.py",
+   "summary": "RunAI Model Streamer 对象存储拉取集成：s3/gs/az URI 识别、safetensors 列举、ObjectStorageModel 把模型镜像到哈希命名的缓存目录并注册信号处理器清理。",
+   "tags": [
+    "object-storage",
+    "runai",
+    "downloader",
+    "s3"
+   ],
+   "complexity": "simple",
+   "languageNotes": "runai_model_streamer 缺失时用 PlaceholderModule 占位保持可 import。"
+  },
+  {
+   "id": "class:vllm/transformers_utils/runai_utils.py:ObjectStorageModel",
+   "type": "class",
+   "name": "ObjectStorageModel",
+   "filePath": "vllm/transformers_utils/runai_utils.py",
+   "summary": "对象存储模型镜像：按 URL sha256 前 8 位建缓存目录，pull_files 经 runai 流式拉取；VLLM_ASSETS_CACHE_MODEL_CLEAN 时挂 SIGINT/SIGTERM 链式清理。",
+   "tags": [
+    "object-storage",
+    "caching",
+    "signal-handling"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    44,
+    99
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/runai_utils.py:list_safetensors",
+   "type": "function",
+   "name": "list_safetensors",
+   "filePath": "vllm/transformers_utils/runai_utils.py",
+   "summary": "经 runai 列举对象存储路径下的 safetensors 文件。",
+   "tags": [
+    "object-storage",
+    "safetensors",
+    "listing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    27,
+    37
+   ]
+  },
+  {
+   "id": "file:vllm/transformers_utils/s3_utils.py",
+   "type": "file",
+   "name": "s3_utils.py",
+   "filePath": "vllm/transformers_utils/s3_utils.py",
+   "summary": "S3 直连工具：boto3（缺失时 PlaceholderModule 占位）列举桶内对象并按 allow/ignore 模式过滤，glob 生成 s3:// 全路径列表。",
+   "tags": [
+    "s3",
+    "boto3",
+    "object-storage",
+    "file-listing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/transformers_utils/s3_utils.py:glob",
+   "type": "function",
+   "name": "glob",
+   "filePath": "vllm/transformers_utils/s3_utils.py",
+   "summary": "按前缀列举 S3 对象并过滤，返回 s3://bucket/... 全路径列表。",
+   "tags": [
+    "s3",
+    "glob",
+    "listing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    34,
+    55
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/s3_utils.py:list_files",
+   "type": "function",
+   "name": "list_files",
+   "filePath": "vllm/transformers_utils/s3_utils.py",
+   "summary": "分页列举 S3 前缀下对象并按 allow/ignore 模式过滤，返回 (bucket, prefix, keys)。",
+   "tags": [
+    "s3",
+    "pagination",
+    "filter"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    58,
+    95
+   ]
+  },
+  {
+   "id": "file:vllm/transformers_utils/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/transformers_utils/utils.py",
+   "summary": "transformers_utils 通用工具：云存储 URI 判定（s3/gs/az）、trust_remote_code kwargs 剥离、ModelScope 仓文件列举与路径转换、VLLM_MODEL_REDIRECT 模型重定向（JSON/空格分隔两种格式）、safetensors 文件头 metadata 解析。",
+   "tags": [
+    "utility",
+    "cloud-storage",
+    "modelscope",
+    "redirect"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/transformers_utils/utils.py:without_trust_remote_code",
+   "type": "function",
+   "name": "without_trust_remote_code",
+   "filePath": "vllm/transformers_utils/utils.py",
+   "summary": "返回剔除 trust_remote_code 的 kwargs 副本（HF API 不接受该参数时使用）。",
+   "tags": [
+    "kwargs",
+    "utility",
+    "hf-compat"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    34,
+    38
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/utils.py:modelscope_list_repo_files",
+   "type": "function",
+   "name": "modelscope_list_repo_files",
+   "filePath": "vllm/transformers_utils/utils.py",
+   "summary": "登录 ModelScope HubApi 后递归列出仓库文件路径（对齐 HF list_repo_files 语义）。",
+   "tags": [
+    "modelscope",
+    "file-listing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    41,
+    58
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/utils.py:maybe_model_redirect",
+   "type": "function",
+   "name": "maybe_model_redirect",
+   "filePath": "vllm/transformers_utils/utils.py",
+   "summary": "@cache 模型名重定向：按 VLLM_MODEL_REDIRECT_PATH 指向的 JSON 或『名字 重定向名』行格式把模型名映射到本地目录。",
+   "tags": [
+    "redirect",
+    "configuration",
+    "caching"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    82,
+    107
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/utils.py:parse_safetensors_file_metadata",
+   "type": "function",
+   "name": "parse_safetensors_file_metadata",
+   "filePath": "vllm/transformers_utils/utils.py",
+   "summary": "直接读 safetensors 文件头 8 字节长度 + metadata JSON。",
+   "tags": [
+    "safetensors",
+    "metadata",
+    "parsing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    110,
+    114
+   ]
+  },
+  {
+   "id": "function:vllm/transformers_utils/utils.py:convert_model_repo_to_path",
+   "type": "function",
+   "name": "convert_model_repo_to_path",
+   "filePath": "vllm/transformers_utils/utils.py",
+   "summary": "VLLM_USE_MODELSCOPE 时把 repo 名转换为 ModelScope 缓存根下的路径。",
+   "tags": [
+    "modelscope",
+    "path",
+    "conversion"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    117,
+    124
+   ]
+  },
+  {
+   "id": "file:vllm/triton_utils/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/triton_utils/__init__.py",
+   "summary": "triton_utils 包入口：HAS_TRITON 探测失败时以 TritonPlaceholder/TritonLanguagePlaceholder 顶替 triton/tl/tldevice/gluon/gl/aggregate 全部名字，另暴露 LOG2E/LOGE2 常量并按 VLLM_TRITON_FORCE_FIRST_CONFIG 安装 autotuner 首配置补丁。",
+   "tags": [
+    "triton",
+    "entry-point",
+    "placeholder",
+    "graceful-degradation"
+   ],
+   "complexity": "simple",
+   "languageNotes": "占位符让无 Triton 平台（纯 CPU）可 import 全部 vLLM 模块；force_first_config 延迟安装避免 import 期解析 current_platform。"
+  },
+  {
+   "id": "file:vllm/triton_utils/dispatcher.py",
+   "type": "file",
+   "name": "dispatcher.py",
+   "filePath": "vllm/triton_utils/dispatcher.py",
+   "summary": "Triton 内核平台覆写注册表：register_kernels 按全限定名把 vLLM 核心 Triton 内核替换为平台实现——Triton 实现直接换入（设备函数内联仍可编译），非 Triton 实现包成 KernelOverride 适配启动协议，并全模块扫描重绑既有引用。",
+   "tags": [
+    "triton",
+    "kernel-override",
+    "registry",
+    "platform-portability"
+   ],
+   "complexity": "complex",
+   "languageNotes": "_rebind_impls 单遍扫描 sys.modules 重绑 from-import 拷贝与 JIT warmup 持有的 kernel 属性（按身份比较避开 __eq__ 副作用）。"
+  },
+  {
+   "id": "class:vllm/triton_utils/dispatcher.py:KernelOverride",
+   "type": "class",
+   "name": "KernelOverride",
+   "filePath": "vllm/triton_utils/dispatcher.py",
+   "summary": "Triton 内核替身：按原内核参数序转发启动到非 Triton impl，支持 [grid] 语法/warmup/缓存绑定。",
+   "tags": [
+    "triton",
+    "adapter",
+    "launcher"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    58,
+    141
+   ]
+  },
+  {
+   "id": "function:vllm/triton_utils/dispatcher.py:_is_triton_kernel",
+   "type": "function",
+   "name": "_is_triton_kernel",
+   "filePath": "vllm/triton_utils/dispatcher.py",
+   "summary": "按 JIT 启动协议（__getitem__/run/warmup/arg_names）判断对象是否真 Triton 内核。",
+   "tags": [
+    "triton",
+    "detection",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    46,
+    55
+   ]
+  },
+  {
+   "id": "function:vllm/triton_utils/dispatcher.py:_resolve_kernel",
+   "type": "function",
+   "name": "_resolve_kernel",
+   "filePath": "vllm/triton_utils/dispatcher.py",
+   "summary": "把全限定内核名解析为 (宿主对象, 属性)，支持经类属性路径定位。",
+   "tags": [
+    "triton",
+    "resolution",
+    "importlib"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    144,
+    155
+   ]
+  },
+  {
+   "id": "function:vllm/triton_utils/dispatcher.py:_rebind_impls",
+   "type": "function",
+   "name": "_rebind_impls",
+   "filePath": "vllm/triton_utils/dispatcher.py",
+   "summary": "扫描 sys.modules 把原内核的全部引用（模块属性拷贝与 warmup 持有者）重绑到替换对象。",
+   "tags": [
+    "triton",
+    "rebinding",
+    "monkey-patch"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    158,
+    207
+   ]
+  },
+  {
+   "id": "function:vllm/triton_utils/dispatcher.py:register_kernels",
+   "type": "function",
+   "name": "register_kernels",
+   "filePath": "vllm/triton_utils/dispatcher.py",
+   "summary": "注册平台覆写：解析内核名、按是否 Triton 实现选择直换或 KernelOverride 包装，先重绑外部引用再换定义属性。",
+   "tags": [
+    "triton",
+    "registry",
+    "platform-portability"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    210,
+    254
+   ]
+  },
+  {
+   "id": "file:vllm/triton_utils/importing.py",
+   "type": "file",
+   "name": "importing.py",
+   "filePath": "vllm/triton_utils/importing.py",
+   "summary": "Triton 可用性探测与占位符：检查 find_spec/后端驱动活跃性（排除 CPU 后端、兼容 Ray 空 CUDA_VISIBLE_DEVICES 场景），不可用时提供 TritonPlaceholder/TritonLanguagePlaceholder 让装饰器与常量安全降级。",
+   "tags": [
+    "triton",
+    "availability",
+    "placeholder",
+    "platform-detection"
+   ],
+   "complexity": "moderate",
+   "languageNotes": "占位模块伪装 __version__='3.4.0'，_dummy_decorator 对无参/带参两种用法都返回原函数。"
+  },
+  {
+   "id": "class:vllm/triton_utils/importing.py:TritonPlaceholder",
+   "type": "class",
+   "name": "TritonPlaceholder",
+   "filePath": "vllm/triton_utils/importing.py",
+   "summary": "triton 模块占位：jit/autotune/heuristics/Config 变无害装饰器，cdiv 真实现，language 挂 TritonLanguagePlaceholder。",
+   "tags": [
+    "placeholder",
+    "triton",
+    "graceful-degradation"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    103,
+    120
+   ]
+  },
+  {
+   "id": "class:vllm/triton_utils/importing.py:TritonLanguagePlaceholder",
+   "type": "class",
+   "name": "TritonLanguagePlaceholder",
+   "filePath": "vllm/triton_utils/importing.py",
+   "summary": "triton.language 占位：constexpr 透传、指针/标量类型接口变为无害桩。",
+   "tags": [
+    "placeholder",
+    "triton",
+    "graceful-degradation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    123,
+    136
+   ]
+  },
+  {
+   "id": "file:vllm/usage/usage_lib.py",
+   "type": "file",
+   "name": "usage_lib.py",
+   "filePath": "vllm/usage/usage_lib.py",
+   "summary": "匿名使用统计上报：UsageContext 上下文枚举 + UsageMessage 收集平台/环境/vLLM 版本信息，经后台守护线程一次性+心跳式持续上报（可被 do_not_track/环境变量关闭，支持落盘代替发送）。",
+   "tags": [
+    "telemetry",
+    "usage-stats",
+    "background-thread"
+   ],
+   "complexity": "moderate",
+   "languageNotes": "_detect_cloud_provider 按环境变量特征识别云厂商；_USAGE_ENV_VARS_TO_COLLECT 仅采集白名单变量。"
+  },
+  {
+   "id": "class:vllm/usage/usage_lib.py:UsageContext",
+   "type": "class",
+   "name": "UsageContext",
+   "filePath": "vllm/usage/usage_lib.py",
+   "summary": "使用场景枚举：LLM_CLASS/API_SERVER/OPENAI_API_SERVER/OPENAI_BATCH_RUNNER/ENGINE_CONTEXT。",
+   "tags": [
+    "telemetry",
+    "enum",
+    "context"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    111,
+    117
+   ]
+  },
+  {
+   "id": "class:vllm/usage/usage_lib.py:UsageMessage",
+   "type": "class",
+   "name": "UsageMessage",
+   "filePath": "vllm/usage/usage_lib.py",
+   "summary": "使用消息收集器：CPU/GPU/内存/环境与 vLLM 版本快照，report_usage 起守护线程做一次性+持续心跳上报（TPU 走 tpu_inference 探测）。",
+   "tags": [
+    "telemetry",
+    "reporting",
+    "background-thread"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    120,
+    278
+   ]
+  },
+  {
+   "id": "function:vllm/usage/usage_lib.py:is_usage_stats_enabled",
+   "type": "function",
+   "name": "is_usage_stats_enabled",
+   "filePath": "vllm/usage/usage_lib.py",
+   "summary": "判定使用统计是否开启（do_not_track 文件/环境变量/默认策略），结果缓存。",
+   "tags": [
+    "telemetry",
+    "configuration",
+    "detection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    50,
+    68
+   ]
+  },
+  {
+   "id": "function:vllm/usage/usage_lib.py:_detect_cloud_provider",
+   "type": "function",
+   "name": "_detect_cloud_provider",
+   "filePath": "vllm/usage/usage_lib.py",
+   "summary": "按环境变量特征识别当前云厂商。",
+   "tags": [
+    "telemetry",
+    "cloud",
+    "detection"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    75,
+    108
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/transformers_utils/chat_templates/registry.py",
+   "target": "function:vllm/transformers_utils/chat_templates/registry.py:_get_minicpmv_chat_template_fallback",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/chat_templates/registry.py",
+   "target": "function:vllm/transformers_utils/chat_templates/registry.py:register_chat_template_fallback_path",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/chat_templates/registry.py",
+   "target": "function:vllm/transformers_utils/chat_templates/registry.py:get_chat_template_fallback_path",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/chat_templates/registry.py",
+   "target": "function:vllm/transformers_utils/chat_templates/registry.py:register_chat_template_fallback_path",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/chat_templates/registry.py",
+   "target": "function:vllm/transformers_utils/chat_templates/registry.py:get_chat_template_fallback_path",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/chat_templates/registry.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:is_rope_parameters_nested",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:_install_hf_config_validator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:_patch_hf_transformers_validate_rope",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:_patch_hf_transformers_nested_rope_validation",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:get_config_parser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:register_config_parser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:patch_legacy_rope_type",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:patch_rope_parameters",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:iter_rope_parameters",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:uses_mrope",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:thinker_uses_mrope",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:mrope_num_dims",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:maybe_override_with_speculators",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:get_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:get_pooling_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:get_sentence_transformer_tokenizer_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:maybe_register_config_serialize_by_value",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:get_hf_text_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:try_get_generation_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:try_get_safetensors_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:try_get_tokenizer_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:try_get_dense_modules",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:get_sentence_transformers_chat_template_kwargs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:get_safetensors_params_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:checkpoint_has_lm_head",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:_maybe_retrieve_max_pos_from_hf",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "class:vllm/transformers_utils/config.py:LazyConfigDict",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "class:vllm/transformers_utils/config.py:HFConfigParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "class:vllm/transformers_utils/config.py:MistralConfigParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:get_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:get_pooling_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:uses_mrope",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:thinker_uses_mrope",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:mrope_num_dims",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:patch_legacy_rope_type",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:get_hf_text_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:try_get_generation_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:get_safetensors_params_metadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:checkpoint_has_lm_head",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:register_config_parser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "function:vllm/transformers_utils/config.py:get_config_parser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "class:vllm/transformers_utils/config.py:HFConfigParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/transformers_utils/config.py:HFConfigParser",
+   "target": "class:vllm/transformers_utils/config_parser_base.py:ConfigParserBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/transformers_utils/config.py:MistralConfigParser",
+   "target": "class:vllm/transformers_utils/config_parser_base.py:ConfigParserBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "function:vllm/transformers_utils/config.py:get_config",
+   "target": "function:vllm/transformers_utils/repo_utils.py:is_mistral_model_repo",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/transformers_utils/config.py:get_config",
+   "target": "function:vllm/transformers_utils/repo_utils.py:file_or_path_exists",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/transformers_utils/config.py:get_config",
+   "target": "function:vllm/transformers_utils/repo_utils.py:with_retry",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "file:vllm/transformers_utils/repo_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "file:vllm/transformers_utils/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "file:vllm/transformers_utils/config_parser_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "file:vllm/transformers_utils/configs/speculators/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "file:vllm/transformers_utils/configs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "file:vllm/transformers_utils/configs/mistral.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "file:vllm/config/pooler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "file:vllm/v1/executor/ray_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/config.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/config_parser_base.py",
+   "target": "class:vllm/transformers_utils/config_parser_base.py:ConfigParserBase",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/config_parser_base.py",
+   "target": "class:vllm/transformers_utils/config_parser_base.py:ConfigParserBase",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/radio.py",
+   "target": "class:vllm/transformers_utils/configs/radio.py:RadioConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/radio.py",
+   "target": "class:vllm/transformers_utils/configs/radio.py:RadioConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/speculators/algos.py",
+   "target": "function:vllm/transformers_utils/configs/speculators/algos.py:register_speculator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/speculators/algos.py",
+   "target": "function:vllm/transformers_utils/configs/speculators/algos.py:register_speculator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/speculators/algos.py",
+   "target": "function:vllm/transformers_utils/configs/speculators/algos.py:update_eagle3",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/speculators/algos.py",
+   "target": "function:vllm/transformers_utils/configs/speculators/algos.py:update_eagle3",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/speculators/algos.py",
+   "target": "function:vllm/transformers_utils/configs/speculators/algos.py:update_peagle",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/speculators/algos.py",
+   "target": "function:vllm/transformers_utils/configs/speculators/algos.py:update_peagle",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/speculators/algos.py",
+   "target": "function:vllm/transformers_utils/configs/speculators/algos.py:update_dflash",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/speculators/algos.py",
+   "target": "function:vllm/transformers_utils/configs/speculators/algos.py:update_dflash",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/speculators/algos.py",
+   "target": "function:vllm/transformers_utils/configs/speculators/algos.py:update_dflash2",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/speculators/algos.py",
+   "target": "function:vllm/transformers_utils/configs/speculators/algos.py:update_dflash2",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/speculators/algos.py",
+   "target": "function:vllm/transformers_utils/configs/speculators/algos.py:update_dspark",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/speculators/algos.py",
+   "target": "function:vllm/transformers_utils/configs/speculators/algos.py:update_dspark",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/speculators/base.py",
+   "target": "class:vllm/transformers_utils/configs/speculators/base.py:SpeculatorsConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/speculators/base.py",
+   "target": "class:vllm/transformers_utils/configs/speculators/base.py:SpeculatorsConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/step3_vl.py",
+   "target": "class:vllm/transformers_utils/configs/step3_vl.py:Step3VLConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/step3_vl.py",
+   "target": "class:vllm/transformers_utils/configs/step3_vl.py:Step3VLConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/step3_vl.py",
+   "target": "class:vllm/transformers_utils/configs/step3_vl.py:Step3VisionEncoderConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/step3_vl.py",
+   "target": "class:vllm/transformers_utils/configs/step3_vl.py:Step3VisionEncoderConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/step3_vl.py",
+   "target": "class:vllm/transformers_utils/configs/step3_vl.py:Step3TextConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/step3_vl.py",
+   "target": "class:vllm/transformers_utils/configs/step3_vl.py:Step3TextConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/step5.py",
+   "target": "class:vllm/transformers_utils/configs/step5.py:Step5VLConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/step5.py",
+   "target": "class:vllm/transformers_utils/configs/step5.py:Step5VLConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/step5.py",
+   "target": "class:vllm/transformers_utils/configs/step5.py:PerceptionEncoderConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/step5.py",
+   "target": "class:vllm/transformers_utils/configs/step5.py:PerceptionEncoderConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/step5.py",
+   "target": "class:vllm/transformers_utils/configs/step5.py:Step5Config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/step5.py",
+   "target": "class:vllm/transformers_utils/configs/step5.py:Step5Config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/ultravox.py",
+   "target": "class:vllm/transformers_utils/configs/ultravox.py:UltravoxConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/ultravox.py",
+   "target": "class:vllm/transformers_utils/configs/ultravox.py:UltravoxConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/ultravox.py",
+   "target": "file:vllm/transformers_utils/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/deepseek_v4_utils.py",
+   "target": "function:vllm/transformers_utils/deepseek_v4_utils.py:get_compress_ratios",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/deepseek_v4_utils.py",
+   "target": "function:vllm/transformers_utils/deepseek_v4_utils.py:get_compress_ratios",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/dynamic_module.py",
+   "target": "function:vllm/transformers_utils/dynamic_module.py:try_get_class_from_dynamic_module",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/dynamic_module.py",
+   "target": "function:vllm/transformers_utils/dynamic_module.py:try_get_class_from_dynamic_module",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/dynamic_module.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/dynamic_module.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:CohereAsrModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:CohereAsrModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:MambaModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:MambaModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:TerratorchModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:TerratorchModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:Zamba2ModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:Zamba2ModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:FalconModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:FalconModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:DbrxModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:DbrxModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:NemotronNasModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:NemotronNasModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:DeepSeekMTPModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:DeepSeekMTPModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:DeepseekV4ModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:DeepseekV4ModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:MimoMTPModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:MimoMTPModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:MimoV2ModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:MimoV2ModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:Qwen3_5ModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:Qwen3_5ModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:Qwen3ASRModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:Qwen3ASRModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:Qwen3OmniMoeModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:Qwen3OmniMoeModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:MimoV2MTPModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:MimoV2MTPModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:GLM4MoeMTPModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:GLM4MoeMTPModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ErnieMTPModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:ErnieMTPModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:Qwen3NextMTPModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:Qwen3NextMTPModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:Qwen4ExpMTPModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:Qwen4ExpMTPModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:BailingHybridMTPModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:BailingHybridMTPModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:BailingHybridV3MTPModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:BailingHybridV3MTPModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:Qwen3_5MTPModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:Qwen3_5MTPModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:Step3p5MTPModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:Step3p5MTPModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:PanguUltraMoeMTPModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:PanguUltraMoeMTPModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:LongCatFlashModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:LongCatFlashModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:LongCatFlashMTPModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:LongCatFlashMTPModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:Gemma4MTPModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:Gemma4MTPModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:Gemma4ModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:Gemma4ModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:MossAudioModelArchConfigConvertor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:MossAudioModelArchConfigConvertor",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/transformers_utils/model_arch_config_convertor.py:ModelArchConfigConvertorBase",
+   "target": "function:vllm/transformers_utils/deepseek_v4_utils.py:get_compress_ratios",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "file:vllm/config/model_arch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "file:vllm/transformers_utils/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "file:vllm/transformers_utils/deepseek_v4_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "file:vllm/transformers_utils/repo_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:_transformers_v4_compatibility_import",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:_transformers_v4_compatibility_init",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:_merge_mm_kwargs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:get_processor_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:get_processor_cls_name_from_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:get_video_processor_cls_name_from_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:get_processor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:get_processor_kwargs_type",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:get_processor_kwargs_keys",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:cached_get_processor_without_dynamic_kwargs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:cached_processor_from_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:get_feature_extractor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:get_image_processor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:get_video_processor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "class:vllm/transformers_utils/processor.py:HashableDict",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "class:vllm/transformers_utils/processor.py:HashableList",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:get_processor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:get_processor_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:get_feature_extractor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:get_image_processor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:get_video_processor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:get_processor_kwargs_type",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:get_processor_kwargs_keys",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:cached_processor_from_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "function:vllm/transformers_utils/processor.py:get_video_processor_cls_name",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/transformers_utils/processor.py:get_processor",
+   "target": "function:vllm/transformers_utils/utils.py:convert_model_repo_to_path",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/transformers_utils/processor.py:get_processor",
+   "target": "function:vllm/transformers_utils/repo_utils.py:get_non_weight_snapshot_path",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "file:vllm/transformers_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "file:vllm/transformers_utils/repo_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "file:vllm/transformers_utils/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "file:vllm/utils/func_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/processor.py",
+   "target": "file:vllm/transformers_utils/processors/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:hf_api",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:resolve_revision",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:with_retry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:list_repo_files",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:list_filtered_repo_files",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:any_pattern_in_repo_files",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:is_mistral_model_repo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:file_exists",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:file_or_path_exists",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:get_model_path",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:_snapshot_non_weight_files",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:get_non_weight_snapshot_path",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:_try_download_from_hf_hub",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:get_hf_file_bytes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:try_get_local_file",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:get_hf_file_to_dict",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:hf_api",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:resolve_revision",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:with_retry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:list_repo_files",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:list_filtered_repo_files",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:any_pattern_in_repo_files",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:is_mistral_model_repo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:file_exists",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:file_or_path_exists",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:get_model_path",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:get_non_weight_snapshot_path",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "function:vllm/transformers_utils/repo_utils.py:get_hf_file_to_dict",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "file:vllm/version.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "file:vllm/transformers_utils/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/repo_utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/runai_utils.py",
+   "target": "class:vllm/transformers_utils/runai_utils.py:ObjectStorageModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/runai_utils.py",
+   "target": "function:vllm/transformers_utils/runai_utils.py:list_safetensors",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/runai_utils.py",
+   "target": "class:vllm/transformers_utils/runai_utils.py:ObjectStorageModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/runai_utils.py",
+   "target": "function:vllm/transformers_utils/runai_utils.py:list_safetensors",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/runai_utils.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/runai_utils.py",
+   "target": "file:vllm/assets/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/runai_utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/runai_utils.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/runai_utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/s3_utils.py",
+   "target": "function:vllm/transformers_utils/s3_utils.py:glob",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/s3_utils.py",
+   "target": "function:vllm/transformers_utils/s3_utils.py:glob",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/s3_utils.py",
+   "target": "function:vllm/transformers_utils/s3_utils.py:list_files",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/s3_utils.py",
+   "target": "function:vllm/transformers_utils/s3_utils.py:list_files",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/s3_utils.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/utils.py",
+   "target": "function:vllm/transformers_utils/utils.py:without_trust_remote_code",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/utils.py",
+   "target": "function:vllm/transformers_utils/utils.py:modelscope_list_repo_files",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/utils.py",
+   "target": "function:vllm/transformers_utils/utils.py:maybe_model_redirect",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/utils.py",
+   "target": "function:vllm/transformers_utils/utils.py:parse_safetensors_file_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/utils.py",
+   "target": "function:vllm/transformers_utils/utils.py:convert_model_repo_to_path",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/transformers_utils/utils.py",
+   "target": "function:vllm/transformers_utils/utils.py:without_trust_remote_code",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/utils.py",
+   "target": "function:vllm/transformers_utils/utils.py:modelscope_list_repo_files",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/utils.py",
+   "target": "function:vllm/transformers_utils/utils.py:maybe_model_redirect",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/utils.py",
+   "target": "function:vllm/transformers_utils/utils.py:parse_safetensors_file_metadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/utils.py",
+   "target": "function:vllm/transformers_utils/utils.py:convert_model_repo_to_path",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/transformers_utils/utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/triton_utils/__init__.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/triton_utils/__init__.py",
+   "target": "file:vllm/triton_utils/importing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/triton_utils/__init__.py",
+   "target": "file:vllm/triton_utils/tensor_descriptor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/triton_utils/__init__.py",
+   "target": "file:vllm/triton_utils/force_first_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/triton_utils/dispatcher.py",
+   "target": "function:vllm/triton_utils/dispatcher.py:_is_triton_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/triton_utils/dispatcher.py",
+   "target": "function:vllm/triton_utils/dispatcher.py:_resolve_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/triton_utils/dispatcher.py",
+   "target": "function:vllm/triton_utils/dispatcher.py:_rebind_impls",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/triton_utils/dispatcher.py",
+   "target": "function:vllm/triton_utils/dispatcher.py:register_kernels",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/triton_utils/dispatcher.py",
+   "target": "class:vllm/triton_utils/dispatcher.py:KernelOverride",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/triton_utils/dispatcher.py",
+   "target": "class:vllm/triton_utils/dispatcher.py:KernelOverride",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/triton_utils/dispatcher.py",
+   "target": "function:vllm/triton_utils/dispatcher.py:register_kernels",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/triton_utils/dispatcher.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/triton_utils/importing.py",
+   "target": "class:vllm/triton_utils/importing.py:TritonPlaceholder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/triton_utils/importing.py",
+   "target": "class:vllm/triton_utils/importing.py:TritonPlaceholder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/triton_utils/importing.py",
+   "target": "class:vllm/triton_utils/importing.py:TritonLanguagePlaceholder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/triton_utils/importing.py",
+   "target": "class:vllm/triton_utils/importing.py:TritonLanguagePlaceholder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/triton_utils/importing.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/triton_utils/importing.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/triton_utils/importing.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/usage/usage_lib.py",
+   "target": "class:vllm/usage/usage_lib.py:UsageContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/usage/usage_lib.py",
+   "target": "class:vllm/usage/usage_lib.py:UsageMessage",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/usage/usage_lib.py",
+   "target": "function:vllm/usage/usage_lib.py:is_usage_stats_enabled",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/usage/usage_lib.py",
+   "target": "function:vllm/usage/usage_lib.py:_detect_cloud_provider",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/usage/usage_lib.py",
+   "target": "class:vllm/usage/usage_lib.py:UsageContext",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/usage/usage_lib.py",
+   "target": "class:vllm/usage/usage_lib.py:UsageMessage",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/usage/usage_lib.py",
+   "target": "function:vllm/usage/usage_lib.py:is_usage_stats_enabled",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/usage/usage_lib.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/usage/usage_lib.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/usage/usage_lib.py",
+   "target": "file:vllm/utils/platform_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/usage/usage_lib.py",
+   "target": "file:vllm/version.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/usage/usage_lib.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/speculators/base.py",
+   "target": "file:vllm/transformers_utils/configs/speculators/algos.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/transformers_utils/configs/speculators/base.py",
+   "target": "file:vllm/transformers_utils/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

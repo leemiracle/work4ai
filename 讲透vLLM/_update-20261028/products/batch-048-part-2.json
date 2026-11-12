@@ -1,0 +1,1357 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "type": "file",
+   "name": "sparse_attention.py",
+   "filePath": "vllm/models/minimax_m3/common/sparse_attention.py",
+   "summary": "MiniMax M3 块稀疏注意力公共层：后端/元数据/构建器/抽象 impl（Triton 实现）、page-16 slot rebase、prefill 查询位置映射与后端+impl 选择器（Blackwell/ROCm 分流）。",
+   "tags": [
+    "sparse-attention",
+    "backend",
+    "metadata",
+    "selection"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "type": "file",
+   "name": "vision_tower.py",
+   "filePath": "vllm/models/minimax_m3/common/vision_tower.py",
+   "summary": "MiniMax VL 视觉塔：Conv3d patch 嵌入、部分 3D RoPE（t/h/w 分解，仅前 rot_dim 维）的 CLIP 式 ViT、两层 MLP projector 与 patch merger。",
+   "tags": [
+    "vision-tower",
+    "vit",
+    "3d-rope",
+    "clip"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "type": "file",
+   "name": "model.py",
+   "filePath": "vllm/models/minimax_m3/nvidia/model.py",
+   "summary": "MiniMax M3 NVIDIA 模型（1318 行）：FlashInfer Gemma RMSNorm（fused add+norm）、SwiGLU-OAI MLP、sigmoid 路由 MoE、部分 RoPE 注意力与 lightning-indexer 融合的稀疏层（NVFP4 KV 支持）。",
+   "tags": [
+    "minimax-m3",
+    "nvidia",
+    "sparse-attention",
+    "flashinfer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseBackend",
+   "type": "class",
+   "name": "MiniMaxM3SparseBackend",
+   "filePath": "vllm/models/minimax_m3/common/sparse_attention.py",
+   "summary": "MiniMax M3 块稀疏 GQA 后端（7 方法）。",
+   "tags": [
+    "sparse-attention",
+    "backend",
+    "gqa"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    144,
+    192
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparsePrefillMetadata",
+   "type": "class",
+   "name": "MiniMaxM3SparsePrefillMetadata",
+   "filePath": "vllm/models/minimax_m3/common/sparse_attention.py",
+   "summary": "prefill 状态（cu_seqlens_k/total_kv_blocks 供 MSA CSR）。",
+   "tags": [
+    "metadata",
+    "prefill",
+    "csr"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    196,
+    212
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseDecodeMetadata",
+   "type": "class",
+   "name": "MiniMaxM3SparseDecodeMetadata",
+   "filePath": "vllm/models/minimax_m3/common/sparse_attention.py",
+   "summary": "decode 状态（cudagraph 安全，统一查询长）。",
+   "tags": [
+    "metadata",
+    "decode",
+    "cudagraph"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    216,
+    222
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseMetadata",
+   "type": "class",
+   "name": "MiniMaxM3SparseMetadata",
+   "filePath": "vllm/models/minimax_m3/common/sparse_attention.py",
+   "summary": "稀疏注意力元数据（prefill/decode 拆分）。",
+   "tags": [
+    "metadata",
+    "sparse-attention",
+    "split"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    226,
+    247
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseMetadataBuilder",
+   "type": "class",
+   "name": "MiniMaxM3SparseMetadataBuilder",
+   "filePath": "vllm/models/minimax_m3/common/sparse_attention.py",
+   "summary": "稀疏元数据构建器。",
+   "tags": [
+    "metadata-builder",
+    "sparse-attention",
+    "metadata-builder-x"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    250,
+    393
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseImpl",
+   "type": "class",
+   "name": "MiniMaxM3SparseImpl",
+   "filePath": "vllm/models/minimax_m3/common/sparse_attention.py",
+   "summary": "索引器选块上块稀疏 GQA 的抽象实现（自定义元数据类型参数）。",
+   "tags": [
+    "impl",
+    "abstract",
+    "sparse-attention"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    396,
+    454
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseTritonImpl",
+   "type": "class",
+   "name": "MiniMaxM3SparseTritonImpl",
+   "filePath": "vllm/models/minimax_m3/common/sparse_attention.py",
+   "summary": "Triton 块稀疏 attend + Triton decode。",
+   "tags": [
+    "impl",
+    "triton",
+    "impl-x"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    457,
+    533
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLPatchEmbed",
+   "type": "class",
+   "name": "MiniMaxVLPatchEmbed",
+   "filePath": "vllm/models/minimax_m3/common/vision_tower.py",
+   "summary": "Conv3d patch 嵌入。",
+   "tags": [
+    "patch-embed",
+    "conv3d",
+    "vision"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    36,
+    74
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLAttention",
+   "type": "class",
+   "name": "MiniMaxVLAttention",
+   "filePath": "vllm/models/minimax_m3/common/vision_tower.py",
+   "summary": "部分 3D RoPE 多头注意力（仅前 rot_dim 维旋转）。",
+   "tags": [
+    "attention",
+    "3d-rope",
+    "partial"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    77,
+    181
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLEncoderLayer",
+   "type": "class",
+   "name": "MiniMaxVLEncoderLayer",
+   "filePath": "vllm/models/minimax_m3/common/vision_tower.py",
+   "summary": "CLIP 式 transformer 块。",
+   "tags": [
+    "encoder-layer",
+    "clip",
+    "vision"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    184,
+    244
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLEncoder",
+   "type": "class",
+   "name": "MiniMaxVLEncoder",
+   "filePath": "vllm/models/minimax_m3/common/vision_tower.py",
+   "summary": "ViT 编码器。",
+   "tags": [
+    "encoder",
+    "vit",
+    "stack"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    247,
+    290
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLVisionTransformer",
+   "type": "class",
+   "name": "MiniMaxVLVisionTransformer",
+   "filePath": "vllm/models/minimax_m3/common/vision_tower.py",
+   "summary": "CLIP 基座 ViT（3D RoPE t/h/w 分解，忠实镜像参考实现）。",
+   "tags": [
+    "vit",
+    "3d-rope",
+    "clip"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    293,
+    524
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLMultiModalProjector",
+   "type": "class",
+   "name": "MiniMaxVLMultiModalProjector",
+   "filePath": "vllm/models/minimax_m3/common/vision_tower.py",
+   "summary": "两层 MLP projector（vision_hidden→text_hidden）。",
+   "tags": [
+    "projector",
+    "mlp",
+    "vision"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    527,
+    565
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLPatchMerger",
+   "type": "class",
+   "name": "MiniMaxVLPatchMerger",
+   "filePath": "vllm/models/minimax_m3/common/vision_tower.py",
+   "summary": "patch 合并器。",
+   "tags": [
+    "patch-merger",
+    "vision",
+    "merge"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    568,
+    608
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLVisionModel",
+   "type": "class",
+   "name": "MiniMaxVLVisionModel",
+   "filePath": "vllm/models/minimax_m3/common/vision_tower.py",
+   "summary": "完整视觉模型：ViT→projector→patch merger。",
+   "tags": [
+    "vision-model",
+    "pipeline",
+    "full-stack"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    611,
+    706
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMAXGemmaRMSNorm",
+   "type": "class",
+   "name": "MiniMAXGemmaRMSNorm",
+   "filePath": "vllm/models/minimax_m3/nvidia/model.py",
+   "summary": "FlashInfer Gemma RMSNorm（fused add+norm）。",
+   "tags": [
+    "rmsnorm",
+    "flashinfer",
+    "gemma"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    118,
+    146
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3MLP",
+   "type": "class",
+   "name": "MiniMaxM3MLP",
+   "filePath": "vllm/models/minimax_m3/nvidia/model.py",
+   "summary": "稠密 SwiGLU-OAI MLP。",
+   "tags": [
+    "mlp",
+    "swiglu",
+    "oai"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    149,
+    192
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3MoE",
+   "type": "class",
+   "name": "MiniMaxM3MoE",
+   "filePath": "vllm/models/minimax_m3/nvidia/model.py",
+   "summary": "sigmoid 路由 MoE（偏差校正+共享专家）。",
+   "tags": [
+    "moe",
+    "sigmoid-routing",
+    "shared-expert"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    195,
+    289
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3Attention",
+   "type": "class",
+   "name": "MiniMaxM3Attention",
+   "filePath": "vllm/models/minimax_m3/nvidia/model.py",
+   "summary": "稠密注意力（QK norm+部分 RoPE）。",
+   "tags": [
+    "attention",
+    "qk-norm",
+    "partial-rope"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    292,
+    389
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3SparseAttention",
+   "type": "class",
+   "name": "MiniMaxM3SparseAttention",
+   "filePath": "vllm/models/minimax_m3/nvidia/model.py",
+   "summary": "融合块稀疏注意力层（lightning-indexer 分支，6 方法）。",
+   "tags": [
+    "sparse-attention",
+    "indexer",
+    "merged-layer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    392,
+    675
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3DecoderLayer",
+   "type": "class",
+   "name": "MiniMaxM3DecoderLayer",
+   "filePath": "vllm/models/minimax_m3/nvidia/model.py",
+   "summary": "单 decoder 层。",
+   "tags": [
+    "decoder-layer",
+    "minimax-m3",
+    "transformer"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    678,
+    798
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3Model",
+   "type": "class",
+   "name": "MiniMaxM3Model",
+   "filePath": "vllm/models/minimax_m3/nvidia/model.py",
+   "summary": "MiniMax M3 backbone（EagleModelMixin）。",
+   "tags": [
+    "backbone",
+    "eagle-mixin",
+    "minimax-m3"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    801,
+    1039
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3SparseForCausalLM",
+   "type": "class",
+   "name": "MiniMaxM3SparseForCausalLM",
+   "filePath": "vllm/models/minimax_m3/nvidia/model.py",
+   "summary": "因果 LM 入口（SupportsPP）。",
+   "tags": [
+    "causal-lm",
+    "entry-point",
+    "supports-pp"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1042,
+    1097
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3SparseForConditionalGeneration",
+   "type": "class",
+   "name": "MiniMaxM3SparseForConditionalGeneration",
+   "filePath": "vllm/models/minimax_m3/nvidia/model.py",
+   "summary": "VL 顶层入口（视觉塔未建模，路由文本）。",
+   "tags": [
+    "multimodal",
+    "vl",
+    "entry-point"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1105,
+    1317
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/common/sparse_attention.py:minimax_m3_rebase_slots_to_page16",
+   "type": "function",
+   "name": "minimax_m3_rebase_slots_to_page16",
+   "filePath": "vllm/models/minimax_m3/common/sparse_attention.py",
+   "summary": "token slot 映射 rebase 到 AITER page-16 页号。",
+   "tags": [
+    "page-16",
+    "rebase",
+    "slots"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    79,
+    98
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/common/sparse_attention.py:minimax_m3_query_token_positions",
+   "type": "function",
+   "name": "minimax_m3_query_token_positions",
+   "filePath": "vllm/models/minimax_m3/common/sparse_attention.py",
+   "summary": "prefill 查询 token→(请求 id, 绝对位置) 映射。",
+   "tags": [
+    "positions",
+    "mapping",
+    "prefill"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    101,
+    119
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/common/sparse_attention.py:minimax_m3_use_aiter_sparse_pa",
+   "type": "function",
+   "name": "minimax_m3_use_aiter_sparse_pa",
+   "filePath": "vllm/models/minimax_m3/common/sparse_attention.py",
+   "summary": "是否使用 ROCm AITER page-16 稀疏 PA 原型。",
+   "tags": [
+    "aiter",
+    "predicate",
+    "prototype"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    122,
+    141
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/common/sparse_attention.py:select_main_backend_and_impl_cls",
+   "type": "function",
+   "name": "select_main_backend_and_impl_cls",
+   "filePath": "vllm/models/minimax_m3/common/sparse_attention.py",
+   "summary": "选主注意力后端与实现（Blackwell/ROCm 分流）。",
+   "tags": [
+    "selection",
+    "backend",
+    "platform"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    536,
+    598
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "file:vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "file:vllm/model_executor/layers/attention/mm_encoder_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "file:vllm/model_executor/layers/conv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/mrope.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/mrope_vit_setup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "file:vllm/model_executor/models/vision.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/attention/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/attention_layer_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/fused_allreduce_gemma_rms_norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/model_executor/models/vision.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/models/minimax_m3/common/encoder_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/models/minimax_m3/common/indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparsePrefillMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseDecodeMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseTritonImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "function:vllm/models/minimax_m3/common/sparse_attention.py:minimax_m3_rebase_slots_to_page16",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "function:vllm/models/minimax_m3/common/sparse_attention.py:minimax_m3_query_token_positions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "function:vllm/models/minimax_m3/common/sparse_attention.py:minimax_m3_use_aiter_sparse_pa",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "function:vllm/models/minimax_m3/common/sparse_attention.py:select_main_backend_and_impl_cls",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLPatchEmbed",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLEncoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLEncoder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLVisionTransformer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLMultiModalProjector",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLPatchMerger",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLVisionModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMAXGemmaRMSNorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3MLP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3MoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3Attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3SparseAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3DecoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3Model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3SparseForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3SparseForConditionalGeneration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparsePrefillMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseDecodeMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseTritonImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "function:vllm/models/minimax_m3/common/sparse_attention.py:minimax_m3_rebase_slots_to_page16",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "function:vllm/models/minimax_m3/common/sparse_attention.py:minimax_m3_query_token_positions",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "function:vllm/models/minimax_m3/common/sparse_attention.py:minimax_m3_use_aiter_sparse_pa",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "target": "function:vllm/models/minimax_m3/common/sparse_attention.py:select_main_backend_and_impl_cls",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLPatchEmbed",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLEncoderLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLEncoder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLVisionTransformer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLMultiModalProjector",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLPatchMerger",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "target": "class:vllm/models/minimax_m3/common/vision_tower.py:MiniMaxVLVisionModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMAXGemmaRMSNorm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3MLP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3MoE",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3Attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3SparseAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3DecoderLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3Model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3SparseForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3SparseForConditionalGeneration",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseBackend",
+   "target": "class:vllm/v1/attention/backend.py:AttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseMetadata",
+   "target": "class:vllm/v1/attention/backend.py:AttentionMetadata",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseMetadataBuilder",
+   "target": "class:vllm/v1/attention/backend.py:AttentionMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseTritonImpl",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseImpl",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "function:vllm/models/minimax_m3/common/sparse_attention.py:select_main_backend_and_impl_cls",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseTritonImpl",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3SparseAttention",
+   "target": "function:vllm/models/minimax_m3/common/ops/index_topk.py:minimax_m3_index_decode",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/nvidia/model.py:MiniMaxM3SparseAttention",
+   "target": "function:vllm/models/minimax_m3/nvidia/ops/sparse_prefill.py:minimax_m3_sparse_attn",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseTritonImpl",
+   "target": "function:vllm/models/minimax_m3/common/ops/sparse_attn.py:minimax_m3_sparse_attn",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

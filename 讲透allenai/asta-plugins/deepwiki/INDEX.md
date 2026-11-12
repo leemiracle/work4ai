@@ -1,0 +1,32 @@
+# DeepWiki 索引 — allenai/asta-plugins
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 179332 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Plugin Architecture: asta vs asta-preview](1.2-plugin-architecture-asta-vs-asta-preview.md)
+- [2 CLI Architecture](2-cli-architecture.md)
+  - [2.1 Configuration System](2.1-configuration-system.md)
+  - [2.2 Passthrough System](2.2-passthrough-system.md)
+  - [2.3 Authentication System](2.3-authentication-system.md)
+  - [2.4 A2A Interactive Framework](2.4-a2a-interactive-framework.md)
+- [3 Skills Reference](3-skills-reference.md)
+  - [3.1 Literature Research Skills](3.1-literature-research-skills.md)
+  - [3.2 Document Management Skill](3.2-document-management-skill.md)
+  - [3.3 Experiment and Data Analysis Skills](3.3-experiment-and-data-analysis-skills.md)
+  - [3.4 Theory Generation and Artifacts Skills](3.4-theory-generation-and-artifacts-skills.md)
+  - [3.5 Research Orchestration Skills](3.5-research-orchestration-skills.md)
+  - [3.6 PDF Extraction, Local Paper Index, and Utility Skills](3.6-pdf-extraction-local-paper-index-and-utility-skills.md)
+- [4 Source Code Internals](4-source-code-internals.md)
+  - [4.1 Papers and Literature Clients](4.1-papers-and-literature-clients.md)
+  - [4.2 AutoDiscovery Client](4.2-autodiscovery-client.md)
+  - [4.3 Analyze Data (DataVoyager) Module](4.3-analyze-data-datavoyager-module.md)
+- [5 Build, CI/CD, and Release](5-build-ci-cd-and-release.md)
+  - [5.1 Makefile and CI Workflows](5.1-makefile-and-ci-workflows.md)
+  - [5.2 Plugin Build Pipeline and Skill Validation](5.2-plugin-build-pipeline-and-skill-validation.md)
+  - [5.3 Docker Environment](5.3-docker-environment.md)
+- [6 Testing](6-testing.md)
+  - [6.1 Unit and Integration Tests](6.1-unit-and-integration-tests.md)
+  - [6.2 Smoke and Docker Tests](6.2-smoke-and-docker-tests.md)
+- [7 Glossary](7-glossary.md)

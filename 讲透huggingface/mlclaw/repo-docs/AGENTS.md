@@ -1,0 +1,55 @@
+# AGENTS.md
+
+These instructions apply to this repository.
+
+## Quality Gates
+
+This repository follows the TypeScript standards enforced by Slophammer.
+Before finishing a change, run formatting, lint, typecheck, tests, coverage,
+build, secret scanning, package validation, and both Slophammer checks.
+
+Do not run mutation testing during ordinary implementation work. Keep its
+configuration and CI declaration current so a dedicated mutation run can be
+performed separately.
+
+Do not report work as complete until the original user-visible workflow has
+been reproduced and verified end to end in its real target environment. Tests,
+mocks, CI, health checks, successful builds, and deployments are supporting
+evidence, not substitutes. If full verification is impossible, state that
+clearly and report the work as unverified.
+
+## Release Versions
+
+- Treat `package.json` as the only hand-edited source for the MLClaw package,
+  OpenClaw, unYOLO plugin, HF Broker binary, and runtime image versions.
+- Keep the `openclaw-unyolo` dependency exactly equal to
+  `config.unyoloPluginVersion`.
+- Do not hand-edit Dockerfile release defaults or
+  `src/mlclaw/release-config.generated.ts`. After editing release metadata, run
+  `npm install --package-lock-only` if dependency metadata changed, then run
+  `npm run release:sync`.
+- Run `npm run release:check` before committing. CI rejects version drift.
+
+## Runtime Boundary
+
+- Treat the OpenClaw process and agent account as untrusted except for credentials that OpenClaw must own to provide a native authenticated transport.
+- The managed native OpenAI OAuth profile is an explicit trust-boundary exception: OpenClaw may persist and refresh that credential only in its private auth store. It must not receive the deployment encryption key or unrelated backend credentials.
+- Keep Hugging Face, broker operator, session, encryption, and all other OAuth secrets in the trusted backend only.
+- Telegram deployments must use separate conversation and unYOLO approval
+  bots in one private user chat. Keep the approval bot token out of OpenClaw's
+  environment and run only one `getUpdates` poller for it.
+- Browser routes may call only fixed typed broker operations.
+- Do not add arbitrary HTTP forwarding to broker, Hub, or operator APIs.
+- Validate unknown file, network, OAuth, and broker payloads at their boundary.
+- Generated runtime bundles and control UI assets must match their source.
+- Consume only unYOLO's version 1 wire APIs, persisted state formats, plan
+  schemas, manifests, and protocols. Do not synthesize broker-owned state files
+  or add compatibility behavior; let each broker initialize its own v1 state
+  after coordinated contract changes.
+
+## TypeScript
+
+- Keep strict compiler settings enabled.
+- Do not add explicit `any` or unsafe type operations.
+- Keep functions below the configured complexity limit.
+- Add focused tests for every security or lifecycle behavior change.

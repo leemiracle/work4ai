@@ -1,0 +1,32 @@
+# DeepWiki 索引 — openai/openai-cli
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 162318 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 SDK Generation and Versioning](1.2-sdk-generation-and-versioning.md)
+- [2 CLI Architecture](2-cli-architecture.md)
+  - [2.1 Command Tree and Root Command](2.1-command-tree-and-root-command.md)
+  - [2.2 Request Construction Pipeline](2.2-request-construction-pipeline.md)
+  - [2.3 Output Formatting and Display](2.3-output-formatting-and-display.md)
+  - [2.4 Debug Middleware and Logging](2.4-debug-middleware-and-logging.md)
+- [3 API Command Reference](3-api-command-reference.md)
+  - [3.1 Inference Commands (Responses and Chat Completions)](3.1-inference-commands-responses-and-chat-completions.md)
+  - [3.2 Image Generation Commands](3.2-image-generation-commands.md)
+  - [3.3 Realtime API Commands](3.3-realtime-api-commands.md)
+  - [3.4 Admin Organization Commands](3.4-admin-organization-commands.md)
+  - [3.5 Other API Resource Commands](3.5-other-api-resource-commands.md)
+- [4 Internal Packages](4-internal-packages.md)
+  - [4.1 Shell Autocomplete (internal/autocomplete)](4.1-shell-autocomplete-internal-autocomplete.md)
+  - [4.2 JSON Explorer (internal/jsonview)](4.2-json-explorer-internal-jsonview.md)
+  - [4.3 Request Flag System (internal/requestflag)](4.3-request-flag-system-internal-requestflag.md)
+  - [4.4 API Encoding Utilities (internal/apiform, internal/apiquery, internal/binaryparam)](4.4-api-encoding-utilities-internal-apiform-internal-apiquery-internal-binaryparam.md)
+- [5 Testing Infrastructure](5-testing-infrastructure.md)
+  - [5.1 Mock Server and Test Utilities](5.1-mock-server-and-test-utilities.md)
+  - [5.2 Command Test Patterns](5.2-command-test-patterns.md)
+- [6 CI/CD and Release Pipeline](6-ci-cd-and-release-pipeline.md)
+  - [6.1 Continuous Integration](6.1-continuous-integration.md)
+  - [6.2 Release Pipeline](6.2-release-pipeline.md)
+  - [6.3 Developer Scripts](6.3-developer-scripts.md)
+- [7 Glossary](7-glossary.md)

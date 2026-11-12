@@ -1,0 +1,4515 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/step5/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/step5/__init__.py",
+   "summary": "Step5 NVIDIA 实现入口：re-export 文本模型/MTP/VLM。",
+   "tags": [
+    "entry-point",
+    "barrel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/step5/nvidia/__init__.py",
+   "summary": "nvidia 子包初始化。",
+   "tags": [
+    "package"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/config.py",
+   "type": "file",
+   "name": "config.py",
+   "filePath": "vllm/models/step5/nvidia/config.py",
+   "summary": "Step5 sparse 配置解析：checkpoint 是否声明 sparse KV 布局与 get_step5_sparse_config 归一化读取。",
+   "tags": [
+    "config",
+    "sparse"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/csa_tail_ring.py",
+   "type": "file",
+   "name": "csa_tail_ring.py",
+   "filePath": "vllm/models/step5/nvidia/csa_tail_ring.py",
+   "summary": "每请求开放 CSA 区原始 indexer 行的环缓冲：region summary 是区八行的定序在线 softmax，ring 行按序累积。",
+   "tags": [
+    "csa",
+    "ring-buffer",
+    "indexer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/flashinfer_sparse.py",
+   "type": "file",
+   "name": "flashinfer_sparse.py",
+   "filePath": "vllm/models/step5/nvidia/flashinfer_sparse.py",
+   "summary": "Step5 sparse 选择与 attention 的 FlashInfer/PyTorch 组合路径（Step5FlashInferSparse，12 个方法）。",
+   "tags": [
+    "flashinfer",
+    "sparse"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/layernorm.py",
+   "type": "file",
+   "name": "layernorm.py",
+   "filePath": "vllm/models/step5/nvidia/layernorm.py",
+   "summary": "Step5 归一化层：RMSNorm（输入/权重/输出 dtype 独立、FP32 计算输出处舍入）与 indexer 每头 LayerNorm。",
+   "tags": [
+    "layernorm",
+    "rmsnorm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "type": "file",
+   "name": "mega_moe.py",
+   "filePath": "vllm/models/step5/nvidia/mega_moe.py",
+   "summary": "Step5 NVFP4/FP8/BF16 DeepGEMM MegaMoE（共享对称存储）：路由+EP 路由专家，_BufferPool 复用缓冲与 _MegaMoEMethod 量化方法。",
+   "tags": [
+    "mega-moe",
+    "deep-gemm",
+    "nvfp4"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/model.py",
+   "type": "file",
+   "name": "model.py",
+   "filePath": "vllm/models/step5/nvidia/model.py",
+   "summary": "Step5 主模型（2460 行）：主 attention qkv 与 sparse-indexer q/k/z/g 单 GEMM 融合（FusedQKVIndexerLinear）、DSA/SWA 混合层栈、MegaMoE 与 DSA 并行几何校验。",
+   "tags": [
+    "step5",
+    "model",
+    "dsa",
+    "fused-qkv"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/mtp.py",
+   "type": "file",
+   "name": "mtp.py",
+   "filePath": "vllm/models/step5/nvidia/mtp.py",
+   "summary": "Step5 MTP draft：dense/MoE 双形态 draft 块、norm_concat 融合与多模态嵌入支持。",
+   "tags": [
+    "mtp",
+    "spec-decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/ops/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/step5/nvidia/ops/__init__.py",
+   "summary": "ops 子包 barrel。",
+   "tags": [
+    "package"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/ops/add.py",
+   "type": "file",
+   "name": "add.py",
+   "filePath": "vllm/models/step5/nvidia/ops/add.py",
+   "summary": "低精度张量相加不物化 FP32 转换（保持 FP32 加法语义）。",
+   "tags": [
+    "triton",
+    "add"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/ops/attention_gate.py",
+   "type": "file",
+   "name": "attention_gate.py",
+   "filePath": "vllm/models/step5/nvidia/ops/attention_gate.py",
+   "summary": "逐头 sigmoid 输出门控（保持原低精度舍入）。",
+   "tags": [
+    "triton",
+    "gate"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/ops/indexer_norm_rope.py",
+   "type": "file",
+   "name": "indexer_norm_rope.py",
+   "filePath": "vllm/models/step5/nvidia/ops/indexer_norm_rope.py",
+   "summary": "indexer 归一化+RoPE+FP8 查询准备：同时更新 decode CSA 态。",
+   "tags": [
+    "triton",
+    "indexer",
+    "rope"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/ops/mtp_norm.py",
+   "type": "file",
+   "name": "mtp_norm.py",
+   "filePath": "vllm/models/step5/nvidia/ops/mtp_norm.py",
+   "summary": "MTP embedding 与 hidden 态直接归一化进投影输入（保 BF16 输入舍入）。",
+   "tags": [
+    "triton",
+    "mtp"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py",
+   "type": "file",
+   "name": "prefill_indexer_metadata.py",
+   "filePath": "vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py",
+   "summary": "步级共享的 indexer metadata：FP32 logits 钳 128MiB 分块（1M 上下文），一次准备全部 DSA 层复用。",
+   "tags": [
+    "prefill",
+    "indexer",
+    "metadata"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py",
+   "type": "file",
+   "name": "qkv_indexer_norm_rope.py",
+   "filePath": "vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py",
+   "summary": "decode 的 attention QKV 与 sparse-indexer 联合准备：一次产出两路张量并分别写缓存态。",
+   "tags": [
+    "decode",
+    "fused",
+    "indexer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/ops/rms_norm.py",
+   "type": "file",
+   "name": "rms_norm.py",
+   "filePath": "vllm/models/step5/nvidia/ops/rms_norm.py",
+   "summary": "输入/权重/输出 dtype 三独立的 RMSNorm Triton kernel（FP32 计算、输出存储时舍入、可选 FP32 残差更新）。",
+   "tags": [
+    "triton",
+    "rmsnorm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/ops/sparse_decode_attention.py",
+   "type": "file",
+   "name": "sparse_decode_attention.py",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_decode_attention.py",
+   "summary": "DSA decode：直接从分页 KV 按选定 region 读（替代 gather-to-scratch+ragged FlashInfer），split 到 ~256 programs（B300 约 1.7 waves）。",
+   "tags": [
+    "triton",
+    "sparse-decode",
+    "split-kv"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "type": "file",
+   "name": "sparse_indexer.py",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "summary": "sparse indexer 的打包与稳定 region 选择：summary 页打包、decode metadata 同 launch 生成与 top-k 历史区+当前区追加。",
+   "tags": [
+    "indexer",
+    "topk",
+    "packing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py",
+   "type": "file",
+   "name": "sparse_indexer_scores.py",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_indexer_scores.py",
+   "summary": "直接从分页 summary 键算 FP8 indexer 分数：decode 免重排键/免分配 unit scale；SM90 的 packed FP8 页 MQA logits。",
+   "tags": [
+    "indexer",
+    "fp8",
+    "scores"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/ops/sparse_prefill.py",
+   "type": "file",
+   "name": "sparse_prefill.py",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_prefill.py",
+   "summary": "紧凑 sparse-prefill KV 聚集与可复用 host 规划（PrefillChunk 跨层共享 CPU 计划与一次 GPU 前缀拷贝）。",
+   "tags": [
+    "prefill",
+    "gather",
+    "planning"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "type": "file",
+   "name": "sparse_prefill_pages.py",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "summary": "sparse prefill 的 8-token 紧凑分页：CompactPagedPrefill 单 native attention 计划跨 DSA 层共享与 FP8/BF16 分组 staging。",
+   "tags": [
+    "prefill",
+    "pages",
+    "staging"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/ops/summary_update.py",
+   "type": "file",
+   "name": "summary_update.py",
+   "filePath": "vllm/models/step5/nvidia/ops/summary_update.py",
+   "summary": "CSA region summary 更新（区第八行到达时压缩一次）：decode/verify/prefill 三路径与设备端 build_prefill_groups（无 host 同步）。",
+   "tags": [
+    "csa",
+    "summary",
+    "triton"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/ops/swa_decode.py",
+   "type": "file",
+   "name": "swa_decode.py",
+   "filePath": "vllm/models/step5/nvidia/ops/swa_decode.py",
+   "summary": "滑窗 GQA decode：split KV+融合逐头门控（FA2 单 CTA 串行扫全窗的替代），MTP verify token 打包进单请求窗。",
+   "tags": [
+    "swa",
+    "decode",
+    "split-kv"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "type": "file",
+   "name": "sparse_attention.py",
+   "filePath": "vllm/models/step5/nvidia/sparse_attention.py",
+   "summary": "Hopper/B300 sparse attention 后端族：Step5SplitKVFlashAttention（非 DSA 层 fused SWA decode）与 Step5DSAAttentionBackend（GQA+DSA，prefill FA3/metadata builder）。",
+   "tags": [
+    "attention-backend",
+    "dsa",
+    "flash-attn"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "type": "file",
+   "name": "sparse_summary_cache.py",
+   "filePath": "vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "summary": "CSA region summary 作为压缩 KV cache 层：每八 token 一个 256B FP8 summary（全注意力层语义），复用 DSA 层 metadata 寻址。",
+   "tags": [
+    "kv-cache",
+    "summary",
+    "csa"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/step5/nvidia/vl.py",
+   "type": "file",
+   "name": "vl.py",
+   "filePath": "vllm/models/step5/nvidia/vl.py",
+   "summary": "Step5 VLM：复用 Step3p7 多模态前端+Step5 文本模型。",
+   "tags": [
+    "vl",
+    "multimodal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/config.py:Step5SparseConfig",
+   "type": "class",
+   "name": "Step5SparseConfig",
+   "filePath": "vllm/models/step5/nvidia/config.py",
+   "summary": "Step5 sparse 配置 dataclass。",
+   "tags": [
+    "config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    12,
+    29
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/config.py:checkpoint_has_step5_sparse_config",
+   "type": "function",
+   "name": "checkpoint_has_step5_sparse_config",
+   "filePath": "vllm/models/step5/nvidia/config.py",
+   "summary": "checkpoint 是否声明 sparse KV 布局（决定后续路径）。",
+   "tags": [
+    "config",
+    "detection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    65,
+    71
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/config.py:get_step5_sparse_config",
+   "type": "function",
+   "name": "get_step5_sparse_config",
+   "filePath": "vllm/models/step5/nvidia/config.py",
+   "summary": "读取并归一化 Step5 sparse 配置。",
+   "tags": [
+    "config"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    74,
+    198
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/csa_tail_ring.py:Step5CSATailRingMetadata",
+   "type": "class",
+   "name": "Step5CSATailRingMetadata",
+   "filePath": "vllm/models/step5/nvidia/csa_tail_ring.py",
+   "summary": "tail ring attention metadata。",
+   "tags": [
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    29,
+    34
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/csa_tail_ring.py:_ring_metadata_kernel",
+   "type": "function",
+   "name": "_ring_metadata_kernel",
+   "filePath": "vllm/models/step5/nvidia/csa_tail_ring.py",
+   "summary": "ring metadata 构建 Triton kernel。",
+   "tags": [
+    "triton",
+    "metadata"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    38,
+    73
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/csa_tail_ring.py:Step5CSATailRingMetadataBuilder",
+   "type": "class",
+   "name": "Step5CSATailRingMetadataBuilder",
+   "filePath": "vllm/models/step5/nvidia/csa_tail_ring.py",
+   "summary": "tail ring metadata builder。",
+   "tags": [
+    "metadata",
+    "builder"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    76,
+    118
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/csa_tail_ring.py:Step5CSATailRingBackend",
+   "type": "class",
+   "name": "Step5CSATailRingBackend",
+   "filePath": "vllm/models/step5/nvidia/csa_tail_ring.py",
+   "summary": "tail ring attention 后端。",
+   "tags": [
+    "backend"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    121,
+    128
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/csa_tail_ring.py:Step5CSATailRing",
+   "type": "class",
+   "name": "Step5CSATailRing",
+   "filePath": "vllm/models/step5/nvidia/csa_tail_ring.py",
+   "summary": "每请求开放 CSA 区的原始 [index_k|index_z] 行环（2 个方法）。",
+   "tags": [
+    "csa",
+    "ring"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    131,
+    210
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/flashinfer_sparse.py:_direct_sparse_decode",
+   "type": "function",
+   "name": "_direct_sparse_decode",
+   "filePath": "vllm/models/step5/nvidia/flashinfer_sparse.py",
+   "summary": "direct paged sparse decode kernel 是否支持这些张量。",
+   "tags": [
+    "dispatch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    25,
+    34
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/flashinfer_sparse.py:Step5FlashInferSparse",
+   "type": "class",
+   "name": "Step5FlashInferSparse",
+   "filePath": "vllm/models/step5/nvidia/flashinfer_sparse.py",
+   "summary": "FlashInfer/PyTorch 组合的 sparse 路径（12 个方法）。",
+   "tags": [
+    "flashinfer",
+    "sparse"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    37,
+    430
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/layernorm.py:get_step5_norm_dtype",
+   "type": "function",
+   "name": "get_step5_norm_dtype",
+   "filePath": "vllm/models/step5/nvidia/layernorm.py",
+   "summary": "Step5 归一化 dtype 决策。",
+   "tags": [
+    "dtype"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    20,
+    24
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/layernorm.py:apply_step5_rms_norm",
+   "type": "function",
+   "name": "apply_step5_rms_norm",
+   "filePath": "vllm/models/step5/nvidia/layernorm.py",
+   "summary": "RMSNorm 应用入口。",
+   "tags": [
+    "rmsnorm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    43,
+    77
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/layernorm.py:apply_step5_add_rms_norm",
+   "type": "function",
+   "name": "apply_step5_add_rms_norm",
+   "filePath": "vllm/models/step5/nvidia/layernorm.py",
+   "summary": "add+RMSNorm 融合应用。",
+   "tags": [
+    "rmsnorm",
+    "fused"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    80,
+    107
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/layernorm.py:Step5RMSNorm",
+   "type": "class",
+   "name": "Step5RMSNorm",
+   "filePath": "vllm/models/step5/nvidia/layernorm.py",
+   "summary": "Step5 RMSNorm 层（2 个方法）。",
+   "tags": [
+    "rmsnorm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    110,
+    155
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/layernorm.py:make_step5_rms_norm",
+   "type": "function",
+   "name": "make_step5_rms_norm",
+   "filePath": "vllm/models/step5/nvidia/layernorm.py",
+   "summary": "RMSNorm 工厂。",
+   "tags": [
+    "factory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    158,
+    166
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/layernorm.py:Step5IndexerLayerNorm",
+   "type": "class",
+   "name": "Step5IndexerLayerNorm",
+   "filePath": "vllm/models/step5/nvidia/layernorm.py",
+   "summary": "sparse-indexer 的每头 LayerNorm。",
+   "tags": [
+    "layernorm",
+    "indexer"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    169,
+    187
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/mega_moe.py:_BufferPool",
+   "type": "class",
+   "name": "_BufferPool",
+   "filePath": "vllm/models/step5/nvidia/mega_moe.py",
+   "summary": "MegaMoE 缓冲池（复用跨步缓冲）。",
+   "tags": [
+    "buffers"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    26,
+    94
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/mega_moe.py:_MegaMoEMethod",
+   "type": "class",
+   "name": "_MegaMoEMethod",
+   "filePath": "vllm/models/step5/nvidia/mega_moe.py",
+   "summary": "MegaMoE 量化方法（FP8/NVFP4 dispatch）。",
+   "tags": [
+    "quantization"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    97,
+    105
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/mega_moe.py:Step5MegaMoEExperts",
+   "type": "class",
+   "name": "Step5MegaMoEExperts",
+   "filePath": "vllm/models/step5/nvidia/mega_moe.py",
+   "summary": "MegaMoE 专家模块（8 个方法，DeepGEMM）。",
+   "tags": [
+    "mega-moe",
+    "experts"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    108,
+    453
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/mega_moe.py:Step5MegaMoE",
+   "type": "class",
+   "name": "Step5MegaMoE",
+   "filePath": "vllm/models/step5/nvidia/mega_moe.py",
+   "summary": "路由+EP 路由专家容器。",
+   "tags": [
+    "mega-moe"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    459,
+    521
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/model.py:_get_step5_layer_types",
+   "type": "function",
+   "name": "_get_step5_layer_types",
+   "filePath": "vllm/models/step5/nvidia/model.py",
+   "summary": "逐层 attention 类型（dense 栈+MTP 层）。",
+   "tags": [
+    "layer-types"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    226,
+    236
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/model.py:_parse_step5_layer_indices",
+   "type": "function",
+   "name": "_parse_step5_layer_indices",
+   "filePath": "vllm/models/step5/nvidia/model.py",
+   "summary": "解析层索引配置。",
+   "tags": [
+    "parsing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    239,
+    253
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/model.py:_get_step5_moe_layer_indices",
+   "type": "function",
+   "name": "_get_step5_moe_layer_indices",
+   "filePath": "vllm/models/step5/nvidia/model.py",
+   "summary": "MoE 层索引集合。",
+   "tags": [
+    "moe",
+    "indices"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    256,
+    285
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/model.py:_set_step5_moe_protocol_metadata",
+   "type": "function",
+   "name": "_set_step5_moe_protocol_metadata",
+   "filePath": "vllm/models/step5/nvidia/model.py",
+   "summary": "为本 PP rank 本地层填 MoE 协议元数据。",
+   "tags": [
+    "moe",
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    288,
+    311
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/model.py:_validate_step5_dsa_parallel_geometry",
+   "type": "function",
+   "name": "_validate_step5_dsa_parallel_geometry",
+   "filePath": "vllm/models/step5/nvidia/model.py",
+   "summary": "DSA provider 与 attention GQA 组分歧时 fail-fast（sparse indexer 按组切分）。",
+   "tags": [
+    "dsa",
+    "validation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    372,
+    431
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/model.py:Step5FusedQKVIndexerLinear",
+   "type": "class",
+   "name": "Step5FusedQKVIndexerLinear",
+   "filePath": "vllm/models/step5/nvidia/model.py",
+   "summary": "主 attention qkv 与 sparse-indexer q/k/z/g 单 GEMM 融合（13 个方法，双投影共享同一归一化输入）。",
+   "tags": [
+    "fused",
+    "qkv",
+    "indexer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    468,
+    688
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/model.py:Step5SparseIndexerIndexTPLinear",
+   "type": "class",
+   "name": "Step5SparseIndexerIndexTPLinear",
+   "filePath": "vllm/models/step5/nvidia/model.py",
+   "summary": "sparse-indexer 自有 TP 尺度的分片线性。",
+   "tags": [
+    "linear",
+    "tp"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    708,
+    755
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/model.py:Step5MLP",
+   "type": "class",
+   "name": "Step5MLP",
+   "filePath": "vllm/models/step5/nvidia/model.py",
+   "summary": "密集 MLP。",
+   "tags": [
+    "mlp"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    777,
+    848
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/model.py:_step5_moe_reduce_policy",
+   "type": "function",
+   "name": "_step5_moe_reduce_policy",
+   "filePath": "vllm/models/step5/nvidia/model.py",
+   "summary": "Step5 MoE 的 combined/per-path reduce 设置。",
+   "tags": [
+    "moe",
+    "policy"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    851,
+    854
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/model.py:Step5Attention",
+   "type": "class",
+   "name": "Step5Attention",
+   "filePath": "vllm/models/step5/nvidia/model.py",
+   "summary": "Step5 attention 层（SWA/full 路径）。",
+   "tags": [
+    "attention"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    857,
+    1426
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/model.py:Step5SparseAttention",
+   "type": "class",
+   "name": "Step5SparseAttention",
+   "filePath": "vllm/models/step5/nvidia/model.py",
+   "summary": "sparse attention 层（7 个方法：indexer+DSA+summary cache 协调）。",
+   "tags": [
+    "sparse-attention"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1429,
+    1675
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/model.py:Step5MoE",
+   "type": "class",
+   "name": "Step5MoE",
+   "filePath": "vllm/models/step5/nvidia/model.py",
+   "summary": "MoE 层（MegaMoE/密集分派）。",
+   "tags": [
+    "moe"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1678,
+    1823
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/model.py:Step5DecoderLayer",
+   "type": "class",
+   "name": "Step5DecoderLayer",
+   "filePath": "vllm/models/step5/nvidia/model.py",
+   "summary": "解码层（6 个方法，attention 类型分派）。",
+   "tags": [
+    "decoder-layer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1826,
+    2059
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/model.py:Step5Model",
+   "type": "class",
+   "name": "Step5Model",
+   "filePath": "vllm/models/step5/nvidia/model.py",
+   "summary": "Step5 骨干（5 个方法）。",
+   "tags": [
+    "backbone"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    2062,
+    2322
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/model.py:Step5ForCausalLM",
+   "type": "class",
+   "name": "Step5ForCausalLM",
+   "filePath": "vllm/models/step5/nvidia/model.py",
+   "summary": "Step5 入口（7 个方法，SupportsPP/MixtureOfExperts/LoRA）。",
+   "tags": [
+    "causal-lm",
+    "entry-point"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    2325,
+    2460
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/mtp.py:Step5MTPSharedHead",
+   "type": "class",
+   "name": "Step5MTPSharedHead",
+   "filePath": "vllm/models/step5/nvidia/mtp.py",
+   "summary": "MTP 共享头。",
+   "tags": [
+    "mtp",
+    "head"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    69,
+    91
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/mtp.py:Step5MultiTokenPredictorLayer",
+   "type": "class",
+   "name": "Step5MultiTokenPredictorLayer",
+   "filePath": "vllm/models/step5/nvidia/mtp.py",
+   "summary": "MTP 单层。",
+   "tags": [
+    "mtp",
+    "layer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    94,
+    168
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/mtp.py:Step5MultiTokenPredictor",
+   "type": "class",
+   "name": "Step5MultiTokenPredictor",
+   "filePath": "vllm/models/step5/nvidia/mtp.py",
+   "summary": "MTP 层栈（6 个方法）。",
+   "tags": [
+    "mtp"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    171,
+    247
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/mtp.py:_is_step5_mtp_dense",
+   "type": "function",
+   "name": "_is_step5_mtp_dense",
+   "filePath": "vllm/models/step5/nvidia/mtp.py",
+   "summary": "draft 块是否全 dense。",
+   "tags": [
+    "mtp"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    262,
+    264
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/mtp.py:Step5MTP",
+   "type": "class",
+   "name": "Step5MTP",
+   "filePath": "vllm/models/step5/nvidia/mtp.py",
+   "summary": "Step5 MTP draft（8 个方法，多模态嵌入支持）。",
+   "tags": [
+    "mtp",
+    "draft"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    267,
+    443
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/add.py:add_fp32",
+   "type": "function",
+   "name": "add_fp32",
+   "filePath": "vllm/models/step5/nvidia/ops/add.py",
+   "summary": "x.float()+y.float() 不物化 FP32 中间。",
+   "tags": [
+    "triton",
+    "add"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    18,
+    36
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/attention_gate.py:headwise_sigmoid_gate",
+   "type": "function",
+   "name": "headwise_sigmoid_gate",
+   "filePath": "vllm/models/step5/nvidia/ops/attention_gate.py",
+   "summary": "逐头 sigmoid 门控（原低精度舍入）。",
+   "tags": [
+    "triton",
+    "gate"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    56,
+    84
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/indexer_norm_rope.py:_layer_norm_stats",
+   "type": "function",
+   "name": "_layer_norm_stats",
+   "filePath": "vllm/models/step5/nvidia/ops/indexer_norm_rope.py",
+   "summary": "LayerNorm 统计 kernel 件。",
+   "tags": [
+    "triton",
+    "layernorm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    38,
+    73
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/indexer_norm_rope.py:_indexer_norm_rope",
+   "type": "function",
+   "name": "_indexer_norm_rope",
+   "filePath": "vllm/models/step5/nvidia/ops/indexer_norm_rope.py",
+   "summary": "indexer norm+RoPE 主 kernel。",
+   "tags": [
+    "triton",
+    "indexer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    77,
+    186
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/indexer_norm_rope.py:indexer_norm_rope",
+   "type": "function",
+   "name": "indexer_norm_rope",
+   "filePath": "vllm/models/step5/nvidia/ops/indexer_norm_rope.py",
+   "summary": "准备 indexer Q/K/weights 并更新 decode CSA 态。",
+   "tags": [
+    "indexer",
+    "rope"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    189,
+    275
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/mtp_norm.py:_norm_concat",
+   "type": "function",
+   "name": "_norm_concat",
+   "filePath": "vllm/models/step5/nvidia/ops/mtp_norm.py",
+   "summary": "归一化+拼接 kernel。",
+   "tags": [
+    "triton",
+    "mtp"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    11,
+    42
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/mtp_norm.py:norm_concat",
+   "type": "function",
+   "name": "norm_concat",
+   "filePath": "vllm/models/step5/nvidia/ops/mtp_norm.py",
+   "summary": "保持 BF16 输入舍入的 norm+concat。",
+   "tags": [
+    "mtp",
+    "norm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    45,
+    79
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py:PrefillIndexerMetadata",
+   "type": "class",
+   "name": "PrefillIndexerMetadata",
+   "filePath": "vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py",
+   "summary": "步级共享 indexer metadata NamedTuple。",
+   "tags": [
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    19,
+    25
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py:_prepare_prefill_indexer",
+   "type": "function",
+   "name": "_prepare_prefill_indexer",
+   "filePath": "vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py",
+   "summary": "有界 FI 查询分块准备。",
+   "tags": [
+    "prefill",
+    "indexer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    31,
+    120
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py:prefill_indexer_chunk_size",
+   "type": "function",
+   "name": "prefill_indexer_chunk_size",
+   "filePath": "vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py",
+   "summary": "FP32 logits 钳 128MiB 的分块尺寸（1M 上下文）。",
+   "tags": [
+    "chunking"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    123,
+    131
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py:prepare_prefill_indexer",
+   "type": "function",
+   "name": "prepare_prefill_indexer",
+   "filePath": "vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py",
+   "summary": "一次准备有界查询分块，全部 DSA 层复用。",
+   "tags": [
+    "prefill",
+    "shared"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    134,
+    218
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py:_prepare_main",
+   "type": "function",
+   "name": "_prepare_main",
+   "filePath": "vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py",
+   "summary": "主准备 kernel 件。",
+   "tags": [
+    "triton"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    14,
+    115
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py:_joint_prepare",
+   "type": "function",
+   "name": "_joint_prepare",
+   "filePath": "vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py",
+   "summary": "联合准备 kernel 件（attention+indexer）。",
+   "tags": [
+    "triton"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    119,
+    249
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py:qkv_indexer_norm_rope",
+   "type": "function",
+   "name": "qkv_indexer_norm_rope",
+   "filePath": "vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py",
+   "summary": "准备 indexer/attention 张量并分别写缓存态。",
+   "tags": [
+    "decode",
+    "fused"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    252,
+    393
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/ops/rms_norm.py:RMSNormKernel",
+   "type": "class",
+   "name": "RMSNormKernel",
+   "filePath": "vllm/models/step5/nvidia/ops/rms_norm.py",
+   "summary": "三 dtype 独立 RMSNorm 的 Triton kernel 封装。",
+   "tags": [
+    "triton",
+    "rmsnorm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    25,
+    140
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/rms_norm.py:_compile",
+   "type": "function",
+   "name": "_compile",
+   "filePath": "vllm/models/step5/nvidia/ops/rms_norm.py",
+   "summary": "kernel 编译缓存。",
+   "tags": [
+    "compile"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    144,
+    158
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/rms_norm.py:supports_rms_norm",
+   "type": "function",
+   "name": "supports_rms_norm",
+   "filePath": "vllm/models/step5/nvidia/ops/rms_norm.py",
+   "summary": "形状/dtype 支持判定。",
+   "tags": [
+    "support-check"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    161,
+    181
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/rms_norm.py:rms_norm",
+   "type": "function",
+   "name": "rms_norm",
+   "filePath": "vllm/models/step5/nvidia/ops/rms_norm.py",
+   "summary": "FP32 计算输出处舍入（可选 FP32 残差更新）。",
+   "tags": [
+    "rmsnorm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    184,
+    230
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_decode_attention.py:_sparse_decode_split",
+   "type": "function",
+   "name": "_sparse_decode_split",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_decode_attention.py",
+   "summary": "split kernel 件。",
+   "tags": [
+    "triton",
+    "split"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    22,
+    172
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_decode_attention.py:_sparse_decode_combine",
+   "type": "function",
+   "name": "_sparse_decode_combine",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_decode_attention.py",
+   "summary": "combine kernel 件。",
+   "tags": [
+    "triton",
+    "combine"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    176,
+    227
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_decode_attention.py:sparse_decode_splits",
+   "type": "function",
+   "name": "sparse_decode_splits",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_decode_attention.py",
+   "summary": "~256 programs 的每行 split 数（逐批捕获 graph）。",
+   "tags": [
+    "split-kv"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    242,
+    251
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_decode_attention.py:sparse_decode_attention",
+   "type": "function",
+   "name": "sparse_decode_attention",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_decode_attention.py",
+   "summary": "(token,KV 组) 行对其选定 region 的 attention（含逐头门控）。",
+   "tags": [
+    "sparse-decode"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    254,
+    357
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/ops/sparse_indexer.py:DecodeIndexerMetadata",
+   "type": "class",
+   "name": "DecodeIndexerMetadata",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "summary": "decode indexer metadata NamedTuple。",
+   "tags": [
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    17,
+    24
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/ops/sparse_indexer.py:PagedPrefillMetadata",
+   "type": "class",
+   "name": "PagedPrefillMetadata",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "summary": "分页 prefill metadata NamedTuple。",
+   "tags": [
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    27,
+    34
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_indexer.py:_pack_summary_pages",
+   "type": "function",
+   "name": "_pack_summary_pages",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "summary": "summary 页打包 kernel 件。",
+   "tags": [
+    "triton",
+    "packing"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    214,
+    322
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_indexer.py:_pack_summaries",
+   "type": "function",
+   "name": "_pack_summaries",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "summary": "summary 打包 kernel 件。",
+   "tags": [
+    "triton",
+    "packing"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    325,
+    388
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_indexer.py:pack_summary_pages",
+   "type": "function",
+   "name": "pack_summary_pages",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "summary": "打包 summary 页。",
+   "tags": [
+    "packing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    391,
+    395
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_indexer.py:pack_decode_summary_pages",
+   "type": "function",
+   "name": "pack_decode_summary_pages",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "summary": "同 launch 打包 summary 并产出 decode metadata。",
+   "tags": [
+    "packing",
+    "decode"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    398,
+    413
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_indexer.py:select_all_regions",
+   "type": "function",
+   "name": "select_all_regions",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "summary": "全历史+当前（不算无用 indexer 分数）。",
+   "tags": [
+    "selection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    431,
+    439
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_indexer.py:_stable_topk_regions",
+   "type": "function",
+   "name": "_stable_topk_regions",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "summary": "稳定 top-k 历史区选择 kernel。",
+   "tags": [
+    "topk",
+    "stable"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    443,
+    561
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_indexer.py:select_regions",
+   "type": "function",
+   "name": "select_regions",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "summary": "稳定 top-k 历史区+当前区追加（可选不排序）。",
+   "tags": [
+    "selection",
+    "topk"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    564,
+    649
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py:_direct_scores",
+   "type": "function",
+   "name": "_direct_scores",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_indexer_scores.py",
+   "summary": "直接分数 kernel 件。",
+   "tags": [
+    "triton",
+    "scores"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    13,
+    112
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py:decode_summary_scores",
+   "type": "function",
+   "name": "decode_summary_scores",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_indexer_scores.py",
+   "summary": "免重排键直接读 FP8 summary（仅 128-region 布局）。",
+   "tags": [
+    "decode",
+    "fp8"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    115,
+    191
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py:_paged_scores_sm90",
+   "type": "function",
+   "name": "_paged_scores_sm90",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_indexer_scores.py",
+   "summary": "SM90 分页分数 kernel 件。",
+   "tags": [
+    "triton",
+    "sm90"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    195,
+    273
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py:paged_mqa_logits_sm90",
+   "type": "function",
+   "name": "paged_mqa_logits_sm90",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_indexer_scores.py",
+   "summary": "Hopper 上为 packed FP8 summary 页打分。",
+   "tags": [
+    "sm90",
+    "mqa"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    276,
+    320
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_prefill.py:_gather_prefill_kv",
+   "type": "function",
+   "name": "_gather_prefill_kv",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_prefill.py",
+   "summary": "聚集选中 token kernel 件（布尔索引序）。",
+   "tags": [
+    "triton",
+    "gather"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    13,
+    72
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_prefill.py:make_indptr",
+   "type": "function",
+   "name": "make_indptr",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_prefill.py",
+   "summary": "由选择器基数契约算紧凑长度。",
+   "tags": [
+    "indptr"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    75,
+    83
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_prefill.py:gather_prefill_kv",
+   "type": "function",
+   "name": "gather_prefill_kv",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_prefill.py",
+   "summary": "按布尔索引参考序精确聚集选中 token。",
+   "tags": [
+    "gather"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    86,
+    143
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/ops/sparse_prefill.py:PrefillChunk",
+   "type": "class",
+   "name": "PrefillChunk",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_prefill.py",
+   "summary": "可复用 prefill 分块 NamedTuple。",
+   "tags": [
+    "chunk"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    146,
+    151
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_prefill.py:make_prefill_chunks",
+   "type": "function",
+   "name": "make_prefill_chunks",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_prefill.py",
+   "summary": "跨 sparse 层共享 CPU 计划与一次 GPU 前缀拷贝。",
+   "tags": [
+    "planning",
+    "shared"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    154,
+    173
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:_compact_prefill_pages",
+   "type": "function",
+   "name": "_compact_prefill_pages",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "summary": "紧凑分页 kernel 件。",
+   "tags": [
+    "triton",
+    "pages"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    16,
+    71
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:fill_prefill_pages",
+   "type": "function",
+   "name": "fill_prefill_pages",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "summary": "产紧凑页并拷 query 进连续缓冲。",
+   "tags": [
+    "pages"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    74,
+    108
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:kv_page_stride",
+   "type": "function",
+   "name": "kv_page_stride",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "summary": "[B,H,N,C] 缓存相邻块的 8-token 页步进（块可有跨步）。",
+   "tags": [
+    "pages",
+    "stride"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    111,
+    123
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:view_sparse_kv_pages",
+   "type": "function",
+   "name": "view_sparse_kv_pages",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "summary": "保留块间与 KV 组间空隙地查看 8-token 页。",
+   "tags": [
+    "pages",
+    "view"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    126,
+    138
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:compact_page_metadata",
+   "type": "function",
+   "name": "compact_page_metadata",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "summary": "紧凑页 metadata。",
+   "tags": [
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    141,
+    150
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:CompactPagedPrefill",
+   "type": "class",
+   "name": "CompactPagedPrefill",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "summary": "整 prefill 步单 native attention 计划（6 个方法，DSA 层共享）。",
+   "tags": [
+    "prefill",
+    "plan"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    153,
+    271
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:StagedPrefillPages",
+   "type": "class",
+   "name": "StagedPrefillPages",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "summary": "重映射到连续单组缓冲的请求页 NamedTuple。",
+   "tags": [
+    "staging"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    274,
+    278
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:plan_staged_prefill_pages",
+   "type": "function",
+   "name": "plan_staged_prefill_pages",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "summary": "每请求活页→密集 staging 页映射。",
+   "tags": [
+    "staging",
+    "plan"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    281,
+    305
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:stage_prefill_pages",
+   "type": "function",
+   "name": "stage_prefill_pages",
+   "filePath": "vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "summary": "拷一 KV 组页进 [pages,1,block,2*dim]（FP8/BF16 统一布局）。",
+   "tags": [
+    "staging"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    338,
+    373
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/summary_update.py:_update_decode_values",
+   "type": "function",
+   "name": "_update_decode_values",
+   "filePath": "vllm/models/step5/nvidia/ops/summary_update.py",
+   "summary": "存开放区行或闭合区 summary。",
+   "tags": [
+    "csa",
+    "decode"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    72,
+    100
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/summary_update.py:summary_layout",
+   "type": "function",
+   "name": "summary_layout",
+   "filePath": "vllm/models/step5/nvidia/ops/summary_update.py",
+   "summary": "[B,R,256] 缓存的（块间字节,每块 token）。",
+   "tags": [
+    "layout"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    137,
+    140
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/summary_update.py:update_decode",
+   "type": "function",
+   "name": "update_decode",
+   "filePath": "vllm/models/step5/nvidia/ops/summary_update.py",
+   "summary": "decode summary 更新入口。",
+   "tags": [
+    "csa",
+    "decode"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    143,
+    159
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/summary_update.py:_update_verify",
+   "type": "function",
+   "name": "_update_verify",
+   "filePath": "vllm/models/step5/nvidia/ops/summary_update.py",
+   "summary": "verify 更新 kernel 件。",
+   "tags": [
+    "csa",
+    "verify"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    163,
+    205
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/summary_update.py:update_verify",
+   "type": "function",
+   "name": "update_verify",
+   "filePath": "vllm/models/step5/nvidia/ops/summary_update.py",
+   "summary": "均匀 MTP verify 更新（graph 可捕获、无 host metadata）。",
+   "tags": [
+    "csa",
+    "verify"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    208,
+    231
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/summary_update.py:_build_prefill_groups",
+   "type": "function",
+   "name": "_build_prefill_groups",
+   "filePath": "vllm/models/step5/nvidia/ops/summary_update.py",
+   "summary": "设备端 summary 更新 metadata（无 host 槽位/同步，[rows,10]）。",
+   "tags": [
+    "prefill",
+    "device-side"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    235,
+    262
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/summary_update.py:build_prefill_groups",
+   "type": "function",
+   "name": "build_prefill_groups",
+   "filePath": "vllm/models/step5/nvidia/ops/summary_update.py",
+   "summary": "prefill 组构建入口。",
+   "tags": [
+    "prefill"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    265,
+    282
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/summary_update.py:update_prefill",
+   "type": "function",
+   "name": "update_prefill",
+   "filePath": "vllm/models/step5/nvidia/ops/summary_update.py",
+   "summary": "闭合区 summary 化后存开放区行（ring 读按序）。",
+   "tags": [
+    "csa",
+    "prefill"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    359,
+    386
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/swa_decode.py:_swa_decode_split",
+   "type": "function",
+   "name": "_swa_decode_split",
+   "filePath": "vllm/models/step5/nvidia/ops/swa_decode.py",
+   "summary": "SWA split kernel 件。",
+   "tags": [
+    "triton",
+    "swa"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    19,
+    144
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/swa_decode.py:_swa_decode_combine",
+   "type": "function",
+   "name": "_swa_decode_combine",
+   "filePath": "vllm/models/step5/nvidia/ops/swa_decode.py",
+   "summary": "SWA combine kernel 件。",
+   "tags": [
+    "triton",
+    "swa"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    159,
+    201
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/swa_decode.py:swa_decode_plan",
+   "type": "function",
+   "name": "swa_decode_plan",
+   "filePath": "vllm/models/step5/nvidia/ops/swa_decode.py",
+   "summary": "decode 批的 (pack,splits)（MTP verify token 打包进单请求窗）。",
+   "tags": [
+    "swa",
+    "plan"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    204,
+    218
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/swa_decode.py:swa_decode_splits",
+   "type": "function",
+   "name": "swa_decode_splits",
+   "filePath": "vllm/models/step5/nvidia/ops/swa_decode.py",
+   "summary": "窗口 split 至 (token,KV head) programs ~2 waves。",
+   "tags": [
+    "swa",
+    "split"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    221,
+    230
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/ops/swa_decode.py:swa_decode_gated",
+   "type": "function",
+   "name": "swa_decode_gated",
+   "filePath": "vllm/models/step5/nvidia/ops/swa_decode.py",
+   "summary": "因果窗内逐请求 decode 行（融合逐头门控）。",
+   "tags": [
+    "swa",
+    "decode"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    233,
+    323
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5SplitKVFlashAttentionImpl",
+   "type": "class",
+   "name": "Step5SplitKVFlashAttentionImpl",
+   "filePath": "vllm/models/step5/nvidia/sparse_attention.py",
+   "summary": "规范 packed-content KV 缓存上的 FlashAttention impl。",
+   "tags": [
+    "flash-attn",
+    "impl"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    69,
+    139
+   ]
+  },
+  {
+   "id": "function:vllm/models/step5/nvidia/sparse_attention.py:_validate_step5_dsa_attention_contract",
+   "type": "function",
+   "name": "_validate_step5_dsa_attention_contract",
+   "filePath": "vllm/models/step5/nvidia/sparse_attention.py",
+   "summary": "DSA attention 契约校验。",
+   "tags": [
+    "validation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    142,
+    183
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5DSAMetadataBuilder",
+   "type": "class",
+   "name": "Step5DSAMetadataBuilder",
+   "filePath": "vllm/models/step5/nvidia/sparse_attention.py",
+   "summary": "DSA metadata builder（4 个方法）。",
+   "tags": [
+    "metadata",
+    "builder"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    186,
+    252
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5DSAAttentionImpl",
+   "type": "class",
+   "name": "Step5DSAAttentionImpl",
+   "filePath": "vllm/models/step5/nvidia/sparse_attention.py",
+   "summary": "DSA impl（5 个方法，prefill FA3+decode 直读）。",
+   "tags": [
+    "dsa",
+    "impl"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    255,
+    792
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5SplitKVFlashAttentionBackend",
+   "type": "class",
+   "name": "Step5SplitKVFlashAttentionBackend",
+   "filePath": "vllm/models/step5/nvidia/sparse_attention.py",
+   "summary": "非 DSA 层的 FLASH_ATTN+Step5 fused SWA decode（保留 get_name 继承语义）。",
+   "tags": [
+    "backend",
+    "swa"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    795,
+    804
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5DSAAttentionBackend",
+   "type": "class",
+   "name": "Step5DSAAttentionBackend",
+   "filePath": "vllm/models/step5/nvidia/sparse_attention.py",
+   "summary": "Step5 GQA+DSA attention 后端入口（17 个方法）。",
+   "tags": [
+    "backend",
+    "dsa"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    807,
+    913
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/sparse_summary_cache.py:Step5SparseSummaryCache",
+   "type": "class",
+   "name": "Step5SparseSummaryCache",
+   "filePath": "vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "summary": "每块闭合 8-token 区的 FP8 summary（mean [blocks,block/8,256]）。",
+   "tags": [
+    "csa",
+    "summary",
+    "fp8"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    23,
+    81
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/sparse_summary_cache.py:Step5SparseSummaryMetadataBuilder",
+   "type": "class",
+   "name": "Step5SparseSummaryMetadataBuilder",
+   "filePath": "vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "summary": "复用 DSA 层自身 metadata 寻址 summary。",
+   "tags": [
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    84,
+    104
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/sparse_summary_cache.py:Step5SparseSummaryBackend",
+   "type": "class",
+   "name": "Step5SparseSummaryBackend",
+   "filePath": "vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "summary": "summary 后端。",
+   "tags": [
+    "backend"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    107,
+    114
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/sparse_summary_cache.py:Step5SparseSummaryCacheLayer",
+   "type": "class",
+   "name": "Step5SparseSummaryCacheLayer",
+   "filePath": "vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "summary": "每八 token 一个 256B FP8 summary 的缓存层（全注意力层语义，4 个方法）。",
+   "tags": [
+    "kv-cache",
+    "summary"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    117,
+    159
+   ]
+  },
+  {
+   "id": "class:vllm/models/step5/nvidia/vl.py:Step5ForConditionalGeneration",
+   "type": "class",
+   "name": "Step5ForConditionalGeneration",
+   "filePath": "vllm/models/step5/nvidia/vl.py",
+   "summary": "Step5 VLM（Step3p7 多模态前端+Step5 文本）。",
+   "tags": [
+    "vl",
+    "multimodal"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    12,
+    25
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/step5/nvidia/config.py",
+   "target": "class:vllm/models/step5/nvidia/config.py:Step5SparseConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/config.py",
+   "target": "class:vllm/models/step5/nvidia/config.py:Step5SparseConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/config.py",
+   "target": "function:vllm/models/step5/nvidia/config.py:checkpoint_has_step5_sparse_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/config.py",
+   "target": "function:vllm/models/step5/nvidia/config.py:checkpoint_has_step5_sparse_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/config.py",
+   "target": "function:vllm/models/step5/nvidia/config.py:get_step5_sparse_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/config.py",
+   "target": "function:vllm/models/step5/nvidia/config.py:get_step5_sparse_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/csa_tail_ring.py",
+   "target": "class:vllm/models/step5/nvidia/csa_tail_ring.py:Step5CSATailRingMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/csa_tail_ring.py",
+   "target": "class:vllm/models/step5/nvidia/csa_tail_ring.py:Step5CSATailRingMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/csa_tail_ring.py",
+   "target": "function:vllm/models/step5/nvidia/csa_tail_ring.py:_ring_metadata_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/csa_tail_ring.py",
+   "target": "class:vllm/models/step5/nvidia/csa_tail_ring.py:Step5CSATailRingMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/csa_tail_ring.py",
+   "target": "class:vllm/models/step5/nvidia/csa_tail_ring.py:Step5CSATailRingMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/csa_tail_ring.py",
+   "target": "class:vllm/models/step5/nvidia/csa_tail_ring.py:Step5CSATailRingBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/csa_tail_ring.py",
+   "target": "class:vllm/models/step5/nvidia/csa_tail_ring.py:Step5CSATailRingBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/csa_tail_ring.py",
+   "target": "class:vllm/models/step5/nvidia/csa_tail_ring.py:Step5CSATailRing",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/csa_tail_ring.py",
+   "target": "class:vllm/models/step5/nvidia/csa_tail_ring.py:Step5CSATailRing",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/flashinfer_sparse.py",
+   "target": "function:vllm/models/step5/nvidia/flashinfer_sparse.py:_direct_sparse_decode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/flashinfer_sparse.py",
+   "target": "class:vllm/models/step5/nvidia/flashinfer_sparse.py:Step5FlashInferSparse",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/flashinfer_sparse.py",
+   "target": "class:vllm/models/step5/nvidia/flashinfer_sparse.py:Step5FlashInferSparse",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/layernorm.py",
+   "target": "function:vllm/models/step5/nvidia/layernorm.py:get_step5_norm_dtype",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/layernorm.py",
+   "target": "function:vllm/models/step5/nvidia/layernorm.py:get_step5_norm_dtype",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/layernorm.py",
+   "target": "function:vllm/models/step5/nvidia/layernorm.py:apply_step5_rms_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/layernorm.py",
+   "target": "function:vllm/models/step5/nvidia/layernorm.py:apply_step5_rms_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/layernorm.py",
+   "target": "function:vllm/models/step5/nvidia/layernorm.py:apply_step5_add_rms_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/layernorm.py",
+   "target": "function:vllm/models/step5/nvidia/layernorm.py:apply_step5_add_rms_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/layernorm.py",
+   "target": "class:vllm/models/step5/nvidia/layernorm.py:Step5RMSNorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/layernorm.py",
+   "target": "class:vllm/models/step5/nvidia/layernorm.py:Step5RMSNorm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/layernorm.py",
+   "target": "function:vllm/models/step5/nvidia/layernorm.py:make_step5_rms_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/layernorm.py",
+   "target": "function:vllm/models/step5/nvidia/layernorm.py:make_step5_rms_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/layernorm.py",
+   "target": "class:vllm/models/step5/nvidia/layernorm.py:Step5IndexerLayerNorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/layernorm.py",
+   "target": "class:vllm/models/step5/nvidia/layernorm.py:Step5IndexerLayerNorm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "target": "class:vllm/models/step5/nvidia/mega_moe.py:_BufferPool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "target": "class:vllm/models/step5/nvidia/mega_moe.py:_MegaMoEMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "target": "class:vllm/models/step5/nvidia/mega_moe.py:Step5MegaMoEExperts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "target": "class:vllm/models/step5/nvidia/mega_moe.py:Step5MegaMoEExperts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "target": "class:vllm/models/step5/nvidia/mega_moe.py:Step5MegaMoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "target": "class:vllm/models/step5/nvidia/mega_moe.py:Step5MegaMoE",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "function:vllm/models/step5/nvidia/model.py:_get_step5_layer_types",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "function:vllm/models/step5/nvidia/model.py:_parse_step5_layer_indices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "function:vllm/models/step5/nvidia/model.py:_get_step5_moe_layer_indices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "function:vllm/models/step5/nvidia/model.py:_set_step5_moe_protocol_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "function:vllm/models/step5/nvidia/model.py:_validate_step5_dsa_parallel_geometry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "class:vllm/models/step5/nvidia/model.py:Step5FusedQKVIndexerLinear",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "class:vllm/models/step5/nvidia/model.py:Step5FusedQKVIndexerLinear",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "class:vllm/models/step5/nvidia/model.py:Step5SparseIndexerIndexTPLinear",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "class:vllm/models/step5/nvidia/model.py:Step5SparseIndexerIndexTPLinear",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "class:vllm/models/step5/nvidia/model.py:Step5MLP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "class:vllm/models/step5/nvidia/model.py:Step5MLP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "function:vllm/models/step5/nvidia/model.py:_step5_moe_reduce_policy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "class:vllm/models/step5/nvidia/model.py:Step5Attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "class:vllm/models/step5/nvidia/model.py:Step5Attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "class:vllm/models/step5/nvidia/model.py:Step5SparseAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "class:vllm/models/step5/nvidia/model.py:Step5SparseAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "class:vllm/models/step5/nvidia/model.py:Step5MoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "class:vllm/models/step5/nvidia/model.py:Step5MoE",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "class:vllm/models/step5/nvidia/model.py:Step5DecoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "class:vllm/models/step5/nvidia/model.py:Step5DecoderLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "class:vllm/models/step5/nvidia/model.py:Step5Model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "class:vllm/models/step5/nvidia/model.py:Step5Model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "class:vllm/models/step5/nvidia/model.py:Step5ForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "class:vllm/models/step5/nvidia/model.py:Step5ForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "class:vllm/models/step5/nvidia/mtp.py:Step5MTPSharedHead",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "class:vllm/models/step5/nvidia/mtp.py:Step5MTPSharedHead",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "class:vllm/models/step5/nvidia/mtp.py:Step5MultiTokenPredictorLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "class:vllm/models/step5/nvidia/mtp.py:Step5MultiTokenPredictorLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "class:vllm/models/step5/nvidia/mtp.py:Step5MultiTokenPredictor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "class:vllm/models/step5/nvidia/mtp.py:Step5MultiTokenPredictor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "function:vllm/models/step5/nvidia/mtp.py:_is_step5_mtp_dense",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "class:vllm/models/step5/nvidia/mtp.py:Step5MTP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "class:vllm/models/step5/nvidia/mtp.py:Step5MTP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/add.py",
+   "target": "function:vllm/models/step5/nvidia/ops/add.py:add_fp32",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/add.py",
+   "target": "function:vllm/models/step5/nvidia/ops/add.py:add_fp32",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/attention_gate.py",
+   "target": "function:vllm/models/step5/nvidia/ops/attention_gate.py:headwise_sigmoid_gate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/attention_gate.py",
+   "target": "function:vllm/models/step5/nvidia/ops/attention_gate.py:headwise_sigmoid_gate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/indexer_norm_rope.py",
+   "target": "function:vllm/models/step5/nvidia/ops/indexer_norm_rope.py:_layer_norm_stats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/indexer_norm_rope.py",
+   "target": "function:vllm/models/step5/nvidia/ops/indexer_norm_rope.py:_indexer_norm_rope",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/indexer_norm_rope.py",
+   "target": "function:vllm/models/step5/nvidia/ops/indexer_norm_rope.py:indexer_norm_rope",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/indexer_norm_rope.py",
+   "target": "function:vllm/models/step5/nvidia/ops/indexer_norm_rope.py:indexer_norm_rope",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/mtp_norm.py",
+   "target": "function:vllm/models/step5/nvidia/ops/mtp_norm.py:_norm_concat",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/mtp_norm.py",
+   "target": "function:vllm/models/step5/nvidia/ops/mtp_norm.py:norm_concat",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/mtp_norm.py",
+   "target": "function:vllm/models/step5/nvidia/ops/mtp_norm.py:norm_concat",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py",
+   "target": "class:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py:PrefillIndexerMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py",
+   "target": "class:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py:PrefillIndexerMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py",
+   "target": "function:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py:_prepare_prefill_indexer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py",
+   "target": "function:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py:prefill_indexer_chunk_size",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py",
+   "target": "function:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py:prefill_indexer_chunk_size",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py",
+   "target": "function:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py:prepare_prefill_indexer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py",
+   "target": "function:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py:prepare_prefill_indexer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py",
+   "target": "function:vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py:_prepare_main",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py",
+   "target": "function:vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py:_joint_prepare",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py",
+   "target": "function:vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py:qkv_indexer_norm_rope",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py",
+   "target": "function:vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py:qkv_indexer_norm_rope",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/rms_norm.py",
+   "target": "class:vllm/models/step5/nvidia/ops/rms_norm.py:RMSNormKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/rms_norm.py",
+   "target": "class:vllm/models/step5/nvidia/ops/rms_norm.py:RMSNormKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/rms_norm.py",
+   "target": "function:vllm/models/step5/nvidia/ops/rms_norm.py:_compile",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/rms_norm.py",
+   "target": "function:vllm/models/step5/nvidia/ops/rms_norm.py:supports_rms_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/rms_norm.py",
+   "target": "function:vllm/models/step5/nvidia/ops/rms_norm.py:supports_rms_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/rms_norm.py",
+   "target": "function:vllm/models/step5/nvidia/ops/rms_norm.py:rms_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/rms_norm.py",
+   "target": "function:vllm/models/step5/nvidia/ops/rms_norm.py:rms_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_decode_attention.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_decode_attention.py:_sparse_decode_split",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_decode_attention.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_decode_attention.py:_sparse_decode_combine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_decode_attention.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_decode_attention.py:sparse_decode_splits",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_decode_attention.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_decode_attention.py:sparse_decode_splits",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_decode_attention.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_decode_attention.py:sparse_decode_attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_decode_attention.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_decode_attention.py:sparse_decode_attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "target": "class:vllm/models/step5/nvidia/ops/sparse_indexer.py:DecodeIndexerMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "target": "class:vllm/models/step5/nvidia/ops/sparse_indexer.py:DecodeIndexerMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "target": "class:vllm/models/step5/nvidia/ops/sparse_indexer.py:PagedPrefillMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "target": "class:vllm/models/step5/nvidia/ops/sparse_indexer.py:PagedPrefillMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_indexer.py:_pack_summary_pages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_indexer.py:_pack_summaries",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_indexer.py:pack_summary_pages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_indexer.py:pack_summary_pages",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_indexer.py:pack_decode_summary_pages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_indexer.py:pack_decode_summary_pages",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_indexer.py:select_all_regions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_indexer.py:select_all_regions",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_indexer.py:_stable_topk_regions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_indexer.py:select_regions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_indexer.py:select_regions",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py:_direct_scores",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py:decode_summary_scores",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py:decode_summary_scores",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py:_paged_scores_sm90",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py:paged_mqa_logits_sm90",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py:paged_mqa_logits_sm90",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill.py:_gather_prefill_kv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill.py:make_indptr",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill.py:make_indptr",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill.py:gather_prefill_kv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill.py:gather_prefill_kv",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill.py",
+   "target": "class:vllm/models/step5/nvidia/ops/sparse_prefill.py:PrefillChunk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill.py",
+   "target": "class:vllm/models/step5/nvidia/ops/sparse_prefill.py:PrefillChunk",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill.py:make_prefill_chunks",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill.py:make_prefill_chunks",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:_compact_prefill_pages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:fill_prefill_pages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:fill_prefill_pages",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:kv_page_stride",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:kv_page_stride",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:view_sparse_kv_pages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:view_sparse_kv_pages",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:compact_page_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:compact_page_metadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "target": "class:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:CompactPagedPrefill",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "target": "class:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:CompactPagedPrefill",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "target": "class:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:StagedPrefillPages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "target": "class:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:StagedPrefillPages",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:plan_staged_prefill_pages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:plan_staged_prefill_pages",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:stage_prefill_pages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "target": "function:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py:stage_prefill_pages",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/summary_update.py",
+   "target": "function:vllm/models/step5/nvidia/ops/summary_update.py:_update_decode_values",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/summary_update.py",
+   "target": "function:vllm/models/step5/nvidia/ops/summary_update.py:summary_layout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/summary_update.py",
+   "target": "function:vllm/models/step5/nvidia/ops/summary_update.py:summary_layout",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/summary_update.py",
+   "target": "function:vllm/models/step5/nvidia/ops/summary_update.py:update_decode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/summary_update.py",
+   "target": "function:vllm/models/step5/nvidia/ops/summary_update.py:update_decode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/summary_update.py",
+   "target": "function:vllm/models/step5/nvidia/ops/summary_update.py:_update_verify",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/summary_update.py",
+   "target": "function:vllm/models/step5/nvidia/ops/summary_update.py:update_verify",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/summary_update.py",
+   "target": "function:vllm/models/step5/nvidia/ops/summary_update.py:update_verify",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/summary_update.py",
+   "target": "function:vllm/models/step5/nvidia/ops/summary_update.py:_build_prefill_groups",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/summary_update.py",
+   "target": "function:vllm/models/step5/nvidia/ops/summary_update.py:build_prefill_groups",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/summary_update.py",
+   "target": "function:vllm/models/step5/nvidia/ops/summary_update.py:build_prefill_groups",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/summary_update.py",
+   "target": "function:vllm/models/step5/nvidia/ops/summary_update.py:update_prefill",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/summary_update.py",
+   "target": "function:vllm/models/step5/nvidia/ops/summary_update.py:update_prefill",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/swa_decode.py",
+   "target": "function:vllm/models/step5/nvidia/ops/swa_decode.py:_swa_decode_split",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/swa_decode.py",
+   "target": "function:vllm/models/step5/nvidia/ops/swa_decode.py:_swa_decode_combine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/swa_decode.py",
+   "target": "function:vllm/models/step5/nvidia/ops/swa_decode.py:swa_decode_plan",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/swa_decode.py",
+   "target": "function:vllm/models/step5/nvidia/ops/swa_decode.py:swa_decode_plan",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/swa_decode.py",
+   "target": "function:vllm/models/step5/nvidia/ops/swa_decode.py:swa_decode_splits",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/swa_decode.py",
+   "target": "function:vllm/models/step5/nvidia/ops/swa_decode.py:swa_decode_splits",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/swa_decode.py",
+   "target": "function:vllm/models/step5/nvidia/ops/swa_decode.py:swa_decode_gated",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/swa_decode.py",
+   "target": "function:vllm/models/step5/nvidia/ops/swa_decode.py:swa_decode_gated",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5SplitKVFlashAttentionImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5SplitKVFlashAttentionImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "function:vllm/models/step5/nvidia/sparse_attention.py:_validate_step5_dsa_attention_contract",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5DSAMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5DSAMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5DSAAttentionImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5DSAAttentionImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5SplitKVFlashAttentionBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5SplitKVFlashAttentionBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5DSAAttentionBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5DSAAttentionBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "target": "class:vllm/models/step5/nvidia/sparse_summary_cache.py:Step5SparseSummaryCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "target": "class:vllm/models/step5/nvidia/sparse_summary_cache.py:Step5SparseSummaryCache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "target": "class:vllm/models/step5/nvidia/sparse_summary_cache.py:Step5SparseSummaryMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "target": "class:vllm/models/step5/nvidia/sparse_summary_cache.py:Step5SparseSummaryMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "target": "class:vllm/models/step5/nvidia/sparse_summary_cache.py:Step5SparseSummaryBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "target": "class:vllm/models/step5/nvidia/sparse_summary_cache.py:Step5SparseSummaryBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "target": "class:vllm/models/step5/nvidia/sparse_summary_cache.py:Step5SparseSummaryCacheLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "target": "class:vllm/models/step5/nvidia/sparse_summary_cache.py:Step5SparseSummaryCacheLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/vl.py",
+   "target": "class:vllm/models/step5/nvidia/vl.py:Step5ForConditionalGeneration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/vl.py",
+   "target": "class:vllm/models/step5/nvidia/vl.py:Step5ForConditionalGeneration",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/step5/__init__.py",
+   "target": "file:vllm/models/step5/nvidia/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/__init__.py",
+   "target": "file:vllm/models/step5/nvidia/mtp.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/__init__.py",
+   "target": "file:vllm/models/step5/nvidia/vl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/config.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/csa_tail_ring.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/csa_tail_ring.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/csa_tail_ring.py",
+   "target": "file:vllm/model_executor/layers/attention_layer_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/csa_tail_ring.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/csa_tail_ring.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/csa_tail_ring.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/models/step5/nvidia/ops/sparse_decode_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/models/step5/nvidia/ops/sparse_prefill.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/flashinfer_sparse.py",
+   "target": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/layernorm.py",
+   "target": "file:vllm/models/step5/nvidia/ops/rms_norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/prepare_megamoe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/router_factory.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "target": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "target": "file:vllm/model_executor/layers/quantization/fp8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "target": "file:vllm/model_executor/layers/quantization/modelopt.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "target": "file:vllm/utils/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/attention/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/attention/kv_transfer_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/model_executor/model_loader/mtp_validation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/model_executor/parameter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/models/common/ops/sequence_parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/models/step5/nvidia/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/models/step5/nvidia/csa_tail_ring.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/models/step5/nvidia/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/models/step5/nvidia/mega_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/models/step5/nvidia/ops/add.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/models/step5/nvidia/ops/attention_gate.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/models/step5/nvidia/ops/indexer_norm_rope.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/model.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/mtp_validation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "file:vllm/models/common/ops/sequence_parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "file:vllm/models/step5/nvidia/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "file:vllm/models/step5/nvidia/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "file:vllm/models/step5/nvidia/ops/mtp_norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/mtp.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/add.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/attention_gate.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/indexer_norm_rope.py",
+   "target": "file:vllm/models/step5/nvidia/ops/summary_update.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/indexer_norm_rope.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/mtp_norm.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py",
+   "target": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/prefill_indexer_metadata.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py",
+   "target": "file:vllm/models/step5/nvidia/ops/indexer_norm_rope.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py",
+   "target": "file:vllm/models/step5/nvidia/ops/summary_update.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/qkv_indexer_norm_rope.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/rms_norm.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_decode_attention.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_decode_attention.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "target": "file:vllm/model_executor/layers/indexer_topk.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py",
+   "target": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_indexer_scores.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "target": "file:vllm/models/step5/nvidia/ops/sparse_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/summary_update.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/swa_decode.py",
+   "target": "file:vllm/models/step5/nvidia/ops/sparse_decode_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/ops/swa_decode.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "file:vllm/models/step5/nvidia/flashinfer_sparse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "file:vllm/models/step5/nvidia/ops/attention_gate.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "file:vllm/models/step5/nvidia/ops/sparse_prefill.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "file:vllm/models/step5/nvidia/ops/sparse_prefill_pages.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "file:vllm/models/step5/nvidia/ops/summary_update.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "file:vllm/models/step5/nvidia/ops/swa_decode.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "file:vllm/v1/attention/backends/flash_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_attention.py",
+   "target": "file:vllm/v1/kv_cache_layout.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "target": "file:vllm/model_executor/layers/attention_layer_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "target": "file:vllm/models/step5/nvidia/csa_tail_ring.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "target": "file:vllm/models/step5/nvidia/ops/summary_update.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/sparse_summary_cache.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/vl.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/vl.py",
+   "target": "file:vllm/model_executor/models/module_mapping.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/vl.py",
+   "target": "file:vllm/model_executor/models/step3p7.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/step5/nvidia/vl.py",
+   "target": "file:vllm/models/step5/nvidia/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/csa_tail_ring.py:Step5CSATailRingMetadataBuilder",
+   "target": "class:vllm/v1/attention/backend.py:AttentionMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/csa_tail_ring.py:Step5CSATailRingBackend",
+   "target": "class:vllm/v1/attention/backend.py:AttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/csa_tail_ring.py:Step5CSATailRing",
+   "target": "class:vllm/model_executor/layers/attention_layer_base.py:AttentionLayerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/mega_moe.py:_MegaMoEMethod",
+   "target": "class:vllm/model_executor/layers/quantization/base_config.py:QuantizeMethodBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/model.py:Step5FusedQKVIndexerLinear",
+   "target": "class:vllm/model_executor/layers/linear.py:QKVParallelLinear",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/model.py:Step5SparseIndexerIndexTPLinear",
+   "target": "class:vllm/model_executor/layers/linear.py:ColumnParallelLinear",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/model.py:Step5ForCausalLM",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsPP",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/model.py:Step5ForCausalLM",
+   "target": "class:vllm/model_executor/models/interfaces.py:MixtureOfExperts",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/model.py:Step5ForCausalLM",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/mtp.py:Step5MTP",
+   "target": "class:vllm/model_executor/models/interfaces.py:MixtureOfExperts",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/mtp.py:Step5MTP",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsMultiModal",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5SplitKVFlashAttentionImpl",
+   "target": "class:vllm/v1/attention/backends/flash_attn.py:FlashAttentionImpl",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5DSAMetadataBuilder",
+   "target": "class:vllm/v1/attention/backends/flash_attn.py:FlashAttentionMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5DSAAttentionImpl",
+   "target": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5SplitKVFlashAttentionImpl",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5SplitKVFlashAttentionBackend",
+   "target": "class:vllm/v1/attention/backends/flash_attn.py:FlashAttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5DSAAttentionBackend",
+   "target": "class:vllm/models/step5/nvidia/sparse_attention.py:Step5SplitKVFlashAttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/sparse_summary_cache.py:Step5SparseSummaryMetadataBuilder",
+   "target": "class:vllm/v1/attention/backend.py:AttentionMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/sparse_summary_cache.py:Step5SparseSummaryBackend",
+   "target": "class:vllm/v1/attention/backend.py:AttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/sparse_summary_cache.py:Step5SparseSummaryCacheLayer",
+   "target": "class:vllm/model_executor/layers/attention_layer_base.py:AttentionLayerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/vl.py:Step5ForConditionalGeneration",
+   "target": "class:vllm/model_executor/models/step3p7.py:Step3p7ForConditionalGeneration",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/step5/nvidia/vl.py:Step5ForConditionalGeneration",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

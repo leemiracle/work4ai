@@ -1,0 +1,42 @@
+# DeepWiki 索引 — NVIDIA/cuml
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 31 页 · 全文 340714 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started and Building from Source](1.1-getting-started-and-building-from-source.md)
+  - [1.2 Documentation, Notebooks and Examples](1.2-documentation-notebooks-and-examples.md)
+- [2 C++ Core Library (libcuml)](2-c-core-library-libcuml.md)
+  - [2.1 C++ Build System and Dependencies](2.1-c-build-system-and-dependencies.md)
+  - [2.2 Tree-Based Models (Decision Trees, Random Forest, Isolation Forest)](2.2-tree-based-models-decision-trees-random-forest-isolation-forest.md)
+  - [2.3 Clustering Algorithms (KMeans, DBSCAN, HDBSCAN, Hierarchy)](2.3-clustering-algorithms-kmeans-dbscan-hdbscan-hierarchy.md)
+  - [2.4 Manifold Learning and Decomposition (UMAP, TSNE, PCA, TSVD, Spectral)](2.4-manifold-learning-and-decomposition-umap-tsne-pca-tsvd-spectral.md)
+  - [2.5 Linear Models, Solvers and SVM](2.5-linear-models-solvers-and-svm.md)
+  - [2.6 Neighbors, Metrics, Datasets and Explainability](2.6-neighbors-metrics-datasets-and-explainability.md)
+  - [2.7 Multi-GPU (OPG/MNMG) C++ Layer](2.7-multi-gpu-opg-mnmg-c-layer.md)
+  - [2.8 C++ Testing, Benchmarks and Utilities](2.8-c-testing-benchmarks-and-utilities.md)
+- [3 Python Package (cuml)](3-python-package-cuml.md)
+  - [3.1 Estimator Base and Internals Framework](3.1-estimator-base-and-internals-framework.md)
+  - [3.2 Estimators by Family](3.2-estimators-by-family.md)
+  - [3.3 Preprocessing, Feature Extraction and Model Selection](3.3-preprocessing-feature-extraction-and-model-selection.md)
+  - [3.4 Metrics and Explainability (SHAP)](3.4-metrics-and-explainability-shap.md)
+  - [3.5 Python Build and Packaging (cuml / libcuml wheels)](3.5-python-build-and-packaging-cuml-libcuml-wheels.md)
+- [4 cuml.accel — Zero Code Change Acceleration](4-cuml.accel-zero-code-change-acceleration.md)
+  - [4.1 Accelerator Internals: Proxy Estimators and Module Loader](4.1-accelerator-internals-proxy-estimators-and-module-loader.md)
+  - [4.2 Overrides and Compatibility Policy](4.2-overrides-and-compatibility-policy.md)
+  - [4.3 Upstream Test Suite Harness and xfail Management](4.3-upstream-test-suite-harness-and-xfail-management.md)
+- [5 Distributed Execution with Dask (cuml.dask)](5-distributed-execution-with-dask-cuml.dask.md)
+  - [5.1 Dask Infrastructure and Data Handling](5.1-dask-infrastructure-and-data-handling.md)
+  - [5.2 Distributed Estimators and MG Cython Bindings](5.2-distributed-estimators-and-mg-cython-bindings.md)
+- [6 CI/CD, Testing and Release Engineering](6-ci-cd-testing-and-release-engineering.md)
+  - [6.1 GitHub Workflows and Repo Automation](6.1-github-workflows-and-repo-automation.md)
+  - [6.2 CI Scripts: Builds, Wheels and Tests](6.2-ci-scripts-builds-wheels-and-tests.md)
+  - [6.3 Python Test Suite and Benchmarks](6.3-python-test-suite-and-benchmarks.md)
+  - [6.4 Code Quality, Style and Developer Guide](6.4-code-quality-style-and-developer-guide.md)
+- [7 Glossary](7-glossary.md)
+
+## 附：结构清单外的页
+- [Clustering and Neighbors Estimators](x1-clustering-and-neighbors-estimators.md)
+- [Dimensionality Reduction and Manifold Estimators](x2-dimensionality-reduction-and-manifold-estimators.md)
+- [Ensemble Estimators (Random Forest, Isolation Forest)](x3-ensemble-estimators-random-forest-isolation-forest.md)
+- [Linear Models, SVM and Solvers](x4-linear-models-svm-and-solvers.md)

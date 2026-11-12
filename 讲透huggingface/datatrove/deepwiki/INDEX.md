@@ -1,0 +1,31 @@
+# DeepWiki 索引 — huggingface/datatrove
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 290551 字符
+
+- [1 Overview](1-overview.md)
+- [2 Pipeline Execution Architecture](2-pipeline-execution-architecture.md)
+  - [2.1 Local Pipeline Execution](2.1-local-pipeline-execution.md)
+  - [2.2 Slurm Cluster Execution](2.2-slurm-cluster-execution.md)
+  - [2.3 Ray Distributed Execution](2.3-ray-distributed-execution.md)
+- [3 Inference and Synthetic Data Generation](3-inference-and-synthetic-data-generation.md)
+  - [3.1 InferenceRunner Core](3.1-inferencerunner-core.md)
+  - [3.2 Benchmark System and Experiment Management](3.2-benchmark-system-and-experiment-management.md)
+  - [3.3 Server Backends and Configuration](3.3-server-backends-and-configuration.md)
+  - [3.4 Progress Monitoring and Dataset Cards](3.4-progress-monitoring-and-dataset-cards.md)
+- [4 Document Processing Pipeline](4-document-processing-pipeline.md)
+  - [4.1 Data Readers](4.1-data-readers.md)
+  - [4.2 Content Extractors](4.2-content-extractors.md)
+  - [4.3 Document Filters](4.3-document-filters.md)
+- [5 Deduplication Subsystems](5-deduplication-subsystems.md)
+  - [5.1 MinHash Near-Duplicate Deduplication](5.1-minhash-near-duplicate-deduplication.md)
+  - [5.2 Sentence-Level Deduplication](5.2-sentence-level-deduplication.md)
+  - [5.3 Exact Hash-Based Deduplication](5.3-exact-hash-based-deduplication.md)
+- [6 Tokenization and Data Preparation](6-tokenization-and-data-preparation.md)
+- [7 Data Writers and Output Management](7-data-writers-and-output-management.md)
+- [8 I/O and File System Abstraction](8-i-o-and-file-system-abstraction.md)
+- [9 Example Pipelines and Use Cases](9-example-pipelines-and-use-cases.md)
+- [10 Development and Testing](10-development-and-testing.md)
+  - [10.1 CI/CD and Release Process](10.1-ci-cd-and-release-process.md)
+  - [10.2 CLI Tools and Utilities](10.2-cli-tools-and-utilities.md)
+- [11 Glossary](11-glossary.md)

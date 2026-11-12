@@ -1,0 +1,31 @@
+# DeepWiki 索引 — NVIDIA/ais-k8s
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 350927 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+- [3 AIStore Kubernetes Operator](3-aistore-kubernetes-operator.md)
+  - [3.1 Operator Architecture](3.1-operator-architecture.md)
+  - [3.2 Custom Resources](3.2-custom-resources.md)
+  - [3.3 Resource Management](3.3-resource-management.md)
+- [4 Deployment Methods](4-deployment-methods.md)
+  - [4.1 Helm Chart Deployment](4.1-helm-chart-deployment.md)
+  - [4.2 Ansible Playbook Deployment](4.2-ansible-playbook-deployment.md)
+  - [4.3 Manual Deployment](4.3-manual-deployment.md)
+- [5 Monitoring and Observability](5-monitoring-and-observability.md)
+  - [5.1 Metrics Collection](5.1-metrics-collection.md)
+  - [5.2 Dashboards and Visualization](5.2-dashboards-and-visualization.md)
+  - [5.3 Alerting Configuration](5.3-alerting-configuration.md)
+- [6 Development and Testing](6-development-and-testing.md)
+  - [6.1 Testing Framework](6.1-testing-framework.md)
+  - [6.2 CI/CD Pipeline](6.2-ci-cd-pipeline.md)
+  - [6.3 Local Development Setup](6.3-local-development-setup.md)
+- [7 Advanced Configuration](7-advanced-configuration.md)
+  - [7.1 Multi-Environment Deployment](7.1-multi-environment-deployment.md)
+  - [7.2 TLS and Security](7.2-tls-and-security.md)
+  - [7.3 Cloud Backend Integration](7.3-cloud-backend-integration.md)
+- [8 Reference Documentation](8-reference-documentation.md)
+  - [8.1 Configuration Reference](8.1-configuration-reference.md)
+  - [8.2 API Reference](8.2-api-reference.md)
+  - [8.3 Troubleshooting Guide](8.3-troubleshooting-guide.md)

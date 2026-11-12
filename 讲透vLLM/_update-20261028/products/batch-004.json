@@ -1,0 +1,3938 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "type": "file",
+   "name": "interface.py",
+   "filePath": "vllm/v1/worker/gpu/model_states/interface.py",
+   "summary": "ModelState 抽象基类定义：V2 runner 的模型特定状态接口，统一封装 encoder cache/encoder runner（多模态）、EncoderCudaGraphManager 装配、请求槽位增删、注意力元数据构建与 cudagraph 捕获钩子；ModelSpecificAttnMetadata 为模型附加注意力元数据的基类。",
+   "tags": [
+    "interface",
+    "model-state",
+    "abstraction",
+    "v1-engine"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/model_states/interface.py:ModelSpecificAttnMetadata",
+   "type": "class",
+   "name": "ModelSpecificAttnMetadata",
+   "filePath": "vllm/v1/worker/gpu/model_states/interface.py",
+   "lineRange": [
+    28,
+    39
+   ],
+   "summary": "模型特定注意力元数据基类：通过 get_extra_common_attn_kwargs/get_extra_attn_kwargs 向后端 builder 注入附加参数（默认空）。",
+   "tags": [
+    "attention-metadata",
+    "interface",
+    "base-class"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/model_states/interface.py:ModelState",
+   "type": "class",
+   "name": "ModelState",
+   "filePath": "vllm/v1/worker/gpu/model_states/interface.py",
+   "lineRange": [
+    42,
+    258
+   ],
+   "summary": "ABC：聚合 vllm_config/model/encoder_cache，负责构建 encoder runner 与可选 encoder CUDA graph、管理请求状态与 inputs_embeds 组装、声明 cudagraph 捕获支持与逐模型注意力元数据构建接口。",
+   "tags": [
+    "model-state",
+    "abc",
+    "batch-state"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/model_states/encoder_decoder.py",
+   "type": "file",
+   "name": "encoder_decoder.py",
+   "filePath": "vllm/v1/worker/gpu/model_states/encoder_decoder.py",
+   "summary": "交叉注意力 encoder-decoder 模型（Whisper、CohereASR、NemotronParse 等）的 ModelState：维护 encoder 侧序列长度并向注意力后端注入 encoder_seq_lens 元数据。",
+   "tags": [
+    "model-state",
+    "encoder-decoder",
+    "cross-attention"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/model_states/encoder_decoder.py:EncoderDecoderAttnMetadata",
+   "type": "class",
+   "name": "EncoderDecoderAttnMetadata",
+   "filePath": "vllm/v1/worker/gpu/model_states/encoder_decoder.py",
+   "lineRange": [
+    26,
+    39
+   ],
+   "summary": "按 KV cache group 携带 (GPU,CPU) 双端 encoder_seq_lens，注入交叉注意力的公共 kwargs。",
+   "tags": [
+    "attention-metadata",
+    "encoder-decoder",
+    "data-model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/model_states/encoder_decoder.py:EncoderDecoderModelState",
+   "type": "class",
+   "name": "EncoderDecoderModelState",
+   "filePath": "vllm/v1/worker/gpu/model_states/encoder_decoder.py",
+   "lineRange": [
+    42,
+    197
+   ],
+   "summary": "encoder-decoder 模型状态：构建 encoder_seq_lens 双端缓冲，重写注意力元数据构建以附加交叉注意力参数。",
+   "tags": [
+    "model-state",
+    "encoder-decoder",
+    "attention-metadata"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/model_states/encoder_only.py",
+   "type": "file",
+   "name": "encoder_only.py",
+   "filePath": "vllm/v1/worker/gpu/model_states/encoder_only.py",
+   "summary": "encoder-only（BERT/RoBERTa 类）模型的 ModelState：encoder 注意力无需 KV cache，单次前向做全双向自注意力；本类为这些非因果层独立构建注意力元数据，不进 kv_cache_groups。",
+   "tags": [
+    "model-state",
+    "encoder-only",
+    "pooling",
+    "attention"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/model_states/encoder_only.py:EncoderOnlyModelState",
+   "type": "class",
+   "name": "EncoderOnlyModelState",
+   "filePath": "vllm/v1/worker/gpu/model_states/encoder_only.py",
+   "lineRange": [
+    27,
+    234
+   ],
+   "summary": "继承 DefaultModelState：为无 KV 的 encoder 层（EncoderOnlyAttentionSpec）构建非因果注意力元数据，关闭 prompt embeds 支持。",
+   "tags": [
+    "model-state",
+    "encoder-only",
+    "bidirectional-attention"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "type": "file",
+   "name": "mamba_hybrid.py",
+   "filePath": "vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "summary": "hybrid attention + Mamba/线性注意力模型的 ModelState：管理 Mamba 状态缓存的请求槽位拷贝、投机解码下 num_accepted 对齐与 MambaHybridAttnMetadata 注入（Mamba2/GDN/ShortConv builder 专属参数）。",
+   "tags": [
+    "model-state",
+    "mamba",
+    "hybrid-attention",
+    "spec-decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/model_states/mamba_hybrid.py:MambaHybridAttnMetadata",
+   "type": "class",
+   "name": "MambaHybridAttnMetadata",
+   "filePath": "vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "lineRange": [
+    41,
+    71
+   ],
+   "summary": "携带 is_prefilling/num_accepted_tokens/num_decode_draft_tokens，向 Mamba2/GDN/ShortConv builder 注入投机解码接受数信息。",
+   "tags": [
+    "attention-metadata",
+    "mamba",
+    "spec-decode"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/model_states/mamba_hybrid.py:MambaHybridModelState",
+   "type": "class",
+   "name": "MambaHybridModelState",
+   "filePath": "vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "lineRange": [
+    74,
+    402
+   ],
+   "summary": "hybrid 模型状态：用 MambaStateCopyFuncsByType 驱动状态缓存读写、投机解码后 fused align kernel 重排状态槽位，聚合 RecoverSSMState。",
+   "tags": [
+    "model-state",
+    "mamba",
+    "state-cache"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/model_states/mm_pruning.py",
+   "type": "file",
+   "name": "mm_pruning.py",
+   "filePath": "vllm/v1/worker/gpu/model_states/mm_pruning.py",
+   "summary": "多模态 embedding 剪枝（EVS，Efficient Video Sampling）工具：MultiModalPruner 把剪枝模型追加在媒体 embedding 尾部的 mrope-position 通道剥离并重算 M-RoPE 位置（Qwen2.5-VL/Qwen3-VL/Nemotron-Nano-VL 等）。",
+   "tags": [
+    "multimodal",
+    "pruning",
+    "mrope",
+    "video-sampling"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/model_states/mm_pruning.py:MultiModalPruner",
+   "type": "class",
+   "name": "MultiModalPruner",
+   "filePath": "vllm/v1/worker/gpu/model_states/mm_pruning.py",
+   "lineRange": [
+    18,
+    123
+   ],
+   "summary": "提供 strip（draft 前向只剥离位置通道）与 merge（目标前向剥离并重算位置后合并）两级操作，持有干净 embedding 宽度。",
+   "tags": [
+    "multimodal",
+    "pruning",
+    "mrope"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/model_states/mm_pruning.py:maybe_create_mm_pruner",
+   "type": "function",
+   "name": "maybe_create_mm_pruner",
+   "filePath": "vllm/v1/worker/gpu/model_states/mm_pruning.py",
+   "lineRange": [
+    126,
+    144
+   ],
+   "summary": "工厂函数：模型声明 supports_multimodal_pruning 时构造 MultiModalPruner，否则返回 None。",
+   "tags": [
+    "factory",
+    "multimodal",
+    "pruning"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/model_states/prompt_embeds.py",
+   "type": "file",
+   "name": "prompt_embeds.py",
+   "filePath": "vllm/v1/worker/gpu/model_states/prompt_embeds.py",
+   "summary": "用户自带 prompt embedding 的 GPU 状态：每请求 embed 在 add_request 时一次性上 GPU，UVA 指针表让单个 triton kernel 每步把全部调度的 prompt-embeds 行覆盖到 inputs_embeds，无 Python 循环与逐请求 H2D。",
+   "tags": [
+    "prompt-embeds",
+    "uva",
+    "triton",
+    "performance"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/model_states/prompt_embeds.py:PromptEmbedsState",
+   "type": "class",
+   "name": "PromptEmbedsState",
+   "filePath": "vllm/v1/worker/gpu/model_states/prompt_embeds.py",
+   "lineRange": [
+    14,
+    96
+   ],
+   "summary": "管理 embeds/mask 指针表（uint64）与长度表，支持 token_ids 输入的掩码替换与请求删除后的懒回收。",
+   "tags": [
+    "prompt-embeds",
+    "state",
+    "uva"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/model_states/recoverssm.py",
+   "type": "file",
+   "name": "recoverssm.py",
+   "filePath": "vllm/v1/worker/gpu/model_states/recoverssm.py",
+   "summary": "RecoverSSM（状态恢复类线性注意力）元数据协调器：record_step 收集各注意力 group 的 RecoverSSMMetadata，commit_step 在投机解码采样后用 triton kernel 对齐状态后处理。",
+   "tags": [
+    "mamba",
+    "ssm",
+    "attention-metadata",
+    "spec-decode"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/model_states/recoverssm.py:RecoverSSMState",
+   "type": "class",
+   "name": "RecoverSSMState",
+   "filePath": "vllm/v1/worker/gpu/model_states/recoverssm.py",
+   "lineRange": [
+    13,
+    67
+   ],
+   "summary": "桥接注意力阶段与后处理阶段：保存本步 RecoverSSM 元组，按 num_sampled/num_rejected 触发对齐 kernel；捕获态显式清空。",
+   "tags": [
+    "mamba",
+    "ssm",
+    "coordinator"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/pcp_manager.py",
+   "type": "file",
+   "name": "pcp_manager.py",
+   "filePath": "vllm/v1/worker/gpu/pcp_manager.py",
+   "summary": "MRV2 PC（prefill context parallelism）批管理器：model runner 保留全局批，PCPManager 每步把 InputBatch 重写为 rank 本地的 DualChunkSwap 行，采样/后处理前再恢复全局批形状；支持 PCP+DCP 组合与 cudagraph 捕获视图。",
+   "tags": [
+    "context-parallelism",
+    "batch-state",
+    "pcp",
+    "v1-engine"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/pcp_manager.py:PCPBatchMetadata",
+   "type": "class",
+   "name": "PCPBatchMetadata",
+   "filePath": "vllm/v1/worker/gpu/pcp_manager.py",
+   "lineRange": [
+    28,
+    38
+   ],
+   "summary": "每步 PCP rank 本地批元数据：全局 token 数、与本地请求段对齐的 global_query_lens/seq_lens 上界（PCP+DCP 时附本地 seq_lens）。",
+   "tags": [
+    "context-parallelism",
+    "metadata",
+    "data-model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/pcp_manager.py:RankSegment",
+   "type": "class",
+   "name": "RankSegment",
+   "filePath": "vllm/v1/worker/gpu/pcp_manager.py",
+   "lineRange": [
+    42,
+    49
+   ],
+   "summary": "一个 rank 在全局批中的段描述：全局批索引、全局切片与 rank 本地切片（num_tokens 派生属性）。",
+   "tags": [
+    "context-parallelism",
+    "data-model",
+    "segmentation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/pcp_manager.py:PCPManager",
+   "type": "class",
+   "name": "PCPManager",
+   "filePath": "vllm/v1/worker/gpu/pcp_manager.py",
+   "lineRange": [
+    52,
+    910
+   ],
+   "summary": "PCP 核心管理器：划分全局批为各 rank 段、重写本地 InputBatch（token 分发/槽位映射）、维护全局视图以便恢复，处理 DCP 上界与图捕获分支。",
+   "tags": [
+    "context-parallelism",
+    "manager",
+    "batch-state"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/pcp_manager.py:maybe_build_pcp_manager",
+   "type": "function",
+   "name": "maybe_build_pcp_manager",
+   "filePath": "vllm/v1/worker/gpu/pcp_manager.py",
+   "lineRange": [
+    913,
+    944
+   ],
+   "summary": "工厂函数：prefill_context_parallel_size>1 时构造 PCPManager，否则返回 None。",
+   "tags": [
+    "factory",
+    "context-parallelism"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/pool/pooling_runner.py",
+   "type": "file",
+   "name": "pooling_runner.py",
+   "filePath": "vllm/v1/worker/gpu/pool/pooling_runner.py",
+   "summary": "V2 池化（embedding/classify）任务执行器：PoolingRunner 校验任务类型（embed/classify/token_embed 等），组装 PoolingMetadata 与 pooler 输入，支持延迟交互（late-interaction）输出与 token 级池化。",
+   "tags": [
+    "pooling",
+    "embedding",
+    "runner"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/pool/pooling_runner.py:PoolingRunner",
+   "type": "class",
+   "name": "PoolingRunner",
+   "filePath": "vllm/v1/worker/gpu/pool/pooling_runner.py",
+   "lineRange": [
+    25,
+    215
+   ],
+   "summary": "池化执行器：维护 PoolingStates、执行 pooler 前向并按任务类型组装输出（含 late-interaction runner 分支），不支持的 V2 任务给出明确报错提示。",
+   "tags": [
+    "pooling",
+    "embedding",
+    "runner"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/pp_utils.py",
+   "type": "file",
+   "name": "pp_utils.py",
+   "filePath": "vllm/v1/worker/gpu/pp_utils.py",
+   "summary": "V2 runner 的流水线并行（PP）工具：PPHandler 在旁路 stream 上跑采样 token 的 broadcast/recv（专用 NCCL communicator），步 T 的接收在步 T+pp_size 消费；PendingRecv 记录延迟后处理槽位数据。",
+   "tags": [
+    "pipeline-parallel",
+    "nccl",
+    "async",
+    "v1-engine"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/pp_utils.py:PendingRecv",
+   "type": "class",
+   "name": "PendingRecv",
+   "filePath": "vllm/v1/worker/gpu/pp_utils.py",
+   "lineRange": [
+    20,
+    35
+   ],
+   "summary": "一步延迟接收的槽位数据：事件、采样 token/数量、idx 映射与代计数快照（用于识别已中止请求）。",
+   "tags": [
+    "pipeline-parallel",
+    "data-model",
+    "deferred"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/pp_utils.py:compute_need_sampled_mask",
+   "type": "function",
+   "name": "compute_need_sampled_mask",
+   "filePath": "vllm/v1/worker/gpu/pp_utils.py",
+   "lineRange": [
+    38,
+    52
+   ],
+   "summary": "标记哪些请求的采样输出在后续 decode 步还可能被需要（排除非终 prefill 块与到达长度上限的终块），全不需要时返回 None。",
+   "tags": [
+    "pipeline-parallel",
+    "mask",
+    "scheduling"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/pp_utils.py:PPHandler",
+   "type": "class",
+   "name": "PPHandler",
+   "filePath": "vllm/v1/worker/gpu/pp_utils.py",
+   "lineRange": [
+    55,
+    280
+   ],
+   "summary": "PP 采样广播/接收处理器：旁路 stream 上发出 broadcast/recv，维护 pp_size 深度的 PendingRecv 环，供非末 rank 上报与首 rank 消费。",
+   "tags": [
+    "pipeline-parallel",
+    "nccl",
+    "handler"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/sample/bad_words.py",
+   "type": "file",
+   "name": "bad_words.py",
+   "filePath": "vllm/v1/worker/gpu/sample/bad_words.py",
+   "summary": "V2 采样的 bad_words 屏蔽：BadWordsState 以 StagedWriteTensor 展平存储每请求违禁词 token 与偏移，apply 前用 triton kernel 做前缀匹配并把命中行 logits 置 -inf。",
+   "tags": [
+    "sampling",
+    "logits-processor",
+    "bad-words",
+    "triton"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/sample/bad_words.py:BadWordsState",
+   "type": "class",
+   "name": "BadWordsState",
+   "filePath": "vllm/v1/worker/gpu/sample/bad_words.py",
+   "lineRange": [
+    21,
+    98
+   ],
+   "summary": "继承 LogitsProcessor：管理违禁词展平缓冲（token 列表+累积偏移+计数），支持请求增删与序列化参数写入。",
+   "tags": [
+    "logits-processor",
+    "bad-words",
+    "state"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/bad_words.py:apply_bad_words",
+   "type": "function",
+   "name": "apply_bad_words",
+   "filePath": "vllm/v1/worker/gpu/sample/bad_words.py",
+   "lineRange": [
+    168,
+    197
+   ],
+   "summary": "调度 bad_words triton kernel：按请求槽位前缀匹配已提交 token 流并屏蔽命中 token 的 logits。",
+   "tags": [
+    "bad-words",
+    "triton",
+    "sampling"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "type": "file",
+   "name": "batch_shard.py",
+   "filePath": "vllm/v1/worker/gpu/sample/batch_shard.py",
+   "summary": "批分片采样（batch-sharded sampling）：把请求按 req_state_idx 轮转分给 TP rank（owner 排序），各 rank 只对自己请求的 logits 做采样/验证，经 all-to-all 与 gather 恢复全局结果——所有 rank 用相同 idx_mapping 无通信构建一致的 shard 计划。",
+   "tags": [
+    "sampling",
+    "tensor-parallel",
+    "all-to-all",
+    "performance"
+   ],
+   "complexity": "complex",
+   "languageNotes": "shard_owner=req_state_idx%NUM_SHARDS 与 shard_row=//NUM_SHARDS 在 triton 与 host 两侧镜像实现，保证计划确定性。"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/sample/batch_shard.py:BatchShardMetadata",
+   "type": "class",
+   "name": "BatchShardMetadata",
+   "filePath": "vllm/v1/worker/gpu/sample/batch_shard.py",
+   "lineRange": [
+    22,
+    50
+   ],
+   "summary": "一步采样的 collective 布局：每 owner rank 的 logits 数、gather 源索引与每请求最大 logits 数等纯函数派生量，各 rank 无通信即得一致值。",
+   "tags": [
+    "tensor-parallel",
+    "metadata",
+    "data-model"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/batch_shard.py:batch_sharded_sampling_enabled",
+   "type": "function",
+   "name": "batch_sharded_sampling_enabled",
+   "filePath": "vllm/v1/worker/gpu/sample/batch_shard.py",
+   "lineRange": [
+    53,
+    60
+   ],
+   "summary": "判定目标模型是否启用批分片采样：配置开关且模型提供 compute_logits_local。",
+   "tags": [
+    "tensor-parallel",
+    "validation",
+    "sampling"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/sample/batch_shard.py:BatchSharder",
+   "type": "class",
+   "name": "BatchSharder",
+   "filePath": "vllm/v1/worker/gpu/sample/batch_shard.py",
+   "lineRange": [
+    175,
+    342
+   ],
+   "summary": "批分片器：host 侧构建 shard 计划（owner 排序、发送/接收切片），执行采样输入的 all-to-all 分发与 grammar 输出分片。",
+   "tags": [
+    "tensor-parallel",
+    "all-to-all",
+    "sharding"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/batch_shard.py:all_to_all_logits",
+   "type": "function",
+   "name": "all_to_all_logits",
+   "filePath": "vllm/v1/worker/gpu/sample/batch_shard.py",
+   "lineRange": [
+    345,
+    364
+   ],
+   "summary": "把本地计算的 logits 按 owner 计划经 all-to-all 发往各 rank 并接收归属本 rank 的部分。",
+   "tags": [
+    "tensor-parallel",
+    "all-to-all",
+    "communication"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/batch_shard.py:gather_sampler_output",
+   "type": "function",
+   "name": "gather_sampler_output",
+   "filePath": "vllm/v1/worker/gpu/sample/batch_shard.py",
+   "lineRange": [
+    649,
+    727
+   ],
+   "summary": "把各 rank 分片采样结果 gather 回全局批序：pack/unpack kernel 重排采样输出与 logprobs 张量。",
+   "tags": [
+    "tensor-parallel",
+    "gather",
+    "sampling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "type": "file",
+   "name": "gumbel.py",
+   "filePath": "vllm/v1/worker/gpu/sample/gumbel.py",
+   "summary": "Gumbel-max 采样工具箱：murmur3 哈希构造确定性均匀随机流，gumbel_sample 以 Gumbel 噪声 argmax 实现无 softmax 的按温度采样（含批分片 gumbel_block_argmax），draft 噪声加 2^30 salt 与目标流隔离。",
+   "tags": [
+    "sampling",
+    "gumbel",
+    "murmur3",
+    "triton"
+   ],
+   "complexity": "complex",
+   "languageNotes": "Gumbel-max trick 把 softmax 采样化为 logits+Gumbel 噪声的 argmax，与批分片 shard_owner/shard_row 布局耦合。"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/gumbel.py:spec_step_seed",
+   "type": "function",
+   "name": "spec_step_seed",
+   "filePath": "vllm/v1/worker/gpu/sample/gumbel.py",
+   "lineRange": [
+    75,
+    77
+   ],
+   "summary": "从请求种子与投机步号派生该步的确定性种子。",
+   "tags": [
+    "sampling",
+    "seed",
+    "spec-decode"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/gumbel.py:murmur3_hash32",
+   "type": "function",
+   "name": "murmur3_hash32",
+   "filePath": "vllm/v1/worker/gpu/sample/gumbel.py",
+   "lineRange": [
+    105,
+    116
+   ],
+   "summary": "triton 实现的 murmur3 32 位哈希（rotl/mix/fmix 三段），随机流的基础。",
+   "tags": [
+    "murmur3",
+    "hash",
+    "triton"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/gumbel.py:apply_temperature",
+   "type": "function",
+   "name": "apply_temperature",
+   "filePath": "vllm/v1/worker/gpu/sample/gumbel.py",
+   "lineRange": [
+    48,
+    63
+   ],
+   "summary": "按请求温度对 logits 行做除温（0/1 温度早退跳过加载）。",
+   "tags": [
+    "sampling",
+    "temperature",
+    "triton"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/gumbel.py:gumbel_noised_argmax",
+   "type": "function",
+   "name": "gumbel_noised_argmax",
+   "filePath": "vllm/v1/worker/gpu/sample/gumbel.py",
+   "lineRange": [
+    172,
+    212
+   ],
+   "summary": "单行 Gumbel 噪声 argmax：log1p(-u) 稳定实现，供水印等处复用。",
+   "tags": [
+    "gumbel",
+    "sampling",
+    "triton"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/gumbel.py:gumbel_block_argmax",
+   "type": "function",
+   "name": "gumbel_block_argmax",
+   "filePath": "vllm/v1/worker/gpu/sample/gumbel.py",
+   "lineRange": [
+    216,
+    284
+   ],
+   "summary": "面向批分片布局的块级 Gumbel argmax（在 owner 的 shard 行上采样）。",
+   "tags": [
+    "gumbel",
+    "sampling",
+    "batch-shard"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/gumbel.py:gumbel_sample",
+   "type": "function",
+   "name": "gumbel_sample",
+   "filePath": "vllm/v1/worker/gpu/sample/gumbel.py",
+   "lineRange": [
+    354,
+    431
+   ],
+   "summary": "完整 Gumbel 采样入口：可选 top-k/top-p 预缩放 + 温度 + 噪声 argmax + 种子化 RNG 流，支持批分片路径。",
+   "tags": [
+    "gumbel",
+    "sampling",
+    "entry-point"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/sample/logit_bias.py",
+   "type": "file",
+   "name": "logit_bias.py",
+   "filePath": "vllm/v1/worker/gpu/sample/logit_bias.py",
+   "summary": "V2 采样的 logit bias 处理器：LogitBiasState 存储每请求 allowed token ids、logit_bias 表与 stop token ids，apply kernel 同时施加白名单屏蔽与偏置加法。",
+   "tags": [
+    "sampling",
+    "logits-processor",
+    "logit-bias"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/sample/logit_bias.py:LogitBiasState",
+   "type": "class",
+   "name": "LogitBiasState",
+   "filePath": "vllm/v1/worker/gpu/sample/logit_bias.py",
+   "lineRange": [
+    25,
+    155
+   ],
+   "summary": "继承 LogitsProcessor：以 StagedWriteTensor 存 allowed/bias/stop 三组槽位表，按采样参数差异做增量更新。",
+   "tags": [
+    "logits-processor",
+    "logit-bias",
+    "state"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/logit_bias.py:apply_logit_bias",
+   "type": "function",
+   "name": "apply_logit_bias",
+   "filePath": "vllm/v1/worker/gpu/sample/logit_bias.py",
+   "lineRange": [
+    303,
+    349
+   ],
+   "summary": "调度 bias kernel：白名单外 token 置 -inf、bias 表叠加、stop token 处理。",
+   "tags": [
+    "logit-bias",
+    "triton",
+    "sampling"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/sample/logits_processor/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/v1/worker/gpu/sample/logits_processor/__init__.py",
+   "summary": "V2 自定义 logits processor 包入口（barrel）：再导出接口三件与插件构建函数；刻意保持 import 轻量——前端进程也会导入本包校验请求参数。",
+   "tags": [
+    "barrel",
+    "entry-point",
+    "logits-processor"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "type": "file",
+   "name": "interface.py",
+   "filePath": "vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "summary": "V2 logits processor 接口层（import-light）：LogitsProcRequestState 包装 runner 每槽位只读缓冲，LogitsContext 描述当步 logits 行布局（行≠请求，投机解码下每 draft token 一行），LogitsProcessor 为 ABC（add_request/update_params/apply）。",
+   "tags": [
+    "interface",
+    "logits-processor",
+    "abc"
+   ],
+   "complexity": "moderate",
+   "languageNotes": "重依赖全部置于 TYPE_CHECKING + 延迟注解，保证前端进程可安全导入。"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/sample/logits_processor/interface.py:LogitsProcRequestState",
+   "type": "class",
+   "name": "LogitsProcRequestState",
+   "filePath": "vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "lineRange": [
+    28,
+    60
+   ],
+   "summary": "冻结数据类：向 processor 暴露 all_token_ids/prompt_len/prefill_len/total_len 等原位可变槽位缓冲（读视角），from_request_state 从 RequestState 装配。",
+   "tags": [
+    "data-model",
+    "logits-processor",
+    "state"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/sample/logits_processor/interface.py:LogitsContext",
+   "type": "class",
+   "name": "LogitsContext",
+   "filePath": "vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "lineRange": [
+    64,
+    89
+   ],
+   "summary": "当步批布局上下文：expanded_idx_mapping（logits 行→槽位）、batch 映射与输入 token，每次 apply 传入。",
+   "tags": [
+    "data-model",
+    "logits-processor",
+    "context"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/sample/logits_processor/interface.py:LogitsProcessor",
+   "type": "class",
+   "name": "LogitsProcessor",
+   "filePath": "vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "lineRange": [
+    92,
+    158
+   ],
+   "summary": "processor 抽象基类：声明 add_request/remove_request/update_params/apply 与默认状态钩子，内置处理器（bad_words/logit_bias/penalties）与插件均继承它。",
+   "tags": [
+    "abc",
+    "logits-processor",
+    "base-class"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/sample/logits_processor/loader.py",
+   "type": "file",
+   "name": "loader.py",
+   "filePath": "vllm/v1/worker/gpu/sample/logits_processor/loader.py",
+   "summary": "V2 自定义 logits processor 加载器：经 entry_points（vllm.logits_processors 组）发现插件类，拒绝 V1 接口插件，支持按 FQCN 从任意模块加载；构建函数与参数校验器构建均延迟重导入。",
+   "tags": [
+    "plugin-loader",
+    "entry-points",
+    "logits-processor"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/logits_processor/loader.py:build_custom_logits_processors",
+   "type": "function",
+   "name": "build_custom_logits_processors",
+   "filePath": "vllm/v1/worker/gpu/sample/logits_processor/loader.py",
+   "lineRange": [
+    156,
+    183
+   ],
+   "summary": "实例化用户在 sampling_params 里声明的自定义 processor（插件+FQCN），返回实例列表。",
+   "tags": [
+    "plugin-loader",
+    "factory",
+    "logits-processor"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/logits_processor/loader.py:build_custom_logits_processors_params_validator",
+   "type": "function",
+   "name": "build_custom_logits_processors_params_validator",
+   "filePath": "vllm/v1/worker/gpu/sample/logits_processor/loader.py",
+   "lineRange": [
+    186,
+    211
+   ],
+   "summary": "构建请求参数校验器（processor 类名→params schema），供前端在请求期验证。",
+   "tags": [
+    "validation",
+    "plugin-loader"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/sample/logprob.py",
+   "type": "file",
+   "name": "logprob.py",
+   "filePath": "vllm/v1/worker/gpu/sample/logprob.py",
+   "summary": "V2 采样的 logprob 计算核心：triton kernel 做 top-k log-softmax、token rank 与 logprob token id 填充；LogprobTokenIdsState 管理每请求 top-k id 的 staged 缓冲。",
+   "tags": [
+    "logprobs",
+    "triton",
+    "sampling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/logprob.py:compute_token_logprobs",
+   "type": "function",
+   "name": "compute_token_logprobs",
+   "filePath": "vllm/v1/worker/gpu/sample/logprob.py",
+   "lineRange": [
+    84,
+    108
+   ],
+   "summary": "计算给定 token id 的 log概率（采样 token 与 draft 验证路径共用）。",
+   "tags": [
+    "logprobs",
+    "triton",
+    "sampling"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/logprob.py:compute_topk_scores",
+   "type": "function",
+   "name": "compute_topk_scores",
+   "filePath": "vllm/v1/worker/gpu/sample/logprob.py",
+   "lineRange": [
+    111,
+    189
+   ],
+   "summary": "对 logits 行计算 top-k log-softmax 分数与对应 token id（分块 gather，上限 1024 宽）。",
+   "tags": [
+    "logprobs",
+    "topk",
+    "triton"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/sample/logprob.py:LogprobTokenIdsState",
+   "type": "class",
+   "name": "LogprobTokenIdsState",
+   "filePath": "vllm/v1/worker/gpu/sample/logprob.py",
+   "lineRange": [
+    238,
+    271
+   ],
+   "summary": "每请求 top-k token id 槽位状态：UVA 计数 + StagedWriteTensor id 表，配合 kernel 填充与采集。",
+   "tags": [
+    "logprobs",
+    "state",
+    "slot-table"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/sample/output.py",
+   "type": "file",
+   "name": "output.py",
+   "filePath": "vllm/v1/worker/gpu/sample/output.py",
+   "summary": "V2 采样输出结构：SamplerOutput 数据类（采样 id/logprobs 张量/NaN 计数），SamplingMaskTensors 用 triton kernel 把请求级采样掩码压缩成 packed 位图行。",
+   "tags": [
+    "sampling",
+    "output",
+    "data-model"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/sample/output.py:SamplerOutput",
+   "type": "class",
+   "name": "SamplerOutput",
+   "filePath": "vllm/v1/worker/gpu/sample/output.py",
+   "lineRange": [
+    17,
+    23
+   ],
+   "summary": "一步采样的原始输出：sampled_token_ids、logprobs_tensors、num_nans、num_sampled/num_rejected 与可选掩码张量。",
+   "tags": [
+    "data-model",
+    "sampling",
+    "output"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/sample/output.py:SamplingMaskTensors",
+   "type": "class",
+   "name": "SamplingMaskTensors",
+   "filePath": "vllm/v1/worker/gpu/sample/output.py",
+   "lineRange": [
+    86,
+    202
+   ],
+   "summary": "采样掩码张量集：维护 packed 掩码/计数缓冲，调 kernel 把按请求的掩码行压缩/解压，用于受限解码等路径。",
+   "tags": [
+    "sampling",
+    "mask",
+    "triton"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/sample/penalties.py",
+   "type": "file",
+   "name": "penalties.py",
+   "filePath": "vllm/v1/worker/gpu/sample/penalties.py",
+   "summary": "V2 采样的惩罚处理器：PenaltiesState 存每请求 repetition/frequency/presence 惩罚系数，apply kernel 基于已提交 token 的 bincount 统计统一施加三类惩罚（CPU 侧块大小被 cpu/shm.py 覆写以走 CPU 路径）。",
+   "tags": [
+    "sampling",
+    "penalties",
+    "logits-processor",
+    "triton"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/sample/penalties.py:PenaltiesState",
+   "type": "class",
+   "name": "PenaltiesState",
+   "filePath": "vllm/v1/worker/gpu/sample/penalties.py",
+   "lineRange": [
+    26,
+    104
+   ],
+   "summary": "继承 LogitsProcessor：惩罚系数槽位表 + 出现次数 staged 统计，update 时按参数变化增量重算。",
+   "tags": [
+    "penalties",
+    "state",
+    "logits-processor"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/penalties.py:apply_penalties",
+   "type": "function",
+   "name": "apply_penalties",
+   "filePath": "vllm/v1/worker/gpu/sample/penalties.py",
+   "lineRange": [
+    187,
+    216
+   ],
+   "summary": "调度惩罚 kernel：按请求已提交 token 的出现计数施加 repetition/frequency/presence 三合一惩罚。",
+   "tags": [
+    "penalties",
+    "triton",
+    "sampling"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/penalties.py:bincount",
+   "type": "function",
+   "name": "bincount",
+   "filePath": "vllm/v1/worker/gpu/sample/penalties.py",
+   "lineRange": [
+    271,
+    298
+   ],
+   "summary": "GPU 版受限 bincount：对每请求 token 片段统计 vocab 内出现次数（惩罚统计的输入）。",
+   "tags": [
+    "bincount",
+    "triton",
+    "statistics"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/sample/prompt_logprob.py",
+   "type": "file",
+   "name": "prompt_logprob.py",
+   "filePath": "vllm/v1/worker/gpu/sample/prompt_logprob.py",
+   "summary": "V2 prompt logprob 工作器：PromptLogprobsWorker 在 prefill 时按 chunk（CHUNK_SIZE=1024）对 prompt token 计算 top-k/指定 id 的 logprob，支持 raw 与 processed 两种 logprobs 模式。",
+   "tags": [
+    "prompt-logprobs",
+    "chunking",
+    "sampling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/sample/prompt_logprob.py:PromptLogprobsWorker",
+   "type": "class",
+   "name": "PromptLogprobsWorker",
+   "filePath": "vllm/v1/worker/gpu/sample/prompt_logprob.py",
+   "lineRange": [
+    30,
+    230
+   ],
+   "summary": "管理 prompt logprob 请求槽位（哪些请求要、k 值、指定 id 表），prefill 后从 logits 切片计算并组装 LogprobsTensors。",
+   "tags": [
+    "prompt-logprobs",
+    "state",
+    "worker"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/prompt_logprob.py:compute_prompt_logprobs_with_chunking",
+   "type": "function",
+   "name": "compute_prompt_logprobs_with_chunking",
+   "filePath": "vllm/v1/worker/gpu/sample/prompt_logprob.py",
+   "lineRange": [
+    287,
+    323
+   ],
+   "summary": "对超长 prompt 按 chunk 切分 logits 逐块计算 logprob，控制峰值显存。",
+   "tags": [
+    "prompt-logprobs",
+    "chunking",
+    "memory"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "type": "file",
+   "name": "sampler.py",
+   "filePath": "vllm/v1/worker/gpu/sample/sampler.py",
+   "summary": "V2 采样器编排器：Sampler 按顺序施加 penalties/logit_bias/bad_words/自定义 processor/thinking_budget，再走 Gumbel 或 top-k/top-p（flashinfer/XPU 后端）采样与 logprob 计算，产出一个 SamplerOutput。",
+   "tags": [
+    "sampling",
+    "orchestration",
+    "v1-engine"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/sample/sampler.py:Sampler",
+   "type": "class",
+   "name": "Sampler",
+   "filePath": "vllm/v1/worker/gpu/sample/sampler.py",
+   "lineRange": [
+    42,
+    360
+   ],
+   "summary": "采样主类：聚合各 logits processor 状态与 SamplingStates，sample() 内完成参数同步（UVA copy）、processor 链、RNG 种子派发与 NaN 统计。",
+   "tags": [
+    "sampling",
+    "orchestrator",
+    "stateful"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/sample/states.py",
+   "type": "file",
+   "name": "states.py",
+   "filePath": "vllm/v1/worker/gpu/sample/states.py",
+   "summary": "V2 采样参数槽位状态：SamplingStates 以 UvaBackedTensor 存每请求 temperature/top_k/top_p/min_p/seed 与 logprob 请求数，update_params 做差异增量下发（CPU 写+copy_to_uva）。",
+   "tags": [
+    "sampling",
+    "state",
+    "slot-table"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/sample/states.py:SamplingStates",
+   "type": "class",
+   "name": "SamplingStates",
+   "filePath": "vllm/v1/worker/gpu/sample/states.py",
+   "lineRange": [
+    17,
+    145
+   ],
+   "summary": "采样参数双端槽位表：种子显式设置标志（seeds_set）区分用户种子与默认 RNG 路径，top_k/top_p 初始化为全词表/1.0 避免非法零值。",
+   "tags": [
+    "sampling",
+    "state",
+    "uva"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/sample/thinking_budget.py",
+   "type": "file",
+   "name": "thinking_budget.py",
+   "filePath": "vllm/v1/worker/gpu/sample/thinking_budget.py",
+   "summary": "V2 思考预算（thinking budget）处理器：ThinkingBudgetState 跟踪每请求 reasoning start/end 标记与已提交 marker 缓存，apply kernel 在思考 token 超预算时对 end marker 加大 bias 强制收束思考。",
+   "tags": [
+    "thinking-budget",
+    "logits-processor",
+    "reasoning",
+    "sampling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/sample/thinking_budget.py:ThinkingBudgetState",
+   "type": "class",
+   "name": "ThinkingBudgetState",
+   "filePath": "vllm/v1/worker/gpu/sample/thinking_budget.py",
+   "lineRange": [
+    22,
+    133
+   ],
+   "summary": "管理思考预算状态：start/end/natural-end token id 集合、每槽位预算值与 committed marker 缓存（StagedWriteTensor），提供参数更新与统计查询。",
+   "tags": [
+    "thinking-budget",
+    "state",
+    "slot-table"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/thinking_budget.py:apply_thinking_budget",
+   "type": "function",
+   "name": "apply_thinking_budget",
+   "filePath": "vllm/v1/worker/gpu/sample/thinking_budget.py",
+   "lineRange": [
+    368,
+    424
+   ],
+   "summary": "调度 thinking budget kernel：超预算请求对 end-marker logits 施加强制偏置，使下一步生成结束思考标记。",
+   "tags": [
+    "thinking-budget",
+    "triton",
+    "sampling"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/sample/watermark.py",
+   "type": "file",
+   "name": "watermark.py",
+   "filePath": "vllm/v1/worker/gpu/sample/watermark.py",
+   "summary": "V2 GPU 水印采样：以重复上下文绿色名单掩码（repeated_context_mask）+ Philox 计数器随机流的 Gumbel 采样实现 context-based watermarking；draft 侧用独立 salt 与逐步 kernel 产出与目标解耦的噪声，供投机解码验证。",
+   "tags": [
+    "watermarking",
+    "philox",
+    "gumbel",
+    "sampling"
+   ],
+   "complexity": "complex",
+   "languageNotes": "Philox4x32-10 计数器 PRNG 在 triton kernel 内联实现（mulhilo32+mix），context/token 双 domain 派生密钥。"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/watermark.py:repeated_context_mask",
+   "type": "function",
+   "name": "repeated_context_mask",
+   "filePath": "vllm/v1/worker/gpu/sample/watermark.py",
+   "lineRange": [
+    248,
+    367
+   ],
+   "summary": "计算重复上下文的绿色名单掩码：按历史窗口自回归匹配前缀，判定当前 token 列是否处于绿色名单（有 triton 与 CPU 双实现）。",
+   "tags": [
+    "watermarking",
+    "green-list",
+    "mask"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/watermark.py:draft_watermarking_mask",
+   "type": "function",
+   "name": "draft_watermarking_mask",
+   "filePath": "vllm/v1/worker/gpu/sample/watermark.py",
+   "lineRange": [
+    370,
+    441
+   ],
+   "summary": "draft 侧水印掩码：对无 logits 的 draft 步复用 Philox 状态生成掩码，保证与目标侧一致性。",
+   "tags": [
+    "watermarking",
+    "spec-decode",
+    "mask"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/watermark.py:_philox_gumbel_kernel",
+   "type": "function",
+   "name": "_philox_gumbel_kernel",
+   "filePath": "vllm/v1/worker/gpu/sample/watermark.py",
+   "lineRange": [
+    583,
+    717
+   ],
+   "summary": "Philox 随机流 + 绿名单 Gumbel 采样 kernel：按 context/token 派生密钥生成均匀数转 Gumbel 噪声并 argmax。",
+   "tags": [
+    "philox",
+    "gumbel",
+    "triton",
+    "watermarking"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/watermark.py:philox_gumbel_sample",
+   "type": "function",
+   "name": "philox_gumbel_sample",
+   "filePath": "vllm/v1/worker/gpu/sample/watermark.py",
+   "lineRange": [
+    720,
+    817
+   ],
+   "summary": "水印 Gumbel 采样入口：组装 context 密钥/偏移并调度 _philox_gumbel_kernel，返回采样 id 与掩码。",
+   "tags": [
+    "watermarking",
+    "sampling",
+    "entry-point"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/sample/watermark.py:draft_philox_gumbel_sample",
+   "type": "function",
+   "name": "draft_philox_gumbel_sample",
+   "filePath": "vllm/v1/worker/gpu/sample/watermark.py",
+   "lineRange": [
+    924,
+    1048
+   ],
+   "summary": "draft 步水印采样：逐 draft token 的小 kernel 推进 Philox 状态并采样，噪声与目标流隔离（2^30 salt）。",
+   "tags": [
+    "watermarking",
+    "spec-decode",
+    "sampling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "summary": "投机解码 speculator 工厂入口：init_speculator 按 speculative_config 的 method/架构分派到对应 speculator（extract_hidden_states、dflash/dflash2/xpress/lilicorr、dspark、gemma4/multi-module MTP、eagle、standalone AR、ngram GPU），全部延迟导入。",
+   "tags": [
+    "spec-decode",
+    "factory",
+    "entry-point"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/__init__.py:init_speculator",
+   "type": "function",
+   "name": "init_speculator",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "lineRange": [
+    14,
+    94
+   ],
+   "summary": "投机解码分发工厂：按 method 与 draft 架构（XPRESS/LiLiCorr/DFlash2/DFlash 等）选择 speculator 类并实例化，不支持组合抛 NotImplementedError。",
+   "tags": [
+    "factory",
+    "spec-decode",
+    "dispatch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/acceptance_estimator.py",
+   "type": "file",
+   "name": "acceptance_estimator.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/acceptance_estimator.py",
+   "summary": "在线投机接受率估计器：OnlineAcceptanceEstimator 用一维 logistic 模型按特征（如接受位置/置信度）在线预测每位置接受概率并边服务边校准（triton kernel 做 accumulate/refit/predict），冷启动系数来自 DeepSeek-V4-Flash 等多模型中位数拟合。",
+   "tags": [
+    "spec-decode",
+    "online-learning",
+    "prediction",
+    "triton"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/spec_decode/acceptance_estimator.py:OnlineAcceptanceEstimator",
+   "type": "class",
+   "name": "OnlineAcceptanceEstimator",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/acceptance_estimator.py",
+   "lineRange": [
+    313,
+    515
+   ],
+   "summary": "逐步 accumulate 梯度统计、定期 refit 逻辑回归系数、推理时 predict 每位置接受概率，驱动自适应 draft 预算分配。",
+   "tags": [
+    "online-learning",
+    "spec-decode",
+    "estimator"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "type": "file",
+   "name": "adaptive_verification.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "summary": "DSpark 投机解码的自适应验证管理器：按接受概率曲线在总 draft 预算内为每请求分配最优 draft token 数（贪意 budget kernel + 成本表），并把变长验证路由到专用 decode cudagraph 档（FULL_AND_PIECEWISE 分流）。",
+   "tags": [
+    "spec-decode",
+    "adaptive-verification",
+    "dspark",
+    "scheduling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py:resolve_adaptive_cudagraph_mode",
+   "type": "function",
+   "name": "resolve_adaptive_cudagraph_mode",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "lineRange": [
+    37,
+    44
+   ],
+   "summary": "为变长验证选择专用 decode 图档：FULL_DECODE_ONLY 或（piecewise 可用时）FULL_AND_PIECEWISE。",
+   "tags": [
+    "cudagraph",
+    "spec-decode",
+    "routing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py:assign_draft_token_budget",
+   "type": "function",
+   "name": "assign_draft_token_budget",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "lineRange": [
+    128,
+    160
+   ],
+   "summary": "调度 budget kernel：在每请求容量与全局 draft 预算约束下，按存活概率贪心分配各请求的 draft token 数。",
+   "tags": [
+    "budget-allocation",
+    "spec-decode",
+    "triton"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py:build_cost_tables_from_curves",
+   "type": "function",
+   "name": "build_cost_tables_from_curves",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "lineRange": [
+    163,
+    211
+   ],
+   "summary": "从测得的接受/成本曲线构建离线成本查找表（步数→期望收益），供预算分配引用。",
+   "tags": [
+    "cost-model",
+    "spec-decode",
+    "tables"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py:AdmittedDraftCounts",
+   "type": "class",
+   "name": "AdmittedDraftCounts",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "lineRange": [
+    214,
+    224
+   ],
+   "summary": "本步各请求被采纳的 draft token 计数（GPU 张量+CPU 视图），供采样与状态更新消费。",
+   "tags": [
+    "spec-decode",
+    "data-model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py:AdaptiveVerificationManager",
+   "type": "class",
+   "name": "AdaptiveVerificationManager",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "lineRange": [
+    227,
+    582
+   ],
+   "summary": "自适应验证管理器：组合接受估计与成本表做预算分配、变长验证执行与统计回填，维护专用 cudagraph 捕获状态。",
+   "tags": [
+    "spec-decode",
+    "manager",
+    "adaptive-verification"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py:maybe_create_adaptive_verification_manager",
+   "type": "function",
+   "name": "maybe_create_adaptive_verification_manager",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "lineRange": [
+    585,
+    646
+   ],
+   "summary": "工厂函数：DSpark 且开启自适应验证时构造 AdaptiveVerificationManager，否则返回 None。",
+   "tags": [
+    "factory",
+    "spec-decode"
+   ],
+   "complexity": "moderate"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "target": "file:vllm/model_executor/models/interfaces_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "target": "file:vllm/v1/worker/encoder_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "target": "file:vllm/v1/worker/gpu/block_table.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "target": "file:vllm/v1/worker/gpu/mm/encoder_cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "target": "file:vllm/v1/worker/gpu/mm/encoder_runner.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "target": "file:vllm/v1/worker/gpu/states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "target": "file:vllm/v1/worker/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/interface.py:ModelSpecificAttnMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/interface.py:ModelState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/interface.py:ModelSpecificAttnMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/interface.py:ModelState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_decoder.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_decoder.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_decoder.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_decoder.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_decoder.py",
+   "target": "file:vllm/v1/worker/gpu/attn_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_decoder.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_decoder.py",
+   "target": "file:vllm/v1/worker/gpu/mm/encoder_cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_decoder.py",
+   "target": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_decoder.py",
+   "target": "file:vllm/v1/worker/gpu/states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_decoder.py",
+   "target": "file:vllm/v1/worker/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_decoder.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/encoder_decoder.py:EncoderDecoderAttnMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_decoder.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/encoder_decoder.py:EncoderDecoderModelState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_decoder.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/encoder_decoder.py:EncoderDecoderAttnMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_decoder.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/encoder_decoder.py:EncoderDecoderModelState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/model_states/encoder_decoder.py:EncoderDecoderModelState",
+   "target": "class:vllm/v1/worker/gpu/model_states/interface.py:ModelState",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_only.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_only.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_only.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_only.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_only.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_only.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_only.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_only.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_only.py",
+   "target": "file:vllm/v1/worker/gpu/mm/encoder_cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_only.py",
+   "target": "file:vllm/v1/worker/gpu/model_states/default.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_only.py",
+   "target": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_only.py",
+   "target": "file:vllm/v1/worker/gpu/states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_only.py",
+   "target": "file:vllm/v1/worker/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_only.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/encoder_only.py:EncoderOnlyModelState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/encoder_only.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/encoder_only.py:EncoderOnlyModelState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/model_states/encoder_only.py:EncoderOnlyModelState",
+   "target": "class:vllm/v1/worker/gpu/model_states/default.py:DefaultModelState",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "file:vllm/v1/attention/backends/gdn_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "file:vllm/v1/attention/backends/mamba2_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "file:vllm/v1/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "file:vllm/v1/worker/gpu/attn_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "file:vllm/v1/worker/gpu/block_table.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "file:vllm/v1/worker/gpu/mm/encoder_cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "file:vllm/v1/worker/gpu/model_states/default.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "file:vllm/v1/worker/gpu/model_states/recoverssm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "file:vllm/v1/worker/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "file:vllm/v1/worker/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/mamba_hybrid.py:MambaHybridAttnMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/mamba_hybrid.py:MambaHybridModelState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/mamba_hybrid.py:MambaHybridAttnMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mamba_hybrid.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/mamba_hybrid.py:MambaHybridModelState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/model_states/mamba_hybrid.py:MambaHybridModelState",
+   "target": "class:vllm/v1/worker/gpu/model_states/default.py:DefaultModelState",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mm_pruning.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mm_pruning.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mm_pruning.py",
+   "target": "file:vllm/multimodal/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mm_pruning.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mm_pruning.py",
+   "target": "file:vllm/v1/worker/gpu/mm/encoder_cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mm_pruning.py",
+   "target": "file:vllm/v1/worker/gpu/mm/rope.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mm_pruning.py",
+   "target": "file:vllm/v1/worker/gpu/states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mm_pruning.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/mm_pruning.py:MultiModalPruner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mm_pruning.py",
+   "target": "function:vllm/v1/worker/gpu/model_states/mm_pruning.py:maybe_create_mm_pruner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mm_pruning.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/mm_pruning.py:MultiModalPruner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/mm_pruning.py",
+   "target": "function:vllm/v1/worker/gpu/model_states/mm_pruning.py:maybe_create_mm_pruner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/prompt_embeds.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/prompt_embeds.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/prompt_embeds.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/prompt_embeds.py",
+   "target": "file:vllm/v1/worker/gpu/buffer_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/prompt_embeds.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/prompt_embeds.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/prompt_embeds.py:PromptEmbedsState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/prompt_embeds.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/prompt_embeds.py:PromptEmbedsState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/recoverssm.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/recoverssm.py",
+   "target": "file:vllm/v1/attention/backends/recoverssm_metadata.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/recoverssm.py",
+   "target": "file:vllm/v1/worker/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/recoverssm.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/recoverssm.py:RecoverSSMState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/model_states/recoverssm.py",
+   "target": "class:vllm/v1/worker/gpu/model_states/recoverssm.py:RecoverSSMState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pcp_manager.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pcp_manager.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pcp_manager.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pcp_manager.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pcp_manager.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pcp_manager.py",
+   "target": "file:vllm/v1/worker/gpu/block_table.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pcp_manager.py",
+   "target": "file:vllm/v1/worker/gpu/cudagraph_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pcp_manager.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pcp_manager.py",
+   "target": "class:vllm/v1/worker/gpu/pcp_manager.py:PCPBatchMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pcp_manager.py",
+   "target": "class:vllm/v1/worker/gpu/pcp_manager.py:RankSegment",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pcp_manager.py",
+   "target": "class:vllm/v1/worker/gpu/pcp_manager.py:PCPManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pcp_manager.py",
+   "target": "function:vllm/v1/worker/gpu/pcp_manager.py:maybe_build_pcp_manager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pcp_manager.py",
+   "target": "class:vllm/v1/worker/gpu/pcp_manager.py:PCPBatchMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pcp_manager.py",
+   "target": "class:vllm/v1/worker/gpu/pcp_manager.py:PCPManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pcp_manager.py",
+   "target": "function:vllm/v1/worker/gpu/pcp_manager.py:maybe_build_pcp_manager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pool/pooling_runner.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pool/pooling_runner.py",
+   "target": "file:vllm/model_executor/models/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pool/pooling_runner.py",
+   "target": "file:vllm/pooling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pool/pooling_runner.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pool/pooling_runner.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pool/pooling_runner.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pool/pooling_runner.py",
+   "target": "file:vllm/v1/pool/late_interaction_runner.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pool/pooling_runner.py",
+   "target": "file:vllm/v1/pool/metadata.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pool/pooling_runner.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pool/pooling_runner.py",
+   "target": "file:vllm/v1/worker/gpu/states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pool/pooling_runner.py",
+   "target": "class:vllm/v1/worker/gpu/pool/pooling_runner.py:PoolingRunner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pool/pooling_runner.py",
+   "target": "class:vllm/v1/worker/gpu/pool/pooling_runner.py:PoolingRunner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pp_utils.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pp_utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pp_utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pp_utils.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pp_utils.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pp_utils.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pp_utils.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pp_utils.py",
+   "target": "class:vllm/v1/worker/gpu/pp_utils.py:PendingRecv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pp_utils.py",
+   "target": "function:vllm/v1/worker/gpu/pp_utils.py:compute_need_sampled_mask",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pp_utils.py",
+   "target": "class:vllm/v1/worker/gpu/pp_utils.py:PPHandler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/pp_utils.py",
+   "target": "class:vllm/v1/worker/gpu/pp_utils.py:PPHandler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/bad_words.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/bad_words.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/bad_words.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/bad_words.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/bad_words.py",
+   "target": "file:vllm/v1/worker/gpu/buffer_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/bad_words.py",
+   "target": "file:vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/bad_words.py",
+   "target": "class:vllm/v1/worker/gpu/sample/bad_words.py:BadWordsState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/bad_words.py",
+   "target": "function:vllm/v1/worker/gpu/sample/bad_words.py:apply_bad_words",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/bad_words.py",
+   "target": "class:vllm/v1/worker/gpu/sample/bad_words.py:BadWordsState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/bad_words.py",
+   "target": "function:vllm/v1/worker/gpu/sample/bad_words.py:apply_bad_words",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/sample/bad_words.py:BadWordsState",
+   "target": "class:vllm/v1/worker/gpu/sample/logits_processor/interface.py:LogitsProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "target": "file:vllm/distributed/communication_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "target": "file:vllm/v1/worker/gpu/sample/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "target": "class:vllm/v1/worker/gpu/sample/batch_shard.py:BatchShardMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "target": "function:vllm/v1/worker/gpu/sample/batch_shard.py:batch_sharded_sampling_enabled",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "target": "class:vllm/v1/worker/gpu/sample/batch_shard.py:BatchSharder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "target": "function:vllm/v1/worker/gpu/sample/batch_shard.py:all_to_all_logits",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "target": "function:vllm/v1/worker/gpu/sample/batch_shard.py:gather_sampler_output",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "target": "class:vllm/v1/worker/gpu/sample/batch_shard.py:BatchShardMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "target": "function:vllm/v1/worker/gpu/sample/batch_shard.py:batch_sharded_sampling_enabled",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "target": "class:vllm/v1/worker/gpu/sample/batch_shard.py:BatchSharder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "target": "function:vllm/v1/worker/gpu/sample/batch_shard.py:all_to_all_logits",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "target": "function:vllm/v1/worker/gpu/sample/batch_shard.py:gather_sampler_output",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "target": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "target": "function:vllm/v1/worker/gpu/sample/gumbel.py:spec_step_seed",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "target": "function:vllm/v1/worker/gpu/sample/gumbel.py:murmur3_hash32",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "target": "function:vllm/v1/worker/gpu/sample/gumbel.py:apply_temperature",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "target": "function:vllm/v1/worker/gpu/sample/gumbel.py:gumbel_noised_argmax",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "target": "function:vllm/v1/worker/gpu/sample/gumbel.py:gumbel_block_argmax",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "target": "function:vllm/v1/worker/gpu/sample/gumbel.py:gumbel_sample",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "target": "function:vllm/v1/worker/gpu/sample/gumbel.py:apply_temperature",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "target": "function:vllm/v1/worker/gpu/sample/gumbel.py:gumbel_noised_argmax",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "target": "function:vllm/v1/worker/gpu/sample/gumbel.py:gumbel_block_argmax",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "target": "function:vllm/v1/worker/gpu/sample/gumbel.py:gumbel_sample",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "target": "function:vllm/v1/worker/gpu/sample/gumbel.py:spec_step_seed",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "target": "function:vllm/v1/worker/gpu/sample/gumbel.py:murmur3_hash32",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logit_bias.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logit_bias.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logit_bias.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logit_bias.py",
+   "target": "file:vllm/v1/worker/gpu/buffer_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logit_bias.py",
+   "target": "file:vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logit_bias.py",
+   "target": "class:vllm/v1/worker/gpu/sample/logit_bias.py:LogitBiasState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logit_bias.py",
+   "target": "function:vllm/v1/worker/gpu/sample/logit_bias.py:apply_logit_bias",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logit_bias.py",
+   "target": "class:vllm/v1/worker/gpu/sample/logit_bias.py:LogitBiasState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logit_bias.py",
+   "target": "function:vllm/v1/worker/gpu/sample/logit_bias.py:apply_logit_bias",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/sample/logit_bias.py:LogitBiasState",
+   "target": "class:vllm/v1/worker/gpu/sample/logits_processor/interface.py:LogitsProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/__init__.py",
+   "target": "file:vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/__init__.py",
+   "target": "file:vllm/v1/worker/gpu/sample/logits_processor/loader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "target": "file:vllm/v1/worker/gpu/buffer_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "target": "file:vllm/v1/worker/gpu/states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "target": "class:vllm/v1/worker/gpu/sample/logits_processor/interface.py:LogitsProcRequestState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "target": "class:vllm/v1/worker/gpu/sample/logits_processor/interface.py:LogitsContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "target": "class:vllm/v1/worker/gpu/sample/logits_processor/interface.py:LogitsProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "target": "class:vllm/v1/worker/gpu/sample/logits_processor/interface.py:LogitsProcRequestState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "target": "class:vllm/v1/worker/gpu/sample/logits_processor/interface.py:LogitsContext",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "target": "class:vllm/v1/worker/gpu/sample/logits_processor/interface.py:LogitsProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/loader.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/loader.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/loader.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/loader.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/loader.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/loader.py",
+   "target": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/loader.py",
+   "target": "file:vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/loader.py",
+   "target": "file:vllm/v1/worker/gpu/states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/loader.py",
+   "target": "function:vllm/v1/worker/gpu/sample/logits_processor/loader.py:build_custom_logits_processors",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/loader.py",
+   "target": "function:vllm/v1/worker/gpu/sample/logits_processor/loader.py:build_custom_logits_processors_params_validator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/loader.py",
+   "target": "function:vllm/v1/worker/gpu/sample/logits_processor/loader.py:build_custom_logits_processors",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logits_processor/loader.py",
+   "target": "function:vllm/v1/worker/gpu/sample/logits_processor/loader.py:build_custom_logits_processors_params_validator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logprob.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logprob.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logprob.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logprob.py",
+   "target": "file:vllm/v1/worker/gpu/buffer_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logprob.py",
+   "target": "function:vllm/v1/worker/gpu/sample/logprob.py:compute_token_logprobs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logprob.py",
+   "target": "function:vllm/v1/worker/gpu/sample/logprob.py:compute_topk_scores",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logprob.py",
+   "target": "class:vllm/v1/worker/gpu/sample/logprob.py:LogprobTokenIdsState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logprob.py",
+   "target": "function:vllm/v1/worker/gpu/sample/logprob.py:compute_token_logprobs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logprob.py",
+   "target": "function:vllm/v1/worker/gpu/sample/logprob.py:compute_topk_scores",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/logprob.py",
+   "target": "class:vllm/v1/worker/gpu/sample/logprob.py:LogprobTokenIdsState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/output.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/output.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/output.py",
+   "target": "class:vllm/v1/worker/gpu/sample/output.py:SamplerOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/output.py",
+   "target": "class:vllm/v1/worker/gpu/sample/output.py:SamplingMaskTensors",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/output.py",
+   "target": "class:vllm/v1/worker/gpu/sample/output.py:SamplerOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/output.py",
+   "target": "class:vllm/v1/worker/gpu/sample/output.py:SamplingMaskTensors",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/penalties.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/penalties.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/penalties.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/penalties.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/penalties.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/penalties.py",
+   "target": "file:vllm/v1/worker/gpu/buffer_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/penalties.py",
+   "target": "file:vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/penalties.py",
+   "target": "class:vllm/v1/worker/gpu/sample/penalties.py:PenaltiesState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/penalties.py",
+   "target": "function:vllm/v1/worker/gpu/sample/penalties.py:apply_penalties",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/penalties.py",
+   "target": "function:vllm/v1/worker/gpu/sample/penalties.py:bincount",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/penalties.py",
+   "target": "class:vllm/v1/worker/gpu/sample/penalties.py:PenaltiesState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/penalties.py",
+   "target": "function:vllm/v1/worker/gpu/sample/penalties.py:apply_penalties",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/sample/penalties.py:PenaltiesState",
+   "target": "class:vllm/v1/worker/gpu/sample/logits_processor/interface.py:LogitsProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/prompt_logprob.py",
+   "target": "file:vllm/config/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/prompt_logprob.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/prompt_logprob.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/prompt_logprob.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/prompt_logprob.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/prompt_logprob.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/prompt_logprob.py",
+   "target": "file:vllm/v1/worker/gpu/sample/logprob.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/prompt_logprob.py",
+   "target": "class:vllm/v1/worker/gpu/sample/prompt_logprob.py:PromptLogprobsWorker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/prompt_logprob.py",
+   "target": "function:vllm/v1/worker/gpu/sample/prompt_logprob.py:compute_prompt_logprobs_with_chunking",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/prompt_logprob.py",
+   "target": "class:vllm/v1/worker/gpu/sample/prompt_logprob.py:PromptLogprobsWorker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/prompt_logprob.py",
+   "target": "function:vllm/v1/worker/gpu/sample/prompt_logprob.py:compute_prompt_logprobs_with_chunking",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "file:vllm/config/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "file:vllm/v1/worker/gpu/metrics/logits.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "file:vllm/v1/worker/gpu/sample/bad_words.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "file:vllm/v1/worker/gpu/sample/logit_bias.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "file:vllm/v1/worker/gpu/sample/logits_processor/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "file:vllm/v1/worker/gpu/sample/logprob.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "file:vllm/v1/worker/gpu/sample/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "file:vllm/v1/worker/gpu/sample/penalties.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "file:vllm/v1/worker/gpu/sample/states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "file:vllm/v1/worker/gpu/sample/thinking_budget.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "file:vllm/v1/worker/gpu/sample/trace_replay.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "file:vllm/v1/worker/gpu/states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "class:vllm/v1/worker/gpu/sample/sampler.py:Sampler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "target": "class:vllm/v1/worker/gpu/sample/sampler.py:Sampler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/states.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/states.py",
+   "target": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/states.py",
+   "target": "file:vllm/v1/worker/gpu/buffer_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/states.py",
+   "target": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/states.py",
+   "target": "file:vllm/v1/worker/gpu/sample/min_p.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/states.py",
+   "target": "class:vllm/v1/worker/gpu/sample/states.py:SamplingStates",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/states.py",
+   "target": "class:vllm/v1/worker/gpu/sample/states.py:SamplingStates",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/thinking_budget.py",
+   "target": "file:vllm/config/reasoning.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/thinking_budget.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/thinking_budget.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/thinking_budget.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/thinking_budget.py",
+   "target": "file:vllm/v1/worker/gpu/buffer_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/thinking_budget.py",
+   "target": "file:vllm/v1/worker/gpu/sample/logits_processor/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/thinking_budget.py",
+   "target": "file:vllm/v1/worker/gpu/states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/thinking_budget.py",
+   "target": "class:vllm/v1/worker/gpu/sample/thinking_budget.py:ThinkingBudgetState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/thinking_budget.py",
+   "target": "function:vllm/v1/worker/gpu/sample/thinking_budget.py:apply_thinking_budget",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/thinking_budget.py",
+   "target": "class:vllm/v1/worker/gpu/sample/thinking_budget.py:ThinkingBudgetState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/thinking_budget.py",
+   "target": "function:vllm/v1/worker/gpu/sample/thinking_budget.py:apply_thinking_budget",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/watermark.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/watermark.py",
+   "target": "file:vllm/v1/watermarking/prfs/philox.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/watermark.py",
+   "target": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/watermark.py",
+   "target": "function:vllm/v1/worker/gpu/sample/watermark.py:repeated_context_mask",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/watermark.py",
+   "target": "function:vllm/v1/worker/gpu/sample/watermark.py:draft_watermarking_mask",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/watermark.py",
+   "target": "function:vllm/v1/worker/gpu/sample/watermark.py:_philox_gumbel_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/watermark.py",
+   "target": "function:vllm/v1/worker/gpu/sample/watermark.py:philox_gumbel_sample",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/watermark.py",
+   "target": "function:vllm/v1/worker/gpu/sample/watermark.py:draft_philox_gumbel_sample",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/watermark.py",
+   "target": "function:vllm/v1/worker/gpu/sample/watermark.py:repeated_context_mask",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/watermark.py",
+   "target": "function:vllm/v1/worker/gpu/sample/watermark.py:draft_watermarking_mask",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/watermark.py",
+   "target": "function:vllm/v1/worker/gpu/sample/watermark.py:philox_gumbel_sample",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/sample/watermark.py",
+   "target": "function:vllm/v1/worker/gpu/sample/watermark.py:draft_philox_gumbel_sample",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "target": "file:vllm/config/speculative.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/dspark/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/eagle/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/extract_hidden_states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/lilicorr/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/mtp/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/multi_module_mtp/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/ngram/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/standalone_ar/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/xpress/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "target": "file:vllm/v1/worker/gpu/states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/__init__.py:init_speculator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/__init__.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/__init__.py:init_speculator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/acceptance_estimator.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/acceptance_estimator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/acceptance_estimator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/acceptance_estimator.py:OnlineAcceptanceEstimator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/acceptance_estimator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/acceptance_estimator.py:OnlineAcceptanceEstimator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "file:vllm/utils/gpu_sync_debug.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "file:vllm/v1/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "file:vllm/v1/worker/gpu/async_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "file:vllm/v1/worker/gpu/attn_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "file:vllm/v1/worker/gpu/states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "file:vllm/v1/worker/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py:resolve_adaptive_cudagraph_mode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py:assign_draft_token_budget",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py:build_cost_tables_from_curves",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py:AdmittedDraftCounts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py:AdaptiveVerificationManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py:maybe_create_adaptive_verification_manager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py:AdaptiveVerificationManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py:AdmittedDraftCounts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/adaptive_verification.py:maybe_create_adaptive_verification_manager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

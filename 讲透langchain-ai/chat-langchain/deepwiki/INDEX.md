@@ -1,0 +1,30 @@
+# DeepWiki 索引 — langchain-ai/chat-langchain
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 172814 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 System Architecture](1.1-system-architecture.md)
+  - [1.2 Dependencies and Project Structure](1.2-dependencies-and-project-structure.md)
+  - [1.3 Key Concepts and Terminology](1.3-key-concepts-and-terminology.md)
+- [2 Backend System](2-backend-system.md)
+  - [2.1 Agent Entrypoint and Connectors](2.1-agent-entrypoint-and-connectors.md)
+  - [2.2 Identity and Authentication Contract](2.2-identity-and-authentication-contract.md)
+  - [2.3 Middleware Stack](2.3-middleware-stack.md)
+  - [2.4 Agent Tools](2.4-agent-tools.md)
+  - [2.5 Prompts and Model Configuration](2.5-prompts-and-model-configuration.md)
+- [3 Frontend System](3-frontend-system.md)
+  - [3.1 Application Structure and Entry Points](3.1-application-structure-and-entry-points.md)
+  - [3.2 Chat Interface Components](3.2-chat-interface-components.md)
+  - [3.3 Streaming and State Management](3.3-streaming-and-state-management.md)
+  - [3.4 Authentication and Identity](3.4-authentication-and-identity.md)
+  - [3.5 Thread Management](3.5-thread-management.md)
+  - [3.6 LangSmith Integration and Feedback](3.6-langsmith-integration-and-feedback.md)
+- [4 Deployment and Operations](4-deployment-and-operations.md)
+  - [4.1 Managed Deep Agent Deployment](4.1-managed-deep-agent-deployment.md)
+  - [4.2 Frontend Deployment](4.2-frontend-deployment.md)
+- [5 Development and Testing](5-development-and-testing.md)
+  - [5.1 Unit Tests](5.1-unit-tests.md)
+  - [5.2 Evaluation Tests](5.2-evaluation-tests.md)
+  - [5.3 Development Utilities and Scripts](5.3-development-utilities-and-scripts.md)
+- [6 Glossary](6-glossary.md)

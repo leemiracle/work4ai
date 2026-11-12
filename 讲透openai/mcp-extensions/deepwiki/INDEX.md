@@ -1,0 +1,31 @@
+# DeepWiki 索引 — openai/mcp-extensions
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 260175 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Repository Layout & Conventions](1.2-repository-layout-conventions.md)
+- [2 The Extensions Specification](2-the-extensions-specification.md)
+  - [2.1 App Entrypoints & Display Modes](2.1-app-entrypoints-display-modes.md)
+  - [2.2 Resources, Mentions & Model Context](2.2-resources-mentions-model-context.md)
+  - [2.3 Forms & Elicitation](2.3-forms-elicitation.md)
+  - [2.4 Structured Settings](2.4-structured-settings.md)
+- [3 TypeScript SDK (@openai/mcp-extensions)](3-typescript-sdk-openai-mcp-extensions.md)
+  - [3.1 Server-side APIs](3.1-server-side-apis.md)
+  - [3.2 App-side (iframe) APIs](3.2-app-side-iframe-apis.md)
+  - [3.3 Shared Types & Utilities](3.3-shared-types-utilities.md)
+- [4 Python SDK (openai-mcp-extensions)](4-python-sdk-openai-mcp-extensions.md)
+  - [4.1 Extension Helpers](4.1-extension-helpers.md)
+  - [4.2 Form Protocol Package](4.2-form-protocol-package.md)
+- [5 Bits & Bolts Example Plugin](5-bits-bolts-example-plugin.md)
+  - [5.1 Plugin MCP Server](5.1-plugin-mcp-server.md)
+  - [5.2 Plugin App UI & 3D Viewer](5.2-plugin-app-ui-3d-viewer.md)
+  - [5.3 Assets, Keycap Legends & Model Generation](5.3-assets-keycap-legends-model-generation.md)
+  - [5.4 Plugin Build, Dev & Test Scripts](5.4-plugin-build-dev-test-scripts.md)
+- [6 CI, Release & Distribution](6-ci-release-distribution.md)
+  - [6.1 CI Workflows](6.1-ci-workflows.md)
+  - [6.2 Release Automation (release-please)](6.2-release-automation-release-please.md)
+  - [6.3 Package Validation Scripts](6.3-package-validation-scripts.md)
+  - [6.4 Agent Marketplace Packaging](6.4-agent-marketplace-packaging.md)
+- [7 Glossary](7-glossary.md)

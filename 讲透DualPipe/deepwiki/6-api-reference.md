@@ -1,215 +1,217 @@
-> 来源: [https://deepwiki.com/deepseek-ai/DualPipe/6-api-reference](https://deepwiki.com/deepseek-ai/DualPipe/6-api-reference)
-> DeepWiki deepseek-ai/DualPipe
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/DualPipe · page 6 API Reference · fetched 2026-10-30 -->
 
 # API Reference
 
-  Relevant source files 
- - [DeepSeek-OCR-master/DeepSeek-OCR-hf/run_dpsk_ocr.py](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-hf/run_dpsk_ocr.py)
- - [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py)
- 
-  This document provides a complete reference for all public interfaces in the DeepSeek-OCR codebase. The API is organized into five main categories: Transformers interface for standard HuggingFace workflows, vLLM interface for production deployment, configuration system, image processing utilities, and vision encoder modules.
+<details>
+<summary>Relevant source files</summary>
 
- For implementation guides and usage patterns, see [User Guide](https://deepwiki.com/deepseek-ai/DeepSeek-OCR/3-user-guide). For architectural details about how these APIs work internally, see [Architecture](https://deepwiki.com/deepseek-ai/DeepSeek-OCR/4-architecture).
+The following files were used as context for generating this wiki page:
 
- 
-## API Structure Overview
+- [dualpipe/__init__.py](dualpipe/__init__.py)
+- [dualpipe/comm.py](dualpipe/comm.py)
+- [dualpipe/dualpipe.py](dualpipe/dualpipe.py)
+- [dualpipe/dualpipev.py](dualpipe/dualpipev.py)
+- [dualpipe/utils.py](dualpipe/utils.py)
 
- DeepSeek-OCR exposes two primary inference interfaces: a standard Transformers-based API for development and experimentation, and a vLLM-based API for high-throughput production use. Both interfaces share the same underlying model architecture and processing pipeline but differ in execution strategy.
+</details>
 
- 
+
+
+This document provides a comprehensive reference for all public interfaces in the DualPipe library. It covers the core classes, utility components, and helper functions that enable efficient pipeline parallelism in distributed training.
+
+For conceptual understanding of the DualPipe architecture, see [DualPipe Architecture](#2). For the DualPipeV variant, see [DualPipeV Architecture](#3).
+
+## Core Components Overview
+
+```mermaid
+classDiagram
+    class DualPipe {
+        +__init__(modules, batch_dim, process_group, rank_mapping)
+        +step(inputs, num_chunks, criterion, labels, return_outputs)
+        -_forward_compute_chunk(phase)
+        -_backward_compute_chunk(phase, enable_zb)
+        -_forward_backward_compute_chunk(phase0, phase1)
+    }
+    
+    class DualPipeV {
+        +__init__(modules, batch_dim, process_group, rank_mapping)
+        +step(inputs, num_chunks, criterion, labels, return_outputs)
+        -_forward_compute_chunk(phase)
+        -_backward_compute_chunk(phase, enable_zb)
+        -_forward_backward_compute_chunk(phase0, phase1)
+    }
+    
+    class WeightGradStore {
+        +enabled: bool
+        +cache: List[Callable]
+        +funcs_queue: Queue
+        +put(func)
+        +flush()
+        +pop()
+        +clear()
+    }
+    
+    class Communication {
+        +set_p2p_tensor_shapes(shapes)
+        +set_p2p_tensor_dtype(dtype)
+        +append_irecv(ops, src, group)
+        +append_isend(ops, tensors, dst, group)
+    }
+    
+    class Utils {
+        +scatter(inputs, chunks, dim)
+        +gather(micro_outputs, dim)
+        +run_backward(tensors, grad_tensors)
+    }
+    
+    DualPipe ..> WeightGradStore : uses
+    DualPipeV ..> WeightGradStore : uses
+    DualPipe ..> Communication : uses
+    DualPipeV ..> Communication : uses
+    DualPipe ..> Utils : uses
+    DualPipeV ..> Utils : uses
 ```
 
+Sources: [dualpipe/__init__.py:1-17](), [dualpipe/dualpipe.py:11-121](), [dualpipe/dualpipev.py:11-120](), [dualpipe/utils.py:8-80](), [dualpipe/comm.py:1-38]()
+
+## Usage Flow
+
+```mermaid
+flowchart TD
+    A["1. dist.init_process_group()"] --> B["2. set_p2p_tensor_shapes()"]
+    B --> C["3. set_p2p_tensor_dtype()"]
+    C --> D["4. Partition nn.Module into Tuple"]
+    D --> E["5. Initialize DualPipe(modules, ...)"]
+    E --> F["6. model.step(inputs, num_chunks, ...)"]
+    F --> G["7. WeightGradStore.pop() during update"]
 ```
 
- **Sources:** [DeepSeek-OCR-master/DeepSeek-OCR-hf/run_dpsk_ocr.py1-35](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-hf/run_dpsk_ocr.py#L1-L35) [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py1-583](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L1-L583)
+Sources: [dualpipe/dualpipe.py:11-46](), [dualpipe/dualpipev.py:11-43](), [dualpipe/comm.py:11-18](), [dualpipe/utils.py:24-29]()
 
- 
-## API Categories
+## DualPipe
 
- 
-### Transformers API ([Transformers API](https://deepwiki.com/deepseek-ai/DeepSeek-OCR/6.1-transformers-api))
+The `DualPipe` class implements a pipeline parallelism approach that achieves full overlap of forward and backward passes across two parallel micro-batch pipelines.
 
- The Transformers API provides a simple, synchronous interface for OCR inference using HuggingFace's standard model loading and inference patterns.
+### Initialization
 
- 
-| Component | Purpose | Key Methods |
-|---|---|---|
-| AutoModel.from_pretrained() | Load model from HuggingFace | Standard HF loading |
-| model.infer() | Execute OCR inference | Single entry point for all OCR tasks |
-| AutoTokenizer.from_pretrained() | Load tokenizer | Standard HF tokenizer loading |
-
- **Primary Entry Point:** `model.infer(tokenizer, prompt, image_file, output_path, base_size, image_size, crop_mode, test_compress, save_results)` [DeepSeek-OCR-master/DeepSeek-OCR-hf/run_dpsk_ocr.py25-34](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-hf/run_dpsk_ocr.py#L25-L34)
-
- **Sources:** [DeepSeek-OCR-master/DeepSeek-OCR-hf/run_dpsk_ocr.py1-35](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-hf/run_dpsk_ocr.py#L1-L35)
-
- 
-### vLLM Model API ([vLLM Model API](https://deepwiki.com/deepseek-ai/DeepSeek-OCR/6.2-vllm-model-api))
-
- The vLLM API provides asynchronous, high-throughput inference capabilities with GPU memory optimization and batch processing.
-
- 
-| Component | Purpose | Key Methods |
-|---|---|---|
-| DeepseekOCRForCausalLM | Main model class for vLLM | forward(), get_multimodal_embeddings(), load_weights() |
-| DeepseekOCRMultiModalProcessor | Multimodal input processing | _call_hf_processor(), _get_prompt_updates() |
-| DeepseekOCRProcessingInfo | vLLM configuration metadata | get_num_image_tokens(), get_image_size_with_most_features() |
-| DeepseekOCRDummyInputsBuilder | Profiling support | get_dummy_text(), get_dummy_mm_data() |
-
- **Primary Entry Point:** Registered with `@MULTIMODAL_REGISTRY.register_processor()` at [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py257-260](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L257-L260)
-
- **Sources:** [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py50-583](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L50-L583)
-
- 
-### Configuration API ([Configuration API](https://deepwiki.com/deepseek-ai/DeepSeek-OCR/6.3-configuration-api))
-
- Centralized configuration parameters that control all aspects of model behavior, from image preprocessing to inference settings.
-
- 
-| Parameter Category | Examples | Effect |
-|---|---|---|
-| Image Resolution | IMAGE_SIZE, BASE_SIZE | Controls input image dimensions |
-| Processing Mode | CROP_MODE, MIN_CROPS, MAX_CROPS | Enables/configures dynamic tiling |
-| Model Selection | MODEL_PATH, PROMPT | Specifies model and task |
-
- **Configuration Source:** `config.py` module (imported throughout codebase) [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py45](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L45-L45)
-
- **Sources:** [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py45](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L45-L45)
-
- 
-### Processing API ([Processing API](https://deepwiki.com/deepseek-ai/DeepSeek-OCR/6.4-processing-api))
-
- The Processing API handles image preprocessing, tokenization, and conversion of raw inputs into model-ready tensors.
-
- 
-| Component | Purpose | Key Methods |
-|---|---|---|
-| DeepseekOCRProcessor | Main processor class | tokenize_with_images(), dynamic_preprocess() |
-| count_tiles() | Tile count calculation | Determines crop grid dimensions |
-
- **Primary Entry Point:** `DeepseekOCRProcessor.tokenize_with_images(images, bos, eos, cropping)` [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py138-140](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L138-L140)
-
- **Sources:** [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py30-31](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L30-L31) [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py138-140](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L138-L140)
-
- 
-### Encoder API ([Encoder API](https://deepwiki.com/deepseek-ai/DeepSeek-OCR/6.5-encoder-api))
-
- The Encoder API provides access to the dual vision encoding system that extracts visual features from images.
-
- 
-| Component | Purpose | Key Functions |
-|---|---|---|
-| build_sam_vit_b() | Build SAM encoder | Returns SAM ViT-B model |
-| build_clip_l() | Build CLIP encoder | Returns CLIP-L model |
-| MlpProjector | Feature projection | Projects concatenated features to LLM space |
-
- **Builder Functions:** Located in `deepencoder/` module [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py40-42](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L40-L42)
-
- **Sources:** [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py40-42](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L40-L42) [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py288-292](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L288-L292)
-
- 
-## Code-to-API Mapping
-
- The following diagram maps user-facing entry points to internal code components:
-
- 
+```python
+DualPipe(modules, batch_dim=0, process_group=None, rank_mapping=None)
 ```
 
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `modules` | Tuple[nn.Module, nn.Module] | Two modules representing the partitions for the two bidirectional phases. [dualpipe/dualpipe.py:14]() |
+| `batch_dim` | int | The dimension to split the batch, default is 0. [dualpipe/dualpipe.py:15]() |
+| `process_group` | Optional[dist.ProcessGroup] | The process group for communication. [dualpipe/dualpipe.py:16]() |
+| `rank_mapping` | Optional[List[int]] | Maps ranks in `process_group` to logical pipeline ranks. [dualpipe/dualpipe.py:17]() |
+
+Sources: [dualpipe/dualpipe.py:11-46]()
+
+### Methods
+
+#### step
+
+```python
+step(*inputs, num_chunks=0, criterion=None, labels=[], return_outputs=False)
 ```
 
- **Sources:** [DeepSeek-OCR-master/DeepSeek-OCR-hf/run_dpsk_ocr.py1-35](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-hf/run_dpsk_ocr.py#L1-L35) [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py261-582](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L261-L582)
+Executes a training or inference step using the 8-step bidirectional schedule. [dualpipe/dualpipe.py:328-435]()
 
- 
-## Special Tokens and Parameters
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `*inputs` | Optional[torch.Tensor] | Module inputs. Required on rank 0 (Phase 0) and rank N-1 (Phase 1). [dualpipe/dualpipe.py:295-300]() |
+| `num_chunks` | int | The number of micro-batches ($M$). [dualpipe/dualpipe.py:296]() |
+| `criterion` | Optional[Callable] | Loss function. [dualpipe/dualpipe.py:297]() |
+| `labels` | List[Optional[torch.Tensor]] | Labels for loss. Required on rank 0 (Phase 1) and rank N-1 (Phase 0). [dualpipe/dualpipe.py:302-307]() |
+| `return_outputs` | bool | Whether to return final outputs. [dualpipe/dualpipe.py:299]() |
 
- DeepSeek-OCR uses several special tokens and learnable parameters to structure multimodal information:
+**Returns**: `(loss, outputs)`
+- `loss`: Combined loss for the batch (on first/last ranks). [dualpipe/dualpipe.py:438]()
+- `outputs`: Gathered module outputs if `return_outputs=True`. [dualpipe/dualpipe.py:440]()
 
- 
-| Token/Parameter | Location | Purpose | Dimensions |
-|---|---|---|---|
-| image_newline | DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py307 | Row separator in image grids | [n_embed] |
-| view_seperator | DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py308 | Separator between global/local views | [n_embed] |
-| image_token_id | DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py286 | Placeholder for image embeddings | Scalar (from tokenizer) |
-| _IMAGE_TOKEN | DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py47 | String token "<image>" | String constant |
+Sources: [dualpipe/dualpipe.py:294-440]()
 
- **Initialization:** Special tokens are initialized as learnable parameters with standard deviation `1/sqrt(n_embed)` at [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py304-312](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L304-L312)
+## DualPipeV
 
- **Sources:** [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py47](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L47-L47) [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py286](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L286-L286) [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py304-312](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L304-L312)
+The `DualPipeV` class implements a V-shaped schedule that requires only $PP/2$ physical devices for the same number of logical pipeline stages.
 
- 
-## Model Registration and Integration
+### Initialization
 
- The vLLM integration uses a registration system to enable custom multimodal models:
-
- 
+```python
+DualPipeV(modules, batch_dim=0, process_group=None, rank_mapping=None)
 ```
 
+Sources: [dualpipe/dualpipev.py:11-43]()
+
+### Methods
+
+#### step
+
+```python
+step(*inputs, num_chunks=0, criterion=None, labels=[], return_outputs=False)
 ```
 
- **Registration Call:** `@MULTIMODAL_REGISTRY.register_processor(DeepseekOCRMultiModalProcessor, info=DeepseekOCRProcessingInfo, dummy_inputs=DeepseekOCRDummyInputsBuilder)` at [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py257-260](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L257-L260)
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `*inputs` | Optional[torch.Tensor] | Module inputs. Required only on the first rank (Rank 0). [dualpipe/dualpipev.py:289]() |
+| `criterion` | Optional[Callable] | Loss function. [dualpipe/dualpipev.py:291]() |
+| `labels` | List[Optional[torch.Tensor]] | Labels. Required only on the first rank (Rank 0). [dualpipe/dualpipev.py:292]() |
 
- **Sources:** [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py257-260](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L257-L260)
+**Returns**: `(loss, outputs)` on the first rank only. [dualpipe/dualpipev.py:409-411]()
 
- 
-## Weight Loading and Name Mapping
+Sources: [dualpipe/dualpipev.py:288-411]()
 
- The model uses a custom weight mapper to handle differences between HuggingFace checkpoint names and vLLM internal structure:
+## Key Differences Between DualPipe and DualPipeV
 
- 
-| HuggingFace Name Pattern | vLLM Name Pattern | Transformation |
-|---|---|---|
-| language.* | language_model.* | Prefix replacement |
-| sam_model.* | sam_model.* | Direct (remove model. prefix) |
-| vision_model.* | vision_model.* | Direct (remove model. prefix) |
-| projector.* | projector.* | Direct (remove model. prefix) |
-| image_newline | image_newline | Direct (remove model. prefix) |
-| view_seperator | view_seperator | Direct (remove model. prefix) |
+| Feature | DualPipe | DualPipeV |
+|---------|----------|-----------|
+| **Device Requirement** | $N$ devices for $N$ stages | $N/2$ devices for $N$ stages |
+| **Input Entry** | Rank 0 (Phase 0) & Rank $N-1$ (Phase 1) | Rank 0 only |
+| **Loss Calculation** | Rank 0 (Phase 1) & Rank $N-1$ (Phase 0) | Rank 0 only |
+| **Rank Mapping** | Linear $0 \dots N-1$ | V-shape $0 \dots N/2-1 \dots 0$ |
 
- **Mapper Definition:** `hf_to_vllm_mapper = WeightsMapper(orig_to_new_prefix={"language.": "language_model."})` at [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py263-265](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L263-L265)
+Sources: [dualpipe/dualpipe.py:37-45](), [dualpipe/dualpipev.py:37-41](), [dualpipe/dualpipe.py:294-326](), [dualpipe/dualpipev.py:288-319]()
 
- **Weight Loading Logic:** [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py564-582](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L564-L582)
+## Communication Utilities
 
- **Sources:** [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py263-265](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L263-L265) [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py564-582](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L564-L582)
+These functions manage the global state and P2P operations for tensor exchange.
 
- 
-## Operational Modes Reference
+### set_p2p_tensor_shapes
+Sets the `TENSOR_SHAPES` global variable used to pre-allocate receive buffers. [dualpipe/comm.py:11-13]()
 
- DeepSeek-OCR supports five preconfigured operational modes with different resolution and cropping settings:
+### set_p2p_tensor_dtype
+Sets the `TENSOR_DTYPE` global variable for communication buffers. [dualpipe/comm.py:16-18]()
 
- 
-| Mode | base_size | image_size | crop_mode | Use Case |
-|---|---|---|---|---|
-| Tiny | 512 | 512 | False | Low-resource inference |
-| Small | 640 | 640 | False | Standard single-view |
-| Base | 1024 | 1024 | False | High-resolution single-view |
-| Large | 1280 | 1280 | False | Very high-resolution single-view |
-| Gundam | 1024 | 640 | True | Multi-scale with dynamic tiling (default) |
+### append_irecv / append_isend
+Helper functions that wrap `dist.P2POp` with `dist.irecv` and `dist.isend`. They automatically handle global rank translation using `dist.distributed_c10d.get_global_rank`. [dualpipe/comm.py:25-38]()
 
- **Configuration Reference:** [DeepSeek-OCR-master/DeepSeek-OCR-hf/run_dpsk_ocr.py27-32](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-hf/run_dpsk_ocr.py#L27-L32)
+Sources: [dualpipe/comm.py:1-38]()
 
- **Sources:** [DeepSeek-OCR-master/DeepSeek-OCR-hf/run_dpsk_ocr.py27-32](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-hf/run_dpsk_ocr.py#L27-L32)
+## WeightGradStore
 
- 
-## Data Flow Through APIs
+A static utility class that manages the deferred execution of weight gradient updates (Zero Bubble).
 
- This diagram shows how data flows through the API layers:
+### Class Methods
 
- 
-```
+*   **`put(func: Callable)`**: Appends a gradient computation function to the current `cache`. [dualpipe/utils.py:15-16]()
+*   **`flush()`**: Moves the current `cache` into the `funcs_queue` and clears the cache. [dualpipe/utils.py:19-21]()
+*   **`pop()`**: Retrieves a batch of functions from the `funcs_queue` and executes them. This is typically called during the "W" (Weight Gradient) phase. [dualpipe/utils.py:24-29]()
+*   **`clear()`**: Resets the cache and the queue. Called at the start of each `step()`. [dualpipe/utils.py:31-33]()
 
-```
+Sources: [dualpipe/utils.py:8-34](), [dualpipe/dualpipe.py:48]()
 
- **Sources:** [DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py261-583](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-vllm/deepseek_ocr.py#L261-L583) [DeepSeek-OCR-master/DeepSeek-OCR-hf/run_dpsk_ocr.py1-35](https://github.com/deepseek-ai/DeepSeek-OCR/blob/09eaf526/DeepSeek-OCR-master/DeepSeek-OCR-hf/run_dpsk_ocr.py#L1-L35)
+## Utility Functions
 
- 
-## Detailed API References
+### scatter
+Splits input tensors (or tuples of tensors) into `num_chunks` along `batch_dim`. [dualpipe/utils.py:62-71]()
 
- For detailed documentation of each API category, see the following pages:
+### gather
+Concatenates micro-batch outputs back into full tensors along `dim`. [dualpipe/utils.py:74-80]()
 
- 
- - **[Transformers API](https://deepwiki.com/deepseek-ai/DeepSeek-OCR/6.1-transformers-api)** - Complete reference for `model.infer()` and standard HuggingFace interface
- - **[vLLM Model API](https://deepwiki.com/deepseek-ai/DeepSeek-OCR/6.2-vllm-model-api)** - Detailed documentation of `DeepseekOCRForCausalLM` and vLLM-specific classes
- - **[Configuration API](https://deepwiki.com/deepseek-ai/DeepSeek-OCR/6.3-configuration-api)** - Comprehensive parameter reference with default values and effects
- - **[Processing API](https://deepwiki.com/deepseek-ai/DeepSeek-OCR/6.4-processing-api)** - Documentation for `DeepseekOCRProcessor`, image transforms, and utilities
- - **[Encoder API](https://deepwiki.com/deepseek-ai/DeepSeek-OCR/6.5-encoder-api)** - Reference for vision encoder construction and usage
- 
- Each subsection provides method signatures, parameter descriptions, return types, and usage examples.
+### run_backward
+Low-level utility that invokes `Variable._execution_engine.run_backward`. It is configured with `accumulate_grad=True` to support the custom gradient accumulation logic required by the DualPipe schedules. [dualpipe/utils.py:36-43]()
+
+Sources: [dualpipe/utils.py:36-80]()
+
+---
+

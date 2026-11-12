@@ -1,0 +1,2132 @@
+{
+ "nodes": [
+  {
+   "id": "document:packages/context/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/context/README.md",
+   "summary": "context 组地图：定义工具之外的请求上下文插件（向模型可见上下文添加持久内容）——用户与维护者导航该组用。",
+   "tags": [
+    "documentation",
+    "group-map",
+    "overview"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/context/agent-instructions/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/context/agent-instructions/README.md",
+   "summary": "dsh-agent-instructions 包英文主文档（239 行）：从用户全局与项目级 AGENTS.md/CLAUDE.md 兼容文件给 agent 工作区指引——首次请求加载适用链；不持续 watch 外部编辑，成功的 fs 工具操作发现新相关嵌套文件与后续增删，会话恢复时 reconcile 基线；字节预算分别约束用户全局链与项目链（链内先省略更宽的文件再截断最具体的文件）。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:packages/context/agent-instructions/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/context/agent-instructions/package.json",
+   "summary": "@deepseek-ai/dsh-agent-instructions 包清单：AGENTS.md/CLAUDE.md 工作区上下文加载器，依赖 util-values/schemastery。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/context/agent-instructions/src/config.ts",
+   "type": "file",
+   "name": "config.ts",
+   "filePath": "packages/context/agent-instructions/src/config.ts",
+   "summary": "指令发现与渲染的配置规范化：projectRootMarkers（默认 .git）、候选文件（AGENTS.md/CLAUDE.md + .local 覆盖层）、maxBytes/maxSourceBytes 预算；workspaceBaselineIdentity 产出恢复时校验基线兼容性的稳定序列化身份。",
+   "tags": [
+    "configuration",
+    "normalization",
+    "discovery"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/config.ts:workspaceBaselineIdentity",
+   "type": "function",
+   "name": "workspaceBaselineIdentity",
+   "filePath": "packages/context/agent-instructions/src/config.ts",
+   "lineRange": [
+    71,
+    84
+   ],
+   "summary": "序列化发现/优先级/预算语义为稳定身份，供会话恢复时校验基线是否仍兼容。",
+   "tags": [
+    "identity",
+    "baseline"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/config.ts:resolveConfig",
+   "type": "function",
+   "name": "resolveConfig",
+   "filePath": "packages/context/agent-instructions/src/config.ts",
+   "lineRange": [
+    92,
+    104
+   ],
+   "summary": "规范化插件配置（默认值填充、home 路径解析一次）。",
+   "tags": [
+    "config-resolution"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/config.ts:resolveDiscoveryConfig",
+   "type": "function",
+   "name": "resolveDiscoveryConfig",
+   "filePath": "packages/context/agent-instructions/src/config.ts",
+   "lineRange": [
+    117,
+    134
+   ],
+   "summary": "仅解析发现相关配置子集（dshHome/agentsHome/markers/candidates）。",
+   "tags": [
+    "config-resolution",
+    "discovery"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/config.ts:resolveInstructionFileCandidates",
+   "type": "function",
+   "name": "resolveInstructionFileCandidates",
+   "filePath": "packages/context/agent-instructions/src/config.ts",
+   "lineRange": [
+    136,
+    140
+   ],
+   "summary": "解析指令文件候选列表（空/保留段校验）。",
+   "tags": [
+    "validation",
+    "candidates"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/context/agent-instructions/src/files.ts",
+   "type": "file",
+   "name": "files.ts",
+   "filePath": "packages/context/agent-instructions/src/files.ts",
+   "summary": "指令文件发现有界中止感知读取（602 行）：用户全局根（dsh home+共享 agents root 形成一个候选组）→findProjectRoot 上行找项目根→祖先链与触及目录→逐目录候选收集（stat 探测/有界读取，经可选 ctx.fs provider，providerless 产品挂 no-op）；按候选组 trimmed-content 去重。",
+   "tags": [
+    "discovery",
+    "file-io",
+    "bounded-reads"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/files.ts:userGlobalRoots",
+   "type": "function",
+   "name": "userGlobalRoots",
+   "filePath": "packages/context/agent-instructions/src/files.ts",
+   "lineRange": [
+    90,
+    102
+   ],
+   "summary": "有序用户全局指令根：harness home 然后 agents root，均贡献固定 USER_GLOBAL_FILE 候选并构成一个候选组。",
+   "tags": [
+    "discovery",
+    "global-roots"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/files.ts:findProjectRoot",
+   "type": "function",
+   "name": "findProjectRoot",
+   "filePath": "packages/context/agent-instructions/src/files.ts",
+   "lineRange": [
+    232,
+    247
+   ],
+   "summary": "从 cwd 向上走找含标记目录（默认 .git）的项目根，中止感知。",
+   "tags": [
+    "discovery",
+    "project-root"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/files.ts:ancestorChain",
+   "type": "function",
+   "name": "ancestorChain",
+   "filePath": "packages/context/agent-instructions/src/files.ts",
+   "lineRange": [
+    255,
+    268
+   ],
+   "summary": "项目根到 cwd 的祖先目录链（项目链的发现顺序）。",
+   "tags": [
+    "traversal",
+    "ancestors"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/files.ts:descendantDirsBetween",
+   "type": "function",
+   "name": "descendantDirsBetween",
+   "filePath": "packages/context/agent-instructions/src/files.ts",
+   "lineRange": [
+    276,
+    283
+   ],
+   "summary": "项目根与触及路径之间的后代目录（嵌套发现范围）。",
+   "tags": [
+    "traversal",
+    "descendants"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/files.ts:allExistingInstructionFiles",
+   "type": "function",
+   "name": "allExistingInstructionFiles",
+   "filePath": "packages/context/agent-instructions/src/files.ts",
+   "lineRange": [
+    295,
+    321
+   ],
+   "summary": "收集一个目录内全部存在候选（stat/node/fs 双路探测）。",
+   "tags": [
+    "discovery",
+    "candidates"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/files.ts:discoverInstructionFiles",
+   "type": "function",
+   "name": "discoverInstructionFiles",
+   "filePath": "packages/context/agent-instructions/src/files.ts",
+   "lineRange": [
+    323,
+    367
+   ],
+   "summary": "主发现入口：用户全局根+项目根到 cwd 的祖先链逐目录收集指令文件。",
+   "tags": [
+    "discovery",
+    "orchestration"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/files.ts:discoverBaselineInstructionFiles",
+   "type": "function",
+   "name": "discoverBaselineInstructionFiles",
+   "filePath": "packages/context/agent-instructions/src/files.ts",
+   "lineRange": [
+    378,
+    380
+   ],
+   "summary": "基线发现便捷封装（规范化选项后委托主发现）。",
+   "tags": [
+    "discovery",
+    "baseline"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/files.ts:readBounded",
+   "type": "function",
+   "name": "readBounded",
+   "filePath": "packages/context/agent-instructions/src/files.ts",
+   "lineRange": [
+    387,
+    417
+   ],
+   "summary": "有界读取一个文件（maxSourceBytes 上限，超限忽略；流式读取中止感知）。",
+   "tags": [
+    "file-io",
+    "bounded-reads"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/files.ts:dedupInstructionFilesByCandidateGroup",
+   "type": "function",
+   "name": "dedupInstructionFilesByCandidateGroup",
+   "filePath": "packages/context/agent-instructions/src/files.ts",
+   "lineRange": [
+    430,
+    446
+   ],
+   "summary": "按候选组做 trimmed-content 去重（同组同内容只留最早候选）。",
+   "tags": [
+    "dedup",
+    "candidate-groups"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/files.ts:loadBaselineInstructions",
+   "type": "function",
+   "name": "loadBaselineInstructions",
+   "filePath": "packages/context/agent-instructions/src/files.ts",
+   "lineRange": [
+    456,
+    461
+   ],
+   "summary": "加载基线指令内容（发现+有界读取）。",
+   "tags": [
+    "loading",
+    "baseline"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/files.ts:loadBaselineInstructionSet",
+   "type": "function",
+   "name": "loadBaselineInstructionSet",
+   "filePath": "packages/context/agent-instructions/src/files.ts",
+   "lineRange": [
+    469,
+    516
+   ],
+   "summary": "加载并渲染完整基线指令集（含渲染后的文本与截断账目）。",
+   "tags": [
+    "loading",
+    "baseline",
+    "rendering"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/files.ts:scopeInstructionFile",
+   "type": "function",
+   "name": "scopeInstructionFile",
+   "filePath": "packages/context/agent-instructions/src/files.ts",
+   "lineRange": [
+    526,
+    539
+   ],
+   "summary": "把指令文件解析为其逻辑 scope（用户全局/项目相对）。",
+   "tags": [
+    "scope",
+    "classification"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/files.ts:probeScopeInstruction",
+   "type": "function",
+   "name": "probeScopeInstruction",
+   "filePath": "packages/context/agent-instructions/src/files.ts",
+   "lineRange": [
+    550,
+    578
+   ],
+   "summary": "探测某 scope 的指令候选元数据（provider 版本+大小，不读内容）——元数据快路径。",
+   "tags": [
+    "probe",
+    "metadata-fast-path"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/files.ts:readScopeInstruction",
+   "type": "function",
+   "name": "readScopeInstruction",
+   "filePath": "packages/context/agent-instructions/src/files.ts",
+   "lineRange": [
+    588,
+    602
+   ],
+   "summary": "按 scope 读取指令内容（有界+版本感知）。",
+   "tags": [
+    "loading",
+    "scope"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/context/agent-instructions/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/context/agent-instructions/src/index.ts",
+   "summary": "Cordis 插件入口（375 行）：基线指令在首个请求前进持久上下文；成功 fs 工具 touch（read/write/edit 的 file_path）把项目嵌套/变更/移除指令投递进 inbox；会话恢复经 baselineIdentity 校验 reconcile 基线；插件生命周期读用可选 ctx.fs provider（providerless 产品挂 no-op）。",
+   "tags": [
+    "cordis-plugin",
+    "instruction-context",
+    "inbox-projection"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/index.ts:visibleBaselineSource",
+   "type": "function",
+   "name": "visibleBaselineSource",
+   "filePath": "packages/context/agent-instructions/src/index.ts",
+   "lineRange": [
+    47,
+    64
+   ],
+   "summary": "从授权消息与 surface 逆序找最近的基线 agent-instructions 源（恢复校验用）。",
+   "tags": [
+    "baseline",
+    "lookup"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/index.ts:filePathFromExecution",
+   "type": "function",
+   "name": "filePathFromExecution",
+   "filePath": "packages/context/agent-instructions/src/index.ts",
+   "lineRange": [
+    77,
+    83
+   ],
+   "summary": "从工具执行提取触发的文件路径（仅 read/write/edit 的 file_path 参数）。",
+   "tags": [
+    "tool-execution",
+    "file-touch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/context/agent-instructions/src/index.ts",
+   "lineRange": [
+    85,
+    375
+   ],
+   "summary": "291 行插件主体：resolveConfig+指令版本 WeakMap 缓存+基线准备缓存；effect 注册投影 touch 收集、请求前基线注入、会话恢复 reconcile 与生命周期清理。",
+   "tags": [
+    "cordis-plugin",
+    "orchestration",
+    "lifecycle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/context/agent-instructions/src/render.ts",
+   "type": "file",
+   "name": "render.ts",
+   "filePath": "packages/context/agent-instructions/src/render.ts",
+   "summary": "指令渲染（513 行）：scope 键编解码（用户全局/项目目录组）、项目显示路径转义、UTF-8 截断；renderInstructionContext 按链预算渲染（链内先省略更宽文件再截断最具体文件），renderInstructionChanges 渲染动态增删批次，markerText 标注省略/截断账目。",
+   "tags": [
+    "rendering",
+    "byte-budget",
+    "truncation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/render.ts:truncateUtf8",
+   "type": "function",
+   "name": "truncateUtf8",
+   "filePath": "packages/context/agent-instructions/src/render.ts",
+   "lineRange": [
+    84,
+    94
+   ],
+   "summary": "按字节截断 UTF-8 字符串（不劈开多字节字符）。",
+   "tags": [
+    "truncation",
+    "utf8"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/render.ts:scopeForDisplayPath",
+   "type": "function",
+   "name": "scopeForDisplayPath",
+   "filePath": "packages/context/agent-instructions/src/render.ts",
+   "lineRange": [
+    138,
+    144
+   ],
+   "summary": "把显示路径解析为逻辑 scope 文本。",
+   "tags": [
+    "scope",
+    "display-path"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/render.ts:renderInstructionChanges",
+   "type": "function",
+   "name": "renderInstructionChanges",
+   "filePath": "packages/context/agent-instructions/src/render.ts",
+   "lineRange": [
+    280,
+    301
+   ],
+   "summary": "渲染动态指令增删批次（changed/added/removed 条目+预算截断）。",
+   "tags": [
+    "rendering",
+    "changes"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/render.ts:truncateToFit",
+   "type": "function",
+   "name": "truncateToFit",
+   "filePath": "packages/context/agent-instructions/src/render.ts",
+   "lineRange": [
+    333,
+    357
+   ],
+   "summary": "把最具体文件截断至剩余预算（链内省略优先策略的执行器）。",
+   "tags": [
+    "byte-budget",
+    "truncation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/render.ts:renderInstructionContext",
+   "type": "function",
+   "name": "renderInstructionContext",
+   "filePath": "packages/context/agent-instructions/src/render.ts",
+   "lineRange": [
+    363,
+    421
+   ],
+   "summary": "按预算渲染指令上下文文本（基线或动态批次样式+省略/截断标记）。",
+   "tags": [
+    "rendering",
+    "byte-budget"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/render.ts:renderInstructionChains",
+   "type": "function",
+   "name": "renderInstructionChains",
+   "filePath": "packages/context/agent-instructions/src/render.ts",
+   "lineRange": [
+    440,
+    482
+   ],
+   "summary": "渲染用户全局链+项目链（每链独立预算）。",
+   "tags": [
+    "rendering",
+    "chains"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/render.ts:renderAgentInstructionSet",
+   "type": "function",
+   "name": "renderAgentInstructionSet",
+   "filePath": "packages/context/agent-instructions/src/render.ts",
+   "lineRange": [
+    491,
+    498
+   ],
+   "summary": "渲染完整指令集（面向模型的最终文本）。",
+   "tags": [
+    "rendering"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/render.ts:renderAgentInstructions",
+   "type": "function",
+   "name": "renderAgentInstructions",
+   "filePath": "packages/context/agent-instructions/src/render.ts",
+   "lineRange": [
+    508,
+    513
+   ],
+   "summary": "渲染指令集的对外便捷入口（选项归一后委托）。",
+   "tags": [
+    "rendering",
+    "entry-point"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/context/agent-instructions/src/state.ts",
+   "type": "file",
+   "name": "state.ts",
+   "filePath": "packages/context/agent-instructions/src/state.ts",
+   "summary": "会话可见的指令状态与动态 reconcile（456 行）：AgentInstructionSource 是 'agent-instructions' 消息源（baseline/baselineIdentity/changes）；InstructionVersionCache 按会话+scope 缓存元数据快路径（刻意不保留指令散文）；reconcileInstructionContext 对比当前发现与已见版本产出增删上下文+元数据迁移。",
+   "tags": [
+    "state",
+    "reconciliation",
+    "version-cache"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/state.ts:visibleInstructionChanges",
+   "type": "function",
+   "name": "visibleInstructionChanges",
+   "filePath": "packages/context/agent-instructions/src/state.ts",
+   "lineRange": [
+    140,
+    161
+   ],
+   "summary": "从授权消息收集已可见的指令变更集合。",
+   "tags": [
+    "state",
+    "changes"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/state.ts:baselineInstructionState",
+   "type": "function",
+   "name": "baselineInstructionState",
+   "filePath": "packages/context/agent-instructions/src/state.ts",
+   "lineRange": [
+    168,
+    193
+   ],
+   "summary": "从基线文件集构造初始版本缓存状态（digest+trimmedDigest）。",
+   "tags": [
+    "state",
+    "baseline"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/state.ts:applyInstructionVersionUpdates",
+   "type": "function",
+   "name": "applyInstructionVersionUpdates",
+   "filePath": "packages/context/agent-instructions/src/state.ts",
+   "lineRange": [
+    223,
+    235
+   ],
+   "summary": "把 reconcile 产出的版本更新应用到会话缓存。",
+   "tags": [
+    "state",
+    "cache-updates"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/agent-instructions/src/state.ts:reconcileInstructionContext",
+   "type": "function",
+   "name": "reconcileInstructionContext",
+   "filePath": "packages/context/agent-instructions/src/state.ts",
+   "lineRange": [
+    251,
+    456
+   ],
+   "summary": "206 行动态调和：对每个 scope 走元数据快路径（版本/trimmedDigest 未变即跳过重读），产出增删渲染上下文与缓存迁移；嵌套发现限触及目录。",
+   "tags": [
+    "reconciliation",
+    "fast-path",
+    "dynamic-context"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:packages/context/agent-instructions/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/context/agent-instructions/tsconfig.json",
+   "summary": "包级 TS 配置：extends 仓根 base，rootDir=src、outDir=lib/types，references 覆盖 agent/fs/llm/session 等。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/context/file-reference/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/context/file-reference/README.md",
+   "summary": "dsh-file-reference 包英文主文档：host 后端 UI 用它提供 @file 补全——UI 请求路径候选、模型读 @path 或 @\"含空格 path\"、选候选插入普通提示文本；seam 自身不拥有文件系统访问（具体 provider 如 file-reference-local 供候选/排序/缓存/失效）；选候选从不读或附加文件内容。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/context/file-reference/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/context/file-reference/package.json",
+   "summary": "@deepseek-ai/dsh-file-reference 包清单：文件引用发现契约与共享 @file 语法，零运行时依赖。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/context/file-reference/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/context/file-reference/src/index.ts",
+   "summary": "FileReferenceService 抽象 Service（ctx.fileReferences）：host 能力 seam——list(agent, query, signal) 返回确定性的仅路径候选；再导出 @file 语法（activeAtToken/formatFileMention）与 FILE_REFERENCE_PROMPT 模型指引（@ 前缀是用户显式引用、尾斜杠标记目录、读前不得声称已检查）。",
+   "tags": [
+    "service-definition",
+    "file-reference",
+    "capability-seam"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/context/file-reference/src/index.ts:FileReferenceService",
+   "type": "class",
+   "name": "FileReferenceService",
+   "filePath": "packages/context/file-reference/src/index.ts",
+   "lineRange": [
+    26,
+    43
+   ],
+   "summary": "抽象 Service 子类（Service Definition 'fileReferences'）：声明可取消的候选发现抽象方法 list；具体 provider（如本地实现）继承并提供文件系统访问。",
+   "tags": [
+    "service-definition",
+    "abstract"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/context/file-reference-local/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/context/file-reference-local/README.md",
+   "summary": "dsh-file-reference-local 包英文主文档：agent 与 host UI 从各自 agent 本地工作区补全 @file 提及——有界发现在大仓保持响应，结果在工具活动后刷新不阻塞补全，目录符号链接永不跟随；read 可用时模型收到解释引用路径的稳定指引。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/context/file-reference-local/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/context/file-reference-local/package.json",
+   "summary": "@deepseek-ai/dsh-file-reference-local 包清单：本地文件系统 ctx.fileReferences provider（有界模糊索引），依赖 schemastery。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/context/file-reference-local/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/context/file-reference-local/src/index.ts",
+   "summary": "LocalFileReferenceService 实现 ctx.fileReferences：每 agent 一个 WorkspaceFileSearch（工作区有界索引，cwd 变更即重建）；为每个 agent 懒注入 FILE_REFERENCE 提示段（read 工具可用时才输出文本），prompt fiber 与 disposal 集中管理。",
+   "tags": [
+    "service-provider",
+    "file-search",
+    "local-filesystem"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/context/file-reference-local/src/index.ts:LocalFileReferenceService",
+   "type": "class",
+   "name": "LocalFileReferenceService",
+   "filePath": "packages/context/file-reference-local/src/index.ts",
+   "lineRange": [
+    45,
+    130
+   ],
+   "summary": "86 行本地 provider：list 委托按 agent 缓存的 WorkspaceFileSearch（maxResults/maxEntries/excludedDirectories 配置），installPrompt/disposePrompt 管理每 agent 的提示 fiber 生命周期。",
+   "tags": [
+    "service-provider",
+    "per-agent-state"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/context/file-reference-local/src/index.ts:validateConfig",
+   "type": "function",
+   "name": "validateConfig",
+   "filePath": "packages/context/file-reference-local/src/index.ts",
+   "lineRange": [
+    132,
+    142
+   ],
+   "summary": "校验搜索配置（正整数限额）。",
+   "tags": [
+    "validation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/context/file-reference-local/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/context/file-reference-local/tsconfig.json",
+   "summary": "包级 TS 配置：extends 仓根 base，rootDir=src、outDir=lib/types。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/context/harness-dev-context/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/context/harness-dev-context/README.md",
+   "summary": "dsh-harness-dev-context 包英文主文档：告诉 Web GUI 背后的 agent harness 实现 checkout 在哪、GUI 与「这个页面」的关系、哪个 URL 服务它——系统提示只带无值指引，当前 checkout 路径与 GUI URL 作为运行时上下文到达；旧版会话嵌值的提示原文保留。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/context/harness-dev-context/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/context/harness-dev-context/package.json",
+   "summary": "@deepseek-ai/dsh-harness-dev-context 包清单：命名 harness checkout 与 Web GUI URL 的模型上下文（不让任一改写系统提示），依赖 zod。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/context/harness-dev-context/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/context/harness-dev-context/src/index.ts",
+   "summary": "Cordis 插件（158 行）：注册 harness:source 与 app:web-surface 两个无路径无 URL 提示段+运行时上下文值；LEGACY_SOURCE/LEGACY_WEB_SURFACE 冻结旧版段前后缀（jscpd 刻意重复——改了就破坏旧会话匹配），harnessDevLegacyPrompt 投影折叠会话已采纳的带值段落，恢复会话永不重写已记录提示。",
+   "tags": [
+    "cordis-plugin",
+    "model-context",
+    "prompt-stability"
+   ],
+   "complexity": "moderate",
+   "languageNotes": "冻结的 legacy 文案与当前指引刻意共存（jscpd:ignore 标记）：编辑其一会使旧 Session 的段落匹配失效导致提示被重写。"
+  },
+  {
+   "id": "function:packages/context/harness-dev-context/src/index.ts:legacyParagraph",
+   "type": "function",
+   "name": "legacyParagraph",
+   "filePath": "packages/context/harness-dev-context/src/index.ts",
+   "lineRange": [
+    89,
+    96
+   ],
+   "summary": "提取提示中 prefix..suffix 间的完整单行段落（跨行即 null）。",
+   "tags": [
+    "parsing",
+    "legacy"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/harness-dev-context/src/index.ts:foldLegacyPrompt",
+   "type": "function",
+   "name": "foldLegacyPrompt",
+   "filePath": "packages/context/harness-dev-context/src/index.ts",
+   "lineRange": [
+    104,
+    112
+   ],
+   "summary": "折叠已提交 system/message 事件到已采纳段落状态（仅单非空文本块算提示版本）。",
+   "tags": [
+    "fold",
+    "prompt-version"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/context/harness-dev-context/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/context/harness-dev-context/src/index.ts",
+   "lineRange": [
+    122,
+    158
+   ],
+   "summary": "注册 legacy 投影与两个提示段（运行时上下文注入 checkout 与 GUI URL）。",
+   "tags": [
+    "cordis-plugin",
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/context/harness-dev-context/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/context/harness-dev-context/tsconfig.json",
+   "summary": "包级 TS 配置：extends 仓根 base，rootDir=src、outDir=lib/types。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/context/session-reference/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/context/session-reference/README.md",
+   "summary": "dsh-session-reference 包英文主文档（147 行）：让对话引用其他会话——host 把 @label 提及转为规范 URI，服务为每个被引用会话准备有界只读快照作为持久不可信后台上下文；候选发现按工作目录亲和度排序并以最新标题标注；快照捕获后不可变并带禁止遵循其内指令/权限声明/工具请求的固定警告。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:packages/context/session-reference/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/context/session-reference/package.json",
+   "summary": "@deepseek-ai/dsh-session-reference 包清单（104 行）：跨会话快照引用与持久不可信模型上下文（ctx.sessionReferenceResolver），依赖 brand/util-values/schemastery/zod。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/context/session-reference/src/config.ts",
+   "type": "file",
+   "name": "config.ts",
+   "filePath": "packages/context/session-reference/src/config.ts",
+   "summary": "引用限制常量与错误类型：MAX_REFERENCES/DEFAULT_CANDIDATE_LIMIT/DEFAULT_MAX_REFERENCE_BYTES；SessionReferenceError 带错误码的稳定失败。",
+   "tags": [
+    "configuration",
+    "error-handling",
+    "limits"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/context/session-reference/src/config.ts:SessionReferenceError",
+   "type": "class",
+   "name": "SessionReferenceError",
+   "filePath": "packages/context/session-reference/src/config.ts",
+   "lineRange": [
+    33,
+    43
+   ],
+   "summary": "带 SessionReferenceErrorCode 的引用失败错误（构造即校验码合法）。",
+   "tags": [
+    "error-handling"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/context/session-reference/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/context/session-reference/src/index.ts",
+   "summary": "SessionReferenceResolver（ctx.sessionReferenceResolver，483 行）：继承 TypertRemoteService（Typert API Gateway 远端面）注入 sessionQuery——精确读取消费方，准备不可变跨会话消息上下文：候选发现（LABEL_KEYS 从 title/subagent 投影取标签，按 cwd 亲和排序）、prepareDirectMessages 精确消息读取、字节预算（绝对上限+上下文分数）、renderSources 组装带不可信警告的 ## Referenced sessions 提示。",
+   "tags": [
+    "service-definition",
+    "typert-remote",
+    "cross-session",
+    "untrusted-context"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/context/session-reference/src/index.ts:SessionReferenceResolver",
+   "type": "class",
+   "name": "SessionReferenceResolver",
+   "filePath": "packages/context/session-reference/src/index.ts",
+   "lineRange": [
+    88,
+    407
+   ],
+   "summary": "320 行 resolver：listCandidates/remoteExportCandidates 候选面、prepare 消息准备面、referenceBudget 预算计算、renderSources 渲染面；构造期校验全部限额配置。",
+   "tags": [
+    "service-definition",
+    "typert-remote",
+    "budgets"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/context/session-reference/src/index.ts:normalizeReferences",
+   "type": "function",
+   "name": "normalizeReferences",
+   "filePath": "packages/context/session-reference/src/index.ts",
+   "lineRange": [
+    409,
+    438
+   ],
+   "summary": "规范化引用集：去重、按上限截断、目标会话自引用剔除。",
+   "tags": [
+    "normalization",
+    "references"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/context/session-reference/src/index.ts:settleWithCancellation",
+   "type": "function",
+   "name": "settleWithCancellation",
+   "filePath": "packages/context/session-reference/src/index.ts",
+   "lineRange": [
+    460,
+    477
+   ],
+   "summary": "以取消感知结算一项准备工作（先到者胜）。",
+   "tags": [
+    "cancellation",
+    "settlement"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/context/session-reference/src/projection.ts",
+   "type": "file",
+   "name": "projection.ts",
+   "filePath": "packages/context/session-reference/src/projection.ts",
+   "summary": "当前 surface 投影与字节有界渲染：projectSessionConversation 只投影 user/assistant 对话（排除工具/推理/注入上下文，压缩 checkpoint 源保留）；retainReferencedSession 把投影快照装入精确渲染 JSON 对象字节上限（TextRetainer 有界保留+截断告示+保留统计）。",
+   "tags": [
+    "projection",
+    "byte-budget",
+    "retention"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/context/session-reference/src/projection.ts:projectSessionConversation",
+   "type": "function",
+   "name": "projectSessionConversation",
+   "filePath": "packages/context/session-reference/src/projection.ts",
+   "lineRange": [
+    38,
+    64
+   ],
+   "summary": "投影 surface 快照为对话条目（user/assistant 文本、checkpoint 标记，assertNever 收口）。",
+   "tags": [
+    "projection",
+    "conversation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/context/session-reference/src/projection.ts:retainReferencedSession",
+   "type": "function",
+   "name": "retainReferencedSession",
+   "filePath": "packages/context/session-reference/src/projection.ts",
+   "lineRange": [
+    73,
+    146
+   ],
+   "summary": "把投影快照装入精确字节上限：返回完整数据+保留预览+保留统计（省略/截断账目），固定数据装不下返回 undefined。",
+   "tags": [
+    "retention",
+    "byte-budget"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/context/session-reference/src/projection.ts:truncateWithNotice",
+   "type": "function",
+   "name": "truncateWithNotice",
+   "filePath": "packages/context/session-reference/src/projection.ts",
+   "lineRange": [
+    152,
+    180
+   ],
+   "summary": "截断文本并附省略告示。",
+   "tags": [
+    "truncation"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "document:packages/context/README.md",
+   "target": "file:packages/context/agent-instructions/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/context/agent-instructions/README.md",
+   "target": "file:packages/context/agent-instructions/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/context/agent-instructions/package.json",
+   "target": "file:packages/context/agent-instructions/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/config.ts",
+   "target": "function:packages/context/agent-instructions/src/config.ts:workspaceBaselineIdentity",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/config.ts",
+   "target": "function:packages/context/agent-instructions/src/config.ts:workspaceBaselineIdentity",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/config.ts",
+   "target": "function:packages/context/agent-instructions/src/config.ts:resolveConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/config.ts",
+   "target": "function:packages/context/agent-instructions/src/config.ts:resolveConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/config.ts",
+   "target": "function:packages/context/agent-instructions/src/config.ts:resolveDiscoveryConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/config.ts",
+   "target": "function:packages/context/agent-instructions/src/config.ts:resolveDiscoveryConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/config.ts",
+   "target": "function:packages/context/agent-instructions/src/config.ts:resolveInstructionFileCandidates",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/config.ts",
+   "target": "function:packages/context/agent-instructions/src/config.ts:resolveInstructionFileCandidates",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:userGlobalRoots",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:findProjectRoot",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:findProjectRoot",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:ancestorChain",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:ancestorChain",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:descendantDirsBetween",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:descendantDirsBetween",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:allExistingInstructionFiles",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:discoverInstructionFiles",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:discoverBaselineInstructionFiles",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:discoverBaselineInstructionFiles",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:readBounded",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:dedupInstructionFilesByCandidateGroup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:dedupInstructionFilesByCandidateGroup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:loadBaselineInstructions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:loadBaselineInstructions",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:loadBaselineInstructionSet",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:loadBaselineInstructionSet",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:scopeInstructionFile",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:scopeInstructionFile",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:probeScopeInstruction",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:probeScopeInstruction",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:readScopeInstruction",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "function:packages/context/agent-instructions/src/files.ts:readScopeInstruction",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/index.ts",
+   "target": "function:packages/context/agent-instructions/src/index.ts:visibleBaselineSource",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/index.ts",
+   "target": "function:packages/context/agent-instructions/src/index.ts:filePathFromExecution",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/index.ts",
+   "target": "function:packages/context/agent-instructions/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/index.ts",
+   "target": "function:packages/context/agent-instructions/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/render.ts",
+   "target": "function:packages/context/agent-instructions/src/render.ts:truncateUtf8",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/render.ts",
+   "target": "function:packages/context/agent-instructions/src/render.ts:scopeForDisplayPath",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/render.ts",
+   "target": "function:packages/context/agent-instructions/src/render.ts:scopeForDisplayPath",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/render.ts",
+   "target": "function:packages/context/agent-instructions/src/render.ts:renderInstructionChanges",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/render.ts",
+   "target": "function:packages/context/agent-instructions/src/render.ts:renderInstructionChanges",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/render.ts",
+   "target": "function:packages/context/agent-instructions/src/render.ts:truncateToFit",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/render.ts",
+   "target": "function:packages/context/agent-instructions/src/render.ts:renderInstructionContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/render.ts",
+   "target": "function:packages/context/agent-instructions/src/render.ts:renderInstructionChains",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/render.ts",
+   "target": "function:packages/context/agent-instructions/src/render.ts:renderAgentInstructionSet",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/render.ts",
+   "target": "function:packages/context/agent-instructions/src/render.ts:renderAgentInstructionSet",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/render.ts",
+   "target": "function:packages/context/agent-instructions/src/render.ts:renderAgentInstructions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/render.ts",
+   "target": "function:packages/context/agent-instructions/src/render.ts:renderAgentInstructions",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/state.ts",
+   "target": "function:packages/context/agent-instructions/src/state.ts:visibleInstructionChanges",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/state.ts",
+   "target": "function:packages/context/agent-instructions/src/state.ts:baselineInstructionState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/state.ts",
+   "target": "function:packages/context/agent-instructions/src/state.ts:baselineInstructionState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/state.ts",
+   "target": "function:packages/context/agent-instructions/src/state.ts:applyInstructionVersionUpdates",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/state.ts",
+   "target": "function:packages/context/agent-instructions/src/state.ts:applyInstructionVersionUpdates",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/state.ts",
+   "target": "function:packages/context/agent-instructions/src/state.ts:reconcileInstructionContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/state.ts",
+   "target": "function:packages/context/agent-instructions/src/state.ts:reconcileInstructionContext",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "config:packages/context/agent-instructions/tsconfig.json",
+   "target": "file:packages/context/agent-instructions/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "document:packages/context/file-reference/README.md",
+   "target": "file:packages/context/file-reference/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/context/file-reference/package.json",
+   "target": "file:packages/context/file-reference/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/context/file-reference/src/index.ts",
+   "target": "class:packages/context/file-reference/src/index.ts:FileReferenceService",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/file-reference/src/index.ts",
+   "target": "class:packages/context/file-reference/src/index.ts:FileReferenceService",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "document:packages/context/file-reference-local/README.md",
+   "target": "file:packages/context/file-reference-local/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/context/file-reference-local/package.json",
+   "target": "file:packages/context/file-reference-local/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/context/file-reference-local/src/index.ts",
+   "target": "class:packages/context/file-reference-local/src/index.ts:LocalFileReferenceService",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/file-reference-local/src/index.ts",
+   "target": "class:packages/context/file-reference-local/src/index.ts:LocalFileReferenceService",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/file-reference-local/src/index.ts",
+   "target": "function:packages/context/file-reference-local/src/index.ts:validateConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "config:packages/context/file-reference-local/tsconfig.json",
+   "target": "file:packages/context/file-reference-local/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "document:packages/context/harness-dev-context/README.md",
+   "target": "file:packages/context/harness-dev-context/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/context/harness-dev-context/package.json",
+   "target": "file:packages/context/harness-dev-context/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/context/harness-dev-context/src/index.ts",
+   "target": "function:packages/context/harness-dev-context/src/index.ts:legacyParagraph",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/harness-dev-context/src/index.ts",
+   "target": "function:packages/context/harness-dev-context/src/index.ts:foldLegacyPrompt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/harness-dev-context/src/index.ts",
+   "target": "function:packages/context/harness-dev-context/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/harness-dev-context/src/index.ts",
+   "target": "function:packages/context/harness-dev-context/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "config:packages/context/harness-dev-context/tsconfig.json",
+   "target": "file:packages/context/harness-dev-context/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "document:packages/context/session-reference/README.md",
+   "target": "file:packages/context/session-reference/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/context/session-reference/package.json",
+   "target": "file:packages/context/session-reference/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/context/session-reference/src/config.ts",
+   "target": "class:packages/context/session-reference/src/config.ts:SessionReferenceError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/session-reference/src/config.ts",
+   "target": "class:packages/context/session-reference/src/config.ts:SessionReferenceError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "class:packages/context/session-reference/src/index.ts:SessionReferenceResolver",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "class:packages/context/session-reference/src/index.ts:SessionReferenceResolver",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "function:packages/context/session-reference/src/index.ts:normalizeReferences",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "function:packages/context/session-reference/src/index.ts:settleWithCancellation",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/session-reference/src/projection.ts",
+   "target": "function:packages/context/session-reference/src/projection.ts:projectSessionConversation",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/session-reference/src/projection.ts",
+   "target": "function:packages/context/session-reference/src/projection.ts:retainReferencedSession",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/session-reference/src/projection.ts",
+   "target": "function:packages/context/session-reference/src/projection.ts:retainReferencedSession",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/context/session-reference/src/projection.ts",
+   "target": "function:packages/context/session-reference/src/projection.ts:truncateWithNotice",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/config.ts",
+   "target": "file:packages/util/home-paths/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "file:packages/context/agent-instructions/src/config.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "file:packages/context/agent-instructions/src/digest.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "file:packages/context/agent-instructions/src/render.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "file:packages/fs/fs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "file:packages/util/home-paths/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/files.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/index.ts",
+   "target": "file:packages/context/agent-instructions/src/config.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/index.ts",
+   "target": "file:packages/context/agent-instructions/src/digest.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/index.ts",
+   "target": "file:packages/context/agent-instructions/src/files.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/index.ts",
+   "target": "file:packages/context/agent-instructions/src/render.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/index.ts",
+   "target": "file:packages/context/agent-instructions/src/state.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/index.ts",
+   "target": "file:packages/session/working-directory/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/render.ts",
+   "target": "file:packages/context/agent-instructions/src/files.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/render.ts",
+   "target": "file:packages/util/home-paths/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/state.ts",
+   "target": "file:packages/context/agent-instructions/src/config.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/state.ts",
+   "target": "file:packages/context/agent-instructions/src/digest.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/state.ts",
+   "target": "file:packages/context/agent-instructions/src/files.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/state.ts",
+   "target": "file:packages/context/agent-instructions/src/render.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/state.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/state.ts",
+   "target": "file:packages/fs/fs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/state.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/agent-instructions/src/state.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/file-reference/src/index.ts",
+   "target": "file:packages/context/file-reference/src/grammar.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/file-reference/src/index.ts",
+   "target": "file:packages/context/file-reference/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/file-reference/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/file-reference-local/src/index.ts",
+   "target": "file:packages/context/file-reference-local/src/search.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/file-reference-local/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/file-reference-local/src/index.ts",
+   "target": "file:packages/context/file-reference/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/file-reference-local/src/index.ts",
+   "target": "file:packages/context/file-reference/src/grammar.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/file-reference-local/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/file-reference-local/src/index.ts",
+   "target": "file:packages/session/working-directory/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/harness-dev-context/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/harness-dev-context/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/harness-dev-context/src/index.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/harness-dev-context/src/index.ts",
+   "target": "file:packages/core/system-prompt/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/harness-dev-context/src/index.ts",
+   "target": "file:packages/bundle/web-app/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "file:packages/context/session-reference/src/config.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "file:packages/context/session-reference/src/projection.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "file:packages/context/session-reference/src/serialization.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "file:packages/context/session-reference/src/spill.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "file:packages/context/session-reference/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "file:packages/context/session-reference/src/uri.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "file:packages/session/session-projection-cache/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "file:packages/session-query/session-query/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "file:packages/session/session-title/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "file:packages/core/system-prompt/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/index.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/projection.ts",
+   "target": "file:packages/context/session-reference/src/serialization.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/projection.ts",
+   "target": "file:packages/context/session-reference/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/projection.ts",
+   "target": "file:packages/compaction/compaction/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/projection.ts",
+   "target": "file:packages/util/output-retention/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/projection.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/projection.ts",
+   "target": "file:packages/session-query/session-query/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/context/session-reference/src/projection.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

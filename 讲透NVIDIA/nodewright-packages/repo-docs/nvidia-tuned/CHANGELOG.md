@@ -1,0 +1,267 @@
+# Changelog
+
+<!-- DO NOT EDIT. Generated from git commit history by scripts/gen-changelog.sh.
+     Hand-authored behavior/upgrade notes live in RELEASE_NOTES.md (same directory). -->
+
+All notable changes to this package will be documented in this file.
+
+## [0.11.0] - 2026-10-23
+
+### Bug Fixes
+
+- *(nvidia-tuned)* Support OCA 1.64 and rail device names on OCI GB300 
+
+### New Features
+
+- *(nvidia-tuned)* Support SLES and openSUSE Leap in the bootloader step 
+
+
+## [0.10.1] - 2026-10-19
+
+### Bug Fixes
+
+- *(nvidia-tuned)* Apply the containerd stack limit to RKE2 and K3s and keep it across reboots 
+
+### Other Tasks
+
+- Bump source image to 1.4.0 for SUSE support
+- *(nvidia-tuned/0.10.1)* Changelog updates
+
+## [0.10.0] - 2026-09-15
+
+### New Features
+
+- *(nvidia-tuned)* 64k-kernel hugepage sizing and gb300 intent shims 
+
+### Other Tasks
+
+- *(nvidia-tuned)* 0.10.0 changelog
+
+## [0.9.0] - 2026-09-03
+
+### New Features
+
+- *(nvidia-tuned)* Add rke2 service keeping the accelerator's bootloader tuning 
+
+### Other Tasks
+
+- *(nvidia-tuned)* Changelog for 0.9.0
+
+## [0.8.0] - 2026-08-18
+
+### New Features
+
+- *(nvidia-tuned)* Disable IOMMU passthrough on kernels needing it for ACS + DMA-BUF 
+
+### Other Tasks
+
+- *(nvidia-tuned)* Update changelog for 0.8.0
+
+## [0.7.2] - 2026-08-14
+
+### Bug Fixes
+
+- *(tuned)* Tolerate apt index refresh failures during install 
+
+### Other Tasks
+
+- *(general)* Remove fixed per-container overhead and per-test tuned installs 
+
+## [0.7.1] - 2026-08-10
+
+### Bug Fixes
+
+- *(nvidia-tuned)* Verify PCIe ACS independently of GPU driver state 
+
+## [0.7.0] - 2026-08-10
+
+### New Features
+
+- *(nvidia-tuned)* Run DOCA Spectrum-X congestion control on OCI GB300 
+
+### Other Tasks
+
+- *(nvidia-tuned)* Update changelog for nvidia-tuned 
+
+## [0.6.0] - 2026-08-10
+
+### New Features
+
+- *(nvidia-tuned)* Add PCIe ACS fix and RDMA VF boot gate for OCI GB300 
+
+## [0.5.1] - 2026-08-07
+
+### Bug Fixes
+
+- *(nvidia-tuned)* Restart tuned after changing reapply_sysctl 
+
+## [0.5.0] - 2026-08-07
+
+### New Features
+
+- *(nvidia-tuned)* Add oci service and gb300 accelerator 
+
+## [0.4.0] - 2026-07-16
+
+### New Features
+
+- Add vr200 support to nvidia-setup and nvidia-tuned 
+
+## [0.3.2] - 2026-07-15
+
+### Bug Fixes
+
+- *(nvidia-tuned)* Remove isolcpus from all inference profiles 
+
+### Other Tasks
+
+- *(general)* Regenerate package changelogs to current tags 
+
+## [0.3.1] - 2026-07-08
+
+### Bug Fixes
+
+- *(general)* Replace license formatter with addlicense and normalize headers 
+- *(nvidia-tuned)* Version-aware profile directory on tuned 1.3.1 base 
+
+### New Features
+
+- *(changelog)* Tag-range generator, split CHANGELOG/RELEASE_NOTES, release helper
+
+## [0.3.0] - 2026-04-27
+
+### Bug Fixes
+
+- *(nvidia-tuned)* Verify containerd drop-in via LimitSTACK line match
+
+### New Features
+
+- *(nvidia-tuned)* Add aks service profile for H100 on AKS
+- *(nvidia-tuned)* Add AKS H100 inference override for kernel 6.8
+
+### Other Tasks
+
+- *(nvidia-tuned)* Extract service MAC-policy and bootloader helpers to common/
+- *(nvidia-tuned)* Bump version to 0.3.0 and document aks service
+- *(nvidia-tuned)* Update directory structure tree for common/ and aks/
+- *(nvidia-tuned)* Add Unreleased section to CHANGELOG for aks service
+- Merge pull request #39 from NVIDIA/feat/nvidia-tuned-aks
+
+Update nvidia-tuned for aks
+- Merge pull request #40 from NVIDIA/fix/tuned
+
+Fix nvidia-tuned and nvidia-setup for eks-gb200
+- *(nvidia-tuned)* Bump changelog for release
+
+## [0.2.4] - 2026-04-15
+
+### Bug Fixes
+
+- Remove bootloader settings as they aren't very helpful in VMs
+
+### New Features
+
+- *(nvidia-tuned)* Add a generic accelerator profile that is fairly minimal while still providing some benefits
+
+### Other Tasks
+
+- Update project to follow the template
+- Merge pull request #37 from NVIDIA/feat/nvidia-tuned-generic
+
+feat(nvidia-tuned): add a generic accelerator profile
+
+## [0.2.3] - 2026-03-09
+
+### Bug Fixes
+
+- Prepare profiles override and remove modules for gb200
+- *(nvidia-tuned)* Aws verify script for bad content check
+
+### New Features
+
+- *(nvidia-tuned)* Change containerd drop to be a script
+- Prepare always runs and update aws script to support tuned lifecycle
+- *(nvidia-tuned)* Update service to be eks to match aicr
+
+### Other Tasks
+
+- Merge pull request #27 from NVIDIA/feat/nvidia-tuned/fix-containerd
+
+feat(nvidia-tuned): change containerd drop to be a script
+- Merge pull request #29 from NVIDIA/fix/nvidia-
+
+Fix/nvidia
+
+## [0.2.2] - 2026-03-02
+
+### Bug Fixes
+
+- *(nvidia-tuned)* Set tuned to not reload profiles so it is final override
+
+### Other Tasks
+
+- Merge pull request #24 from NVIDIA/fix/nvidia-tuned
+
+fix(nvidia-tuned): set tuned to not reload profiles so it is final ov…
+
+## [0.2.1] - 2026-02-20
+
+### Bug Fixes
+
+- *(nvidia-tuned)* Work around for tuned needing update for executable bit
+- *(nvidia-tuned)* Aws specific work arounds for bootloader and some values
+- *(nvidia-tuned)* Add tests and fix common to os profiles
+- Bootloader
+
+### Other Tasks
+
+- *(nvidia-tuned)* Update config file with the right version
+- Merge pull request #19 from NVIDIA/add_validation
+
+feat: add package validation for local and ci and developer docs
+- *(nvidia-tuned)* Add link to gb200 tuning reference
+- Merge pull request #21 from NVIDIA/testing
+
+Add nvidia-tuned and unit-like integration tests for packages
+- Merge pull request #22 from NVIDIA/nvidia-tuned-fix
+
+Nvidia tuned fix
+
+## [0.2.0] - 2026-02-13
+
+### New Features
+
+- *(nvidia-tuned)* Add gb200 profiles
+
+### Other Tasks
+
+- Merge pull request #18 from NVIDIA/nvidia-tuned-gb200
+
+feat(nvidia-tuned): add gb200 profiles
+
+## [0.1.0] - 2026-02-12
+
+### Bug Fixes
+
+- Gh action
+- *(nvidia-tuned)* Move the cleanup to the check step
+- *(nvidia-tuned)* Cant actually remove the configmaps due to expected in config.json
+
+### New Features
+
+- *(nvidia-tuned)* Move to be nvidia-tuned and make clear the support
+- Add attestation to package builds and update the readme for nvidia-tuned
+
+### Other Tasks
+
+- Update nvidia-tuned readme
+- Update nvidia-tuned readme
+- Merge pull request #16 from NVIDIA/tuned_h100
+
+Add a package for nvidia hardware tunings
+- *(nvidia-tuned)* Fix version in example
+- Merge pull request #17 from NVIDIA/fix_nvidia-tuned
+
+feat: add attestation to package builds and update the readme for nvi…
+
+<!-- Generated by git-cliff -->

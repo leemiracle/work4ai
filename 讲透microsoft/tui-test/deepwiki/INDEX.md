@@ -1,0 +1,33 @@
+# DeepWiki 索引 — microsoft/tui-test
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 171075 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation and Quick Start](1.1-installation-and-quick-start.md)
+  - [1.2 Core Concepts and Architecture](1.2-core-concepts-and-architecture.md)
+- [2 CLI Reference](2-cli-reference.md)
+  - [2.1 Session and Process Commands](2.1-session-and-process-commands.md)
+  - [2.2 Input Commands](2.2-input-commands.md)
+  - [2.3 Inspection and Wait Commands](2.3-inspection-and-wait-commands.md)
+  - [2.4 Assertion Commands](2.4-assertion-commands.md)
+  - [2.5 Observability Commands](2.5-observability-commands.md)
+- [3 Daemon and Internal Architecture](3-daemon-and-internal-architecture.md)
+  - [3.1 Daemon Lifecycle and Session Management](3.1-daemon-lifecycle-and-session-management.md)
+  - [3.2 PTY and Terminal Emulation](3.2-pty-and-terminal-emulation.md)
+  - [3.3 IPC Protocol and Transport](3.3-ipc-protocol-and-transport.md)
+  - [3.4 Session Recording and Tracing](3.4-session-recording-and-tracing.md)
+- [4 Shell Integration](4-shell-integration.md)
+  - [4.1 Integration Architecture and Script Materialization](4.1-integration-architecture-and-script-materialization.md)
+  - [4.2 Per-Shell Integration Scripts](4.2-per-shell-integration-scripts.md)
+- [5 Language Bindings](5-language-bindings.md)
+  - [5.1 JavaScript / TypeScript Bindings](5.1-javascript-typescript-bindings.md)
+  - [5.2 Python Bindings](5.2-python-bindings.md)
+  - [5.3 Bindings Test Suites](5.3-bindings-test-suites.md)
+- [6 Agent Integration](6-agent-integration.md)
+  - [6.1 Agent Context and Self-Documentation](6.1-agent-context-and-self-documentation.md)
+  - [6.2 Exit Code Taxonomy](6.2-exit-code-taxonomy.md)
+- [7 Distribution and CI/CD](7-distribution-and-ci-cd.md)
+  - [7.1 Release Pipeline](7.1-release-pipeline.md)
+  - [7.2 Continuous Integration](7.2-continuous-integration.md)
+- [8 Glossary](8-glossary.md)

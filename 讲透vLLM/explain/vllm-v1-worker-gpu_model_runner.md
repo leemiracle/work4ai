@@ -1,49 +1,48 @@
-# vLLM v1 深度解析：GPUModelRunner（gpu_model_runner.py）
+# vllm/v1/worker/gpu_model_runner.py — GPUModelRunner：GPU 执行总指挥（V1 大本营）
 
-> 文件：`vllm/v1/worker/gpu_model_runner.py`（约 7700 行，v1 引擎最大单文件）
-> 知识图谱 layer：`gpu-worker`（GPU 执行 Worker，124 节点），107 条 import 出边，被 cpu/xpu_model_runner 继承
+> 源码：`vllm/v1/worker/gpu_model_runner.py`（7192 行，全仓最大单文件）｜V2 新一代在 vllm/v1/worker/gpu/model_runner.py（2547 行，目录化重构中）｜vLLM 2026-10-28 @06e172b5cf
 
-## 角色定位
+## ① 角色定位
 
-`GPUModelRunner` 是**单次模型 forward 的总指挥**：从 SchedulerOutput 出发，组装输入张量、构建 attention 元数据、决定 CUDA graph 路径、驱动模型 forward、采样、投机解码起草，最后把 token 送回调度器。如果说 Scheduler 是大脑（决定"跑什么"），ModelRunner 就是小脑（决定"怎么跑"）。它通过三个 Mixin 横向扩展能力：`LoRAModelRunnerMixin`（LoRA 装载）、`KVConnectorModelRunnerMixin`（KV 传输）、`ECConnectorModelRunnerMixin`（encoder 传输）。
+`GPUModelRunner` 是**单次 forward 的总指挥**：从 SchedulerOutput 出发，同步 persistent batch、组装输入、构建 attention 元数据、定 graph 路径、驱动 forward、采样、投机解码起草。Scheduler 决定"跑什么"，它决定"怎么跑"。三个 Mixin（vllm/v1/worker/gpu_model_runner.py:476）：LoRA/KVConnector/ECConnector。生命周期：构造（:478）→ load_model（:4967）→ initialize_kv_cache（:6990）→ capture_model（:6417）→ 稳态两段驱动。2026-09→10 形态级变化：**cascade attention 整体移除**（:541 只剩残迹）；graph 新增 Breakable 与 DBO；drafter 扩到 10+；async 修补链 GPU 化。V2 走 use_v2_model_runner 分叉（vllm/v1/worker/gpu_worker.py:577）。
 
-在生命周期中：Worker 在 `init_device` 时构造它 → `load_model` 装载权重 → `initialize_kv_cache` 建显存池 → `capture_model` 捕获 CUDA graph → 稳态时每步被 `execute_model` + `sample_tokens` 驱动。
+## ② 内部结构
 
-## 内部结构（关键成员）
+文件三段：异步输出包装（`AsyncGPUModelRunnerOutput`:269，旁路流 D2H sampled/logprobs/NaN/EP fault :313）、`ExecuteModelState`（:459，十字段交接）、主体（:475）。
 
-- **请求状态**：`self.requests: dict[req_id, CachedRequestState]` + `self.input_batch: InputBatch`（persistent batch，见 gpu_input_batch 篇）。
-- **持久 GPU buffer**（CUDA graph 的静态地址根基）：`input_ids / positions / query_start_loc / seq_lens / num_computed_tokens / req_indices / is_token_ids` 等，全部按 `max_num_tokens`、`max_num_reqs` 预分配，多数通过 `_make_buffer` 做成 CPU pinned + GPU 双份的 `CpuGpuBuffer`。
-- **注意力体系**：`kv_caches: list[Tensor]`（物理显存）、`attn_groups[gid][i]`（group→backend 细分，支持滑窗/Mamba/全注意力混组）、per-layer metadata builders。
-- **执行决策**：`cudagraph_dispatcher`（FULL/PIECEWISE 分派 + 捕获尺寸表 `cudagraph_batch_sizes`）。
-- **投机解码**：`drafter`（EAGLE/Medusa/ngram/DFlash/Step3.5-MTP 等 10 种 proposer）+ `rejection_sampler`；`num_spec_tokens` 决定 `uniform_decode_query_len = 1 + num_spec_tokens`。
-- **异步输出**：`AsyncGPUModelRunnerOutput` 在旁路 copy stream 上把 sampled_token_ids/logprobs D2H，事件同步后才 `get_output()`。
-- **`ExecuteModelState`**（NamedTuple）：execute_model 与 sample_tokens 之间的两段式交接状态。
+`__init__` 重镇：drafter 十路分派（:598-668，ngram/GPU-ngram/suffix/eagle/dflash/gemma4-MTP/step3p5-MTP 等）+ RejectionSampler（:666）；InputBatch 占位 block_size 先建（:717，:692 注释引 PR #18298：须在 load_model 前）。**持久 buffer 群**（:774-857，graph 静态地址根基）：CpuGpuBuffer 系（input_ids/query_start_loc/req_indices…）+ is_padding（:781）/optimistic_seq_lens_cpu（:790）/**prev_positions**（:801，当前行→上一步行映射）/**discard_request_mask**（:818）；num_accepted_tokens 初始 fill(1)（:827，recurrent 内核取 accepted-1 作状态槽）；cudagraph_dispatcher（:876）。
 
-## 数据流：execute_model → sample_tokens
+注意力体系：kv_caches（:581）+ attn_groups[gid][i]（:583，按 (full_cls_name, kv_cache_spec, num_heads_q) 三元去重 :6631）；per-group builders（:6728，DBO 每 ubatch 一个）。
 
-**`execute_model(scheduler_output)`** 返回 `None` 并把中间态存进 `self.execute_model_state`（配合 overlap scheduler 的拆步设计）。内部流水：
+## ③ 外部连接
 
-1. `_update_states()`：同步 persistent batch——移除 finished/unscheduled 请求、新增请求建 CachedRequestState、追加 running 请求的 new_block_ids、执行 KV-zero 清零与 CoW 块拷贝、返回延迟校正闭包（async scheduling 下推迟到 launch 后再等上一步校正）。
-2. `_prepare_inputs()`：**先 `commit_block_table(num_reqs)` 启动 H2D**，让块表拷贝与后续 CPU 计算重叠；再用 `np.repeat` 算 req_indices、cumsum 算 query_start_loc，`torch.index_select` 从 token_ids_cpu 大表里按 `position + req_index × max_model_len` 稠密gather出本步 input_ids。
-3. `_compute_cascade_attn_prefix_lens()`：若启用 cascade attention，结合 `num_common_prefix_blocks`（来自 KVCacheManager）算逐请求前缀长。
-4. `_determine_batch_execution_and_padding()`：判定 uniform decode（`max_scheduled == 1+spec_tokens` 且 `num_tokens == max × num_reqs`）→ 选择 CUDAGraphMode（FULL 走捕获图 / PIECEWISE 走分段图 / NONE 走 eager）与 padding 目标形状；DBO microbatching 时 `_allow_microbatching` 会否决"读到自己 batch 内正在写的 prefix"的切分。
-5. `_get_slot_mappings()` + `_build_attention_metadata()`：前者算 KV 写入槽位（可按 kernel_block_size 细分），后者组装 `CommonAttentionMetadata`（query_start_loc/seq_lens/block_table/slot_mapping）并分发给各组 builder（如 FlashAttentionMetadataBuilder.build）；FULL graph 模式下 block_table 空洞填 `NULL_BLOCK_ID`。
-6. `_preprocess()` 产出 input_ids/positions/intermediate_tensors 后，进入 `set_forward_context(...)` 上下文（把 attn_metadata 挂进全局 forward context，供编译图内取用），调 `_model_forward()` → `self.model(...)`。
-7. 非 last PP rank 返回 IntermediateTensors 给 Worker 发送；last rank `compute_logits(hidden_states[logits_indices])`——**只对每个请求最后一个采样位算 logits**。
+- **上游**：Worker 驱动（vllm/v1/worker/gpu_worker.py:1337/:1330）；输入 SchedulerOutput。
+- **下游**：模型本体（`_model_forward`:3586 单点可覆写）；attention backends（:2363）；CudagraphDispatcher；drafter 与 mamba_utils（:1573）。
+- **被继承**：cpu/xpu runner 复用骨架；V2 继承职责而非代码（:962/:1160 钩子为子类而留）。
 
-**`sample_tokens(grammar_output)`**：取出 ExecuteModelState → 结构化输出 bitmask 掩 logits → `_sample()` 采样 → `_update_states_after_model_execute` 回写 token → （spec decode）按 drafter 类型决定 bookkeeping 前还是后起草：EAGLE/DraftModel 类直接吃 GPU 采样结果不等回 CPU，ngram 类等 CPU token → `_bookkeeping_sync()` 做 logprobs/prompt_logprobs 的 D2H 与解析 → 返回 `ModelRunnerOutput`；async scheduling 时包成 `AsyncGPUModelRunnerOutput`（旁路流拷贝），并把 CPU tensor 引用存回 input_batch 供下一步 penalties 修补占位 token。
+## ④ 数据流：execute_model（:3906）六步 → sample_tokens（:4270）
 
-## 关键设计决策
+1. **`_update_states`**（:1176）：清 finished（:1187）→ 新块 KV-zero（:1205）+CoW（:1207）→ unscheduled 移出 batch 但留 self.requests（:1231，"这步不跑"≠"不在世"）→ 新请求建 CachedRequestState（:1279）→ async spec decode 乐观 `extend([-1]*n)` 登记延迟校正（:1343）→ add+condense+reorder（:1105，MLA 类后端按算力/带宽拆批）+refresh_metadata（:1491）→ 返回校正闭包（:1514）。
+2. **`_prepare_inputs`**（:1924）：**先 commit_block_table 启动 H2D**（:1944）与 CPU 重叠 → 批状 arange（:1948）→ index_select gather（:1971，比 np.take 快）→ prompt_embeds 填位（:1997）→ query_start_loc pad 非减（:2033）→ optimistic_seq_lens（:2045）→ async 时 GPU 校正 num_computed（:2107）→ positions/seq_lens（:2139）→ slot_mapping（:2148）→ `_prepare_input_ids`：async 用 prev_positions 在 GPU 侧 scatter 上步 token/draft（:1849）→ logits_indices：非 spec=`query_start_loc[1:]-1`（:2195，**每请求只留最后采样位**）。
+3. **`_determine_batch_execution_and_padding`**（:3684）：`_is_uniform_decode`（:3620，最核心性能分岔）→ dispatcher 分派 → DP 对齐 padding（:3746）；DBO 时 `_allow_microbatching`（:3639）否决"读到自己 batch 内正在写的 prefix"的切分（:3662）。
+4. **`_get_slot_mappings`**（:3822，padded 尾填 -1 :3870）+ **`_build_attention_metadata`**（:2253）：max_seq_len 取 optimistic 上界（:2290）→ block_table 空洞填 NULL_BLOCK_ID（:2309）→ CommonAttentionMetadata（:2363，带 mm_prefix:2334/R-SWA:2353/ReplaySSM:2357）→ **跨组缓存**：同 spec+builder 只 build 一次，其余 update_block_table 换表（:2409）→ drafter 表（:2512）+unpadded 视图（:2537）。
+5. **`_preprocess`+forward**：spec 占位 clamp_(min=0) 防越界（:3277）；mm encoder+嵌入统一化（:3283，文本也走 embed）；三路分派（:3336）→ `set_forward_context`（:4154，metadata/batch_descriptor/slot_mappings/is_padding 挂全局上下文）→ `_model_forward`（mamba align 先 preprocess :4049）。
+6. **收尾**：非 last PP rank 返回 IntermediateTensors（:4194）；last rank `hidden_states[logits_indices]` 只算采样位 logits（:4207）→ 存 ExecuteModelState（:4233）→ launch 后跑校正（:4249）→ 返回 None。
 
-- **persistent buffer + 静态形状**：所有模型输入写入预分配 buffer，CUDA graph 重放时地址不变，只需改内容。这是"graph 捕获一次、无限重放"的前提。
-- **uniform decode 判定**：只有"每请求恰好 1（+spec）个 token"的纯 decode 才能命中以 batch 维捕获的图；混合 chunked prefill 走 piecewise 或 eager。`_is_uniform_decode` 一行判断决定了 vLLM 最核心的性能分岔。
-- **两段式 execute/sample**：让调度器在 forward 还在 GPU 上跑时就开始准备下一步（overlap），代价是状态交接复杂（`deferred_state_corrections_fn`、placeholder token -1 修补）。
-- **capture_model 先捕大 shape**：`cudagraph_dispatcher.get_capture_descs()` 从大到小捕获，小图复用大图内存池；捕获前 warmup 若干次并 `torch.accelerator.synchronize()`，防止辅助流工作未完成污染捕获。
+**`sample_tokens`**（:4270）：grammar bitmask 掩 logits（:4300）→ `_sample`（:3403）→ mamba 后处理（:1548）→ **drafter 时序三分**：GPU-token 系（EAGLE/DFlash/DraftModel 等）不等 CPU 吃采样结果（:4362）；CPU-token 系（ngram/suffix）bookkeeping 后起草（:4415）；超 drafter 长度**零起草**（:4420，脏 draft 腐蚀 Nemotron-H Mamba 态）→ `_bookkeeping_sync`（:4433）→ finalize_kv_connector（:4475）→ async 包 AsyncGPUModelRunnerOutput（:4505）并存 CPU 引用回 input_batch（:4520）。
 
-## 新人提示
+## ⑤ 设计决策
 
-- 切入点：先读 `__init__` 的 buffer 分配段（819-901 行）建立"静态形状"心智，再读 `execute_model`（4250 起）按上述七步对照，最后读 `_update_states`。
-- 易混淆点①：**FULL vs PIECEWISE cuda graph**——FULL 把整步 forward 录进一张图（含 attention，要求 uniform batch + padding）；PIECEWISE 只录 attention 之外的编译段，attention 仍 eager（所以 FA forward 里的注释强调"此函数 eager 执行，慎加 CPU 开销"）。
-- 易混淆点②：`_update_states` 里 unscheduled 请求被移出 persistent batch 但 `self.requests` 保留其状态——前者是"这步不跑"，后者是"还在世"（可能被抢占等待恢复）。
-- 易混淆点③：logits_indices 不是全 token——prefill 时一个请求只留最后一个位置的 logits（除非要 prompt logprobs）。
-- 文件里大量 `record_function_or_nullcontext` 是 profiler 埋点，跳读时可忽略。
+1. **persistent buffer+静态形状**：graph 重放只改内容不改地址。**uniform decode 谓词是性能分岔**：只有"每请求恰好 1(+spec) token"的纯 decode 命中按 batch 维捕获的图，混合 chunked prefill 走 piecewise/eager。load_model（:4967）按模式包 BreakableCUDAGraphWrapper（:5139）/CUDAGraphWrapper（:5154，FULL）/UBatchWrapper（:5157，DBO），capture_model（:6417）大 shape 先捕小图复用池（:6435）、捕完 lock_workspace（:6510）。
+2. **两段式+GPU 修补链**：execute 返回 None 存中间态，调度器在 GPU 忙时准备下一步；乐观占位-延迟校正（:1360/:1514/:2107）、prev_positions、scatter（:1849）构成"先假设、后回扣"信用系统——9 月以来复杂度增长最快地带。
+3. **元数据跨组复用**：hybrid 组间同 spec+builder 只差 block table，update_block_table 免重复 build（:2409）。
+4. **drafter 时序协议**：按"消费 GPU 还是 CPU token"归三类加零起草兜底；`_model_forward` 可整体替换。另有可观测内建：NaN 计数（:251）、EP fault（:313）、cudagraph_stats。
+
+## ⑥ 新人提示
+
+- 读法：:774-876 buffer 段 → :3906 按六步对照 → :1176 `_update_states` → :4270。
+- 易混淆点①：**FULL vs PIECEWISE vs Breakable**——FULL 整步一张图（含 attention）；PIECEWISE 只录 attention 外编译段；Breakable 图内留断点。FA"eager 慎加 CPU 开销"警告（vllm/v1/attention/backends/flash_attn.py:1232）正因 piecewise。
+- 易混淆点②：`cascade_attn_enabled=False`（:541）与 `use_cascade_attn` 形参（:3691）都是尸体——cascade 已随 #61126 移除。
+- 易混淆点③：logits_indices 非全 token——prefill 每请求只留最后采样位（除非 spec/prompt logprobs）。
+- 易混淆点④：num_computed_tokens 有 CPU 真值/GPU 校正/optimistic 三套时序，async spec decode 下逐步不同——追 bug 先分清在哪层。
+- V2 线索：use_v2_model_runner 分流 gpu/ 新 runner；use_ubatching/use_replayssm 是 V1 内部演进，并行不悖。

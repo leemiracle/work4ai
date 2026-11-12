@@ -1,0 +1,30 @@
+# DeepWiki 索引 — thunlp/H-Neurons
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-11-02
+> 结构 25 页 · 全文 394179 字符
+
+- [1 Home](1-home.md)
+- [2 Getting Started](2-getting-started.md)
+- [3 Core Concepts](3-core-concepts.md)
+- [4 Pipeline Guide](4-pipeline-guide.md)
+  - [4.1 Step 1: Response Collection](4.1-step-1-response-collection.md)
+  - [4.2 Step 2: Answer Token Extraction](4.2-step-2-answer-token-extraction.md)
+  - [4.3 Step 3: Balanced ID Sampling](4.3-step-3-balanced-id-sampling.md)
+  - [4.4 Step 4: Activation Extraction](4.4-step-4-activation-extraction.md)
+  - [4.5 Step 5: Classifier Training](4.5-step-5-classifier-training.md)
+  - [4.6 Step 6: Model Intervention](4.6-step-6-model-intervention.md)
+- [5 Data Organization](5-data-organization.md)
+  - [5.1 TriviaQA Source Dataset](5.1-triviaqa-source-dataset.md)
+  - [5.2 Intermediate Data Formats](5.2-intermediate-data-formats.md)
+  - [5.3 Example Data: Llama33](5.3-example-data-llama33.md)
+  - [5.4 Example Data: Mistral24b](5.4-example-data-mistral24b.md)
+  - [5.5 Example Data: gemma27b](5.5-example-data-gemma27b.md)
+- [6 Configuration & Options](6-configuration-options.md)
+  - [6.1 Training Modes (1-vs-1 and 3-vs-1)](6.1-training-modes-1-vs-1-and-3-vs-1.md)
+  - [6.2 Regularization Options (L1 vs L2)](6.2-regularization-options-l1-vs-l2.md)
+  - [6.3 Activation Extraction Locations](6.3-activation-extraction-locations.md)
+  - [6.4 Judging Strategies](6.4-judging-strategies.md)
+- [7 Advanced Topics](7-advanced-topics.md)
+  - [7.1 CETT Metric Implementation](7.1-cett-metric-implementation.md)
+  - [7.2 Multi-Model Support](7.2-multi-model-support.md)
+  - [7.3 Evaluation Metrics](7.3-evaluation-metrics.md)

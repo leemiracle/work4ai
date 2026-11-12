@@ -1,0 +1,33 @@
+# DeepWiki 索引 — allenai/personalized-scholarqa-eval
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 167488 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Repository Structure](1.2-repository-structure.md)
+- [2 Data Layer](2-data-layer.md)
+  - [2.1 Core Data Models](2.1-core-data-models.md)
+  - [2.2 Dataset Loader](2.2-dataset-loader.md)
+  - [2.3 Local Datasets and Qualitative Coding Data](2.3-local-datasets-and-qualitative-coding-data.md)
+- [3 Generation Pipeline](3-generation-pipeline.md)
+  - [3.1 User Profile Generation](3.1-user-profile-generation.md)
+  - [3.2 Plan Generation](3.2-plan-generation.md)
+- [4 Prompt System](4-prompt-system.md)
+  - [4.1 Constitution and Plan Prompt Templates](4.1-constitution-and-plan-prompt-templates.md)
+  - [4.2 User Prediction Prompts (Simulation)](4.2-user-prediction-prompts-simulation.md)
+- [5 LLM Abstraction Layer](5-llm-abstraction-layer.md)
+  - [5.1 LLM Base Classes and ModelFactory](5.1-llm-base-classes-and-modelfactory.md)
+  - [5.2 Provider Implementations](5.2-provider-implementations.md)
+- [6 Evaluation Framework](6-evaluation-framework.md)
+  - [6.1 Profile Evaluation](6.1-profile-evaluation.md)
+  - [6.2 Plan Evaluation](6.2-plan-evaluation.md)
+  - [6.3 Simulation Evaluation (User Prediction)](6.3-simulation-evaluation-user-prediction.md)
+  - [6.4 Evaluation Metrics Data Structures](6.4-evaluation-metrics-data-structures.md)
+- [7 Metric Scores and Reporting](7-metric-scores-and-reporting.md)
+  - [7.1 Profile and Plan Metric Summaries](7.1-profile-and-plan-metric-summaries.md)
+  - [7.2 Simulation Results Plot](7.2-simulation-results-plot.md)
+- [8 Scripts and Workflow Orchestration](8-scripts-and-workflow-orchestration.md)
+  - [8.1 Generation Scripts](8.1-generation-scripts.md)
+  - [8.2 Evaluation Scripts](8.2-evaluation-scripts.md)
+- [9 Glossary](9-glossary.md)

@@ -1,0 +1,31 @@
+# DeepWiki 索引 — microsoft/genaiops-promptflow-template
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 318271 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+- [3 Use Cases and Prompt Flows](3-use-cases-and-prompt-flows.md)
+  - [3.1 Named Entity Recognition](3.1-named-entity-recognition.md)
+  - [3.2 Web Classification](3.2-web-classification.md)
+  - [3.3 Other Use Cases](3.3-other-use-cases.md)
+- [4 CI/CD Platforms](4-ci-cd-platforms.md)
+  - [4.1 GitHub Actions](4.1-github-actions.md)
+  - [4.2 Azure DevOps Pipelines](4.2-azure-devops-pipelines.md)
+  - [4.3 Jenkins](4.3-jenkins.md)
+- [5 Core LLMOps Engine](5-core-llmops-engine.md)
+  - [5.1 Experiment Execution](5.1-experiment-execution.md)
+  - [5.2 Model Evaluation](5.2-model-evaluation.md)
+  - [5.3 Asset Management](5.3-asset-management.md)
+- [6 Deployment](6-deployment.md)
+  - [6.1 Azure ML Managed Endpoints](6.1-azure-ml-managed-endpoints.md)
+  - [6.2 Kubernetes Endpoints](6.2-kubernetes-endpoints.md)
+  - [6.3 Azure Web Apps](6.3-azure-web-apps.md)
+- [7 Configuration](7-configuration.md)
+  - [7.1 Experiment Configuration](7.1-experiment-configuration.md)
+  - [7.2 Deployment Configuration](7.2-deployment-configuration.md)
+  - [7.3 Environment and Secrets Management](7.3-environment-and-secrets-management.md)
+- [8 Development and Testing](8-development-and-testing.md)
+  - [8.1 Build Validation](8.1-build-validation.md)
+  - [8.2 Dependencies and Requirements](8.2-dependencies-and-requirements.md)
+  - [8.3 Project Structure](8.3-project-structure.md)

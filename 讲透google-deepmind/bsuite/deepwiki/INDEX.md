@@ -1,0 +1,31 @@
+# DeepWiki 索引 — google-deepmind/bsuite
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 249906 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Package Structure and Installation](1.1-package-structure-and-installation.md)
+  - [1.2 Quick Start Guide](1.2-quick-start-guide.md)
+- [2 Core Framework](2-core-framework.md)
+  - [2.1 Agent Interface and Experiment Framework](2.1-agent-interface-and-experiment-framework.md)
+  - [2.2 Environment Loading System](2.2-environment-loading-system.md)
+  - [2.3 Sweep and Configuration Management](2.3-sweep-and-configuration-management.md)
+- [3 Environments](3-environments.md)
+  - [3.1 Core Diagnostic Environments](3.1-core-diagnostic-environments.md)
+  - [3.2 Environment Wrappers and Utilities](3.2-environment-wrappers-and-utilities.md)
+  - [3.3 Environment Variants and Extensions](3.3-environment-variants-and-extensions.md)
+- [4 Agent Implementations](4-agent-implementations.md)
+  - [4.1 JAX-based Agents](4.1-jax-based-agents.md)
+  - [4.2 TensorFlow-based Agents](4.2-tensorflow-based-agents.md)
+  - [4.3 Third-party Agent Integrations](4.3-third-party-agent-integrations.md)
+  - [4.4 Agent Utilities and Components](4.4-agent-utilities-and-components.md)
+- [5 Experiment Management](5-experiment-management.md)
+  - [5.1 Running Experiments](5.1-running-experiments.md)
+  - [5.2 Experiment Configuration and Sweeps](5.2-experiment-configuration-and-sweeps.md)
+- [6 Data and Analysis](6-data-and-analysis.md)
+  - [6.1 Logging System](6.1-logging-system.md)
+  - [6.2 Analysis and Visualization](6.2-analysis-and-visualization.md)
+  - [6.3 Results and Reporting](6.3-results-and-reporting.md)
+- [7 Development and Testing](7-development-and-testing.md)
+  - [7.1 Testing Framework](7.1-testing-framework.md)
+  - [7.2 Development Setup](7.2-development-setup.md)

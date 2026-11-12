@@ -1,0 +1,211 @@
+---
+{
+  title: 'Responsive Layout - Container',
+  description: 'Use container queries with NVIDIA Elements layout to adapt content to its parent container instead of the viewport.',
+  layout: 'docs.11ty.js',
+  permalink: 'docs/labs/layout/responsive/container/index.html'
+}
+---
+
+<nve-alert-group status="warning">
+  <nve-alert>
+    <nve-icon name="beaker" slot="icon" style="--color:inherit"></nve-icon> Labs projects are experimental packages available for early feedback.
+  </nve-alert>
+</nve-alert-group>
+
+# {{title}}
+
+By optionally importing the responsive container layout module, you extend the `nve-layout` system using [CSS Container Queries](https://developer.mozilla.org/en-US/docs/Web/CSS/@container) for adaptive responsive design based on the container element's width rather than just the browser width.
+
+<nve-alert-group>
+  <nve-alert style="--align-items: start">
+    <nve-icon slot="icon" name="academic-cap"></nve-icon>
+    <div nve-text="relaxed">
+      Learn more about container queries in this Google <a href="https://web.dev/articles/new-responsive#responsive_to_the_container" target="_blank" nve-text="link">web.dev</a> video and article.
+    </div>
+  </nve-alert>
+</nve-alert-group>
+
+The responsive layout API applies conditional styling based on parent element width. Supported features include `gap`, `padding`, `row vs column`, `reversing` flex direction, and varying `grid` structure across defined pixel width breakpoints.
+
+The following set of container `breakpoint-values` defines:
+
+- `xs = 160px`
+- `sm = 320px`
+- `md = 480px`
+- `lg = 640px`
+- `xl = 800px`
+- `xxl = 960px`
+
+The ampersand-based `&breakpoint-size|...` API adds the breakpoint size before the layout modifier.
+
+Conditional gap sizing example: `nve-layout="row &sm|gap:xxs &md|gap:md &lg|gap:xxl"`. The size value after the `:` corresponds to one of the nine [spacing](/docs/foundations/layout/#gap-spacing)/[padding](/docs/foundations/layout/#padding) system values.
+
+```html
+<div> <!-- This parent div element is the containing element - its width will be queried -->
+  <section nve-layout="row gap:sm &sm|gap:xxs &md|gap:md &lg|gap:xl &xl|gap:xxl">
+    <nve-card></nve-card>
+    <nve-card></nve-card>
+    <nve-card></nve-card>
+    <nve-card></nve-card>
+    <nve-card nve-display="&sm|hide"></nve-card>
+  </section>
+</div>
+```
+
+<nve-alert-group status="accent">
+  <nve-alert style="--align-items: start">
+    <div nve-text="relaxed">
+      The extra <code nve-text="code">div</code> wrapper explicitly defines the container element for queries. This design keeps the utility minimal—elements with <code nve-text="code">&</code> syntax automatically use their parent as the container without requiring manual container specification.
+    </div>
+  </nve-alert>
+</nve-alert-group>
+
+## Responsive Gap Sizing
+
+The following container query breakpoints are available for gap, replace `...` with one of the 9 gap [spacing](/docs/foundations/layout/#gap-spacing) values:
+
+- `&xs|gap:...`
+- `&sm|gap:...`
+- `&md|gap:...`
+- `&lg|gap:...`
+- `&xl|gap:...`
+- `&xxl|gap:...`
+
+{% example '@nvidia-elements/styles/responsive.examples.json', 'GapResponsive', '{ "inline": false, "resizable": true, "height": "260px" }' %}
+
+## Responsive Padding
+
+The following container query breakpoints are available for padding, replace `...` with one of the 9 [padding](/docs/foundations/layout/#padding) values:
+
+- `&xs|pad:...`
+- `&sm|pad:...`
+- `&md|pad:...`
+- `&lg|pad:...`
+- `&xl|pad:...`
+- `&xxl|pad:...`
+
+{% example '@nvidia-elements/styles/responsive.examples.json', 'PadResponsive', '{ "inline": false, "resizable": true, "height": "260px" }' %}
+
+## Breakpoints for Switching Flexbox Layout Direction
+
+The following container query breakpoints are available for swapping flex direction:
+
+### Horizontally
+
+- `&xs|row`
+- `&sm|row`
+- `&md|row`
+- `&lg|row`
+- `&xl|row`
+- `&xxl|row`
+
+### Vertically
+
+- `&xs|column`
+- `&sm|column`
+- `&md|column`
+- `&lg|column`
+- `&xl|column`
+- `&xxl|column`
+
+{% example '@nvidia-elements/styles/responsive.examples.json', 'FlexDirectionResponsive', '{ "inline": false, "resizable": true, "height": "360px" }' %}
+
+### Reverse Direction
+
+Also, you can use the following syntax for flipping the flex direction:
+
+- `&...|row-reverse`
+- `&...|column-reverse`
+
+{% example '@nvidia-elements/styles/responsive.examples.json', 'FlexDirectionReverse', '{ "inline": false, "resizable": true, "height": "425px" }' %}
+
+## Responsive Grid
+
+You can vary grid structure based on container size using the following syntax with `nve-layout=grid...`:
+
+```html
+<section nve-layout="grid gap:md span-items:12 &sm|span-items:6 &md|span-items:4 &lg|span-items:3">
+  <nve-logo size="lg" color="green-mint">1</nve-logo>
+  <nve-logo size="lg" color="green-mint">2</nve-logo>
+  <nve-logo size="lg" color="green-mint">3</nve-logo>
+  <nve-logo size="lg" color="green-mint">4</nve-logo>
+  <nve-logo size="lg" color="green-mint">5</nve-logo>
+  <nve-logo size="lg" color="green-mint">6</nve-logo>
+  <nve-logo size="lg" color="green-mint">7</nve-logo>
+  <nve-logo size="lg" color="green-mint">8</nve-logo>
+</section>
+```
+
+Or:
+
+```html
+<section nve-layout="grid gap:md">
+  <div nve-layout="span:12 &sm|span:4 &md|span:6 &lg|span:8"><nve-card></nve-card></div>
+  <div nve-layout="span:12 &sm|span:8 &md|span:6 &lg|span:4"><nve-card></nve-card></div>
+  <div nve-layout="span:12 &sm|span:8 &md|span:6 &lg|span:4"><nve-card></nve-card></div>
+  <div nve-layout="span:12 &sm|span:4 &md|span:6 &lg|span:8"><nve-card></nve-card></div>
+</section>
+```
+
+### Responsive Grid Parent
+
+{% example '@nvidia-elements/styles/responsive.examples.json', 'ResponsiveGrid', '{ "inline": false, "resizable": true, "height": "420px" }' %}
+
+### Responsive Grid Items
+
+{% example '@nvidia-elements/styles/responsive.examples.json', 'ResponsiveGridItems', '{ "inline": false, "resizable": true, "height": "260px" }' %}
+
+## Hiding Elements Based on Container Size
+
+Since hiding elements only affects the display of the element itself and not the layout of its children, responsive visibility control uses the `nve-display` attribute.
+
+<nve-alert-group status="accent">
+  <nve-alert style="--align-items: start">
+    <div nve-text="relaxed">
+      Element visibility (hiding) uses the separate <code nve-text="code">nve-display</code> attribute rather than <code nve-text="code">nve-layout</code>. This distinction exists because visibility control only affects the element itself, while layout properties affect how the parent arranges children.
+    </div>
+  </nve-alert>
+</nve-alert-group>
+
+The following attributes are available for _hiding_ elements at specific container breakpoints and below:
+
+- `nve-display="hide"`
+- `nve-display="&xs|hide"`
+- `nve-display="&sm|hide"`
+- `nve-display="&md|hide"`
+- `nve-display="&lg|hide"`
+- `nve-display="&xl|hide"`
+- `nve-display="&xxl|hide"`
+
+You may want to now `show` elements at smaller container widths.
+The following attributes are available for _showing_ elements at specific container breakpoints and below:
+
+- `nve-display="&xs|show"`
+- `nve-display="&sm|show"`
+- `nve-display="&md|show"`
+- `nve-display="&lg|show"`
+- `nve-display="&xl|show"`
+- `nve-display="&xxl|show"`
+
+{% example '@nvidia-elements/styles/responsive.examples.json', 'HideResponsive', '{ "inline": false, "resizable": true, "height": "260px" }' %}
+
+## Summary
+
+The container query responsive system allows elements to adapt based on their container's width using the `&` prefix. Remember:
+
+- **Layout properties** (`gap`, `padding`, `row/column`, `grid`) use `nve-layout`
+- **Visibility control** (`hide`/`show`) uses `nve-display`
+- Container queries **use the parent element** to establish the container context
+- Breakpoints range from `xs` (160px) to `xxl` (960px)
+
+Example combining both:
+
+```html
+<div>
+  <section nve-layout="row gap:sm &md|gap:lg">
+    <div>Always visible</div>
+    <div nve-display="&sm|hide">Hidden when container ≥ 320px</div>
+  </section>
+</div>
+```

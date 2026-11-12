@@ -1,0 +1,2179 @@
+{
+ "nodes": [
+  {
+   "id": "file:rust/src/server/src/routes/openai/completions.rs",
+   "type": "file",
+   "name": "completions.rs",
+   "filePath": "rust/src/server/src/routes/openai/completions.rs",
+   "summary": "OpenAI /v1/completions 路由（1559 行）：completions 入口+collect_completion 非流收集+completion_chunk_stream/delta_chunk/final_chunk 流式组装+logprobs 到 OpenAI 格式的转换。",
+   "tags": [
+    "openai-api",
+    "completions",
+    "route",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/openai/completions.rs:completions",
+   "type": "function",
+   "name": "completions",
+   "filePath": "rust/src/server/src/routes/openai/completions.rs",
+   "lineRange": [
+    64,
+    135
+   ],
+   "summary": "路由 handler 入口（参数解析+请求准备+流/非流分派）。",
+   "tags": [
+    "handler",
+    "entry-point"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/openai/completions.rs:completion_chunk_stream",
+   "type": "function",
+   "name": "completion_chunk_stream",
+   "filePath": "rust/src/server/src/routes/openai/completions.rs",
+   "lineRange": [
+    268,
+    528
+   ],
+   "summary": "流式块组装主循环（261 行：增量收集+logprobs+finish 映射）。",
+   "tags": [
+    "stream",
+    "chunk"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/openai/completions.rs:collect_completion",
+   "type": "function",
+   "name": "collect_completion",
+   "filePath": "rust/src/server/src/routes/openai/completions.rs",
+   "lineRange": [
+    137,
+    264
+   ],
+   "summary": "非流式完成收集。",
+   "tags": [
+    "collect"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/openai/completions/convert.rs",
+   "type": "file",
+   "name": "convert.rs",
+   "filePath": "rust/src/server/src/routes/openai/completions/convert.rs",
+   "summary": "completions 请求转换层：prepare_completion_request（OpenAI 请求→引擎核心请求，echo 处理与采样参数映射）。",
+   "tags": [
+    "openai-api",
+    "convert",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:rust/src/server/src/routes/openai/completions/convert.rs:ResponseOptions",
+   "type": "class",
+   "name": "ResponseOptions",
+   "filePath": "rust/src/server/src/routes/openai/completions/convert.rs",
+   "lineRange": [
+    34,
+    52
+   ],
+   "summary": "响应选项（logprobs/echo/use 等开关集）。",
+   "tags": [
+    "options",
+    "data-model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/openai/completions/convert.rs:prepare_completion_request",
+   "type": "function",
+   "name": "prepare_completion_request",
+   "filePath": "rust/src/server/src/routes/openai/completions/convert.rs",
+   "lineRange": [
+    59,
+    193
+   ],
+   "summary": "请求准备（135 行：参数校验+转换+上下文注入）。",
+   "tags": [
+    "convert",
+    "prepare"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/openai/completions/types.rs",
+   "type": "file",
+   "name": "types.rs",
+   "filePath": "rust/src/server/src/routes/openai/completions/types.rs",
+   "summary": "completions 类型定义：CompletionRequest（1 方法）/Response/Choice/Stream 系列响应结构。",
+   "tags": [
+    "openai-api",
+    "types",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/server/src/routes/openai/completions/types.rs:CompletionRequest",
+   "type": "class",
+   "name": "CompletionRequest",
+   "filePath": "rust/src/server/src/routes/openai/completions/types.rs",
+   "lineRange": [
+    37,
+    229
+   ],
+   "summary": "补全请求结构（含自定义反序列化与默认值）。",
+   "tags": [
+    "request",
+    "data-model"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/server/src/routes/openai/completions/types.rs:CompletionResponse",
+   "type": "class",
+   "name": "CompletionResponse",
+   "filePath": "rust/src/server/src/routes/openai/completions/types.rs",
+   "lineRange": [
+    248,
+    261
+   ],
+   "summary": "补全响应。",
+   "tags": [
+    "response"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/openai/completions/validate.rs",
+   "type": "file",
+   "name": "validate.rs",
+   "filePath": "rust/src/server/src/routes/openai/completions/validate.rs",
+   "summary": "completions 兼容性校验：validate_request_compat（119 行——不支持的参数组合显式报错而非静默忽略）。",
+   "tags": [
+    "openai-api",
+    "validation",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/openai/completions/validate.rs:validate_request_compat",
+   "type": "function",
+   "name": "validate_request_compat",
+   "filePath": "rust/src/server/src/routes/openai/completions/validate.rs",
+   "lineRange": [
+    9,
+    122
+   ],
+   "summary": "请求兼容性校验（参数组合合法性+明确错误消息）。",
+   "tags": [
+    "validation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/openai/models.rs",
+   "type": "file",
+   "name": "models.rs",
+   "filePath": "rust/src/server/src/routes/openai/models.rs",
+   "summary": "/v1/models 路由：list_models（列出 served 模型）。",
+   "tags": [
+    "openai-api",
+    "models",
+    "route",
+    "rust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/openai/models.rs:list_models",
+   "type": "function",
+   "name": "list_models",
+   "filePath": "rust/src/server/src/routes/openai/models.rs",
+   "lineRange": [
+    18,
+    48
+   ],
+   "summary": "模型列表 handler。",
+   "tags": [
+    "handler"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/openai/utils/logprobs.rs",
+   "type": "file",
+   "name": "logprobs.rs",
+   "filePath": "rust/src/server/src/routes/openai/utils/logprobs.rs",
+   "summary": "OpenAI logprobs 转换工具（484 行）：decoded→Openai 三种格式（completion/chat/collected）+position top-logprob 映射。",
+   "tags": [
+    "openai-api",
+    "logprobs",
+    "convert",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/openai/utils/logprobs.rs:decoded_logprobs_to_openai",
+   "type": "function",
+   "name": "decoded_logprobs_to_openai",
+   "filePath": "rust/src/server/src/routes/openai/utils/logprobs.rs",
+   "lineRange": [
+    18,
+    51
+   ],
+   "summary": "completion 格式 logprobs 转换。",
+   "tags": [
+    "logprobs",
+    "convert"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/openai/utils/logprobs.rs:collected_logprobs_to_openai",
+   "type": "function",
+   "name": "collected_logprobs_to_openai",
+   "filePath": "rust/src/server/src/routes/openai/utils/logprobs.rs",
+   "lineRange": [
+    191,
+    227
+   ],
+   "summary": "收集态 logprobs 转换。",
+   "tags": [
+    "logprobs"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/openai/utils/metrics.rs",
+   "type": "file",
+   "name": "metrics.rs",
+   "filePath": "rust/src/server/src/routes/openai/utils/metrics.rs",
+   "summary": "请求级指标（PerRequestMetrics 四态：非流/流/投机/流投机），from_timestamps/from_request 构造。",
+   "tags": [
+    "openai-api",
+    "metrics",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/server/src/routes/openai/utils/metrics.rs:PerRequestMetrics",
+   "type": "class",
+   "name": "PerRequestMetrics",
+   "filePath": "rust/src/server/src/routes/openai/utils/metrics.rs",
+   "lineRange": [
+    10,
+    17
+   ],
+   "summary": "每请求指标（2 方法）。",
+   "tags": [
+    "metrics"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:rust/src/server/src/routes/openai/utils/metrics.rs:SpeculativeDecodingMetrics",
+   "type": "class",
+   "name": "SpeculativeDecodingMetrics",
+   "filePath": "rust/src/server/src/routes/openai/utils/metrics.rs",
+   "lineRange": [
+    101,
+    111
+   ],
+   "summary": "投机解码指标（接受率等）。",
+   "tags": [
+    "metrics",
+    "spec-decode"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/openai/utils/mod.rs",
+   "type": "file",
+   "name": "mod.rs",
+   "filePath": "rust/src/server/src/routes/openai/utils/mod.rs",
+   "summary": "openai utils 入口：validate_generation_prompt_truncation（生成提示截断校验）。",
+   "tags": [
+    "openai-api",
+    "utils",
+    "rust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/openai/utils/mod.rs:validate_generation_prompt_truncation",
+   "type": "function",
+   "name": "validate_generation_prompt_truncation",
+   "filePath": "rust/src/server/src/routes/openai/utils/mod.rs",
+   "lineRange": [
+    15,
+    34
+   ],
+   "summary": "截断参数校验。",
+   "tags": [
+    "validation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/openai/utils/structured_outputs.rs",
+   "type": "file",
+   "name": "structured_outputs.rs",
+   "filePath": "rust/src/server/src/routes/openai/utils/structured_outputs.rs",
+   "summary": "结构化输出转换：ResponseFormat/JsonSchemaFormat 解析与 convert_from_response_format（OpenAI response_format→引擎结构化约束）。",
+   "tags": [
+    "openai-api",
+    "structured-output",
+    "convert",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/server/src/routes/openai/utils/structured_outputs.rs:ResponseFormat",
+   "type": "class",
+   "name": "ResponseFormat",
+   "filePath": "rust/src/server/src/routes/openai/utils/structured_outputs.rs",
+   "lineRange": [
+    38,
+    55
+   ],
+   "summary": "响应格式（json_schema/json_schema_type 分派）。",
+   "tags": [
+    "structured-output"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/openai/utils/structured_outputs.rs:convert_from_response_format",
+   "type": "function",
+   "name": "convert_from_response_format",
+   "filePath": "rust/src/server/src/routes/openai/utils/structured_outputs.rs",
+   "lineRange": [
+    79,
+    126
+   ],
+   "summary": "response_format 到引擎约束的转换。",
+   "tags": [
+    "convert",
+    "structured-output"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/openai/utils/types.rs",
+   "type": "file",
+   "name": "types.rs",
+   "filePath": "rust/src/server/src/routes/openai/utils/types.rs",
+   "summary": "OpenAI 共享类型库（874 行，25+ 结构）：ContentPart/ImageUrl/Tool/ToolCall/StreamOptions/Usage 全套——chat 与 completions 路由共用的请求/响应模型。",
+   "tags": [
+    "openai-api",
+    "types",
+    "shared",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:rust/src/server/src/routes/openai/utils/types.rs:ContentPart",
+   "type": "class",
+   "name": "ContentPart",
+   "filePath": "rust/src/server/src/routes/openai/utils/types.rs",
+   "lineRange": [
+    177,
+    204
+   ],
+   "summary": "多模态内容块（text/image_url/audio/video_url 四态）。",
+   "tags": [
+    "content-part",
+    "multimodal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:rust/src/server/src/routes/openai/utils/types.rs:Tool",
+   "type": "class",
+   "name": "Tool",
+   "filePath": "rust/src/server/src/routes/openai/utils/types.rs",
+   "lineRange": [
+    284,
+    293
+   ],
+   "summary": "工具定义。",
+   "tags": [
+    "tools"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/openai/utils/types.rs:validate_messages",
+   "type": "function",
+   "name": "validate_messages",
+   "filePath": "rust/src/server/src/routes/openai/utils/types.rs",
+   "lineRange": [
+    837,
+    862
+   ],
+   "summary": "消息合法性校验。",
+   "tags": [
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/openai/utils/usage.rs",
+   "type": "file",
+   "name": "usage.rs",
+   "filePath": "rust/src/server/src/routes/openai/utils/usage.rs",
+   "summary": "usage 累计（ContinuousUsage：流式增量 token 计数的连续累计）。",
+   "tags": [
+    "openai-api",
+    "usage",
+    "rust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:rust/src/server/src/routes/openai/utils/usage.rs:ContinuousUsage",
+   "type": "class",
+   "name": "ContinuousUsage",
+   "filePath": "rust/src/server/src/routes/openai/utils/usage.rs",
+   "lineRange": [
+    15,
+    20
+   ],
+   "summary": "连续 usage 累计器（6 方法）。",
+   "tags": [
+    "usage",
+    "streaming"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/openai/utils/validated_json.rs",
+   "type": "file",
+   "name": "validated_json.rs",
+   "filePath": "rust/src/server/src/routes/openai/utils/validated_json.rs",
+   "summary": "ValidatedJson 提取器：axum JSON 提取+schema 校验二合一。",
+   "tags": [
+    "openai-api",
+    "extractor",
+    "rust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:rust/src/server/src/routes/openai/utils/validated_json.rs:ValidatedJson",
+   "type": "class",
+   "name": "ValidatedJson",
+   "filePath": "rust/src/server/src/routes/openai/utils/validated_json.rs",
+   "lineRange": [
+    22,
+    22
+   ],
+   "summary": "校验型 JSON 提取器。",
+   "tags": [
+    "extractor",
+    "validation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/output_log.rs",
+   "type": "file",
+   "name": "output_log.rs",
+   "filePath": "rust/src/server/src/routes/output_log.rs",
+   "summary": "输出日志路由：LoggedOutput+log_output（响应文本抽取与日志记录）。",
+   "tags": [
+    "route",
+    "output-log",
+    "rust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/output_log.rs:log_output",
+   "type": "function",
+   "name": "log_output",
+   "filePath": "rust/src/server/src/routes/output_log.rs",
+   "lineRange": [
+    23,
+    38
+   ],
+   "summary": "输出日志 handler。",
+   "tags": [
+    "handler",
+    "logging"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/pause.rs",
+   "type": "file",
+   "name": "pause.rs",
+   "filePath": "rust/src/server/src/routes/pause.rs",
+   "summary": "暂停路由（/pause、/is_paused）：PauseParams+状态查询。",
+   "tags": [
+    "route",
+    "pause",
+    "rust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/pause.rs:pause",
+   "type": "function",
+   "name": "pause",
+   "filePath": "rust/src/server/src/routes/pause.rs",
+   "lineRange": [
+    43,
+    56
+   ],
+   "summary": "暂停 handler。",
+   "tags": [
+    "handler",
+    "pause"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/pause.rs:is_paused",
+   "type": "function",
+   "name": "is_paused",
+   "filePath": "rust/src/server/src/routes/pause.rs",
+   "lineRange": [
+    70,
+    80
+   ],
+   "summary": "暂停状态查询。",
+   "tags": [
+    "handler",
+    "status"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/profile.rs",
+   "type": "file",
+   "name": "profile.rs",
+   "filePath": "rust/src/server/src/routes/profile.rs",
+   "summary": "profiling 路由（/start_profile）：StartProfileRequest 透传引擎。",
+   "tags": [
+    "route",
+    "profile",
+    "rust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/profile.rs:start_profile",
+   "type": "function",
+   "name": "start_profile",
+   "filePath": "rust/src/server/src/routes/profile.rs",
+   "lineRange": [
+    36,
+    79
+   ],
+   "summary": "profiling 启动 handler。",
+   "tags": [
+    "handler",
+    "profile"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/render.rs",
+   "type": "file",
+   "name": "render.rs",
+   "filePath": "rust/src/server/src/routes/render.rs",
+   "summary": "渲染路由（/render 调试端点）：lower_render_request/hoist_transfer_params 把 OpenAI 请求降级渲染为引擎请求（chat/completion 双路）——不推理只看渲染结果。",
+   "tags": [
+    "route",
+    "render",
+    "debug",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/render.rs:lower_render_request",
+   "type": "function",
+   "name": "lower_render_request",
+   "filePath": "rust/src/server/src/routes/render.rs",
+   "lineRange": [
+    82,
+    130
+   ],
+   "summary": "请求降级（OpenAI→引擎请求形态）。",
+   "tags": [
+    "render",
+    "lower"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/render.rs:render_chat",
+   "type": "function",
+   "name": "render_chat",
+   "filePath": "rust/src/server/src/routes/render.rs",
+   "lineRange": [
+    156,
+    180
+   ],
+   "summary": "chat 渲染端点。",
+   "tags": [
+    "render",
+    "chat"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/sleep.rs",
+   "type": "file",
+   "name": "sleep.rs",
+   "filePath": "rust/src/server/src/routes/sleep.rs",
+   "summary": "sleep 模式路由四端点：sleep/release_kv_cache_memory/wake_up/is_sleeping——Rust 版显存卸载管理。",
+   "tags": [
+    "route",
+    "sleep",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/sleep.rs:sleep",
+   "type": "function",
+   "name": "sleep",
+   "filePath": "rust/src/server/src/routes/sleep.rs",
+   "lineRange": [
+    57,
+    80
+   ],
+   "summary": "sleep handler（级别/模式透传引擎）。",
+   "tags": [
+    "handler",
+    "sleep"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/sleep.rs:wake_up",
+   "type": "function",
+   "name": "wake_up",
+   "filePath": "rust/src/server/src/routes/sleep.rs",
+   "lineRange": [
+    99,
+    122
+   ],
+   "summary": "唤醒 handler。",
+   "tags": [
+    "handler",
+    "wake-up"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/tests.rs",
+   "type": "file",
+   "name": "tests.rs",
+   "filePath": "rust/src/server/src/routes/tests.rs",
+   "summary": "路由集成测试（9813 行，本批最大文件）：FakeChatBackend/MockEngineTask 全套 mock+流式 envelope 断言+logprobs 采样构造——Rust 服务端的端到端测试基座。",
+   "tags": [
+    "test",
+    "integration",
+    "mock",
+    "rust"
+   ],
+   "complexity": "complex",
+   "languageNotes": "9813 行的测试文件：FakeChatBackend 伪造完整 chat 后端行为，覆盖流式/工具调用/logprobs 全语义。"
+  },
+  {
+   "id": "class:rust/src/server/src/routes/tests.rs:FakeChatBackend",
+   "type": "class",
+   "name": "FakeChatBackend",
+   "filePath": "rust/src/server/src/routes/tests.rs",
+   "lineRange": [
+    448,
+    451
+   ],
+   "summary": "伪造 chat 后端（10 方法）。",
+   "tags": [
+    "mock",
+    "backend"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:rust/src/server/src/routes/tests.rs:MockEngineTask",
+   "type": "class",
+   "name": "MockEngineTask",
+   "filePath": "rust/src/server/src/routes/tests.rs",
+   "lineRange": [
+    209,
+    212
+   ],
+   "summary": "mock 引擎任务（6 方法）。",
+   "tags": [
+    "mock",
+    "engine"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/tokenize.rs",
+   "type": "file",
+   "name": "tokenize.rs",
+   "filePath": "rust/src/server/src/routes/tokenize.rs",
+   "summary": "tokenize 路由：tokenize/detokenize 双端点（completion/chat 双形态）。",
+   "tags": [
+    "route",
+    "tokenize",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/tokenize.rs:tokenize",
+   "type": "function",
+   "name": "tokenize",
+   "filePath": "rust/src/server/src/routes/tokenize.rs",
+   "lineRange": [
+    53,
+    80
+   ],
+   "summary": "tokenize 主 handler。",
+   "tags": [
+    "handler",
+    "tokenize"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/tokenize.rs:detokenize",
+   "type": "function",
+   "name": "detokenize",
+   "filePath": "rust/src/server/src/routes/tokenize.rs",
+   "lineRange": [
+    126,
+    138
+   ],
+   "summary": "detokenize handler。",
+   "tags": [
+    "handler",
+    "detokenize"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/tokenize/types.rs",
+   "type": "file",
+   "name": "types.rs",
+   "filePath": "rust/src/server/src/routes/tokenize/types.rs",
+   "summary": "tokenize 类型：TokenizeRequest（Completion/Chat 双形态，into_text/into_chat 转换）+响应结构。",
+   "tags": [
+    "route",
+    "tokenize",
+    "types",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/server/src/routes/tokenize/types.rs:TokenizeChatRequest",
+   "type": "class",
+   "name": "TokenizeChatRequest",
+   "filePath": "rust/src/server/src/routes/tokenize/types.rs",
+   "lineRange": [
+    71,
+    90
+   ],
+   "summary": "chat tokenize 请求（into_chat_request 转换）。",
+   "tags": [
+    "tokenize",
+    "chat"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/weight_checker.rs",
+   "type": "file",
+   "name": "weight_checker.rs",
+   "filePath": "rust/src/server/src/routes/weight_checker.rs",
+   "summary": "权重检查路由：WeightCheckerAction/Request/Response——权重健康度检查端点。",
+   "tags": [
+    "route",
+    "weight-checker",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/weight_checker.rs:weight_checker",
+   "type": "function",
+   "name": "weight_checker",
+   "filePath": "rust/src/server/src/routes/weight_checker.rs",
+   "lineRange": [
+    49,
+    113
+   ],
+   "summary": "权重检查 handler（65 行）。",
+   "tags": [
+    "handler",
+    "weights"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:rust/src/server/src/routes/weight_transfer.rs",
+   "type": "file",
+   "name": "weight_transfer.rs",
+   "filePath": "rust/src/server/src/routes/weight_transfer.rs",
+   "summary": "权重传输路由（212 行）：init/shutdown 引擎/start_weight_update（含 draft）/update_weights/finish/update_version/weight_info 七端点——在线权重热更新全套。",
+   "tags": [
+    "route",
+    "weight-transfer",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/weight_transfer.rs:init_weight_transfer_engine",
+   "type": "function",
+   "name": "init_weight_transfer_engine",
+   "filePath": "rust/src/server/src/routes/weight_transfer.rs",
+   "lineRange": [
+    54,
+    76
+   ],
+   "summary": "传输引擎初始化 handler。",
+   "tags": [
+    "handler",
+    "weights"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/weight_transfer.rs:update_weights",
+   "type": "function",
+   "name": "update_weights",
+   "filePath": "rust/src/server/src/routes/weight_transfer.rs",
+   "lineRange": [
+    127,
+    155
+   ],
+   "summary": "权重更新 handler。",
+   "tags": [
+    "handler",
+    "weights"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/server/src/routes/weight_transfer.rs:start_draft_weight_update",
+   "type": "function",
+   "name": "start_draft_weight_update",
+   "filePath": "rust/src/server/src/routes/weight_transfer.rs",
+   "lineRange": [
+    111,
+    124
+   ],
+   "summary": "draft 权重更新（投机解码权重独立热更）。",
+   "tags": [
+    "handler",
+    "weights",
+    "spec-decode"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/server/src/server_info.rs",
+   "type": "file",
+   "name": "server_info.rs",
+   "filePath": "rust/src/server/src/server_info.rs",
+   "summary": "服务器信息（ServerInfoSnapshot/ConfigFormat）：frontend_vllm_config——前端侧 vllm 配置的 JSON 视图。",
+   "tags": [
+    "server-info",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/server/src/server_info.rs:ServerInfoSnapshot",
+   "type": "class",
+   "name": "ServerInfoSnapshot",
+   "filePath": "rust/src/server/src/server_info.rs",
+   "lineRange": [
+    22,
+    30
+   ],
+   "summary": "服务器信息快照（2 方法）。",
+   "tags": [
+    "server-info"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:rust/src/server/src/server_info.rs:frontend_vllm_config",
+   "type": "function",
+   "name": "frontend_vllm_config",
+   "filePath": "rust/src/server/src/server_info.rs",
+   "lineRange": [
+    72,
+    100
+   ],
+   "summary": "前端 vllm 配置组装（从环境与选项）。",
+   "tags": [
+    "config"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/server/src/state.rs",
+   "type": "file",
+   "name": "state.rs",
+   "filePath": "rust/src/server/src/state.rs",
+   "summary": "AppState（263 行，26 方法）：Rust 最小单模型 OpenAI server 的共享路由状态——served 模型名/API key sha256 哈希/ChatLlm/EngineCoreClient/LoRA 管理器/tokio Runtime/关停引用计数。",
+   "tags": [
+    "state",
+    "server",
+    "rust"
+   ],
+   "complexity": "complex",
+   "languageNotes": "API key 以 sha256 摘要存储（hash_api_key）而非明文；关停走 refcount 轮询（100ms 间隔）。"
+  },
+  {
+   "id": "class:rust/src/server/src/state.rs:AppState",
+   "type": "class",
+   "name": "AppState",
+   "filePath": "rust/src/server/src/state.rs",
+   "lineRange": [
+    32,
+    57
+   ],
+   "summary": "共享路由状态（26 方法：模型名/API key/engine/lora/关停）。",
+   "tags": [
+    "state",
+    "shared"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:rust/src/server/src/utils.rs",
+   "type": "file",
+   "name": "utils.rs",
+   "filePath": "rust/src/server/src/utils.rs",
+   "summary": "路由工具集（301 行）：sse_response/merge_kv_transfer_params/convert_logit_bias/resolve_request_context——各路由共享的请求上下文解析。",
+   "tags": [
+    "utils",
+    "route",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/server/src/utils.rs:resolve_request_context",
+   "type": "function",
+   "name": "resolve_request_context",
+   "filePath": "rust/src/server/src/utils.rs",
+   "lineRange": [
+    150,
+    179
+   ],
+   "summary": "请求上下文解析（session/model/lora）。",
+   "tags": [
+    "context",
+    "resolve"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/server/src/utils.rs:convert_logit_bias",
+   "type": "function",
+   "name": "convert_logit_bias",
+   "filePath": "rust/src/server/src/utils.rs",
+   "lineRange": [
+    117,
+    145
+   ],
+   "summary": "logit_bias 到引擎格式转换。",
+   "tags": [
+    "convert",
+    "logit-bias"
+   ],
+   "complexity": "moderate"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions.rs",
+   "target": "file:rust/src/server/src/config.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions.rs",
+   "target": "file:rust/src/server/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions.rs",
+   "target": "file:rust/src/server/src/lora.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions.rs",
+   "target": "file:rust/src/server/src/routes/openai/completions/types.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/types.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/usage.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/validated_json.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions.rs",
+   "target": "file:rust/src/server/src/routes/output_log.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions.rs",
+   "target": "file:rust/src/server/src/state.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions.rs",
+   "target": "file:rust/src/server/src/utils.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions.rs",
+   "target": "function:rust/src/server/src/routes/openai/completions.rs:completions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions.rs",
+   "target": "function:rust/src/server/src/routes/openai/completions.rs:completions",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions.rs",
+   "target": "function:rust/src/server/src/routes/openai/completions.rs:completion_chunk_stream",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions.rs",
+   "target": "function:rust/src/server/src/routes/openai/completions.rs:completion_chunk_stream",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions.rs",
+   "target": "function:rust/src/server/src/routes/openai/completions.rs:collect_completion",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions.rs",
+   "target": "function:rust/src/server/src/routes/openai/completions.rs:collect_completion",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/convert.rs",
+   "target": "file:rust/src/server/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/convert.rs",
+   "target": "file:rust/src/server/src/lora.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/convert.rs",
+   "target": "file:rust/src/server/src/routes/openai/completions/types.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/convert.rs",
+   "target": "file:rust/src/server/src/routes/openai/completions/validate.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/convert.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/mod.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/convert.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/structured_outputs.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/convert.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/types.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/convert.rs",
+   "target": "file:rust/src/server/src/utils.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/convert.rs",
+   "target": "class:rust/src/server/src/routes/openai/completions/convert.rs:ResponseOptions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/convert.rs",
+   "target": "class:rust/src/server/src/routes/openai/completions/convert.rs:ResponseOptions",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/convert.rs",
+   "target": "function:rust/src/server/src/routes/openai/completions/convert.rs:prepare_completion_request",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/convert.rs",
+   "target": "function:rust/src/server/src/routes/openai/completions/convert.rs:prepare_completion_request",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/types.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/metrics.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/types.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/types.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/types.rs",
+   "target": "class:rust/src/server/src/routes/openai/completions/types.rs:CompletionRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/types.rs",
+   "target": "class:rust/src/server/src/routes/openai/completions/types.rs:CompletionRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/types.rs",
+   "target": "class:rust/src/server/src/routes/openai/completions/types.rs:CompletionResponse",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/types.rs",
+   "target": "class:rust/src/server/src/routes/openai/completions/types.rs:CompletionResponse",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/validate.rs",
+   "target": "file:rust/src/server/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/validate.rs",
+   "target": "file:rust/src/server/src/routes/openai/completions/types.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/validate.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/mod.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/validate.rs",
+   "target": "function:rust/src/server/src/routes/openai/completions/validate.rs:validate_request_compat",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions/validate.rs",
+   "target": "function:rust/src/server/src/routes/openai/completions/validate.rs:validate_request_compat",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/models.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/types.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/models.rs",
+   "target": "file:rust/src/server/src/state.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/models.rs",
+   "target": "function:rust/src/server/src/routes/openai/models.rs:list_models",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/models.rs",
+   "target": "function:rust/src/server/src/routes/openai/models.rs:list_models",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/logprobs.rs",
+   "target": "file:rust/src/server/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/logprobs.rs",
+   "target": "function:rust/src/server/src/routes/openai/utils/logprobs.rs:decoded_logprobs_to_openai",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/logprobs.rs",
+   "target": "function:rust/src/server/src/routes/openai/utils/logprobs.rs:decoded_logprobs_to_openai",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/logprobs.rs",
+   "target": "function:rust/src/server/src/routes/openai/utils/logprobs.rs:collected_logprobs_to_openai",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/logprobs.rs",
+   "target": "function:rust/src/server/src/routes/openai/utils/logprobs.rs:collected_logprobs_to_openai",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/metrics.rs",
+   "target": "class:rust/src/server/src/routes/openai/utils/metrics.rs:PerRequestMetrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/metrics.rs",
+   "target": "class:rust/src/server/src/routes/openai/utils/metrics.rs:PerRequestMetrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/metrics.rs",
+   "target": "class:rust/src/server/src/routes/openai/utils/metrics.rs:SpeculativeDecodingMetrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/metrics.rs",
+   "target": "class:rust/src/server/src/routes/openai/utils/metrics.rs:SpeculativeDecodingMetrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/mod.rs",
+   "target": "file:rust/src/server/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/mod.rs",
+   "target": "function:rust/src/server/src/routes/openai/utils/mod.rs:validate_generation_prompt_truncation",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/mod.rs",
+   "target": "function:rust/src/server/src/routes/openai/utils/mod.rs:validate_generation_prompt_truncation",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/structured_outputs.rs",
+   "target": "file:rust/src/server/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/structured_outputs.rs",
+   "target": "class:rust/src/server/src/routes/openai/utils/structured_outputs.rs:ResponseFormat",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/structured_outputs.rs",
+   "target": "class:rust/src/server/src/routes/openai/utils/structured_outputs.rs:ResponseFormat",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/structured_outputs.rs",
+   "target": "function:rust/src/server/src/routes/openai/utils/structured_outputs.rs:convert_from_response_format",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/structured_outputs.rs",
+   "target": "function:rust/src/server/src/routes/openai/utils/structured_outputs.rs:convert_from_response_format",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/types.rs",
+   "target": "class:rust/src/server/src/routes/openai/utils/types.rs:ContentPart",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/types.rs",
+   "target": "class:rust/src/server/src/routes/openai/utils/types.rs:ContentPart",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/types.rs",
+   "target": "class:rust/src/server/src/routes/openai/utils/types.rs:Tool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/types.rs",
+   "target": "class:rust/src/server/src/routes/openai/utils/types.rs:Tool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/types.rs",
+   "target": "function:rust/src/server/src/routes/openai/utils/types.rs:validate_messages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/types.rs",
+   "target": "function:rust/src/server/src/routes/openai/utils/types.rs:validate_messages",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/usage.rs",
+   "target": "class:rust/src/server/src/routes/openai/utils/usage.rs:ContinuousUsage",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/usage.rs",
+   "target": "class:rust/src/server/src/routes/openai/utils/usage.rs:ContinuousUsage",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/validated_json.rs",
+   "target": "file:rust/src/server/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/validated_json.rs",
+   "target": "class:rust/src/server/src/routes/openai/utils/validated_json.rs:ValidatedJson",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/validated_json.rs",
+   "target": "class:rust/src/server/src/routes/openai/utils/validated_json.rs:ValidatedJson",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/output_log.rs",
+   "target": "function:rust/src/server/src/routes/output_log.rs:log_output",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/output_log.rs",
+   "target": "function:rust/src/server/src/routes/output_log.rs:log_output",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/pause.rs",
+   "target": "file:rust/src/server/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/pause.rs",
+   "target": "file:rust/src/server/src/state.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/pause.rs",
+   "target": "file:rust/src/server/src/utils.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/pause.rs",
+   "target": "function:rust/src/server/src/routes/pause.rs:pause",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/pause.rs",
+   "target": "function:rust/src/server/src/routes/pause.rs:pause",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/pause.rs",
+   "target": "function:rust/src/server/src/routes/pause.rs:is_paused",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/pause.rs",
+   "target": "function:rust/src/server/src/routes/pause.rs:is_paused",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/profile.rs",
+   "target": "file:rust/src/server/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/profile.rs",
+   "target": "file:rust/src/server/src/state.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/profile.rs",
+   "target": "file:rust/src/server/src/utils.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/profile.rs",
+   "target": "function:rust/src/server/src/routes/profile.rs:start_profile",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/profile.rs",
+   "target": "function:rust/src/server/src/routes/profile.rs:start_profile",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/render.rs",
+   "target": "file:rust/src/server/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/render.rs",
+   "target": "file:rust/src/server/src/lora.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/render.rs",
+   "target": "file:rust/src/server/src/render.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/render.rs",
+   "target": "file:rust/src/server/src/routes/inference/generate.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/render.rs",
+   "target": "file:rust/src/server/src/routes/openai/mod.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/render.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/types.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/render.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/validated_json.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/render.rs",
+   "target": "file:rust/src/server/src/utils.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/render.rs",
+   "target": "function:rust/src/server/src/routes/render.rs:lower_render_request",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/render.rs",
+   "target": "function:rust/src/server/src/routes/render.rs:lower_render_request",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/render.rs",
+   "target": "function:rust/src/server/src/routes/render.rs:render_chat",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/render.rs",
+   "target": "function:rust/src/server/src/routes/render.rs:render_chat",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/sleep.rs",
+   "target": "file:rust/src/server/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/sleep.rs",
+   "target": "file:rust/src/server/src/state.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/sleep.rs",
+   "target": "file:rust/src/server/src/utils.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/sleep.rs",
+   "target": "function:rust/src/server/src/routes/sleep.rs:sleep",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/sleep.rs",
+   "target": "function:rust/src/server/src/routes/sleep.rs:sleep",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/sleep.rs",
+   "target": "function:rust/src/server/src/routes/sleep.rs:wake_up",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/sleep.rs",
+   "target": "function:rust/src/server/src/routes/sleep.rs:wake_up",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tests.rs",
+   "target": "file:rust/src/server/src/config.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tests.rs",
+   "target": "file:rust/src/server/src/lora.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tests.rs",
+   "target": "file:rust/src/server/src/render.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tests.rs",
+   "target": "file:rust/src/server/src/state.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tests.rs",
+   "target": "class:rust/src/server/src/routes/tests.rs:FakeChatBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tests.rs",
+   "target": "class:rust/src/server/src/routes/tests.rs:FakeChatBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tests.rs",
+   "target": "class:rust/src/server/src/routes/tests.rs:MockEngineTask",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tests.rs",
+   "target": "class:rust/src/server/src/routes/tests.rs:MockEngineTask",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tokenize.rs",
+   "target": "file:rust/src/server/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tokenize.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/validated_json.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tokenize.rs",
+   "target": "file:rust/src/server/src/routes/tokenize/types.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tokenize.rs",
+   "target": "file:rust/src/server/src/state.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tokenize.rs",
+   "target": "file:rust/src/server/src/utils.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tokenize.rs",
+   "target": "function:rust/src/server/src/routes/tokenize.rs:tokenize",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tokenize.rs",
+   "target": "function:rust/src/server/src/routes/tokenize.rs:tokenize",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tokenize.rs",
+   "target": "function:rust/src/server/src/routes/tokenize.rs:detokenize",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tokenize.rs",
+   "target": "function:rust/src/server/src/routes/tokenize.rs:detokenize",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tokenize/types.rs",
+   "target": "file:rust/src/server/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tokenize/types.rs",
+   "target": "file:rust/src/server/src/routes/openai/chat_completions/convert.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tokenize/types.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/types.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tokenize/types.rs",
+   "target": "class:rust/src/server/src/routes/tokenize/types.rs:TokenizeChatRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tokenize/types.rs",
+   "target": "class:rust/src/server/src/routes/tokenize/types.rs:TokenizeChatRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/weight_checker.rs",
+   "target": "file:rust/src/server/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/weight_checker.rs",
+   "target": "file:rust/src/server/src/state.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/weight_checker.rs",
+   "target": "file:rust/src/server/src/utils.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/weight_checker.rs",
+   "target": "function:rust/src/server/src/routes/weight_checker.rs:weight_checker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/weight_checker.rs",
+   "target": "function:rust/src/server/src/routes/weight_checker.rs:weight_checker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/weight_transfer.rs",
+   "target": "file:rust/src/server/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/weight_transfer.rs",
+   "target": "file:rust/src/server/src/state.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/weight_transfer.rs",
+   "target": "file:rust/src/server/src/utils.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/routes/weight_transfer.rs",
+   "target": "function:rust/src/server/src/routes/weight_transfer.rs:init_weight_transfer_engine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/weight_transfer.rs",
+   "target": "function:rust/src/server/src/routes/weight_transfer.rs:init_weight_transfer_engine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/weight_transfer.rs",
+   "target": "function:rust/src/server/src/routes/weight_transfer.rs:update_weights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/weight_transfer.rs",
+   "target": "function:rust/src/server/src/routes/weight_transfer.rs:update_weights",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/weight_transfer.rs",
+   "target": "function:rust/src/server/src/routes/weight_transfer.rs:start_draft_weight_update",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/routes/weight_transfer.rs",
+   "target": "function:rust/src/server/src/routes/weight_transfer.rs:start_draft_weight_update",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/server_info.rs",
+   "target": "file:rust/src/server/src/config.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/server_info.rs",
+   "target": "class:rust/src/server/src/server_info.rs:ServerInfoSnapshot",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/server_info.rs",
+   "target": "class:rust/src/server/src/server_info.rs:ServerInfoSnapshot",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/server_info.rs",
+   "target": "function:rust/src/server/src/server_info.rs:frontend_vllm_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/server_info.rs",
+   "target": "function:rust/src/server/src/server_info.rs:frontend_vllm_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/state.rs",
+   "target": "file:rust/src/server/src/config.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/state.rs",
+   "target": "file:rust/src/server/src/lora.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/state.rs",
+   "target": "file:rust/src/server/src/runtime.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/state.rs",
+   "target": "file:rust/src/server/src/server_info.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/state.rs",
+   "target": "class:rust/src/server/src/state.rs:AppState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/state.rs",
+   "target": "class:rust/src/server/src/state.rs:AppState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/utils.rs",
+   "target": "file:rust/src/server/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/server/src/utils.rs",
+   "target": "function:rust/src/server/src/utils.rs:resolve_request_context",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/utils.rs",
+   "target": "function:rust/src/server/src/utils.rs:resolve_request_context",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/utils.rs",
+   "target": "function:rust/src/server/src/utils.rs:convert_logit_bias",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/server/src/utils.rs",
+   "target": "function:rust/src/server/src/utils.rs:convert_logit_bias",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions.rs",
+   "target": "file:rust/src/server/src/routes/openai/completions/convert.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions.rs",
+   "target": "file:rust/src/server/src/routes/openai/completions/types.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/completions.rs",
+   "target": "file:rust/src/server/src/routes/openai/completions/validate.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/mod.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/logprobs.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/mod.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/metrics.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/mod.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/structured_outputs.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/mod.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/types.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/mod.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/usage.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/server/src/routes/openai/utils/mod.rs",
+   "target": "file:rust/src/server/src/routes/openai/utils/validated_json.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/server/src/routes/tokenize.rs",
+   "target": "file:rust/src/server/src/routes/tokenize/types.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  }
+ ]
+}

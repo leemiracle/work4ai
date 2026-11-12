@@ -1,0 +1,105 @@
+# AIStore Audio Split & Consolidate Transformer
+
+This transformer splits and consolidates audio files using a [JSONL](https://jsonlines.org/) manifest file as input. It extracts segments specified in the manifest, consolidates them, and returns the result as a tarball.
+
+This transformer consists of two components:
+
+1. **Audio Manager** – Processes the manifest and dispatches splitting tasks.
+2. **Audio Splitter** – Splits individual audio files based on instructions from the Audio Manager.
+
+---
+
+## Why two separate transformers?
+
+Using separate transformers ensures scalability through distributed processing. A single transformer combining both roles would not scale efficiently, as audio files might not reside on the same node, causing performance issues due to unnecessary data movement between nodes. Separating the roles allows efficient distributed processing across the AIStore cluster.
+
+![Audio Split Consolidate Overview](audio_split_consolidate_diagram.png)
+
+---
+
+## Example Input Manifest
+
+`manifest.jsonl`:
+```json
+{"id": "youtube_vid_id_1", "part": 1, "from_time": 0.36, "to_time": 2.36}
+{"id": "youtube_vid_id_1", "part": 2, "from_time": 3.36, "to_time": 9.36}
+{"id": "youtube_vid_id_2", "part": 1, "from_time": 0.0, "to_time": 4.0}
+```
+
+Output:
+- A tarball (`manifest.tar`) containing:
+  - `youtube_vid_id_1_1`
+  - `youtube_vid_id_1_2`
+  - `youtube_vid_id_2_1`
+
+Each file will contain audio trimmed to the specified duration.
+
+---
+
+## How to Get Started
+
+### Step 1: Prepare the Manifest
+
+Create a JSON Lines (`.jsonl`) file where each line contains:
+- `id`: Identifier of the audio file.
+- `part`: Part number.
+- `from_time` and `to_time`: Segment duration.
+
+---
+
+## Deploy ETLs
+
+### Audio Splitter ETL
+
+Review and edit [`audio_splitter/etl_spec.yaml`](audio_splitter/etl_spec.yaml) as needed.
+
+```bash
+ais etl init -f audio_splitter/etl_spec.yaml
+```
+
+### Audio Manager ETL
+
+Review and edit [`audio_manager/etl_spec.yaml`](audio_manager/etl_spec.yaml), ensuring settings match your environment.
+
+```bash
+ais etl init -f audio_manager/etl_spec.yaml
+```
+
+Ensure the manifest file is accessible by the Audio Manager.
+
+### TLS / Auth-Enabled Clusters
+
+The Audio Manager makes SDK calls to the AIS cluster to invoke the Audio Splitter ETL. If your cluster uses **HTTPS** or has **AuthN** enabled, you need to pass additional environment variables in the Audio Manager's `etl_spec.yaml`:
+
+| Variable | Description |
+|----------|-------------|
+| `AIS_SKIP_VERIFY` | Set to `"true"` to skip SSL certificate verification (e.g., self-signed certs) |
+| `AIS_CLIENT_CA` | Path to a CA certificate bundle (mount via volume) |
+| `AIS_CRT` | Path to a client certificate PEM file (for mTLS) |
+| `AIS_CRT_KEY` | Path to the client certificate private key (for mTLS) |
+| `AIS_AUTHN_TOKEN` | Bearer token if AIS cluster has authentication enabled |
+
+These are the same environment variables used by the [AIStore Python SDK](https://github.com/NVIDIA/aistore/blob/main/python/aistore/sdk/README.md#environment-variables). See the commented-out examples in [`audio_manager/etl_spec.yaml`](audio_manager/etl_spec.yaml).
+
+---
+
+## Run Transformations
+
+### Single Manifest File
+
+```bash
+ais etl object audio-manager ais://manifests/manifest.jsonl manifest.tar
+```
+
+### Batch Operation (Multiple Manifest Files - Bucket Transform)
+
+```bash
+ais etl bucket audio-manager ais://bench_manifests ais://output_bucket --ext "{jsonl:tar}"
+```
+
+This will process each `.jsonl` file in the source bucket and output consolidated audio tarballs (`.tar`) into the specified output bucket.
+
+
+## Performance  
+
+Our [benchmark](../../benchmarks/audio_split_consolidate.py) demonstrates that using our ETL can accelerate data processing by **up to 13x** compared to single-threaded local execution. Performance scales **linearly** with the number of targets and disks in the AIStore cluster.

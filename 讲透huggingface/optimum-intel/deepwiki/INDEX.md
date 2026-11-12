@@ -1,0 +1,32 @@
+# DeepWiki 索引 — huggingface/optimum-intel
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 302589 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 System Architecture](1.1-system-architecture.md)
+  - [1.2 Installation and Setup](1.2-installation-and-setup.md)
+- [2 OpenVINO Integration](2-openvino-integration.md)
+  - [2.1 Model Classes and Task Coverage](2.1-model-classes-and-task-coverage.md)
+  - [2.2 Model Export and Conversion](2.2-model-export-and-conversion.md)
+  - [2.3 Quantization System](2.3-quantization-system.md)
+  - [2.4 Model Loading and Inference](2.4-model-loading-and-inference.md)
+  - [2.5 Diffusion Models](2.5-diffusion-models.md)
+  - [2.6 Visual-Language Models](2.6-visual-language-models.md)
+  - [2.7 Sequence-to-Sequence Models](2.7-sequence-to-sequence-models.md)
+- [3 IPEX Integration](3-ipex-integration.md)
+  - [3.1 IPEX Model Classes](3.1-ipex-model-classes.md)
+  - [3.2 Optimizations and Performance](3.2-optimizations-and-performance.md)
+- [4 Neural Compressor Integration (Deprecated)](4-neural-compressor-integration-deprecated.md)
+  - [4.1 INCQuantizer and Quantization](4.1-incquantizer-and-quantization.md)
+  - [4.2 INCTrainer and Compression](4.2-inctrainer-and-compression.md)
+- [5 Utilities and Tools](5-utilities-and-tools.md)
+  - [5.1 Dependency Management and Import System](5.1-dependency-management-and-import-system.md)
+  - [5.2 Model Utilities](5.2-model-utilities.md)
+  - [5.3 Pipeline Framework and Accelerators](5.3-pipeline-framework-and-accelerators.md)
+- [6 Command Line Interface](6-command-line-interface.md)
+- [7 Development and Contributing](7-development-and-contributing.md)
+  - [7.1 Package Structure](7.1-package-structure.md)
+  - [7.2 Testing Infrastructure](7.2-testing-infrastructure.md)
+  - [7.3 Documentation and Release Management](7.3-documentation-and-release-management.md)
+- [8 Glossary](8-glossary.md)

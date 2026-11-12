@@ -1,148 +1,248 @@
-> 来源: [https://deepwiki.com/deepseek-ai/DeepSeek-VL2/1-overview](https://deepwiki.com/deepseek-ai/DeepSeek-VL2/1-overview)
-> DeepWiki deepseek-ai/DeepSeek-VL2
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/DeepSeek-VL2 · page 1 Overview · fetched 2026-10-30 -->
 
 # Overview
 
-  Relevant source files 
- - [README.md](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1)
- - [deep_ep/__init__.py](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py)
- 
-  
-## Purpose and Scope
+<details>
+<summary>Relevant source files</summary>
 
- DeepEP (DeepEveryParallel) is a high-performance communication library tailored for modern machine learning training and inference, specifically optimized for **Mixture-of-Experts (MoE) expert parallelism**. It provides high-throughput and low-latency all-to-all GPU kernels for MoE dispatch and combine operations, supporting low-precision formats like FP8 [README.md1-5](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L1-L5)
+The following files were used as context for generating this wiki page:
 
- The library features a lightweight **Just-In-Time (JIT)** compilation system, allowing it to run without pre-compilation of CUDA kernels during installation [README.md3-5](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L3-L5) DeepEP V2 introduces a significant architectural shift from the NVSHMEM-based V1 to a more efficient **NCCL Gin backend**, achieving up to 1.3x peak performance while reducing SM occupancy by up to 4x [README.md9-57](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L9-L57)
+- [README.md](README.md)
+- [images/badge.svg](images/badge.svg)
 
- **Sources:** [README.md1-17](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L1-L17) [deep_ep/__init__.py71-84](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L71-L84)
+</details>
 
- 
----
 
- 
-## Architectural Evolution: V1 to V2
 
- DeepEP V2 represents a complete refactoring of the communication layer. The transition from V1 to V2 involves several major shifts in backend technology and resource management:
+This document provides a technical introduction to DeepSeek-VL2, an advanced series of large Mixture-of-Experts (MoE) Vision-Language Models. DeepSeek-VL2 is designed to process both visual and textual inputs for tasks including visual question answering, optical character recognition (OCR), document/table/chart understanding, and visual grounding.
 
- 
-| Feature | V1 (Legacy) | V2 (Elastic) |
-|---|---|---|
-| Backend | NVSHMEM (IBGDA/Symmetric Heap) | NCCL Gin (Header-only, lightweight) |
-| Interface | Buffer class | ElasticBuffer & EPHandle |
-| Resource Allocation | Manual tuning (num_sms, Config) | Analytical calculation via formulas |
-| Domain Scale | Limited scale-out | Up to EP2048 |
-| SM Occupancy | High (e.g., 24 SMs) | Low (e.g., 4-6 SMs) |
-| JIT Pipeline | Partial / Pre-compiled | Fully JIT (NVRTC-based) |
+For installation instructions, see [Installation and Requirements](#1.1), and for usage examples, see [Quick Start](#1.2).
 
- **Sources:** [README.md9-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L9-L25) [README.md115-116](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L116) [deep_ep/buffers/elastic.py16-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L30)
+## System Architecture
 
- 
----
+DeepSeek-VL2 follows a modular architecture with specialized components for vision processing, feature projection, and language generation.
 
- 
-## System Architecture and Code Entities
+### High-Level Architecture
 
- The following diagram maps the high-level system components to their corresponding code entities and files, illustrating the bridge between the Python user space and the CUDA kernel implementations.
-
- 
+```mermaid
+graph TD
+    A["User"] --> B["DeepSeek-VL2 Interface"]
+    B --> |"Web UI"| C["Gradio Demo"]
+    B --> |"API"| D["Inference Script"]
+    
+    D --> E["DeepseekVLV2Processor"]
+    E --> |"Tokenize text"| F["LlamaTokenizer"]
+    E --> |"Process images"| G["Image Transformer"]
+    
+    E --> H["DeepseekVLV2ForCausalLM"]
+    H --> |"Image encoding"| I["VisionTransformer"]
+    H --> |"Feature projection"| J["MlpProjector"]
+    H --> |"Text generation"| K["DeepseekV2ForCausalLM"]
+    
+    subgraph "Core Model Components"
+        H
+        I
+        J
+        K
+    end
+    
+    subgraph "Input Processing"
+        E
+        F
+        G
+    end
+    
+    subgraph "User Interfaces"
+        C
+        D
+    end
 ```
 
+Sources: README.md
+
+### Core Components
+
+The system comprises several key components that work together to process multimodal inputs:
+
+```mermaid
+classDiagram
+    class DeepseekVLV2ForCausalLM {
+        +vision: VisionTransformer
+        +projector: MlpProjector
+        +language: DeepseekV2ForCausalLM
+        +forward()
+        +prepare_inputs_embeds()
+        +incremental_prefilling()
+    }
+    
+    class VisionTransformer {
+        +layers
+        +patch_embed
+        +norm
+        +forward()
+    }
+    
+    class MlpProjector {
+        +projector_type
+        +forward()
+    }
+    
+    class DeepseekV2ForCausalLM {
+        +model: DeepseekV2Model
+        +lm_head
+        +forward()
+    }
+    
+    class DeepseekVLV2Processor {
+        +tokenizer
+        +image_transform
+        +__call__()
+        +process_one()
+        +batchify()
+    }
+    
+    DeepseekVLV2ForCausalLM --> VisionTransformer : contains
+    DeepseekVLV2ForCausalLM --> MlpProjector : contains
+    DeepseekVLV2ForCausalLM --> DeepseekV2ForCausalLM : contains
+    
+    DeepseekVLV2Processor ..> DeepseekVLV2ForCausalLM : prepares input for
 ```
 
- **Diagram: DeepEP V2 Code Entity Mapping**
+Sources: README.md
 
- **Sources:** [deep_ep/__init__.py87-97](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L87-L97) [deep_ep/buffers/elastic.py16-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L30) [README.md13-17](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L13-L17) [csrc/python_api.cpp1-39](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/python_api.cpp#L1-L39)
+1. **DeepseekVLV2Processor**: Handles preprocessing of both text and image inputs.
+2. **DeepseekVLV2ForCausalLM**: The main model class that integrates vision and language capabilities.
+3. **VisionTransformer**: Processes and encodes images into feature representations.
+4. **MlpProjector**: Aligns visual features with the language embedding space.
+5. **DeepseekV2ForCausalLM**: Generates text responses based on the combined text and image embeddings.
 
- 
----
+## Model Variants and Capabilities
 
- 
-## Core Abstractions: ElasticBuffer and EPHandle
+DeepSeek-VL2 comes in three variants with different parameter counts and resource requirements:
 
- 
-### ElasticBuffer
+| Model Variant | Total Parameters | Activated Parameters | Minimum GPU Memory |
+|---------------|-----------------|---------------------|-------------------|
+| DeepSeek-VL2-Tiny | 3.37B | 1.0B | < 40GB |
+| DeepSeek-VL2-Small | 16.1B | 2.8B | 40GB |
+| DeepSeek-VL2 | 7.5B | 4.5B | 80GB+ |
 
- The `ElasticBuffer` is the primary interface in V2. It manages a single contiguous GPU buffer that serves as a symmetric memory window across the communication group [README.md115-116](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L116) It uses `NCCLSymmetricMemoryContext` to handle cross-GPU memory registration and RDMA window management [csrc/kernels/backend/nccl.cu10-50](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/kernels/backend/nccl.cu#L10-L50) It supports both standard EP operations and experimental features like PP and Engram.
+All variants utilize Mixture-of-Experts (MoE) technology, which allows them to have a large total parameter count while keeping inference costs manageable by only activating a portion of the parameters during processing.
 
- 
-### EPHandle
+Sources: README.md:80-90
 
- The `EPHandle` is a metadata object produced during the dispatch phase. It caches critical routing information, including:
+## Data Flow During Inference
 
- 
- - **Expert Alignment**: Padding information for memory efficiency [deep_ep/buffers/elastic.py32-40](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L32-L40)
- - **Token Counts**: `psum_num_recv_tokens_per_expert` and `num_recv_tokens` [deep_ep/buffers/elastic.py45-55](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L45-L55)
- - **Routing Metadata**: `topk_idx` and `recv_src_metadata` for the combine phase [deep_ep/buffers/elastic.py42-50](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L42-L50)
- 
- This handle can be reused for subsequent `combine` operations or cached during inference decoding to eliminate redundant metadata calculation [README.md18-20](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L18-L20)
+The following diagram illustrates how data flows through the system during inference:
 
- **Sources:** [deep_ep/buffers/elastic.py16-110](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L110) [README.md115-130](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L130)
-
- 
----
-
- 
-## Supported Communication Modes
-
- DeepEP V2 provides a unified interface for several high-performance primitives, executed via the NCCL Gin backend:
-
- 
- - **EP Dispatch/Combine**: The core MoE all-to-all kernels. Supports `do_expand` for GEMM layout optimization and `expert_alignment` for memory efficiency [deep_ep/buffers/elastic.py134-210](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L134-L210)
- - **Engram (Remote Memory Access)**: Zero-SM RDMA-based remote memory fetching (e.g., for KV cache). Uses `engram_write` and `engram_fetch` (returning a hook) to access remote memory with minimal compute overhead [README.md23-31](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L23-L31)
- - **Pipeline Parallelism (PP)**: Experimental zero-SM RDMA primitives (`pp_send`, `pp_recv`) for point-to-point communication between pipeline stages [README.md24-100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L24-L100)
- - **All-Gather Reduce-Scatter (AGRS)**: Experimental primitives for data and tensor parallelism, including `all_gather` updates [README.md37-98](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L37-L98)
- 
- 
+```mermaid
+flowchart TD
+    A["User Input"] --> B1["Text Input"]
+    A --> B2["Image Input"]
+    
+    B1 --> C1["Tokenizer"]
+    B2 --> C2["Image Processor"]
+    
+    C1 --> D1["Text Tokens"]
+    C2 --> D2["Processed Images"]
+    
+    D1 --> E["DeepseekVLV2Processor"]
+    D2 --> E
+    
+    E --> |"input_ids"| F["DeepseekVLV2ForCausalLM"]
+    E --> |"images"| F
+    E --> |"images_seq_mask"| F
+    E --> |"images_spatial_crop"| F
+    
+    F --> G1["Process Images"]
+    G1 --> H1["VisionTransformer"]
+    H1 --> I1["Image Features"]
+    
+    F --> G2["Prepare Text"]
+    G2 --> H2["Text Embeddings"]
+    
+    I1 --> J["MLP Projector"]
+    J --> K["Projected Image Features"]
+    
+    H2 --> L["Merge Embeddings"]
+    K --> L
+    
+    L --> M["Language Model"]
+    M --> N["Generated Text"]
 ```
 
+Sources: README.md:107-160
+
+The inference process consists of these key steps:
+
+1. **Input Processing**: The user provides text and image inputs, which are processed by the tokenizer and image processor.
+2. **Feature Extraction**: The VisionTransformer extracts features from the images.
+3. **Feature Projection**: The MlpProjector aligns visual features with the language embedding space.
+4. **Text Generation**: The projected features are merged with text embeddings and fed to the language model to generate the final response.
+
+## Memory Optimization Techniques
+
+For deployment on hardware with limited memory resources, DeepSeek-VL2 implements an incremental prefilling technique to reduce memory requirements:
+
+```mermaid
+graph TB
+    subgraph "Memory Optimization Techniques"
+        B1["Standard Inference"]
+        B2["Incremental Prefilling"]
+        
+        B2 --> C1["Split Input Sequence"]
+        C1 --> C2["Process in Chunks"]
+        C2 --> C3["Merge KV Cache"]
+        C3 --> C4["Generate Response"]
+    end
+    
+    A1["DeepSeek-VL2-Tiny"] --> B1
+    A2["DeepSeek-VL2-Small"] --> |"Large GPU"| B1
+    A2 --> |"Limited GPU"| B2
+    A3["DeepSeek-VL2"] --> B1
 ```
 
- **Diagram: V2 Dispatch Execution Flow**
+Sources: README.md:249-325
 
- **Sources:** [deep_ep/buffers/elastic.py113-400](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L113-L400) [README.md97-101](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L97-L101) [csrc/kernels/backend/nccl.cu60-100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/kernels/backend/nccl.cu#L60-L100)
+This approach is particularly useful when running DeepSeek-VL2-Small on 40GB GPUs. It works by:
 
- 
+1. Splitting the input sequence into smaller chunks (typically 512 tokens)
+2. Processing each chunk sequentially
+3. Merging the key-value caches
+4. Generating the final response
+
+This allows larger models to run on more constrained hardware, though with some impact on inference speed.
+
+## Supported Features
+
+DeepSeek-VL2 supports various multimodal capabilities:
+
+1. **Single Image Processing**: Basic visual question answering about individual images
+2. **Multi-Image Processing**: Handling multiple images in a single prompt
+3. **Visual Grounding**: Object localization with bounding box coordinates using `<|ref|>` and `<|/ref|>` tokens
+4. **Special Token Support**: Including `<|grounding|>` for grounded captioning functionality
+
+The output for visual grounding includes bounding box coordinates in the format:
+```
+<|ref|>Object description<|/ref|><|det|>[[x1, y1, x2, y2]]<|/det|>
+```
+
+Sources: README.md:123-169
+
+## Integration and Usage
+
+DeepSeek-VL2 can be integrated through two primary interfaces:
+
+1. **Inference Script**: For programmatic access using Python
+2. **Gradio Web Demo**: A web-based user interface for interactive use
+
+Basic usage involves:
+1. Loading the model and processor
+2. Preparing text and image inputs
+3. Running the model to generate a response
+
+For more detailed examples, refer to the [Quick Start](#1.2) guide.
+
+Sources: README.md:93-169, README.md:352-382
+
 ---
 
- 
-## Resource Allocation and Topology
-
- V2 eliminates the need for manual auto-tuning by using analytical formulas to determine optimal resource usage.
-
- 
-### Analytical SM Tuning
-
- The method `get_theoretical_num_sms` calculates the required SM count based on hardware performance characteristics:
-
- 
- - **Bandwidth Modeling**: Considers `sm_read_gbs`, `sm_write_gbs`, `rdma_gbs`, and `nvlink_gbs` [deep_ep/buffers/elastic.py441-450](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L441-L450)
- - **Overlap**: Adjusts counts based on the `prefer_overlap_with_compute` flag to allow communication to hide behind computation [deep_ep/buffers/elastic.py121-125](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L121-L125)
- 
- 
-### Topology Domains
-
- DeepEP models the cluster as a logical grid of ranks:
-
- 
- - **Scale-up Domain**: Communication via NVLink (Intra-node/Intra-LSA) [deep_ep/utils/envs.py10-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L10-L25)
- - **Scale-out Domain**: Communication via RDMA (Inter-node/Rail-only) [deep_ep/utils/envs.py10-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L10-L25)
- - **Hybrid Mode**: When `allow_hybrid_mode=True`, the library uses a hierarchical approach, combining NVLink and RDMA to maximize throughput in large clusters [deep_ep/buffers/elastic.py120-121](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L120-L121)
- 
- **Sources:** [deep_ep/buffers/elastic.py113-470](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L113-L470) [README.md18-22](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L18-L22) [deep_ep/utils/envs.py7-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L7-L30)
-
- 
----
-
- 
-## Hardware and Software Requirements
-
- To utilize DeepEP V2, the following environment is required:
-
- 
- - **GPU Architecture**: NVIDIA Hopper (SM90) or newer (e.g., Blackwell/SM100) [README.md63-65](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L63-L65)
- - **CUDA**: 12.3 or above for SM90 support [README.md67-68](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L67-L68)
- - **NCCL**: 2.30.4 or above (recommended via `nvidia-nccl-cu13` pip package) [README.md70-79](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L70-L79)
- - **Interconnect**: NVLink for intra-node; RDMA (InfiniBand/RoCE) for inter-node [README.md71-72](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L71-L72)
- - **Python**: 3.8+ with PyTorch 2.10+ [README.md66-69](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L66-L69)
- 
- **Sources:** [README.md63-72](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L63-L72) [deep_ep/__init__.py46-70](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L46-L70)

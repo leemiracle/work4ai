@@ -1,0 +1,30 @@
+# DeepWiki 索引 — microsoft/MMdnn
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 295571 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 System Architecture](1.1-system-architecture.md)
+  - [1.2 Command-Line Tools](1.2-command-line-tools.md)
+- [2 Intermediate Representation](2-intermediate-representation.md)
+- [3 Framework Parsers](3-framework-parsers.md)
+  - [3.1 TensorFlow Parser](3.1-tensorflow-parser.md)
+  - [3.2 Keras Parser](3.2-keras-parser.md)
+  - [3.3 Caffe Parser](3.3-caffe-parser.md)
+  - [3.4 PyTorch Parser](3.4-pytorch-parser.md)
+  - [3.5 CNTK Parser](3.5-cntk-parser.md)
+  - [3.6 Other Parsers](3.6-other-parsers.md)
+- [4 Framework Emitters](4-framework-emitters.md)
+  - [4.1 TensorFlow Emitter](4.1-tensorflow-emitter.md)
+  - [4.2 Keras Emitter](4.2-keras-emitter.md)
+  - [4.3 Caffe Emitter](4.3-caffe-emitter.md)
+  - [4.4 PyTorch Emitter](4.4-pytorch-emitter.md)
+  - [4.5 CNTK Emitter](4.5-cntk-emitter.md)
+  - [4.6 Other Emitters](4.6-other-emitters.md)
+- [5 Testing and Validation](5-testing-and-validation.md)
+  - [5.1 TestKit](5.1-testkit.md)
+  - [5.2 Test Framework](5.2-test-framework.md)
+- [6 Pre-trained Models](6-pre-trained-models.md)
+  - [6.1 Model Extraction](6.1-model-extraction.md)
+- [7 Utilities](7-utilities.md)
+- [8 Developer Guide](8-developer-guide.md)

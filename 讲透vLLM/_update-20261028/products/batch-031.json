@@ -1,0 +1,3989 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "type": "file",
+   "name": "act_quant_fusion.py",
+   "filePath": "vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "summary": "激活+量化融合 pass：匹配 SiluAndMul 后接 FP8 静态/NVFP4/分组量化（乃至 SiluAndMul→Linear→量化的块级链）的 FX 图模式，替换为单融合 kernel 调用，消除中间 bf16 激活物化。",
+   "tags": [
+    "fusion",
+    "quantization",
+    "pattern-matcher",
+    "compilation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/act_quant_fusion.py:ActivationQuantPattern",
+   "type": "class",
+   "name": "ActivationQuantPattern",
+   "filePath": "vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "lineRange": [
+    47,
+    77
+   ],
+   "summary": "激活量化模式基类：定义 quant op 定位与替换点接口。",
+   "tags": [
+    "pattern",
+    "base-class",
+    "quantization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/act_quant_fusion.py:SiluMulFp8StaticQuantPattern",
+   "type": "class",
+   "name": "SiluMulFp8StaticQuantPattern",
+   "filePath": "vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "lineRange": [
+    80,
+    122
+   ],
+   "summary": "SiluAndMul+FP8 静态量化融合模式。",
+   "tags": [
+    "pattern",
+    "fp8",
+    "fusion"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/act_quant_fusion.py:SiluMulNvfp4QuantPattern",
+   "type": "class",
+   "name": "SiluMulNvfp4QuantPattern",
+   "filePath": "vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "lineRange": [
+    125,
+    176
+   ],
+   "summary": "SiluAndMul+NVFP4 量化融合模式。",
+   "tags": [
+    "pattern",
+    "nvfp4",
+    "fusion"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/act_quant_fusion.py:SiluMulBlockQuantPattern",
+   "type": "class",
+   "name": "SiluMulBlockQuantPattern",
+   "filePath": "vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "lineRange": [
+    179,
+    274
+   ],
+   "summary": "块级融合模式：SiluAndMul→Linear→量化整链合并。",
+   "tags": [
+    "pattern",
+    "block-fusion",
+    "quantization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/act_quant_fusion.py:ActivationQuantFusionPass",
+   "type": "class",
+   "name": "ActivationQuantFusionPass",
+   "filePath": "vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "lineRange": [
+    277,
+    315
+   ],
+   "summary": "注册全部激活量化模式的融合 pass（VllmFusionPatternMatcherPass 子类）。",
+   "tags": [
+    "fusion-pass",
+    "quantization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "type": "file",
+   "name": "allreduce_rms_fusion.py",
+   "filePath": "vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "summary": "allreduce+RMSNorm(+量化) 融合家族（1729 行）：CUDA 侧 AllReduceFusionPass 匹配 allreduce→add/RMSNorm/Gemma 变体/FP8/NVFP4 量化组合替换为 FlashInfer 融合 kernel（oneshot 策略与 workspace 隐藏维选择）；ROCm 侧 RocmAiterAllReduceFusionPass 匹配 Aiter 融合算子（含 group quant 与 indexer 变体）。",
+   "tags": [
+    "fusion",
+    "allreduce",
+    "rmsnorm",
+    "flashinfer",
+    "aiter"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:BasePattern",
+   "type": "class",
+   "name": "BasePattern",
+   "filePath": "vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "lineRange": [
+    335,
+    346
+   ],
+   "summary": "allreduce 融合模式基类：统一 trace 与替换骨架。",
+   "tags": [
+    "pattern",
+    "base-class"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:AllReduceRMSNormPattern",
+   "type": "class",
+   "name": "AllReduceRMSNormPattern",
+   "filePath": "vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "lineRange": [
+    349,
+    407
+   ],
+   "summary": "allreduce→RMSNorm 两步融合模式（TP 通信后紧跟 norm 的典型链）。",
+   "tags": [
+    "pattern",
+    "allreduce",
+    "rmsnorm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:AllReduceFusedAddRMSNormPattern",
+   "type": "class",
+   "name": "AllReduceFusedAddRMSNormPattern",
+   "filePath": "vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "lineRange": [
+    410,
+    485
+   ],
+   "summary": "allreduce→残差加→RMSNorm 三步融合模式。",
+   "tags": [
+    "pattern",
+    "allreduce",
+    "residual"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:AllReduceFusionPass",
+   "type": "class",
+   "name": "AllReduceFusionPass",
+   "filePath": "vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "lineRange": [
+    984,
+    1147
+   ],
+   "summary": "CUDA allreduce 融合 pass：按 TP size/量化配置/flashinfer 可用性注册各模式，管理 workspace 隐藏维。",
+   "tags": [
+    "fusion-pass",
+    "allreduce",
+    "flashinfer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:AiterAllreduceFusedRMSNormGroupQuantFP8Pattern",
+   "type": "class",
+   "name": "AiterAllreduceFusedRMSNormGroupQuantFP8Pattern",
+   "filePath": "vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "lineRange": [
+    1298,
+    1376
+   ],
+   "summary": "Aiter 变体：allreduce+RMSNorm+FP8 分组量化三合一融合。",
+   "tags": [
+    "pattern",
+    "aiter",
+    "group-quant"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:RocmAiterAllReduceFusionPass",
+   "type": "class",
+   "name": "RocmAiterAllReduceFusionPass",
+   "filePath": "vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "lineRange": [
+    1570,
+    1729
+   ],
+   "summary": "ROCm Aiter allreduce 融合 pass：注册 Aiter 全系模式（含 OutputOnly 与 WithIndexer 变体）。",
+   "tags": [
+    "fusion-pass",
+    "aiter",
+    "rocm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:_select_flashinfer_allreduce_use_oneshot",
+   "type": "function",
+   "name": "_select_flashinfer_allreduce_use_oneshot",
+   "filePath": "vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "lineRange": [
+    158,
+    176
+   ],
+   "summary": "按消息大小/世界规模判定 flashinfer allreduce 是否走 oneshot 路径。",
+   "tags": [
+    "strategy",
+    "flashinfer",
+    "allreduce"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "type": "file",
+   "name": "attn_quant_fusion.py",
+   "filePath": "vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "summary": "注意力输出+量化融合 pass：匹配 Attention 层输出投影后接 FP8 静态量化或 NVFP4 量化的模式（含 ROCm 变体），替换为融合 kernel，省掉投影输出的全精度中间张量。",
+   "tags": [
+    "fusion",
+    "attention",
+    "quantization",
+    "pattern-matcher"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/attn_quant_fusion.py:AttnFp8StaticQuantPattern",
+   "type": "class",
+   "name": "AttnFp8StaticQuantPattern",
+   "filePath": "vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "lineRange": [
+    39,
+    189
+   ],
+   "summary": "Attention+FP8 静态量化融合模式（输出可为单张量或 q/k 二元组）。",
+   "tags": [
+    "pattern",
+    "fp8",
+    "attention"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/attn_quant_fusion.py:AttnNvfp4QuantPattern",
+   "type": "class",
+   "name": "AttnNvfp4QuantPattern",
+   "filePath": "vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "lineRange": [
+    216,
+    402
+   ],
+   "summary": "Attention+NVFP4 量化融合模式（q/k 双输出与 scale 语义）。",
+   "tags": [
+    "pattern",
+    "nvfp4",
+    "attention"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/attn_quant_fusion.py:AttnQuantFusionPass",
+   "type": "class",
+   "name": "AttnQuantFusionPass",
+   "filePath": "vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "lineRange": [
+    405,
+    447
+   ],
+   "summary": "注册注意力量化模式的融合 pass。",
+   "tags": [
+    "fusion-pass",
+    "attention",
+    "quantization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "type": "file",
+   "name": "matcher_utils.py",
+   "filePath": "vllm/compilation/passes/fusion/matcher_utils.py",
+   "summary": "模式匹配器工具库：把 vLLM 自定义算子（RMSNormGated/QuantFP8/SiluAndMul/RotaryEmbedding 含 MRoPE 与 DeepseekScaling 变体）包装为可被 pattern matcher trace 的 Matcher* 类，并集中登记 quant op 到 QuantKey 的映射表。",
+   "tags": [
+    "pattern-matcher",
+    "custom-op",
+    "quantization",
+    "shared"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherCustomOp",
+   "type": "class",
+   "name": "MatcherCustomOp",
+   "filePath": "vllm/compilation/passes/fusion/matcher_utils.py",
+   "lineRange": [
+    53,
+    84
+   ],
+   "summary": "自定义算子 matcher 基类：enabled 开关与 trace 函数骨架，供具体算子实现。",
+   "tags": [
+    "matcher",
+    "base-class",
+    "custom-op"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherRotaryEmbedding",
+   "type": "class",
+   "name": "MatcherRotaryEmbedding",
+   "filePath": "vllm/compilation/passes/fusion/matcher_utils.py",
+   "lineRange": [
+    87,
+    163
+   ],
+   "summary": "RotaryEmbedding 自定义算子的可 trace 包装（供 rope 相关融合匹配）。",
+   "tags": [
+    "matcher",
+    "rope"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherMRotaryEmbedding",
+   "type": "class",
+   "name": "MatcherMRotaryEmbedding",
+   "filePath": "vllm/compilation/passes/fusion/matcher_utils.py",
+   "lineRange": [
+    166,
+    231
+   ],
+   "summary": "M-RoPE（多维位置）自定义算子 matcher 包装。",
+   "tags": [
+    "matcher",
+    "mrope"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherRMSNormGated",
+   "type": "class",
+   "name": "MatcherRMSNormGated",
+   "filePath": "vllm/compilation/passes/fusion/matcher_utils.py",
+   "lineRange": [
+    234,
+    290
+   ],
+   "summary": "RMSNormGated（MLA 用门控 norm）matcher 包装。",
+   "tags": [
+    "matcher",
+    "rmsnorm",
+    "mla"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherDeepseekScalingRotaryEmbedding",
+   "type": "class",
+   "name": "MatcherDeepseekScalingRotaryEmbedding",
+   "filePath": "vllm/compilation/passes/fusion/matcher_utils.py",
+   "lineRange": [
+    293,
+    371
+   ],
+   "summary": "DeepSeek scaling RoPE matcher 包装（MSDA 系 rope 变体）。",
+   "tags": [
+    "matcher",
+    "rope",
+    "deepseek"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherQuantFP8",
+   "type": "class",
+   "name": "MatcherQuantFP8",
+   "filePath": "vllm/compilation/passes/fusion/matcher_utils.py",
+   "lineRange": [
+    374,
+    540
+   ],
+   "summary": "QuantFP8 算子 matcher：覆盖 static/dynamic tensor/token/128/64 分组全族量化语义与 scale 形状校验。",
+   "tags": [
+    "matcher",
+    "fp8",
+    "quantization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherSiluAndMul",
+   "type": "class",
+   "name": "MatcherSiluAndMul",
+   "filePath": "vllm/compilation/passes/fusion/matcher_utils.py",
+   "lineRange": [
+    543,
+    567
+   ],
+   "summary": "SiluAndMul 激活 matcher 包装。",
+   "tags": [
+    "matcher",
+    "activation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "type": "file",
+   "name": "mla_attn_quant_fusion.py",
+   "filePath": "vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "summary": "MLA（Multi-head Latent Attention）专用注意力量化融合：q_b/k_b 投影输出接 FP8 静态/分组/NVFP4 量化的模式族（含 ROCm 变体），融合 MLA 压缩路径的量化点。",
+   "tags": [
+    "fusion",
+    "mla",
+    "quantization",
+    "pattern-matcher"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py:MLAAttnFp8StaticQuantPattern",
+   "type": "class",
+   "name": "MLAAttnFp8StaticQuantPattern",
+   "filePath": "vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "lineRange": [
+    36,
+    187
+   ],
+   "summary": "MLA 注意力 FP8 静态量化融合模式。",
+   "tags": [
+    "pattern",
+    "mla",
+    "fp8"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py:MLAAttnNvfp4QuantPattern",
+   "type": "class",
+   "name": "MLAAttnNvfp4QuantPattern",
+   "filePath": "vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "lineRange": [
+    212,
+    396
+   ],
+   "summary": "MLA 注意力 NVFP4 量化融合模式。",
+   "tags": [
+    "pattern",
+    "mla",
+    "nvfp4"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py:MLAAttnFp8GroupQuantPattern",
+   "type": "class",
+   "name": "MLAAttnFp8GroupQuantPattern",
+   "filePath": "vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "lineRange": [
+    399,
+    607
+   ],
+   "summary": "MLA 注意力 FP8 分组量化融合模式（DeepSeek V3.x 系 128 组量化）。",
+   "tags": [
+    "pattern",
+    "mla",
+    "group-quant"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py:MLAAttnQuantFusionPass",
+   "type": "class",
+   "name": "MLAAttnQuantFusionPass",
+   "filePath": "vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "lineRange": [
+    610,
+    670
+   ],
+   "summary": "注册 MLA 注意力量化模式的融合 pass。",
+   "tags": [
+    "fusion-pass",
+    "mla",
+    "quantization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py",
+   "type": "file",
+   "name": "mla_rope_kvcache_cat_fusion.py",
+   "filePath": "vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py",
+   "summary": "MLA RoPE+KV cache cat 融合：把 MLA 路径的 RoPE 应用与统一 KV cache 更新（cat 写入）合并为单自定义 op（impl+fake 双实现），替换 FX 图中的原语序列。",
+   "tags": [
+    "fusion",
+    "mla",
+    "rope",
+    "kv-cache"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py:MLARoPEKVCacheCatPattern",
+   "type": "class",
+   "name": "MLARoPEKVCacheCatPattern",
+   "filePath": "vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py",
+   "lineRange": [
+    80,
+    240
+   ],
+   "summary": "匹配 MLA rope→kv cache cat 更新序列并替换为 fused 自定义 op 的 VllmPatternReplacement。",
+   "tags": [
+    "pattern",
+    "mla",
+    "kv-cache"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py:MLARoPEKVCacheCatFusionPass",
+   "type": "class",
+   "name": "MLARoPEKVCacheCatFusionPass",
+   "filePath": "vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py",
+   "lineRange": [
+    243,
+    274
+   ],
+   "summary": "注册 MLA rope+cat 模式的融合 pass。",
+   "tags": [
+    "fusion-pass",
+    "mla"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py:fused_rope_unified_mla_kv_cache_update_impl",
+   "type": "function",
+   "name": "fused_rope_unified_mla_kv_cache_update_impl",
+   "filePath": "vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py",
+   "lineRange": [
+    26,
+    55
+   ],
+   "summary": "融合 op 的真实实现：rope 变换后直接 cat 写入统一 KV cache（对应 fake 实现供 trace）。",
+   "tags": [
+    "custom-op",
+    "mla",
+    "kv-cache"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py",
+   "type": "file",
+   "name": "qk_norm_rope_fusion.py",
+   "filePath": "vllm/compilation/passes/fusion/qk_norm_rope_fusion.py",
+   "summary": "QK-Norm+RoPE 融合：把注意力块中 q/k 的 RMSNorm 与 rotary embedding 两个原语序列合并为单 fused op（QkNormRopePattern），QKNormRoPEFusionPass 含三种安装路径。",
+   "tags": [
+    "fusion",
+    "qk-norm",
+    "rope",
+    "pattern-matcher"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py:QkNormRopePattern",
+   "type": "class",
+   "name": "QkNormRopePattern",
+   "filePath": "vllm/compilation/passes/fusion/qk_norm_rope_fusion.py",
+   "lineRange": [
+    36,
+    193
+   ],
+   "summary": "匹配未融合的 norm+rope 序列（含 trace 包装）并替换为 fused op。",
+   "tags": [
+    "pattern",
+    "qk-norm",
+    "rope"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py:QKNormRoPEFusionPass",
+   "type": "class",
+   "name": "QKNormRoPEFusionPass",
+   "filePath": "vllm/compilation/passes/fusion/qk_norm_rope_fusion.py",
+   "lineRange": [
+    196,
+    274
+   ],
+   "summary": "qk-norm+rope 融合 pass（VllmPatternMatcherPass 子类，三种注册路径）。",
+   "tags": [
+    "fusion-pass",
+    "qk-norm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "type": "file",
+   "name": "qk_norm_rope_kvcache_fusion.py",
+   "filePath": "vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "summary": "QK-Norm+RoPE+KV cache 写入三合一融合（980 行）：QkNormRopeKvCachePattern 覆盖 q/k norm→rope→统一 KV 更新全链（13 方法），QkNormMRopeKvCachePattern 处理 M-RoPE 变体（运行时 _discover_mrope_configs 探测配置），impl/fake 四组自定义 op。",
+   "tags": [
+    "fusion",
+    "qk-norm",
+    "rope",
+    "kv-cache",
+    "mrope"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py:QkNormRopeKvCachePattern",
+   "type": "class",
+   "name": "QkNormRopeKvCachePattern",
+   "filePath": "vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "lineRange": [
+    186,
+    622
+   ],
+   "summary": "qkv split→q/k norm→rope→kv cache 写入全链融合模式（13 个方法覆盖 trace/校验/替换各环节）。",
+   "tags": [
+    "pattern",
+    "qk-norm",
+    "kv-cache"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py:QkNormMRopeKvCachePattern",
+   "type": "class",
+   "name": "QkNormMRopeKvCachePattern",
+   "filePath": "vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "lineRange": [
+    625,
+    787
+   ],
+   "summary": "M-RoPE（多维位置）变体：Qwen-VL 类模型的 mrope 通道布局适配。",
+   "tags": [
+    "pattern",
+    "mrope",
+    "kv-cache"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py:QkNormRopeKvCacheFusionPass",
+   "type": "class",
+   "name": "QkNormRopeKvCacheFusionPass",
+   "filePath": "vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "lineRange": [
+    834,
+    980
+   ],
+   "summary": "注册 rope/mrope 两族模式的融合 pass。",
+   "tags": [
+    "fusion-pass",
+    "qk-norm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py:fused_qk_norm_rope_and_unified_kv_cache_update_impl",
+   "type": "function",
+   "name": "fused_qk_norm_rope_and_unified_kv_cache_update_impl",
+   "filePath": "vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "lineRange": [
+    51,
+    85
+   ],
+   "summary": "norm+rope+kv 更新融合 op 的真实实现（fake 版本供 FX trace）。",
+   "tags": [
+    "custom-op",
+    "fusion"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py:_discover_mrope_configs",
+   "type": "function",
+   "name": "_discover_mrope_configs",
+   "filePath": "vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "lineRange": [
+    790,
+    826
+   ],
+   "summary": "运行时探测模型 M-RoPE section 配置（mrope section 表推导），驱动 mrope 模式注册。",
+   "tags": [
+    "discovery",
+    "mrope",
+    "configuration"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "type": "file",
+   "name": "rms_quant_fusion.py",
+   "filePath": "vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "summary": "RMSNorm(+残差加)+量化融合家族（855 行）：RMSNormQuantPattern 基类派生 static/group/dynamic/nvfp4 全系模式，把 norm（或 fused-add-norm）与紧随量化合并为单 kernel；含 flashinfer nvfp4 融合 op 与 FusedRMSQuantKey 缓存键、dtype 匹配守卫。",
+   "tags": [
+    "fusion",
+    "rmsnorm",
+    "quantization",
+    "pattern-matcher"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:FusedRMSQuantKey",
+   "type": "class",
+   "name": "FusedRMSQuantKey",
+   "filePath": "vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "lineRange": [
+    170,
+    183
+   ],
+   "summary": "融合结果缓存键：norm 形态×量化键×dtype 组合，避免重复注册。",
+   "tags": [
+    "cache-key",
+    "data-model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:RMSNormQuantPattern",
+   "type": "class",
+   "name": "RMSNormQuantPattern",
+   "filePath": "vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "lineRange": [
+    209,
+    231
+   ],
+   "summary": "norm+量化模式基类：统一 trace 与守卫骨架。",
+   "tags": [
+    "pattern",
+    "base-class"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:RMSNormStaticQuantPattern",
+   "type": "class",
+   "name": "RMSNormStaticQuantPattern",
+   "filePath": "vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "lineRange": [
+    234,
+    286
+   ],
+   "summary": "RMSNorm+FP8 静态量化融合模式。",
+   "tags": [
+    "pattern",
+    "fp8",
+    "static-quant"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:FusedAddRMSNormStaticQuantPattern",
+   "type": "class",
+   "name": "FusedAddRMSNormStaticQuantPattern",
+   "filePath": "vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "lineRange": [
+    289,
+    353
+   ],
+   "summary": "残差加+RMSNorm+FP8 静态量化三合一融合模式。",
+   "tags": [
+    "pattern",
+    "residual",
+    "fp8"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:RMSNormGroupQuantPattern",
+   "type": "class",
+   "name": "RMSNormGroupQuantPattern",
+   "filePath": "vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "lineRange": [
+    463,
+    554
+   ],
+   "summary": "RMSNorm+FP8 分组量化（128/64 组）融合模式。",
+   "tags": [
+    "pattern",
+    "group-quant"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:RMSNormDynamicQuantPattern",
+   "type": "class",
+   "name": "RMSNormDynamicQuantPattern",
+   "filePath": "vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "lineRange": [
+    557,
+    613
+   ],
+   "summary": "RMSNorm+动态（per-token/tensor）量化融合模式。",
+   "tags": [
+    "pattern",
+    "dynamic-quant"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:RMSNormQuantFusionPass",
+   "type": "class",
+   "name": "RMSNormQuantFusionPass",
+   "filePath": "vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "lineRange": [
+    772,
+    855
+   ],
+   "summary": "注册全系 norm+量化模式的融合 pass（按平台/量化配置筛选）。",
+   "tags": [
+    "fusion-pass",
+    "rmsnorm",
+    "quantization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/compilation/passes/fusion/rms_quant_fusion.py:_rms_input_weight_dtype_match",
+   "type": "function",
+   "name": "_rms_input_weight_dtype_match",
+   "filePath": "vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "lineRange": [
+    116,
+    129
+   ],
+   "summary": "守卫函数：校验 norm 输入/权重 dtype 与融合 op 支持组合匹配。",
+   "tags": [
+    "validation",
+    "dtype"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "type": "file",
+   "name": "rocm_aiter_fusion.py",
+   "filePath": "vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "summary": "ROCm Aiter 融合家族（1372 行）：AiterRMSNormQuantPattern 派生 9 个 norm+量化变体（dynamic/group/static/gated/double/view 型），RocmAiterRMSNormQuantFusionPass 统一注册；另含 SiluMul 融合、Add+RMSNorm+Pad 融合与 MLA 双 norm（q_a+kv_a）三族 pass——覆盖 ROCm 上 Composable Kernel Aiter 库的全套融合入口。",
+   "tags": [
+    "fusion",
+    "rocm",
+    "aiter",
+    "quantization",
+    "mla"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:AiterRMSNormQuantPattern",
+   "type": "class",
+   "name": "AiterRMSNormQuantPattern",
+   "filePath": "vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "lineRange": [
+    49,
+    66
+   ],
+   "summary": "Aiter norm+量化模式基类（9 个变体的共同骨架）。",
+   "tags": [
+    "pattern",
+    "base-class",
+    "aiter"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:RocmAiterRMSNormQuantFusionPass",
+   "type": "class",
+   "name": "RocmAiterRMSNormQuantFusionPass",
+   "filePath": "vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "lineRange": [
+    699,
+    842
+   ],
+   "summary": "注册全系 Aiter norm+量化变体的融合 pass。",
+   "tags": [
+    "fusion-pass",
+    "aiter"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:AiterSiluMulFp8GroupQuantPattern",
+   "type": "class",
+   "name": "AiterSiluMulFp8GroupQuantPattern",
+   "filePath": "vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "lineRange": [
+    845,
+    882
+   ],
+   "summary": "Aiter SiluAndMul+FP8 分组量化融合模式。",
+   "tags": [
+    "pattern",
+    "aiter",
+    "silu"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:RocmAiterSiluMulFp8GroupQuantFusionPass",
+   "type": "class",
+   "name": "RocmAiterSiluMulFp8GroupQuantFusionPass",
+   "filePath": "vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "lineRange": [
+    885,
+    903
+   ],
+   "summary": "注册 Aiter silu+量化模式的融合 pass。",
+   "tags": [
+    "fusion-pass",
+    "aiter"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:AddAiterRMSNormPadPattern",
+   "type": "class",
+   "name": "AddAiterRMSNormPadPattern",
+   "filePath": "vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "lineRange": [
+    906,
+    978
+   ],
+   "summary": "Add+RMSNorm+Pad 融合模式（Triton 路径配套）。",
+   "tags": [
+    "pattern",
+    "aiter",
+    "padding"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:MLADualRMSNormPattern",
+   "type": "class",
+   "name": "MLADualRMSNormPattern",
+   "filePath": "vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "lineRange": [
+    1012,
+    1092
+   ],
+   "summary": "MLA q_a_layernorm+kv_a_layernorm 双 norm 融合模式（派生 per-token 量化与 group 量化两个子型）。",
+   "tags": [
+    "pattern",
+    "mla",
+    "aiter"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:MLADualRMSPerTokenQuantPattern",
+   "type": "class",
+   "name": "MLADualRMSPerTokenQuantPattern",
+   "filePath": "vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "lineRange": [
+    1095,
+    1219
+   ],
+   "summary": "MLA 双 norm+per-token 量化融合模式。",
+   "tags": [
+    "pattern",
+    "mla",
+    "per-token-quant"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:MLADualRMSNormFusionPass",
+   "type": "class",
+   "name": "MLADualRMSNormFusionPass",
+   "filePath": "vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "lineRange": [
+    1354,
+    1372
+   ],
+   "summary": "注册 MLA 双 norm 三族模式的融合 pass。",
+   "tags": [
+    "fusion-pass",
+    "mla",
+    "aiter"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "type": "file",
+   "name": "rope_kvcache_fusion.py",
+   "filePath": "vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "summary": "RoPE+KV cache 写入融合：RopeStaticQQuantKVCachePattern 把 rope+静态 Q FP8 量化+KV 更新（保持依赖序）三步合并；RopeReshapeKVCachePattern 处理带 reshape 的 rope→cache 链，替换为 fused 自定义 op。",
+   "tags": [
+    "fusion",
+    "rope",
+    "kv-cache",
+    "quantization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/rope_kvcache_fusion.py:RopeStaticQQuantKVCachePattern",
+   "type": "class",
+   "name": "RopeStaticQQuantKVCachePattern",
+   "filePath": "vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "lineRange": [
+    99,
+    274
+   ],
+   "summary": "rope+Q 静态 FP8 量化+KV cache 依赖保序融合模式。",
+   "tags": [
+    "pattern",
+    "rope",
+    "fp8"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/rope_kvcache_fusion.py:RopeReshapeKVCachePattern",
+   "type": "class",
+   "name": "RopeReshapeKVCachePattern",
+   "filePath": "vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "lineRange": [
+    277,
+    406
+   ],
+   "summary": "rope→reshape→KV cache 更新链的融合模式。",
+   "tags": [
+    "pattern",
+    "rope",
+    "reshape"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/fusion/rope_kvcache_fusion.py:RopeKVCacheFusionPass",
+   "type": "class",
+   "name": "RopeKVCacheFusionPass",
+   "filePath": "vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "lineRange": [
+    409,
+    466
+   ],
+   "summary": "注册 rope+cache 两族模式的融合 pass。",
+   "tags": [
+    "fusion-pass",
+    "rope"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/compilation/passes/fusion/rope_kvcache_fusion.py:fused_rope_and_unified_kv_cache_update_impl",
+   "type": "function",
+   "name": "fused_rope_and_unified_kv_cache_update_impl",
+   "filePath": "vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "lineRange": [
+    46,
+    76
+   ],
+   "summary": "rope+统一 KV 更新融合 op 实现（fake 版供 trace）。",
+   "tags": [
+    "custom-op",
+    "rope",
+    "kv-cache"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/compilation/passes/fx_utils.py",
+   "type": "file",
+   "name": "fx_utils.py",
+   "filePath": "vllm/compilation/passes/fx_utils.py",
+   "summary": "FX 图工具：is_func 判定、find_auto_fn* 查找 auto_functionalized 节点、find_op_nodes 按 op 与过滤条件枚举节点——全部 pass 共用的图遍历基础件。",
+   "tags": [
+    "utility",
+    "fx-graph",
+    "shared"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/compilation/passes/fx_utils.py:find_op_nodes",
+   "type": "function",
+   "name": "find_op_nodes",
+   "filePath": "vllm/compilation/passes/fx_utils.py",
+   "lineRange": [
+    33,
+    48
+   ],
+   "summary": "按 target op 与谓词过滤枚举图中节点。",
+   "tags": [
+    "fx-graph",
+    "traversal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/compilation/passes/inductor_pass.py",
+   "type": "file",
+   "name": "inductor_pass.py",
+   "filePath": "vllm/compilation/passes/inductor_pass.py",
+   "summary": "inductor pass 基础设施：InductorPass 以源码 sha256 为 UUID（torch CustomGraphPass 子类）、PassContext 全局上下文（compile range 与 donated 输入登记）、enable_fake_mode 上下文与 CallableInductorPass 函数包装。",
+   "tags": [
+    "compilation",
+    "base-class",
+    "infrastructure"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/inductor_pass.py:InductorPass",
+   "type": "class",
+   "name": "InductorPass",
+   "filePath": "vllm/compilation/passes/inductor_pass.py",
+   "lineRange": [
+    66,
+    109
+   ],
+   "summary": "torch CustomGraphPass 子类：UUID=源码哈希，保证 pass 改动会改变编译缓存键。",
+   "tags": [
+    "base-class",
+    "cache-key"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/compilation/passes/inductor_pass.py:CallableInductorPass",
+   "type": "class",
+   "name": "CallableInductorPass",
+   "filePath": "vllm/compilation/passes/inductor_pass.py",
+   "lineRange": [
+    112,
+    127
+   ],
+   "summary": "把任意可调用对象包装成合法 pass（uuid 由源码哈希）。",
+   "tags": [
+    "wrapper",
+    "adapter"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/compilation/passes/inductor_pass.py:PassContext",
+   "type": "class",
+   "name": "PassContext",
+   "filePath": "vllm/compilation/passes/inductor_pass.py",
+   "lineRange": [
+    29,
+    34
+   ],
+   "summary": "编译期全局上下文：compile_range 与 donated_input_ids（可复用输入集合）。",
+   "tags": [
+    "context",
+    "data-model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/compilation/passes/inductor_pass.py:enable_fake_mode",
+   "type": "function",
+   "name": "enable_fake_mode",
+   "filePath": "vllm/compilation/passes/inductor_pass.py",
+   "lineRange": [
+    130,
+    142
+   ],
+   "summary": "上下文管理器：进入 FakeTensorMode 供 fake 实现求值。",
+   "tags": [
+    "fake-tensor",
+    "context-manager"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/compilation/passes/ir/clone_elimination.py",
+   "type": "file",
+   "name": "clone_elimination.py",
+   "filePath": "vllm/compilation/passes/ir/clone_elimination.py",
+   "summary": "不安全 clone 消除 pass：在保证布局保持、无用户写入、不与图 IO 别名三条件下删除 IR 图中冗余 clone 节点。",
+   "tags": [
+    "ir-pass",
+    "optimization",
+    "clone-elimination"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/ir/clone_elimination.py:UnsafeCloneEliminationPass",
+   "type": "class",
+   "name": "UnsafeCloneEliminationPass",
+   "filePath": "vllm/compilation/passes/ir/clone_elimination.py",
+   "lineRange": [
+    88,
+    178
+   ],
+   "summary": "clone 消除 pass 主体：三重安全性判定后重接用户到原节点。",
+   "tags": [
+    "ir-pass",
+    "optimization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/compilation/passes/ir/clone_elimination.py:clone_preserves_layout",
+   "type": "function",
+   "name": "clone_preserves_layout",
+   "filePath": "vllm/compilation/passes/ir/clone_elimination.py",
+   "lineRange": [
+    20,
+    37
+   ],
+   "summary": "判定 clone 节点是否保持内存布局（stride/大小一致）。",
+   "tags": [
+    "validation",
+    "layout"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/compilation/passes/ir/clone_elimination.py:user_writes_to_node",
+   "type": "function",
+   "name": "user_writes_to_node",
+   "filePath": "vllm/compilation/passes/ir/clone_elimination.py",
+   "lineRange": [
+    40,
+    70
+   ],
+   "summary": "判定是否存在对节点的原位写用户（有则不可消除）。",
+   "tags": [
+    "validation",
+    "aliasing"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/compilation/passes/ir/inplace_functionalization.py",
+   "type": "file",
+   "name": "inplace_functionalization.py",
+   "filePath": "vllm/compilation/passes/ir/inplace_functionalization.py",
+   "summary": "IR 原位功能化 pass：把 auto_functionalized 的 vLLM 原位算子还原为真原位调用（消除 functionalization 包裹），在 lowering 前执行。",
+   "tags": [
+    "ir-pass",
+    "functionalization",
+    "inplace"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/ir/inplace_functionalization.py:VllmIRInplaceFunctionalizationPass",
+   "type": "class",
+   "name": "VllmIRInplaceFunctionalizationPass",
+   "filePath": "vllm/compilation/passes/ir/inplace_functionalization.py",
+   "lineRange": [
+    21,
+    100
+   ],
+   "summary": "扫描 auto_functionalized 节点并重写为原位语义的 IR pass。",
+   "tags": [
+    "ir-pass",
+    "rewrite"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/compilation/passes/ir/lowering_pass.py",
+   "type": "file",
+   "name": "lowering_pass.py",
+   "filePath": "vllm/compilation/passes/ir/lowering_pass.py",
+   "summary": "IR lowering pass：把 vllm.ir 自定义 op 图下降为可执行的 torch op/自定义 kernel 调用（含逐节点日志）。",
+   "tags": [
+    "ir-pass",
+    "lowering"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/ir/lowering_pass.py:VllmIRLoweringPass",
+   "type": "class",
+   "name": "VllmIRLoweringPass",
+   "filePath": "vllm/compilation/passes/ir/lowering_pass.py",
+   "lineRange": [
+    25,
+    128
+   ],
+   "summary": "IR→可执行图下降 pass（VllmInductorPass 子类，处理 vllm.ir.op 节点）。",
+   "tags": [
+    "ir-pass",
+    "lowering"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/compilation/passes/pass_manager.py",
+   "type": "file",
+   "name": "pass_manager.py",
+   "filePath": "vllm/compilation/passes/pass_manager.py",
+   "summary": "post-grad pass 管理器：PostGradPassManager 按平台（CUDA/XPU/ROCm-Aiter）条件装配全部融合与工具 pass 到 fixed/shape/splitting 三条执行清单，含 pattern match debug 开关与 pass 计数上报。",
+   "tags": [
+    "pass-manager",
+    "orchestration",
+    "compilation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/pass_manager.py:PostGradPassManager",
+   "type": "class",
+   "name": "PostGradPassManager",
+   "filePath": "vllm/compilation/passes/pass_manager.py",
+   "lineRange": [
+    88,
+    250
+   ],
+   "summary": "pass 编排器：平台条件导入各 pass，组装 fixed_passes/shape_passes 执行序列并驱动整个 post-grad 优化。",
+   "tags": [
+    "orchestrator",
+    "pass-manager"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/compilation/passes/pass_manager.py:with_pattern_match_debug",
+   "type": "function",
+   "name": "with_pattern_match_debug",
+   "filePath": "vllm/compilation/passes/pass_manager.py",
+   "lineRange": [
+    71,
+    85
+   ],
+   "summary": "装饰器：调用期间临时打开 inductor pattern match debug（只看 vLLM 自有模式）。",
+   "tags": [
+    "debugging",
+    "decorator"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/compilation/passes/utility/fix_functionalization.py",
+   "type": "file",
+   "name": "fix_functionalization.py",
+   "filePath": "vllm/compilation/passes/utility/fix_functionalization.py",
+   "summary": "functionalization 修复 pass（361 行）：修补 torch 自动 functionalization 对 vLLM 原位自定义算子生成的低效 auto_functionalized 包裹（多余 clone/拷贝），按算子语义重接为更优的原位调用形态。",
+   "tags": [
+    "utility-pass",
+    "functionalization",
+    "optimization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/utility/fix_functionalization.py:FixFunctionalizationPass",
+   "type": "class",
+   "name": "FixFunctionalizationPass",
+   "filePath": "vllm/compilation/passes/utility/fix_functionalization.py",
+   "lineRange": [
+    19,
+    361
+   ],
+   "summary": "扫描 auto_functionalized 节点：按 vLLM 算子的可原位性/可重写性分类处理，消除冗余副本并保正确性。",
+   "tags": [
+    "utility-pass",
+    "rewrite"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/compilation/passes/utility/noop_elimination.py",
+   "type": "file",
+   "name": "noop_elimination.py",
+   "filePath": "vllm/compilation/passes/utility/noop_elimination.py",
+   "summary": "空操作消除 pass：删除 FX 图中的 no-op 节点（如恒等 reshape/to 等），减少无谓 kernel 启动。",
+   "tags": [
+    "utility-pass",
+    "optimization",
+    "dead-code"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/utility/noop_elimination.py:NoOpEliminationPass",
+   "type": "class",
+   "name": "NoOpEliminationPass",
+   "filePath": "vllm/compilation/passes/utility/noop_elimination.py",
+   "lineRange": [
+    18,
+    133
+   ],
+   "summary": "识别并删除 no-op 节点序列的清理 pass。",
+   "tags": [
+    "utility-pass",
+    "cleanup"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/compilation/passes/utility/post_cleanup.py",
+   "type": "file",
+   "name": "post_cleanup.py",
+   "filePath": "vllm/compilation/passes/utility/post_cleanup.py",
+   "summary": "收尾清理 pass：对完成全部变换的 FX 图做最终垃圾回收式整理。",
+   "tags": [
+    "utility-pass",
+    "cleanup"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/compilation/passes/utility/post_cleanup.py:PostCleanupPass",
+   "type": "class",
+   "name": "PostCleanupPass",
+   "filePath": "vllm/compilation/passes/utility/post_cleanup.py",
+   "lineRange": [
+    8,
+    20
+   ],
+   "summary": "最后的图清理（死代码消除入口）。",
+   "tags": [
+    "utility-pass",
+    "cleanup"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/compilation/passes/utility/scatter_split_replace.py",
+   "type": "file",
+   "name": "scatter_split_replace.py",
+   "filePath": "vllm/compilation/passes/utility/scatter_split_replace.py",
+   "summary": "scatter+split 替换 pass：把 tensor.split 后逐片 get+scatter 写回的模式替换为整块操作，消除逐片 kernel。",
+   "tags": [
+    "utility-pass",
+    "rewrite",
+    "splitting"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/utility/scatter_split_replace.py:ScatterSplitReplacementPass",
+   "type": "class",
+   "name": "ScatterSplitReplacementPass",
+   "filePath": "vllm/compilation/passes/utility/scatter_split_replace.py",
+   "lineRange": [
+    34,
+    137
+   ],
+   "summary": "识别 split→逐片写回链并整块替换的 pass。",
+   "tags": [
+    "utility-pass",
+    "rewrite"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/compilation/passes/utility/split_coalescing.py",
+   "type": "file",
+   "name": "split_coalescing.py",
+   "filePath": "vllm/compilation/passes/utility/split_coalescing.py",
+   "summary": "split 合并 pass：把对同一张量的多次 narrow/slice（split 消费）合并为一次 split 调用（_SliceInfo 记录切片），减少重复视图与拷贝。",
+   "tags": [
+    "utility-pass",
+    "coalescing",
+    "splitting"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/utility/split_coalescing.py:SplitCoalescingPass",
+   "type": "class",
+   "name": "SplitCoalescingPass",
+   "filePath": "vllm/compilation/passes/utility/split_coalescing.py",
+   "lineRange": [
+    42,
+    225
+   ],
+   "summary": "聚合同源切片为单 split 的优化 pass（7 方法：切片发现、守卫、重写）。",
+   "tags": [
+    "utility-pass",
+    "coalescing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "file",
+   "name": "vllm_inductor_pass.py",
+   "filePath": "vllm/compilation/passes/vllm_inductor_pass.py",
+   "summary": "vLLM inductor pass 核心抽象（350 行）：VllmInductorPass 基类（计时/日志/图 dump），VllmPatternMatcherPass（模式注册+匹配计数），VllmPatternReplacement（泛型替换 ABC：trace+guard+replacement），VllmFusionPatternMatcherPass（融合专用：注册后自动 reshape 折叠清理）——全部融合 pass 的父抽象。",
+   "tags": [
+    "compilation",
+    "base-class",
+    "pattern-matcher",
+    "infrastructure"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmInductorPass",
+   "type": "class",
+   "name": "VllmInductorPass",
+   "filePath": "vllm/compilation/passes/vllm_inductor_pass.py",
+   "lineRange": [
+    37,
+    86
+   ],
+   "summary": "带 vLLM PassConfig 访问的 pass 基类：time_and_log 装饰器与前后图 dump。",
+   "tags": [
+    "base-class",
+    "compilation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternMatcherPass",
+   "type": "class",
+   "name": "VllmPatternMatcherPass",
+   "filePath": "vllm/compilation/passes/vllm_inductor_pass.py",
+   "lineRange": [
+    94,
+    187
+   ],
+   "summary": "inductor pattern matcher 封装：模式注册、匹配计数（match_table 全局表）与调试支持。",
+   "tags": [
+    "pattern-matcher",
+    "base-class"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternReplacement",
+   "type": "class",
+   "name": "VllmPatternReplacement",
+   "filePath": "vllm/compilation/passes/vllm_inductor_pass.py",
+   "lineRange": [
+    194,
+    244
+   ],
+   "summary": "泛型替换 ABC：定义 trace_fn/搜索骨架，全部 Pattern 类的契约。",
+   "tags": [
+    "abc",
+    "generics",
+    "pattern"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmFusionPatternMatcherPass",
+   "type": "class",
+   "name": "VllmFusionPatternMatcherPass",
+   "filePath": "vllm/compilation/passes/vllm_inductor_pass.py",
+   "lineRange": [
+    312,
+    350
+   ],
+   "summary": "融合专用 matcher pass：模式应用后自动执行连续 reshape 折叠与 noop reshape/permute 清理。",
+   "tags": [
+    "pattern-matcher",
+    "fusion",
+    "cleanup"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/compilation/passes/vllm_inductor_pass.py:fold_consecutive_reshapes",
+   "type": "function",
+   "name": "fold_consecutive_reshapes",
+   "filePath": "vllm/compilation/passes/vllm_inductor_pass.py",
+   "lineRange": [
+    253,
+    277
+   ],
+   "summary": "折叠连续 reshape 链为单 reshape。",
+   "tags": [
+    "optimization",
+    "reshape"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/compilation/passes/vllm_inductor_pass.py:remove_noop_reshapes",
+   "type": "function",
+   "name": "remove_noop_reshapes",
+   "filePath": "vllm/compilation/passes/vllm_inductor_pass.py",
+   "lineRange": [
+    280,
+    298
+   ],
+   "summary": "删除形状不变的 noop reshape 节点。",
+   "tags": [
+    "optimization",
+    "cleanup"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "target": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "target": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "target": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/act_quant_fusion.py:ActivationQuantPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/act_quant_fusion.py:SiluMulFp8StaticQuantPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/act_quant_fusion.py:SiluMulNvfp4QuantPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/act_quant_fusion.py:SiluMulBlockQuantPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/act_quant_fusion.py:ActivationQuantFusionPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/act_quant_fusion.py:ActivationQuantFusionPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/act_quant_fusion.py:SiluMulFp8StaticQuantPattern",
+   "target": "class:vllm/compilation/passes/fusion/act_quant_fusion.py:ActivationQuantPattern",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/act_quant_fusion.py:SiluMulNvfp4QuantPattern",
+   "target": "class:vllm/compilation/passes/fusion/act_quant_fusion.py:ActivationQuantPattern",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/act_quant_fusion.py:SiluMulBlockQuantPattern",
+   "target": "class:vllm/compilation/passes/fusion/act_quant_fusion.py:ActivationQuantPattern",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/act_quant_fusion.py:ActivationQuantPattern",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternReplacement",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/act_quant_fusion.py:ActivationQuantFusionPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmFusionPatternMatcherPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "file:vllm/compilation/passes/inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "file:vllm/ir/ops/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:BasePattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:AllReduceRMSNormPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:AllReduceFusedAddRMSNormPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:AllReduceFusionPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:AiterAllreduceFusedRMSNormGroupQuantFP8Pattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:RocmAiterAllReduceFusionPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "function:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:_select_flashinfer_allreduce_use_oneshot",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:AllReduceFusionPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:RocmAiterAllReduceFusionPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:AllReduceRMSNormPattern",
+   "target": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:BasePattern",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:AllReduceFusedAddRMSNormPattern",
+   "target": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:BasePattern",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:AllReduceFusionPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternMatcherPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:AiterAllreduceFusedRMSNormGroupQuantFP8Pattern",
+   "target": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:BasePattern",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:AiterAllreduceFusedRMSNormGroupQuantFP8Pattern",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternReplacement",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/allreduce_rms_fusion.py:RocmAiterAllReduceFusionPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmFusionPatternMatcherPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "target": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "target": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "target": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/attn_quant_fusion.py:AttnFp8StaticQuantPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/attn_quant_fusion.py:AttnNvfp4QuantPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/attn_quant_fusion.py:AttnQuantFusionPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/attn_quant_fusion.py:AttnQuantFusionPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/attn_quant_fusion.py:AttnFp8StaticQuantPattern",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternReplacement",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/attn_quant_fusion.py:AttnNvfp4QuantPattern",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternReplacement",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/attn_quant_fusion.py:AttnQuantFusionPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmFusionPatternMatcherPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/input_quant_fp8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/deepseek_scaling_rope.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "target": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherCustomOp",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "target": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherRotaryEmbedding",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "target": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherMRotaryEmbedding",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "target": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherRMSNormGated",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "target": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherDeepseekScalingRotaryEmbedding",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "target": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherQuantFP8",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "target": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherSiluAndMul",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "target": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherCustomOp",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "target": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherQuantFP8",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherRotaryEmbedding",
+   "target": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherCustomOp",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherMRotaryEmbedding",
+   "target": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherCustomOp",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherRMSNormGated",
+   "target": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherCustomOp",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherDeepseekScalingRotaryEmbedding",
+   "target": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherCustomOp",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherQuantFP8",
+   "target": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherCustomOp",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherSiluAndMul",
+   "target": "class:vllm/compilation/passes/fusion/matcher_utils.py:MatcherCustomOp",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "target": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "target": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "target": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "target": "file:vllm/model_executor/layers/attention/mla_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py:MLAAttnFp8StaticQuantPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py:MLAAttnNvfp4QuantPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py:MLAAttnFp8GroupQuantPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py:MLAAttnQuantFusionPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py:MLAAttnQuantFusionPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py:MLAAttnQuantFusionPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmFusionPatternMatcherPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py",
+   "target": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py",
+   "target": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py",
+   "target": "file:vllm/model_executor/layers/attention/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py:MLARoPEKVCacheCatPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py:MLARoPEKVCacheCatFusionPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py",
+   "target": "function:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py:fused_rope_unified_mla_kv_cache_update_impl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py:MLARoPEKVCacheCatFusionPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py:MLARoPEKVCacheCatPattern",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternReplacement",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py:MLARoPEKVCacheCatFusionPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmFusionPatternMatcherPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py",
+   "target": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py",
+   "target": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py",
+   "target": "file:vllm/compilation/passes/inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py",
+   "target": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py",
+   "target": "file:vllm/ir/ops/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py:QkNormRopePattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py:QKNormRoPEFusionPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py:QKNormRoPEFusionPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py:QKNormRoPEFusionPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternMatcherPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "target": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "target": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "target": "file:vllm/compilation/passes/inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "target": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "target": "file:vllm/ir/ops/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "target": "file:vllm/model_executor/layers/attention/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py:QkNormRopeKvCachePattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py:QkNormMRopeKvCachePattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py:QkNormRopeKvCacheFusionPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "target": "function:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py:fused_qk_norm_rope_and_unified_kv_cache_update_impl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "target": "function:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py:_discover_mrope_configs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py:QkNormRopeKvCacheFusionPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py:QkNormMRopeKvCachePattern",
+   "target": "class:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py:QkNormRopeKvCachePattern",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py:QkNormRopeKvCacheFusionPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternMatcherPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "target": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "target": "file:vllm/compilation/passes/inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "target": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "target": "file:vllm/ir/ops/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "target": "file:vllm/utils/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:FusedRMSQuantKey",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:RMSNormQuantPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:RMSNormStaticQuantPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:FusedAddRMSNormStaticQuantPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:RMSNormGroupQuantPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:RMSNormDynamicQuantPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:RMSNormQuantFusionPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "target": "function:vllm/compilation/passes/fusion/rms_quant_fusion.py:_rms_input_weight_dtype_match",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:RMSNormQuantFusionPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:RMSNormStaticQuantPattern",
+   "target": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:RMSNormQuantPattern",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:FusedAddRMSNormStaticQuantPattern",
+   "target": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:RMSNormQuantPattern",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:RMSNormGroupQuantPattern",
+   "target": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:RMSNormQuantPattern",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:RMSNormDynamicQuantPattern",
+   "target": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:RMSNormQuantPattern",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/rms_quant_fusion.py:RMSNormQuantFusionPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternMatcherPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "file:vllm/compilation/passes/inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "file:vllm/ir/ops/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "file:vllm/model_executor/layers/mamba/gdn/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/fp8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:AiterRMSNormQuantPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:RocmAiterRMSNormQuantFusionPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:AiterSiluMulFp8GroupQuantPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:RocmAiterSiluMulFp8GroupQuantFusionPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:AddAiterRMSNormPadPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:MLADualRMSNormPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:MLADualRMSPerTokenQuantPattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:MLADualRMSNormFusionPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:RocmAiterRMSNormQuantFusionPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:MLADualRMSNormFusionPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:MLADualRMSNormPattern",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternReplacement",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:MLADualRMSPerTokenQuantPattern",
+   "target": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:MLADualRMSNormPattern",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:AiterSiluMulFp8GroupQuantPattern",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternReplacement",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:RocmAiterRMSNormQuantFusionPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternMatcherPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:RocmAiterSiluMulFp8GroupQuantFusionPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmFusionPatternMatcherPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/rocm_aiter_fusion.py:MLADualRMSNormFusionPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmFusionPatternMatcherPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "target": "file:vllm/compilation/passes/fusion/matcher_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "target": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "target": "file:vllm/compilation/passes/inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "target": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "target": "file:vllm/model_executor/layers/attention/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rope_kvcache_fusion.py:RopeStaticQQuantKVCachePattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rope_kvcache_fusion.py:RopeReshapeKVCachePattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rope_kvcache_fusion.py:RopeKVCacheFusionPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "target": "function:vllm/compilation/passes/fusion/rope_kvcache_fusion.py:fused_rope_and_unified_kv_cache_update_impl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "target": "class:vllm/compilation/passes/fusion/rope_kvcache_fusion.py:RopeKVCacheFusionPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/fusion/rope_kvcache_fusion.py:RopeKVCacheFusionPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternMatcherPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/fx_utils.py",
+   "target": "function:vllm/compilation/passes/fx_utils.py:find_op_nodes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/fx_utils.py",
+   "target": "function:vllm/compilation/passes/fx_utils.py:find_op_nodes",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/passes/inductor_pass.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/inductor_pass.py",
+   "target": "class:vllm/compilation/passes/inductor_pass.py:InductorPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/inductor_pass.py",
+   "target": "class:vllm/compilation/passes/inductor_pass.py:CallableInductorPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/inductor_pass.py",
+   "target": "class:vllm/compilation/passes/inductor_pass.py:PassContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/inductor_pass.py",
+   "target": "function:vllm/compilation/passes/inductor_pass.py:enable_fake_mode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/inductor_pass.py",
+   "target": "class:vllm/compilation/passes/inductor_pass.py:InductorPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/passes/inductor_pass.py",
+   "target": "class:vllm/compilation/passes/inductor_pass.py:CallableInductorPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/inductor_pass.py:CallableInductorPass",
+   "target": "class:vllm/compilation/passes/inductor_pass.py:InductorPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/clone_elimination.py",
+   "target": "file:vllm/compilation/passes/fx_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/clone_elimination.py",
+   "target": "file:vllm/compilation/passes/inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/clone_elimination.py",
+   "target": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/clone_elimination.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/clone_elimination.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/clone_elimination.py",
+   "target": "class:vllm/compilation/passes/ir/clone_elimination.py:UnsafeCloneEliminationPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/clone_elimination.py",
+   "target": "function:vllm/compilation/passes/ir/clone_elimination.py:clone_preserves_layout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/clone_elimination.py",
+   "target": "function:vllm/compilation/passes/ir/clone_elimination.py:user_writes_to_node",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/clone_elimination.py",
+   "target": "class:vllm/compilation/passes/ir/clone_elimination.py:UnsafeCloneEliminationPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/ir/clone_elimination.py:UnsafeCloneEliminationPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmInductorPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/inplace_functionalization.py",
+   "target": "file:vllm/compilation/passes/inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/inplace_functionalization.py",
+   "target": "file:vllm/compilation/passes/ir/lowering_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/inplace_functionalization.py",
+   "target": "file:vllm/compilation/passes/ir/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/inplace_functionalization.py",
+   "target": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/inplace_functionalization.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/inplace_functionalization.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/inplace_functionalization.py",
+   "target": "class:vllm/compilation/passes/ir/inplace_functionalization.py:VllmIRInplaceFunctionalizationPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/inplace_functionalization.py",
+   "target": "class:vllm/compilation/passes/ir/inplace_functionalization.py:VllmIRInplaceFunctionalizationPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/ir/inplace_functionalization.py:VllmIRInplaceFunctionalizationPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmInductorPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/lowering_pass.py",
+   "target": "file:vllm/compilation/passes/ir/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/lowering_pass.py",
+   "target": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/lowering_pass.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/lowering_pass.py",
+   "target": "file:vllm/ir/op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/lowering_pass.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/lowering_pass.py",
+   "target": "file:vllm/logging_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/lowering_pass.py",
+   "target": "class:vllm/compilation/passes/ir/lowering_pass.py:VllmIRLoweringPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/ir/lowering_pass.py",
+   "target": "class:vllm/compilation/passes/ir/lowering_pass.py:VllmIRLoweringPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/ir/lowering_pass.py:VllmIRLoweringPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmInductorPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/fusion/act_quant_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/fusion/add_rms_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/fusion/attn_quant_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/fusion/mla_attn_quant_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/fusion/mla_rope_kvcache_cat_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/fusion/qk_norm_rope_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/fusion/qk_norm_rope_kvcache_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/fusion/rms_quant_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/fusion/rocm_aiter_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/fusion/rope_kvcache_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/ir/clone_elimination.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/ir/lowering_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/utility/fix_functionalization.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/utility/noop_elimination.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/utility/post_cleanup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/utility/scatter_split_replace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/utility/split_coalescing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "file:vllm/utils/system_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "class:vllm/compilation/passes/pass_manager.py:PostGradPassManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "function:vllm/compilation/passes/pass_manager.py:with_pattern_match_debug",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/pass_manager.py",
+   "target": "class:vllm/compilation/passes/pass_manager.py:PostGradPassManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/fix_functionalization.py",
+   "target": "file:vllm/compilation/passes/fx_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/fix_functionalization.py",
+   "target": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/fix_functionalization.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/fix_functionalization.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/fix_functionalization.py",
+   "target": "class:vllm/compilation/passes/utility/fix_functionalization.py:FixFunctionalizationPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/fix_functionalization.py",
+   "target": "class:vllm/compilation/passes/utility/fix_functionalization.py:FixFunctionalizationPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/utility/fix_functionalization.py:FixFunctionalizationPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmInductorPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/noop_elimination.py",
+   "target": "file:vllm/compilation/passes/fx_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/noop_elimination.py",
+   "target": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/noop_elimination.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/noop_elimination.py",
+   "target": "class:vllm/compilation/passes/utility/noop_elimination.py:NoOpEliminationPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/noop_elimination.py",
+   "target": "class:vllm/compilation/passes/utility/noop_elimination.py:NoOpEliminationPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/utility/noop_elimination.py:NoOpEliminationPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmInductorPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/post_cleanup.py",
+   "target": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/post_cleanup.py",
+   "target": "class:vllm/compilation/passes/utility/post_cleanup.py:PostCleanupPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/post_cleanup.py",
+   "target": "class:vllm/compilation/passes/utility/post_cleanup.py:PostCleanupPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/utility/post_cleanup.py:PostCleanupPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmInductorPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/scatter_split_replace.py",
+   "target": "file:vllm/compilation/passes/fx_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/scatter_split_replace.py",
+   "target": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/scatter_split_replace.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/scatter_split_replace.py",
+   "target": "class:vllm/compilation/passes/utility/scatter_split_replace.py:ScatterSplitReplacementPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/scatter_split_replace.py",
+   "target": "class:vllm/compilation/passes/utility/scatter_split_replace.py:ScatterSplitReplacementPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/utility/scatter_split_replace.py:ScatterSplitReplacementPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmInductorPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/split_coalescing.py",
+   "target": "file:vllm/compilation/passes/fx_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/split_coalescing.py",
+   "target": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/split_coalescing.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/split_coalescing.py",
+   "target": "class:vllm/compilation/passes/utility/split_coalescing.py:SplitCoalescingPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/utility/split_coalescing.py",
+   "target": "class:vllm/compilation/passes/utility/split_coalescing.py:SplitCoalescingPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/utility/split_coalescing.py:SplitCoalescingPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmInductorPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "target": "file:vllm/compilation/passes/fx_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "target": "file:vllm/compilation/passes/inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "target": "file:vllm/utils/system_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmInductorPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternMatcherPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternReplacement",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmFusionPatternMatcherPass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "target": "function:vllm/compilation/passes/vllm_inductor_pass.py:fold_consecutive_reshapes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "target": "function:vllm/compilation/passes/vllm_inductor_pass.py:remove_noop_reshapes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmInductorPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternMatcherPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternReplacement",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/passes/vllm_inductor_pass.py",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmFusionPatternMatcherPass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmInductorPass",
+   "target": "class:vllm/compilation/passes/inductor_pass.py:InductorPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternMatcherPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmInductorPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmFusionPatternMatcherPass",
+   "target": "class:vllm/compilation/passes/vllm_inductor_pass.py:VllmPatternMatcherPass",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

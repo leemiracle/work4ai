@@ -1,0 +1,310 @@
+{
+ "nodes": [
+  {
+   "id": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/skill/tool-workspace-dependencies/src/index.ts",
+   "summary": "打包 Python/Node.js/pnpm payload 的模型可见查询工具（函数插件 tool-workspace-dependencies，inject ['tools']）：load_workspace_dependencies 首次调用时按 config 原地校验（只读载体）或安装到 Harness home（staging 拷贝+previous 保留、失败完整回滚），返回解释器与库目录绝对路径及锁定发行版版本；不改 PATH 与包管理器配置。",
+   "tags": [
+    "tool-registration",
+    "runtime-payload",
+    "installation",
+    "read-only-query"
+   ],
+   "complexity": "complex",
+   "languageNotes": "runtime.json 兼容 legacy components 形态（读时归一化、冲突即拒）；安装路径遇 symlink 直接抛错防链接劫持。"
+  },
+  {
+   "id": "function:packages/skill/tool-workspace-dependencies/src/index.ts:parsePrimaryRuntime",
+   "type": "function",
+   "name": "parsePrimaryRuntime",
+   "filePath": "packages/skill/tool-workspace-dependencies/src/index.ts",
+   "lineRange": [
+    82,
+    123
+   ],
+   "summary": "校验并归一化 runtime.json：desktopVersion/platform/arch/payloadDigest（64 位 hex）/python 版本语法与 pnpm 依赖 node 的组合约束；legacy components 形态读时转换且要求 numpy/pandas 版本与发行版映射一致。",
+   "tags": [
+    "validation",
+    "manifest-parsing",
+    "legacy-normalization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/skill/tool-workspace-dependencies/src/index.ts:readPrimaryRuntime",
+   "type": "function",
+   "name": "readPrimaryRuntime",
+   "filePath": "packages/skill/tool-workspace-dependencies/src/index.ts",
+   "lineRange": [
+    130,
+    133
+   ],
+   "summary": "读取并解析 runtime.json，不重写源文件。",
+   "tags": [
+    "file-reading",
+    "manifest",
+    "runtime-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/skill/tool-workspace-dependencies/src/index.ts:primaryRuntimePythonAliases",
+   "type": "function",
+   "name": "primaryRuntimePythonAliases",
+   "filePath": "packages/skill/tool-workspace-dependencies/src/index.ts",
+   "lineRange": [
+    142,
+    161
+   ],
+   "summary": "枚举平台相关的 Python 别名符号链接映射（如 python3→python），供拷贝排除与重建。",
+   "tags": [
+    "symlink-aliases",
+    "python-layout",
+    "symlink"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/skill/tool-workspace-dependencies/src/index.ts:copyPrimaryRuntime",
+   "type": "function",
+   "name": "copyPrimaryRuntime",
+   "filePath": "packages/skill/tool-workspace-dependencies/src/index.ts",
+   "lineRange": [
+    170,
+    175
+   ],
+   "summary": "递归拷贝 payload（dereference 解引用、排除别名链接），再在目标重建别名符号链接。",
+   "tags": [
+    "copy",
+    "symlink-rebuild",
+    "filesystem"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/skill/tool-workspace-dependencies/src/index.ts:workspaceDependencyPaths",
+   "type": "function",
+   "name": "workspaceDependencyPaths",
+   "filePath": "packages/skill/tool-workspace-dependencies/src/index.ts",
+   "lineRange": [
+    183,
+    198
+   ],
+   "summary": "按平台推导解释器与库目录绝对路径（python.exe vs bin/python3、site-packages 布局、node/pnpm 可选），不改动环境。",
+   "tags": [
+    "path-resolution",
+    "platform-layout",
+    "platform-paths"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/skill/tool-workspace-dependencies/src/index.ts:resolvePrimaryRuntime",
+   "type": "function",
+   "name": "resolvePrimaryRuntime",
+   "filePath": "packages/skill/tool-workspace-dependencies/src/index.ts",
+   "lineRange": [
+    234,
+    240
+   ],
+   "summary": "原地使用 payload：校验平台/arch 兼容、别名与全部条目存在后返回指向 payload 自身的路径，零拷贝。",
+   "tags": [
+    "in-place-resolution",
+    "validation",
+    "zero-copy"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/skill/tool-workspace-dependencies/src/index.ts:installPrimaryRuntime",
+   "type": "function",
+   "name": "installPrimaryRuntime",
+   "filePath": "packages/skill/tool-workspace-dependencies/src/index.ts",
+   "lineRange": [
+    248,
+    278
+   ],
+   "summary": "安装应用自带 payload 到固定目录：已装 manifest 逐字节等价则直接复用；否则 staging 拷贝+校验，previous 保留旧树，rename 失败完整回滚，成功后清理；安装路径是符号链接即抛。",
+   "tags": [
+    "installation",
+    "staging",
+    "rollback"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/skill/tool-workspace-dependencies/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/skill/tool-workspace-dependencies/src/index.ts",
+   "lineRange": [
+    285,
+    322
+   ],
+   "summary": "函数插件入口：注册 load_workspace_dependencies 只读查询工具（无参数、输出含 python/node/pnpm 路径与锁定发行版表）；首次调用触发准备（失败清空 preparation 允许重试），dispose 只等文件系统工作收尾。",
+   "tags": [
+    "plugin-entry",
+    "tool-registration",
+    "lazy-preparation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/skill/tool-workspace-dependencies/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/skill/tool-workspace-dependencies/tsconfig.json",
+   "summary": "包级 TypeScript 编译配置。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "target": "function:packages/skill/tool-workspace-dependencies/src/index.ts:parsePrimaryRuntime",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "target": "function:packages/skill/tool-workspace-dependencies/src/index.ts:readPrimaryRuntime",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "target": "function:packages/skill/tool-workspace-dependencies/src/index.ts:primaryRuntimePythonAliases",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "target": "function:packages/skill/tool-workspace-dependencies/src/index.ts:copyPrimaryRuntime",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "target": "function:packages/skill/tool-workspace-dependencies/src/index.ts:workspaceDependencyPaths",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "target": "function:packages/skill/tool-workspace-dependencies/src/index.ts:resolvePrimaryRuntime",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "target": "function:packages/skill/tool-workspace-dependencies/src/index.ts:installPrimaryRuntime",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "target": "function:packages/skill/tool-workspace-dependencies/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "target": "function:packages/skill/tool-workspace-dependencies/src/index.ts:parsePrimaryRuntime",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "target": "function:packages/skill/tool-workspace-dependencies/src/index.ts:readPrimaryRuntime",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "target": "function:packages/skill/tool-workspace-dependencies/src/index.ts:primaryRuntimePythonAliases",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "target": "function:packages/skill/tool-workspace-dependencies/src/index.ts:copyPrimaryRuntime",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "target": "function:packages/skill/tool-workspace-dependencies/src/index.ts:workspaceDependencyPaths",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "target": "function:packages/skill/tool-workspace-dependencies/src/index.ts:resolvePrimaryRuntime",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "target": "function:packages/skill/tool-workspace-dependencies/src/index.ts:installPrimaryRuntime",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "target": "function:packages/skill/tool-workspace-dependencies/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/skill/tool-workspace-dependencies/src/index.ts:apply",
+   "target": "function:packages/skill/tool-workspace-dependencies/src/index.ts:resolvePrimaryRuntime",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/skill/tool-workspace-dependencies/src/index.ts:apply",
+   "target": "function:packages/skill/tool-workspace-dependencies/src/index.ts:installPrimaryRuntime",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "config:packages/skill/tool-workspace-dependencies/tsconfig.json",
+   "target": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  }
+ ]
+}

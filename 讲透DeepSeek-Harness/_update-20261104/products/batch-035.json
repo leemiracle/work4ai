@@ -1,0 +1,767 @@
+{
+ "nodes": [
+  {
+   "id": "file:packages/fs/tool-fs/src/mutation-result.ts",
+   "type": "file",
+   "name": "mutation-result.ts",
+   "filePath": "packages/fs/tool-fs/src/mutation-result.ts",
+   "summary": "成功文件变更共享的结果装配：mutationResult 从 provider 结果剥离 version（进观察事件）并补上规范绝对路径，同时 emit fs/observed present 事件。",
+   "tags": [
+    "shared-result",
+    "observation-event",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/fs/tool-fs/src/mutation-result.ts:mutationResult",
+   "type": "function",
+   "name": "mutationResult",
+   "filePath": "packages/fs/tool-fs/src/mutation-result.ts",
+   "lineRange": [
+    15,
+    22
+   ],
+   "summary": "记录新文件版本到 fs/observed（kind present）并返回去 version、带规范 path 的结果字段（行范围含 JSDoc 后的函数体，15-22 依源码核实为 15 行起的单语句函数）。",
+   "tags": [
+    "observation-event",
+    "result-shaping",
+    "fs-events"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/fs/tool-fs/src/patch/execute.ts",
+   "type": "file",
+   "name": "execute.ts",
+   "filePath": "packages/fs/tool-fs/src/patch/execute.ts",
+   "summary": "patch 顺序提交执行器：全部预检通过后逐操作提交，首个失败停止后续且不回滚； truthful 部分结果——取消或 I/O 失败时经 stat 版本比对裁决 unknown（无法定居的远端中断不得靠 stat 洗白），失败消息追加重读指引。",
+   "tags": [
+    "executor",
+    "sequential-commit",
+    "uncertainty-check",
+    "partial-results"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/fs/tool-fs/src/patch/execute.ts:commitPatch",
+   "type": "function",
+   "name": "commitPatch",
+   "filePath": "packages/fs/tool-fs/src/patch/execute.ts",
+   "lineRange": [
+    40,
+    121
+   ],
+   "summary": "按序提交已放行的计划：每操作先 stat 记录 before 基准再按 add/update/delete/move 分派 ctx.fs 变更（move 写目标+删源，目标已写源保留为已知半成效果）；FS_ABORTED 或版本未变校验失败的 I/O 错误标 unknown 并提示重读，其余标 failed 带 changes。",
+   "tags": [
+    "commit-loop",
+    "move-semantics",
+    "outcome-classification"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/fs/tool-fs/src/patch/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/fs/tool-fs/src/patch/index.ts",
+   "summary": "内部 patch 执行器入口（工具注册与持久化结果归调用方）：executePatch 串联 plan→preflight→commit 三阶段，语法错误折成 syntax 报告、全部拒绝按 patch 序排成 preflight 报告，否则顺序提交。",
+   "tags": [
+    "entry-point",
+    "pipeline",
+    "patch-executor"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/fs/tool-fs/src/patch/index.ts:executePatch",
+   "type": "function",
+   "name": "executePatch",
+   "filePath": "packages/fs/tool-fs/src/patch/index.ts",
+   "lineRange": [
+    22,
+    36
+   ],
+   "summary": "三阶段编排：planPatch（解析+目标解析，PatchParseError 折成 PATCH_SYNTAX）→ 合并排序 plan.refusals 与 preflightPatch 拒绝（任一存在即整体拒绝、零写入）→ commitPatch 顺序提交。",
+   "tags": [
+    "orchestration",
+    "phase-pipeline",
+    "patch-executor"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "type": "file",
+   "name": "plan.ts",
+   "filePath": "packages/fs/tool-fs/src/patch/plan.ts",
+   "summary": "patch 解析与目标身份层（preflight 与顺序提交共享）：planPatch 把每个操作解析为 FsTarget（同 canonical key 共享一个 target、不丢重复别名、不拆 move），解析失败保留原始拼写进 refusals；并导出 source/destination intent 获取（fs/delete-intent、fs/edit-intent、fs/write-intent waterfall，不记录观察）与 patchFailure 错误映射。",
+   "tags": [
+    "planning",
+    "target-resolution",
+    "intent-waterfall",
+    "error-mapping"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/fs/tool-fs/src/patch/plan.ts:planPatch",
+   "type": "function",
+   "name": "planPatch",
+   "filePath": "packages/fs/tool-fs/src/patch/plan.ts",
+   "lineRange": [
+    22,
+    68
+   ],
+   "summary": "parsePatch 后逐操作经 ctx.fs.resolve+sessionResolveOptions 解析目标：以 targetKey 去重共享 FsTarget，update+moveTo 折成 move 操作（先解析 destination），FsError 走 patchFailure 进拒绝列表且记录保留原始 patch 拼写。",
+   "tags": [
+    "planning",
+    "deduplication",
+    "move-folding"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/fs/tool-fs/src/patch/plan.ts:sourceIntent",
+   "type": "function",
+   "name": "sourceIntent",
+   "filePath": "packages/fs/tool-fs/src/patch/plan.ts",
+   "lineRange": [
+    78,
+    80
+   ],
+   "summary": "经 fs/delete-intent 或 fs/edit-intent waterfall 获取源守卫（观察版本），不记录模型观察。",
+   "tags": [
+    "intent-waterfall",
+    "source-guard",
+    "fs-intent"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/fs/tool-fs/src/patch/plan.ts:destinationIntent",
+   "type": "function",
+   "name": "destinationIntent",
+   "filePath": "packages/fs/tool-fs/src/patch/plan.ts",
+   "lineRange": [
+    91,
+    93
+   ],
+   "summary": "经 fs/write-intent waterfall 获取写守卫（写意图），不记录模型观察。",
+   "tags": [
+    "intent-waterfall",
+    "write-guard",
+    "fs-intent"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/fs/tool-fs/src/patch/plan.ts:patchFailure",
+   "type": "function",
+   "name": "patchFailure",
+   "filePath": "packages/fs/tool-fs/src/patch/plan.ts",
+   "lineRange": [
+    103,
+    108
+   ],
+   "summary": "把 FsError 经共享 sandbox.mapError（沙箱拒绝映射）与 remediateFsError（文件系统补救文案）折成带稳定 code 的 PatchFailure。",
+   "tags": [
+    "error-mapping",
+    "remediation",
+    "diagnostics"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/fs/tool-fs/src/patch/plan.ts:mutationTargets",
+   "type": "function",
+   "name": "mutationTargets",
+   "filePath": "packages/fs/tool-fs/src/patch/plan.ts",
+   "lineRange": [
+    115,
+    117
+   ],
+   "summary": "列出操作可变更的全部目标（move 的 destination 在前），供不确定性版本比对记录基准。",
+   "tags": [
+    "target-enumeration",
+    "uncertainty-basis",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/fs/tool-fs/src/patch/preflight.ts",
+   "type": "file",
+   "name": "preflight.ts",
+   "filePath": "packages/fs/tool-fs/src/patch/preflight.ts",
+   "summary": "patch 效果的只读模拟预检：Preflight 类以 targetKey 缓存 stat/内容/touched 状态模拟整包应用（hunk 匹配、symlink 源检查、非常规文件拒绝），内部读取不产生模型观察；沙箱封锁是 provider 在 commit 时的决定（与 write/edit 同语义）。",
+   "tags": [
+    "preflight",
+    "read-only-simulation",
+    "validation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/fs/tool-fs/src/patch/preflight.ts:Preflight",
+   "type": "class",
+   "name": "Preflight",
+   "filePath": "packages/fs/tool-fs/src/patch/preflight.ts",
+   "lineRange": [
+    21,
+    134
+   ],
+   "summary": "整包只读模拟器：按 targetKey 缓存 SimulatedFile（存在性/信息/内容/touched），逐操作 check 常规文件约束、symlink 源策略（PATCH_SYMLINK_SOURCE）、applyHunks 试匹配与 add 已存在/move 目标冲突等独立拒绝。",
+   "tags": [
+    "simulation",
+    "state-cache",
+    "refusal-collection"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/fs/tool-fs/src/patch/preflight.ts:preflightPatch",
+   "type": "function",
+   "name": "preflightPatch",
+   "filePath": "packages/fs/tool-fs/src/patch/preflight.ts",
+   "lineRange": [
+    146,
+    157
+   ],
+   "summary": "逐操作收集相互独立的预检拒绝（patch 序返回）；任一拒绝即禁止整个 commit 阶段。",
+   "tags": [
+    "preflight",
+    "refusal-collection",
+    "validation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/fs/tool-fs/src/patch/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/fs/tool-fs/src/patch/types.ts",
+   "summary": "内部 patch 结果/诊断/操作计划类型：PatchExecutionRequest、PatchOperationRecord（解析失败保留原始拼写）、四态 PatchOperationOutcome（completed/failed/unknown/skipped）、三阶段 PatchExecutionReport（syntax/preflight/commit）、PlannedOperation 与 PatchPlan。",
+   "tags": [
+    "type-definition",
+    "patch-model",
+    "outcome-union"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/fs/tool-fs/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/fs/tool-fs/tsconfig.json",
+   "summary": "包级 TypeScript 编译配置：references 覆盖 fs/fs-patch/sandbox 等依赖面（61 行，tool-fs 依赖最广的配置之一）。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/fs/tool-fs-search/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/fs/tool-fs-search/README.md",
+   "summary": "dsh-tool-fs-search 包参考文档（242 行）：面向模型的 glob/grep 发现工具的组装与调试指南。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "search-tools"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:packages/fs/tool-fs-search/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/fs/tool-fs-search/package.json",
+   "summary": "@deepseek-ai/dsh-tool-fs-search 包清单：模型可见的文件系统发现工具（glob、grep）。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "search-tools"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/fs/tool-fs-search/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/fs/tool-fs-search/tsconfig.json",
+   "summary": "包级 TypeScript 编译配置（49 行，含较多 project references）。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/fs/tool-str-replace-editor/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/fs/tool-str-replace-editor/README.md",
+   "summary": "dsh-tool-str-replace-editor 包参考文档：ctx.fs 之上的独立 str_replace_editor 工具（Claude-Code 风格文件编辑）指南。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "editor-tool"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/fs/tool-str-replace-editor/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/fs/tool-str-replace-editor/package.json",
+   "summary": "@deepseek-ai/dsh-tool-str-replace-editor 包清单：模型可见的查看/创建/字面替换/行插入编辑工具。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "editor-tool"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/fs/tool-str-replace-editor/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/fs/tool-str-replace-editor/tsconfig.json",
+   "summary": "包级 TypeScript 编译配置。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/fs/tool-fs/src/mutation-result.ts",
+   "target": "file:packages/fs/fs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/mutation-result.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/execute.ts",
+   "target": "file:packages/fs/fs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/execute.ts",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/execute.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/execute.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/execute.ts",
+   "target": "file:packages/fs/tool-fs/src/sandbox.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/execute.ts",
+   "target": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/execute.ts",
+   "target": "file:packages/fs/tool-fs/src/patch/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/index.ts",
+   "target": "file:packages/fs/fs-patch/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/index.ts",
+   "target": "file:packages/fs/tool-fs/src/sandbox.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/index.ts",
+   "target": "file:packages/fs/tool-fs/src/patch/execute.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/index.ts",
+   "target": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/index.ts",
+   "target": "file:packages/fs/tool-fs/src/patch/preflight.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/index.ts",
+   "target": "file:packages/fs/tool-fs/src/patch/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "target": "file:packages/fs/fs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "target": "file:packages/fs/fs-patch/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "target": "file:packages/fs/tool-fs/src/error.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "target": "file:packages/fs/tool-fs/src/sandbox.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "target": "file:packages/fs/tool-fs/src/session-cwd.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "target": "file:packages/fs/tool-fs/src/patch/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/preflight.ts",
+   "target": "file:packages/fs/fs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/preflight.ts",
+   "target": "file:packages/fs/fs-patch/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/preflight.ts",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/preflight.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/preflight.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/preflight.ts",
+   "target": "file:packages/fs/tool-fs/src/sandbox.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/preflight.ts",
+   "target": "file:packages/fs/tool-fs/src/session-cwd.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/preflight.ts",
+   "target": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/preflight.ts",
+   "target": "file:packages/fs/tool-fs/src/patch/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/types.ts",
+   "target": "file:packages/fs/fs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/types.ts",
+   "target": "file:packages/fs/fs-patch/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/types.ts",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/mutation-result.ts",
+   "target": "function:packages/fs/tool-fs/src/mutation-result.ts:mutationResult",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/execute.ts",
+   "target": "function:packages/fs/tool-fs/src/patch/execute.ts:commitPatch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/index.ts",
+   "target": "function:packages/fs/tool-fs/src/patch/index.ts:executePatch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "target": "function:packages/fs/tool-fs/src/patch/plan.ts:planPatch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "target": "function:packages/fs/tool-fs/src/patch/plan.ts:sourceIntent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "target": "function:packages/fs/tool-fs/src/patch/plan.ts:destinationIntent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "target": "function:packages/fs/tool-fs/src/patch/plan.ts:patchFailure",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "target": "function:packages/fs/tool-fs/src/patch/plan.ts:mutationTargets",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/preflight.ts",
+   "target": "class:packages/fs/tool-fs/src/patch/preflight.ts:Preflight",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/preflight.ts",
+   "target": "function:packages/fs/tool-fs/src/patch/preflight.ts:preflightPatch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/mutation-result.ts",
+   "target": "function:packages/fs/tool-fs/src/mutation-result.ts:mutationResult",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/execute.ts",
+   "target": "function:packages/fs/tool-fs/src/patch/execute.ts:commitPatch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/index.ts",
+   "target": "function:packages/fs/tool-fs/src/patch/index.ts:executePatch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "target": "function:packages/fs/tool-fs/src/patch/plan.ts:planPatch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "target": "function:packages/fs/tool-fs/src/patch/plan.ts:sourceIntent",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "target": "function:packages/fs/tool-fs/src/patch/plan.ts:destinationIntent",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "target": "function:packages/fs/tool-fs/src/patch/plan.ts:patchFailure",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/plan.ts",
+   "target": "function:packages/fs/tool-fs/src/patch/plan.ts:mutationTargets",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/fs/tool-fs/src/patch/preflight.ts",
+   "target": "function:packages/fs/tool-fs/src/patch/preflight.ts:preflightPatch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/fs/tool-fs/src/patch/index.ts:executePatch",
+   "target": "function:packages/fs/tool-fs/src/patch/execute.ts:commitPatch",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/fs/tool-fs/src/patch/index.ts:executePatch",
+   "target": "function:packages/fs/tool-fs/src/patch/plan.ts:planPatch",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/fs/tool-fs/src/patch/index.ts:executePatch",
+   "target": "function:packages/fs/tool-fs/src/patch/preflight.ts:preflightPatch",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/fs/tool-fs/src/patch/plan.ts:planPatch",
+   "target": "function:packages/fs/fs-patch/src/parse.ts:parsePatch",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

@@ -1,0 +1,42 @@
+# DeepWiki 索引 — openai/chatkit-python
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 34 页 · 全文 438056 字符
+
+- [1 Overview](1-overview.md)
+- [2 Core Concepts](2-core-concepts.md)
+  - [2.1 Type System and Data Models](2.1-type-system-and-data-models.md)
+  - [2.2 Request and Response Flow](2.2-request-and-response-flow.md)
+  - [2.3 Streaming Events](2.3-streaming-events.md)
+  - [2.4 Threads and Thread Items](2.4-threads-and-thread-items.md)
+  - [2.5 Entities and Annotations](2.5-entities-and-annotations.md)
+- [3 Server Integration](3-server-integration.md)
+  - [3.1 ChatKitServer Class](3.1-chatkitserver-class.md)
+  - [3.2 Storage Interfaces](3.2-storage-interfaces.md)
+  - [3.3 Request Processing Pipeline](3.3-request-processing-pipeline.md)
+  - [3.4 Context Management](3.4-context-management.md)
+- [4 Advanced Features](4-advanced-features.md)
+  - [4.1 Agent Integration](4.1-agent-integration.md)
+  - [4.2 Actions System](4.2-actions-system.md)
+  - [4.3 Widgets and UI Components](4.3-widgets-and-ui-components.md)
+  - [4.4 Workflows and Tasks](4.4-workflows-and-tasks.md)
+  - [4.5 Image Generation](4.5-image-generation.md)
+  - [4.6 Rich User Input](4.6-rich-user-input.md)
+- [5 Development Guide](5-development-guide.md)
+  - [5.1 Quickstart and Project Setup](5.1-quickstart-and-project-setup.md)
+  - [5.2 Documentation System](5.2-documentation-system.md)
+  - [5.3 Testing and Quality Assurance](5.3-testing-and-quality-assurance.md)
+  - [5.4 Release Process and Versioning](5.4-release-process-and-versioning.md)
+- [6 API Reference](6-api-reference.md)
+  - [6.1 chatkit.types](6.1-chatkit.types.md)
+  - [6.2 chatkit.server](6.2-chatkit.server.md)
+  - [6.3 chatkit.agents](6.3-chatkit.agents.md)
+  - [6.4 chatkit.store](6.4-chatkit.store.md)
+  - [6.5 chatkit.actions](6.5-chatkit.actions.md)
+  - [6.6 chatkit.widgets](6.6-chatkit.widgets.md)
+  - [6.7 chatkit.errors](6.7-chatkit.errors.md)
+  - [6.8 chatkit.icons](6.8-chatkit.icons.md)
+- [7 Glossary](7-glossary.md)
+
+## 附：结构清单外的页
+- [Widget Templates](x1-widget-templates.md)

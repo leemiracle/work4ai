@@ -1,0 +1,8 @@
+# Coverage Check
+
+- repo: deepseek-ai/deepseek-harness
+- fetched: 2026-11-04
+- 结构清单页数: 46
+- 落盘页数: 46
+
+- 覆盖: 46/46 (100%)

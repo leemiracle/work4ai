@@ -1,187 +1,180 @@
+<!-- source: DeepWiki mcp.deepwiki.com · repo vllm-project/vllm · page 7 Quantization and MoE Optimizations · fetched 2026-10-28 -->
+
 # Quantization and MoE Optimizations
 
-> 来源: https://deepwiki.com/vllm-project/vllm/7-quantization-and-moe-optimizations 抓取日期: 2026-09-02
-> 章节: 第 7 章 量化与 MoE 优化
+<details>
+<summary>Relevant source files</summary>
+
+The following files were used as context for generating this wiki page:
+
+- [cmake/external_projects/triton_kernels.cmake](cmake/external_projects/triton_kernels.cmake)
+- [tests/kernels/moe/test_gpt_oss_triton_kernels.py](tests/kernels/moe/test_gpt_oss_triton_kernels.py)
+- [tests/kernels/moe/test_ocp_mx_moe.py](tests/kernels/moe/test_ocp_mx_moe.py)
+- [tests/kernels/quantization/test_mxfp4_triton_ep.py](tests/kernels/quantization/test_mxfp4_triton_ep.py)
+- [tests/models/quantization/test_gpt_oss.py](tests/models/quantization/test_gpt_oss.py)
+- [tests/models/quantization/test_mimo_v2_w4a16_routing.py](tests/models/quantization/test_mimo_v2_w4a16_routing.py)
+- [tests/quantization/test_gfx950_moe.py](tests/quantization/test_gfx950_moe.py)
+- [tests/quantization/test_modelopt.py](tests/quantization/test_modelopt.py)
+- [vllm/model_executor/layers/fused_moe/config.py](vllm/model_executor/layers/fused_moe/config.py)
+- [vllm/model_executor/layers/fused_moe/experts/aiter_mxfp4_w4a16_moe.py](vllm/model_executor/layers/fused_moe/experts/aiter_mxfp4_w4a16_moe.py)
+- [vllm/model_executor/layers/fused_moe/experts/aiter_mxfp4_w4a8_moe.py](vllm/model_executor/layers/fused_moe/experts/aiter_mxfp4_w4a8_moe.py)
+- [vllm/model_executor/layers/fused_moe/experts/gpt_oss_triton_kernels_moe.py](vllm/model_executor/layers/fused_moe/experts/gpt_oss_triton_kernels_moe.py)
+- [vllm/model_executor/layers/fused_moe/experts/rocm_aiter_moe.py](vllm/model_executor/layers/fused_moe/experts/rocm_aiter_moe.py)
+- [vllm/model_executor/layers/fused_moe/experts/xpu_moe.py](vllm/model_executor/layers/fused_moe/experts/xpu_moe.py)
+- [vllm/model_executor/layers/fused_moe/layer.py](vllm/model_executor/layers/fused_moe/layer.py)
+- [vllm/model_executor/layers/fused_moe/oracle/fp8.py](vllm/model_executor/layers/fused_moe/oracle/fp8.py)
+- [vllm/model_executor/layers/fused_moe/oracle/mxfp4.py](vllm/model_executor/layers/fused_moe/oracle/mxfp4.py)
+- [vllm/model_executor/layers/fused_moe/oracle/nvfp4.py](vllm/model_executor/layers/fused_moe/oracle/nvfp4.py)
+- [vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py](vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py)
+- [vllm/model_executor/layers/quantization/fp8.py](vllm/model_executor/layers/quantization/fp8.py)
+- [vllm/model_executor/layers/quantization/modelopt.py](vllm/model_executor/layers/quantization/modelopt.py)
+- [vllm/model_executor/layers/quantization/mxfp4.py](vllm/model_executor/layers/quantization/mxfp4.py)
+- [vllm/model_executor/layers/quantization/quark/quark_moe.py](vllm/model_executor/layers/quantization/quark/quark_moe.py)
+- [vllm/model_executor/layers/quantization/utils/mxfp4_utils.py](vllm/model_executor/layers/quantization/utils/mxfp4_utils.py)
+
+</details>
+
+
+
+## Purpose and scope
+
+This page outlines how vLLM connects quantization configurations to layer methods and kernel selection, and how its `FusedMoE` pipeline combines routing with expert execution. It is a parent-page overview; implementation details belong in the linked child pages.
+
+Sources: [vllm/model_executor/layers/quantization/fp8.py:92-105](), [vllm/model_executor/layers/fused_moe/layer.py:92-159]()
+
+For details, see:
+
+- [Quantization Methods Overview](#7.1) — Quantization formats, configuration, and the linear kernel selection layer.
+- [FP8 and Low-Precision Quantization](#7.2) — FP8, block quantization, MXFP4, NVFP4, and related kernel backends.
+- [FusedMoE Layer Architecture](#7.3) — MoE routing, expert execution, and modular pipeline components.
+- [MoE Quantization and Backend Selection](#7.4) — MoE quantization methods, backend selection, and parallelism considerations.
+- [Custom Kernels and C++/CUDA Extensions](#7.5) — Native extensions, custom-op wrappers, kernel libraries, and warmup.
+
+Sources: [vllm/model_executor/layers/quantization/fp8.py:11-14](), [vllm/model_executor/layers/fused_moe/layer.py:18-39](), [vllm/model_executor/layers/quantization/quark/quark_moe.py:8-10]()
 
 ---
 
-Relevant source files
+## Quantization Methods Overview
 
-  * [csrc/libtorch_stable/attention/merge_attn_states.cu](https://github.com/vllm-project/vllm/blob/185cada3/csrc/libtorch_stable/attention/merge_attn_states.cu)
-  * [csrc/libtorch_stable/mamba/selective_scan.h](https://github.com/vllm-project/vllm/blob/185cada3/csrc/libtorch_stable/mamba/selective_scan.h)
-  * [csrc/libtorch_stable/mamba/selective_scan_fwd.cu](https://github.com/vllm-project/vllm/blob/185cada3/csrc/libtorch_stable/mamba/selective_scan_fwd.cu)
-  * [csrc/libtorch_stable/mamba/static_switch.h](https://github.com/vllm-project/vllm/blob/185cada3/csrc/libtorch_stable/mamba/static_switch.h)
-  * [csrc/libtorch_stable/sampler.cu](https://github.com/vllm-project/vllm/blob/185cada3/csrc/libtorch_stable/sampler.cu)
-  * [tests/kernels/attention/test_deepgemm_attention.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/kernels/attention/test_deepgemm_attention.py)
-  * [tests/kernels/attention/test_rocm_aiter_mla_causal_verify_mask.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/kernels/attention/test_rocm_aiter_mla_causal_verify_mask.py)
-  * [tests/kernels/attention/test_rocm_aiter_mla_head_padding.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/kernels/attention/test_rocm_aiter_mla_head_padding.py)
-  * [tests/kernels/attention/test_rocm_triton_attn_dsv4.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/kernels/attention/test_rocm_triton_attn_dsv4.py)
-  * [tests/kernels/moe/test_cutlass_moe.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/kernels/moe/test_cutlass_moe.py)
-  * [tests/kernels/moe/test_flashinfer.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/kernels/moe/test_flashinfer.py)
-  * [tests/kernels/moe/test_moe.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/kernels/moe/test_moe.py)
-  * [tests/kernels/moe/test_unquantized_backend_selection.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/kernels/moe/test_unquantized_backend_selection.py)
-  * [tests/kernels/quantization/test_fp8_quant_group.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/kernels/quantization/test_fp8_quant_group.py)
-  * [tests/kernels/test_top_k_per_row.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/kernels/test_top_k_per_row.py)
-  * [tests/quantization/test_blackwell_moe.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/quantization/test_blackwell_moe.py)
-  * [tests/quantization/test_fp8.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/quantization/test_fp8.py)
-  * [tests/tool_parsers/test_dots_tool_parser.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/tool_parsers/test_dots_tool_parser.py)
-  * [tests/v1/attention/test_indexer_native_next_n.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/attention/test_indexer_native_next_n.py)
-  * [tests/v1/attention/test_rocm_aiter_mla_fp8_decode_routing.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/attention/test_rocm_aiter_mla_fp8_decode_routing.py)
-  * [tests/v1/attention/test_rocm_aiter_mla_mtp_split.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/attention/test_rocm_aiter_mla_mtp_split.py)
-  * [vllm/model_executor/layers/fused_moe/config.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/config.py)
-  * [vllm/model_executor/layers/fused_moe/experts/cutlass_moe.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/experts/cutlass_moe.py)
-  * [vllm/model_executor/layers/fused_moe/experts/rocm_aiter_moe.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/experts/rocm_aiter_moe.py)
-  * [vllm/model_executor/layers/fused_moe/experts/xpu_moe.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/experts/xpu_moe.py)
-  * [vllm/model_executor/layers/fused_moe/fused_moe.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/fused_moe.py)
-  * [vllm/model_executor/layers/fused_moe/fused_moe_method_base.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/fused_moe_method_base.py)
-  * [vllm/model_executor/layers/fused_moe/fused_moe_modular_method.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/fused_moe_modular_method.py)
-  * [vllm/model_executor/layers/fused_moe/layer.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/layer.py)
-  * [vllm/model_executor/layers/fused_moe/modular_kernel.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/modular_kernel.py)
-  * [vllm/model_executor/layers/fused_moe/oracle/fp8.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/oracle/fp8.py)
-  * [vllm/model_executor/layers/fused_moe/oracle/mxfp4.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/oracle/mxfp4.py)
-  * [vllm/model_executor/layers/fused_moe/oracle/nvfp4.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/oracle/nvfp4.py)
-  * [vllm/model_executor/layers/fused_moe/oracle/unquantized.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/oracle/unquantized.py)
-  * [vllm/model_executor/layers/fused_moe/oracle/w4a8.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/oracle/w4a8.py)
-  * [vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py)
-  * [vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py)
-  * [vllm/model_executor/layers/fused_moe/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/utils.py)
-  * [vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py)
-  * [vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_fp8.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_fp8.py)
-  * [vllm/model_executor/layers/quantization/fp8.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/fp8.py)
-  * [vllm/model_executor/layers/quantization/input_quant_fp8.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/input_quant_fp8.py)
-  * [vllm/model_executor/layers/quantization/modelopt.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/modelopt.py)
-  * [vllm/model_executor/layers/quantization/mxfp4.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/mxfp4.py)
-  * [vllm/model_executor/layers/quantization/quark/quark_moe.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/quark/quark_moe.py)
-  * [vllm/model_executor/layers/quantization/utils/flashinfer_fp4_moe.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/utils/flashinfer_fp4_moe.py)
-  * [vllm/model_executor/layers/quantization/utils/flashinfer_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/utils/flashinfer_utils.py)
-  * [vllm/model_executor/layers/quantization/utils/fp8_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/utils/fp8_utils.py)
-  * [vllm/model_executor/layers/sparse_attn_indexer.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/sparse_attn_indexer.py)
-  * [vllm/models/deepseek_v4/amd/rocm.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/models/deepseek_v4/amd/rocm.py)
-  * [vllm/models/dots3_note/__init__.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/models/dots3_note/__init__.py)
-  * [vllm/models/dots3_note/common/__init__.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/models/dots3_note/common/__init__.py)
-  * [vllm/utils/deep_gemm.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/utils/deep_gemm.py)
-  * [vllm/v1/attention/backends/mla/indexer.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/mla/indexer.py)
-  * [vllm/v1/attention/backends/mla/rocm_aiter_mla.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/mla/rocm_aiter_mla.py)
-  * [vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py)
-  * [vllm/v1/attention/ops/rocm_aiter_mla_sparse.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/ops/rocm_aiter_mla_sparse.py)
+Quantization configurations describe how methods apply to model layers. For example, `Fp8Config` records checkpoint serialization, activation scheme, ignored layers, and optional weight block size; its `get_quant_method()` selects a method based on layer type. Quantization methods can also connect to kernel initialization, as shown by the FP8 linear implementation importing the `model_executor.kernels.linear` selection functions. For details, see [Quantization Methods Overview](#7.1). [vllm/model_executor/layers/quantization/fp8.py:11-14](), [vllm/model_executor/layers/quantization/fp8.py:92-135](), [vllm/model_executor/layers/quantization/fp8.py:177-187]()
 
-This page covers vLLM's quantization infrastructure and Mixture-of-Experts (MoE) kernel system. It explains the quantization method registry, the FP8 linear and MoE pipelines, the modular MoE kernel abstraction, and how backend selection is performed at runtime.
+The codebase also has methods for ModelOpt and Quark formats, alongside MXFP4 support. Their MoE paths integrate with `FusedMoE` method and backend abstractions rather than treating quantization as a standalone format choice. For details, see [FP8 and Low-Precision Quantization](#7.2) and [MoE Quantization and Backend Selection](#7.4). [vllm/model_executor/layers/quantization/modelopt.py:16-36](), [vllm/model_executor/layers/quantization/modelopt.py:141-158](), [vllm/model_executor/layers/quantization/quark/quark_moe.py:13-18](), [vllm/model_executor/layers/quantization/mxfp4.py:86-113]()
 
-For details on the linear layer and normalization implementations that host quantized weights, see Linear Layers and Normalization. For distributed expert parallelism configuration, see [Parallelism Strategies](../../../../vllm-project/vllm/9.1-parallelism-strategies). For the general attention backend system, see [Attention Backends](../../../../vllm-project/vllm/8-attention-backends).
+**Quantization configuration to layer method**
 
-* * *
+```mermaid
+flowchart TD
+    Config["Fp8Config"] --> Select["get_quant_method()"]
+    Select --> Linear["LinearBase"]
+    Select --> Experts["RoutedExperts"]
+    Linear --> LinearMethod["Linear kernel initialization"]
+    Experts --> MoeMethod["FusedMoEMethodBase"]
+```
 
-## Quantization System Overview
+Sources: [vllm/model_executor/layers/quantization/fp8.py:11-14](), [vllm/model_executor/layers/quantization/fp8.py:92-105](), [vllm/model_executor/layers/quantization/fp8.py:177-187](), [vllm/model_executor/layers/quantization/mxfp4.py:86-113]()
 
-Every quantization scheme implements the `QuantizationConfig` abstract base class ([vllm/model_executor/layers/quantization/base_config.py45-48](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/base_config.py#L45-L48)) and is registered in a central registry. When a model is loaded, the config's `get_quant_method` is called per layer to return a `QuantizeMethodBase` that knows how to `create_weights`, `process_weights_after_loading`, and `apply` the kernel.
+---
 
-**Quantization method dispatch diagram:**
+## FP8 and Low-Precision Quantization
 
-Sources: [vllm/model_executor/layers/quantization/fp8.py175-200](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/fp8.py#L175-L200) [vllm/model_executor/layers/quantization/modelopt.py183-205](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/modelopt.py#L183-L205) [vllm/model_executor/layers/quantization/mxfp4.py81-103](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/mxfp4.py#L81-L103)
+`Fp8Config` supports static or dynamic activation schemes and optional block-shaped weight quantization; its configuration validates the activation scheme and block-size requirements. MXFP4 has a dedicated `Mxfp4Config`, whose method selection assigns a MoE method to `RoutedExperts` while leaving unsupported linear and attention cases unquantized. For details, see [FP8 and Low-Precision Quantization](#7.2). [vllm/model_executor/layers/quantization/fp8.py:92-135](), [vllm/model_executor/layers/quantization/mxfp4.py:55-113]()
 
-* * *
+MoE low-precision support connects quantization formats to backend oracles. The FP8 oracle defines backend choices including FlashInfer, DeepGEMM, Triton, AITER, and CPU variants; the MXFP4 and NVFP4 oracles likewise define backend families. These choices are part of the MoE execution path, rather than a single universal kernel. For details, see [MoE Quantization and Backend Selection](#7.4). [vllm/model_executor/layers/fused_moe/oracle/fp8.py:50-76](), [vllm/model_executor/layers/fused_moe/oracle/mxfp4.py:130-172](), [vllm/model_executor/layers/fused_moe/oracle/nvfp4.py:43-55]()
 
-### Supported Quantization Methods
+Sources: [vllm/model_executor/layers/quantization/fp8.py:92-135](), [vllm/model_executor/layers/quantization/mxfp4.py:55-113](), [vllm/model_executor/layers/fused_moe/oracle/fp8.py:50-76](), [vllm/model_executor/layers/fused_moe/oracle/mxfp4.py:130-172](), [vllm/model_executor/layers/fused_moe/oracle/nvfp4.py:43-55]()
 
-vLLM supports a wide array of quantization formats, from standard FP8 to specialized 4-bit formats like NVFP4 and MXFP4.
-
-Method| Config Class| Key File  
----|---|---  
-`fp8`| `Fp8Config`| [vllm/model_executor/layers/quantization/fp8.py95-109](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/fp8.py#L95-L109)  
-`modelopt`| `ModelOptQuantConfigBase`| [vllm/model_executor/layers/quantization/modelopt.py133-142](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/modelopt.py#L133-L142)  
-`mxfp4`| `Mxfp4Config`| [vllm/model_executor/layers/quantization/mxfp4.py45-55](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/mxfp4.py#L45-L55)  
-`quark`| `QuarkMoEMethod`| [vllm/model_executor/layers/quantization/quark/quark_moe.py95-101](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/quark/quark_moe.py#L95-L101)  
-`compressed-tensors`| `CompressedTensorsConfig`| [vllm/model_executor/layers/quantization/__init__.py119-121](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/__init__.py#L119-L121)  
-  
-Sources: [vllm/model_executor/layers/quantization/fp8.py136-137](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/fp8.py#L136-L137) [vllm/model_executor/layers/quantization/mxfp4.py65-66](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/mxfp4.py#L65-L66) [vllm/model_executor/layers/quantization/quark/quark_moe.py100-137](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/quark/quark_moe.py#L100-L137) [vllm/model_executor/layers/quantization/__init__.py12-46](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/__init__.py#L12-L46)
-
-For more details on specific methods, see [Quantization Methods Overview](../../../../vllm-project/vllm/7.1-quantization-methods-overview).
-
-* * *
-
-## FP8 Quantization
-
-FP8 quantization in vLLM is configured via `Fp8Config` and implemented through `Fp8LinearMethod` for linear layers and `Fp8MoEMethod` for MoE layers.
-
-### Fp8Config
-
-`Fp8Config` ([vllm/model_executor/layers/quantization/fp8.py95-174](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/fp8.py#L95-L174)) controls:
-
-  * `activation_scheme`: `"static"` or `"dynamic"` — whether activation scales are pre-computed or computed per-token at runtime ([vllm/model_executor/layers/quantization/fp8.py110-112](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/fp8.py#L110-L112)).
-  * `is_checkpoint_fp8_serialized`: `True` if weights are stored as FP8 in the checkpoint ([vllm/model_executor/layers/quantization/fp8.py108](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/fp8.py#L108-L108)).
-  * `weight_block_size`: enables block-wise quantization (e.g. `[128, 128]`). Requires `is_checkpoint_fp8_serialized=True` and `activation_scheme="dynamic"` ([vllm/model_executor/layers/quantization/fp8.py115-132](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/fp8.py#L115-L132)).
-
-For detailed implementation details on block quantization and backend selection (CUTLASS, DeepGemm, etc.), refer to [FP8 and Low-Precision Quantization](../../../../vllm-project/vllm/7.2-fp8-and-low-precision-quantization).
-
-Sources: [vllm/model_executor/layers/quantization/fp8.py19-21](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/fp8.py#L19-L21) [vllm/model_executor/layers/quantization/fp8.py190-196](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/fp8.py#L190-L196)
-
-* * *
+---
 
 ## FusedMoE Layer Architecture
 
-The `FusedMoE` layer is a core component for Mixture-of-Experts models, designed for efficiency and flexibility. It integrates various quantization methods and execution backends.
+`FusedMoEFactory` assembles a MoE execution pipeline from a router, `RoutedExperts`, and a `MoERunner`; it also accepts parallelism, quantization, routing, and expert-related configuration. `make_parallel_config()` derives the MoE parallel configuration from tensor-, data-, and context-parallel inputs. For details, see [FusedMoE Layer Architecture](#7.3). [vllm/model_executor/layers/fused_moe/layer.py:47-73](), [vllm/model_executor/layers/fused_moe/layer.py:92-159]()
 
-### FusedMoE Factory and Runner
+This separation gives the layer a clear flow: routing produces expert assignments, expert kernels perform the routed work, and the runner coordinates execution. Quantization and backend selection plug into the expert path; routing method types are represented separately in `RoutingMethodType`. For details, see [FusedMoE Layer Architecture](#7.3) and [MoE Quantization and Backend Selection](#7.4). [vllm/model_executor/layers/fused_moe/layer.py:30-39](), [vllm/model_executor/layers/fused_moe/config.py:103-131]()
 
-The `FusedMoEFactory` ([vllm/model_executor/layers/fused_moe/layer.py88-138](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/layer.py#L88-L138)) constructs the MoE execution pipeline. It orchestrates:
+**FusedMoE concepts mapped to code entities**
 
-  * **Router** : Token-to-expert assignment via `FusedMoERouter` created by `create_fused_moe_router` ([vllm/model_executor/layers/fused_moe/layer.py27-32](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/layer.py#L27-L32)).
-  * **Experts** : Parameters stored in `RoutedExperts` ([vllm/model_executor/layers/fused_moe/layer.py26](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/layer.py#L26-L26)).
-  * **Runner** : Orchestration via `MoERunner` ([vllm/model_executor/layers/fused_moe/layer.py33-35](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/layer.py#L33-L35)).
+```mermaid
+flowchart LR
+    Factory["FusedMoEFactory"] --> Router["FusedMoERouter"]
+    Factory --> Experts["RoutedExperts"]
+    Factory --> Runner["MoERunner"]
+    Router --> Assignments["RoutingMethodType"]
+    Runner --> Experts
+```
 
-**FusedMoE Code Entity Space Diagram:**
+Sources: [vllm/model_executor/layers/fused_moe/layer.py:30-39](), [vllm/model_executor/layers/fused_moe/layer.py:92-159](), [vllm/model_executor/layers/fused_moe/config.py:103-131]()
 
-Sources: [vllm/model_executor/layers/fused_moe/layer.py43-69](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/layer.py#L43-L69) [vllm/model_executor/layers/fused_moe/layer.py139-152](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/layer.py#L139-L152)
-
-### Modular Kernel Architecture
-
-The MoE execution pipeline is decomposed into independent stages in `modular_kernel.py`. This allows mixing and matching different backends for routing, expert execution, and reduction.
-
-Interface| Role  
----|---  
-`FusedMoEExperts`| Executes core expert GEMMs + activations. Supports `DeepGemm`, `FlashInfer`, `Triton`, and `AITER` ([vllm/model_executor/layers/fused_moe/modular_kernel.py65-69](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/modular_kernel.py#L65-L69)).  
-`FusedMoEPrepareAndFinalize`| Handles input quantization, token dispatch (EP), and result finalization ([vllm/model_executor/layers/fused_moe/modular_kernel.py180-188](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/modular_kernel.py#L180-L188)).  
-  
-For details on the sub-modules (oracle, experts, runner), see [FusedMoE Layer Architecture](../../../../vllm-project/vllm/7.3-fusedmoe-layer-architecture).
-
-Sources: [vllm/model_executor/layers/fused_moe/modular_kernel.py46-81](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/modular_kernel.py#L46-L81) [vllm/model_executor/layers/fused_moe/layer.py139-145](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/layer.py#L139-L145)
-
-* * *
+---
 
 ## MoE Quantization and Backend Selection
 
-Each quantization config supplies a `FusedMoEMethodBase` subclass for `FusedMoE` layers. vLLM uses an "oracle" system to select the best backend based on hardware and quantization format.
+MoE quantization configuration represents activation and weight quantization separately. `FusedMoEQuantDesc` describes data type and quantization group shape, while quantization-specific oracles provide backend selection and map backend choices to expert-kernel classes. For details, see [MoE Quantization and Backend Selection](#7.4). [vllm/model_executor/layers/fused_moe/config.py:174-193](), [vllm/model_executor/layers/fused_moe/oracle/nvfp4.py:74-160]()
 
-### Backend Selection Flow
+Backend availability and preference can depend on the platform, quantization keys, and MoE parallel configuration. For example, the FP8 oracle adjusts backend priority for selected CUDA capabilities, expert-parallel configurations, XPU, and CPU. The NVFP4 oracle maps configured backend names to its backend enum. These mechanisms connect quantization formats to platform-specific expert kernels. [vllm/model_executor/layers/fused_moe/oracle/fp8.py:79-145](), [vllm/model_executor/layers/fused_moe/oracle/nvfp4.py:163-182]()
 
-Backends like `FLASHINFER_TRTLLM`, `DEEPGEMM`, and `AITER` are prioritized based on platform capability. For example, `select_fp8_moe_backend` chooses the optimal FP8 implementation ([vllm/model_executor/layers/fused_moe/oracle/fp8.py69-133](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/oracle/fp8.py#L69-L133)).
+**MoE quantization and backend selection in code**
 
-**MoE Backend Selection Flow:**
+```mermaid
+flowchart TD
+    Method["Fp8MoeMethod or low-precision MoE method"] --> Oracle["select_fp8_moe_backend or format-specific selector"]
+    Oracle --> Backend["Fp8MoeBackend or format-specific backend enum"]
+    Backend --> KernelMap["backend_to_kernel_cls()"]
+    KernelMap --> Experts["Expert kernel classes"]
+    Parallel["FusedMoEParallelConfig"] --> Oracle
+    QuantKeys["weight_key and activation_key"] --> Oracle
+```
 
-Sources: [vllm/model_executor/layers/fused_moe/oracle/mxfp4.py154-199](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/oracle/mxfp4.py#L154-L199) [vllm/model_executor/layers/fused_moe/modular_kernel.py50-57](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/modular_kernel.py#L50-L57)
+Sources: [vllm/model_executor/layers/fused_moe/oracle/fp8.py:79-104](), [vllm/model_executor/layers/fused_moe/oracle/fp8.py:148-178](), [vllm/model_executor/layers/fused_moe/oracle/nvfp4.py:74-100]()
 
-For detailed documentation on MoE-specific quantization and backends, see [MoE Quantization and Backend Selection](../../../../vllm-project/vllm/7.4-moe-quantization-and-backend-selection).
+---
 
-* * *
+## Custom Kernels and C++/CUDA Extensions
 
-## Triton and FlashInfer Kernels
+Custom kernels and extension infrastructure form a neighboring optimization layer: Python quantization and MoE methods can use custom operations, as illustrated by Quark MoE importing `vllm._custom_ops`. The extension layout, build process, kernel libraries, and warmup are covered in [Custom Kernels and C++/CUDA Extensions](#7.5); this parent page does not detail those implementations. [vllm/model_executor/layers/quantization/quark/quark_moe.py:8-10]()
 
-The Triton-based MoE kernels implement a "sorted token" pattern to efficiently process tokens routed to different experts ([vllm/model_executor/layers/fused_moe/fused_moe.py113-138](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/fused_moe.py#L113-L138)). vLLM also integrates `FlashInfer` for high-performance MoE kernels, especially for FP8 and FP4 formats.
+Sources: [vllm/model_executor/layers/quantization/quark/quark_moe.py:8-10]()
 
-The routing method is configurable via `RoutingMethodType`, supporting methods like `Default` (Softmax), `DeepSeekV3` (Sigmoid + Bias), and `Llama4` ([vllm/model_executor/layers/fused_moe/config.py102-130](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/config.py#L102-L130)).
+---
 
-Sources: [vllm/model_executor/layers/fused_moe/config.py132-171](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/config.py#L132-L171) [vllm/model_executor/layers/fused_moe/fused_moe.py142-150](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/fused_moe.py#L142-L150)
+## Natural-language concepts mapped to code entities
 
-* * *
+**Quantization configuration and dispatch**
 
-## Weight Scale Granularities
+```mermaid
+flowchart LR
+    Config["Quantization configuration"] --> Fp8Config["Fp8Config"]
+    Config --> Mxfp4Config["Mxfp4Config"]
+    Fp8Config --> QuantMethod["get_quant_method()"]
+    Mxfp4Config --> Mxfp4Method["Mxfp4MoEMethod"]
+    QuantMethod --> LinearMethod["LinearMethodBase"]
+    QuantMethod --> RoutedExperts["RoutedExperts"]
+    RoutedExperts --> MoEMethod["FusedMoEMethodBase"]
+```
 
-The `FusedMoEQuantDesc` and associated logic capture the scale granularities supported by MoE kernels ([vllm/model_executor/layers/fused_moe/config.py175-194](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/config.py#L175-L194)):
+Sources: [vllm/model_executor/layers/quantization/fp8.py:92-105](), [vllm/model_executor/layers/quantization/fp8.py:177-187](), [vllm/model_executor/layers/quantization/mxfp4.py:86-113](), [vllm/model_executor/layers/fused_moe/layer.py:30-39]()
 
-Granularity| Description  
----|---  
-**Per-Tensor**|  Single scale for the entire weight tensor ([vllm/model_executor/layers/quantization/utils/quant_utils.py67-71](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/utils/quant_utils.py#L67-L71)).  
-**Per-Row/Column**|  Scaling per individual row or column ([vllm/model_executor/layers/fused_moe/config.py188-189](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/config.py#L188-L189)).  
-**Block-wise**|  2D block-wise scaling (e.g., 128x128 for DeepSeek or 1x32 for MXFP4) ([vllm/model_executor/layers/fused_moe/config.py190-193](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/config.py#L190-L193)).  
-  
-Sources: [vllm/model_executor/layers/fused_moe/config.py186-193](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/config.py#L186-L193) [vllm/model_executor/layers/fused_moe/oracle/mxfp4.py78-82](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/oracle/mxfp4.py#L78-L82) [vllm/model_executor/layers/quantization/utils/quant_utils.py67-71](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/utils/quant_utils.py#L67-L71)
+**Routing, execution, and backend selection**
+
+```mermaid
+flowchart LR
+    Factory["FusedMoEFactory"] --> RouterFactory["create_fused_moe_router"]
+    RouterFactory --> Router["FusedMoERouter"]
+    Router --> Runner["MoERunner"]
+    Runner --> Routed["RoutedExperts"]
+    Routed --> Oracle["select_fp8_moe_backend"]
+    Oracle --> Backend["Fp8MoeBackend"]
+    Backend --> Kernel["backend_to_kernel_cls()"]
+```
+
+Sources: [vllm/model_executor/layers/fused_moe/layer.py:30-39](), [vllm/model_executor/layers/fused_moe/layer.py:92-159](), [vllm/model_executor/layers/fused_moe/oracle/fp8.py:50-76](), [vllm/model_executor/layers/fused_moe/oracle/fp8.py:148-178]()
+
+For implementation details, follow the child pages:
+
+- [Quantization Methods Overview](#7.1)
+- [FP8 and Low-Precision Quantization](#7.2)
+- [FusedMoE Layer Architecture](#7.3)
+- [MoE Quantization and Backend Selection](#7.4)
+- [Custom Kernels and C++/CUDA Extensions](#7.5)
+
+---
+

@@ -1,0 +1,1625 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/beam/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/beam/__init__.py",
+   "summary": "beam 模型子包入口：再导出 nvidia 平台的 Beam 目标模型与 DFlash2 draft 模型实现。",
+   "tags": [
+    "barrel",
+    "package-init",
+    "model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/beam/nvidia/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/beam/nvidia/__init__.py",
+   "summary": "nvidia 平台 beam 实现子包入口（空占位 barrel）。",
+   "tags": [
+    "barrel",
+    "package-init"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/beam/nvidia/activation.py",
+   "type": "file",
+   "name": "activation.py",
+   "filePath": "vllm/models/beam/nvidia/activation.py",
+   "summary": "Beam 激活函数 triton kernel：beam_silu_mul（SiLU 门控乘）与 beam_softcap_logits（注意力/ logits 软上限缩放）。",
+   "tags": [
+    "triton",
+    "activation",
+    "kernel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/beam/nvidia/activation.py:beam_silu_mul",
+   "type": "function",
+   "name": "beam_silu_mul",
+   "filePath": "vllm/models/beam/nvidia/activation.py",
+   "lineRange": [
+    20,
+    28
+   ],
+   "summary": "SiLU 门控乘 kernel 启动器（gate×up 元素级）。",
+   "tags": [
+    "triton",
+    "activation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/beam/nvidia/activation.py:beam_softcap_logits",
+   "type": "function",
+   "name": "beam_softcap_logits",
+   "filePath": "vllm/models/beam/nvidia/activation.py",
+   "lineRange": [
+    46,
+    59
+   ],
+   "summary": "softcap logits kernel：按 tanh 软上限压缩 logits 幅度。",
+   "tags": [
+    "triton",
+    "softcap"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/beam/nvidia/allreduce.py",
+   "type": "file",
+   "name": "allreduce.py",
+   "filePath": "vllm/models/beam/nvidia/allreduce.py",
+   "summary": "Beam 专用 MNNVL allreduce：BeamAllReduceWorkspace 管理多播 Lamport 缓冲（3 buffer 轮转，2/4/8 rank×bf16×1024-8192 隐藏维×SM100 门槛）；beam_allreduce_norm_residual_norm 发起 allreduce+FP32 sandwich-norm 尾声，finalize 阶段消费结果完成 norm 与残差。",
+   "tags": [
+    "allreduce",
+    "mnnvl",
+    "lamport",
+    "communication"
+   ],
+   "complexity": "complex",
+   "languageNotes": "oneshot 阈值 1MB BF16 payload；Lamport 三缓冲规避同步；与 UnfinalizedMoEOutput 两段式执行衔接。"
+  },
+  {
+   "id": "class:vllm/models/beam/nvidia/allreduce.py:BeamAllReduceWorkspace",
+   "type": "class",
+   "name": "BeamAllReduceWorkspace",
+   "filePath": "vllm/models/beam/nvidia/allreduce.py",
+   "lineRange": [
+    17,
+    107
+   ],
+   "summary": "MNNVL 多播 Lamport 缓冲工作区：create 工厂按 rank 数/精度/隐藏维/算子可用性判定支持并分配。",
+   "tags": [
+    "workspace",
+    "mnnvl",
+    "factory"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/beam/nvidia/allreduce.py:beam_allreduce_norm_residual_norm",
+   "type": "function",
+   "name": "beam_allreduce_norm_residual_norm",
+   "filePath": "vllm/models/beam/nvidia/allreduce.py",
+   "lineRange": [
+    110,
+    154
+   ],
+   "summary": "发起段：TP allreduce 并调度 FP32 sandwich-norm+残差 CUDA 尾声。",
+   "tags": [
+    "allreduce",
+    "epilogue"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/beam/nvidia/allreduce.py:beam_finalize_allreduce_norm_residual_norm",
+   "type": "function",
+   "name": "beam_finalize_allreduce_norm_residual_norm",
+   "filePath": "vllm/models/beam/nvidia/allreduce.py",
+   "lineRange": [
+    208,
+    244
+   ],
+   "summary": "完成段：等待 Lamport 标志后消费 allreduce 结果完成 norm/residual（与 MoE unfinalized 输出协同）。",
+   "tags": [
+    "allreduce",
+    "finalize",
+    "async"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/beam/nvidia/attention.py",
+   "type": "file",
+   "name": "attention.py",
+   "filePath": "vllm/models/beam/nvidia/attention.py",
+   "summary": "BeamAttention 模块：合并 QKV 投影（可选 gate）、beam_qk_norm_rope 融合预处理、sigmoid 注意力输出门控与滑动窗口支持，直接对接 v1 attention backend。",
+   "tags": [
+    "attention",
+    "model-layer",
+    "beam"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/beam/nvidia/attention.py:BeamAttention",
+   "type": "class",
+   "name": "BeamAttention",
+   "filePath": "vllm/models/beam/nvidia/attention.py",
+   "lineRange": [
+    39,
+    221
+   ],
+   "summary": "Beam 注意力层：QKV merged 投影+per-head QK RMSNorm+RoPE（融合 op）+backend 调用+输出 gate。",
+   "tags": [
+    "attention",
+    "model-layer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/beam/nvidia/attention_ops.py",
+   "type": "file",
+   "name": "attention_ops.py",
+   "filePath": "vllm/models/beam/nvidia/attention_ops.py",
+   "summary": "注意力前/后处理 triton ops：beam_output_gate（sigmoid 门控输出，CUDA 时委托 CuteDSL 实现）与 beam_qk_norm_rope（per-head RMSNorm+RoPE 单 kernel 融合）。",
+   "tags": [
+    "triton",
+    "attention",
+    "fusion"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/beam/nvidia/attention_ops.py:beam_output_gate",
+   "type": "function",
+   "name": "beam_output_gate",
+   "filePath": "vllm/models/beam/nvidia/attention_ops.py",
+   "lineRange": [
+    35,
+    67
+   ],
+   "summary": "注意力输出 sigmoid 门控：CUDA 平台走 CuteDSL gate kernel，其余回退 triton。",
+   "tags": [
+    "gate",
+    "dispatch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/beam/nvidia/attention_ops.py:beam_qk_norm_rope",
+   "type": "function",
+   "name": "beam_qk_norm_rope",
+   "filePath": "vllm/models/beam/nvidia/attention_ops.py",
+   "lineRange": [
+    185,
+    250
+   ],
+   "summary": "per-head Q/K RMSNorm + RoPE 融合 triton kernel 启动器。",
+   "tags": [
+    "triton",
+    "qk-norm",
+    "rope"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/beam/nvidia/attention_ops_cutedsl.py",
+   "type": "file",
+   "name": "attention_ops_cutedsl.py",
+   "filePath": "vllm/models/beam/nvidia/attention_ops_cutedsl.py",
+   "summary": "输出门控的 CUTLASS CuteDSL 手写 kernel（766 行）：PTX 级 ld/st 内建（ld_b16x2/st_v4 等带 cache hint 变体）、三种 gate 形态（pair/vec/one，含 exp 交错 SIMD 版）、2D cooperative 启动器按 SM 数/向量宽度/协同适配自动选型——极致榨取 SM100 门控 kernel 带宽。",
+   "tags": [
+    "cutedsl",
+    "ptx",
+    "kernel",
+    "gate"
+   ],
+   "complexity": "complex",
+   "languageNotes": "CuteDSL 直接内嵌 PTX（ld.global.v4/b16x2、st.global with cache hint）；_choose 按 SM 数/数据量在 cooperative 与 plain 启动间自适应。"
+  },
+  {
+   "id": "function:vllm/models/beam/nvidia/attention_ops_cutedsl.py:run",
+   "type": "function",
+   "name": "run",
+   "filePath": "vllm/models/beam/nvidia/attention_ops_cutedsl.py",
+   "lineRange": [
+    693,
+    766
+   ],
+   "summary": "门控 kernel 公共入口：按形状/平台选择 gate 实现并启动（含 warmup 支持）。",
+   "tags": [
+    "entry-point",
+    "dispatch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/beam/nvidia/attention_ops_cutedsl.py:_gate2d_launch",
+   "type": "function",
+   "name": "_gate2d_launch",
+   "filePath": "vllm/models/beam/nvidia/attention_ops_cutedsl.py",
+   "lineRange": [
+    534,
+    605
+   ],
+   "summary": "2D 网格门控 kernel 启动器（grid 计算与参数绑定）。",
+   "tags": [
+    "launcher",
+    "kernel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/beam/nvidia/attention_ops_cutedsl.py:gate_vec",
+   "type": "function",
+   "name": "gate_vec",
+   "filePath": "vllm/models/beam/nvidia/attention_ops_cutedsl.py",
+   "lineRange": [
+    318,
+    332
+   ],
+   "summary": "向量化门控 CuteDSL kernel（多元素并行）。",
+   "tags": [
+    "cutedsl",
+    "gate"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/beam/nvidia/attention_ops_cutedsl.py:_choose",
+   "type": "function",
+   "name": "_choose",
+   "filePath": "vllm/models/beam/nvidia/attention_ops_cutedsl.py",
+   "lineRange": [
+    644,
+    690
+   ],
+   "summary": "启动策略选择：按数据量/SM 数/cooperative 可行性选 gate 形态。",
+   "tags": [
+    "heuristics",
+    "dispatch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/beam/nvidia/dflash2.py",
+   "type": "file",
+   "name": "dflash2.py",
+   "filePath": "vllm/models/beam/nvidia/dflash2.py",
+   "summary": "Beam 目标的 DFlash2 draft 模型（623 行）：从目标模型指定层捕获隐藏态，一次预测整块 token，低秩候选选择器对每位置 top-k 逐 token 重打分（与前 token 对比）；共享目标 embedding 与 LM head。整模型不参与 torch.compile——draft 全步（decoder+候选头+选择器）由 speculator 的 CUDA graph 捕获，context KV 预计算走少量 fused kernel。",
+   "tags": [
+    "spec-decode",
+    "draft-model",
+    "dflash2",
+    "beam"
+   ],
+   "complexity": "complex",
+   "languageNotes": "模块头注释钉版：不用 torch.compile；CUDA graph 由 DFlash speculator 外部管理；复用 qwen3_dflash2 的 DFlashGroupedConv。"
+  },
+  {
+   "id": "class:vllm/models/beam/nvidia/dflash2.py:DFlash2BeamAttention",
+   "type": "class",
+   "name": "DFlash2BeamAttention",
+   "filePath": "vllm/models/beam/nvidia/dflash2.py",
+   "lineRange": [
+    53,
+    151
+   ],
+   "summary": "draft 注意力：只做 query token 注意力（context KV 已由预计算写入 KV cache）。",
+   "tags": [
+    "attention",
+    "draft-model"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/beam/nvidia/dflash2.py:DFlash2BeamMLP",
+   "type": "class",
+   "name": "DFlash2BeamMLP",
+   "filePath": "vllm/models/beam/nvidia/dflash2.py",
+   "lineRange": [
+    154,
+    174
+   ],
+   "summary": "draft MLP 子层。",
+   "tags": [
+    "mlp",
+    "draft-model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/beam/nvidia/dflash2.py:DFlash2BeamDecoderLayer",
+   "type": "class",
+   "name": "DFlash2BeamDecoderLayer",
+   "filePath": "vllm/models/beam/nvidia/dflash2.py",
+   "lineRange": [
+    177,
+    250
+   ],
+   "summary": "draft decoder 层：注意力+MLP+beam 融合残差 norm 组合。",
+   "tags": [
+    "decoder-layer",
+    "draft-model"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/beam/nvidia/dflash2.py:DFlash2BeamCandidateSelector",
+   "type": "class",
+   "name": "DFlash2BeamCandidateSelector",
+   "filePath": "vllm/models/beam/nvidia/dflash2.py",
+   "lineRange": [
+    253,
+    306
+   ],
+   "summary": "低秩候选重打分头：对每 block 位置的 top-k token 相对其前 token 打分，供外部 beam 搜索构图（candidate_edges）。",
+   "tags": [
+    "candidate-selection",
+    "low-rank",
+    "spec-decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/beam/nvidia/dflash2.py:DFlash2BeamModel",
+   "type": "class",
+   "name": "DFlash2BeamModel",
+   "filePath": "vllm/models/beam/nvidia/dflash2.py",
+   "lineRange": [
+    309,
+    539
+   ],
+   "summary": "draft 主干：目标层隐藏态输入→decoder 层栈→候选头，处理 TP 切分与权重映射（共享目标 embed/lm_head）。",
+   "tags": [
+    "draft-model",
+    "backbone"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/beam/nvidia/dflash2.py:DFlash2BeamForCausalLM",
+   "type": "class",
+   "name": "DFlash2BeamForCausalLM",
+   "filePath": "vllm/models/beam/nvidia/dflash2.py",
+   "lineRange": [
+    542,
+    623
+   ],
+   "summary": "对外封装：权重加载/映射与 draft 前向入口（供 speculator 调用）。",
+   "tags": [
+    "causal-lm",
+    "draft-model",
+    "entry-point"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/beam/nvidia/dflash2_context_ops.py",
+   "type": "file",
+   "name": "dflash2_context_ops.py",
+   "filePath": "vllm/models/beam/nvidia/dflash2_context_ops.py",
+   "summary": "draft context KV 预计算 triton kernel：把捕获的目标层隐藏态经投影后写入 KV cache 指定槽位（eager 执行的少量 fused kernel 之一）。",
+   "tags": [
+    "triton",
+    "kv-cache",
+    "precompute",
+    "draft-model"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/beam/nvidia/dflash2_context_ops.py:store_context_kv",
+   "type": "function",
+   "name": "store_context_kv",
+   "filePath": "vllm/models/beam/nvidia/dflash2_context_ops.py",
+   "lineRange": [
+    86,
+    127
+   ],
+   "summary": "context KV 写入启动器：投影+写 cache 单 kernel。",
+   "tags": [
+    "triton",
+    "kv-cache"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/beam/nvidia/dflash2_conv_ops.py",
+   "type": "file",
+   "name": "dflash2_conv_ops.py",
+   "filePath": "vllm/models/beam/nvidia/dflash2_conv_ops.py",
+   "summary": "draft 分组卷积+残差 norm 融合 triton kernel：DFlashGroupedConv 输出后一步完成残差加与双 norm。",
+   "tags": [
+    "triton",
+    "grouped-conv",
+    "fusion",
+    "draft-model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/beam/nvidia/dflash2_conv_ops.py:conv_residual_norm",
+   "type": "function",
+   "name": "conv_residual_norm",
+   "filePath": "vllm/models/beam/nvidia/dflash2_conv_ops.py",
+   "lineRange": [
+    56,
+    94
+   ],
+   "summary": "卷积+残差+norm 融合 kernel 启动器。",
+   "tags": [
+    "triton",
+    "fusion"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/beam/nvidia/dflash2_ops.py",
+   "type": "file",
+   "name": "dflash2_ops.py",
+   "filePath": "vllm/models/beam/nvidia/dflash2_ops.py",
+   "summary": "beam 候选边计算 triton kernel：从候选选择器打分构造 block 内 token 依赖边（position→position+1 的 top-k 候选转移）。",
+   "tags": [
+    "triton",
+    "beam-search",
+    "spec-decode"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/beam/nvidia/dflash2_ops.py:candidate_edges",
+   "type": "function",
+   "name": "candidate_edges",
+   "filePath": "vllm/models/beam/nvidia/dflash2_ops.py",
+   "lineRange": [
+    52,
+    85
+   ],
+   "summary": "候选边 kernel 启动器：输出 beam 搜索图的边集。",
+   "tags": [
+    "triton",
+    "beam-search"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/beam/nvidia/layernorm.py",
+   "type": "file",
+   "name": "layernorm.py",
+   "filePath": "vllm/models/beam/nvidia/layernorm.py",
+   "summary": "Beam layernorm triton 家族：beam_rms_norm（单 norm）、beam_norm_residual_norm（FP32 sandwich norm：norm→残差加→再 norm，返回下一层输入与残差双输出，boundary 数学精确对齐参考实现）。",
+   "tags": [
+    "triton",
+    "rmsnorm",
+    "sandwich-norm",
+    "kernel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/beam/nvidia/layernorm.py:RMSNorm",
+   "type": "class",
+   "name": "RMSNorm",
+   "filePath": "vllm/models/beam/nvidia/layernorm.py",
+   "lineRange": [
+    11,
+    19
+   ],
+   "summary": "RMSNorm 模块壳：权重管理+beam_rms_norm kernel 调用。",
+   "tags": [
+    "layernorm",
+    "module"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/beam/nvidia/layernorm.py:beam_rms_norm",
+   "type": "function",
+   "name": "beam_rms_norm",
+   "filePath": "vllm/models/beam/nvidia/layernorm.py",
+   "lineRange": [
+    48,
+    69
+   ],
+   "summary": "单 RMSNorm kernel 启动器（fp32 累加）。",
+   "tags": [
+    "triton",
+    "rmsnorm"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/beam/nvidia/layernorm.py:beam_norm_residual_norm",
+   "type": "function",
+   "name": "beam_norm_residual_norm",
+   "filePath": "vllm/models/beam/nvidia/layernorm.py",
+   "lineRange": [
+    148,
+    191
+   ],
+   "summary": "sandwich norm kernel：归一化残差分支并产出下一 norm 输入（双输出），与 allreduce epilogue 协同。",
+   "tags": [
+    "triton",
+    "sandwich-norm",
+    "residual"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/beam/nvidia/model.py",
+   "type": "file",
+   "name": "model.py",
+   "filePath": "vllm/models/beam/nvidia/model.py",
+   "summary": "Beam 目标模型（474 行）：decoder-only 稀疏 MoE causal LM——NoPE 层+SSMax query scaling、混合滑窗注意力、per-head QK RMSNorm、sandwich norm、深度缩放残差（_depth_scaled_coeffs 按 1/sqrt(2L) 族系数）、sigmoid 注意力输出门控、noaux_tc 分组 sigmoid 路由；BeamModel 混入 EagleModelMixin（可作 EAGLE3 目标）。",
+   "tags": [
+    "model",
+    "moe",
+    "beam",
+    "target-model"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/beam/nvidia/model.py:_depth_scaled_coeffs",
+   "type": "function",
+   "name": "_depth_scaled_coeffs",
+   "filePath": "vllm/models/beam/nvidia/model.py",
+   "lineRange": [
+    63,
+    73
+   ],
+   "summary": "深度缩放残差系数：x_scale=1/sqrt(num_adds)、r_scale=sqrt(num_adds-1)/sqrt(num_adds)（attention/MLP 各自的残差计数）。",
+   "tags": [
+    "residual-scaling",
+    "math"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/beam/nvidia/model.py:BeamDecoderLayer",
+   "type": "class",
+   "name": "BeamDecoderLayer",
+   "filePath": "vllm/models/beam/nvidia/model.py",
+   "lineRange": [
+    76,
+    185
+   ],
+   "summary": "sandwich-norm 块：残差与下一 norm 输入分离传递，含 attention 与 MoE 两个子层。",
+   "tags": [
+    "decoder-layer",
+    "sandwich-norm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/beam/nvidia/model.py:BeamModel",
+   "type": "class",
+   "name": "BeamModel",
+   "filePath": "vllm/models/beam/nvidia/model.py",
+   "lineRange": [
+    188,
+    337
+   ],
+   "summary": "Beam 主干：embedding+层栈+MNNVL allreduce workspace 共享+PP 支持+深度缩放残差传播。",
+   "tags": [
+    "backbone",
+    "model",
+    "pipeline-parallel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/beam/nvidia/model.py:BeamForCausalLM",
+   "type": "class",
+   "name": "BeamForCausalLM",
+   "filePath": "vllm/models/beam/nvidia/model.py",
+   "lineRange": [
+    340,
+    474
+   ],
+   "summary": "对外封装：lm_head、权重加载（AutoWeightsLoader）、logits 处理与 MoE/量化接口声明（SupportsPP/MixtureOfExperts/SupportsQuant）。",
+   "tags": [
+    "causal-lm",
+    "entry-point",
+    "model"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/beam/nvidia/moe.py",
+   "type": "file",
+   "name": "moe.py",
+   "filePath": "vllm/models/beam/nvidia/moe.py",
+   "summary": "Beam MoE 层：BeamSparseMoeBlock 用 noaux_tc 分组 sigmoid 路由选专家，专家计算经 TRTLLM NVFP4 fused MoE kernel（UnfinalizedMoEOutput 两段式输出与 allreduce 尾声衔接）；BeamMLP 为 dense 备胎。",
+   "tags": [
+    "moe",
+    "sparse",
+    "nvfp4",
+    "router"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/beam/nvidia/moe.py:BeamMLP",
+   "type": "class",
+   "name": "BeamMLP",
+   "filePath": "vllm/models/beam/nvidia/moe.py",
+   "lineRange": [
+    19,
+    57
+   ],
+   "summary": "dense MLP 子层（gate/up/down + beam_silu_mul）。",
+   "tags": [
+    "mlp",
+    "dense"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/beam/nvidia/moe.py:BeamSparseMoeBlock",
+   "type": "class",
+   "name": "BeamSparseMoeBlock",
+   "filePath": "vllm/models/beam/nvidia/moe.py",
+   "lineRange": [
+    60,
+    128
+   ],
+   "summary": "稀疏 MoE 块：noaux_tc sigmoid 路由+NVFP4 fused expert+两段式输出。",
+   "tags": [
+    "moe",
+    "router",
+    "nvfp4"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/beam/nvidia/projection.py",
+   "type": "file",
+   "name": "projection.py",
+   "filePath": "vllm/models/beam/nvidia/projection.py",
+   "summary": "打包投影工具：按权重形状/架构（1792/3584×5120）与 SM100 家族判定走 CuteDSL 低时延 GEMM（ll_bf16，m=1/2/16 档）或 flashinfer tinygemm2，packed_projection 统一入口含 warmup。",
+   "tags": [
+    "gemm",
+    "cutedsl",
+    "projection",
+    "low-latency"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/beam/nvidia/projection.py:use_low_latency_gemm",
+   "type": "function",
+   "name": "use_low_latency_gemm",
+   "filePath": "vllm/models/beam/nvidia/projection.py",
+   "lineRange": [
+    20,
+    29
+   ],
+   "summary": "判定权重是否可用 SM100 低时延 GEMM（bf16+cuda+cap100+特定形状）。",
+   "tags": [
+    "dispatch",
+    "capability"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/beam/nvidia/projection.py:warmup_packed_projection",
+   "type": "function",
+   "name": "warmup_packed_projection",
+   "filePath": "vllm/models/beam/nvidia/projection.py",
+   "lineRange": [
+    32,
+    45
+   ],
+   "summary": "预热 ll_bf16 GEMM kernel（m=1/2/16）与 tinygemm。",
+   "tags": [
+    "warmup",
+    "gemm"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/beam/nvidia/projection.py:packed_projection",
+   "type": "function",
+   "name": "packed_projection",
+   "filePath": "vllm/models/beam/nvidia/projection.py",
+   "lineRange": [
+    48,
+    61
+   ],
+   "summary": "统一投影入口：可用时走低时延 GEMM，否则 F.linear 回退。",
+   "tags": [
+    "gemm",
+    "dispatch",
+    "entry-point"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/beam/__init__.py",
+   "target": "file:vllm/models/beam/nvidia/dflash2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/__init__.py",
+   "target": "file:vllm/models/beam/nvidia/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/activation.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/activation.py",
+   "target": "function:vllm/models/beam/nvidia/activation.py:beam_silu_mul",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/activation.py",
+   "target": "function:vllm/models/beam/nvidia/activation.py:beam_softcap_logits",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/activation.py",
+   "target": "function:vllm/models/beam/nvidia/activation.py:beam_silu_mul",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/activation.py",
+   "target": "function:vllm/models/beam/nvidia/activation.py:beam_softcap_logits",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/allreduce.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/moe_output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/allreduce.py",
+   "target": "file:vllm/models/beam/nvidia/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/allreduce.py",
+   "target": "file:vllm/utils/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/allreduce.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/allreduce.py",
+   "target": "class:vllm/models/beam/nvidia/allreduce.py:BeamAllReduceWorkspace",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/allreduce.py",
+   "target": "function:vllm/models/beam/nvidia/allreduce.py:beam_allreduce_norm_residual_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/allreduce.py",
+   "target": "function:vllm/models/beam/nvidia/allreduce.py:beam_finalize_allreduce_norm_residual_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/allreduce.py",
+   "target": "class:vllm/models/beam/nvidia/allreduce.py:BeamAllReduceWorkspace",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/allreduce.py",
+   "target": "function:vllm/models/beam/nvidia/allreduce.py:beam_allreduce_norm_residual_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/allreduce.py",
+   "target": "function:vllm/models/beam/nvidia/allreduce.py:beam_finalize_allreduce_norm_residual_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention.py",
+   "target": "file:vllm/models/beam/nvidia/attention_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention.py",
+   "target": "file:vllm/models/beam/nvidia/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention.py",
+   "target": "file:vllm/models/beam/nvidia/projection.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention.py",
+   "target": "file:vllm/transformers_utils/configs/beam.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention.py",
+   "target": "class:vllm/models/beam/nvidia/attention.py:BeamAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention.py",
+   "target": "class:vllm/models/beam/nvidia/attention.py:BeamAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention_ops.py",
+   "target": "file:vllm/models/beam/nvidia/attention_ops_cutedsl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention_ops.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention_ops.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention_ops.py",
+   "target": "function:vllm/models/beam/nvidia/attention_ops.py:beam_output_gate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention_ops.py",
+   "target": "function:vllm/models/beam/nvidia/attention_ops.py:beam_qk_norm_rope",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention_ops.py",
+   "target": "function:vllm/models/beam/nvidia/attention_ops.py:beam_output_gate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention_ops.py",
+   "target": "function:vllm/models/beam/nvidia/attention_ops.py:beam_qk_norm_rope",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention_ops_cutedsl.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention_ops_cutedsl.py",
+   "target": "function:vllm/models/beam/nvidia/attention_ops_cutedsl.py:run",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention_ops_cutedsl.py",
+   "target": "function:vllm/models/beam/nvidia/attention_ops_cutedsl.py:_gate2d_launch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention_ops_cutedsl.py",
+   "target": "function:vllm/models/beam/nvidia/attention_ops_cutedsl.py:gate_vec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention_ops_cutedsl.py",
+   "target": "function:vllm/models/beam/nvidia/attention_ops_cutedsl.py:_choose",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/attention_ops_cutedsl.py",
+   "target": "function:vllm/models/beam/nvidia/attention_ops_cutedsl.py:run",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "file:vllm/model_executor/models/qwen3_dflash2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "file:vllm/models/beam/nvidia/attention_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "file:vllm/models/beam/nvidia/dflash2_context_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "file:vllm/models/beam/nvidia/dflash2_conv_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "file:vllm/models/beam/nvidia/dflash2_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "class:vllm/models/beam/nvidia/dflash2.py:DFlash2BeamAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "class:vllm/models/beam/nvidia/dflash2.py:DFlash2BeamMLP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "class:vllm/models/beam/nvidia/dflash2.py:DFlash2BeamDecoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "class:vllm/models/beam/nvidia/dflash2.py:DFlash2BeamCandidateSelector",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "class:vllm/models/beam/nvidia/dflash2.py:DFlash2BeamModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "class:vllm/models/beam/nvidia/dflash2.py:DFlash2BeamForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2.py",
+   "target": "class:vllm/models/beam/nvidia/dflash2.py:DFlash2BeamForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2_context_ops.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2_context_ops.py",
+   "target": "function:vllm/models/beam/nvidia/dflash2_context_ops.py:store_context_kv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2_context_ops.py",
+   "target": "function:vllm/models/beam/nvidia/dflash2_context_ops.py:store_context_kv",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2_conv_ops.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2_conv_ops.py",
+   "target": "function:vllm/models/beam/nvidia/dflash2_conv_ops.py:conv_residual_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2_conv_ops.py",
+   "target": "function:vllm/models/beam/nvidia/dflash2_conv_ops.py:conv_residual_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2_ops.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2_ops.py",
+   "target": "function:vllm/models/beam/nvidia/dflash2_ops.py:candidate_edges",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/dflash2_ops.py",
+   "target": "function:vllm/models/beam/nvidia/dflash2_ops.py:candidate_edges",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/layernorm.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/layernorm.py",
+   "target": "class:vllm/models/beam/nvidia/layernorm.py:RMSNorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/layernorm.py",
+   "target": "function:vllm/models/beam/nvidia/layernorm.py:beam_rms_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/layernorm.py",
+   "target": "function:vllm/models/beam/nvidia/layernorm.py:beam_norm_residual_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/layernorm.py",
+   "target": "class:vllm/models/beam/nvidia/layernorm.py:RMSNorm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/layernorm.py",
+   "target": "function:vllm/models/beam/nvidia/layernorm.py:beam_norm_residual_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/moe_output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "file:vllm/models/beam/nvidia/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "file:vllm/models/beam/nvidia/allreduce.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "file:vllm/models/beam/nvidia/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "file:vllm/models/beam/nvidia/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "file:vllm/models/beam/nvidia/moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "file:vllm/transformers_utils/configs/beam.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "function:vllm/models/beam/nvidia/model.py:_depth_scaled_coeffs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "class:vllm/models/beam/nvidia/model.py:BeamDecoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "class:vllm/models/beam/nvidia/model.py:BeamModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "class:vllm/models/beam/nvidia/model.py:BeamForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/model.py",
+   "target": "class:vllm/models/beam/nvidia/model.py:BeamForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/moe.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/moe.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/moe.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/trtllm_nvfp4_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/moe.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/moe_output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/moe.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/moe.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/moe.py",
+   "target": "file:vllm/models/beam/nvidia/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/moe.py",
+   "target": "class:vllm/models/beam/nvidia/moe.py:BeamMLP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/moe.py",
+   "target": "class:vllm/models/beam/nvidia/moe.py:BeamSparseMoeBlock",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/moe.py",
+   "target": "class:vllm/models/beam/nvidia/moe.py:BeamSparseMoeBlock",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/projection.py",
+   "target": "file:vllm/model_executor/kernels/linear/cute_dsl/ll_bf16.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/projection.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/projection.py",
+   "target": "function:vllm/models/beam/nvidia/projection.py:use_low_latency_gemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/projection.py",
+   "target": "function:vllm/models/beam/nvidia/projection.py:warmup_packed_projection",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/projection.py",
+   "target": "function:vllm/models/beam/nvidia/projection.py:packed_projection",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/beam/nvidia/projection.py",
+   "target": "function:vllm/models/beam/nvidia/projection.py:packed_projection",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/beam/nvidia/model.py:BeamModel",
+   "target": "class:vllm/model_executor/models/interfaces.py:EagleModelMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/beam/nvidia/model.py:BeamForCausalLM",
+   "target": "class:vllm/models/beam/nvidia/model.py:BeamModel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

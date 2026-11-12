@@ -1,0 +1,32 @@
+# DeepWiki 索引 — huggingface/hf-csi-driver
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 177131 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Architecture Overview](1.2-architecture-overview.md)
+- [2 Core Driver](2-core-driver.md)
+  - [2.1 CSI Node Service](2.1-csi-node-service.md)
+  - [2.2 Mounter Interface and CLI Argument Construction](2.2-mounter-interface-and-cli-argument-construction.md)
+  - [2.3 PodMounter (MountPod Mode)](2.3-podmounter-mountpod-mode.md)
+  - [2.4 Sidecar Mounter (Sidecar Mode)](2.4-sidecar-mounter-sidecar-mode.md)
+  - [2.5 Resource Management](2.5-resource-management.md)
+- [3 Admission Webhook (Sidecar Injection)](3-admission-webhook-sidecar-injection.md)
+  - [3.1 Sidecar Injection Logic](3.1-sidecar-injection-logic.md)
+  - [3.2 Webhook Deployment and TLS](3.2-webhook-deployment-and-tls.md)
+- [4 Deployment and Configuration](4-deployment-and-configuration.md)
+  - [4.1 Helm Chart Reference](4.1-helm-chart-reference.md)
+  - [4.2 Raw Kubernetes Manifests](4.2-raw-kubernetes-manifests.md)
+- [5 Build and Release](5-build-and-release.md)
+  - [5.1 CI Pipeline](5.1-ci-pipeline.md)
+  - [5.2 Release Workflow](5.2-release-workflow.md)
+- [6 Testing](6-testing.md)
+  - [6.1 Unit Tests](6.1-unit-tests.md)
+  - [6.2 End-to-End Tests: PodMount Mode](6.2-end-to-end-tests-podmount-mode.md)
+  - [6.3 End-to-End Tests: Sidecar Mode](6.3-end-to-end-tests-sidecar-mode.md)
+- [7 Reference: HFMount CRD](7-reference-hfmount-crd.md)
+- [8 Reference: Volume Attributes](8-reference-volume-attributes.md)
+- [9 Internals: fd-Passing and FUSE Device Cloning](9-internals-fd-passing-and-fuse-device-cloning.md)
+- [10 Design Notes: Git Repo Support Analysis](10-design-notes-git-repo-support-analysis.md)
+- [11 Glossary](11-glossary.md)

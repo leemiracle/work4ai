@@ -1,0 +1,532 @@
+<!-- source: DeepWiki mcp.deepwiki.com · repo NVIDIA/diffusion-audio-restoration · unicode-title page 页**：5.2 Schrödinger Bridge Diffusion · patched 2026-10-26 -->
+
+# Schrödinger Bridge Diffusion
+# Schrödinger Bridge Diffusion
+
+<details>
+<summary>Relevant source files</summary>
+
+The following files were used as context for generating this wiki page:
+
+- [A2SB_lightning_module.py](A2SB_lightning_module.py)
+- [A2SB_lightning_module_api.py](A2SB_lightning_module_api.py)
+
+</details>
+
+
+
+## Purpose and Scope
+
+This page explains the Schrödinger Bridge diffusion formulation used in A2SB, including the mathematical foundations, implementation details, and the differences between SDE (Stochastic Differential Equation) and ODE (Ordinary Differential Equation) sampling modes. This document covers the core diffusion mechanics implemented in the `Diffusion` class and how it is used during training and inference.
+
+For the overall A2SB architecture, see [A2SB Model Overview](#5.1). For details on the audio representation that the diffusion operates on, see [Audio Representation](#5.3). For information about how multiple diffusion models are combined during inference, see [Time-Partitioned Ensemble](#5.4).
+
+## What is Schrödinger Bridge?
+
+A Schrödinger Bridge (SB) is a diffusion process that connects two probability distributions through a series of intermediate distributions. Unlike standard diffusion models that bridge clean data to Gaussian noise, A2SB uses the Schrödinger Bridge formulation to directly bridge **corrupted audio** (x₁) to **clean audio** (x₀).
+
+```mermaid
+graph LR
+    X1["x₁<br/>(Corrupted Audio<br/>e.g., low-bandwidth)"]
+    T1["t = 1.0"]
+    T075["t = 0.75"]
+    T05["t = 0.5"]
+    T025["t = 0.25"]
+    T0["t = 0.0"]
+    X0["x₀<br/>(Clean Audio<br/>full-bandwidth)"]
+    
+    X1 --> T1
+    T1 -->|"Forward: q_sample"| T075
+    T075 --> T05
+    T05 --> T025
+    T025 --> T0
+    T0 --> X0
+    
+    X0 -.->|"Reverse: p_posterior"| T0
+    T0 -.-> T025
+    T025 -.-> T05
+    T05 -.-> T075
+    T075 -.-> T1
+    T1 -.-> X1
+```
+
+**Sources:** [A2SB_lightning_module.py:381-382](), [A2SB_lightning_module.py:262]()
+
+### Key Characteristics
+
+| Aspect | Standard Diffusion | Schrödinger Bridge (A2SB) |
+|--------|-------------------|---------------------------|
+| **Starting distribution** | Gaussian noise | Corrupted audio (x₁) |
+| **Target distribution** | Clean data (x₀) | Clean audio (x₀) |
+| **Forward process** | Add noise to data | Bridge from x₀ to x₁ |
+| **Reverse process** | Denoise from noise | Bridge from x₁ to x₀ |
+| **Application** | Unconditional generation | Conditional restoration |
+
+**Sources:** [A2SB_lightning_module.py:374-402]()
+
+## SDE vs ODE Formulations
+
+A2SB supports two formulations controlled by the `use_ot_ode` parameter:
+
+### SDE (Stochastic Differential Equation)
+
+The default formulation includes stochastic noise during sampling, making the reverse process probabilistic. At each timestep during reverse sampling, Gaussian noise is added according to the bridge variance:
+
+```
+x_{t-Δt} = p_posterior(t, x_t, pred_x₀) + σ_t · ε,  where ε ~ N(0, I)
+```
+
+**Sources:** [A2SB_lightning_module.py:232-235](), [A2SB_lightning_module.py:270-271]()
+
+### ODE (Ordinary Differential Equation)
+
+When `use_ot_ode=True`, the sampling becomes deterministic by removing the stochastic component. This is based on Optimal Transport (OT) theory and provides a deterministic mapping from x₁ to x₀:
+
+```
+x_{t-Δt} = p_posterior(t, x_t, pred_x₀)  [no noise added]
+```
+
+**Sources:** [A2SB_lightning_module.py:54-56](), [A2SB_lightning_module.py:232-235]()
+
+```mermaid
+graph TB
+    subgraph "Configuration"
+        UseOTODE["use_ot_ode flag"]
+    end
+    
+    subgraph "SDE Mode (use_ot_ode=False)"
+        SDE_Init["Initialize from x₁"]
+        SDE_Loop["For each timestep t"]
+        SDE_Predict["Predict x₀ using VF model"]
+        SDE_Posterior["Compute p_posterior"]
+        SDE_Noise["Add stochastic noise:<br/>std_sb = ddpm.get_std_t(t)"]
+        SDE_Update["x_t ← x_t-Δt + σ·ε"]
+        
+        SDE_Init --> SDE_Loop
+        SDE_Loop --> SDE_Predict
+        SDE_Predict --> SDE_Posterior
+        SDE_Posterior --> SDE_Noise
+        SDE_Noise --> SDE_Update
+        SDE_Update --> SDE_Loop
+    end
+    
+    subgraph "ODE Mode (use_ot_ode=True)"
+        ODE_Init["Initialize from x₁"]
+        ODE_Loop["For each timestep t"]
+        ODE_Predict["Predict x₀ using VF model"]
+        ODE_Posterior["Compute p_posterior"]
+        ODE_Update["x_t ← x_t-Δt (deterministic)"]
+        
+        ODE_Init --> ODE_Loop
+        ODE_Loop --> ODE_Predict
+        ODE_Predict --> ODE_Posterior
+        ODE_Posterior --> ODE_Update
+        ODE_Update --> ODE_Loop
+    end
+    
+    UseOTODE -->|"False"| SDE_Init
+    UseOTODE -->|"True"| ODE_Init
+```
+
+**Sources:** [A2SB_lightning_module.py:244-278](), [A2SB_lightning_module.py:268-276]()
+
+## Diffusion Class Implementation
+
+The core diffusion mechanics are implemented in the `Diffusion` class, which is instantiated with a `beta_max` parameter that controls the diffusion strength:
+
+```mermaid
+graph TB
+    subgraph "Diffusion Class Instantiation"
+        BetaMax["beta_max parameter<br/>(default: 0.3)"]
+        DiffusionInit["Diffusion(beta_max=beta_max)"]
+        BetaMax --> DiffusionInit
+    end
+    
+    subgraph "Core Methods"
+        QSample["q_sample(t, x₀, x₁, ot_ode)<br/>Forward: Sample x_t"]
+        PPosterior["p_posterior(t_prev, t, x_t, pred_x₀, ot_ode)<br/>Reverse: Compute x_t-Δt"]
+        GetPredX0["get_pred_x0(t, x_t, vf_output)<br/>Predict clean x₀"]
+        GetStdFwd["get_std_fwd(t)<br/>Forward diffusion std"]
+        GetStdRev["get_std_rev(t)<br/>Reverse diffusion std"]
+        GetStdT["get_std_t(t)<br/>Bridge variance std"]
+    end
+    
+    subgraph "Lightning Modules"
+        STFTBridge["STFTBridgeModel<br/>(Training)"]
+        TimePartitioned["TimePartitionedPretrainedSTFTBridgeModel<br/>(Inference)"]
+    end
+    
+    DiffusionInit --> STFTBridge
+    DiffusionInit --> TimePartitioned
+    
+    STFTBridge --> QSample
+    STFTBridge --> PPosterior
+    STFTBridge --> GetPredX0
+    STFTBridge --> GetStdFwd
+    
+    TimePartitioned --> PPosterior
+    TimePartitioned --> GetPredX0
+    TimePartitioned --> GetStdT
+```
+
+**Sources:** [A2SB_lightning_module.py:220](), [A2SB_lightning_module.py:51](), [diffusion.py:16]()
+
+### Key Parameters
+
+- **beta_max**: Controls the maximum diffusion strength. Default is 0.3. Higher values lead to stronger diffusion but may be harder to reverse.
+- **use_ot_ode**: Boolean flag to switch between SDE (False) and ODE (True) formulations.
+
+**Sources:** [A2SB_lightning_module.py:214](), [A2SB_lightning_module.py:38]()
+
+## Forward Diffusion Process (q_sample)
+
+During training, the forward process samples noisy intermediate states x_t by interpolating between clean audio x₀ and corrupted audio x₁. The `q_sample` method implements this:
+
+### Training Forward Process
+
+```mermaid
+graph LR
+    X0["x₀<br/>(Clean Audio)"]
+    X1["x₁<br/>(Corrupted Audio)"]
+    T["t ~ Uniform(0, 1)"]
+    QSample["ddpm.q_sample(t, x₀, x₁, ot_ode)"]
+    Xt["x_t<br/>(Noisy Sample)"]
+    StdFwd["σ_fwd = ddpm.get_std_fwd(t)"]
+    
+    X0 --> QSample
+    X1 --> QSample
+    T --> QSample
+    QSample --> Xt
+    T --> StdFwd
+    StdFwd --> Target["Target = (x_t - x₀) / σ_fwd"]
+```
+
+The forward process creates training pairs where:
+1. A random timestep **t** is sampled from the range `[train_t_min, train_t_max]`
+2. The noisy state **x_t** is computed using `q_sample`
+3. The vector field target is computed as **(x_t - x₀) / σ_fwd**
+
+**Sources:** [A2SB_lightning_module.py:374-389]()
+
+### Implementation in Training Step
+
+[A2SB_lightning_module.py:374-402]() shows the complete training step:
+
+```python
+t = self.sample_t_bounded(x_0_clean.shape[0]).to(x_0_clean.device)
+t_emb = self.t_to_emb(t)
+x_t = self.ddpm.q_sample(t, x_0_clean, x_0_corrupted, ot_ode=self.use_ot_ode)
+std_fwd_t = self.ddpm.get_std_fwd(t)
+vf_output = self.vf_model(x_t, t_emb)
+std_fwd_t_expanded = std_fwd_t.view(std_fwd_t.shape[0], 1, 1, 1)
+target = (x_t - x_0_clean)/std_fwd_t_expanded
+loss = (((vf_output - target.detach()) ** 2) * loss_mask).sum() / loss_mask.sum()
+```
+
+**Sources:** [A2SB_lightning_module.py:379-388]()
+
+## Reverse Diffusion Process (p_posterior)
+
+The reverse process moves from corrupted audio x₁ back to clean audio x₀ by iteratively applying the learned vector field. The `p_posterior` method computes the previous timestep state:
+
+```mermaid
+graph TB
+    subgraph "Single Reverse Step"
+        Xt["x_t at time t"]
+        VFModel["vf_model(x_t, t_emb)<br/>Vector Field Prediction"]
+        GetPred["ddpm.get_pred_x0(t, x_t, vf_output)<br/>Predict clean x₀"]
+        PPosterior["ddpm.p_posterior(t_prev, t, x_t, pred_x₀, ot_ode)<br/>Compute x_t-Δt"]
+        Xtprev["x_t-Δt"]
+        
+        Xt --> VFModel
+        VFModel --> GetPred
+        GetPred --> PredX0["pred_x₀"]
+        PredX0 --> PPosterior
+        Xt --> PPosterior
+        PPosterior --> Xtprev
+    end
+    
+    subgraph "Optional: Add Noise (SDE only)"
+        CheckODE{"use_ot_ode?"}
+        AddNoise["xt_true = x₁ + σ_t·ε<br/>ddpm.get_std_t(t_prev)"]
+        NoNoise["xt_true = x₁<br/>(deterministic)"]
+        
+        Xtprev --> CheckODE
+        CheckODE -->|"False (SDE)"| AddNoise
+        CheckODE -->|"True (ODE)"| NoNoise
+    end
+```
+
+**Sources:** [A2SB_lightning_module.py:251-277]()
+
+### Prediction of Clean Audio (get_pred_x0)
+
+At each reverse timestep, the model first predicts what the clean audio x₀ should be, given the current noisy state x_t and the vector field output. This prediction is used to guide the reverse step.
+
+**Sources:** [A2SB_lightning_module.py:257](), [A2SB_lightning_module.py:132]()
+
+## DDPM Sampling Loop
+
+The complete reverse sampling procedure is implemented in the `ddpm_sample` method, which iterates backwards from t=1.0 to t≈0.0:
+
+```mermaid
+graph TB
+    Start["Start: x_t = x₁ (corrupted)"]
+    InitSteps["t_steps = linspace(1.0, 0.05, n_steps)"]
+    
+    Start --> InitSteps
+    InitSteps --> LoopStart
+    
+    subgraph "Main Sampling Loop"
+        LoopStart["For t_idx in range(n_steps)"]
+        GetT["t = t_steps[t_idx]<br/>t_prev = t_steps[t_idx+1]"]
+        EmbedT["t_emb = t_to_emb(t)"]
+        VFCall["vf_output = vf_model(x_t, t_emb)"]
+        PredX0["pred_x₀ = ddpm.get_pred_x0(t, x_t, vf_output)"]
+        
+        LoopStart --> GetT
+        GetT --> EmbedT
+        EmbedT --> VFCall
+        VFCall --> PredX0
+    end
+    
+    subgraph "Apply Mask (Inpainting)"
+        CheckMask{"mask provided?<br/>mask_pred_x0=True?"}
+        ApplyMask["pred_x₀ = pred_x₀ * mask + (1-mask) * x₁"]
+        NoMaskOp["No operation"]
+        
+        PredX0 --> CheckMask
+        CheckMask -->|"Yes"| ApplyMask
+        CheckMask -->|"No"| NoMaskOp
+    end
+    
+    subgraph "Reverse Step"
+        Posterior["x_t_prev = ddpm.p_posterior(t_prev, t, x_t, pred_x₀, ot_ode)"]
+        UpdateXT["x_t ← x_t_prev"]
+        
+        ApplyMask --> Posterior
+        NoMaskOp --> Posterior
+        Posterior --> UpdateXT
+    end
+    
+    subgraph "Conditional Masking"
+        CheckMask2{"mask provided?"}
+        ComputeTrue["xt_true = x₁ + σ·ε (SDE)<br/>or xt_true = x₁ (ODE)"]
+        BlendMask["x_t = (1-mask) * xt_true + mask * x_t"]
+        
+        UpdateXT --> CheckMask2
+        CheckMask2 -->|"Yes"| ComputeTrue
+        ComputeTrue --> BlendMask
+        BlendMask --> LoopStart
+        CheckMask2 -->|"No"| LoopStart
+    end
+    
+    LoopStart -->|"Done"| Return["Return: all_pred_x0s"]
+```
+
+**Sources:** [A2SB_lightning_module.py:244-278](), [A2SB_lightning_module_api.py:106-149]()
+
+### Timestep Schedule
+
+The sampling typically uses a linear schedule from t=1.0 down to t=0.05 (or 1/n_steps). Common values:
+- **Training**: n_steps = 25 during validation
+- **Inference**: n_steps = 50 for better quality
+
+**Sources:** [A2SB_lightning_module.py:411](), [A2SB_lightning_module.py:192]()
+
+## Masked Conditional Sampling
+
+A2SB supports conditional generation through masking, which is critical for inpainting and bandwidth extension tasks. The mask indicates which regions should be preserved (mask=0) and which should be generated (mask=1).
+
+### Masking Strategy
+
+```mermaid
+graph TB
+    subgraph "Mask Application Points"
+        Point1["1. After pred_x₀ prediction:<br/>pred_x₀ = pred_x₀ * mask + (1-mask) * x₁"]
+        Point2["2. After reverse step:<br/>x_t = (1-mask) * xt_true + mask * x_t"]
+    end
+    
+    subgraph "Effect"
+        Preserve["Unmasked regions (mask=0):<br/>Keep original corrupted values"]
+        Generate["Masked regions (mask=1):<br/>Generate restored values"]
+    end
+    
+    Point1 --> Preserve
+    Point2 --> Preserve
+    Point1 --> Generate
+    Point2 --> Generate
+```
+
+**Sources:** [A2SB_lightning_module.py:258-259](), [A2SB_lightning_module.py:265-276]()
+
+### Implementation Details
+
+[A2SB_lightning_module.py:258-276]() shows two mask applications:
+
+1. **Mask pred_x₀**: Forces predicted clean audio to match corrupted audio in unmasked regions
+2. **Mask x_t**: After each reverse step, replaces unmasked regions with the known corrupted values (with appropriate noise in SDE mode)
+
+This ensures that only the masked regions are restored while preserving the known good regions.
+
+**Sources:** [A2SB_lightning_module.py:258-276]()
+
+## Vector Field Model Integration
+
+The Schrödinger Bridge requires a vector field model that predicts the direction to move at each timestep. A2SB uses the `AttnUNetF` architecture (see [Model Architecture Details](#6.3)):
+
+```mermaid
+graph LR
+    subgraph "Inputs to Vector Field"
+        Xt["x_t<br/>(Current State)"]
+        TEmbRaw["t (scalar)"]
+        TEmbedding["SinusoidalTemporalEmbedding"]
+        TEmb["t_emb<br/>(128-dim vector)"]
+        
+        TEmbRaw --> TEmbedding
+        TEmbedding --> TEmb
+    end
+    
+    subgraph "Vector Field Model"
+        VFModel["vf_model: AttnUNetF<br/>U-Net with attention"]
+    end
+    
+    subgraph "Output"
+        VFOutput["vf_output<br/>(Predicted direction)"]
+        GetPred["ddpm.get_pred_x0<br/>(Convert to x₀ prediction)"]
+        PredX0["pred_x₀"]
+    end
+    
+    Xt --> VFModel
+    TEmb --> VFModel
+    VFModel --> VFOutput
+    VFOutput --> GetPred
+    Xt --> GetPred
+    GetPred --> PredX0
+```
+
+**Sources:** [A2SB_lightning_module.py:223](), [A2SB_lightning_module.py:256-257](), [A2SB_lightning_module.py:383]()
+
+### Time Embedding
+
+The `SinusoidalTemporalEmbedding` converts scalar timestep values into 128-dimensional vectors that can be processed by the neural network:
+
+**Sources:** [A2SB_lightning_module.py:223](), [networks.py]()
+
+## Training vs Inference Usage
+
+### Training Mode (STFTBridgeModel)
+
+During training, the diffusion is used to:
+1. Generate training pairs (x_t, target) via `q_sample`
+2. Compute the vector field target: **(x_t - x₀) / σ_fwd**
+3. Train the model to predict this target
+
+**Sources:** [A2SB_lightning_module.py:374-402]()
+
+### Inference Mode (TimePartitionedPretrainedSTFTBridgeModel)
+
+During inference, the diffusion is used to:
+1. Start from corrupted audio x₁
+2. Iteratively apply `ddpm_sample` to move toward clean audio
+3. Use time-partitioned ensemble models (see [Time-Partitioned Ensemble](#5.4))
+4. Support long-form audio via multidiffusion
+
+**Sources:** [A2SB_lightning_module.py:103-146](), [A2SB_lightning_module_api.py:106-149]()
+
+```mermaid
+graph TB
+    subgraph "Training Usage"
+        TDataset["Training Batch:<br/>x₀_clean, x₀_corrupted"]
+        TSample["t ~ sample_t_bounded"]
+        TForward["x_t = ddpm.q_sample(t, x₀, x₁)"]
+        TPredict["vf_output = vf_model(x_t, t_emb)"]
+        TTarget["target = (x_t - x₀) / σ_fwd"]
+        TLoss["MSE Loss"]
+        
+        TDataset --> TSample
+        TSample --> TForward
+        TForward --> TPredict
+        TForward --> TTarget
+        TPredict --> TLoss
+        TTarget --> TLoss
+    end
+    
+    subgraph "Inference Usage"
+        IInput["x₁ (corrupted)"]
+        ISteps["t_steps = linspace(1.0, 0.05, 50)"]
+        ILoop["For each timestep"]
+        IVF["vf_model = get_vf_model(t)<br/>(ensemble selector)"]
+        IPredict["vf_output = vf_model(x_t, t_emb)"]
+        IPredX0["pred_x₀ = ddpm.get_pred_x0"]
+        IReverse["x_t ← ddpm.p_posterior"]
+        IOutput["x₀ (restored)"]
+        
+        IInput --> ISteps
+        ISteps --> ILoop
+        ILoop --> IVF
+        IVF --> IPredict
+        IPredict --> IPredX0
+        IPredX0 --> IReverse
+        IReverse --> ILoop
+        ILoop --> IOutput
+    end
+```
+
+**Sources:** [A2SB_lightning_module.py:374-402](), [A2SB_lightning_module_api.py:106-149](), [A2SB_lightning_module_api.py:81-89]()
+
+## Variance Schedules and Beta_max
+
+The `beta_max` parameter controls the strength of the diffusion process. The forward and reverse variances are computed as functions of time t and beta_max:
+
+| Method | Purpose | Usage |
+|--------|---------|-------|
+| `get_std_fwd(t)` | Forward diffusion standard deviation | Training target normalization |
+| `get_std_rev(t)` | Reverse diffusion standard deviation | Alternative sampling (not primary) |
+| `get_std_t(t)` | Bridge variance standard deviation | SDE stochastic noise |
+
+**Sources:** [A2SB_lightning_module.py:382](), [A2SB_lightning_module.py:270](), [diffusion.py]()
+
+### Beta_max Configuration
+
+The default `beta_max=0.3` is specified in configuration files and passed to the `Diffusion` class:
+
+**Sources:** [A2SB_lightning_module.py:214](), [A2SB_lightning_module.py:38](), [configs/pretrain.yaml]()
+
+## Alternative Sampling Methods
+
+The codebase includes alternative sampling implementations that are not the primary methods but are available for experimentation:
+
+### ddpm_sample_i2sb_way
+
+An alternative sampling method that computes Gaussian product coefficients differently:
+
+**Sources:** [A2SB_lightning_module.py:280-316]()
+
+### ddpm_sample_i2sb_change_order
+
+Another variant that changes the order of mask application:
+
+**Sources:** [A2SB_lightning_module.py:318-355]()
+
+These methods use `compute_gaussian_product_coef` to compute variance from forward and reverse standard deviations:
+
+**Sources:** [A2SB_lightning_module.py:305](), [A2SB_lightning_module.py:341](), [diffusion.py:16]()
+
+## Summary
+
+The Schrödinger Bridge diffusion in A2SB:
+
+1. **Bridges corrupted to clean audio** rather than noise to data
+2. **Supports both SDE and ODE** formulations via `use_ot_ode`
+3. **Uses vector field prediction** to learn the reverse process
+4. **Enables conditional generation** through masking for inpainting/BWE
+5. **Integrates with time-partitioned ensemble** for better quality
+6. **Controlled by beta_max** parameter for diffusion strength
+
+The core implementation resides in the `Diffusion` class with key methods `q_sample` (forward), `p_posterior` (reverse), and `get_pred_x0` (clean prediction), orchestrated by the `ddpm_sample` sampling loop.
+
+**Sources:** [A2SB_lightning_module.py:208-476](), [A2SB_lightning_module_api.py:35-209](), [diffusion.py]()
+
+---
+

@@ -1,18 +1,12 @@
-# DeepWiki 抓取覆盖率检查
+# Coverage Check
 
-- _links.txt 链接总数: 32
-- 实际 md 文件数: 32
-- 缺失页: 0
-- 空页(<= 500B): 0
+- repo: deepseek-ai/Engram
+- fetched: 2026-10-30
+- 结构清单页数: 32
+- 落盘页数: 32
 
-## 结论
-**100% 覆盖**：全部链接均有对应 Markdown 文件且非空。
+- 覆盖: 32/32 (100%)
 
-## 抽查 3 页
-
-| 页面 | 大小(B) | 状态 | 检查 |
-|---|---|---|---|
-| 3.2-engram-module-deep-dive | 20721 | 正常 | PASS |
-| 4.4-multi-head-embedding-and-shortconv | 11781 | 正常 | PASS |
-| 6.3-use-cases-and-examples | 16816 | 正常 | PASS |
-
+## 全层级对账终判（dw_reconcile_dir.py, 2026-10-30）
+- 结构全层级 32 页 vs 落盘 32 页（结构外/三级页 extra 0）
+- 终判: TRUE_100

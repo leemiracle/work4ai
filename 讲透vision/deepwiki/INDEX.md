@@ -1,0 +1,31 @@
+# DeepWiki 索引 — pytorch/vision
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-21
+> 结构 26 页 · 全文 526486 字符
+
+- [1 Overview](1-overview.md)
+- [2 Transforms](2-transforms.md)
+  - [2.1 Transforms v1](2.1-transforms-v1.md)
+  - [2.2 Transforms v2](2.2-transforms-v2.md)
+  - [2.3 Prototype Transforms](2.3-prototype-transforms.md)
+  - [2.4 TV Tensors](2.4-tv-tensors.md)
+- [3 Models](3-models.md)
+  - [3.1 Classification Models](3.1-classification-models.md)
+  - [3.2 Detection and Segmentation Models](3.2-detection-and-segmentation-models.md)
+  - [3.3 Model Weights System](3.3-model-weights-system.md)
+- [4 Datasets](4-datasets.md)
+  - [4.1 Dataset Architecture](4.1-dataset-architecture.md)
+  - [4.2 Available Datasets](4.2-available-datasets.md)
+- [5 I/O Operations](5-i-o-operations.md)
+  - [5.1 Image I/O](5.1-image-i-o.md)
+  - [5.2 Video I/O](5.2-video-i-o.md)
+- [6 Operators](6-operators.md)
+  - [6.1 Detection Operators](6.1-detection-operators.md)
+  - [6.2 Box Operations](6.2-box-operations.md)
+  - [6.3 Layer Components](6.3-layer-components.md)
+- [7 Utilities](7-utilities.md)
+  - [7.1 Visualization Utilities](7.1-visualization-utilities.md)
+- [8 Building and Development](8-building-and-development.md)
+  - [8.1 Build System](8.1-build-system.md)
+  - [8.2 Testing Infrastructure](8.2-testing-infrastructure.md)
+  - [8.3 ONNX Export and Interoperability](8.3-onnx-export-and-interoperability.md)

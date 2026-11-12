@@ -1,0 +1,31 @@
+# DeepWiki 索引 — allenai/dolma
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 290858 字符
+
+- [1 Overview](1-overview.md)
+- [2 Architecture](2-architecture.md)
+  - [2.1 Python-Rust Integration](2.1-python-rust-integration.md)
+  - [2.2 Build and Deployment](2.2-build-and-deployment.md)
+- [3 Data Processing Pipeline](3-data-processing-pipeline.md)
+  - [3.1 Sharding System](3.1-sharding-system.md)
+  - [3.2 Mixer Component](3.2-mixer-component.md)
+  - [3.3 Deduplication System](3.3-deduplication-system.md)
+  - [3.4 Tagging System](3.4-tagging-system.md)
+  - [3.5 Tokenization System](3.5-tokenization-system.md)
+  - [3.6 Analysis System](3.6-analysis-system.md)
+- [4 Command Line Interface](4-command-line-interface.md)
+  - [4.1 CLI Architecture](4.1-cli-architecture.md)
+  - [4.2 Available Commands](4.2-available-commands.md)
+- [5 Utility Systems](5-utility-systems.md)
+  - [5.1 Path Handling](5.1-path-handling.md)
+  - [5.2 Parallel Processing](5.2-parallel-processing.md)
+  - [5.3 S3 Integration](5.3-s3-integration.md)
+- [6 WARC Processing](6-warc-processing.md)
+- [7 Contributed Tools](7-contributed-tools.md)
+  - [7.1 Fill-In-Middle (FIM)](7.1-fill-in-middle-fim.md)
+  - [7.2 Tokens Sanitizer](7.2-tokens-sanitizer.md)
+  - [7.3 Code File Concatenation](7.3-code-file-concatenation.md)
+- [8 Tutorials and Examples](8-tutorials-and-examples.md)
+  - [8.1 Getting Started](8.1-getting-started.md)
+  - [8.2 Wikipedia Processing Example](8.2-wikipedia-processing-example.md)

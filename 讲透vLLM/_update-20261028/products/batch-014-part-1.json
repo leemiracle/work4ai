@@ -1,0 +1,1725 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/v1/sample/logits_processor/__init__.py",
+   "summary": "logits processor 装配层：按采样参数构建内置 + 插件 + FQCN 自定义处理器列表，校验参数并拒绝 pooling/spec-decode 场景；AdapterLogitsProcessor 包装每请求处理器。",
+   "tags": [
+    "logits-processor",
+    "plugins",
+    "loading",
+    "validation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/sample/logits_processor/builtin.py",
+   "type": "file",
+   "name": "builtin.py",
+   "filePath": "vllm/v1/sample/logits_processor/builtin.py",
+   "summary": "内置 logits processor：min_p（argmax 不变）、logit_bias、min_tokens（最小长度强制，含 stop token 保护与稀疏 dict 状态更新工具）。",
+   "tags": [
+    "logits-processor",
+    "builtin",
+    "sampling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/sample/logits_processor/interface.py",
+   "type": "file",
+   "name": "interface.py",
+   "filePath": "vllm/v1/sample/logits_processor/interface.py",
+   "summary": "logits processor 接口层：LogitsProcessor 抽象（apply/is_argmax_invariant/参数校验）、持久批状态变更 BatchUpdate（removed/added/moved，move 有单向/交换两种方向性）。",
+   "tags": [
+    "logits-processor",
+    "interface",
+    "batch-update"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/sample/logits_processor/state.py",
+   "type": "file",
+   "name": "state.py",
+   "filePath": "vllm/v1/sample/logits_processor/state.py",
+   "summary": "logits processor 批状态：BatchUpdateBuilder 追踪持久批的增删移并构建 BatchUpdate，LogitsProcessors 持有已初始化处理器集并转发生命周期。",
+   "tags": [
+    "logits-processor",
+    "state",
+    "batch-tracking"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/sample/ops/logprobs.py",
+   "type": "file",
+   "name": "logprobs.py",
+   "filePath": "vllm/v1/sample/ops/logprobs.py",
+   "summary": "logprobs 工具：batched_count_greater_than 按行统计大于阈值的元素数（GPU 批量比较）。",
+   "tags": [
+    "logprobs",
+    "ops",
+    "gpu"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/sample/ops/penalties.py",
+   "type": "file",
+   "name": "penalties.py",
+   "filePath": "vllm/v1/sample/ops/penalties.py",
+   "summary": "采样惩罚应用：apply_all_penalties 在 GPU 上应用 presence/frequency/repetition 三种惩罚并回写 logits。",
+   "tags": [
+    "penalties",
+    "sampling",
+    "ops"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "type": "file",
+   "name": "topk_topp_sampler.py",
+   "filePath": "vllm/v1/sample/ops/topk_topp_sampler.py",
+   "summary": "TopK/TopP 采样器（多后端）：Triton（Qrita pivot）/PyTorch/FlashInfer JIT/aiter/XPU 融合核的后端探测与统一应用接口，含各后端可用性探测与 warmup 注册。",
+   "tags": [
+    "sampling",
+    "top-k",
+    "top-p",
+    "multi-backend"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "type": "file",
+   "name": "topk_topp_triton.py",
+   "filePath": "vllm/v1/sample/ops/topk_topp_triton.py",
+   "summary": "Qrita 论文（arXiv:2602.01518）的 pivot 截断 Top-K+Top-P Triton kernel：770 行主 kernel + 小批 split-row top-p 流水线（统计→阶梯 pivot 二分→掩码），正态 CDF 表驱动 pivot 初值。",
+   "tags": [
+    "triton",
+    "top-k",
+    "top-p",
+    "pivot",
+    "qrita"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/sample/logits_processor/__init__.py:AdapterLogitsProcessor",
+   "type": "class",
+   "name": "AdapterLogitsProcessor",
+   "filePath": "vllm/v1/sample/logits_processor/__init__.py",
+   "summary": "每请求 logits processor 的包装基类：把请求级处理器接入持久批生命周期。",
+   "tags": [
+    "logits-processor",
+    "adapter",
+    "wrapper"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    246,
+    352
+   ]
+  },
+  {
+   "id": "class:vllm/v1/sample/logits_processor/builtin.py:MinPLogitsProcessor",
+   "type": "class",
+   "name": "MinPLogitsProcessor",
+   "filePath": "vllm/v1/sample/logits_processor/builtin.py",
+   "summary": "min-p 采样处理器（argmax 不变）：pinned CPU 参数张量 + 设备镜像。",
+   "tags": [
+    "logits-processor",
+    "min-p",
+    "sampling"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    23,
+    116
+   ]
+  },
+  {
+   "id": "class:vllm/v1/sample/logits_processor/builtin.py:LogitBiasLogitsProcessor",
+   "type": "class",
+   "name": "LogitBiasLogitsProcessor",
+   "filePath": "vllm/v1/sample/logits_processor/builtin.py",
+   "summary": "logit bias 处理器：按 token id 加偏置。",
+   "tags": [
+    "logits-processor",
+    "logit-bias",
+    "sampling"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    119,
+    162
+   ]
+  },
+  {
+   "id": "class:vllm/v1/sample/logits_processor/builtin.py:MinTokensLogitsProcessor",
+   "type": "class",
+   "name": "MinTokensLogitsProcessor",
+   "filePath": "vllm/v1/sample/logits_processor/builtin.py",
+   "summary": "最小 token 数处理器：结束 token 掩码直到达到 min_tokens（含结构化输出/停止词交互）。",
+   "tags": [
+    "logits-processor",
+    "min-tokens",
+    "masking"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    165,
+    371
+   ]
+  },
+  {
+   "id": "class:vllm/v1/sample/logits_processor/interface.py:MoveDirectionality",
+   "type": "class",
+   "name": "MoveDirectionality",
+   "filePath": "vllm/v1/sample/logits_processor/interface.py",
+   "summary": "批内移动方向性枚举：单向移动或双向交换。",
+   "tags": [
+    "logits-processor",
+    "enum",
+    "directionality"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    17,
+    21
+   ]
+  },
+  {
+   "id": "class:vllm/v1/sample/logits_processor/interface.py:BatchUpdate",
+   "type": "class",
+   "name": "BatchUpdate",
+   "filePath": "vllm/v1/sample/logits_processor/interface.py",
+   "summary": "持久批状态变更信息：removed/added/moved（added 的 output_tok_ids 是活引用）。",
+   "tags": [
+    "logits-processor",
+    "batch-update",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    37,
+    57
+   ]
+  },
+  {
+   "id": "class:vllm/v1/sample/logits_processor/interface.py:LogitsProcessor",
+   "type": "class",
+   "name": "LogitsProcessor",
+   "filePath": "vllm/v1/sample/logits_processor/interface.py",
+   "summary": "logits processor 抽象基类：apply/update_params/batch update 钩子与 argmax 不变性查询。",
+   "tags": [
+    "logits-processor",
+    "interface",
+    "abc"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    60,
+    109
+   ]
+  },
+  {
+   "id": "class:vllm/v1/sample/logits_processor/state.py:BatchUpdateBuilder",
+   "type": "class",
+   "name": "BatchUpdateBuilder",
+   "filePath": "vllm/v1/sample/logits_processor/state.py",
+   "summary": "持久批状态变更构建器：按 removed→added→moved 顺序收集并产出 BatchUpdate。",
+   "tags": [
+    "logits-processor",
+    "builder",
+    "batch-tracking"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    18,
+    147
+   ]
+  },
+  {
+   "id": "class:vllm/v1/sample/logits_processor/state.py:LogitsProcessors",
+   "type": "class",
+   "name": "LogitsProcessors",
+   "filePath": "vllm/v1/sample/logits_processor/state.py",
+   "summary": "已初始化 logits 处理器集合的封装与生命周期转发。",
+   "tags": [
+    "logits-processor",
+    "container",
+    "lifecycle"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    150,
+    167
+   ]
+  },
+  {
+   "id": "class:vllm/v1/sample/ops/topk_topp_sampler.py:TopKTopPSampler",
+   "type": "class",
+   "name": "TopKTopPSampler",
+   "filePath": "vllm/v1/sample/ops/topk_topp_sampler.py",
+   "summary": "top-k/top-p 采样模块：后端探测（FlashInfer JIT/XPU/aiter/PyTorch/Triton）、probs 或 logits 模式与 gumbel 噪声采样。",
+   "tags": [
+    "sampling",
+    "top-k",
+    "top-p",
+    "backend-selection"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    230,
+    501
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/logits_processor/__init__.py:_load_logitsprocs_plugins",
+   "type": "function",
+   "name": "_load_logitsprocs_plugins",
+   "filePath": "vllm/v1/sample/logits_processor/__init__.py",
+   "summary": "加载已安装的 logits processor 插件（entry_points 组）。",
+   "tags": [
+    "logits-processor",
+    "plugins",
+    "entry-points"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    57,
+    83
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/logits_processor/__init__.py:_load_logitsprocs_by_fqcns",
+   "type": "function",
+   "name": "_load_logitsprocs_by_fqcns",
+   "filePath": "vllm/v1/sample/logits_processor/__init__.py",
+   "summary": "按全限定类名加载自定义 logits processor。",
+   "tags": [
+    "logits-processor",
+    "fqcn",
+    "loading"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    86,
+    161
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/logits_processor/__init__.py:_load_custom_logitsprocs",
+   "type": "function",
+   "name": "_load_custom_logitsprocs",
+   "filePath": "vllm/v1/sample/logits_processor/__init__.py",
+   "summary": "合并插件与 FQCN 自定义处理器。",
+   "tags": [
+    "logits-processor",
+    "loading",
+    "custom"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    164,
+    188
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/logits_processor/__init__.py:build_logitsprocs",
+   "type": "function",
+   "name": "build_logitsprocs",
+   "filePath": "vllm/v1/sample/logits_processor/__init__.py",
+   "summary": "按采样参数构建启用的处理器实例列表。",
+   "tags": [
+    "logits-processor",
+    "factory",
+    "building"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    191,
+    224
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/logits_processor/__init__.py:validate_logits_processors_parameters",
+   "type": "function",
+   "name": "validate_logits_processors_parameters",
+   "filePath": "vllm/v1/sample/logits_processor/__init__.py",
+   "summary": "校验 logits processor 参数合法性。",
+   "tags": [
+    "logits-processor",
+    "validation",
+    "parameters"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    230,
+    243
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/logits_processor/builtin.py:process_dict_updates",
+   "type": "function",
+   "name": "process_dict_updates",
+   "filePath": "vllm/v1/sample/logits_processor/builtin.py",
+   "summary": "稀疏 logits processor 的 dict 状态更新工具。",
+   "tags": [
+    "logits-processor",
+    "dict-state",
+    "utility"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    374,
+    411
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/logprobs.py:batched_count_greater_than",
+   "type": "function",
+   "name": "batched_count_greater_than",
+   "filePath": "vllm/v1/sample/ops/logprobs.py",
+   "summary": "按行统计大于对应阈值的元素数。",
+   "tags": [
+    "logprobs",
+    "counting",
+    "gpu"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    11,
+    27
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/penalties.py:apply_all_penalties",
+   "type": "function",
+   "name": "apply_all_penalties",
+   "filePath": "vllm/v1/sample/ops/penalties.py",
+   "summary": "GPU 应用 presence/frequency/repetition 惩罚到 logits。",
+   "tags": [
+    "penalties",
+    "sampling",
+    "gpu"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    10,
+    36
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/penalties.py:_convert_to_tensors",
+   "type": "function",
+   "name": "_convert_to_tensors",
+   "filePath": "vllm/v1/sample/ops/penalties.py",
+   "summary": "惩罚数据结构转张量。",
+   "tags": [
+    "penalties",
+    "tensors",
+    "conversion"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    39,
+    52
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_sampler.py:register_top_k_top_p_warmups",
+   "type": "function",
+   "name": "register_top_k_top_p_warmups",
+   "filePath": "vllm/v1/sample/ops/topk_topp_sampler.py",
+   "summary": "注册运行时用到的全部原生采样 kernel warmup。",
+   "tags": [
+    "sampling",
+    "warmup",
+    "registration"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    30,
+    37
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_sampler.py:_aiter_temp_gumbel_sample",
+   "type": "function",
+   "name": "_aiter_temp_gumbel_sample",
+   "filePath": "vllm/v1/sample/ops/topk_topp_sampler.py",
+   "summary": "aiter 融合温度+Gumbel-max 采样。",
+   "tags": [
+    "sampling",
+    "aiter",
+    "gumbel"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    40,
+    67
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_sampler.py:_flashinfer_jit_unsupported_reason",
+   "type": "function",
+   "name": "_flashinfer_jit_unsupported_reason",
+   "filePath": "vllm/v1/sample/ops/topk_topp_sampler.py",
+   "summary": "返回 FlashInfer JIT 无法面向当前 GPU 的原因。",
+   "tags": [
+    "sampling",
+    "flashinfer",
+    "jit",
+    "probe"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    70,
+    100
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_sampler.py:flashinfer_sampler_supported",
+   "type": "function",
+   "name": "flashinfer_sampler_supported",
+   "filePath": "vllm/v1/sample/ops/topk_topp_sampler.py",
+   "summary": "探测 FlashInfer top-p/top-k 采样可用性。",
+   "tags": [
+    "sampling",
+    "flashinfer",
+    "probe"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    103,
+    164
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_sampler.py:xpu_sampler_supported",
+   "type": "function",
+   "name": "xpu_sampler_supported",
+   "filePath": "vllm/v1/sample/ops/topk_topp_sampler.py",
+   "summary": "探测 XPU 融合 top-k/top-p kernel 可用性。",
+   "tags": [
+    "sampling",
+    "xpu",
+    "probe"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    167,
+    186
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_sampler.py:xpu_sample",
+   "type": "function",
+   "name": "xpu_sample",
+   "filePath": "vllm/v1/sample/ops/topk_topp_sampler.py",
+   "summary": "XPU 融合 kernel 采样（与 PyTorch 路径统计等价）。",
+   "tags": [
+    "sampling",
+    "xpu",
+    "kernel"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    189,
+    227
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_sampler.py:apply_top_k_top_p",
+   "type": "function",
+   "name": "apply_top_k_top_p",
+   "filePath": "vllm/v1/sample/ops/topk_topp_sampler.py",
+   "summary": "统一 top-k/top-p 掩码入口（按后端分发）。",
+   "tags": [
+    "sampling",
+    "top-k",
+    "top-p",
+    "dispatch"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    504,
+    524
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_sampler.py:apply_top_k_top_p_pytorch",
+   "type": "function",
+   "name": "apply_top_k_top_p_pytorch",
+   "filePath": "vllm/v1/sample/ops/topk_topp_sampler.py",
+   "summary": "PyTorch 参考实现（top-p 需全排序）。",
+   "tags": [
+    "sampling",
+    "pytorch",
+    "reference"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    527,
+    568
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_sampler.py:apply_top_k_only",
+   "type": "function",
+   "name": "apply_top_k_only",
+   "filePath": "vllm/v1/sample/ops/topk_topp_sampler.py",
+   "summary": "仅 top-k 掩码（无需全排序）。",
+   "tags": [
+    "sampling",
+    "top-k",
+    "masking"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    571,
+    590
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_sampler.py:random_sample",
+   "type": "function",
+   "name": "random_sample",
+   "filePath": "vllm/v1/sample/ops/topk_topp_sampler.py",
+   "summary": "按概率分布随机采样（替代 torch.multinomial）。",
+   "tags": [
+    "sampling",
+    "random",
+    "multinomial"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    609,
+    631
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_sampler.py:flashinfer_sample",
+   "type": "function",
+   "name": "flashinfer_sample",
+   "filePath": "vllm/v1/sample/ops/topk_topp_sampler.py",
+   "summary": "FlashInfer 采样路径（与参考实现统计等价）。",
+   "tags": [
+    "sampling",
+    "flashinfer",
+    "kernel",
+    "fused"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    634,
+    671
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_triton.py:_update_min_larger_stats",
+   "type": "function",
+   "name": "_update_min_larger_stats",
+   "filePath": "vllm/v1/sample/ops/topk_topp_triton.py",
+   "summary": "跨 tile 维护 pivot 之上值的 (min,count)。",
+   "tags": [
+    "triton",
+    "top-p",
+    "statistics"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    84,
+    103
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topk_topp_kernel",
+   "type": "function",
+   "name": "_topk_topp_kernel",
+   "filePath": "vllm/v1/sample/ops/topk_topp_triton.py",
+   "summary": "Qrita 组合 top-k+top-p 主 kernel（770 行）：正态 CDF 初始化 pivot、迭代截断与选择。",
+   "tags": [
+    "triton",
+    "top-k",
+    "top-p",
+    "qrita",
+    "kernel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    107,
+    878
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topk_topp_warmup_inputs",
+   "type": "function",
+   "name": "_topk_topp_warmup_inputs",
+   "filePath": "vllm/v1/sample/ops/topk_topp_triton.py",
+   "summary": "主 kernel 的 warmup 输入构造。",
+   "tags": [
+    "triton",
+    "warmup",
+    "inputs"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    887,
+    910
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topk_topp",
+   "type": "function",
+   "name": "_topk_topp",
+   "filePath": "vllm/v1/sample/ops/topk_topp_triton.py",
+   "summary": "主 kernel 的 Python 启动封装。",
+   "tags": [
+    "triton",
+    "launcher",
+    "wrapper"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    917,
+    962
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_sb_stats_kernel",
+   "type": "function",
+   "name": "_topp_sb_stats_kernel",
+   "filePath": "vllm/v1/sample/ops/topk_topp_triton.py",
+   "summary": "split-row top-p 统计 kernel：每切片 (max, sum_exp, min, n_finite)。",
+   "tags": [
+    "triton",
+    "top-p",
+    "statistics"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1008,
+    1051
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_split_stats_warmup_inputs",
+   "type": "function",
+   "name": "_topp_split_stats_warmup_inputs",
+   "filePath": "vllm/v1/sample/ops/topk_topp_triton.py",
+   "summary": "统计 kernel warmup 输入。",
+   "tags": [
+    "triton",
+    "warmup",
+    "inputs"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1054,
+    1073
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_split_stats",
+   "type": "function",
+   "name": "_topp_split_stats",
+   "filePath": "vllm/v1/sample/ops/topk_topp_triton.py",
+   "summary": "统计 kernel 启动封装。",
+   "tags": [
+    "triton",
+    "launcher",
+    "wrapper"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1080,
+    1096
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_sb_row_stats",
+   "type": "function",
+   "name": "_topp_sb_row_stats",
+   "filePath": "vllm/v1/sample/ops/topk_topp_triton.py",
+   "summary": "合并切片部分量为行级 (max,sum_exp,min,n_finite)。",
+   "tags": [
+    "triton",
+    "top-p",
+    "reduction"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1100,
+    1111
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_sb_combine",
+   "type": "function",
+   "name": "_topp_sb_combine",
+   "filePath": "vllm/v1/sample/ops/topk_topp_triton.py",
+   "summary": "一轮 pivot 部分量的合并与搜索状态推进。",
+   "tags": [
+    "triton",
+    "top-p",
+    "pivot-search"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1122,
+    1234
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_sb_step_kernel",
+   "type": "function",
+   "name": "_topp_sb_step_kernel",
+   "filePath": "vllm/v1/sample/ops/topk_topp_triton.py",
+   "summary": "split-row top-p 步进 kernel（几何阶梯 pivot）。",
+   "tags": [
+    "triton",
+    "top-p",
+    "step"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1238,
+    1340
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_split_step_warmup_inputs",
+   "type": "function",
+   "name": "_topp_split_step_warmup_inputs",
+   "filePath": "vllm/v1/sample/ops/topk_topp_triton.py",
+   "summary": "步进 kernel warmup 输入。",
+   "tags": [
+    "triton",
+    "warmup",
+    "inputs"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1343,
+    1365
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_split_step",
+   "type": "function",
+   "name": "_topp_split_step",
+   "filePath": "vllm/v1/sample/ops/topk_topp_triton.py",
+   "summary": "步进 kernel 启动封装。",
+   "tags": [
+    "triton",
+    "launcher",
+    "wrapper"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1372,
+    1392
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_sb_mask_kernel",
+   "type": "function",
+   "name": "_topp_sb_mask_kernel",
+   "filePath": "vllm/v1/sample/ops/topk_topp_triton.py",
+   "summary": "按最终 pivot 掩码 logits 的 kernel。",
+   "tags": [
+    "triton",
+    "top-p",
+    "masking"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1396,
+    1518
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_split_mask_warmup_inputs",
+   "type": "function",
+   "name": "_topp_split_mask_warmup_inputs",
+   "filePath": "vllm/v1/sample/ops/topk_topp_triton.py",
+   "summary": "掩码 kernel warmup 输入。",
+   "tags": [
+    "triton",
+    "warmup",
+    "inputs"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1521,
+    1542
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_split_mask",
+   "type": "function",
+   "name": "_topp_split_mask",
+   "filePath": "vllm/v1/sample/ops/topk_topp_triton.py",
+   "summary": "掩码 kernel 启动封装。",
+   "tags": [
+    "triton",
+    "launcher",
+    "wrapper"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1549,
+    1569
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_triton.py:_apply_topp_split",
+   "type": "function",
+   "name": "_apply_topp_split",
+   "filePath": "vllm/v1/sample/ops/topk_topp_triton.py",
+   "summary": "小批 split-row top-p 流水线（统计→步进→掩码，就地掩码）。",
+   "tags": [
+    "triton",
+    "top-p",
+    "pipeline"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1572,
+    1615
+   ]
+  },
+  {
+   "id": "function:vllm/v1/sample/ops/topk_topp_triton.py:apply_top_k_top_p_triton",
+   "type": "function",
+   "name": "apply_top_k_top_p_triton",
+   "filePath": "vllm/v1/sample/ops/topk_topp_triton.py",
+   "summary": "组合 top-k+top-p Triton 入口：先 top-k 截断再 top-p（Qrita pivot）。",
+   "tags": [
+    "triton",
+    "top-k",
+    "top-p",
+    "entry-point"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1618,
+    1726
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "target": "file:vllm/logits_process.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "target": "file:vllm/v1/sample/logits_processor/builtin.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "target": "file:vllm/v1/sample/logits_processor/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "target": "file:vllm/v1/sample/logits_processor/state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/builtin.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/builtin.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/builtin.py",
+   "target": "file:vllm/v1/sample/logits_processor/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/interface.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/state.py",
+   "target": "file:vllm/v1/sample/logits_processor/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/logprobs.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/penalties.py",
+   "target": "file:vllm/model_executor/layers/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/penalties.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "file:vllm/config/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "file:vllm/utils/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "file:vllm/v1/attention/backends/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "file:vllm/utils/gpu_sync_debug.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "file:vllm/utils/platform_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "target": "class:vllm/v1/sample/logits_processor/__init__.py:AdapterLogitsProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "target": "function:vllm/v1/sample/logits_processor/__init__.py:_load_logitsprocs_plugins",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "target": "function:vllm/v1/sample/logits_processor/__init__.py:_load_logitsprocs_by_fqcns",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "target": "function:vllm/v1/sample/logits_processor/__init__.py:_load_custom_logitsprocs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "target": "function:vllm/v1/sample/logits_processor/__init__.py:build_logitsprocs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "target": "function:vllm/v1/sample/logits_processor/__init__.py:validate_logits_processors_parameters",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/builtin.py",
+   "target": "class:vllm/v1/sample/logits_processor/builtin.py:MinPLogitsProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/builtin.py",
+   "target": "class:vllm/v1/sample/logits_processor/builtin.py:LogitBiasLogitsProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/builtin.py",
+   "target": "class:vllm/v1/sample/logits_processor/builtin.py:MinTokensLogitsProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/builtin.py",
+   "target": "function:vllm/v1/sample/logits_processor/builtin.py:process_dict_updates",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/interface.py",
+   "target": "class:vllm/v1/sample/logits_processor/interface.py:MoveDirectionality",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/interface.py",
+   "target": "class:vllm/v1/sample/logits_processor/interface.py:BatchUpdate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/interface.py",
+   "target": "class:vllm/v1/sample/logits_processor/interface.py:LogitsProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/state.py",
+   "target": "class:vllm/v1/sample/logits_processor/state.py:BatchUpdateBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/state.py",
+   "target": "class:vllm/v1/sample/logits_processor/state.py:LogitsProcessors",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "class:vllm/v1/sample/ops/topk_topp_sampler.py:TopKTopPSampler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:register_top_k_top_p_warmups",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:_aiter_temp_gumbel_sample",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:_flashinfer_jit_unsupported_reason",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:flashinfer_sampler_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:xpu_sampler_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:xpu_sample",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:apply_top_k_top_p",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:apply_top_k_top_p_pytorch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:apply_top_k_only",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:random_sample",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:flashinfer_sample",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/logprobs.py",
+   "target": "function:vllm/v1/sample/ops/logprobs.py:batched_count_greater_than",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/penalties.py",
+   "target": "function:vllm/v1/sample/ops/penalties.py:apply_all_penalties",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/penalties.py",
+   "target": "function:vllm/v1/sample/ops/penalties.py:_convert_to_tensors",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_update_min_larger_stats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topk_topp_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topk_topp_warmup_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topk_topp",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_sb_stats_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_split_stats_warmup_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_split_stats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_sb_row_stats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_sb_combine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_sb_step_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_split_step_warmup_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_split_step",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_sb_mask_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_split_mask_warmup_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_split_mask",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_apply_topp_split",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:apply_top_k_top_p_triton",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "target": "class:vllm/v1/sample/logits_processor/__init__.py:AdapterLogitsProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "target": "function:vllm/v1/sample/logits_processor/__init__.py:build_logitsprocs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "target": "function:vllm/v1/sample/logits_processor/__init__.py:validate_logits_processors_parameters",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/builtin.py",
+   "target": "class:vllm/v1/sample/logits_processor/builtin.py:MinPLogitsProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/builtin.py",
+   "target": "class:vllm/v1/sample/logits_processor/builtin.py:LogitBiasLogitsProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/builtin.py",
+   "target": "class:vllm/v1/sample/logits_processor/builtin.py:MinTokensLogitsProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/builtin.py",
+   "target": "function:vllm/v1/sample/logits_processor/builtin.py:process_dict_updates",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/interface.py",
+   "target": "class:vllm/v1/sample/logits_processor/interface.py:MoveDirectionality",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/interface.py",
+   "target": "class:vllm/v1/sample/logits_processor/interface.py:BatchUpdate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/interface.py",
+   "target": "class:vllm/v1/sample/logits_processor/interface.py:LogitsProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/state.py",
+   "target": "class:vllm/v1/sample/logits_processor/state.py:BatchUpdateBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/logits_processor/state.py",
+   "target": "class:vllm/v1/sample/logits_processor/state.py:LogitsProcessors",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "class:vllm/v1/sample/ops/topk_topp_sampler.py:TopKTopPSampler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:register_top_k_top_p_warmups",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:flashinfer_sampler_supported",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:xpu_sampler_supported",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:xpu_sample",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:apply_top_k_top_p",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:apply_top_k_top_p_pytorch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:apply_top_k_only",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:random_sample",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_sampler.py:flashinfer_sample",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/logprobs.py",
+   "target": "function:vllm/v1/sample/ops/logprobs.py:batched_count_greater_than",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/penalties.py",
+   "target": "function:vllm/v1/sample/ops/penalties.py:apply_all_penalties",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:apply_top_k_top_p_triton",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/sample/logits_processor/builtin.py:MinPLogitsProcessor",
+   "target": "class:vllm/v1/sample/logits_processor/interface.py:LogitsProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/sample/logits_processor/builtin.py:LogitBiasLogitsProcessor",
+   "target": "class:vllm/v1/sample/logits_processor/interface.py:LogitsProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/sample/logits_processor/builtin.py:MinTokensLogitsProcessor",
+   "target": "class:vllm/v1/sample/logits_processor/interface.py:LogitsProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/sample/logits_processor/__init__.py:AdapterLogitsProcessor",
+   "target": "class:vllm/v1/sample/logits_processor/interface.py:LogitsProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "function:vllm/v1/sample/ops/topk_topp_sampler.py:apply_top_k_top_p",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:apply_top_k_top_p_triton",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/v1/sample/ops/topk_topp_triton.py:apply_top_k_top_p_triton",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topk_topp",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/v1/sample/ops/topk_topp_triton.py:_apply_topp_split",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_split_stats",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/v1/sample/ops/topk_topp_triton.py:_apply_topp_split",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_split_step",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/v1/sample/ops/topk_topp_triton.py:_apply_topp_split",
+   "target": "function:vllm/v1/sample/ops/topk_topp_triton.py:_topp_split_mask",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

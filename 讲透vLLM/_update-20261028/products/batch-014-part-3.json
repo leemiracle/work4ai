@@ -1,0 +1,1389 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/simple_kv_offload/worker.py",
+   "type": "file",
+   "name": "worker.py",
+   "filePath": "vllm/v1/simple_kv_offload/worker.py",
+   "summary": "worker 侧 CPU offload 传输处理器：DMA（DmaCopyBackend）或磁盘（DiskBackend）后端选择、load/store 双流事件高水位跟踪与异步完成上报。",
+   "tags": [
+    "kv-offload",
+    "worker",
+    "transfers",
+    "dma"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/structured_output/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/v1/structured_output/__init__.py",
+   "summary": "结构化输出引擎管理器 StructuredOutputManager：请求→语法编译（线程池异步，external_launcher 下禁用）、reasoning parser 适配、grammar bitmask 填充下发与 KV 事件通知。",
+   "tags": [
+    "structured-output",
+    "manager",
+    "grammar",
+    "bitmask"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/structured_output/backend_guidance.py",
+   "type": "file",
+   "name": "backend_guidance.py",
+   "filePath": "vllm/v1/structured_output/backend_guidance.py",
+   "summary": "guidance/llguidance 后端：JSON schema 不支持特性检测（additionalProperties 处理）、grammar 编译/序列化与逐 token fill_bitmask。",
+   "tags": [
+    "structured-output",
+    "guidance",
+    "json-schema"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/structured_output/backend_lm_format_enforcer.py",
+   "type": "file",
+   "name": "backend_lm_format_enforcer.py",
+   "filePath": "vllm/v1/structured_output/backend_lm_format_enforcer.py",
+   "summary": "lm-format-enforcer 后端：tokenizer 数据构建（缓存）、请求级 grammar 与字符级 token 过滤。",
+   "tags": [
+    "structured-output",
+    "lm-format-enforcer",
+    "grammar"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/structured_output/backend_outlines.py",
+   "type": "file",
+   "name": "backend_outlines.py",
+   "filePath": "vllm/v1/structured_output/backend_outlines.py",
+   "summary": "outlines 后端：正则可构建性校验（regex-automata 不支持特性、look-around 前缀上下文检测）与 Index/FSM 请求级 grammar。",
+   "tags": [
+    "structured-output",
+    "outlines",
+    "regex"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/structured_output/backend_types.py",
+   "type": "file",
+   "name": "backend_types.py",
+   "filePath": "vllm/v1/structured_output/backend_types.py",
+   "summary": "结构化输出后端抽象：StructuredOutputGrammar（请求级：accept/validate/fill_bitmask）与 StructuredOutputBackend（引擎级：compile 语法）两个 ABC 及选项枚举。",
+   "tags": [
+    "structured-output",
+    "interface",
+    "abc",
+    "backends"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "type": "file",
+   "name": "backend_xgrammar.py",
+   "filePath": "vllm/v1/structured_output/backend_xgrammar.py",
+   "summary": "xgrammar 后端：JSON schema 不支持特性检测、grammar 编译缓存与逐 token bitmask 填充（xgr核心 API 适配）。",
+   "tags": [
+    "structured-output",
+    "xgrammar",
+    "json-schema",
+    "bitmask"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/structured_output/request.py",
+   "type": "file",
+   "name": "request.py",
+   "filePath": "vllm/v1/structured_output/request.py",
+   "summary": "结构化输出请求状态：grammar Future（异步编译）、reasoning parser 实例与推理结束前需掩码的隐式 token。",
+   "tags": [
+    "structured-output",
+    "request",
+    "state"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/simple_kv_offload/worker.py:SimpleCPUOffloadWorker",
+   "type": "class",
+   "name": "SimpleCPUOffloadWorker",
+   "filePath": "vllm/v1/simple_kv_offload/worker.py",
+   "summary": "worker 侧传输处理器：DMA/磁盘后端选择、双流事件高水位与异步完成上报。",
+   "tags": [
+    "kv-offload",
+    "worker",
+    "transfers"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    27,
+    390
+   ]
+  },
+  {
+   "id": "class:vllm/v1/structured_output/__init__.py:ConstraintBounds",
+   "type": "class",
+   "name": "ConstraintBounds",
+   "filePath": "vllm/v1/structured_output/__init__.py",
+   "summary": "grammar 开始喂 token 与开始掩码的边界 NamedTuple。",
+   "tags": [
+    "structured-output",
+    "bounds",
+    "namedtuple"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    39,
+    43
+   ]
+  },
+  {
+   "id": "class:vllm/v1/structured_output/__init__.py:StructuredOutputManager",
+   "type": "class",
+   "name": "StructuredOutputManager",
+   "filePath": "vllm/v1/structured_output/__init__.py",
+   "summary": "引擎级结构化输出管理器：异步语法编译线程池、reasoning 适配、bitmask 并行填充与 KV 事件。",
+   "tags": [
+    "structured-output",
+    "manager",
+    "engine-level"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    50,
+    553
+   ]
+  },
+  {
+   "id": "class:vllm/v1/structured_output/backend_guidance.py:GuidanceBackend",
+   "type": "class",
+   "name": "GuidanceBackend",
+   "filePath": "vllm/v1/structured_output/backend_guidance.py",
+   "summary": "guidance/llguidance 引擎级后端：语法编译与缓存。",
+   "tags": [
+    "structured-output",
+    "guidance",
+    "backend"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    132,
+    214
+   ]
+  },
+  {
+   "id": "class:vllm/v1/structured_output/backend_guidance.py:GuidanceGrammar",
+   "type": "class",
+   "name": "GuidanceGrammar",
+   "filePath": "vllm/v1/structured_output/backend_guidance.py",
+   "summary": "guidance 请求级 grammar：token 接受与 bitmask 填充。",
+   "tags": [
+    "structured-output",
+    "guidance",
+    "grammar"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    218,
+    322
+   ]
+  },
+  {
+   "id": "class:vllm/v1/structured_output/backend_lm_format_enforcer.py:LMFormatEnforcerGrammar",
+   "type": "class",
+   "name": "LMFormatEnforcerGrammar",
+   "filePath": "vllm/v1/structured_output/backend_lm_format_enforcer.py",
+   "summary": "lm-format-enforcer 请求级 grammar。",
+   "tags": [
+    "structured-output",
+    "lm-format-enforcer",
+    "grammar"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    44,
+    91
+   ]
+  },
+  {
+   "id": "class:vllm/v1/structured_output/backend_lm_format_enforcer.py:LMFormatEnforcerBackend",
+   "type": "class",
+   "name": "LMFormatEnforcerBackend",
+   "filePath": "vllm/v1/structured_output/backend_lm_format_enforcer.py",
+   "summary": "lm-format-enforcer 引擎级后端（tokenizer 数据缓存构建）。",
+   "tags": [
+    "structured-output",
+    "lm-format-enforcer",
+    "backend"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    95,
+    153
+   ]
+  },
+  {
+   "id": "class:vllm/v1/structured_output/backend_outlines.py:OutlinesBackend",
+   "type": "class",
+   "name": "OutlinesBackend",
+   "filePath": "vllm/v1/structured_output/backend_outlines.py",
+   "summary": "outlines 引擎级后端：Index/FSM 构建与词汇适配。",
+   "tags": [
+    "structured-output",
+    "outlines",
+    "backend"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    39,
+    98
+   ]
+  },
+  {
+   "id": "class:vllm/v1/structured_output/backend_outlines.py:OutlinesGrammar",
+   "type": "class",
+   "name": "OutlinesGrammar",
+   "filePath": "vllm/v1/structured_output/backend_outlines.py",
+   "summary": "outlines 请求级 grammar：FSM 推进与 bitmask。",
+   "tags": [
+    "structured-output",
+    "outlines",
+    "grammar"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    102,
+    192
+   ]
+  },
+  {
+   "id": "class:vllm/v1/structured_output/backend_types.py:StructuredOutputOptions",
+   "type": "class",
+   "name": "StructuredOutputOptions",
+   "filePath": "vllm/v1/structured_output/backend_types.py",
+   "summary": "结构化输出选项枚举（JSON/regex/grammar/choice/structural_tag 等）。",
+   "tags": [
+    "structured-output",
+    "options",
+    "enum",
+    "backend-selection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    19,
+    25
+   ]
+  },
+  {
+   "id": "class:vllm/v1/structured_output/backend_types.py:StructuredOutputGrammar",
+   "type": "class",
+   "name": "StructuredOutputGrammar",
+   "filePath": "vllm/v1/structured_output/backend_types.py",
+   "summary": "请求级后端 ABC：accept_tokens/validate_tokens/fill_bitmask。",
+   "tags": [
+    "structured-output",
+    "grammar",
+    "abc"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    31,
+    95
+   ]
+  },
+  {
+   "id": "class:vllm/v1/structured_output/backend_types.py:StructuredOutputBackend",
+   "type": "class",
+   "name": "StructuredOutputBackend",
+   "filePath": "vllm/v1/structured_output/backend_types.py",
+   "summary": "引擎级后端 ABC：compile 语法与能力查询。",
+   "tags": [
+    "structured-output",
+    "backend",
+    "abc"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    99,
+    140
+   ]
+  },
+  {
+   "id": "class:vllm/v1/structured_output/backend_xgrammar.py:XgrammarBackend",
+   "type": "class",
+   "name": "XgrammarBackend",
+   "filePath": "vllm/v1/structured_output/backend_xgrammar.py",
+   "summary": "xgrammar 引擎级后端：编译器/缓存与 vocab 适配。",
+   "tags": [
+    "structured-output",
+    "xgrammar",
+    "backend"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    38,
+    244
+   ]
+  },
+  {
+   "id": "class:vllm/v1/structured_output/backend_xgrammar.py:XgrammarGrammar",
+   "type": "class",
+   "name": "XgrammarGrammar",
+   "filePath": "vllm/v1/structured_output/backend_xgrammar.py",
+   "summary": "xgrammar 请求级 grammar：accept/fill_bitmask。",
+   "tags": [
+    "structured-output",
+    "xgrammar",
+    "grammar"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    248,
+    322
+   ]
+  },
+  {
+   "id": "class:vllm/v1/structured_output/request.py:StructuredOutputRequest",
+   "type": "class",
+   "name": "StructuredOutputRequest",
+   "filePath": "vllm/v1/structured_output/request.py",
+   "summary": "请求级状态：grammar Future、reasoning parser 与掩码的隐式推理结束 token。",
+   "tags": [
+    "structured-output",
+    "request",
+    "state"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    21,
+    74
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/backend_guidance.py:_walk_json_for_additional_properties",
+   "type": "function",
+   "name": "_walk_json_for_additional_properties",
+   "filePath": "vllm/v1/structured_output/backend_guidance.py",
+   "summary": "遍历 JSON schema 找 additionalProperties 节点。",
+   "tags": [
+    "guidance",
+    "json-schema",
+    "walk"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    68,
+    90
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/backend_guidance.py:has_guidance_unsupported_json_features",
+   "type": "function",
+   "name": "has_guidance_unsupported_json_features",
+   "filePath": "vllm/v1/structured_output/backend_guidance.py",
+   "summary": "检测 guidance 不支持的 JSON schema 特性。",
+   "tags": [
+    "guidance",
+    "json-schema",
+    "detection"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    93,
+    116
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/backend_guidance.py:process_for_additional_properties",
+   "type": "function",
+   "name": "process_for_additional_properties",
+   "filePath": "vllm/v1/structured_output/backend_guidance.py",
+   "summary": "处理 additionalProperties 的 schema 改写。",
+   "tags": [
+    "guidance",
+    "json-schema",
+    "rewrite"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    119,
+    128
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/backend_guidance.py:serialize_guidance_grammar",
+   "type": "function",
+   "name": "serialize_guidance_grammar",
+   "filePath": "vllm/v1/structured_output/backend_guidance.py",
+   "summary": "序列化 guidance 语法（LLM 输出/缓存用）。",
+   "tags": [
+    "guidance",
+    "serialization",
+    "grammar"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    325,
+    393
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/backend_guidance.py:validate_guidance_grammar",
+   "type": "function",
+   "name": "validate_guidance_grammar",
+   "filePath": "vllm/v1/structured_output/backend_guidance.py",
+   "summary": "校验请求是否被 guidance 后端支持。",
+   "tags": [
+    "guidance",
+    "validation",
+    "grammar"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    396,
+    409
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/backend_lm_format_enforcer.py:validate_structured_output_request_lm_format_enforcer",
+   "type": "function",
+   "name": "validate_structured_output_request_lm_format_enforcer",
+   "filePath": "vllm/v1/structured_output/backend_lm_format_enforcer.py",
+   "summary": "校验请求是否被 lm-format-enforcer 支持。",
+   "tags": [
+    "lm-format-enforcer",
+    "validation",
+    "request"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    156,
+    204
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/backend_outlines.py:validate_structured_output_request_outlines",
+   "type": "function",
+   "name": "validate_structured_output_request_outlines",
+   "filePath": "vllm/v1/structured_output/backend_outlines.py",
+   "summary": "校验请求是否被 outlines 支持。",
+   "tags": [
+    "outlines",
+    "validation",
+    "request"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    195,
+    248
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/backend_outlines.py:_prefix_needs_context",
+   "type": "function",
+   "name": "_prefix_needs_context",
+   "filePath": "vllm/v1/structured_output/backend_outlines.py",
+   "summary": "检测 regex 前缀是否含 look-around/anchor（需要上下文）。",
+   "tags": [
+    "outlines",
+    "regex",
+    "lookaround"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    251,
+    314
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/backend_outlines.py:_check_unsupported",
+   "type": "function",
+   "name": "_check_unsupported",
+   "filePath": "vllm/v1/structured_output/backend_outlines.py",
+   "summary": "检测 regex-automata 不支持的 regex 特性。",
+   "tags": [
+    "outlines",
+    "regex",
+    "detection"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    317,
+    343
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/backend_outlines.py:validate_regex_is_buildable",
+   "type": "function",
+   "name": "validate_regex_is_buildable",
+   "filePath": "vllm/v1/structured_output/backend_outlines.py",
+   "summary": "校验 regex 可被 regex-automata 构建。",
+   "tags": [
+    "outlines",
+    "regex",
+    "validation"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    346,
+    376
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/backend_xgrammar.py:has_xgrammar_unsupported_json_features",
+   "type": "function",
+   "name": "has_xgrammar_unsupported_json_features",
+   "filePath": "vllm/v1/structured_output/backend_xgrammar.py",
+   "summary": "检测 xgrammar 不支持的 JSON schema 特性。",
+   "tags": [
+    "xgrammar",
+    "json-schema",
+    "detection"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    362,
+    476
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/backend_xgrammar.py:validate_xgrammar_grammar",
+   "type": "function",
+   "name": "validate_xgrammar_grammar",
+   "filePath": "vllm/v1/structured_output/backend_xgrammar.py",
+   "summary": "校验请求被 xgrammar 支持（否则抛 VLLMValidationError）。",
+   "tags": [
+    "xgrammar",
+    "validation",
+    "grammar"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    479,
+    586
+   ]
+  },
+  {
+   "id": "function:vllm/v1/structured_output/request.py:get_structured_output_key",
+   "type": "function",
+   "name": "get_structured_output_key",
+   "filePath": "vllm/v1/structured_output/request.py",
+   "summary": "从采样参数提取结构化输出去重键 (option, spec)。",
+   "tags": [
+    "structured-output",
+    "key",
+    "request"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    77,
+    98
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/simple_kv_offload/worker.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/simple_kv_offload/worker.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/simple_kv_offload/worker.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/simple_kv_offload/worker.py",
+   "target": "file:vllm/v1/simple_kv_offload/copy_backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/simple_kv_offload/worker.py",
+   "target": "file:vllm/v1/simple_kv_offload/cuda_mem_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/simple_kv_offload/worker.py",
+   "target": "file:vllm/v1/simple_kv_offload/disk_backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/simple_kv_offload/worker.py",
+   "target": "file:vllm/v1/simple_kv_offload/metadata.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/simple_kv_offload/worker.py",
+   "target": "file:vllm/v1/simple_kv_offload/sizing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/__init__.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/__init__.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/__init__.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/__init__.py",
+   "target": "file:vllm/parser/engine/adapters.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/__init__.py",
+   "target": "file:vllm/reasoning/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/__init__.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/__init__.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/__init__.py",
+   "target": "file:vllm/v1/structured_output/backend_guidance.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/__init__.py",
+   "target": "file:vllm/v1/structured_output/backend_types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/__init__.py",
+   "target": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/__init__.py",
+   "target": "file:vllm/v1/structured_output/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "file:vllm/utils/mistral.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "file:vllm/v1/structured_output/backend_types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "file:vllm/v1/structured_output/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "file:vllm/v1/structured_output/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_lm_format_enforcer.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_lm_format_enforcer.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_lm_format_enforcer.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_lm_format_enforcer.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_lm_format_enforcer.py",
+   "target": "file:vllm/v1/structured_output/backend_types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_lm_format_enforcer.py",
+   "target": "file:vllm/v1/structured_output/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_outlines.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_outlines.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_outlines.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_outlines.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_outlines.py",
+   "target": "file:vllm/v1/structured_output/backend_types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_outlines.py",
+   "target": "file:vllm/v1/structured_output/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "target": "file:vllm/utils/mistral.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "target": "file:vllm/v1/structured_output/backend_types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "target": "file:vllm/v1/structured_output/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/request.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/structured_output/request.py",
+   "target": "file:vllm/v1/structured_output/backend_types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/simple_kv_offload/worker.py",
+   "target": "class:vllm/v1/simple_kv_offload/worker.py:SimpleCPUOffloadWorker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/__init__.py",
+   "target": "class:vllm/v1/structured_output/__init__.py:ConstraintBounds",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/__init__.py",
+   "target": "class:vllm/v1/structured_output/__init__.py:StructuredOutputManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "class:vllm/v1/structured_output/backend_guidance.py:GuidanceBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "class:vllm/v1/structured_output/backend_guidance.py:GuidanceGrammar",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "function:vllm/v1/structured_output/backend_guidance.py:_walk_json_for_additional_properties",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "function:vllm/v1/structured_output/backend_guidance.py:has_guidance_unsupported_json_features",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "function:vllm/v1/structured_output/backend_guidance.py:process_for_additional_properties",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "function:vllm/v1/structured_output/backend_guidance.py:serialize_guidance_grammar",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "function:vllm/v1/structured_output/backend_guidance.py:validate_guidance_grammar",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_lm_format_enforcer.py",
+   "target": "class:vllm/v1/structured_output/backend_lm_format_enforcer.py:LMFormatEnforcerGrammar",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_lm_format_enforcer.py",
+   "target": "class:vllm/v1/structured_output/backend_lm_format_enforcer.py:LMFormatEnforcerBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_lm_format_enforcer.py",
+   "target": "function:vllm/v1/structured_output/backend_lm_format_enforcer.py:validate_structured_output_request_lm_format_enforcer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_outlines.py",
+   "target": "class:vllm/v1/structured_output/backend_outlines.py:OutlinesBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_outlines.py",
+   "target": "class:vllm/v1/structured_output/backend_outlines.py:OutlinesGrammar",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_outlines.py",
+   "target": "function:vllm/v1/structured_output/backend_outlines.py:validate_structured_output_request_outlines",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_outlines.py",
+   "target": "function:vllm/v1/structured_output/backend_outlines.py:_prefix_needs_context",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_outlines.py",
+   "target": "function:vllm/v1/structured_output/backend_outlines.py:_check_unsupported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_outlines.py",
+   "target": "function:vllm/v1/structured_output/backend_outlines.py:validate_regex_is_buildable",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_types.py",
+   "target": "class:vllm/v1/structured_output/backend_types.py:StructuredOutputOptions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_types.py",
+   "target": "class:vllm/v1/structured_output/backend_types.py:StructuredOutputGrammar",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_types.py",
+   "target": "class:vllm/v1/structured_output/backend_types.py:StructuredOutputBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "target": "class:vllm/v1/structured_output/backend_xgrammar.py:XgrammarBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "target": "class:vllm/v1/structured_output/backend_xgrammar.py:XgrammarGrammar",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "target": "function:vllm/v1/structured_output/backend_xgrammar.py:has_xgrammar_unsupported_json_features",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "target": "function:vllm/v1/structured_output/backend_xgrammar.py:validate_xgrammar_grammar",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/request.py",
+   "target": "class:vllm/v1/structured_output/request.py:StructuredOutputRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/structured_output/request.py",
+   "target": "function:vllm/v1/structured_output/request.py:get_structured_output_key",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/simple_kv_offload/worker.py",
+   "target": "class:vllm/v1/simple_kv_offload/worker.py:SimpleCPUOffloadWorker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/__init__.py",
+   "target": "class:vllm/v1/structured_output/__init__.py:ConstraintBounds",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/__init__.py",
+   "target": "class:vllm/v1/structured_output/__init__.py:StructuredOutputManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "class:vllm/v1/structured_output/backend_guidance.py:GuidanceBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "class:vllm/v1/structured_output/backend_guidance.py:GuidanceGrammar",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "function:vllm/v1/structured_output/backend_guidance.py:has_guidance_unsupported_json_features",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "function:vllm/v1/structured_output/backend_guidance.py:process_for_additional_properties",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "function:vllm/v1/structured_output/backend_guidance.py:serialize_guidance_grammar",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_guidance.py",
+   "target": "function:vllm/v1/structured_output/backend_guidance.py:validate_guidance_grammar",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_lm_format_enforcer.py",
+   "target": "class:vllm/v1/structured_output/backend_lm_format_enforcer.py:LMFormatEnforcerGrammar",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_lm_format_enforcer.py",
+   "target": "class:vllm/v1/structured_output/backend_lm_format_enforcer.py:LMFormatEnforcerBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_lm_format_enforcer.py",
+   "target": "function:vllm/v1/structured_output/backend_lm_format_enforcer.py:validate_structured_output_request_lm_format_enforcer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_outlines.py",
+   "target": "class:vllm/v1/structured_output/backend_outlines.py:OutlinesBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_outlines.py",
+   "target": "class:vllm/v1/structured_output/backend_outlines.py:OutlinesGrammar",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_outlines.py",
+   "target": "function:vllm/v1/structured_output/backend_outlines.py:validate_structured_output_request_outlines",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_outlines.py",
+   "target": "function:vllm/v1/structured_output/backend_outlines.py:validate_regex_is_buildable",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_types.py",
+   "target": "class:vllm/v1/structured_output/backend_types.py:StructuredOutputOptions",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_types.py",
+   "target": "class:vllm/v1/structured_output/backend_types.py:StructuredOutputGrammar",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_types.py",
+   "target": "class:vllm/v1/structured_output/backend_types.py:StructuredOutputBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "target": "class:vllm/v1/structured_output/backend_xgrammar.py:XgrammarBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "target": "class:vllm/v1/structured_output/backend_xgrammar.py:XgrammarGrammar",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "target": "function:vllm/v1/structured_output/backend_xgrammar.py:has_xgrammar_unsupported_json_features",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "target": "function:vllm/v1/structured_output/backend_xgrammar.py:validate_xgrammar_grammar",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/request.py",
+   "target": "class:vllm/v1/structured_output/request.py:StructuredOutputRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/structured_output/request.py",
+   "target": "function:vllm/v1/structured_output/request.py:get_structured_output_key",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/structured_output/backend_xgrammar.py:XgrammarBackend",
+   "target": "class:vllm/v1/structured_output/backend_types.py:StructuredOutputBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/structured_output/backend_guidance.py:GuidanceBackend",
+   "target": "class:vllm/v1/structured_output/backend_types.py:StructuredOutputBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/structured_output/backend_outlines.py:OutlinesBackend",
+   "target": "class:vllm/v1/structured_output/backend_types.py:StructuredOutputBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/structured_output/backend_lm_format_enforcer.py:LMFormatEnforcerBackend",
+   "target": "class:vllm/v1/structured_output/backend_types.py:StructuredOutputBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/structured_output/backend_xgrammar.py:XgrammarGrammar",
+   "target": "class:vllm/v1/structured_output/backend_types.py:StructuredOutputGrammar",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/structured_output/backend_guidance.py:GuidanceGrammar",
+   "target": "class:vllm/v1/structured_output/backend_types.py:StructuredOutputGrammar",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/structured_output/backend_outlines.py:OutlinesGrammar",
+   "target": "class:vllm/v1/structured_output/backend_types.py:StructuredOutputGrammar",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/structured_output/backend_lm_format_enforcer.py:LMFormatEnforcerGrammar",
+   "target": "class:vllm/v1/structured_output/backend_types.py:StructuredOutputGrammar",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/structured_output/__init__.py:StructuredOutputManager",
+   "target": "class:vllm/v1/structured_output/backend_xgrammar.py:XgrammarBackend",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/structured_output/__init__.py:StructuredOutputManager",
+   "target": "class:vllm/v1/structured_output/backend_guidance.py:GuidanceBackend",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/simple_kv_offload/worker.py:SimpleCPUOffloadWorker",
+   "target": "class:vllm/v1/simple_kv_offload/disk_backend.py:DiskBackend",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

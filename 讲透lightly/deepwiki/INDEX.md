@@ -1,0 +1,33 @@
+# DeepWiki 索引 — lightly-ai/lightly
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-21
+> 结构 28 页 · 全文 597606 字符
+
+- [1 Overview](1-overview.md)
+- [2 Self-Supervised Learning Models](2-self-supervised-learning-models.md)
+  - [2.1 Model Architectures](2.1-model-architectures.md)
+  - [2.2 Model Components and Utilities](2.2-model-components-and-utilities.md)
+  - [2.3 Loss Functions](2.3-loss-functions.md)
+  - [2.4 Transforms and Augmentations](2.4-transforms-and-augmentations.md)
+- [3 Data Handling](3-data-handling.md)
+  - [3.1 Datasets](3.1-datasets.md)
+  - [3.2 Data Collation and Batching](3.2-data-collation-and-batching.md)
+- [4 Command-Line Interface](4-command-line-interface.md)
+  - [4.1 Training Commands](4.1-training-commands.md)
+  - [4.2 Embedding Generation](4.2-embedding-generation.md)
+  - [4.3 Platform Integration Commands](4.3-platform-integration-commands.md)
+  - [4.4 CLI Configuration](4.4-cli-configuration.md)
+- [5 Python API](5-python-api.md)
+- [6 Platform Integration](6-platform-integration.md)
+  - [6.1 API Workflow Client](6.1-api-workflow-client.md)
+  - [6.2 Compute Workers](6.2-compute-workers.md)
+  - [6.3 Dataset and Tag Management](6.3-dataset-and-tag-management.md)
+  - [6.4 Datasources](6.4-datasources.md)
+  - [6.5 Version Checking and Compatibility](6.5-version-checking-and-compatibility.md)
+- [7 Benchmarking](7-benchmarking.md)
+  - [7.1 ImageNet Benchmarks](7.1-imagenet-benchmarks.md)
+  - [7.2 Evaluation Protocols](7.2-evaluation-protocols.md)
+- [8 Tutorials and Examples](8-tutorials-and-examples.md)
+- [9 Developer Guide](9-developer-guide.md)
+  - [9.1 Project Configuration](9.1-project-configuration.md)
+  - [9.2 Testing and CI/CD](9.2-testing-and-ci-cd.md)

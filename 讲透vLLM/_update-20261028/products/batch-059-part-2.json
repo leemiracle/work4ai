@@ -1,0 +1,1327 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "type": "file",
+   "name": "bf16x3_router_gemm_sm100.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "summary": "SM100 BF16x3 router GEMM（CuTe DSL）：持久 kernel + split-K 归约，调优表选 tile 配置与逐配置 warmup。",
+   "tags": [
+    "router",
+    "gemm",
+    "bf16x3",
+    "sm100"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py",
+   "type": "file",
+   "name": "bf16x3_router_gemm_sm90.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py",
+   "summary": "SM90 BF16x3 router GEMM：MMA warpgroup（64 专家×token 块）+TMA warp 的 CuTe DSL Jit kernel。",
+   "tags": [
+    "router",
+    "gemm",
+    "bf16x3",
+    "sm90"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/router/cpu_router.py",
+   "type": "file",
+   "name": "cpu_router.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/cpu_router.py",
+   "summary": "CPU 路由器：覆盖 softmax top-k、grouped top-k 与 DeepSeek V4 的 sqrt(softplus) 偏置 top-k 全部 CPU 路由方案。",
+   "tags": [
+    "router",
+    "cpu",
+    "top-k"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/router/dsv4_topk.py",
+   "type": "file",
+   "name": "dsv4_topk.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/dsv4_topk.py",
+   "summary": "DeepSeek V4 专用 top-k（Triton）：sqrt(softplus) 权重 + 偏置校正的专用 kernel 与可用性判定。",
+   "tags": [
+    "top-k",
+    "deepseek",
+    "triton",
+    "router"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/router/fused_moe_router.py",
+   "type": "file",
+   "name": "fused_moe_router.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/fused_moe_router.py",
+   "summary": "FusedMoERouter 抽象基类：定义 select_experts 路由接口。",
+   "tags": [
+    "router",
+    "abc",
+    "interface"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "type": "file",
+   "name": "fused_topk_bias_router.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "summary": "偏置融合 top-k 路由器：softmax/sigmoid/softplus-sqrt 三变体 + e_score_correction_bias，AITER 分组偏置 top-k 探测。",
+   "tags": [
+    "router",
+    "top-k",
+    "bias",
+    "aiter"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py",
+   "type": "file",
+   "name": "fused_topk_router.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/fused_topk_router.py",
+   "summary": "默认融合 top-k 路由器：softmax/sigmoid top-k 的多后端分发（含 AITER topk_gating 探测）。",
+   "tags": [
+    "router",
+    "top-k",
+    "dispatch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "type": "file",
+   "name": "gate_linear.py",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "summary": "GateLinear：MoE gate 线性层的多级 GEMM 分发——CuTeDSL ll_bf16（SM90+ M≤16）/ROCm bf16x3/FP32 小批 kernel/cuBLAS 兜底。",
+   "tags": [
+    "router",
+    "gate",
+    "gemm",
+    "dispatch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py:Sm100BF16x3RouterGemm",
+   "type": "class",
+   "name": "Sm100BF16x3RouterGemm",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "summary": "SM100 持久 BF16x3 router GEMM kernel（5 方法）。",
+   "tags": [
+    "sm100",
+    "bf16x3",
+    "gemm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    85,
+    424
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py:_Sm90BF16x3RouterGemm",
+   "type": "class",
+   "name": "_Sm90BF16x3RouterGemm",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py",
+   "summary": "SM90 MMA warpgroup+TMA warp 的 kernel 主体（内部名保留）。",
+   "tags": [
+    "sm90",
+    "bf16x3",
+    "kernel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    112,
+    498
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py:Sm90BF16x3RouterGemmKernel",
+   "type": "class",
+   "name": "Sm90BF16x3RouterGemmKernel",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py",
+   "summary": "SM90 CuTe DSL Jit kernel 封装（5 方法）。",
+   "tags": [
+    "sm90",
+    "cute-dsl",
+    "jit"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    538,
+    610
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/router/cpu_router.py:CPURouter",
+   "type": "class",
+   "name": "CPURouter",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/cpu_router.py",
+   "summary": "CPU 全方案路由器（softmax/grouped/DSv4 sqrt-softplus）。",
+   "tags": [
+    "cpu",
+    "router",
+    "top-k"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    152,
+    252
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/router/fused_moe_router.py:FusedMoERouter",
+   "type": "class",
+   "name": "FusedMoERouter",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/fused_moe_router.py",
+   "summary": "路由抽象基类（select_experts，9 方法）。",
+   "tags": [
+    "abc",
+    "router",
+    "interface"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    12,
+    100
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py:FusedTopKBiasRouter",
+   "type": "class",
+   "name": "FusedTopKBiasRouter",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "summary": "带 e_score_correction_bias 的融合 top-k 路由器。",
+   "tags": [
+    "top-k",
+    "bias",
+    "router"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    370,
+    466
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py:FusedTopKRouter",
+   "type": "class",
+   "name": "FusedTopKRouter",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/fused_topk_router.py",
+   "summary": "默认标准融合 top-k 路由器。",
+   "tags": [
+    "top-k",
+    "router",
+    "default",
+    "standard"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    187,
+    234
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/router/gate_linear.py:GateLinear",
+   "type": "class",
+   "name": "GateLinear",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "summary": "MoE gate 线性层：多级 GEMM 分发（CuTeDSL/bf16x3/FP32/cuBLAS）。",
+   "tags": [
+    "gate",
+    "gemm",
+    "dispatch"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    25,
+    399
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fused_moe/router/gate_linear.py:_GateLinearMethod",
+   "type": "class",
+   "name": "_GateLinearMethod",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "summary": "gate 的未量化方法：预构建 ROCm bf16x3 权重拆分。",
+   "tags": [
+    "gate",
+    "bf16x3",
+    "method"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    402,
+    432
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py:_decompose_fp32x2_to_3xbf16x2",
+   "type": "function",
+   "name": "_decompose_fp32x2_to_3xbf16x2",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "summary": "fp32x2 分解为 3 个 bf16x2（SM100 kernel 用）。",
+   "tags": [
+    "decomposition",
+    "bf16x3",
+    "sm100"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    35,
+    82
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py:splitk_reduce_triton",
+   "type": "function",
+   "name": "splitk_reduce_triton",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "summary": "split-K 归约 Triton kernel 封装。",
+   "tags": [
+    "split-k",
+    "reduce",
+    "triton"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    479,
+    497
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py:_pick_tile_config",
+   "type": "function",
+   "name": "_pick_tile_config",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "summary": "(BN, split_k) 配置：中段查调优表，其余通用规则。",
+   "tags": [
+    "tile-config",
+    "tuning",
+    "selection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    530,
+    549
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py:warmup_bf16x3_router_gemm",
+   "type": "function",
+   "name": "warmup_bf16x3_router_gemm",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "summary": "编译全部可达的 BF16x3 router GEMM 配置。",
+   "tags": [
+    "warmup",
+    "compilation",
+    "sm100"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    552,
+    606
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py:_split_fp32x2_to_3xbf16x2",
+   "type": "function",
+   "name": "_split_fp32x2_to_3xbf16x2",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py",
+   "summary": "SM90 版 fp32→3×bf16 分解。",
+   "tags": [
+    "decomposition",
+    "bf16x3",
+    "sm90"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    46,
+    86
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py:_pick_config",
+   "type": "function",
+   "name": "_pick_config",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py",
+   "summary": "(block_t, block_k, stages, split_k) 配置选择。",
+   "tags": [
+    "config",
+    "tuning",
+    "sm90"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    513,
+    535
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/cpu_router.py:_grouped_topk",
+   "type": "function",
+   "name": "_grouped_topk",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/cpu_router.py",
+   "summary": "CPU 分组 top-k。",
+   "tags": [
+    "grouped-topk",
+    "cpu",
+    "grouped-topk-main"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    26,
+    78
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/cpu_router.py:_sqrtsoftplus_bias_topk",
+   "type": "function",
+   "name": "_sqrtsoftplus_bias_topk",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/cpu_router.py",
+   "summary": "DeepSeek V4 路由：sqrt(softplus(logit))。",
+   "tags": [
+    "sqrt-softplus",
+    "deepseek",
+    "cpu"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    81,
+    135
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/cpu_router.py:select_experts",
+   "type": "function",
+   "name": "select_experts",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/cpu_router.py",
+   "summary": "仍用旧接口的 CPU MoE 专家路由 helper。",
+   "tags": [
+    "routing",
+    "helper",
+    "cpu"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    255,
+    293
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/dsv4_topk.py:can_use_dsv4_topk",
+   "type": "function",
+   "name": "can_use_dsv4_topk",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/dsv4_topk.py",
+   "summary": "DSv4 top-k kernel 可用性判定。",
+   "tags": [
+    "predicate",
+    "deepseek",
+    "top-k"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    15,
+    35
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/dsv4_topk.py:_dsv4_topk_kernel",
+   "type": "function",
+   "name": "_dsv4_topk_kernel",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/dsv4_topk.py",
+   "summary": "DSv4 sqrt(softplus)+bias top-k Triton kernel。",
+   "tags": [
+    "triton",
+    "top-k",
+    "deepseek"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    41,
+    120
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/dsv4_topk.py:dsv4_topk",
+   "type": "function",
+   "name": "dsv4_topk",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/dsv4_topk.py",
+   "summary": "DSv4 top-k 公开入口。",
+   "tags": [
+    "top-k",
+    "deepseek",
+    "entry-point"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    123,
+    169
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py:vllm_topk_softplus_sqrt",
+   "type": "function",
+   "name": "vllm_topk_softplus_sqrt",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "summary": "softplus+sqrt top-k 变体。",
+   "tags": [
+    "softplus",
+    "sqrt",
+    "top-k"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    74,
+    102
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py:fused_topk_bias",
+   "type": "function",
+   "name": "fused_topk_bias",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "summary": "带偏置融合 top-k 主实现（226 行）。",
+   "tags": [
+    "top-k",
+    "bias",
+    "fused"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    141,
+    367
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py:dispatch_topk_softmax_func",
+   "type": "function",
+   "name": "dispatch_topk_softmax_func",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/fused_topk_router.py",
+   "summary": "单次 launch 的 softmax top-k 实现选择。",
+   "tags": [
+    "dispatch",
+    "softmax",
+    "top-k"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    93,
+    126
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py:fused_topk",
+   "type": "function",
+   "name": "fused_topk",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/fused_topk_router.py",
+   "summary": "标准融合 top-k 入口。",
+   "tags": [
+    "top-k",
+    "fused",
+    "entry-point"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    137,
+    184
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/gate_linear.py:bf16x3_router_gemm_module",
+   "type": "function",
+   "name": "bf16x3_router_gemm_module",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "summary": "本设备的 CuteDSL bf16x3 router GEMM 模块。",
+   "tags": [
+    "cute-dsl",
+    "module",
+    "gemm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    447,
+    463
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/gate_linear.py:rocm_bf16x3_router_gemm_dispatch_impl",
+   "type": "function",
+   "name": "rocm_bf16x3_router_gemm_dispatch_impl",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "summary": "ROCm bf16x3 router GEMM 分发（小批回退）。",
+   "tags": [
+    "dispatch",
+    "rocm",
+    "bf16x3"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    466,
+    496
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_moe/router/gate_linear.py:fp32_router_gemm_dispatch_impl",
+   "type": "function",
+   "name": "fp32_router_gemm_dispatch_impl",
+   "filePath": "vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "summary": "小批 FP32 kernel 分发（形状特化）。",
+   "tags": [
+    "dispatch",
+    "fp32",
+    "small-batch"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    514,
+    555
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "target": "file:vllm/cute_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "target": "file:vllm/cute_utils/_tcgen05.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup_cutedsl_helper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py",
+   "target": "file:vllm/utils/platform_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/cpu_router.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/cpu_router.py",
+   "target": "file:vllm/distributed/eplb/eplb_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/cpu_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/cpu_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/dsv4_topk.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/dsv4_topk.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_moe_router.py",
+   "target": "file:vllm/distributed/eplb/eplb_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_moe_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "target": "file:vllm/distributed/eplb/eplb_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/dsv4_topk.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py",
+   "target": "file:vllm/distributed/eplb/eplb_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/rocm_fp32_router_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py:Sm100BF16x3RouterGemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py:_decompose_fp32x2_to_3xbf16x2",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py:splitk_reduce_triton",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py:_pick_tile_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py:warmup_bf16x3_router_gemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py:_Sm90BF16x3RouterGemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py:Sm90BF16x3RouterGemmKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py:_split_fp32x2_to_3xbf16x2",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py:_pick_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/cpu_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/cpu_router.py:CPURouter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/cpu_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/cpu_router.py:_grouped_topk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/cpu_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/cpu_router.py:_sqrtsoftplus_bias_topk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/cpu_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/cpu_router.py:select_experts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_moe_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/fused_moe_router.py:FusedMoERouter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py:FusedTopKBiasRouter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py:vllm_topk_softplus_sqrt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py:fused_topk_bias",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py:FusedTopKRouter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py:dispatch_topk_softmax_func",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py:fused_topk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/gate_linear.py:GateLinear",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/gate_linear.py:_GateLinearMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/gate_linear.py:bf16x3_router_gemm_module",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/gate_linear.py:rocm_bf16x3_router_gemm_dispatch_impl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/gate_linear.py:fp32_router_gemm_dispatch_impl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/dsv4_topk.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/dsv4_topk.py:can_use_dsv4_topk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/dsv4_topk.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/dsv4_topk.py:_dsv4_topk_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/dsv4_topk.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/dsv4_topk.py:dsv4_topk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py:Sm100BF16x3RouterGemm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py:splitk_reduce_triton",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py:warmup_bf16x3_router_gemm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py:_Sm90BF16x3RouterGemm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm90.py:Sm90BF16x3RouterGemmKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/cpu_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/cpu_router.py:CPURouter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/cpu_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/cpu_router.py:select_experts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_moe_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/fused_moe_router.py:FusedMoERouter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py:FusedTopKBiasRouter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py:vllm_topk_softplus_sqrt",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py:fused_topk_bias",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py:FusedTopKRouter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py:dispatch_topk_softmax_func",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py:fused_topk",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/gate_linear.py:GateLinear",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/gate_linear.py:_GateLinearMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/gate_linear.py:bf16x3_router_gemm_module",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/gate_linear.py:rocm_bf16x3_router_gemm_dispatch_impl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/gate_linear.py:fp32_router_gemm_dispatch_impl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/dsv4_topk.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/dsv4_topk.py:can_use_dsv4_topk",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_moe/router/dsv4_topk.py",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/dsv4_topk.py:dsv4_topk",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/router/cpu_router.py:CPURouter",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/base_router.py:BaseRouter",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py:FusedTopKBiasRouter",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/base_router.py:BaseRouter",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py:FusedTopKRouter",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/base_router.py:BaseRouter",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/router/gate_linear.py:GateLinear",
+   "target": "class:vllm/model_executor/layers/linear.py:ReplicatedLinear",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/router/gate_linear.py:_GateLinearMethod",
+   "target": "class:vllm/model_executor/layers/linear.py:UnquantizedLinearMethod",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py:FusedTopKRouter",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/fused_topk_router.py:fused_topk",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py:FusedTopKBiasRouter",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/fused_topk_bias_router.py:fused_topk_bias",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/router/gate_linear.py:GateLinear",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/gate_linear.py:rocm_bf16x3_router_gemm_dispatch_impl",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fused_moe/router/gate_linear.py:GateLinear",
+   "target": "function:vllm/model_executor/layers/fused_moe/router/gate_linear.py:fp32_router_gemm_dispatch_impl",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

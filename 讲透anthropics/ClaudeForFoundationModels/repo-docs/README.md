@@ -1,0 +1,313 @@
+# Claude for Foundation Models
+
+Use Claude as a server-side language model through Apple's [Foundation Models](https://developer.apple.com/documentation/foundationmodels) framework. The package conforms Claude to the framework's `LanguageModel` protocol, so you drive it with the same `LanguageModelSession` API you use for Apple's on-device model — `respond(to:)`, streaming, guided generation, and tool calling all work the same way.
+
+> **Beta.** This package targets the Foundation Models server-side language model API introduced in the OS 27 betas. APIs may change before general availability.
+
+## Contents
+
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Quick start](#quick-start)
+- [Example](#example)
+- [Choosing a model](#choosing-a-model)
+- [Authentication](#authentication)
+- [Streaming](#streaming)
+- [Structured output](#structured-output)
+- [Server-side tools](#server-side-tools)
+- [Error handling](#error-handling)
+- [What this package provides](#what-this-package-provides)
+- [Support](#support)
+- [License](#license)
+
+## Requirements
+
+- iOS 27, macOS 27, visionOS 27, or watchOS 27 (beta) — the OS releases whose Foundation Models framework supports server-side language models.
+- Xcode 27 (beta).
+- A credential: an App Attest client ID from the Anthropic console, or an API key for simulator development. See [Authentication](#authentication).
+
+## Installation
+
+Add the package to your `Package.swift`:
+
+```swift
+dependencies: [
+  .package(url: "https://github.com/anthropics/ClaudeForFoundationModels.git", from: "0.1.0")
+]
+```
+
+Or in Xcode: **File ▸ Add Package Dependencies…** and enter the repository URL.
+
+Then add `ClaudeForFoundationModels` to your target's dependencies and import it alongside `FoundationModels`:
+
+```swift
+import FoundationModels
+import ClaudeForFoundationModels
+```
+
+## Quick start
+
+```swift
+import FoundationModels
+import ClaudeForFoundationModels
+
+let model = ClaudeLanguageModel(
+  name: .sonnet5,
+  auth: .apiKey(ProcessInfo.processInfo.environment["ANTHROPIC_API_KEY"] ?? "")
+)
+
+let session = LanguageModelSession(model: model)
+let response = try await session.respond(to: "Plan a 4-day trip to Buenos Aires.")
+print(response.content)
+```
+
+`ClaudeLanguageModel` is the entry point. Pass it to `LanguageModelSession` and use the session exactly as you would with any Foundation Models provider.
+
+## Example
+
+[`Examples/ClaudeExample`](Examples/ClaudeExample) is a runnable command-line target that streams one chat turn through `LanguageModelSession` to the terminal, with token usage at the end (running it requires a macOS 27 host):
+
+```sh
+ANTHROPIC_API_KEY=<key> swift run ClaudeExample "What should I see in Kyoto?"
+```
+
+Pass `--search` to enable server-side web search for the turn:
+
+```sh
+ANTHROPIC_API_KEY=<key> swift run ClaudeExample --search "Top spaceflight news this week?"
+```
+
+## Choosing a model
+
+Model identifiers are values of `ClaudeModel`. Use a compiled-in constant, or construct one with explicit capabilities for an ID that isn't compiled in yet (see [Capabilities](#capabilities)):
+
+```swift
+ClaudeLanguageModel(name: .opus5_5, auth: auth)
+```
+
+Constants mirror API model IDs (`.opus5_5` is `claude-opus-5-5`) and carry each model's capabilities. New models ship as new constants in package releases.
+
+Dateless model IDs like `claude-opus-5-5` (the 4.6 generation onward) are pinned snapshots, not evergreen pointers — the model behind an ID doesn't change underneath you.
+
+### Capabilities
+
+Each model declares what it accepts — sampling parameters, effort levels, adaptive thinking, structured output, and image input. The bridge uses this to decide which request fields to send, since sending a field a model rejects is a hard error. The constants carry the right capabilities. For an ID that isn't compiled in, declare what the model accepts:
+
+```swift
+let model = ClaudeModel(
+  id: "claude-experimental-x",
+  capabilities: .init(effortLevels: [.low, .high], structuredOutput: true)
+)
+ClaudeLanguageModel(name: model, auth: auth)
+```
+
+### Effort
+
+Pin a Claude effort level for every request with `fixedEffort:`. It takes precedence over the framework's per-request reasoning hints. The API defaults to `high` when no effort is sent:
+
+```swift
+ClaudeLanguageModel(name: .opus5_5, auth: auth, fixedEffort: .xhigh)
+```
+
+The framework's reasoning levels map to effort per request: `.light` → `low`, `.moderate` → `medium`, `.deep` → `high`, and `.custom` accepts a Claude effort name directly (`"xhigh"`, `"max"`). Levels a model doesn't accept are dropped — a reasoning level is a hint, not a contract.
+
+The level must be one the model accepts — each model declares which of the five levels (`low`, `medium`, `high`, `xhigh`, `max`) it takes.
+
+### Fallbacks
+
+Some models decline requests in certain policy areas, such as cybersecurity or biology. Name fallback models with `fallbacks:`, and the API retries a declined request on them, in order, within the same request:
+
+```swift
+ClaudeLanguageModel(name: .opus5_5, auth: auth, fallbacks: [.opus4_8])
+```
+
+You can name up to three fallbacks, and each one must be a model that the requested model allows as a fallback. To use the requested model's default fallback configuration instead, pass `fallbacks: .serverDefault`. The API then picks the fallback that's recommended for the policy area of the refusal, and for an area with no recommended fallback, the refusal stands.
+
+A model can decline after it has started to answer. The fallback model then continues from the declining model's text, so the response reads as one answer. An empty text segment marks the handover, and the response entry reports it:
+
+```swift
+for case .response(let entry) in session.transcript {
+  if let handover = entry.claudeHandovers.last {
+    print("\(handover.fromModelID) declined, and \(handover.toModelID) finished the answer")
+  }
+}
+```
+
+After a fallback, the API serves the conversation's next requests straight from the fallback model, for about an hour. Those responses have no handover. To see which model served a response, use `entry.claudeModelID`.
+
+Each fallback gets the thinking and effort it accepts, the same way the requested model does. With `fixedEffort:`, each fallback gets the closest level it accepts. A fallback can also narrow what the model offers. A schema or an image needs every model in the chain to support it, and sampling parameters are sent only when every model accepts them. `session.usage` counts the tokens of the model that served each response, not the tokens of a declined attempt. With `.proxied`, the relay has to forward the `anthropic-beta` header, because fallbacks need it.
+
+## Authentication
+
+Set the credential with the `auth:` parameter.
+
+```swift
+// Recommended. Register the app in the Anthropic console to get a client ID;
+// each install then proves it's a genuine, unmodified copy via App Attest,
+// and usage bills to your workspace. The app ships no key and needs no
+// developer backend. Works in development and production; requires a
+// physical device.
+ClaudeLanguageModel(name: .sonnet5, auth: .appAttest(clientID: "clid_..."))
+
+// An API key is useful for simulator iteration. A bundled key is
+// extractable from a shipping app, so don't release with one.
+ClaudeLanguageModel(name: .sonnet5, auth: .apiKey("..."))
+
+// Your own backend. The relay at `baseURL` adds the credential server-side;
+// the app ships no key. `headers` are sent on every request so the proxy
+// can authorize the caller — pass `[:]` if it needs none.
+ClaudeLanguageModel(
+  name: .sonnet5,
+  auth: .proxied(headers: ["X-App-Token": "..."]),
+  baseURL: URL(string: "https://api.yourapp.com/claude")!
+)
+```
+
+### App Attest
+
+`.appAttest` needs three things:
+
+- **A registered app.** Register the app's team ID and bundle ID in the
+  [Anthropic console](https://platform.claude.com/settings/workspaces/default/app-integrations).
+  The client ID it issues is public configuration that is safe to include in
+  the app binary.
+- **The App Attest capability.** Add the App Attest entitlement to the app
+  (`com.apple.developer.devicecheck.appattest-environment`); this requires an
+  explicitly registered App ID.
+- **A physical device.** Simulators and hardware without a Secure Enclave
+  throw `ClaudeError.attestationUnsupported` — keep `.apiKey` for simulator
+  iteration.
+
+The first request on a fresh install attests the device with Apple (a few
+seconds, once per install). Front that cost at app launch instead of paying
+it on the first prompt:
+
+```swift
+try await model.authenticateIfNeeded()
+```
+
+This throws if attestation fails — an unregistered client ID, an unsupported
+device — so the app learns before the user's first prompt does.
+`session.prewarm()` also starts attestation, but as a fire-and-forget hint
+with no error reporting; prefer `authenticateIfNeeded()` when the app should
+react to failure. After first run, requests reuse a cached short-lived token
+from the Keychain, and renewing an expired token costs only a local Secure
+Enclave signature and one short round trip (two after an app relaunch);
+renewal never repeats the attestation.
+Credentials are device-bound and never sync or back up.
+
+### User profiles
+
+If your app makes requests on behalf of its users, attribute each request to that user's profile. Your backend creates one profile per user with the API's user profiles endpoints (`/v1/user_profiles`). It stores the profile's ID with the user, and passes that ID to the app. The app then passes the ID when it creates the model:
+
+```swift
+ClaudeLanguageModel(name: .opus5_5, auth: auth, userProfileID: profileID)
+```
+
+The bridge sends the ID in the `anthropic-user-profile-id` header on every request, along with the `user-profiles-2026-08-18` beta. The API checks the ID, so an unknown ID fails the request. With `.proxied`, the relay has to forward both headers.
+
+## Streaming
+
+`streamResponse(to:)` returns the response incrementally. Each element is a cumulative snapshot:
+
+```swift
+let stream = session.streamResponse(to: "Summarize today's top science stories.")
+for try await partial in stream {
+  print(partial.content)
+}
+```
+
+## Structured output
+
+Annotate a type with `@Generable` and request it with `generating:`. The model returns a value of that type:
+
+```swift
+@Generable
+struct Trip {
+  @Guide(description: "Destination city") var destination: String
+  @Guide(description: "Length in days") var days: Int
+}
+
+let response = try await session.respond(to: "Plan a trip to Tokyo.", generating: Trip.self)
+print(response.content.destination)
+```
+
+Structured output requires a model whose capabilities include it (all compiled-in constants do).
+
+## Server-side tools
+
+Server-side tools run on Anthropic's infrastructure within a single round-trip — web search, web fetch, and code execution. Configure them per model with `serverTools:`:
+
+```swift
+let model = ClaudeLanguageModel(
+  name: .sonnet5,
+  auth: auth,
+  serverTools: [
+    .webSearch(maxUses: 5),
+    .codeExecution,
+  ]
+)
+```
+
+`.webSearch` and `.webFetch` accept a `domains:` filter — `.unrestricted` (the default), `.allowing([...])`, or `.blocking([...])` — and an optional `maxUses`. These are distinct from the framework's `tools:` array, which holds client-side tools the framework invokes on the device.
+
+In the transcript, a response entry's segments run in the order the model produced them: prose in text segments and, wherever the model searched, fetched, or ran code, an empty segment holding that call's place. Ask the entry which it is to render the activity inline; a call appears as soon as the model issues it, with its `outcome` filled in when the result arrives in the same response:
+
+```swift
+for case .response(let entry) in session.transcript {
+  for segment in entry.segments {
+    if let activity = entry.claudeServerToolActivity(for: segment) {
+      if case .webSearch(let search) = activity.content { print("Searched for \(search.query)") }
+    } else if case .text(let text) = segment {
+      print(text.content)
+    }
+  }
+}
+```
+
+To render searches inline while the answer is still streaming, walk the snapshot's entries the same way:
+
+```swift
+for try await snapshot in session.streamResponse(to: prompt) {
+  for case .response(let entry) in snapshot.transcriptEntries {
+    for segment in entry.segments {
+      // text or activity, as above
+    }
+  }
+}
+```
+
+`session.transcript.claudeServerToolActivities` lists every round-trip in the conversation, and also pairs a result that only arrived in a later response (when the model called one of your tools alongside the search).
+
+Everything the API needs back on later turns (thinking signatures, search results, citations, a search that was still running when the model called one of your tools) is kept on the transcript entries under a reserved `claude.content` metadata key and replayed for you, including across a persisted `Transcript`. Treat that key's value as opaque.
+
+## Error handling
+
+Provider errors that don't map onto a Foundation Models `LanguageModelError` surface as `ClaudeError`. Pattern-match to drive product flows:
+
+```swift
+do {
+  let response = try await session.respond(to: prompt)
+  print(response.content)
+} catch ClaudeError.missingCredential {
+  // Prompt for an API key.
+} catch {
+  // Foundation Models errors (guardrails, context length, decoding) and transport errors.
+}
+```
+
+## What this package provides
+
+The public surface is Apple's Foundation Models provider conformance plus the configuration types that reach it — `ClaudeLanguageModel`, `ClaudeModel`, `AuthMode`, and `ClaudeServerTool`. It is not a general-purpose Anthropic Messages API client.
+
+## Support
+
+**Maintenance status:** maintained on a best-effort basis, provided as is, and not accepting external contributions.
+
+Bug reports and feedback are welcome — please [open an issue](../../issues). We triage issues and address them on a best-effort basis.
+
+## License
+
+Apache 2.0 — see [LICENSE](LICENSE).
+
+Copyright 2026 Anthropic PBC

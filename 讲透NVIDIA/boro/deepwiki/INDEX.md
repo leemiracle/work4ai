@@ -1,0 +1,31 @@
+# DeepWiki 索引 — NVIDIA/boro
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 178480 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started and Configuration](1.1-getting-started-and-configuration.md)
+  - [1.2 CLI Commands Reference](1.2-cli-commands-reference.md)
+- [2 Review Pipeline](2-review-pipeline.md)
+  - [2.1 Orchestration and Commit Workers](2.1-orchestration-and-commit-workers.md)
+  - [2.2 Specialist Stages and Concern Clustering](2.2-specialist-stages-and-concern-clustering.md)
+  - [2.3 Findings Validation and Adjudication](2.3-findings-validation-and-adjudication.md)
+  - [2.4 Context Assembly and Prefetch](2.4-context-assembly-and-prefetch.md)
+  - [2.5 Upstream Follow-up (lore and Fixes:)](2.5-upstream-follow-up-lore-and-fixes.md)
+- [3 Model Backends and Inference Layer](3-model-backends-and-inference-layer.md)
+  - [3.1 chat_completion, Streaming and Retries](3.1-chat-completion-streaming-and-retries.md)
+  - [3.2 Token Budgets, Prompt Caching and Timeouts](3.2-token-budgets-prompt-caching-and-timeouts.md)
+  - [3.3 Repository Tool Loop](3.3-repository-tool-loop.md)
+  - [3.4 Payload Builders and Response Parsers](3.4-payload-builders-and-response-parsers.md)
+- [4 Targets and Prompt Corpora](4-targets-and-prompt-corpora.md)
+  - [4.1 TargetSpec Trait and Dispatch](4.1-targetspec-trait-and-dispatch.md)
+  - [4.2 Kernel and QEMU Targets](4.2-kernel-and-qemu-targets.md)
+  - [4.3 libvirt and virt-manager Targets](4.3-libvirt-and-virt-manager-targets.md)
+- [5 Apply, Build and Test Workflows](5-apply-build-and-test-workflows.md)
+  - [5.1 Patch Apply and Conflict Resolution](5.1-patch-apply-and-conflict-resolution.md)
+  - [5.2 Build and Boot Testing with virtme-ng](5.2-build-and-boot-testing-with-virtme-ng.md)
+  - [5.3 Git, Worktrees and Process Execution](5.3-git-worktrees-and-process-execution.md)
+- [6 Output, Progress and Developer Tooling](6-output-progress-and-developer-tooling.md)
+  - [6.1 Reporting and Progress UI](6.1-reporting-and-progress-ui.md)
+  - [6.2 CI, Contributing and Scripts](6.2-ci-contributing-and-scripts.md)
+- [7 Glossary](7-glossary.md)

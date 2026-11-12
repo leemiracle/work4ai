@@ -1,0 +1,32 @@
+# DeepWiki 索引 — openai/chatkit-js
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 300359 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 High-Level Architecture](1.1-high-level-architecture.md)
+  - [1.2 Packages](1.2-packages.md)
+  - [1.3 Development Setup](1.3-development-setup.md)
+- [2 Core Package (@openai/chatkit)](2-core-package-openai-chatkit.md)
+  - [2.1 ChatKitOptions Configuration](2.1-chatkitoptions-configuration.md)
+  - [2.2 Widget System](2.2-widget-system.md)
+  - [2.3 OpenAIChatKit Element Interface](2.3-openaichatkit-element-interface.md)
+  - [2.4 Event System](2.4-event-system.md)
+- [3 React Bindings (@openai/chatkit-react)](3-react-bindings-openai-chatkit-react.md)
+  - [3.1 ChatKit Component](3.1-chatkit-component.md)
+  - [3.2 useChatKit Hook](3.2-usechatkit-hook.md)
+  - [3.3 Integration Patterns](3.3-integration-patterns.md)
+- [4 Integration Guides](4-integration-guides.md)
+  - [4.1 Quick Start](4.1-quick-start.md)
+  - [4.2 Backend Configuration](4.2-backend-configuration.md)
+  - [4.3 Theming and Customization](4.3-theming-and-customization.md)
+  - [4.4 Client Tools and Extensions](4.4-client-tools-and-extensions.md)
+- [5 Documentation System](5-documentation-system.md)
+  - [5.1 Site Configuration](5.1-site-configuration.md)
+  - [5.2 API Documentation Generation](5.2-api-documentation-generation.md)
+  - [5.3 Custom Components](5.3-custom-components.md)
+- [6 Development Workflow](6-development-workflow.md)
+  - [6.1 Continuous Integration](6.1-continuous-integration.md)
+  - [6.2 Release Management](6.2-release-management.md)
+  - [6.3 Code Quality Standards](6.3-code-quality-standards.md)
+- [7 Glossary](7-glossary.md)

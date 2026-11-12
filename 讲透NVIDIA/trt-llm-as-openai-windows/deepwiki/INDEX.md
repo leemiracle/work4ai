@@ -1,0 +1,40 @@
+# DeepWiki 索引 — NVIDIA/trt-llm-as-openai-windows
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 31 页 · 全文 498102 字符
+
+- [1 Home](1-home.md)
+  - [1.1 System Architecture](1.1-system-architecture.md)
+- [2 Getting Started](2-getting-started.md)
+  - [2.1 Prerequisites and Dependencies](2.1-prerequisites-and-dependencies.md)
+  - [2.2 Model Preparation](2.2-model-preparation.md)
+  - [2.3 Launching the Server](2.3-launching-the-server.md)
+- [3 API Usage](3-api-usage.md)
+  - [3.1 Available Endpoints](3.1-available-endpoints.md)
+  - [3.2 Chat Completions](3.2-chat-completions.md)
+  - [3.3 Text Completions](3.3-text-completions.md)
+  - [3.4 Client Integration Examples](3.4-client-integration-examples.md)
+- [4 Architecture and Implementation](4-architecture-and-implementation.md)
+  - [4.1 Component Overview](4.1-component-overview.md)
+  - [4.2 Flask Application Layer](4.2-flask-application-layer.md)
+  - [4.3 TensorRT-LLM Inference Engine](4.3-tensorrt-llm-inference-engine.md)
+  - [4.4 Prompt Formatting System](4.4-prompt-formatting-system.md)
+  - [4.5 Request Processing Pipeline](4.5-request-processing-pipeline.md)
+  - [4.6 Streaming Responses](4.6-streaming-responses.md)
+- [5 Configuration Reference](5-configuration-reference.md)
+  - [5.1 Server Configuration](5.1-server-configuration.md)
+  - [5.2 Model and Engine Settings](5.2-model-and-engine-settings.md)
+  - [5.3 Prompt Customization](5.3-prompt-customization.md)
+- [6 Project Structure](6-project-structure.md)
+  - [6.1 Directory Layout](6.1-directory-layout.md)
+  - [6.2 Dependencies](6.2-dependencies.md)
+- [7 Advanced Topics](7-advanced-topics.md)
+  - [7.1 AWQ Quantization](7.1-awq-quantization.md)
+  - [7.2 Performance Considerations](7.2-performance-considerations.md)
+- [8 Legal Information](8-legal-information.md)
+  - [8.1 Project License](8.1-project-license.md)
+  - [8.2 Third-Party Licenses](8.2-third-party-licenses.md)
+
+## 附：结构清单外的页
+- [Building TensorRT Engines](x1-building-tensorrt-engines.md)
+- [Downloading Models and Weights](x2-downloading-models-and-weights.md)

@@ -1,0 +1,31 @@
+# DeepWiki 索引 — NVIDIA/edk2-nvidia
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 636112 字符
+
+- [1 Overview](1-overview.md)
+- [2 Build System and Configuration](2-build-system-and-configuration.md)
+  - [2.1 Stuart Build Orchestration](2.1-stuart-build-orchestration.md)
+  - [2.2 Platform Configuration Files (DSC/FDF)](2.2-platform-configuration-files-dsc-fdf.md)
+  - [2.3 Kconfig Configuration System](2.3-kconfig-configuration-system.md)
+- [3 Firmware Initialization Phases](3-firmware-initialization-phases.md)
+  - [3.1 Pre-EFI Initialization (PrePi)](3.1-pre-efi-initialization-prepi.md)
+  - [3.2 Platform Resource Management](3.2-platform-resource-management.md)
+  - [3.3 DXE Platform Initialization](3.3-dxe-platform-initialization.md)
+- [4 Device Tree System](4-device-tree-system.md)
+  - [4.1 Device Tree Loading and Preparation](4.1-device-tree-loading-and-preparation.md)
+  - [4.2 Device Tree Helper Library](4.2-device-tree-helper-library.md)
+- [5 Platform Configuration Services](5-platform-configuration-services.md)
+  - [5.1 BIOS Setup and HII Interface](5.1-bios-setup-and-hii-interface.md)
+  - [5.2 UEFI Variable Management](5.2-uefi-variable-management.md)
+  - [5.3 Boot Manager and Boot Options](5.3-boot-manager-and-boot-options.md)
+- [6 Hardware Drivers and Protocols](6-hardware-drivers-and-protocols.md)
+  - [6.1 PCIe Controller Drivers](6.1-pcie-controller-drivers.md)
+  - [6.2 BPMP IPC and System Management](6.2-bpmp-ipc-and-system-management.md)
+- [7 Operating System Boot Support](7-operating-system-boot-support.md)
+  - [7.1 Android Boot Implementation](7.1-android-boot-implementation.md)
+  - [7.2 Kernel and Device Tree Handoff](7.2-kernel-and-device-tree-handoff.md)
+- [8 Platform Variants](8-platform-variants.md)
+  - [8.1 TH500 Server Platform](8.1-th500-server-platform.md)
+  - [8.2 TegraVirt Virtualization Platform](8.2-tegravirt-virtualization-platform.md)
+  - [8.3 Jetson Embedded Platforms](8.3-jetson-embedded-platforms.md)

@@ -1,18 +1,12 @@
-# DeepWiki 抓取覆盖率检查
+# Coverage Check
 
-- _links.txt 链接总数: 16
-- 实际 md 文件数: 16
-- 缺失页: 0
-- 空页(<= 500B): 0
+- repo: deepseek-ai/DualPipe
+- fetched: 2026-10-30
+- 结构清单页数: 16
+- 落盘页数: 16
 
-## 结论
-**100% 覆盖**：全部链接均有对应 Markdown 文件且非空。
+- 覆盖: 16/16 (100%)
 
-## 抽查 3 页
-
-| 页面 | 大小(B) | 状态 | 检查 |
-|---|---|---|---|
-| 2.1-dualpipe-implementation | 7208 | 正常 | PASS |
-| 5-performance-comparison | 6110 | 正常 | PASS |
-| 1.2-key-concepts | 7221 | 正常 | PASS |
-
+## 全层级对账终判（dw_reconcile_dir.py, 2026-10-30）
+- 结构全层级 16 页 vs 落盘 17 页（结构外/三级页 extra 1）
+- 终判: TRUE_100

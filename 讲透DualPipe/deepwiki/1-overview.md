@@ -1,148 +1,181 @@
-> 来源: [https://deepwiki.com/deepseek-ai/DualPipe/1-overview](https://deepwiki.com/deepseek-ai/DualPipe/1-overview)
-> DeepWiki deepseek-ai/DualPipe
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/DualPipe · page 1 Overview · fetched 2026-10-30 -->
 
 # Overview
 
-  Relevant source files 
- - [README.md](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1)
- - [deep_ep/__init__.py](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py)
- 
-  
+<details>
+<summary>Relevant source files</summary>
+
+The following files were used as context for generating this wiki page:
+
+- [README.md](README.md)
+- [dualpipe/__init__.py](dualpipe/__init__.py)
+
+</details>
+
+
+
 ## Purpose and Scope
 
- DeepEP (DeepEveryParallel) is a high-performance communication library tailored for modern machine learning training and inference, specifically optimized for **Mixture-of-Experts (MoE) expert parallelism**. It provides high-throughput and low-latency all-to-all GPU kernels for MoE dispatch and combine operations, supporting low-precision formats like FP8 [README.md1-5](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L1-L5)
+This documentation covers **DualPipe**, an innovative bidirectional pipeline parallelism algorithm designed for efficient distributed training of large neural networks. DualPipe achieves full overlap of forward and backward computation-communication phases, significantly reducing pipeline bubbles compared to traditional approaches.
 
- The library features a lightweight **Just-In-Time (JIT)** compilation system, allowing it to run without pre-compilation of CUDA kernels during installation [README.md3-5](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L3-L5) DeepEP V2 introduces a significant architectural shift from the NVSHMEM-based V1 to a more efficient **NCCL Gin backend**, achieving up to 1.3x peak performance while reducing SM occupancy by up to 4x [README.md9-57](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L9-L57)
+This overview introduces the core concepts, architecture, and benefits of both DualPipe and its variant DualPipeV. For installation instructions, see [Installation & Setup](#1.1), and for deeper technical details about specific implementations, see [Key Concepts](#1.2), [DualPipe Architecture](#2), and [DualPipeV Architecture](#3).
 
- **Sources:** [README.md1-17](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L1-L17) [deep_ep/__init__.py71-84](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L71-L84)
+Sources: [README.md:1-3]()
 
- 
----
+## What is DualPipe?
 
- 
-## Architectural Evolution: V1 to V2
+DualPipe is a pipeline parallelism algorithm introduced in the DeepSeek-V3 Technical Report that optimizes distributed training by enabling full overlap between computation and communication phases. Traditional pipeline parallelism methods often suffer from efficiency issues due to pipeline bubbles (idle time) between ranks. DualPipe addresses this by implementing a bidirectional schedule that maximizes hardware utilization.
 
- DeepEP V2 represents a complete refactoring of the communication layer. The transition from V1 to V2 involves several major shifts in backend technology and resource management:
+DualPipeV is a more efficient variant that uses a concise V-shape schedule derived from DualPipe through a "cut-in-half" procedure, requiring only half the number of devices while maintaining the same pipeline bubble size.
 
- 
-| Feature | V1 (Legacy) | V2 (Elastic) |
-|---|---|---|
-| Backend | NVSHMEM (IBGDA/Symmetric Heap) | NCCL Gin (Header-only, lightweight) |
-| Interface | Buffer class | ElasticBuffer & EPHandle |
-| Resource Allocation | Manual tuning (num_sms, Config) | Analytical calculation via formulas |
-| Domain Scale | Limited scale-out | Up to EP2048 |
-| SM Occupancy | High (e.g., 24 SMs) | Low (e.g., 4-6 SMs) |
-| JIT Pipeline | Partial / Pre-compiled | Fully JIT (NVRTC-based) |
-
- **Sources:** [README.md9-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L9-L25) [README.md115-116](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L116) [deep_ep/buffers/elastic.py16-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L30)
-
- 
----
-
- 
-## System Architecture and Code Entities
-
- The following diagram maps the high-level system components to their corresponding code entities and files, illustrating the bridge between the Python user space and the CUDA kernel implementations.
-
- 
+```mermaid
+flowchart TD
+    subgraph "Pipeline Parallelism Evolution"
+        direction LR
+        Traditional["Traditional (1F1B)"] --> ZB1P["Zero Bubble One-way Pipeline (ZB1P)"]
+        ZB1P --> DualPipe["DualPipe (Bidirectional)"]
+        DualPipe --> DualPipeV["DualPipeV (V-shaped Schedule)"]
+    end
+    
+    Traditional -->|"Large Bubbles: (PP-1)(F+B)"| Efficiency
+    ZB1P -->|"Reduced Bubbles: (PP-1)(F+B-2W)"| Efficiency
+    DualPipe -->|"Minimal Bubbles: (PP/2-1)(F&B+B-3W)"| Efficiency
+    DualPipeV -->|"Same Bubble Size with Half Devices"| Efficiency
+    
+    Efficiency["Pipeline Efficiency"]
 ```
 
+Sources: [README.md:1-16]()
+
+## Key Benefits
+
+DualPipe and DualPipeV offer several advantages over traditional pipeline parallelism approaches:
+
+1.  **Full computation-communication overlap**: Both implementations achieve complete overlap of forward and backward passes.
+2.  **Reduced pipeline bubbles**: Significantly smaller idle time compared to traditional methods.
+3.  **Efficient resource usage**: DualPipeV achieves the same pipeline efficiency as DualPipe but with half the number of devices.
+4.  **Practical trade-offs**: Uses 2× the parameter memory for better computational efficiency.
+
+The following table compares key metrics of different pipeline parallelism methods:
+
+| Method | Pipeline Bubble | Parameter Memory Per Device | Activation Memory Per Device | Number of Devices |
+| :--- | :--- | :--- | :--- | :--- |
+| 1F1B | (*PP*-1)(𝐹+𝐵) | 1× | *PP* | *PP* |
+| ZB1P | (*PP*-1)(𝐹+𝐵-2𝑊) | 1× | *PP* | *PP* |
+| DualPipe | (*PP*/2-1)(𝐹&𝐵+𝐵-3𝑊) | 2× | *PP*+1 | *PP* |
+| DualPipeV | (*PP*/2-1)(𝐹&𝐵+𝐵-3𝑊) | 2× | *PP*+1 | *PP*/2 |
+
+**Definitions:**
+*   *PP*: Number of pipeline stages (must be even).
+*   𝐹: Execution time of a forward chunk.
+*   𝐵: Execution time of a full backward chunk.
+*   𝑊: Execution time of a "backward for weights" chunk.
+*   𝐹&𝐵: Execution time of two mutually overlapped forward and backward chunks.
+
+Sources: [README.md:25-36]()
+
+## High-Level Architecture
+
+DualPipe consists of two main implementations: the standard `DualPipe` and the more resource-efficient `DualPipeV`. Both implementations are built on top of PyTorch (version 2.0+) and share core components for weight gradient management and communication.
+
+```mermaid
+graph TD
+    subgraph "DualPipe Package Structure"
+        DP_INIT["dualpipe/__init__.py"]
+        DP_CORE["dualpipe/dualpipe.py"]
+        DPV_CORE["dualpipe/dualpipev.py"]
+        
+        subgraph "Core Components"
+            WGS["dualpipe/utils.py: WeightGradStore"]
+            COMM["dualpipe/comm.py: P2P Communication"]
+        end
+    end
+    
+    DP_INIT -->|"Exports"| DP_CORE
+    DP_INIT -->|"Exports"| DPV_CORE
+    DP_INIT -->|"Exports"| WGS
+    
+    DP_CORE -->|"Uses"| WGS
+    DP_CORE -->|"Uses"| COMM
+    DPV_CORE -->|"Uses"| WGS
+    DPV_CORE -->|"Uses"| COMM
 ```
 
- **Diagram: DeepEP V2 Code Entity Mapping**
+Sources: [dualpipe/__init__.py:1-17](), [README.md:38-47]()
 
- **Sources:** [deep_ep/__init__.py87-97](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L87-L97) [deep_ep/buffers/elastic.py16-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L30) [README.md13-17](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L13-L17) [csrc/python_api.cpp1-39](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/python_api.cpp#L1-L39)
+## Pipeline Execution Model
 
- 
----
+### DualPipe Schedule
+DualPipe uses a bidirectional approach where micro-batches flow in two directions through pipeline stages. This schedule achieves full overlapping of computation and communication, minimizing idle time.
 
- 
-## Core Abstractions: ElasticBuffer and EPHandle
+### DualPipeV Schedule
+DualPipeV implements a V-shape schedule that achieves the same pipeline efficiency with half the number of devices by mapping two pipeline stages to a single physical device.
 
- 
-### ElasticBuffer
-
- The `ElasticBuffer` is the primary interface in V2. It manages a single contiguous GPU buffer that serves as a symmetric memory window across the communication group [README.md115-116](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L116) It uses `NCCLSymmetricMemoryContext` to handle cross-GPU memory registration and RDMA window management [csrc/kernels/backend/nccl.cu10-50](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/kernels/backend/nccl.cu#L10-L50) It supports both standard EP operations and experimental features like PP and Engram.
-
- 
-### EPHandle
-
- The `EPHandle` is a metadata object produced during the dispatch phase. It caches critical routing information, including:
-
- 
- - **Expert Alignment**: Padding information for memory efficiency [deep_ep/buffers/elastic.py32-40](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L32-L40)
- - **Token Counts**: `psum_num_recv_tokens_per_expert` and `num_recv_tokens` [deep_ep/buffers/elastic.py45-55](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L45-L55)
- - **Routing Metadata**: `topk_idx` and `recv_src_metadata` for the combine phase [deep_ep/buffers/elastic.py42-50](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L42-L50)
- 
- This handle can be reused for subsequent `combine` operations or cached during inference decoding to eliminate redundant metadata calculation [README.md18-20](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L18-L20)
-
- **Sources:** [deep_ep/buffers/elastic.py16-110](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L110) [README.md115-130](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L130)
-
- 
----
-
- 
-## Supported Communication Modes
-
- DeepEP V2 provides a unified interface for several high-performance primitives, executed via the NCCL Gin backend:
-
- 
- - **EP Dispatch/Combine**: The core MoE all-to-all kernels. Supports `do_expand` for GEMM layout optimization and `expert_alignment` for memory efficiency [deep_ep/buffers/elastic.py134-210](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L134-L210)
- - **Engram (Remote Memory Access)**: Zero-SM RDMA-based remote memory fetching (e.g., for KV cache). Uses `engram_write` and `engram_fetch` (returning a hook) to access remote memory with minimal compute overhead [README.md23-31](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L23-L31)
- - **Pipeline Parallelism (PP)**: Experimental zero-SM RDMA primitives (`pp_send`, `pp_recv`) for point-to-point communication between pipeline stages [README.md24-100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L24-L100)
- - **All-Gather Reduce-Scatter (AGRS)**: Experimental primitives for data and tensor parallelism, including `all_gather` updates [README.md37-98](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L37-L98)
- 
- 
+```mermaid
+flowchart LR
+    subgraph "DualPipe Scheduling Logic"
+        direction TB
+        STEP["dualpipe.py: step()"]
+        F_CHUNK["_forward_compute_chunk"]
+        B_CHUNK["_backward_compute_chunk"]
+        FB_CHUNK["_forward_backward_compute_chunk"]
+        
+        STEP --> F_CHUNK
+        STEP --> B_CHUNK
+        STEP --> FB_CHUNK
+    end
+    
+    subgraph "Resource Management"
+        direction TB
+        MEM["_free_tensors"]
+        GRAD["WeightGradStore.put"]
+    end
+    
+    FB_CHUNK --> MEM
+    B_CHUNK --> GRAD
 ```
 
+Sources: [README.md:5-23](), [dualpipe/dualpipe.py:228-348]()
+
+## Core Components
+
+The DualPipe repository is organized around these key components:
+
+1.  **`DualPipe` Class**: The main implementation of the bidirectional pipeline parallelism algorithm [dualpipe/dualpipe.py:10]().
+2.  **`DualPipeV` Class**: The V-shape schedule variant requiring half the number of devices [dualpipe/dualpipev.py:11]().
+3.  **`WeightGradStore`**: Manages weight gradients during pipeline execution to allow for deferred gradient updates [dualpipe/utils.py:10]().
+4.  **Communication Utilities**: Handles point-to-point communication (e.g., `set_p2p_tensor_shapes`) between pipeline stages [dualpipe/comm.py:11]().
+
+Sources: [dualpipe/__init__.py:3-9]()
+
+## System Requirements and Compatibility
+
+DualPipe is designed to work with:
+*   PyTorch 2.0 and above [README.md:51]()
+*   CUDA-capable GPUs for distributed training and NCCL for P2P communication.
+
+For real-world applications, users must implement a custom `overlapped_forward_backward` method tailored to their specific modules to handle the concurrent execution of forward and backward passes.
+
+Sources: [README.md:47-51]()
+
+## Getting Started
+
+To quickly get started with DualPipe, you can run the provided examples:
+
+```bash
+python examples/example_dualpipe.py
+python examples/example_dualpipev.py
 ```
 
- **Diagram: V2 Dispatch Execution Flow**
+For detailed installation instructions, see [Installation & Setup](#1.1). For practical implementation details, see [DualPipe Example Usage](#2.2).
 
- **Sources:** [deep_ep/buffers/elastic.py113-400](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L113-L400) [README.md97-101](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L97-L101) [csrc/kernels/backend/nccl.cu60-100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/kernels/backend/nccl.cu#L60-L100)
+Sources: [README.md:38-47]()
 
- 
+## Citation and Contributors
+
+DualPipe was created and developed by Jiashi Li, Chengqi Deng, and Wenfeng Liang. The research is presented in the DeepSeek-V3 Technical Report. The DualPipeV variant incorporates the "Cut-in-half" concept introduced by Sea AI Lab.
+
+Sources: [README.md:54-69]()
+
 ---
 
- 
-## Resource Allocation and Topology
-
- V2 eliminates the need for manual auto-tuning by using analytical formulas to determine optimal resource usage.
-
- 
-### Analytical SM Tuning
-
- The method `get_theoretical_num_sms` calculates the required SM count based on hardware performance characteristics:
-
- 
- - **Bandwidth Modeling**: Considers `sm_read_gbs`, `sm_write_gbs`, `rdma_gbs`, and `nvlink_gbs` [deep_ep/buffers/elastic.py441-450](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L441-L450)
- - **Overlap**: Adjusts counts based on the `prefer_overlap_with_compute` flag to allow communication to hide behind computation [deep_ep/buffers/elastic.py121-125](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L121-L125)
- 
- 
-### Topology Domains
-
- DeepEP models the cluster as a logical grid of ranks:
-
- 
- - **Scale-up Domain**: Communication via NVLink (Intra-node/Intra-LSA) [deep_ep/utils/envs.py10-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L10-L25)
- - **Scale-out Domain**: Communication via RDMA (Inter-node/Rail-only) [deep_ep/utils/envs.py10-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L10-L25)
- - **Hybrid Mode**: When `allow_hybrid_mode=True`, the library uses a hierarchical approach, combining NVLink and RDMA to maximize throughput in large clusters [deep_ep/buffers/elastic.py120-121](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L120-L121)
- 
- **Sources:** [deep_ep/buffers/elastic.py113-470](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L113-L470) [README.md18-22](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L18-L22) [deep_ep/utils/envs.py7-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L7-L30)
-
- 
----
-
- 
-## Hardware and Software Requirements
-
- To utilize DeepEP V2, the following environment is required:
-
- 
- - **GPU Architecture**: NVIDIA Hopper (SM90) or newer (e.g., Blackwell/SM100) [README.md63-65](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L63-L65)
- - **CUDA**: 12.3 or above for SM90 support [README.md67-68](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L67-L68)
- - **NCCL**: 2.30.4 or above (recommended via `nvidia-nccl-cu13` pip package) [README.md70-79](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L70-L79)
- - **Interconnect**: NVLink for intra-node; RDMA (InfiniBand/RoCE) for inter-node [README.md71-72](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L71-L72)
- - **Python**: 3.8+ with PyTorch 2.10+ [README.md66-69](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L66-L69)
- 
- **Sources:** [README.md63-72](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L63-L72) [deep_ep/__init__.py46-70](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L46-L70)

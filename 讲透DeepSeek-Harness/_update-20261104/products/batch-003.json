@@ -1,0 +1,1834 @@
+{
+ "nodes": [
+  {
+   "id": "document:packages/core/tool-executor-ptc/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/core/tool-executor-ptc/README.md",
+   "summary": "dsh-tool-executor-ptc 包参考：PTC 模式工具执行——模型只见 run_code+生成 SDK，程序内嵌套调用走共享受管管线。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "ptc",
+    "tool-executor"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/core/tool-executor-ptc/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/core/tool-executor-ptc/package.json",
+   "summary": "dsh-tool-executor-ptc 包清单：依赖 dsh-ptc-runtime/dsh-sandbox/dsh-tools 等。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/core/tool-executor-ptc/src/client.ts",
+   "type": "file",
+   "name": "client.ts",
+   "filePath": "packages/core/tool-executor-ptc/src/client.ts",
+   "summary": "Client 面 re-export barrel（2 行）。",
+   "tags": [
+    "barrel",
+    "client-face"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/core/tool-executor-ptc/src/config.ts",
+   "type": "file",
+   "name": "config.ts",
+   "filePath": "packages/core/tool-executor-ptc/src/config.ts",
+   "summary": "PTC executor Config schema：maxParallelSubCalls 等校验字段。",
+   "tags": [
+    "config",
+    "schema"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/core/tool-executor-ptc/src/errors.ts",
+   "type": "file",
+   "name": "errors.ts",
+   "filePath": "packages/core/tool-executor-ptc/src/errors.ts",
+   "summary": "CodeRunFailedError：程序运行失败的类型化错误（HarnessError 子类）。",
+   "tags": [
+    "error",
+    "typed-error"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/core/tool-executor-ptc/src/errors.ts:CodeRunFailedError",
+   "type": "class",
+   "name": "CodeRunFailedError",
+   "filePath": "packages/core/tool-executor-ptc/src/errors.ts",
+   "lineRange": [
+    12,
+    17
+   ],
+   "summary": "程序运行失败的类型化错误，携带 exitCode/stderr 等诊断。",
+   "tags": [
+    "error",
+    "typed-error"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/core/tool-executor-ptc/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/core/tool-executor-ptc/src/index.ts",
+   "summary": "PTC 执行插件入口：PtcExecutor 只暴露 run_code schema+SDK 提示 section，嵌套调用经共享 ToolExecutionPipeline（非嵌套非 run_code 调用直接拒绝）。",
+   "tags": [
+    "plugin",
+    "ptc",
+    "tool-executor",
+    "entry-point"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/core/tool-executor-ptc/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/core/tool-executor-ptc/src/index.ts",
+   "lineRange": [
+    82,
+    84
+   ],
+   "summary": "Cordis 插件入口：装载 PtcExecutor 到当前 scope 的 ctx.tools.setExecutor。",
+   "tags": [
+    "plugin-entry",
+    "installer"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/core/tool-executor-ptc/src/index.ts:PtcExecutor",
+   "type": "class",
+   "name": "PtcExecutor",
+   "filePath": "packages/core/tool-executor-ptc/src/index.ts",
+   "lineRange": [
+    20,
+    63
+   ],
+   "summary": "PTC ToolExecutor：describe 只返回 run_code schema，两个 prompt section（ptc-only 指令+运行时语言感知 SDK），嵌套经共享管线并拒绝直接调用其他工具。",
+   "tags": [
+    "tool-executor",
+    "ptc",
+    "prompt-section"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/core/tool-executor-ptc/src/ptc-calls.ts",
+   "type": "file",
+   "name": "ptc-calls.ts",
+   "filePath": "packages/core/tool-executor-ptc/src/ptc-calls.ts",
+   "summary": "PtcCalls：程序内嵌套工具调用的记账——每个 sub-dispatch 记日志可重构，只有外层精选结果进模型历史。",
+   "tags": [
+    "ptc",
+    "nested-calls",
+    "dispatch-log"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/core/tool-executor-ptc/src/ptc-calls.ts:PtcCalls",
+   "type": "class",
+   "name": "PtcCalls",
+   "filePath": "packages/core/tool-executor-ptc/src/ptc-calls.ts",
+   "lineRange": [
+    13,
+    64
+   ],
+   "summary": "嵌套调用记账器：登记每个 sub-dispatch 的入参出参日志，外层仅返回精选结果。",
+   "tags": [
+    "nested-calls",
+    "dispatch-log"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "type": "file",
+   "name": "ptc.ts",
+   "filePath": "packages/core/tool-executor-ptc/src/ptc.ts",
+   "summary": "run_code 传输构造：createRunCodeTool 在注册能力之外保留传输工具，语言感知 schema、沙箱策略/升级审批、dispatch-log waterfall 与 PtcCalls 集成。",
+   "tags": [
+    "run-code",
+    "transport",
+    "sandbox",
+    "ptc"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/core/tool-executor-ptc/src/ptc.ts:requirePtcRuntime",
+   "type": "function",
+   "name": "requirePtcRuntime",
+   "filePath": "packages/core/tool-executor-ptc/src/ptc.ts",
+   "lineRange": [
+    80,
+    90
+   ],
+   "summary": "解析当前已装载的 Ptc 运行时（TS/Python），缺失时类型化报错。",
+   "tags": [
+    "runtime",
+    "resolver"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/core/tool-executor-ptc/src/ptc.ts:renderJsonValue",
+   "type": "function",
+   "name": "renderJsonValue",
+   "filePath": "packages/core/tool-executor-ptc/src/ptc.ts",
+   "lineRange": [
+    174,
+    241
+   ],
+   "summary": "把 JSON 值渲染为程序内可读文本（截断/缩进/循环处理），供 SDK 文档与错误信息。",
+   "tags": [
+    "rendering",
+    "json"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/core/tool-executor-ptc/src/ptc.ts:createRunCodeTool",
+   "type": "function",
+   "name": "createRunCodeTool",
+   "filePath": "packages/core/tool-executor-ptc/src/ptc.ts",
+   "lineRange": [
+    273,
+    757
+   ],
+   "summary": "构造保留的 run_code 传输工具（注册能力之外）：语言感知描述、沙箱执行策略、升级审批、dispatch-log waterfall 整形与运行时绑定。",
+   "tags": [
+    "run-code",
+    "transport",
+    "factory"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/core/tool-executor-ptc/src/py-types.ts",
+   "type": "file",
+   "name": "py-types.ts",
+   "filePath": "packages/core/tool-executor-ptc/src/py-types.ts",
+   "summary": "Python SDK 生成器：JSON Schema→Python 类型（类名分配/受约束标量/文档行），renderToolsSdkPy 产出模型可见 Python SDK 文本。",
+   "tags": [
+    "sdk-generation",
+    "python",
+    "json-schema"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/core/tool-executor-ptc/src/py-types.ts:renderType",
+   "type": "function",
+   "name": "renderType",
+   "filePath": "packages/core/tool-executor-ptc/src/py-types.ts",
+   "lineRange": [
+    479,
+    711
+   ],
+   "summary": "递归渲染 JSON Schema 节点为 Python 类型表达（类分配/受约束标量/嵌套结构）。",
+   "tags": [
+    "sdk-generation",
+    "python",
+    "schema-rendering"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/core/tool-executor-ptc/src/py-types.ts:jsonSchemaToPy",
+   "type": "function",
+   "name": "jsonSchemaToPy",
+   "filePath": "packages/core/tool-executor-ptc/src/py-types.ts",
+   "lineRange": [
+    725,
+    730
+   ],
+   "summary": "单个 JSON Schema 节点到 Python 类型速记的入口转换。",
+   "tags": [
+    "sdk-generation",
+    "conversion"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/core/tool-executor-ptc/src/py-types.ts:renderToolsSdkPy",
+   "type": "function",
+   "name": "renderToolsSdkPy",
+   "filePath": "packages/core/tool-executor-ptc/src/py-types.ts",
+   "lineRange": [
+    762,
+    817
+   ],
+   "summary": "把全部工具 schema 组装为模型可见的 Python SDK 文本（类型+调用说明）。",
+   "tags": [
+    "sdk-generation",
+    "python"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/core/tool-executor-ptc/src/runtime-types.ts",
+   "type": "file",
+   "name": "runtime-types.ts",
+   "filePath": "packages/core/tool-executor-ptc/src/runtime-types.ts",
+   "summary": "PTC 运行时类型：PtcDispatchLog 等程序执行词汇。",
+   "tags": [
+    "type-definition",
+    "runtime-types"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/core/tool-executor-ptc/src/ts-types.ts",
+   "type": "file",
+   "name": "ts-types.ts",
+   "filePath": "packages/core/tool-executor-ptc/src/ts-types.ts",
+   "summary": "TypeScript SDK 生成器：renderSupportedSchema 把受支持 JSON Schema 渲染为 TS 类型文档，renderToolsSdk 组装 SDK 指令与 bash 示例。",
+   "tags": [
+    "sdk-generation",
+    "typescript",
+    "json-schema"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/core/tool-executor-ptc/src/ts-types.ts:renderSupportedSchema",
+   "type": "function",
+   "name": "renderSupportedSchema",
+   "filePath": "packages/core/tool-executor-ptc/src/ts-types.ts",
+   "lineRange": [
+    113,
+    231
+   ],
+   "summary": "渲染受支持 JSON Schema 为 TypeScript 类型文档（缩进/注释/受约束标量）。",
+   "tags": [
+    "sdk-generation",
+    "typescript",
+    "schema-rendering"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/core/tool-executor-ptc/src/ts-types.ts:jsonSchemaToTs",
+   "type": "function",
+   "name": "jsonSchemaToTs",
+   "filePath": "packages/core/tool-executor-ptc/src/ts-types.ts",
+   "lineRange": [
+    241,
+    248
+   ],
+   "summary": "单个 JSON Schema 节点到 TS 类型的入口转换。",
+   "tags": [
+    "sdk-generation",
+    "conversion"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/core/tool-executor-ptc/src/ts-types.ts:renderToolsSdk",
+   "type": "function",
+   "name": "renderToolsSdk",
+   "filePath": "packages/core/tool-executor-ptc/src/ts-types.ts",
+   "lineRange": [
+    313,
+    335
+   ],
+   "summary": "组装模型可见 TypeScript SDK 文本：类型文档+程序格式指令+bash 示例。",
+   "tags": [
+    "sdk-generation",
+    "typescript"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/core/tool-executor-ptc/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/core/tool-executor-ptc/src/types.ts",
+   "summary": "PTC executor 类型模块（品牌 id 等）。",
+   "tags": [
+    "type-definition"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/core/tool-executor-ptc/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/core/tool-executor-ptc/tsconfig.json",
+   "summary": "dsh-tool-executor-ptc TypeScript 叶配置。",
+   "tags": [
+    "configuration",
+    "typescript"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/core/tools/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/core/tools/README.md",
+   "summary": "dsh-tools 包参考：工具注册表、schema 编译、调用管线与批调度（工具能力面核心）。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "tools"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/core/tools/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/core/tools/package.json",
+   "summary": "dsh-tools 包清单：exports 含 /pipeline 子路径。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/core/tools/src/batch.ts",
+   "type": "file",
+   "name": "batch.ts",
+   "filePath": "packages/core/tools/src/batch.ts",
+   "summary": "单步工具批调度：独占调用成屏障、并行调用有界滚动池且启动前重分类；abort 为跳过调用合成错误结果保证回放有效。",
+   "tags": [
+    "scheduler",
+    "batch-execution",
+    "concurrency"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/core/tools/src/batch.ts:executeToolBatch",
+   "type": "function",
+   "name": "executeToolBatch",
+   "filePath": "packages/core/tools/src/batch.ts",
+   "lineRange": [
+    50,
+    96
+   ],
+   "summary": "执行原始调用批：解析参数→分组调度（屏障/并行池）→模型序结算，abort 为跳过调用合成错误结果。",
+   "tags": [
+    "batch-execution",
+    "scheduler"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/core/tools/src/batch.ts:runGroup",
+   "type": "function",
+   "name": "runGroup",
+   "filePath": "packages/core/tools/src/batch.ts",
+   "lineRange": [
+    117,
+    234
+   ],
+   "summary": "运行一个调度组：独占屏障或并行池滚动补充，重分类并发安全调用，组耗尽/中止时收尾。",
+   "tags": [
+    "scheduler",
+    "concurrency"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/core/tools/src/batch.ts:BatchSettlement",
+   "type": "class",
+   "name": "BatchSettlement",
+   "filePath": "packages/core/tools/src/batch.ts",
+   "lineRange": [
+    237,
+    285
+   ],
+   "summary": "批结算器：按模型序物化结果消息、跟踪 consumed/concludesTurn 等组结果。",
+   "tags": [
+    "settlement",
+    "ordering"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/core/tools/src/contracts.ts",
+   "type": "file",
+   "name": "contracts.ts",
+   "filePath": "packages/core/tools/src/contracts.ts",
+   "summary": "工具定义与调用数据契约：ToolDefinition/ToolOutputDefinition（render+presentationMeta）、RUN_CODE_NAME 保留名与三个类型化错误。",
+   "tags": [
+    "contract",
+    "type-definition",
+    "tool-definition"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/core/tools/src/contracts.ts:ToolActivationError",
+   "type": "class",
+   "name": "ToolActivationError",
+   "filePath": "packages/core/tools/src/contracts.ts",
+   "lineRange": [
+    139,
+    149
+   ],
+   "summary": "步骤级工具激活失败（activate 条件抛错）的类型化错误。",
+   "tags": [
+    "error",
+    "typed-error"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/core/tools/src/contracts.ts:ToolNotFoundError",
+   "type": "class",
+   "name": "ToolNotFoundError",
+   "filePath": "packages/core/tools/src/contracts.ts",
+   "lineRange": [
+    291,
+    307
+   ],
+   "summary": "调用未注册/不可见工具时的类型化错误（PTC 直呼其他工具也复用）。",
+   "tags": [
+    "error",
+    "typed-error"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/core/tools/src/contracts.ts:ToolOutputError",
+   "type": "class",
+   "name": "ToolOutputError",
+   "filePath": "packages/core/tools/src/contracts.ts",
+   "lineRange": [
+    310,
+    319
+   ],
+   "summary": "工具输出违反声明 schema 时的类型化错误。",
+   "tags": [
+    "error",
+    "typed-error"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/core/tools/src/events.ts",
+   "type": "file",
+   "name": "events.ts",
+   "filePath": "packages/core/tools/src/events.ts",
+   "summary": "工具面持久事件词汇（tools/* SessionEventMap 合并）。",
+   "tags": [
+    "type-definition",
+    "event-vocabulary"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/core/tools/src/executor.ts",
+   "type": "file",
+   "name": "executor.ts",
+   "filePath": "packages/core/tools/src/executor.ts",
+   "summary": "ToolExecutor 接口与批执行/不可用错误：executor 面（native/ptc）实现的 describe+execute 契约。",
+   "tags": [
+    "contract",
+    "executor",
+    "type-definition"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/core/tools/src/executor.ts:ToolBatchExecutionError",
+   "type": "class",
+   "name": "ToolBatchExecutionError",
+   "filePath": "packages/core/tools/src/executor.ts",
+   "lineRange": [
+    89,
+    94
+   ],
+   "summary": "批调度内部失败的聚合错误（携带已提交结果与上下文）。",
+   "tags": [
+    "error",
+    "batch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/core/tools/src/executor.ts:ToolExecutorUnavailableError",
+   "type": "class",
+   "name": "ToolExecutorUnavailableError",
+   "filePath": "packages/core/tools/src/executor.ts",
+   "lineRange": [
+    97,
+    102
+   ],
+   "summary": "scope 未选择 executor 时的类型化错误。",
+   "tags": [
+    "error",
+    "executor"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/core/tools/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/core/tools/src/index.ts",
+   "summary": "ToolsService（ctx.tools）：ScopedLayers 双层注册（全局+agent scope 遮蔽）、保留名拒绝、setExecutor 选择与 systemPrompt.tools 集成。",
+   "tags": [
+    "service-definition",
+    "registry",
+    "scoped-layers"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/core/tools/src/index.ts:ToolLayer",
+   "type": "class",
+   "name": "ToolLayer",
+   "filePath": "packages/core/tools/src/index.ts",
+   "lineRange": [
+    63,
+    87
+   ],
+   "summary": "一个 scope 的工具注册层（遮蔽全局层）。",
+   "tags": [
+    "scoped-layers",
+    "registry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/core/tools/src/index.ts:GuardLayer",
+   "type": "class",
+   "name": "GuardLayer",
+   "filePath": "packages/core/tools/src/index.ts",
+   "lineRange": [
+    93,
+    96
+   ],
+   "summary": "一个 scope 的守卫注册层（guard 循环防呆）。",
+   "tags": [
+    "scoped-layers",
+    "guard"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/core/tools/src/index.ts:ToolsService",
+   "type": "class",
+   "name": "ToolsService",
+   "filePath": "packages/core/tools/src/index.ts",
+   "lineRange": [
+    99,
+    403
+   ],
+   "summary": "tools 服务（Service Definition+Provider）：ScopedLayers 全局/scope 注册与遮蔽、保留名与输出契约校验、executor 选择、systemPrompt.tools 投影。",
+   "tags": [
+    "service",
+    "registry",
+    "scoped"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/core/tools/src/pipeline.ts",
+   "type": "file",
+   "name": "pipeline.ts",
+   "filePath": "packages/core/tools/src/pipeline.ts",
+   "summary": "共享调用管线：ToolExecutionPipeline 20 方法持有调用策略（pre/post waterfall、审批、around-dispatch 信号替换、超时、结果结算）供批与程序调度器复用。",
+   "tags": [
+    "pipeline",
+    "execution-policy",
+    "cancellation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/core/tools/src/pipeline.ts:toolErrorMessage",
+   "type": "function",
+   "name": "toolErrorMessage",
+   "filePath": "packages/core/tools/src/pipeline.ts",
+   "lineRange": [
+    648,
+    662
+   ],
+   "summary": "从任意错误提取模型可见的错误消息文本。",
+   "tags": [
+    "error",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/core/tools/src/pipeline.ts:fuseToolSignals",
+   "type": "function",
+   "name": "fuseToolSignals",
+   "filePath": "packages/core/tools/src/pipeline.ts",
+   "lineRange": [
+    714,
+    741
+   ],
+   "summary": "融合调用方与执行器信号为单 dispatch 信号，体结束后清理监听。",
+   "tags": [
+    "cancellation",
+    "signal"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/core/tools/src/pipeline.ts:ToolExecutionPipeline",
+   "type": "class",
+   "name": "ToolExecutionPipeline",
+   "filePath": "packages/core/tools/src/pipeline.ts",
+   "lineRange": [
+    62,
+    607
+   ],
+   "summary": "共享调用管线：pre/post-result waterfall、审批问询、around-dispatch 信号替换、超时预算、投影/最终化与错误结算——批与 PTC 程序调度共用的执行策略核心。",
+   "tags": [
+    "pipeline",
+    "execution-policy",
+    "waterfall"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/core/tools/src/schema.ts",
+   "type": "file",
+   "name": "schema.ts",
+   "filePath": "packages/core/tools/src/schema.ts",
+   "summary": "工具 schema 编译与 defineTool：spec→JSON Schema 编译器、参数校验、projectToolSchema 投影（含 detachParameters），一等工具的类型化定义入口。",
+   "tags": [
+    "schema",
+    "compiler",
+    "define-tool"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/core/tools/src/schema.ts:runSchemaCompiler",
+   "type": "function",
+   "name": "runSchemaCompiler",
+   "filePath": "packages/core/tools/src/schema.ts",
+   "lineRange": [
+    276,
+    415
+   ],
+   "summary": "spec→JSON Schema 编译器主体：注解拷贝、author 键断言、编译节点/属性图赋值。",
+   "tags": [
+    "compiler",
+    "json-schema"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/core/tools/src/schema.ts:defineTool",
+   "type": "function",
+   "name": "defineTool",
+   "filePath": "packages/core/tools/src/schema.ts",
+   "lineRange": [
+    555,
+    633
+   ],
+   "summary": "一等工具类型化定义入口：推断参数/值类型、strict 执行校验、软校验的 presentCall/presentResult 重放投影。",
+   "tags": [
+    "define-tool",
+    "factory",
+    "type-inference"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/core/tools/src/schema.ts:projectToolSchema",
+   "type": "function",
+   "name": "projectToolSchema",
+   "filePath": "packages/core/tools/src/schema.ts",
+   "lineRange": [
+    641,
+    646
+   ],
+   "summary": "把 ToolDefinition 投影为模型可见 ToolSchema（可选剥离参数以配合 deferLoading）。",
+   "tags": [
+    "projection",
+    "schema"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/core/tools/src/schema.ts:ToolArgsError",
+   "type": "class",
+   "name": "ToolArgsError",
+   "filePath": "packages/core/tools/src/schema.ts",
+   "lineRange": [
+    462,
+    471
+   ],
+   "summary": "参数校验失败的类型化错误（含路径）。",
+   "tags": [
+    "error",
+    "validation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/core/tools/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/core/tools/tsconfig.json",
+   "summary": "dsh-tools TypeScript 叶配置。",
+   "tags": [
+    "configuration",
+    "typescript"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/core/tools/tsdown.config.ts",
+   "type": "file",
+   "name": "tsdown.config.ts",
+   "filePath": "packages/core/tools/tsdown.config.ts",
+   "summary": "dsh-tools tsdown 打包配置（pipeline 子路径独立 bundle）。",
+   "tags": [
+    "configuration",
+    "build-system"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/client.ts",
+   "target": "file:packages/core/tool-executor-ptc/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/errors.ts",
+   "target": "class:packages/core/tool-executor-ptc/src/errors.ts:CodeRunFailedError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/errors.ts",
+   "target": "class:packages/core/tool-executor-ptc/src/errors.ts:CodeRunFailedError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/errors.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/index.ts",
+   "target": "function:packages/core/tool-executor-ptc/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/index.ts",
+   "target": "function:packages/core/tool-executor-ptc/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/index.ts",
+   "target": "class:packages/core/tool-executor-ptc/src/index.ts:PtcExecutor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/index.ts",
+   "target": "class:packages/core/tool-executor-ptc/src/index.ts:PtcExecutor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/index.ts",
+   "target": "file:packages/core/tool-executor-ptc/src/config.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/index.ts",
+   "target": "file:packages/core/tool-executor-ptc/src/errors.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/index.ts",
+   "target": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/index.ts",
+   "target": "file:packages/core/tool-executor-ptc/src/py-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/index.ts",
+   "target": "file:packages/core/tool-executor-ptc/src/runtime-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/index.ts",
+   "target": "file:packages/core/tool-executor-ptc/src/ts-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/index.ts",
+   "target": "file:packages/core/tool-executor-ptc/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/index.ts",
+   "target": "file:packages/core/tools/src/pipeline.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/index.ts",
+   "target": "file:packages/ptc-runtime/ptc-runtime/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc-calls.ts",
+   "target": "class:packages/core/tool-executor-ptc/src/ptc-calls.ts:PtcCalls",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc-calls.ts",
+   "target": "class:packages/core/tool-executor-ptc/src/ptc-calls.ts:PtcCalls",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc-calls.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc-calls.ts",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "function:packages/core/tool-executor-ptc/src/ptc.ts:requirePtcRuntime",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "function:packages/core/tool-executor-ptc/src/ptc.ts:requirePtcRuntime",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "function:packages/core/tool-executor-ptc/src/ptc.ts:renderJsonValue",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "function:packages/core/tool-executor-ptc/src/ptc.ts:createRunCodeTool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "function:packages/core/tool-executor-ptc/src/ptc.ts:createRunCodeTool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "file:packages/core/scope/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "file:packages/core/tool-executor-ptc/src/errors.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "file:packages/core/tool-executor-ptc/src/ptc-calls.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "file:packages/core/tool-executor-ptc/src/runtime-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "file:packages/core/tool-executor-ptc/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "file:packages/core/tools/src/pipeline.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "file:packages/interaction/user-approval/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "file:packages/ptc-runtime/ptc-runtime/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "file:packages/sandbox/sandbox-policy/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "file:packages/session/working-directory/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ptc.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/py-types.ts",
+   "target": "function:packages/core/tool-executor-ptc/src/py-types.ts:renderType",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/py-types.ts",
+   "target": "function:packages/core/tool-executor-ptc/src/py-types.ts:jsonSchemaToPy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/py-types.ts",
+   "target": "function:packages/core/tool-executor-ptc/src/py-types.ts:jsonSchemaToPy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/py-types.ts",
+   "target": "function:packages/core/tool-executor-ptc/src/py-types.ts:renderToolsSdkPy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/py-types.ts",
+   "target": "function:packages/core/tool-executor-ptc/src/py-types.ts:renderToolsSdkPy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/py-types.ts",
+   "target": "file:packages/core/tool-executor-ptc/src/ts-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/py-types.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/runtime-types.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/runtime-types.ts",
+   "target": "file:packages/core/scope/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/runtime-types.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/runtime-types.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ts-types.ts",
+   "target": "function:packages/core/tool-executor-ptc/src/ts-types.ts:renderSupportedSchema",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ts-types.ts",
+   "target": "function:packages/core/tool-executor-ptc/src/ts-types.ts:jsonSchemaToTs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ts-types.ts",
+   "target": "function:packages/core/tool-executor-ptc/src/ts-types.ts:jsonSchemaToTs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ts-types.ts",
+   "target": "function:packages/core/tool-executor-ptc/src/ts-types.ts:renderToolsSdk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ts-types.ts",
+   "target": "function:packages/core/tool-executor-ptc/src/ts-types.ts:renderToolsSdk",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ts-types.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ts-types.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/ts-types.ts",
+   "target": "file:packages/ptc-runtime/ptc-runtime/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/types.ts",
+   "target": "file:packages/llm/llm/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/types.ts",
+   "target": "file:packages/llm/llm/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tool-executor-ptc/src/types.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/batch.ts",
+   "target": "function:packages/core/tools/src/batch.ts:executeToolBatch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tools/src/batch.ts",
+   "target": "function:packages/core/tools/src/batch.ts:executeToolBatch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tools/src/batch.ts",
+   "target": "function:packages/core/tools/src/batch.ts:runGroup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tools/src/batch.ts",
+   "target": "class:packages/core/tools/src/batch.ts:BatchSettlement",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tools/src/batch.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/batch.ts",
+   "target": "file:packages/core/tools/src/contracts.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/batch.ts",
+   "target": "file:packages/core/tools/src/executor.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/batch.ts",
+   "target": "file:packages/core/tools/src/pipeline.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/batch.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/batch.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/contracts.ts",
+   "target": "class:packages/core/tools/src/contracts.ts:ToolActivationError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tools/src/contracts.ts",
+   "target": "class:packages/core/tools/src/contracts.ts:ToolActivationError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tools/src/contracts.ts",
+   "target": "class:packages/core/tools/src/contracts.ts:ToolNotFoundError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tools/src/contracts.ts",
+   "target": "class:packages/core/tools/src/contracts.ts:ToolNotFoundError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tools/src/contracts.ts",
+   "target": "class:packages/core/tools/src/contracts.ts:ToolOutputError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tools/src/contracts.ts",
+   "target": "class:packages/core/tools/src/contracts.ts:ToolOutputError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tools/src/contracts.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/contracts.ts",
+   "target": "file:packages/core/scope/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/contracts.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/contracts.ts",
+   "target": "file:packages/core/tools/src/json-schema.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/contracts.ts",
+   "target": "file:packages/core/tools/src/presentation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/contracts.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/contracts.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/events.ts",
+   "target": "file:packages/core/scope/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/events.ts",
+   "target": "file:packages/core/tools/src/contracts.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/events.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/executor.ts",
+   "target": "class:packages/core/tools/src/executor.ts:ToolBatchExecutionError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tools/src/executor.ts",
+   "target": "class:packages/core/tools/src/executor.ts:ToolBatchExecutionError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tools/src/executor.ts",
+   "target": "class:packages/core/tools/src/executor.ts:ToolExecutorUnavailableError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tools/src/executor.ts",
+   "target": "class:packages/core/tools/src/executor.ts:ToolExecutorUnavailableError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tools/src/executor.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/executor.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/executor.ts",
+   "target": "file:packages/core/system-prompt/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/executor.ts",
+   "target": "file:packages/core/tools/src/contracts.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/executor.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/index.ts",
+   "target": "class:packages/core/tools/src/index.ts:ToolLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tools/src/index.ts",
+   "target": "class:packages/core/tools/src/index.ts:GuardLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tools/src/index.ts",
+   "target": "class:packages/core/tools/src/index.ts:ToolsService",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tools/src/index.ts",
+   "target": "class:packages/core/tools/src/index.ts:ToolsService",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tools/src/index.ts",
+   "target": "file:packages/core/scope/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/index.ts",
+   "target": "file:packages/core/tools/src/contracts.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/index.ts",
+   "target": "file:packages/core/tools/src/events.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/index.ts",
+   "target": "file:packages/core/tools/src/executor.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/index.ts",
+   "target": "file:packages/core/tools/src/json-schema.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/index.ts",
+   "target": "file:packages/core/tools/src/presentation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/index.ts",
+   "target": "file:packages/core/tools/src/schema.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/pipeline.ts",
+   "target": "function:packages/core/tools/src/pipeline.ts:toolErrorMessage",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tools/src/pipeline.ts",
+   "target": "function:packages/core/tools/src/pipeline.ts:toolErrorMessage",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tools/src/pipeline.ts",
+   "target": "function:packages/core/tools/src/pipeline.ts:fuseToolSignals",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tools/src/pipeline.ts",
+   "target": "class:packages/core/tools/src/pipeline.ts:ToolExecutionPipeline",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tools/src/pipeline.ts",
+   "target": "class:packages/core/tools/src/pipeline.ts:ToolExecutionPipeline",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tools/src/pipeline.ts",
+   "target": "file:packages/core/scope/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/pipeline.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/pipeline.ts",
+   "target": "file:packages/core/tools/src/batch.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/pipeline.ts",
+   "target": "file:packages/core/tools/src/contracts.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/pipeline.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/pipeline.ts",
+   "target": "file:packages/core/tools/src/json-schema.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/pipeline.ts",
+   "target": "file:packages/interaction/user-approval/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/pipeline.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/pipeline.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/schema.ts",
+   "target": "function:packages/core/tools/src/schema.ts:runSchemaCompiler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tools/src/schema.ts",
+   "target": "function:packages/core/tools/src/schema.ts:defineTool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tools/src/schema.ts",
+   "target": "function:packages/core/tools/src/schema.ts:defineTool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tools/src/schema.ts",
+   "target": "function:packages/core/tools/src/schema.ts:projectToolSchema",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tools/src/schema.ts",
+   "target": "function:packages/core/tools/src/schema.ts:projectToolSchema",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tools/src/schema.ts",
+   "target": "class:packages/core/tools/src/schema.ts:ToolArgsError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/tools/src/schema.ts",
+   "target": "class:packages/core/tools/src/schema.ts:ToolArgsError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/tools/src/schema.ts",
+   "target": "file:packages/core/tools/src/contracts.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/schema.ts",
+   "target": "file:packages/core/tools/src/json-schema.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/schema.ts",
+   "target": "file:packages/core/tools/src/presentation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/schema.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/tools/src/schema.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "document:packages/core/tool-executor-ptc/README.md",
+   "target": "file:packages/core/tool-executor-ptc/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/core/tools/README.md",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/core/tools/package.json",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/core/tool-executor-ptc/package.json",
+   "target": "file:packages/core/tool-executor-ptc/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "class:packages/core/tool-executor-ptc/src/index.ts:PtcExecutor",
+   "target": "function:packages/core/tool-executor-ptc/src/ptc.ts:createRunCodeTool",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/core/tool-executor-ptc/src/ptc.ts:createRunCodeTool",
+   "target": "class:packages/core/tool-executor-ptc/src/ptc-calls.ts:PtcCalls",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:packages/core/tool-executor-ptc/src/index.ts:PtcExecutor",
+   "target": "class:packages/core/tools/src/pipeline.ts:ToolExecutionPipeline",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/core/tools/src/batch.ts:executeToolBatch",
+   "target": "class:packages/core/tools/src/pipeline.ts:ToolExecutionPipeline",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:packages/core/tools/src/index.ts:ToolsService",
+   "target": "function:packages/core/tools/src/schema.ts:projectToolSchema",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

@@ -1,0 +1,3057 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/device_allocator/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/device_allocator/__init__.py",
+   "summary": "device_allocator 包入口：MemAllocator 协议+平台分派（cumem/xpumem）。",
+   "tags": [
+    "allocator",
+    "protocol"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/device_allocator/alloc_conf.py",
+   "type": "file",
+   "name": "alloc_conf.py",
+   "filePath": "vllm/device_allocator/alloc_conf.py",
+   "summary": "PyTorch 分配器配置读写助手：整串 parseArgs 语义保持下编辑 expandable_segments 等标志。",
+   "tags": [
+    "alloc-config",
+    "expandable-segments"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/device_allocator/cumem.py",
+   "type": "file",
+   "name": "cumem.py",
+   "filePath": "vllm/device_allocator/cumem.py",
+   "summary": "CuMemAllocator（CUDA，单例）：cuMemCreate/Map 的睡眠模式内存池（discarded pages swap 到 CPU）。",
+   "tags": [
+    "cumem",
+    "sleep",
+    "cuda"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/device_allocator/sleep_mode_backend.py",
+   "type": "file",
+   "name": "sleep_mode_backend.py",
+   "filePath": "vllm/device_allocator/sleep_mode_backend.py",
+   "summary": "可插拔睡眠后端（RFC #34303）：SleepModeBackend ABC+默认 CuMemBackend+工厂（镜像 KVConnectorFactory 懒注册模式）。",
+   "tags": [
+    "sleep-mode",
+    "pluggable",
+    "rfc"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/device_allocator/xpumem.py",
+   "type": "file",
+   "name": "xpumem.py",
+   "filePath": "vllm/device_allocator/xpumem.py",
+   "summary": "XpuMemAllocator（XPU，单例）：Level-0 内存池+vpmem 快照的睡眠模式实现。",
+   "tags": [
+    "xpumem",
+    "sleep"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/aux_output_connector/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/distributed/aux_output_connector/__init__.py",
+   "summary": "aux_output_connector 空 barrel。",
+   "tags": [
+    "package"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/distributed/aux_output_connector/connector.py",
+   "type": "file",
+   "name": "connector.py",
+   "filePath": "vllm/distributed/aux_output_connector/connector.py",
+   "summary": "调度侧辅助输出控制面：AuxOutputSchedulerConnector（13 方法）与 PackedBlockHashes IPC 压缩格式。",
+   "tags": [
+    "aux-output",
+    "scheduler"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/aux_output_connector/routed_experts.py",
+   "type": "file",
+   "name": "routed_experts.py",
+   "filePath": "vllm/distributed/aux_output_connector/routed_experts.py",
+   "summary": "路由专家辅助输出：RoutedExpertsBuffer（不完整/未键块暂存）+发布/物化三件。",
+   "tags": [
+    "routed-experts",
+    "buffer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/aux_output_connector/store.py",
+   "type": "file",
+   "name": "store.py",
+   "filePath": "vllm/distributed/aux_output_connector/store.py",
+   "summary": "进程内辅助输出存储：BlockObjectStore（单主、逐出后 fail-closed）与后台线程串行化版本。",
+   "tags": [
+    "store",
+    "fail-closed"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/aux_output_connector/worker.py",
+   "type": "file",
+   "name": "worker.py",
+   "filePath": "vllm/distributed/aux_output_connector/worker.py",
+   "summary": "worker 侧辅助输出数据面：AuxOutputWorkerConnector（捕获/请求尾/后端资源，8 方法）。",
+   "tags": [
+    "aux-output",
+    "worker"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "type": "file",
+   "name": "worker.py",
+   "filePath": "vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "summary": "Mooncake EC worker 编排（988 行、30 方法）：consumer 预约+producer 推批，TP 亲和 fanout 与错误保留。",
+   "tags": [
+    "mooncake",
+    "ec",
+    "worker"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_ec_connector.py",
+   "type": "file",
+   "name": "mooncake_ec_connector.py",
+   "filePath": "vllm/distributed/ec_transfer/ec_connector/mooncake_ec_connector.py",
+   "summary": "ECMooncakeConnector（17 方法）：保持公共 API 并按进程角色委托（scheduler/worker 组件）。",
+   "tags": [
+    "mooncake",
+    "ec",
+    "connector"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/__init__.py",
+   "summary": "mooncake_store_embedding barrel。",
+   "tags": [
+    "package"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/backend.py",
+   "type": "file",
+   "name": "backend.py",
+   "filePath": "vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/backend.py",
+   "summary": "encoder 侧 Mooncake Store 解析器/发布器：命中复用+miss 异步发布。",
+   "tags": [
+    "embedding-store",
+    "encoder"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/data.py",
+   "type": "file",
+   "name": "data.py",
+   "filePath": "vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/data.py",
+   "summary": "共享 Encoder Store 的内容标识与输出契约：TensorSpec+embedding 键/命名空间。",
+   "tags": [
+    "data",
+    "namespace"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py",
+   "type": "file",
+   "name": "store_client.py",
+   "filePath": "vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py",
+   "summary": "Mooncake Store 薄客户端（463 行）：对象/缓冲 API 封装+v3 紧凑键命名空间+张量元数据编解码。",
+   "tags": [
+    "mooncake",
+    "client"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/ec_transfer/ec_connector/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/distributed/ec_transfer/ec_connector/utils.py",
+   "summary": "EC connector 工具：PlaceholderMetadataResolver（按模态解析需发布键）+ECOutputAggregator（多 worker 输出合并）。",
+   "tags": [
+    "ec",
+    "utils"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/ec_transfer/ec_transfer_state.py",
+   "type": "file",
+   "name": "ec_transfer_state.py",
+   "filePath": "vllm/distributed/ec_transfer/ec_transfer_state.py",
+   "summary": "EC transfer 全局态：get/has/ensure init/shutdown 四入口。",
+   "tags": [
+    "state",
+    "lifecycle"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/distributed/kv_events.py",
+   "type": "file",
+   "name": "kv_events.py",
+   "filePath": "vllm/distributed/kv_events.py",
+   "summary": "KV 事件体系（610 行、12 类）：msgspec 事件（BlockStored/Removed/Cleared）+聚合器+EventPublisher 三实现（Null/Zmq PUB-ROUTER 重放缓冲/工厂）。",
+   "tags": [
+    "kv-events",
+    "zmq",
+    "msgspec"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/localization.py",
+   "type": "file",
+   "name": "localization.py",
+   "filePath": "vllm/distributed/localization.py",
+   "summary": "每设备 locality 域资源（277 行）：对齐 context/stream/pool/SM 计数列表+localized MoE 门控判定。",
+   "tags": [
+    "localization",
+    "moe"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/mooncake_store.py",
+   "type": "file",
+   "name": "mooncake_store.py",
+   "filePath": "vllm/distributed/mooncake_store.py",
+   "summary": "Mooncake Store 共享配置与 setup（EC+KV 双客户端公用，topology mode 选择）。",
+   "tags": [
+    "mooncake",
+    "config"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/distributed/nixl_utils.py",
+   "type": "file",
+   "name": "nixl_utils.py",
+   "filePath": "vllm/distributed/nixl_utils.py",
+   "summary": "NIXL 懒加载工具：UCX rcache 限制/包名映射/版本检查/Ray 别名。",
+   "tags": [
+    "nixl",
+    "lazy-loading"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/parallel_state.py",
+   "type": "file",
+   "name": "parallel_state.py",
+   "filePath": "vllm/distributed/parallel_state.py",
+   "summary": "vLLM 分布式状态核心（2780 行）：GroupCoordinator（44 方法）+全部并行组获取器（tp/etp/pp/dp/ep/eplb/pcp/dcp/engram-dp/elastic-ep）+init/destroy 生命周期与 graph capture。",
+   "tags": [
+    "parallel-state",
+    "groups",
+    "core"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/stateless_coordinator.py",
+   "type": "file",
+   "name": "stateless_coordinator.py",
+   "filePath": "vllm/distributed/stateless_coordinator.py",
+   "summary": "StatelessGroupCoordinator（13 方法）：无全局进程组状态版 GroupCoordinator（TCP store 握手建组）。",
+   "tags": [
+    "stateless",
+    "coordinator"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/distributed/utils.py",
+   "summary": "分布式工具（795 行）：StatelessProcessGroup（12 方法）+TCP store/gloo/split 张量/PP 索引等。",
+   "tags": [
+    "utils",
+    "stateless"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/device_allocator/__init__.py:AllocationData",
+   "type": "class",
+   "name": "AllocationData",
+   "filePath": "vllm/device_allocator/__init__.py",
+   "summary": "分配数据契约。",
+   "tags": [
+    "data"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    21,
+    25
+   ]
+  },
+  {
+   "id": "class:vllm/device_allocator/__init__.py:MemAllocator",
+   "type": "class",
+   "name": "MemAllocator",
+   "filePath": "vllm/device_allocator/__init__.py",
+   "summary": "分配器协议（5 个方法）。",
+   "tags": [
+    "protocol"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    28,
+    37
+   ]
+  },
+  {
+   "id": "function:vllm/device_allocator/__init__.py:get_mem_allocator_instance",
+   "type": "function",
+   "name": "get_mem_allocator_instance",
+   "filePath": "vllm/device_allocator/__init__.py",
+   "summary": "平台分派取分配器实例。",
+   "tags": [
+    "factory"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    40,
+    55
+   ]
+  },
+  {
+   "id": "function:vllm/device_allocator/alloc_conf.py:alloc_conf_from_env",
+   "type": "function",
+   "name": "alloc_conf_from_env",
+   "filePath": "vllm/device_allocator/alloc_conf.py",
+   "summary": "从 env 读分配配置。",
+   "tags": [
+    "env"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    36,
+    45
+   ]
+  },
+  {
+   "id": "function:vllm/device_allocator/alloc_conf.py:live_alloc_conf",
+   "type": "function",
+   "name": "live_alloc_conf",
+   "filePath": "vllm/device_allocator/alloc_conf.py",
+   "summary": "当前生效配置（torch 已解析后）。",
+   "tags": [
+    "live"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    48,
+    63
+   ]
+  },
+  {
+   "id": "function:vllm/device_allocator/alloc_conf.py:with_conf_flag",
+   "type": "function",
+   "name": "with_conf_flag",
+   "filePath": "vllm/device_allocator/alloc_conf.py",
+   "summary": "临时改标志的上下文管理器。",
+   "tags": [
+    "context"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    81,
+    90
+   ]
+  },
+  {
+   "id": "function:vllm/device_allocator/alloc_conf.py:expandable_segments_enabled",
+   "type": "function",
+   "name": "expandable_segments_enabled",
+   "filePath": "vllm/device_allocator/alloc_conf.py",
+   "summary": "expandable_segments 是否生效。",
+   "tags": [
+    "expandable"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    99,
+    112
+   ]
+  },
+  {
+   "id": "function:vllm/device_allocator/alloc_conf.py:set_alloc_conf",
+   "type": "function",
+   "name": "set_alloc_conf",
+   "filePath": "vllm/device_allocator/alloc_conf.py",
+   "summary": "设置分配配置（保持整串语义）",
+   "tags": [
+    "setter"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    115,
+    121
+   ]
+  },
+  {
+   "id": "class:vllm/device_allocator/cumem.py:CuMemAllocator",
+   "type": "class",
+   "name": "CuMemAllocator",
+   "filePath": "vllm/device_allocator/cumem.py",
+   "summary": "CUDA 睡眠模式内存池单例（14 个方法）。",
+   "tags": [
+    "cumem",
+    "sleep"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    88,
+    460
+   ]
+  },
+  {
+   "id": "class:vllm/device_allocator/sleep_mode_backend.py:SleepModeBackend",
+   "type": "class",
+   "name": "SleepModeBackend",
+   "filePath": "vllm/device_allocator/sleep_mode_backend.py",
+   "summary": "睡眠后端接口（10 个方法：GPU 态释放/恢复）",
+   "tags": [
+    "abc",
+    "sleep"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    37,
+    113
+   ]
+  },
+  {
+   "id": "class:vllm/device_allocator/sleep_mode_backend.py:CuMemBackend",
+   "type": "class",
+   "name": "CuMemBackend",
+   "filePath": "vllm/device_allocator/sleep_mode_backend.py",
+   "summary": "默认后端（包装平台睡眠分配器）",
+   "tags": [
+    "cumem"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    116,
+    157
+   ]
+  },
+  {
+   "id": "class:vllm/device_allocator/sleep_mode_backend.py:SleepModeBackendFactory",
+   "type": "class",
+   "name": "SleepModeBackendFactory",
+   "filePath": "vllm/device_allocator/sleep_mode_backend.py",
+   "summary": "后端注册/解析工厂（镜像 KVConnectorFactory）",
+   "tags": [
+    "factory"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    160,
+    203
+   ]
+  },
+  {
+   "id": "function:vllm/device_allocator/xpumem.py:_xpu_memcpy_sync",
+   "type": "function",
+   "name": "_xpu_memcpy_sync",
+   "filePath": "vllm/device_allocator/xpumem.py",
+   "summary": "XPU 同步拷贝助手。",
+   "tags": [
+    "xpu"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    45,
+    63
+   ]
+  },
+  {
+   "id": "class:vllm/device_allocator/xpumem.py:XpuMemAllocator",
+   "type": "class",
+   "name": "XpuMemAllocator",
+   "filePath": "vllm/device_allocator/xpumem.py",
+   "summary": "XPU 睡眠模式分配器单例（11 个方法）。",
+   "tags": [
+    "xpumem",
+    "sleep"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    112,
+    346
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/aux_output_connector/connector.py:PackedBlockHashes",
+   "type": "class",
+   "name": "PackedBlockHashes",
+   "filePath": "vllm/distributed/aux_output_connector/connector.py",
+   "summary": "scheduler-worker IPC 的紧凑块哈希。",
+   "tags": [
+    "ipc"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    27,
+    35
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/aux_output_connector/connector.py:AuxOutputSchedulerConnector",
+   "type": "class",
+   "name": "AuxOutputSchedulerConnector",
+   "filePath": "vllm/distributed/aux_output_connector/connector.py",
+   "summary": "调度侧连接器（13 个方法）。",
+   "tags": [
+    "scheduler"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    54,
+    259
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/aux_output_connector/routed_experts.py:RoutedExpertsBuffer",
+   "type": "class",
+   "name": "RoutedExpertsBuffer",
+   "filePath": "vllm/distributed/aux_output_connector/routed_experts.py",
+   "summary": "路由专家块缓冲（8 个方法）。",
+   "tags": [
+    "buffer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    27,
+    159
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/aux_output_connector/routed_experts.py:publish_routed_experts",
+   "type": "function",
+   "name": "publish_routed_experts",
+   "filePath": "vllm/distributed/aux_output_connector/routed_experts.py",
+   "summary": "路由专家发布。",
+   "tags": [
+    "publish"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    182,
+    219
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/aux_output_connector/store.py:BackgroundBlockObjectStore",
+   "type": "class",
+   "name": "BackgroundBlockObjectStore",
+   "filePath": "vllm/distributed/aux_output_connector/store.py",
+   "summary": "后台线程串行化存储（6 个方法）",
+   "tags": [
+    "background"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    31,
+    101
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/aux_output_connector/store.py:BlockObjectStore",
+   "type": "class",
+   "name": "BlockObjectStore",
+   "filePath": "vllm/distributed/aux_output_connector/store.py",
+   "summary": "单主 fail-closed 存储（8 个方法）",
+   "tags": [
+    "store"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    104,
+    247
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/aux_output_connector/worker.py:PendingAuxOutput",
+   "type": "class",
+   "name": "PendingAuxOutput",
+   "filePath": "vllm/distributed/aux_output_connector/worker.py",
+   "summary": "一步 R3 快照持有者。",
+   "tags": [
+    "pending"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    55,
+    80
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/aux_output_connector/worker.py:AuxOutputWorkerConnector",
+   "type": "class",
+   "name": "AuxOutputWorkerConnector",
+   "filePath": "vllm/distributed/aux_output_connector/worker.py",
+   "summary": "worker 侧数据面（8 个方法）",
+   "tags": [
+    "worker"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    83,
+    405
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/aux_output_connector/worker.py:get_aux_output_connector",
+   "type": "function",
+   "name": "get_aux_output_connector",
+   "filePath": "vllm/distributed/aux_output_connector/worker.py",
+   "summary": "连接器获取入口。",
+   "tags": [
+    "factory"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    408,
+    415
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py:ECMooncakeWorker",
+   "type": "class",
+   "name": "ECMooncakeWorker",
+   "filePath": "vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "summary": "Mooncake EC worker 编排（30 个方法）",
+   "tags": [
+    "mooncake",
+    "worker"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    84,
+    988
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/ec_transfer/ec_connector/mooncake_ec_connector.py:ECMooncakeConnector",
+   "type": "class",
+   "name": "ECMooncakeConnector",
+   "filePath": "vllm/distributed/ec_transfer/ec_connector/mooncake_ec_connector.py",
+   "summary": "Mooncake EC 连接器门面（17 个方法，按角色委托）",
+   "tags": [
+    "mooncake",
+    "facade"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    32,
+    130
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/backend.py:MooncakeEmbeddingStoreBackend",
+   "type": "class",
+   "name": "MooncakeEmbeddingStoreBackend",
+   "filePath": "vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/backend.py",
+   "summary": "encoder 侧 Store 解析/发布（7 个方法）",
+   "tags": [
+    "embedding-store"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    38,
+    206
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/data.py:TensorSpec",
+   "type": "class",
+   "name": "TensorSpec",
+   "filePath": "vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/data.py",
+   "summary": "连续输出契约。",
+   "tags": [
+    "spec"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    21,
+    26
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py:MooncakeEmbeddingStoreClient",
+   "type": "class",
+   "name": "MooncakeEmbeddingStoreClient",
+   "filePath": "vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py",
+   "summary": "Mooncake Store 客户端（11 个方法）",
+   "tags": [
+    "mooncake",
+    "client"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    147,
+    426
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py:_validate_mooncake_tensor_metadata",
+   "type": "function",
+   "name": "_validate_mooncake_tensor_metadata",
+   "filePath": "vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py",
+   "summary": "张量元数据校验。",
+   "tags": [
+    "metadata"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    429,
+    446
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py:_encode_mooncake_tensor_metadata",
+   "type": "function",
+   "name": "_encode_mooncake_tensor_metadata",
+   "filePath": "vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py",
+   "summary": "张量元数据编码。",
+   "tags": [
+    "metadata"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    449,
+    463
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/ec_transfer/ec_connector/utils.py:PlaceholderMetadataResolver",
+   "type": "class",
+   "name": "PlaceholderMetadataResolver",
+   "filePath": "vllm/distributed/ec_transfer/ec_connector/utils.py",
+   "summary": "按模态解析需发布键（2 个方法）",
+   "tags": [
+    "resolver"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    20,
+    52
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/ec_transfer/ec_connector/utils.py:collect_ec_item_metadata",
+   "type": "function",
+   "name": "collect_ec_item_metadata",
+   "filePath": "vllm/distributed/ec_transfer/ec_connector/utils.py",
+   "summary": "逐项元数据收集。",
+   "tags": [
+    "metadata"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    55,
+    92
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/ec_transfer/ec_connector/utils.py:ECOutputAggregator",
+   "type": "class",
+   "name": "ECOutputAggregator",
+   "filePath": "vllm/distributed/ec_transfer/ec_connector/utils.py",
+   "summary": "多 worker EC 输出合并。",
+   "tags": [
+    "aggregator"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    95,
+    147
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/ec_transfer/ec_transfer_state.py:ensure_ec_transfer_initialized",
+   "type": "function",
+   "name": "ensure_ec_transfer_initialized",
+   "filePath": "vllm/distributed/ec_transfer/ec_transfer_state.py",
+   "summary": "EC transfer 初始化入口。",
+   "tags": [
+    "lifecycle"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    26,
+    39
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_events.py:BlockStored",
+   "type": "class",
+   "name": "BlockStored",
+   "filePath": "vllm/distributed/kv_events.py",
+   "summary": "块存储事件（msgspec）",
+   "tags": [
+    "event"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    56,
+    120
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_events.py:BlockRemoved",
+   "type": "class",
+   "name": "BlockRemoved",
+   "filePath": "vllm/distributed/kv_events.py",
+   "summary": "块移除事件。",
+   "tags": [
+    "event"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    123,
+    141
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_events.py:KVEventAggregator",
+   "type": "class",
+   "name": "KVEventAggregator",
+   "filePath": "vllm/distributed/kv_events.py",
+   "summary": "跨 worker 事件聚合（9 个方法）",
+   "tags": [
+    "aggregator"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    152,
+    231
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_events.py:KVConnectorKVEvents",
+   "type": "class",
+   "name": "KVConnectorKVEvents",
+   "filePath": "vllm/distributed/kv_events.py",
+   "summary": "connector KV 事件容器 ABC（7 个方法）",
+   "tags": [
+    "abc"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    234,
+    265
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_events.py:ZmqEventPublisher",
+   "type": "class",
+   "name": "ZmqEventPublisher",
+   "filePath": "vllm/distributed/kv_events.py",
+   "summary": "PUB/ROUTER 可靠发布器（10 个方法，重放缓冲+独立进程）",
+   "tags": [
+    "zmq",
+    "publisher"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    313,
+    575
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_events.py:EventPublisherFactory",
+   "type": "class",
+   "name": "EventPublisherFactory",
+   "filePath": "vllm/distributed/kv_events.py",
+   "summary": "发布器工厂。",
+   "tags": [
+    "factory"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    578,
+    610
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/localization.py:LocalizedResources",
+   "type": "class",
+   "name": "LocalizedResources",
+   "filePath": "vllm/distributed/localization.py",
+   "summary": "locality 域共享资源（4 个方法）",
+   "tags": [
+    "localization"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    30,
+    64
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/localization.py:localized_moe_unsupported_reason",
+   "type": "function",
+   "name": "localized_moe_unsupported_reason",
+   "filePath": "vllm/distributed/localization.py",
+   "summary": "localized MoE 不支持原因。",
+   "tags": [
+    "moe",
+    "validation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    123,
+    143
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/localization.py:maybe_init_localized_resources",
+   "type": "function",
+   "name": "maybe_init_localized_resources",
+   "filePath": "vllm/distributed/localization.py",
+   "summary": "locality 资源初始化（121 行主体）",
+   "tags": [
+    "localization",
+    "init"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    146,
+    266
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/mooncake_store.py:MooncakeStoreConfig",
+   "type": "class",
+   "name": "MooncakeStoreConfig",
+   "filePath": "vllm/distributed/mooncake_store.py",
+   "summary": "Mooncake Store 配置（topology mode 选择）",
+   "tags": [
+    "config"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    21,
+    77
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/mooncake_store.py:_parse_size",
+   "type": "function",
+   "name": "_parse_size",
+   "filePath": "vllm/distributed/mooncake_store.py",
+   "summary": "尺寸字符串解析。",
+   "tags": [
+    "parse"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    91,
+    123
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/mooncake_store.py:setup_mooncake_store",
+   "type": "function",
+   "name": "setup_mooncake_store",
+   "filePath": "vllm/distributed/mooncake_store.py",
+   "summary": "Store 建立入口。",
+   "tags": [
+    "setup"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    126,
+    144
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/nixl_utils.py:_maybe_set_ucx_rcache_limit",
+   "type": "function",
+   "name": "_maybe_set_ucx_rcache_limit",
+   "filePath": "vllm/distributed/nixl_utils.py",
+   "summary": "UCX rcache 限制设置。",
+   "tags": [
+    "ucx"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    21,
+    37
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/nixl_utils.py:check_nixl_version",
+   "type": "function",
+   "name": "check_nixl_version",
+   "filePath": "vllm/distributed/nixl_utils.py",
+   "summary": "NIXL 版本检查。",
+   "tags": [
+    "version"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    96,
+    110
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/nixl_utils.py:alias_nixl_for_ray",
+   "type": "function",
+   "name": "alias_nixl_for_ray",
+   "filePath": "vllm/distributed/nixl_utils.py",
+   "summary": "NIXL→Ray 别名桥。",
+   "tags": [
+    "ray"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    113,
+    126
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/parallel_state.py:GroupCoordinator",
+   "type": "class",
+   "name": "GroupCoordinator",
+   "filePath": "vllm/distributed/parallel_state.py",
+   "summary": "进程组协调器（44 个方法：集合通信/graph capture/P2P/设备通信器组合）",
+   "tags": [
+    "coordinator",
+    "core"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    427,
+    1490
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/parallel_state.py:suspend_device_comms",
+   "type": "function",
+   "name": "suspend_device_comms",
+   "filePath": "vllm/distributed/parallel_state.py",
+   "summary": "挂起设备通信器（checkpoint 用）",
+   "tags": [
+    "suspend"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    189,
+    191
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/parallel_state.py:get_tp_group",
+   "type": "function",
+   "name": "get_tp_group",
+   "filePath": "vllm/distributed/parallel_state.py",
+   "summary": "取 TP 组等 12 个组获取器之一。",
+   "tags": [
+    "tp"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1594,
+    1596
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/parallel_state.py:init_distributed_environment",
+   "type": "function",
+   "name": "init_distributed_environment",
+   "filePath": "vllm/distributed/parallel_state.py",
+   "summary": "分布式环境初始化（203 行）",
+   "tags": [
+    "init"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1839,
+    2041
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/parallel_state.py:initialize_model_parallel",
+   "type": "function",
+   "name": "initialize_model_parallel",
+   "filePath": "vllm/distributed/parallel_state.py",
+   "summary": "模型并行初始化（320 行：全部组建立）",
+   "tags": [
+    "init",
+    "parallel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    2081,
+    2400
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/parallel_state.py:destroy_model_parallel",
+   "type": "function",
+   "name": "destroy_model_parallel",
+   "filePath": "vllm/distributed/parallel_state.py",
+   "summary": "模型并行销毁。",
+   "tags": [
+    "destroy"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    2495,
+    2538
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/parallel_state.py:cleanup_dist_env_and_memory",
+   "type": "function",
+   "name": "cleanup_dist_env_and_memory",
+   "filePath": "vllm/distributed/parallel_state.py",
+   "summary": "环境清理+内存释放。",
+   "tags": [
+    "cleanup"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    2551,
+    2596
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/parallel_state.py:in_the_same_node_as",
+   "type": "function",
+   "name": "in_the_same_node_as",
+   "filePath": "vllm/distributed/parallel_state.py",
+   "summary": "同节点判定（含缓存）",
+   "tags": [
+    "topology"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    2599,
+    2689
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/parallel_state.py:is_global_first_rank",
+   "type": "function",
+   "name": "is_global_first_rank",
+   "filePath": "vllm/distributed/parallel_state.py",
+   "summary": "全局/本地首 rank 判定。",
+   "tags": [
+    "rank"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    2692,
+    2720
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/stateless_coordinator.py:StatelessGroupCoordinator",
+   "type": "class",
+   "name": "StatelessGroupCoordinator",
+   "filePath": "vllm/distributed/stateless_coordinator.py",
+   "summary": "无状态版协调器（13 个方法，TCP 握手建组）",
+   "tags": [
+    "stateless"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    63,
+    390
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/utils.py:StatelessProcessGroup",
+   "type": "class",
+   "name": "StatelessProcessGroup",
+   "filePath": "vllm/distributed/utils.py",
+   "summary": "无状态进程组（12 个方法）",
+   "tags": [
+    "stateless"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    268,
+    582
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/utils.py:cpu_all_reduce_",
+   "type": "function",
+   "name": "cpu_all_reduce_",
+   "filePath": "vllm/distributed/utils.py",
+   "summary": "CPU all_reduce（朴素实现）",
+   "tags": [
+    "cpu"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    62,
+    127
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/utils.py:get_pp_indices",
+   "type": "function",
+   "name": "get_pp_indices",
+   "filePath": "vllm/distributed/utils.py",
+   "summary": "PP 层切分索引。",
+   "tags": [
+    "pp"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    198,
+    241
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/utils.py:stateless_init_torch_distributed_process_group",
+   "type": "function",
+   "name": "stateless_init_torch_distributed_process_group",
+   "filePath": "vllm/distributed/utils.py",
+   "summary": "无状态 torch PG 建立（104 行）",
+   "tags": [
+    "stateless",
+    "init"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    643,
+    746
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/utils.py:create_tcp_store",
+   "type": "function",
+   "name": "create_tcp_store",
+   "filePath": "vllm/distributed/utils.py",
+   "summary": "TCP store 建立。",
+   "tags": [
+    "tcp-store"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    244,
+    264
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_events.py:AllBlocksCleared",
+   "type": "class",
+   "name": "AllBlocksCleared",
+   "filePath": "vllm/distributed/kv_events.py",
+   "summary": "全清事件（144-145）",
+   "tags": [
+    "event",
+    "clear"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    144,
+    145
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_events.py:NullEventPublisher",
+   "type": "class",
+   "name": "NullEventPublisher",
+   "filePath": "vllm/distributed/kv_events.py",
+   "summary": "空实现（禁用时默认，2 个方法）",
+   "tags": [
+    "null",
+    "publisher"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    303,
+    310
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/device_allocator/__init__.py",
+   "target": "class:vllm/device_allocator/__init__.py:AllocationData",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/device_allocator/__init__.py",
+   "target": "class:vllm/device_allocator/__init__.py:AllocationData",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/device_allocator/__init__.py",
+   "target": "class:vllm/device_allocator/__init__.py:MemAllocator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/device_allocator/__init__.py",
+   "target": "class:vllm/device_allocator/__init__.py:MemAllocator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/device_allocator/__init__.py",
+   "target": "function:vllm/device_allocator/__init__.py:get_mem_allocator_instance",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/device_allocator/__init__.py",
+   "target": "function:vllm/device_allocator/__init__.py:get_mem_allocator_instance",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/device_allocator/alloc_conf.py",
+   "target": "function:vllm/device_allocator/alloc_conf.py:alloc_conf_from_env",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/device_allocator/alloc_conf.py",
+   "target": "function:vllm/device_allocator/alloc_conf.py:alloc_conf_from_env",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/device_allocator/alloc_conf.py",
+   "target": "function:vllm/device_allocator/alloc_conf.py:live_alloc_conf",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/device_allocator/alloc_conf.py",
+   "target": "function:vllm/device_allocator/alloc_conf.py:live_alloc_conf",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/device_allocator/alloc_conf.py",
+   "target": "function:vllm/device_allocator/alloc_conf.py:with_conf_flag",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/device_allocator/alloc_conf.py",
+   "target": "function:vllm/device_allocator/alloc_conf.py:with_conf_flag",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/device_allocator/alloc_conf.py",
+   "target": "function:vllm/device_allocator/alloc_conf.py:expandable_segments_enabled",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/device_allocator/alloc_conf.py",
+   "target": "function:vllm/device_allocator/alloc_conf.py:expandable_segments_enabled",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/device_allocator/alloc_conf.py",
+   "target": "function:vllm/device_allocator/alloc_conf.py:set_alloc_conf",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/device_allocator/alloc_conf.py",
+   "target": "function:vllm/device_allocator/alloc_conf.py:set_alloc_conf",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/device_allocator/cumem.py",
+   "target": "class:vllm/device_allocator/cumem.py:CuMemAllocator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/device_allocator/cumem.py",
+   "target": "class:vllm/device_allocator/cumem.py:CuMemAllocator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/device_allocator/sleep_mode_backend.py",
+   "target": "class:vllm/device_allocator/sleep_mode_backend.py:SleepModeBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/device_allocator/sleep_mode_backend.py",
+   "target": "class:vllm/device_allocator/sleep_mode_backend.py:SleepModeBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/device_allocator/sleep_mode_backend.py",
+   "target": "class:vllm/device_allocator/sleep_mode_backend.py:CuMemBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/device_allocator/sleep_mode_backend.py",
+   "target": "class:vllm/device_allocator/sleep_mode_backend.py:CuMemBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/device_allocator/sleep_mode_backend.py",
+   "target": "class:vllm/device_allocator/sleep_mode_backend.py:SleepModeBackendFactory",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/device_allocator/sleep_mode_backend.py",
+   "target": "class:vllm/device_allocator/sleep_mode_backend.py:SleepModeBackendFactory",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/device_allocator/xpumem.py",
+   "target": "function:vllm/device_allocator/xpumem.py:_xpu_memcpy_sync",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/device_allocator/xpumem.py",
+   "target": "class:vllm/device_allocator/xpumem.py:XpuMemAllocator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/device_allocator/xpumem.py",
+   "target": "class:vllm/device_allocator/xpumem.py:XpuMemAllocator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/connector.py",
+   "target": "class:vllm/distributed/aux_output_connector/connector.py:PackedBlockHashes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/connector.py",
+   "target": "class:vllm/distributed/aux_output_connector/connector.py:PackedBlockHashes",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/connector.py",
+   "target": "class:vllm/distributed/aux_output_connector/connector.py:AuxOutputSchedulerConnector",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/connector.py",
+   "target": "class:vllm/distributed/aux_output_connector/connector.py:AuxOutputSchedulerConnector",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/routed_experts.py",
+   "target": "class:vllm/distributed/aux_output_connector/routed_experts.py:RoutedExpertsBuffer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/routed_experts.py",
+   "target": "class:vllm/distributed/aux_output_connector/routed_experts.py:RoutedExpertsBuffer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/routed_experts.py",
+   "target": "function:vllm/distributed/aux_output_connector/routed_experts.py:publish_routed_experts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/routed_experts.py",
+   "target": "function:vllm/distributed/aux_output_connector/routed_experts.py:publish_routed_experts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/store.py",
+   "target": "class:vllm/distributed/aux_output_connector/store.py:BackgroundBlockObjectStore",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/store.py",
+   "target": "class:vllm/distributed/aux_output_connector/store.py:BackgroundBlockObjectStore",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/store.py",
+   "target": "class:vllm/distributed/aux_output_connector/store.py:BlockObjectStore",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/store.py",
+   "target": "class:vllm/distributed/aux_output_connector/store.py:BlockObjectStore",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/worker.py",
+   "target": "class:vllm/distributed/aux_output_connector/worker.py:PendingAuxOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/worker.py",
+   "target": "class:vllm/distributed/aux_output_connector/worker.py:PendingAuxOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/worker.py",
+   "target": "class:vllm/distributed/aux_output_connector/worker.py:AuxOutputWorkerConnector",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/worker.py",
+   "target": "class:vllm/distributed/aux_output_connector/worker.py:AuxOutputWorkerConnector",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/worker.py",
+   "target": "function:vllm/distributed/aux_output_connector/worker.py:get_aux_output_connector",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/worker.py",
+   "target": "function:vllm/distributed/aux_output_connector/worker.py:get_aux_output_connector",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "target": "class:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py:ECMooncakeWorker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "target": "class:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py:ECMooncakeWorker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_ec_connector.py",
+   "target": "class:vllm/distributed/ec_transfer/ec_connector/mooncake_ec_connector.py:ECMooncakeConnector",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_ec_connector.py",
+   "target": "class:vllm/distributed/ec_transfer/ec_connector/mooncake_ec_connector.py:ECMooncakeConnector",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/backend.py",
+   "target": "class:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/backend.py:MooncakeEmbeddingStoreBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/backend.py",
+   "target": "class:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/backend.py:MooncakeEmbeddingStoreBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/data.py",
+   "target": "class:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/data.py:TensorSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/data.py",
+   "target": "class:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/data.py:TensorSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py",
+   "target": "class:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py:MooncakeEmbeddingStoreClient",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py",
+   "target": "class:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py:MooncakeEmbeddingStoreClient",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py",
+   "target": "function:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py:_validate_mooncake_tensor_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py",
+   "target": "function:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py:_encode_mooncake_tensor_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/utils.py",
+   "target": "class:vllm/distributed/ec_transfer/ec_connector/utils.py:PlaceholderMetadataResolver",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/utils.py",
+   "target": "class:vllm/distributed/ec_transfer/ec_connector/utils.py:PlaceholderMetadataResolver",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/utils.py",
+   "target": "function:vllm/distributed/ec_transfer/ec_connector/utils.py:collect_ec_item_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/utils.py",
+   "target": "function:vllm/distributed/ec_transfer/ec_connector/utils.py:collect_ec_item_metadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/utils.py",
+   "target": "class:vllm/distributed/ec_transfer/ec_connector/utils.py:ECOutputAggregator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/utils.py",
+   "target": "class:vllm/distributed/ec_transfer/ec_connector/utils.py:ECOutputAggregator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_transfer_state.py",
+   "target": "function:vllm/distributed/ec_transfer/ec_transfer_state.py:ensure_ec_transfer_initialized",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_transfer_state.py",
+   "target": "function:vllm/distributed/ec_transfer/ec_transfer_state.py:ensure_ec_transfer_initialized",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "class:vllm/distributed/kv_events.py:BlockStored",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "class:vllm/distributed/kv_events.py:BlockStored",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "class:vllm/distributed/kv_events.py:BlockRemoved",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "class:vllm/distributed/kv_events.py:BlockRemoved",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "class:vllm/distributed/kv_events.py:KVEventAggregator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "class:vllm/distributed/kv_events.py:KVEventAggregator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "class:vllm/distributed/kv_events.py:KVConnectorKVEvents",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "class:vllm/distributed/kv_events.py:KVConnectorKVEvents",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "class:vllm/distributed/kv_events.py:ZmqEventPublisher",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "class:vllm/distributed/kv_events.py:ZmqEventPublisher",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "class:vllm/distributed/kv_events.py:EventPublisherFactory",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "class:vllm/distributed/kv_events.py:EventPublisherFactory",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/localization.py",
+   "target": "class:vllm/distributed/localization.py:LocalizedResources",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/localization.py",
+   "target": "class:vllm/distributed/localization.py:LocalizedResources",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/localization.py",
+   "target": "function:vllm/distributed/localization.py:localized_moe_unsupported_reason",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/localization.py",
+   "target": "function:vllm/distributed/localization.py:localized_moe_unsupported_reason",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/localization.py",
+   "target": "function:vllm/distributed/localization.py:maybe_init_localized_resources",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/localization.py",
+   "target": "function:vllm/distributed/localization.py:maybe_init_localized_resources",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/mooncake_store.py",
+   "target": "class:vllm/distributed/mooncake_store.py:MooncakeStoreConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/mooncake_store.py",
+   "target": "class:vllm/distributed/mooncake_store.py:MooncakeStoreConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/mooncake_store.py",
+   "target": "function:vllm/distributed/mooncake_store.py:_parse_size",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/mooncake_store.py",
+   "target": "function:vllm/distributed/mooncake_store.py:setup_mooncake_store",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/mooncake_store.py",
+   "target": "function:vllm/distributed/mooncake_store.py:setup_mooncake_store",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/nixl_utils.py",
+   "target": "function:vllm/distributed/nixl_utils.py:_maybe_set_ucx_rcache_limit",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/nixl_utils.py",
+   "target": "function:vllm/distributed/nixl_utils.py:check_nixl_version",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/nixl_utils.py",
+   "target": "function:vllm/distributed/nixl_utils.py:check_nixl_version",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/nixl_utils.py",
+   "target": "function:vllm/distributed/nixl_utils.py:alias_nixl_for_ray",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/nixl_utils.py",
+   "target": "function:vllm/distributed/nixl_utils.py:alias_nixl_for_ray",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "class:vllm/distributed/parallel_state.py:GroupCoordinator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "class:vllm/distributed/parallel_state.py:GroupCoordinator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "function:vllm/distributed/parallel_state.py:suspend_device_comms",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "function:vllm/distributed/parallel_state.py:suspend_device_comms",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "function:vllm/distributed/parallel_state.py:get_tp_group",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "function:vllm/distributed/parallel_state.py:get_tp_group",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "function:vllm/distributed/parallel_state.py:init_distributed_environment",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "function:vllm/distributed/parallel_state.py:init_distributed_environment",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "function:vllm/distributed/parallel_state.py:initialize_model_parallel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "function:vllm/distributed/parallel_state.py:initialize_model_parallel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "function:vllm/distributed/parallel_state.py:destroy_model_parallel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "function:vllm/distributed/parallel_state.py:destroy_model_parallel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "function:vllm/distributed/parallel_state.py:cleanup_dist_env_and_memory",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "function:vllm/distributed/parallel_state.py:cleanup_dist_env_and_memory",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "function:vllm/distributed/parallel_state.py:in_the_same_node_as",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "function:vllm/distributed/parallel_state.py:in_the_same_node_as",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "function:vllm/distributed/parallel_state.py:is_global_first_rank",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "function:vllm/distributed/parallel_state.py:is_global_first_rank",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/stateless_coordinator.py",
+   "target": "class:vllm/distributed/stateless_coordinator.py:StatelessGroupCoordinator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/stateless_coordinator.py",
+   "target": "class:vllm/distributed/stateless_coordinator.py:StatelessGroupCoordinator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/utils.py",
+   "target": "class:vllm/distributed/utils.py:StatelessProcessGroup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/utils.py",
+   "target": "class:vllm/distributed/utils.py:StatelessProcessGroup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/utils.py",
+   "target": "function:vllm/distributed/utils.py:cpu_all_reduce_",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/utils.py",
+   "target": "function:vllm/distributed/utils.py:cpu_all_reduce_",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/utils.py",
+   "target": "function:vllm/distributed/utils.py:get_pp_indices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/utils.py",
+   "target": "function:vllm/distributed/utils.py:get_pp_indices",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/utils.py",
+   "target": "function:vllm/distributed/utils.py:stateless_init_torch_distributed_process_group",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/utils.py",
+   "target": "function:vllm/distributed/utils.py:stateless_init_torch_distributed_process_group",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/utils.py",
+   "target": "function:vllm/distributed/utils.py:create_tcp_store",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/utils.py",
+   "target": "function:vllm/distributed/utils.py:create_tcp_store",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/device_allocator/__init__.py",
+   "target": "file:vllm/device_allocator/cumem.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/device_allocator/__init__.py",
+   "target": "file:vllm/device_allocator/xpumem.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/device_allocator/__init__.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/device_allocator/cumem.py",
+   "target": "file:vllm/device_allocator/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/device_allocator/cumem.py",
+   "target": "file:vllm/device_allocator/alloc_conf.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/device_allocator/cumem.py",
+   "target": "file:vllm/distributed/device_communicators/cuda_wrapper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/device_allocator/cumem.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/device_allocator/cumem.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/device_allocator/cumem.py",
+   "target": "file:vllm/utils/system_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/device_allocator/cumem.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/device_allocator/sleep_mode_backend.py",
+   "target": "file:vllm/config/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/device_allocator/sleep_mode_backend.py",
+   "target": "file:vllm/device_allocator/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/device_allocator/sleep_mode_backend.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/device_allocator/xpumem.py",
+   "target": "file:vllm/device_allocator/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/device_allocator/xpumem.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/device_allocator/xpumem.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/connector.py",
+   "target": "file:vllm/distributed/kv_events.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/connector.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/connector.py",
+   "target": "file:vllm/v1/core/kv_cache_manager.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/connector.py",
+   "target": "file:vllm/v1/core/kv_cache_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/connector.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/connector.py",
+   "target": "file:vllm/v1/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/routed_experts.py",
+   "target": "file:vllm/distributed/aux_output_connector/store.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/store.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/worker.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/worker.py",
+   "target": "file:vllm/distributed/aux_output_connector/connector.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/worker.py",
+   "target": "file:vllm/distributed/aux_output_connector/routed_experts.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/worker.py",
+   "target": "file:vllm/distributed/aux_output_connector/store.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/worker.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/worker.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/routed_experts_capturer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/worker.py",
+   "target": "file:vllm/v1/core/kv_cache_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/worker.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/aux_output_connector/worker.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/control.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/memory.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/metadata.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/producer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/reservation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/transfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/data.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "target": "file:vllm/utils/network_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_ec_connector.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_ec_connector.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_ec_connector.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/metadata.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_ec_connector.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/scheduler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_ec_connector.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/mooncake/worker.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_ec_connector.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_ec_connector.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_ec_connector.py",
+   "target": "file:vllm/v1/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/backend.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/data.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/backend.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/backend.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/data.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/data.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/mooncake/rdma_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py",
+   "target": "file:vllm/distributed/mooncake_store.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/mooncake_store_embedding/store_client.py",
+   "target": "file:vllm/utils/network_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/utils.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/utils.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/utils.py",
+   "target": "file:vllm/utils/collection_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_connector/utils.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_transfer_state.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_transfer_state.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/ec_transfer/ec_transfer_state.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/factory.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "file:vllm/config/kv_events.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "file:vllm/utils/network_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "file:vllm/v1/core/kv_cache_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/localization.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/localization.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/localization.py",
+   "target": "file:vllm/utils/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/nixl_utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/nixl_utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "file:vllm/device_allocator/alloc_conf.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "file:vllm/distributed/device_communicators/base_device_communicator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "file:vllm/distributed/device_communicators/pynccl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "file:vllm/distributed/device_communicators/xpu_communicator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "file:vllm/distributed/stateless_coordinator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "file:vllm/utils/network_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "file:vllm/utils/system_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/parallel_state.py",
+   "target": "file:vllm/v1/sample/ops/topk_topp_triton.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/stateless_coordinator.py",
+   "target": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/stateless_coordinator.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/stateless_coordinator.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/stateless_coordinator.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/stateless_coordinator.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/stateless_coordinator.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/utils.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/utils.py",
+   "target": "file:vllm/utils/network_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/utils.py",
+   "target": "file:vllm/utils/system_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/device_allocator/sleep_mode_backend.py:CuMemBackend",
+   "target": "class:vllm/device_allocator/sleep_mode_backend.py:SleepModeBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/kv_events.py:BlockStored",
+   "target": "class:vllm/distributed/kv_events.py:KVCacheEvent",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/kv_events.py:BlockRemoved",
+   "target": "class:vllm/distributed/kv_events.py:KVCacheEvent",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/kv_events.py:AllBlocksCleared",
+   "target": "class:vllm/distributed/kv_events.py:KVCacheEvent",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/kv_events.py:NullEventPublisher",
+   "target": "class:vllm/distributed/kv_events.py:EventPublisher",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/kv_events.py:ZmqEventPublisher",
+   "target": "class:vllm/distributed/kv_events.py:EventPublisher",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/stateless_coordinator.py:StatelessGroupCoordinator",
+   "target": "class:vllm/distributed/parallel_state.py:GroupCoordinator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/ec_transfer/ec_connector/mooncake_ec_connector.py:ECMooncakeConnector",
+   "target": "class:vllm/distributed/ec_transfer/ec_connector/base.py:ECConnectorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "class:vllm/distributed/kv_events.py:AllBlocksCleared",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "class:vllm/distributed/kv_events.py:AllBlocksCleared",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "class:vllm/distributed/kv_events.py:NullEventPublisher",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_events.py",
+   "target": "class:vllm/distributed/kv_events.py:NullEventPublisher",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

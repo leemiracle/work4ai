@@ -1,0 +1,30 @@
+# DeepWiki 索引 — openucx/ucx
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-11-11
+> 结构 25 页 · 全文 637295 字符
+
+- [1 Overview](1-overview.md)
+- [2 UCP (Unified Communication Protocol)](2-ucp-unified-communication-protocol.md)
+  - [2.1 UCP API and Core Abstractions](2.1-ucp-api-and-core-abstractions.md)
+  - [2.2 Contexts and Workers](2.2-contexts-and-workers.md)
+  - [2.3 Endpoints and Connection Establishment](2.3-endpoints-and-connection-establishment.md)
+  - [2.4 Request Management and Tag Matching](2.4-request-management-and-tag-matching.md)
+  - [2.5 Communication Protocols](2.5-communication-protocols.md)
+- [3 UCT (Unified Communication Transport)](3-uct-unified-communication-transport.md)
+  - [3.1 UCT API and Interface Design](3.1-uct-api-and-interface-design.md)
+  - [3.2 InfiniBand Base Infrastructure](3.2-infiniband-base-infrastructure.md)
+  - [3.3 RC (Reliable Connection) Transport](3.3-rc-reliable-connection-transport.md)
+  - [3.4 UD (Unreliable Datagram) Transport](3.4-ud-unreliable-datagram-transport.md)
+  - [3.5 DC (Dynamic Connection) Transport](3.5-dc-dynamic-connection-transport.md)
+  - [3.6 TCP and Network Transports](3.6-tcp-and-network-transports.md)
+  - [3.7 MLX5 Hardware Acceleration](3.7-mlx5-hardware-acceleration.md)
+- [4 Memory Management](4-memory-management.md)
+  - [4.1 Memory Domains and Registration](4.1-memory-domains-and-registration.md)
+  - [4.2 Memory Registration Flows and Caching](4.2-memory-registration-flows-and-caching.md)
+  - [4.3 Remote Keys and Zero-Copy Operations](4.3-remote-keys-and-zero-copy-operations.md)
+  - [4.4 GPU Memory Support](4.4-gpu-memory-support.md)
+- [5 Testing and Development](5-testing-and-development.md)
+  - [5.1 Build System and Configuration](5.1-build-system-and-configuration.md)
+  - [5.2 UCP Testing Framework](5.2-ucp-testing-framework.md)
+  - [5.3 UCT Testing Framework](5.3-uct-testing-framework.md)
+  - [5.4 CI/CD Pipeline and Testing Infrastructure](5.4-ci-cd-pipeline-and-testing-infrastructure.md)

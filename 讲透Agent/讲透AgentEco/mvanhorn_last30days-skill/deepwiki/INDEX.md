@@ -1,0 +1,43 @@
+# DeepWiki 索引 — mvanhorn/last30days-skill
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-27
+> 结构 35 页 · 全文 330854 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 SKILL.md Contract and Output LAWs](1.1-skill.md-contract-and-output-laws.md)
+  - [1.2 Key Concepts and Query Modes](1.2-key-concepts-and-query-modes.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 Two-Phase Search Strategy](2.1-two-phase-search-strategy.md)
+  - [2.2 Orchestration Pipeline](2.2-orchestration-pipeline.md)
+  - [2.3 Configuration and Authentication](2.3-configuration-and-authentication.md)
+  - [2.4 Discovery Protocol](2.4-discovery-protocol.md)
+- [3 Data Sources](3-data-sources.md)
+  - [3.1 Reddit Integration](3.1-reddit-integration.md)
+  - [3.2 X/Twitter Integration](3.2-x-twitter-integration.md)
+  - [3.3 Social Media Sources](3.3-social-media-sources.md)
+  - [3.4 Forums and Prediction Markets](3.4-forums-and-prediction-markets.md)
+  - [3.5 Web Search](3.5-web-search.md)
+  - [3.6 Developer, Commerce and Hiring Sources](3.6-developer-commerce-and-hiring-sources.md)
+- [4 Data Processing Pipeline](4-data-processing-pipeline.md)
+  - [4.1 Data Normalization](4.1-data-normalization.md)
+  - [4.2 Scoring and Ranking](4.2-scoring-and-ranking.md)
+  - [4.3 Deduplication and Cross-Source Linking](4.3-deduplication-and-cross-source-linking.md)
+- [5 Output Layer](5-output-layer.md)
+  - [5.1 Report Generation](5.1-report-generation.md)
+  - [5.2 Terminal UI and Nudges](5.2-terminal-ui-and-nudges.md)
+  - [5.3 Output Formats and Files](5.3-output-formats-and-files.md)
+  - [5.4 HTML Briefs and Library](5.4-html-briefs-and-library.md)
+- [6 Persistence: Store, Watchlist and Briefings](6-persistence-store-watchlist-and-briefings.md)
+  - [6.1 Watchlist Management](6.1-watchlist-management.md)
+  - [6.2 Storage and Persistence](6.2-storage-and-persistence.md)
+  - [6.3 History and Briefings](6.3-history-and-briefings.md)
+- [7 Development and Deployment](7-development-and-deployment.md)
+  - [7.1 Installation and Setup](7.1-installation-and-setup.md)
+  - [7.2 Packaging: Plugin Manifests and MCP Server](7.2-packaging-plugin-manifests-and-mcp-server.md)
+  - [7.3 Testing and Quality Evaluation](7.3-testing-and-quality-evaluation.md)
+  - [7.4 CI/CD and Security Workflows](7.4-ci-cd-and-security-workflows.md)
+  - [7.5 Diagnostics and Health Checks](7.5-diagnostics-and-health-checks.md)
+- [8 Glossary](8-glossary.md)
+
+## 附：结构清单外的页
+- [Credential Stores and Cookie Extraction](x1-credential-stores-and-cookie-extraction.md)

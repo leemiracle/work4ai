@@ -1,0 +1,42 @@
+# DeepWiki 索引 — verl-project/uni-agent
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 34 页 · 全文 274955 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started & Installation](1.1-getting-started-installation.md)
+  - [1.2 Architecture Overview](1.2-architecture-overview.md)
+- [2 Gateway](2-gateway.md)
+  - [2.1 Gateway Actor, Manager & Configuration](2.1-gateway-actor-manager-configuration.md)
+  - [2.2 Sessions, Chains & Trajectories](2.2-sessions-chains-trajectories.md)
+  - [2.3 Message Codec & Tool Parsing](2.3-message-codec-tool-parsing.md)
+  - [2.4 Protocol Adapters (OpenAI & Anthropic)](2.4-protocol-adapters-openai-anthropic.md)
+- [3 Agent Framework & RL Training](3-agent-framework-rl-training.md)
+  - [3.1 GatewayAgentFramework & TransferQueue](3.1-gatewayagentframework-transferqueue.md)
+  - [3.2 Task Runner & Rollout Adapter](3.2-task-runner-rollout-adapter.md)
+  - [3.3 RL Training Recipes & Launch Scripts](3.3-rl-training-recipes-launch-scripts.md)
+  - [3.4 Parallel Inference & Benchmarking](3.4-parallel-inference-benchmarking.md)
+- [4 Sandbox Layer](4-sandbox-layer.md)
+  - [4.1 Sandbox Base, Config & Error Policy](4.1-sandbox-base-config-error-policy.md)
+  - [4.2 Sandbox Providers](4.2-sandbox-providers.md)
+  - [4.3 Toolbox & Built-in Tools](4.3-toolbox-built-in-tools.md)
+- [5 Agents](5-agents.md)
+  - [5.1 ReAct Agent](5.1-react-agent.md)
+  - [5.2 Claude Code Agent](5.2-claude-code-agent.md)
+  - [5.3 Mini-SWE-Agent (Black-box Harness)](5.3-mini-swe-agent-black-box-harness.md)
+  - [5.4 Mem Agent](5.4-mem-agent.md)
+- [6 Tasks & Rewards](6-tasks-rewards.md)
+  - [6.1 Task Base, Registry & Config Resolution](6.1-task-base-registry-config-resolution.md)
+  - [6.2 SWE Benchmarks (SWE-bench, SWE-reBench, Pro, Multilingual)](6.2-swe-benchmarks-swe-bench-swe-rebench-pro-multilingual.md)
+  - [6.3 KernelBench Task](6.3-kernelbench-task.md)
+  - [6.4 QA, Terminal-Bench & Harbor Tasks](6.4-qa-terminal-bench-harbor-tasks.md)
+- [7 Agent Aware Router](7-agent-aware-router.md)
+  - [7.1 Balancer, Strategies & Store](7.1-balancer-strategies-store.md)
+  - [7.2 Collectors & Metrics Parsing](7.2-collectors-metrics-parsing.md)
+- [8 Observability & Developer Operations](8-observability-developer-operations.md)
+  - [8.1 Logging & RL-Insight](8.1-logging-rl-insight.md)
+  - [8.2 Testing, CI & Contributing](8.2-testing-ci-contributing.md)
+- [9 Glossary](9-glossary.md)
+
+## 附：Unicode 标题补页
+- [页**：3.1 GatewayAgentFramework & TransferQueue](x1-gatewayagentframework-transferqueue.md)

@@ -1,0 +1,244 @@
+---
+name: k8s-launch-kit-deploy
+version: 1.3.5
+description: "Use this skill when the user wants to deploy generated NVIDIA networking manifests to a Kubernetes cluster using k8s-launch-kit (l8k). Activate for: applying manifests, deploying to cluster, the `l8k deploy` subcommand or the legacy --deploy flag on `l8k generate`, applying generated files, or any mention of pushing l8k output to a live cluster. Even if the user just says 'apply these' or 'push to cluster' after generating manifests, use this skill."
+metadata:
+  requires:
+    skills: ["k8s-launch-kit-shared"]
+---
+
+# l8k: Deploy
+
+> **PREREQUISITE:** Read `../k8s-launch-kit-shared/SKILL.md` for install paths, global flags, and output modes.
+
+This workflow uses the default `host` target; `--target host` is equivalent.
+The CLI snapshots deployment arguments and runs the standalone Host deploy
+service through the target registry; command syntax and apply ordering are
+unchanged.
+
+Apply previously generated NVIDIA networking manifests to a Kubernetes cluster.
+Use `docs/advanced/deployment.md#before-applying` for the ownership, artifact
+review, and preview sequence; resolve preflight conflicts before a real apply.
+
+Deploy loads and validates the entire flat artifact directory before Helm,
+preflight remediation, or apply. Only exact `values.yaml` is Helm input;
+`values.yml` and case variants must be renamed. Malformed or duplicate
+resources fail with source details and exit code 2.
+
+An NCP bundle gets a secondary-network ownership check before Helm or
+remediation, refreshed before every NCP apply, including disappearance retries.
+Retries retain desired component intent independently of API responses and use
+the configured worker set for external installer coverage. Foreign installer collisions and removal
+of a live managed section block deployment, including overwrite/dry-run. External
+health non-detection or denied optional reads remain unverified; failed mandatory
+NCP inspection blocks. Overwrite also protects differently named NCP deletion
+candidates with managed sections, even when their installer is absent; candidates
+are refreshed before any delete and checked by UID/resource-version preconditions.
+Policy strays without either managed section retain normal remediation. See [ownership guard](../../docs/advanced/deployment.md#secondary-network-ownership-guard).
+
+Before Helm/remediation/writes, affected SR-IOV policy and IPPool selectors must
+match exactly the worker union referenced by intended source metadata. Node-list
+permission errors, extra/missing nodes, duplicate IDs/workers, mixed empty/full
+inventories and annotated resources without resolved source config block deploy.
+Overwrite and dry-run cannot bypass this. Legacy multi-source inventory needs
+regeneration; a single source is unambiguous. All-empty preset/manual inventory
+retains a visible target-scope-unverified warning and strict PF readiness.
+Checks repeat before affected apply/reapply and against live selectors while waiting.
+Temporary live-scope read failures retry within the deployment budget, without
+evaluating readiness until inspection succeeds. Denied reads, invalid metadata
+and scope mismatches remain terminal; pre-write checks continue to block writes
+when inspection fails.
+
+## Usage
+
+The standalone subcommand (preferred):
+
+```bash
+l8k deploy [--deployment-files <DIR>] [--kubeconfig <PATH>] [--dry-run]
+```
+
+`l8k deploy` reads YAML files from `--deployment-files` (default `./deployment`) and applies them in dependency order. It auto-prefers `<DIR>/network-operator/` (the layout `l8k generate` produces) and falls back to `<DIR>` itself.
+
+When the deployment directory contains a `values.yaml` (the `l8k generate` profile renderer emits one per profile), Phase 0 runs first: the Helm Go SDK installs (or upgrades, with `--overwrite-existing`) the `nvidia/network-operator` chart in the namespace from `networkOperator.namespace`. The chart version and Helm repo URL come from the embedded release catalog selected via `--network-operator-release`. Phase 0 is skipped silently when `values.yaml` is absent — backward compatible with users managing the chart out of band.
+
+`networkOperator.skipHelmChart: true` or
+`--skip-network-operator-helm` explicitly skips Phase 0 and its Helm
+chart-version/values preflight checks even when an external bundle has a
+`values.yaml`. Component-version and stray-resource preflight checks plus all
+manifest apply phases remain enabled.
+
+When `networkOperator.imagePullSecrets` is non-empty, l8k reads the named
+Docker Secrets from the operator namespace and uses compatible credentials to
+authenticate both the Helm repository index and chart archive requests. The
+Secret must exist before Phase 0, and the kubeconfig must allow `get secrets`.
+l8k never logs or persists the credential. It sends credentials only to an
+exact matching chart host, with one intentional NGC mapping from `nvcr.io` to
+`helm.ngc.nvidia.com`; unrelated registry credentials are not forwarded.
+
+Network Operator 26.1+ requestor mode is a Helm-level change: the generated
+values add Network Operator Deployment environment variables and enable the
+SR-IOV external drainer where applicable. Applying only the generated CRs
+cannot enable requestor mode. When upgrading an existing release whose values
+differ, pass `--overwrite-existing`; otherwise l8k intentionally stops at the
+values conflict.
+
+The legacy one-shot form (still supported, useful when you want to generate and apply in a single step):
+
+```bash
+l8k generate --user-config <CONFIG> --fabric <FABRIC> --deployment-type <TYPE> --deploy [--kubeconfig <PATH>]
+```
+
+## Flags
+
+| Flag | Required | Description |
+|------|----------|-------------|
+| `--deployment-files` | — | Directory with manifests to apply (default `./deployment`) |
+| `--kubeconfig` | — | Path to kubeconfig with cluster-admin access (falls back to `$KUBECONFIG`) |
+| `--dry-run` | — | Server-side dry-run (`client.DryRunAll`) — cluster validates without persisting |
+| `--overwrite-existing` | — | Upgrade conflicting Helm chart/values and delete every reported stray CR in the checked kinds/scopes, even without l8k ownership annotations. Other cohorts and manual resources can be affected; recognized Spectrum-X children are excluded. |
+| `--skip-network-operator-helm` | — | Skip Network Operator chart install/upgrade and Helm preflight checks; still deploy the generated CRs. |
+
+## Examples
+
+```bash
+# Apply manifests from ./deployment to the cluster reachable via $KUBECONFIG
+l8k deploy
+
+# Apply from a specific directory with explicit kubeconfig
+l8k deploy --deployment-files /tmp/my-output --kubeconfig ~/.kube/config
+
+# Server-side dry-run before a production apply
+l8k deploy --dry-run
+
+# Apply newly generated requestor-mode values to an existing release
+l8k deploy --deployment-files ./output --kubeconfig ~/.kube/config \
+  --overwrite-existing
+
+# Agent mode
+l8k deploy --output json
+# Standalone deploy has no success JSON envelope; check its exit status.
+
+# Legacy single-shot: generate + deploy in one invocation
+l8k generate --user-config cluster-config.yaml \
+  --fabric ethernet --deployment-type sriov \
+  --save-deployment-files ./output \
+  --deploy --kubeconfig ~/.kube/config
+```
+
+## Resource Apply Order
+
+l8k applies resources in dependency order:
+
+1. Install/check Helm and perform preflight as applicable.
+2. Apply **NicClusterPolicy**, then wait for readiness.
+3. Apply each generated **NicNodePolicy**, waiting for each.
+4. Apply the remaining operational resources, then verify reconciliation.
+
+Example validation files are excluded. Custom `90-workload-*.yaml` files are
+operational resources and are applied. Host-device keeps its driver and device
+plugin in the singleton NicClusterPolicy and has no NicNodePolicy template.
+
+Deploy/validate prefer `.l8k/resolved-config.yaml` from the bundle unless
+`--user-config` explicitly overrides it. Retain that metadata with the files.
+
+Before `--overwrite-existing`, inspect the entire preflight inventory. Stray
+checks enumerate the documented kinds cluster-wide or in the operator
+namespace, without checking l8k ownership annotations. `--groups` does not
+isolate deletion to the chosen cohort. Follow the exact boundary in
+`docs/advanced/deployment.md#stray-resource-deletion-boundary`.
+
+## Post-Deploy Verification
+
+During reconciliation, `NicConfigurationTemplate` and
+`NicFirmwareTemplate` wait for the operator-populated `status.nicDevices`
+list to reflect the current node, NIC type, PCI-address, serial-number, and
+part-number selectors. l8k validates only those
+named `NicDevice` objects and waits for their corresponding
+`spec.configuration` or `spec.firmware` to reflect the current template
+payload and for device conditions to observe the current device generation;
+unrelated device configuration state does not block deployment. A
+`NicConfigurationTemplate` gates on `FirmwareUpdateInProgress` only when the
+matched device has `spec.firmware`; configuration-only deployments ignore a
+stale firmware condition.
+
+`NicInterfaceNameTemplate` gates verification of the manifests that follow it.
+Treat `InterfaceNameMismatch` as retryable because the NIC configuration
+daemon can publish that condition while new udev rules are still taking
+effect. Start the five-minute retry window only when the first mismatch is
+observed; initial device discovery and other ordinary in-progress states stay
+unbounded. If every targeted device reaches `InterfaceNameApplied`, continue
+verification. If a mismatch persists for five minutes, fail with the
+per-device details. A shorter deploy-wide `--deploy-timeout` takes precedence.
+
+During preflight, do not classify `SriovNetworkPoolConfig`,
+`SriovNetworkNodePolicy`, or `OVSNetwork` objects labeled with
+`spectrumx.nvidia.com/owner-name` as strays. They are child resources generated
+and reconciled by the Spectrum-X operator from `SpectrumXRailPoolConfig`, not
+manifests owned by l8k. Unlabelled objects of the same kinds remain subject to
+the normal conflict check.
+
+```bash
+kubectl get nicclusterpolicy -o yaml          # Check policy state
+kubectl get nicnodepolicy                     # Per-group state
+kubectl get pods -n <operator-ns>             # Verify all pods Running
+kubectl get sriovnetworknodestates -A         # Check SR-IOV VF allocation
+kubectl get maintenanceoperatorconfigs -A -o yaml # Check global concurrency
+kubectl get nodemaintenances -A                # Check active requests
+```
+
+For SR-IOV on release 26.1+, verify that the generated Helm values contain both
+`operator.maintenanceOperator.useDrainControllerRequestor: true` and
+`sriov-network-operator.operator.externalDrainer.enabled: true`. For OFED,
+verify `operator.maintenanceOperator.useRequestor: true`. Do not try to enable
+these by applying `MaintenanceOperatorConfig` alone.
+
+> [!CAUTION]
+> This is a **write** command — confirm with the user before executing on production clusters.
+
+## See Also
+
+- [k8s-launch-kit-shared](../k8s-launch-kit-shared/SKILL.md) — Global flags and exit codes
+- [k8s-launch-kit-dryrun](../k8s-launch-kit-dryrun/SKILL.md) — Preview before deploying
+- [k8s-launch-kit-clean](../k8s-launch-kit-clean/SKILL.md) — Remove an installed deployment
+- [k8s-launch-kit-troubleshoot](../k8s-launch-kit-troubleshoot/SKILL.md) — Debug deployment failures
+
+## OpenShift
+
+OpenShift deploy requires certified operator installations, uses OLM CSV/API checks, and configures existing operators. Helm values in the deployment directory are rejected. IPPool dry-run checks may be deferred until NCP installs NV-IPAM.
+Use `docs/user/openshift.md` for the operator ownership and acceptance workflow.
+
+## Standard NIC tuning
+
+`nicConfigurationOperator.deployNicConfigurationTemplate` defaults to true.
+Set it to false or pass `--deploy-nic-configuration-template=false` to opt out;
+explicit YAML and CLI false values are preserved.
+Root, generate and discover accept `--deploy-nic-configuration-template[=false]`.
+It enables NCO independently of interface naming and renders per-source,
+east-west PCI-scoped templates for standard SR-IOV, RDMA-shared and host-device
+profiles on k8s/OCP. VF count comes from `sriov.numVfs`; link type comes from
+`profile.fabric`. Ethernet gets DSCP trust and priority-3 PFC; InfiniBand omits
+RoCE tuning. Spectrum-X keeps its dedicated required templates independently
+of this standard-profile toggle. Only SR-IOV disables the Mellanox
+plugin (Helm values on k8s, additive `disablePlugins` merge on OCP). Kubernetes
+external Helm owners must configure that plugin themselves.
+
+Deploy and validate consume the generated template and require all matched
+NicDevices to report current `ConfigUpdateInProgress=False` with reason
+`UpdateSuccessful`; stale/partial status waits and failures surface. Opting out
+does not restore applied NIC settings. On k8s, omitted templates (also for
+unselected groups) block deploy preflight unless `--overwrite-existing` is used,
+which deletes them. OCP preserves existing templates and disabled plugins.
+Generation rejects inventory with selected and excluded ports on the same PCI
+device. Review whole-NIC scope, including ports absent from inventory, and qualify
+runtime RoCE support for the installed NCO/DOCA/RHCOS versions before live use. See `docs/reference/configuration.md#nic-configuration-and-naming`.
+
+## RA2.4 API compatibility
+
+For RA2.4/RA3.1 NIC templates, deploy checks the live NCO CRD after NCP/NNP bootstrap
+and before applying the doSPCX ConfigMap or NIC templates. The manifest's served
+API version must define platformType as a string; missing APIs and failed
+inspection stop deployment. This check also covers standalone/configless deploy,
+external Helm, overwrite and dry-run. Dry-run cannot install dependent CRDs.
+Read access to the cluster-scoped NCT CRD is required. Existing Helm, preflight
+remediation and policy-bootstrap effects are retained if the check fails.
+See `docs/user/spectrum-x.md#ra24-dospcx-profile` for compatible-build requirements.

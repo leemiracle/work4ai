@@ -1,0 +1,228 @@
+{
+ "nodes": [
+  {
+   "id": "file:packages/session-query/session-query/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/session-query/session-query/src/types.ts",
+   "summary": "session-query 公共记录类型：SessionRecord（live/persisted/formatStatus 可用性）、SessionSurfaceSnapshot、事件 surface 三态（current/shadowed/log-only）、检索命中/分页/游标与 trace 观察等纯类型集。",
+   "tags": [
+    "type-definition",
+    "records",
+    "public-types"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/session-query/session-query/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/session-query/session-query/tsconfig.json",
+   "summary": "session-query 包 tsconfig（extends base，src→lib/types，references 含 vendor cosmokit 与依赖包）。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/session-query/session-query-sqlite/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/session-query/session-query-sqlite/README.md",
+   "summary": "dsh-session-query-sqlite 文档：SQLite FTS5 全文检索后端——在独立派生库索引 live+持久化历史，不改会话持久层；openAt 三态（startup/first-search/never），匹配 token 与短语而非任意子串，每索引路径单进程所有。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "fts5",
+    "sqlite"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/session-query/session-query-sqlite/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/session-query/session-query-sqlite/package.json",
+   "summary": "@deepseek-ai/dsh-session-query-sqlite 清单。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "sqlite"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session-query/session-query-sqlite/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/session-query/session-query-sqlite/src/index.ts",
+   "summary": "SQLite FTS5 后端服务：SqliteSessionQueryEngine 实现抽象检索面——请求规范化与指纹、活/持久语料对账（generation+绑定 identity 防陈旧）、FTS 查询构造/片段/高亮与游标分页；schema.ts 建库、query.ts 承载 FTS 语义。",
+   "tags": [
+    "entry-point",
+    "fts5",
+    "sqlite-backend",
+    "reconciliation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/session-query/session-query-sqlite/src/index.ts:SqliteSessionQueryEngine",
+   "type": "class",
+   "name": "SqliteSessionQueryEngine",
+   "filePath": "packages/session-query/session-query-sqlite/src/index.ts",
+   "lineRange": [
+    203,
+    773
+   ],
+   "summary": "具体查询引擎（SessionQueryEngine 的 Provider 实现）：static Config 验 path/openAt/journalMode/分页/窗口参数；searchSessions/searchEvents 经串行队列执行——ensureReady 惰性开库、reconcile 对账索引与语料、FTS 行查询+snippet+cursor 分页；可选注入 sessionPersistence（identity symbol 防陈旧绑定），close 挂 effect。",
+   "tags": [
+    "provider",
+    "fts5",
+    "serialization-queue",
+    "optional-inject"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session-query/session-query-sqlite/src/index.ts:materializePersistenceSnapshots",
+   "type": "function",
+   "name": "materializePersistenceSnapshots",
+   "filePath": "packages/session-query/session-query-sqlite/src/index.ts",
+   "lineRange": [
+    893,
+    910
+   ],
+   "summary": "把持久化层快照物化为索引对账所需的输入（活记录与持久化记录的合并基线）。",
+   "tags": [
+    "reconciliation",
+    "snapshots"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session-query/session-query-sqlite/src/index.ts:resolveConfig",
+   "type": "function",
+   "name": "resolveConfig",
+   "filePath": "packages/session-query/session-query-sqlite/src/index.ts",
+   "lineRange": [
+    1020,
+    1063
+   ],
+   "summary": "解析并缺省化引擎配置（path/openAt/journalMode/limit 窗口等），非法值走 invalidConfig 报错。",
+   "tags": [
+    "config-resolution",
+    "validation"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/session-query/session-query/src/types.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/types.ts",
+   "target": "file:packages/session/session-title/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/types.ts",
+   "target": "file:packages/session-query/session-query/src/cursor.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query-sqlite/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query-sqlite/src/index.ts",
+   "target": "file:packages/session/session-persistence/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query-sqlite/src/index.ts",
+   "target": "file:packages/session-query/session-query/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query-sqlite/src/index.ts",
+   "target": "file:packages/session-query/session-query-sqlite/src/schema.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query-sqlite/src/index.ts",
+   "target": "file:packages/session-query/session-query-sqlite/src/query.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query-sqlite/src/index.ts",
+   "target": "class:packages/session-query/session-query-sqlite/src/index.ts:SqliteSessionQueryEngine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-query-sqlite/src/index.ts",
+   "target": "class:packages/session-query/session-query-sqlite/src/index.ts:SqliteSessionQueryEngine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-query-sqlite/src/index.ts",
+   "target": "function:packages/session-query/session-query-sqlite/src/index.ts:materializePersistenceSnapshots",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-query-sqlite/src/index.ts",
+   "target": "function:packages/session-query/session-query-sqlite/src/index.ts:resolveConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:packages/session-query/session-query-sqlite/src/index.ts:SqliteSessionQueryEngine",
+   "target": "class:packages/session-query/session-query/src/index.ts:SessionQueryEngine",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "document:packages/session-query/session-query-sqlite/README.md",
+   "target": "file:packages/session-query/session-query-sqlite/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/session-query/session-query-sqlite/package.json",
+   "target": "file:packages/session-query/session-query-sqlite/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  }
+ ]
+}

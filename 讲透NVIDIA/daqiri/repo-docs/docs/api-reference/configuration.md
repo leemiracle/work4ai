@@ -1,0 +1,841 @@
+---
+hide:
+  - navigation
+---
+
+# Configuration YAML Reference
+
+DAQIRI is configured through a YAML file or a `NetworkConfig` struct built in code.
+Either form defines memory regions, NIC interfaces, TX/RX queues, and flow rules, and
+is passed to `daqiri_init()` at startup. The struct form is useful for customers who
+want to interoperate with existing configuration code.
+
+Start with the commented configurations under `examples/` to see complete,
+readable configurations and understand how the fields fit together. When you
+need repeatable production, benchmark, multi-queue, or cross-host variants, use
+[Configuration Generation](../config-generation.md) to apply system and topology
+parameters consistently.
+
+## Optional validation without hardware initialization
+
+Use `daqiri_config_validate` to check YAML files before running an application, such as in CI or
+on a machine without the target NIC. `daqiri_init()` performs these checks during startup. The
+command cannot determine whether the selected engine and hardware support every requested
+setting.
+
+```bash
+daqiri_config_validate config.yaml another-config.yaml
+```
+
+The command exits with status `0` when every file is valid, `1` when any file is invalid, and
+`2` when no file was provided. Use `daqiri_config_validate --list-engines` to print the
+engines compiled into the validator and exit successfully without checking files.
+It is built and installed even when `DAQIRI_BUILD_EXAMPLES=OFF`.
+
+OpenTelemetry metrics do not add YAML fields. Metrics-enabled builds use the
+same interface, queue, and flow names from the active configuration as metric
+labels, and applications are still responsible for configuring the OpenTelemetry
+SDK/exporter before running DAQIRI.
+
+## Common Configuration
+
+These settings apply globally to both TX and RX:
+
+- **`version`**: Config version. Only `1` is valid currently.
+  - type: `integer`
+- **`master_core`**: CPU core used to fork and join network threads. This core is not used
+  for packet processing and can be bound to a non-isolated core. Should differ from isolated
+  cores assigned to queues.
+  - type: `integer`
+- **`stream_type`**: Packet I/O stream class.
+  - type: `string`
+  - values: `raw`, `socket`
+- **`engine`**: Optional implementation engine for the selected stream type. Omit this
+  unless you need a specific implementation override. For `stream_type: "raw"` the
+  default is `ibverbs`, which uses the Multi-Packet (striding) Receive Queue engine on
+  Mellanox/mlx5 NICs; set `engine: "dpdk"` to use DPDK instead. RoCE configs infer `ibverbs` from
+  `roce://` endpoint URIs by default.
+  - type: `string`
+  - values: `dpdk`, `socket`, `ibverbs`
+  - Builds with `DAQIRI_IBVERBS_DLOPEN=ON` require the selected raw ibverbs or
+    RoCE engine's glue library and compatible system RDMA shared libraries at
+    initialization. This is a CMake option; YAML engine selection uses the same
+    values. See [runtime RDMA library deployment](../tutorials/bare-metal-cmake-build.md#daqiri_ibverbs_dlopen-runtime-rdma-libraries)
+    for installation and `DAQIRI_RDMA_GLUE_DIR` search-path guidance.
+- **`log_level`**: Engine log level.
+  - type: `string`
+  - values: `trace`, `debug`, `info`, `warn` (default), `error`, `critical`, `off`
+  - any other value is rejected during configuration parsing
+- **`loopback`**: Select a loopback mode for local testing.
+  - type: `string`
+  - values: `""` (disabled, default), `"sw"` (DPDK software loopback, no NIC),
+    `"hw"` (single-port mlx5 hardware loopback, raw `ibverbs` engine only)
+  - hardware loopback requires one physical interface containing both TX and RX queues;
+    transmitted unicast packets must use that port's own destination MAC
+- **`tx_meta_buffers`**: Metadata buffers for transmit. One buffer is used for each burst
+  of packets.
+  - type: `integer`
+  - default: `256`
+- **`rx_meta_buffers`**: Metadata buffers for receive. One buffer is used for each burst
+  of packets.
+  - type: `integer`
+  - default: `256`
+
+## Memory Regions
+
+`memory_regions:` List of regions where packet buffers are stored. The number of regions
+and their `kind` determines the receive mode (CPU-only, header-data split, or batched GPU).
+
+YAML describes region semantics but never contains process-local pointers. C++ and Python callers
+can attach application-owned allocations by name at initialization; see
+[Application-owned memory regions](cpp.md#application-owned-memory-regions). A runtime binding
+replaces DAQIRI's allocation for that region. The legacy `owned: false` form requires a matching
+runtime binding.
+
+- **`name`**: Memory region name. Referenced by queue configurations.
+  - type: `string`
+- **`kind`**: Memory type.
+  - type: `string`
+  - values:
+    - `huge`: Explicit hugetlb CPU memory (recommended for CPU buffers). Initialization fails
+      if the configured hugetlb pool cannot satisfy it; DAQIRI never silently substitutes
+      regular pages or transparent hugepages.
+    - `device`: GPU memory (requires GPUDirect via peermem or DMA-BUF). On a system such as
+      IGX Thor with both an integrated and a discrete GPU, set `affinity` to the discrete GPU's
+      process-local CUDA ordinal.
+    - `host_pinned`: Pinned CPU pages allocated via `cudaHostAlloc`. **Recommended on
+      integrated GPUs (e.g. NVIDIA GB10 / DGX Spark)**, where the NIC cannot peer-DMA
+      into device memory and CUDA reports DMA-BUF unsupported. Use this kind when remaining on
+      the integrated GPU in a hybrid-GPU system such as IGX Thor. On discrete-GPU systems,
+      prefer `device` for high-throughput RX/TX paths.
+    - `host`: Regular CPU memory (not recommended)
+  With the raw ibverbs engine, DAQIRI-owned `huge` regions declared in the startup configuration
+  and having the same NUMA affinity share a hugetlb arena. DAQIRI chooses the available page size
+  that can back the regions with the least rounding, while registering every region separately.
+  For example, twenty-two 32 MiB regions require one 1 GiB page—not twenty-two—when the host has
+  only 1 GiB hugepages.
+
+- **`affinity`**: Process-local CUDA ordinal for `device` and `host_pinned` memory, or NUMA
+  node ID for `huge` and `host` memory. CUDA ordinals reflect only the devices visible to the
+  process and need not match host-wide GPU indices.
+
+  On a mixed integrated/discrete GPU host, select the intended discrete GPU by its stable UUID
+  when starting a privileged NVIDIA container. For example, after identifying the UUID with
+  `nvidia-smi --query-gpu=uuid,name --format=csv,noheader`, pass it to both visibility variables:
+
+  ```bash
+  docker run --privileged --runtime=nvidia \
+    -e NVIDIA_VISIBLE_DEVICES=<discrete-GPU-UUID> \
+    -e CUDA_VISIBLE_DEVICES=<discrete-GPU-UUID> ...
+  ```
+
+  When that is the only CUDA-visible GPU, it has process-local ordinal `0`, even if it has a
+  different host-wide index. Configure `affinity` using the process-local ordinal, not the host
+  index. On the tested IGX Thor privileged-container setup, UUID-based selection prevents the
+  integrated GPU from remaining selected.
+  - type: `integer`
+- **`access`**: Memory access permissions.
+  - type: `list`
+  - values: `local`, `rdma_read`, `rdma_write`, `relaxed_ordering`
+
+  `relaxed_ordering` requests PCIe relaxed ordering for NIC DMA into the region and is honored
+  by the raw `ibverbs` engine and the RoCE (`roce://`) engine. It can raise GPUDirect RX
+  bandwidth on discrete-GPU hosts, but leave it off on Tegra/IGX: it has caused receive-side
+  local protection errors there. If the device rejects the flag, DAQIRI retries the
+  registration without it and logs a warning.
+- **`num_bufs`**: Number of buffers in this region. Higher values give more processing
+  headroom but consume more memory (GPU BAR1 for `device`). Too low risks dropped packets
+  on RX or a TX stall. For socket TCP and UDP RX queues, the smallest `num_bufs` among the
+  queue's memory regions bounds the number of packets DAQIRI holds internally. When that
+  queue fills, DAQIRI stops consuming from the socket. TCP flow control backpressures the
+  sender; UDP fills the bounded kernel receive buffer and drops excess datagrams. A UDP burst
+  may contain up to `batch_size` datagrams, but every datagram counts against the limit. See
+  [Receive backpressure and queue sizing](../benchmarks/socket_benchmarking.md#receive-backpressure-and-queue-sizing)
+  for sizing guidance and ownership details. Raw DPDK queue regions use a floor of
+  `max(1.5 * ring, ring + 2 * batch_size)`. DAQIRI bumps values below that floor to
+  `max(3 * ring, ring + 4 * batch_size)` and warns with the exact `num_bufs` to configure.
+  With the default 8192-descriptor ring and `batch_size: 10240`, the floor is 28672 and the
+  bump target is 49152; the shipped `num_bufs: 51200` is sufficient.
+
+  Raw ibverbs uses a separate hardware limit. A scheduled packet can consume two send work
+  requests, so usable TX slots are capped at `max_qp_wr / 2`. DAQIRI warns when configured
+  storage exceeds that cap and fails initialization with the exact maximum when `batch_size`
+  exceeds it. Providers can also reject a QP request at the exact advertised maximum, so
+  portable configs should leave headroom. The named-endpoint example uses 8192 TX slots and
+  a 256-packet batch, requiring at most 16384 send work requests rather than the 32768
+  reported by the demonstrated ConnectX-7 device.
+  - type: `integer`
+- **`buf_size`**: Size of each buffer in bytes. Should match the expected packet size, or
+  the segment size when using header-data split.
+  - type: `integer`
+
+### Example: Header-Data Split
+
+Two regions, a small CPU region for headers and a GPU region for payload:
+
+```yaml
+memory_regions:
+- name: "RX_CPU"
+  kind: "huge"
+  affinity: 0
+  access:
+    - local
+  num_bufs: 51200
+  buf_size: 64        # ETH+IP+UDP headers (~42 bytes, padded)
+- name: "RX_GPU"
+  kind: "device"
+  affinity: 0
+  access:
+    - local
+  num_bufs: 51200
+  buf_size: 1000      # payload
+```
+
+## Interfaces
+
+`interfaces:` List of NIC interfaces to configure.
+
+- **`name`**: Interface name. Used to look up port IDs at runtime via `get_port_id()`.
+  - type: `string`
+- **`address`**: PCIe BDF address (from `lspci`) or Linux interface name for Raw Ethernet
+  (`stream_type: "raw"`), or IP address for RoCE (`stream_type: "socket"` with a
+  `roce://` endpoint).
+  - type: `string`
+
+### Socket and RDMA Endpoint Configuration
+
+Socket-style streams use a `socket_config` block for endpoint role and addressing.
+Endpoint addresses are URI strings. Supported schemes are `tcp://`, `udp://`, and
+`roce://` (`rdma://` is still accepted as a legacy alias).
+
+- **`socket_config.mode`**: Connection role.
+  - type: `string`
+  - values: `client`, `server`
+- **`socket_config.local_addr`**: Local bind endpoint, for example
+  `tcp://127.0.0.1:6001`, `roce://10.100.3.1:4096`, or
+  `roce://10.100.1.1` for a RoCE client whose source port is chosen by RDMA CM.
+  Required for server mode and RoCE client mode.
+- **`socket_config.remote_addr`**: Remote peer endpoint, for example
+  `udp://10.250.0.2:5021`. Required for TCP/UDP client mode. RoCE clients choose
+  the peer in application code (for example by calling `rdma_connect_to_server`),
+  not in DAQIRI config. It is optional for UDP server mode; when present, DAQIRI
+  connects the socket to that expected peer so other sources are rejected by the
+  kernel and multi-datagram receive batching is safe.
+- **`socket_config.local_ip`** / **`socket_config.local_port`** and
+  **`socket_config.remote_ip`** / **`socket_config.remote_port`**: Legacy endpoint
+  fields accepted for older configs when a top-level engine override provides the
+  transport.
+
+Linux TCP/UDP socket options are intentionally not configured in YAML. Apply them
+after connection setup with `socket_setsockopt(conn_id, level, optname, optval,
+optlen)`, using the numeric constants from the target system headers. The API is
+not supported for `roce://` endpoints.
+
+For compatibility, a UDP server without `remote_addr` operates in a
+single-active-peer mode: each received datagram replaces the endpoint's current
+reply target. This does not preserve request/reply association when multiple
+clients interleave traffic. DAQIRI limits such endpoints to one datagram per
+receive burst. Configure `remote_addr` for point-to-point operation, peer
+filtering, and receive batching.
+
+When using RoCE, set `stream_type: "socket"` and use `roce://` endpoint addresses
+plus a `roce_config` block for transport settings. A RoCE URI may include
+`?engine=ibverbs`; when omitted, `ibverbs` is the default and only supported RoCE
+engine.
+
+- **`roce_config.transport_mode`**: RDMA transport type.
+  - type: `string`
+  - values: `RC` (Reliable Connected), `UC` (Unreliable Connected)
+
+Each RoCE client connection uses one TX queue from the interface whose `address`
+field matches the connection's local IP address. An application can choose that
+local IP by passing a source address to `rdma_connect_to_server`. If it does not,
+Linux chooses the local IP and network interface it would normally use to reach the
+server.
+Queue positions are independent for each interface: the first connection through
+an interface uses position 0, and later connections through the same interface use
+the lowest unused position. A connection fails with `NO_SPACE_AVAILABLE` when all
+TX queues on that interface are already in use.
+
+## Receive Configuration (rx)
+
+### Queues
+
+`rx.queues:` List of receive queues on the interface.
+
+- **`name`**: Queue name.
+  - type: `string`
+- **`id`**: Integer ID used for flow steering and burst retrieval.
+  - type: `integer`
+- **`poll_mode`**: `indirect` uses the current DAQIRI RX worker and application handoff ring.
+  `direct` makes the thread calling `get_rx_burst()` poll the NIC synchronously and is supported
+  only by the raw ibverbs engine.
+  - type: `string`
+  - values: `indirect`, `direct`
+  - default: `indirect`
+- **`cpu_core`**: CPU core ID for the RX worker thread. Required in indirect mode and forbidden
+  in direct mode. For `udp://` and `tcp://` socket endpoints, this pins the receive thread
+  that calls `recvmmsg()` or `recv()`, respectively;
+  application threads use their own affinity settings. Should be an isolated core for best
+  performance. Use `-1` to leave a socket receive thread unpinned.
+  - type: `string`
+- **`batch_size`**: Maximum number of packets per batch passed to the application. Larger values
+  increase throughput, and smaller values reduce latency. For `udp://` socket endpoints, one
+  `recvmmsg()` call returns up to this many datagrams; valid values are 1-32. UDP servers without
+  a configured `remote_addr` are limited to one datagram per burst. Required in indirect mode and
+  forbidden in direct mode. A direct poll returns the packets currently ready, up to 256, without
+  waiting.
+  - type: `integer`
+  - C++ or Python callers constructing an indirect UDP RX queue programmatically must set this
+    field explicitly. The default `CommonQueueConfig` value of `0` is not a valid UDP batch size.
+- **`memory_regions`**: List of memory region names (defined in [Memory Regions](#memory-regions)).
+  The order determines segment mapping: first region = segment 0, second = segment 1, etc.
+  A single region means all packet data lands in one place, while two regions enables header-data
+  split.
+  For raw ibverbs RX, up to four regions are supported. Each region receives up to
+  its configured `buf_size` bytes, in list order; allocation padding does not change
+  the split boundaries. A short packet can leave later segments with zero length.
+  Multi-region queues always use a regular scatter RQ, including when
+  `DAQIRI_IBV_STRIDING=1` is set. Raw ibverbs TX also supports up to four regions,
+  gathered in list order using the per-packet segment lengths set by the application.
+  - type: `list`
+- **`timeout_us`**: Timeout in microseconds. A partial batch is delivered if this time elapses
+  before `batch_size` packets are collected. Set to `0` to disable (wait for full batch only).
+  Forbidden in direct mode.
+  - type: `integer`
+  - default: `0`
+- **`cqe_compression`**: Raw `ibverbs` engine only. Enables mlx5 RX CQE compression on a
+  single-region (striding) queue: the NIC packs up to eight completions into one 64-byte CQ
+  entry, cutting completion PCIe traffic for small packets. On a compressed queue,
+  `get_packet_rx_timestamp()` returns `NOT_SUPPORTED`, and a packet's flow tag comes from the
+  first completion of its compressed group. DAQIRI ignores the option (with a warning) on
+  multi-region queues, when `rx.hardware_timestamps` is enabled, or when the interface has a
+  reorder configuration, and falls back to an uncompressed CQ if the NIC rejects it.
+  - type: `boolean`
+  - default: `false`
+
+Direct queues must be polled by exactly one user thread per queue. They do not create an RX
+worker or handoff ring, so an application stall also stops packet reception and buffer recycling.
+A direct queue cannot be targeted by an RX reorder configuration. Unsupported engines, reorder,
+or forbidden worker fields produce a warning followed by configuration failure.
+
+For the raw ibverbs engine, the same `RxQueueConfig` represented by this YAML block can be passed
+to `add_rx_queue_async()` after initialization. Its memory regions must already exist, and its
+batch capacity cannot exceed the metadata capacity fixed at initialization: at least 256 packets,
+or the largest startup queue batch when that is greater. Runtime queues are not written back to
+the YAML file. Install a dynamic RX flow after queue creation to route traffic to it; delete that
+flow before requesting queue removal.
+
+### Flex Items
+
+`rx.flex_items:` Flexible parser items for custom flow matching beyond standard UDP fields.
+
+- **`name`**: Name of the flex item.
+  - type: `string`
+- **`id`**: ID of the flex item. Scoped per interface. The same numeric ID on two
+  interfaces may refer to different parser settings.
+  - type: `integer`
+- **`offset`**: Byte offset after the UDP header where matching begins. Must be a multiple
+  of 4 and less than 28.
+  - type: `integer`
+- **`udp_dst_port`**: UDP destination port for flex item activation.
+  - type: `integer`
+
+### Flows
+
+`rx.flows:` Static startup flow rules that steer packets to specific queues based on
+match criteria. This sequence may be omitted, and a queues-only RX config can add DPDK RX
+flows later with the dynamic flow API. For Raw Ethernet on the DPDK and ibverbs engines,
+RX flows can also perform hardware VLAN pop or tunnel decapsulation before queue delivery.
+
+- **`name`**: Flow name.
+  - type: `string`
+- **`id`**: Flow ID. Retrievable at runtime via `get_packet_flow_id()`.
+  - type: `integer`
+- **`action`**: Legacy single action map. Existing configs may keep using
+  `action: {type: queue, id: ...}`. A multi-queue destination uses
+  `action: {type: queue, ids: [0, 1]}`.
+- **`actions`**: Ordered action list. Use this for tunnel/VLAN transforms.
+  RX transform flows must end with `type: queue`.
+  - **`type: queue`**: Steer matched packets to an RX queue.
+    - **`id`**: Queue ID under `rx.queues` on the same interface.
+    - **`ids`**: Non-empty list of unique queue IDs under `rx.queues` on the same
+      interface. One entry is direct steering. Two or more entries automatically
+      enable RSS. IP/UDP matches use flow-affine Toeplitz hashing over source and
+      destination IPv4 addresses and UDP ports. An Ethernet-only match remains
+      MAC-only; it does not implicitly add IPv4/UDP criteria, so matching non-IP
+      frames remain eligible for the RSS destination. `id` and `ids` are mutually
+      exclusive.
+  - **`type: vlan_pop`**: Pop one VLAN tag in hardware.
+  - **`type: tunnel_decap`**: Decapsulate a hardware tunnel before queue delivery.
+    - **`tunnel.type`**: `vxlan`, `gre`, or `nvgre`.
+    - **`outer_eth_src` / `outer_eth_dst`**: Outer Ethernet addresses.
+    - **`outer_ipv4_src` / `outer_ipv4_dst`**: Outer IPv4 addresses. IPv6 outer
+      headers are not supported in v1.
+    - **VXLAN fields**: `vni`, optional `outer_udp_src`, `outer_udp_dst` default `4789`.
+    - **GRE fields**: optional `gre_protocol` default `0x0800`.
+    - **NVGRE fields**: `tni`, optional `flow_id`.
+- **`match`**: Criteria for matching packets.
+  - **`udp_src`**: UDP source port or port range (e.g., `1000-1010`).
+    - type: `integer` or `string`
+  - **`udp_dst`**: UDP destination port or port range.
+    - type: `integer` or `string`
+  - **`ipv4_len`**: IPv4 payload length.
+    - type: `integer`
+  - **`flex_item_id`**: Flex item ID (the `id` field from an entry under `rx.flex_items` on
+    the same interface). Cannot be combined with UDP/IP matching.
+    - type: `integer`
+  - **`val`**: 32-bit value to match (with flex items).
+    - type: `integer`
+  - **`mask`**: 32-bit mask applied before matching (with flex items).
+    - type: `integer`
+  - **`ecpri`**: eCPRI-over-Ethernet match (EtherType `0xAEFE`). Presence of this map selects
+    the eCPRI flow class. The EtherType is matched implicitly. Cannot be combined with UDP/IP
+    or flex-item matching. A flow with an empty `ecpri: {}` map matches all eCPRI frames.
+    - **`msg_type`**: eCPRI common-header message type (e.g. `0` = IQ data, `2` = real-time
+      control). Optional.
+      - type: `integer`
+    - **`pc_id`** / **`rtc_id`**: eCPRI message identifier (the 16-bit physical-channel ID for
+      message types 0/1, or real-time-control ID for type 2). `pc_id` and `rtc_id` are aliases
+      for the same field. Optional, but matching it requires a `msg_type` (the NIC needs a known
+      message type to locate the identifier in the eCPRI header).
+      - type: `integer`
+
+  - **`ethernet`**: Raw Ethernet address match. The map must contain at least one address.
+    It can be used alone or combined with IPv4/UDP, flex-item, or eCPRI criteria; all
+    configured criteria must match for the rule to apply.
+    - **`src`**: Source MAC address to match. Optional.
+      - type: `string`
+      - format: `xx:xx:xx:xx:xx:xx`
+    - **`dst`**: Destination MAC address to match. Optional.
+      - type: `string`
+      - format: `xx:xx:xx:xx:xx:xx`
+
+
+For Raw Ethernet (`stream_type: "raw"`), each flow rule is programmed into the NIC during
+`daqiri_init()`. If any rule cannot be installed, or the send-to-kernel fallback cannot be
+created when `flow_isolation: true`, initialization fails with a critical log and
+`daqiri_init()` returns an error status. eCPRI matching is supported by both the `dpdk`
+(via the mlx5 eCPRI flow item) and `ibverbs` (via an mlx5 flex-parser node anchored on the
+eCPRI EtherType) engines. On the `dpdk` engine the mlx5 eCPRI flow item is only honored under
+firmware steering, so any interface with eCPRI flows is automatically switched to
+`dv_flow_en=1` (logged as a warning); a side effect is that the async/template dynamic-RX-flow
+API is unavailable on that interface. The `ibverbs` engine has no such restriction.
+
+A single RX interface must use exactly one protocol flow class: standard UDP/IP (including
+Ethernet-only rules), flex-item, or eCPRI. Ethernet address criteria may qualify a rule in
+any of these classes and do not select a separate class when protocol criteria are present.
+Each class installs its own DPDK group-0 jump rule, and these conflict when mixed, so only one
+class is reachable per interface. `daqiri_init` rejects mixed configs with a clear error.
+Flex-item flows cannot be combined with VLAN/tunnel transform actions in v1.
+
+Multi-queue RSS is supported for standard IPv4/UDP and flex-item flows. A flex
+item selects the rule, but its sampled value is not an RSS input; distribution
+still uses the packet's IPv4/UDP tuple. VLAN-pop rules hash the IPv4/UDP packet
+after the VLAN header, and tunnel-decap rules hash the inner IPv4/UDP tuple.
+eCPRI flows cannot use multi-queue RSS because they have no applicable UDP/IP
+five tuple. Queue-list order affects hash-to-queue mapping, but does not express
+weights.
+
+RSS is flow-affine: every packet with an unchanged five tuple stays on one
+queue. Roughly even packet counts require enough distinct tuples with reasonably
+balanced traffic; this is not packet striping or exact round-robin delivery.
+There is no queue-action mode field in configuration version 1; a future stripe mode can be
+added without changing the multi-ID RSS default. If
+the NIC rejects an RSS action, static initialization or the dynamic flow
+completion fails rather than falling back to one queue.
+
+### Flow Isolation
+
+`rx.flow_isolation:` When `true`, only packets matching an explicit flow rule are delivered
+to the application. Static startup flows install send-to-kernel fallback rules per flow class
+(standard, flex-item, or eCPRI), so unmatched traffic in those classes is steered back to the Linux
+kernel. Queues-only configs can set `flow_isolation: true` and then install dynamic RX flows
+after `daqiri_init()`; the first dynamic RX flow installs the send-to-kernel fallback for that
+flow class (so unmatched control traffic such as ARP keeps reaching the kernel), and until a
+dynamic rule is added, application traffic is not delivered to DAQIRI RX queues. When `false`,
+unmatched packets go to a default queue. Mixing standard, flex-item, and eCPRI flow classes on
+one interface is not supported, including across dynamic flow additions or within one dynamic
+batch.
+
+- type: `boolean`
+- default: `false`
+
+### Dynamic Flow Capacity
+
+`rx.dynamic_flow_capacity:` DPDK template-table capacity reserved for dynamic RX flow
+rules on this interface. `0` disables DPDK template/async setup on startup. Set a positive
+value to opt in to the template fast path when it is available and the NIC has enough async
+flow resources. Legacy fallback paths still accept dynamic RX flow operations but do not use
+a template table.
+
+- type: `integer`
+- default: `0`
+
+### Hardware Timestamps
+
+`rx.hardware_timestamps:` Enable per-packet hardware RX timestamps.
+When enabled, DAQIRI requires hardware timestamp support from the NIC and driver.
+Timestamps returned by `get_packet_rx_timestamp()` are unsigned 64-bit PTP epoch
+nanoseconds in the same clock domain as a PTP-synchronized `CLOCK_REALTIME`.
+The raw ibverbs engine requests the mlx5 real-time CQ timestamp format only when
+the device advertises it; otherwise it uses the default mlx5 device-clock CQ
+format and converts those ticks to nanoseconds internally. Device-clock ticks are
+not exposed by the public API.
+**WARNING: PTP synchronization is required.** DAQIRI does not validate the NIC or system clock
+configuration. Timestamp values are invalid if the clocks are not PTP-synchronized.
+
+- type: `boolean`
+- default: `false`
+
+### RX Reorder Configs
+
+`rx.reorder_configs:` Optional automatic packet reordering/aggregation plans. Implemented
+for Raw Ethernet (`stream_type: "raw"`) only in v1. GPU reorder requires CUDA-addressable
+packet buffers (`device` or `host_pinned` memory regions). CPU reorder requires CPU-addressable
+packet buffers (`host`, `host_pinned`, or `huge` memory regions).
+
+v1 source-memory requirement:
+- Reorder queues must use exactly one RX source memory region.
+- Header-data split RX queues are not supported with `rx.reorder_configs`.
+
+v1 batch-size requirement:
+- For each emitted reordered batch, packets are expected to have identical on-wire length.
+- `payload_byte_offset` is applied uniformly to all packets in the batch, so mixed packet sizes
+  in the same reorder batch are not supported.
+- Timeout-flushed reordered bursts set `DAQIRI_BURST_FLAG_REORDER_TIMEOUT` in
+  `burst->hdr.hdr.burst_flags`. All reordered bursts set `DAQIRI_BURST_FLAG_REORDERED`.
+  `burst->hdr.hdr.max_pkt` contains the number of source packets represented by the aggregate.
+- Reordered bursts expose `ReorderBurstInfo::batch_id` via
+  `daqiri::get_reorder_burst_info(...)`. With `seq_batch_number`, the batch ID is copied from
+  the configured batch-number field. With `seq_packets_per_batch`, the batch ID is derived from
+  `sequence_number / packets_per_batch`.
+
+- **`name`**: Reorder config name. Must be unique per interface.
+  - type: `string`
+- **`reorder_engine`**: Reorder implementation. `sw` preserves the CUDA/CPU copy path;
+  `hw` selects ibverbs first-DMA placement on supported mlx5 NICs.
+  Hardware mode requires the adapter settings `PROG_PARSE_GRAPH=1` and
+  `FLEX_PARSER_PROFILE_ENABLE=4`; follow the
+  [mlxconfig setup procedure](../tutorials/system_configuration.md#enable-programmable-flex-parsing) and cold
+  reboot the adapter after changing them.
+  - type: `string`
+  - values: `sw`, `hw`
+  - default: `sw`
+- **`cyclic_sequence`**: Required acknowledgement for `reorder_engine: hw`. Hardware placement
+  uses exact 32-bit programmable-parser samples, so the sampled destination value must cycle over
+  the finite output ring and all non-address bits in each sampled word must remain zero. Wide
+  monotonic sequence values are unsupported; use `reorder_engine: sw` for those streams.
+  - type: `boolean`
+  - default: `false`
+- **`missing_action`**: Action when the owning RX queue's `timeout_us` elapses before every
+  sequence slot arrives. `drop` frees the partial batch without delivering it. `passthrough`
+  delivers the fixed-size aggregate with `DAQIRI_BURST_FLAG_REORDER_TIMEOUT`; received slots are
+  valid and missing slots are unspecified, so consult `get_reorder_missing_info()` first.
+  - type: `string`
+  - values: `drop`, `passthrough`
+  - default: `passthrough`
+- **`reorder_type`**: Reorder implementation (`gpu` or `cpu`).
+  - type: `string`
+  - values: `gpu`, `cpu`
+- **`memory_region`**: Output memory region where reordered payload is written.
+  - type: `string`
+  - requirements: for `gpu`, must reference a `device` or `host_pinned` memory region. For
+    `cpu`, must reference a `host`, `host_pinned`, or `huge` memory region
+- **`payload_byte_offset`**: Byte offset in each packet where copied payload starts. Bytes before
+  this offset are skipped.
+  - type: `integer`
+- **`packet_size`**: Payload bytes placed in each output slot by `reorder_engine: hw`, excluding
+  the bytes skipped by `payload_byte_offset`. Required for hardware reorder and ignored by the
+  software path.
+  - type: `integer`
+  - performance note: values below 4000 bytes are accepted but emit a warning because the current
+    ibverbs direct-placement implementation performs much better with larger packets
+- **`data_types`**: Optional payload data type conversion for GPU reorder. If omitted, payload
+  bytes are copied as-is.
+  - `input_type`: On-wire input element type. Values: `int4`, `int8`, `int16`, `int32`
+  - `output_type`: Reordered output element type. Values: `fp16`, `bf16`, `fp32`, `fp64`, `int32`
+  - `endianness`: Optional input byte order. Values: `host`, `network`; default: `host`
+  - requirements: conversion is supported for `reorder_type: "gpu"`; the output memory region
+    buffer must hold the converted batch size
+  - notes: `int4` is interpreted as two signed 4-bit two's-complement values per byte, high
+    nibble first; `network` endianness swaps byte-multiple input types wider than 8 bits
+- **`flow_ids`**: List of RX flow IDs this reorder config applies to.
+  - type: `list[integer]`
+  - notes: flow IDs cannot overlap across reorder configs on the same interface;
+    a referenced flow must use direct steering to one queue, not multi-queue RSS
+- **`method`**: Exactly one method must be configured:
+  - **`seq_batch_number`**
+    - `sequence_number.bit_offset`
+    - `sequence_number.bit_width` (1..32)
+    - `batch_number.bit_offset`
+    - `batch_number.bit_width` (1..32)
+    - Derived constraint: `2^seq_bits` must be divisible by `2^batch_bits`
+  - **`seq_packets_per_batch`**
+    - `sequence_number.bit_offset`
+    - `sequence_number.bit_width` (1..32)
+    - `packets_per_batch` (>0)
+    - Constraint: `2^seq_bits % packets_per_batch == 0`
+
+Example conversion from packed signed 4-bit payload samples to FP16:
+
+```yaml
+data_types:
+  input_type: "int4"
+  output_type: "fp16"
+  endianness: "host"
+```
+
+After `daqiri_init()`, each GPU reorder config must be assigned a CUDA stream. CPU reorder
+configs do not use CUDA streams:
+
+```cpp
+daqiri::set_reorder_cuda_stream("rx_port", "rx_reorder_0", stream);
+```
+
+For reorder queues, `timeout_us` is a fixed deadline measured from the first observed packet; later
+arrivals do not extend it, and an empty batch has no timer. Hardware reorder quiesces the batch's
+private RQs before dropping or exposing its output, preventing late DMA into caller-owned or
+recycled storage. A cyclic hardware sender must treat timeout as final for that sequence cycle:
+without an epoch field, an old late packet is indistinguishable from the same slot in a new cycle.
+
+## Transmit Configuration (tx)
+
+### Queues
+
+`tx.queues:` List of transmit queues on the interface.
+
+- **`name`**: Queue name.
+  - type: `string`
+- **`id`**: Integer ID used for burst submission.
+  - type: `integer`
+- **`poll_mode`**: `indirect` hands bursts to a DAQIRI TX worker. `direct` makes the calling
+  thread submit one packet immediately and manage transmit progress; it is supported only by
+  the raw ibverbs engine.
+  - type: `string`
+  - values: `indirect`, `direct`
+  - default: `indirect`
+- **`cpu_core`**: CPU core ID for the TX worker thread. Required in indirect mode and forbidden
+  in direct mode. Should be an isolated core for best performance.
+  - type: `string`
+- **`batch_size`**: Number of packets per batch sent to the NIC. Larger values increase
+  throughput, and smaller values reduce latency. Required in indirect mode and forbidden in
+  direct mode; direct TX requires exactly one packet per API submission.
+  - type: `integer`
+- **`memory_regions`**: List of memory region names. Same segment mapping rules as RX.
+  Raw ibverbs supports one to four CPU/GPU regions in both polling modes. Each packet
+  uses one buffer from every region. With the default cyclic allocator, the smallest
+  `num_bufs` bounds packet capacity.
+  Set each segment's actual length before sending. The NIC concatenates the segments
+  into one wire packet, for example CPU network headers, CPU message headers, and a
+  GPU payload. Keep the Ethernet/IPv4/UDP header in segment 0 when using the header
+  helpers; its IP/UDP lengths must include the later segments. Named endpoints instead
+  insert the network header inline and treat all configured regions as UDP payload.
+  - type: `list`
+- **`buffer_mode`**: `cyclic` (default) retains cyclic packet-slot allocation. `shared`
+  enables independent segment pools and `clone_tx_burst()` on raw ibverbs indirect TX
+  queues. Selected segments are reference counted through local TX completion; CPU
+  segments outside the clone mask receive private copies. A shared queue's MRs must
+  belong exclusively to that queue, with no repeated region or RX/reorder alias.
+  Direct polling and other engines reject shared mode. Shared mode uses ordinary
+  SEND WQEs; eMPW packing is disabled.
+- **`max_inflight_sends`**: Shared-mode send-credit limit, independent of storage pool
+  sizes. `0`/omitted selects twice the smallest region's `num_bufs`. The effective
+  limit, whether explicit or automatically derived, must fit the device capacity and
+  be at least `batch_size`. Queued, worker-pending, and NIC-posted packets all consume
+  credits until completion. This field requires `buffer_mode: shared` when nonzero.
+  For two sends with private header segments and one shared payload buffer, use
+  `batch_size: 1`, two buffers in each header MR, one in the payload MR, and at least
+  two send credits. Acquire a one-packet burst, clone it, and submit the two bursts
+  separately. Acquiring a fresh two-packet burst would require two buffers in every
+  region. A clone allocates no new buffer in a selected shared segment.
+- **`offloads`**: List of hardware offloads to enable. Each offload installs an RTE Flow rule
+  during `daqiri_init()`; initialization fails if the NIC cannot program the rule.
+  - type: `list`
+  - values: `tx_eth_src` (auto-fill source MAC address)
+- **`pacing_mbps`**: Packet-pacing rate cap for this queue, in megabits per second of L2 frame
+  bytes (the data the application transmits, excluding preamble/IFG/FCS). The NIC meters the queue
+  out so its long-run average TX rate stays at or below this value. `0` (the default) disables
+  pacing and sends at line rate. DAQIRI supports packet pacing on ConnectX-7 or later. The two raw
+  engines use different mechanisms: `dpdk` uses the native wait-on-time `SEND_ON_TIMESTAMP`
+  offload and falls back to line rate with a warning when that offload is unavailable; `ibverbs`
+  assigns the QP to an mlx5 hardware packet-pacing rate-table entry and fails initialization if
+  RAW_PACKET pacing is unavailable or the requested rate is outside a range advertised by the
+  device. Older drivers that omit the range defer bounds checking to the provider when the rate is
+  applied. The ibverbs engine leaves the optional burst bound and typical-packet-size fields at
+  their device defaults.
+  - type: `integer`
+  - default: `0`
+
+A direct TX queue creates no handoff ring or worker. One application thread owns the queue and
+may have only one acquired-but-unsubmitted packet at a time. `BurstParams` remains the ownership
+handle, but neither it nor the packet data crosses another CPU core: the caller writes directly
+to the packet buffer and `send_tx_burst()` submits it directly. Completed packet buffers are
+reclaimed on later availability, allocation, or send calls. Unsupported engines and forbidden
+worker fields produce a warning followed by configuration failure.
+
+For the raw ibverbs engine, an equivalent `TxQueueConfig` can be passed to
+`add_tx_queue_async()` after initialization. The queue must reference existing memory regions and
+fit the metadata capacity reserved at initialization. Runtime TX queues require no flow rule;
+delete completion waits for submitted work and application-held allocations to be returned.
+
+### Transmit Flows
+
+`tx.flows:` Raw Ethernet hardware transform rules for outgoing packets. Supported on
+the DPDK and ibverbs raw engines only. TX flows match the packet as supplied by the
+application, then push or encapsulate headers in hardware. The application buffer remains
+the pre-encap packet.
+
+- **`name`** / **`id`**: Flow label and ID.
+- **`actions`**: Ordered transform action list. TX flows cannot contain `queue`.
+  - **`type: vlan_push`**: Push one VLAN tag.
+    - **`vlan_id`**: VLAN ID, `0..4095`.
+    - **`pcp`**: Priority, `0..7`, default `0`.
+    - **`dei`**: Drop eligible indicator, `0..1`, default `0`.
+    - **`ethertype`**: VLAN TPID, default `0x8100`.
+  - **`type: tunnel_encap`**: Encapsulate in `vxlan`, `gre`, or `nvgre`.
+    - **`tunnel.type`**: `vxlan`, `gre`, or `nvgre`.
+    - **`outer_eth_src` / `outer_eth_dst`** and **`outer_ipv4_src` /
+      `outer_ipv4_dst`** are required.
+    - **VXLAN fields**: `vni`, optional `outer_udp_src`, `outer_udp_dst` default `4789`.
+    - **GRE fields**: optional `gre_protocol` default `0x0800`.
+    - **NVGRE fields**: `tni`, optional `flow_id`.
+- **`match`**: Same standard UDP/IP match keys as RX flows. Omit `match` for a
+  catch-all TX transform.
+
+DAQIRI validates transform overhead against the configured packet buffer size and
+the supported jumbo-frame bound. For RX decap/pop and TX encap/push, MTU sizing
+accounts for the outer wire frame. Packet buffers hold the post-decap (RX) /
+pre-encap (TX) frame.
+
+### Accurate Send
+
+`tx.accurate_send:` Enable hardware-timed packet transmission. When enabled, use
+`set_packet_tx_time()` to schedule packets. The supplied timestamp is always an unsigned
+64-bit PTP epoch-nanosecond value in the same clock domain as a PTP-synchronized
+`CLOCK_REALTIME`. **WARNING: PTP synchronization is required.** DAQIRI does not validate the NIC or
+system clock configuration. Scheduled transmission is invalid if the clocks are not
+PTP-synchronized. DAQIRI requires ConnectX-7 or later for send-on-timestamp.
+
+- type: `boolean`
+- default: `false`
+
+## Complete Example (Raw Ethernet, Header-Data Split)
+
+```yaml
+%YAML 1.2
+---
+daqiri:
+  cfg:
+    version: 1
+    stream_type: "raw"
+    master_core: 3
+    debug: false
+    log_level: "info"
+
+    memory_regions:
+    - name: "Data_TX_CPU"
+      kind: "huge"
+      affinity: 0
+      num_bufs: 51200
+      buf_size: 64
+    - name: "Data_TX_GPU"
+      kind: "device"
+      affinity: 0
+      num_bufs: 51200
+      buf_size: 1064
+    - name: "Data_RX_CPU"
+      kind: "huge"
+      affinity: 0
+      num_bufs: 51200
+      buf_size: 64
+    - name: "Data_RX_GPU"
+      kind: "device"
+      affinity: 0
+      num_bufs: 51200
+      buf_size: 1000
+
+    interfaces:
+    - name: "tx_port"
+      address: <PCIe BDF>
+      tx:
+        queues:
+        - name: "tx_q_0"
+          id: 0
+          batch_size: 10240
+          cpu_core: 11
+          memory_regions:
+            - "Data_TX_CPU"
+            - "Data_TX_GPU"
+          offloads:
+            - "tx_eth_src"
+    - name: "rx_port"
+      address: <PCIe BDF>
+      rx:
+        flow_isolation: true
+        queues:
+        - name: "rx_q_0"
+          id: 0
+          cpu_core: 9
+          batch_size: 10240
+          memory_regions:
+            - "Data_RX_CPU"
+            - "Data_RX_GPU"
+        flows:
+        - name: "flow_0"
+          id: 0
+          action:
+            type: queue
+            id: 0
+          match:
+            udp_src: 4096
+            udp_dst: 4096
+            ipv4_len: 1050
+```
+
+## Complete Example (RDMA, Client/Server)
+
+```yaml
+%YAML 1.2
+---
+daqiri:
+  cfg:
+    version: 1
+    stream_type: "socket"
+    master_core: 3
+    debug: false
+    log_level: "info"
+
+    memory_regions:
+    - name: "DATA_TX"
+      kind: "host_pinned"
+      affinity: 0
+      num_bufs: 20
+      buf_size: 9000000
+    - name: "DATA_RX"
+      kind: "host_pinned"
+      affinity: 0
+      num_bufs: 20
+      buf_size: 9000000
+
+    interfaces:
+    - name: my_server
+      address: 10.100.3.1
+      socket_config:
+        mode: server
+        local_addr: "roce://10.100.3.1:4096"
+      roce_config:
+        transport_mode: RC
+      rx:
+        queues:
+        - name: "Server_RX_Queue"
+          id: 0
+          cpu_core: 8
+          batch_size: 1
+      tx:
+        queues:
+        - name: "Server_TX_Queue"
+          id: 0
+          cpu_core: 8
+          batch_size: 1
+```

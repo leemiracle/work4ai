@@ -1,0 +1,4626 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/core/block_pool.py",
+   "type": "file",
+   "name": "block_pool.py",
+   "filePath": "vllm/v1/core/block_pool.py",
+   "summary": "KV cache 块池：BlockPool 统一管理块的分配/释放/前缀缓存哈希映射（BlockHashToBlockMap）与 LRU 逐出顺序，并对接 KV 事件发布与多模态特征窗口查询。",
+   "tags": [
+    "kv-cache",
+    "block-pool",
+    "prefix-cache",
+    "lru"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/core/encoder_cache_manager.py",
+   "type": "file",
+   "name": "encoder_cache_manager.py",
+   "filePath": "vllm/v1/core/encoder_cache_manager.py",
+   "summary": "多模态 encoder 输出缓存管理：跟踪每请求 encoder 输入的缓存/调度状态并按预算控制 in-flight encoder 计算；EncoderDecoderCacheManager 扩展支持 enc-dec 模型。",
+   "tags": [
+    "encoder-cache",
+    "multimodal",
+    "budget"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/core/kv_cache_config_builder.py",
+   "type": "file",
+   "name": "kv_cache_config_builder.py",
+   "filePath": "vllm/v1/core/kv_cache_config_builder.py",
+   "summary": "平台可插拔的 KV cache 配置构建器接口（实验性）：KVCacheConfigBuilder 定义分组/布局 hooks，get_kv_cache_config_builder 按平台 resolution 优先级解析实现类。",
+   "tags": [
+    "kv-cache",
+    "interface",
+    "platform",
+    "extensibility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "type": "file",
+   "name": "kv_cache_coordinator.py",
+   "filePath": "vllm/v1/core/kv_cache_coordinator.py",
+   "summary": "KV cache 协调器：按 KV cache 组协调多个 SingleTypeKVCacheManager 的命中查找/分配/释放，提供无前缀缓存、单一组与混合（hybrid）三个实现及 SpecGroup 批量命中查找。",
+   "tags": [
+    "kv-cache",
+    "coordinator",
+    "prefix-cache",
+    "hybrid"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/core/kv_cache_manager.py",
+   "type": "file",
+   "name": "kv_cache_manager.py",
+   "filePath": "vllm/v1/core/kv_cache_manager.py",
+   "summary": "Scheduler 面向的 KV cache 管理门面：KVCacheBlocks 作为分配结果接口，KVCacheManager 统一暴露按 token 分配、前缀命中、释放与统计，内部委托 coordinator。",
+   "tags": [
+    "kv-cache",
+    "facade",
+    "scheduler-api"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/core/kv_cache_planning.py",
+   "type": "file",
+   "name": "kv_cache_planning.py",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "KV cache 规划核心：把逐层 spec 分组（uniform spec/type/page-size、hybrid 统一、packed 混合页）并完成内存拟合（二分 max_model_len、auto-fit、TP/PP 投影与跨 rank 一致性）；DefaultKVCacheConfigBuilder 把这些函数包装为可被平台覆盖的 hooks。",
+   "tags": [
+    "kv-cache",
+    "planning",
+    "memory-fitting",
+    "layer-grouping"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/core/kv_cache_utils.py",
+   "type": "file",
+   "name": "kv_cache_utils.py",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "KV cache 工具集：块元数据（KVCacheBlock/FreeKVCacheBlockQueue）、BlockHash 打包与请求级 block hasher、多模态/LoRA/prompt-embeds 额外哈希键、DCP 块尺寸与对齐解析及容量/并发上限计算。",
+   "tags": [
+    "kv-cache",
+    "block-metadata",
+    "hashing",
+    "utilities"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "type": "file",
+   "name": "single_type_kv_cache_manager.py",
+   "filePath": "vllm/v1/core/single_type_kv_cache_manager.py",
+   "summary": "按注意力类型分治的 KV cache 管理器家族：SingleTypeKVCacheManager 定义单类型协议，full/sliding/R-SWA/circular/chunked-local/mamba/cross/sink 各自实现块分配与命中策略，HiSparse 三层管理器支持 host-tier 分级 KV；get_manager_for_kv_cache_spec 经 registry 分派。",
+   "tags": [
+    "kv-cache",
+    "managers",
+    "attention-types",
+    "hisparse"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/core/sched/async_scheduler.py",
+   "type": "file",
+   "name": "async_scheduler.py",
+   "filePath": "vllm/v1/core/sched/async_scheduler.py",
+   "summary": "前端异步调度变体：在基类调度之后维护 spec-decode 占位 token、structured output 占位计数与 PP microbatch 的 decode stagger（XPU 特性开关）。",
+   "tags": [
+    "scheduler",
+    "async",
+    "spec-decode",
+    "pipeline-parallel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/core/sched/diffusion_scheduler.py",
+   "type": "file",
+   "name": "diffusion_scheduler.py",
+   "filePath": "vllm/v1/core/sched/diffusion_scheduler.py",
+   "summary": "diffusion 请求调度支持：canvas 宽度读取（extra_args 扩展）、只读请求 in-flight 判定与 draft/canvas 占位裁剪，组合出同步与异步两个 Diffusion 调度器。",
+   "tags": [
+    "diffusion",
+    "scheduler",
+    "canvas"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/core/sched/interface.py",
+   "type": "file",
+   "name": "interface.py",
+   "filePath": "vllm/v1/core/sched/interface.py",
+   "summary": "调度器抽象接口：SchedulerInterface 定义 schedule/update_from_output 等完整协议（EngineCore 与 DP 引擎面向接口编程），PauseState 枚举定义 pause/resume 语义。",
+   "tags": [
+    "interface",
+    "scheduler",
+    "abc"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/core/sched/output.py",
+   "type": "file",
+   "name": "output.py",
+   "filePath": "vllm/v1/core/sched/output.py",
+   "summary": "调度器输出数据结构族：NewRequestData/CachedRequestData（worker 端缓存差分）、SchedulerOutput（每步 token 计划与 spec/encoder 输入索引）、KVConnectorBlockState 与 GrammarOutput（结构化输出 bitmask）。",
+   "tags": [
+    "scheduler",
+    "data-model",
+    "outputs"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/core/sched/request_queue.py",
+   "type": "file",
+   "name": "request_queue.py",
+   "filePath": "vllm/v1/core/sched/request_queue.py",
+   "summary": "可插拔请求队列：RequestQueue 抽象 + FCFS 与优先级两个实现，create_request_queue 按 scheduling_policy 配置选择。",
+   "tags": [
+    "queue",
+    "scheduling-policy",
+    "abstraction"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/core/sched/scheduler.py",
+   "type": "file",
+   "name": "scheduler.py",
+   "filePath": "vllm/v1/core/sched/scheduler.py",
+   "summary": "V1 核心调度器（3700 行、66 方法）：waiting/running 队列调度、chunked prefill、前缀缓存命中、spec-decode 安排、KV/EC connector 协调、encoder 输入调度、停止与逐出判定及统计上报，是引擎吞吐与延迟的决策中枢。",
+   "tags": [
+    "scheduler",
+    "core",
+    "scheduling",
+    "spec-decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/core/sched/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/v1/core/sched/utils.py",
+   "summary": "调度器停止判定工具：stop string/token/长度/重复模式检测（check_sequence_repetition 支持可配置 pattern 检测）与高性能列表剔除。",
+   "tags": [
+    "stop-conditions",
+    "utilities",
+    "repetition"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/core/block_pool.py:BlockHashToBlockMap",
+   "type": "class",
+   "name": "BlockHashToBlockMap",
+   "filePath": "vllm/v1/core/block_pool.py",
+   "summary": "前缀缓存哈希→块的映射缓存：同一 hash 可映射多个候选块，处理 null hash、touch 更新与逐出时的登记维护。",
+   "tags": [
+    "prefix-cache",
+    "hash-map",
+    "eviction"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    36,
+    134
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/block_pool.py:BlockPool",
+   "type": "class",
+   "name": "BlockPool",
+   "filePath": "vllm/v1/core/block_pool.py",
+   "summary": "块池主体（26 个方法）：get_new/cached/swap blocks、全请求块查询与释放、KV 事件发布与指标采集，是所有 SingleTypeKVCacheManager 的共享底层存储。",
+   "tags": [
+    "kv-cache",
+    "allocation",
+    "eviction",
+    "kv-events"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    137,
+    945
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/encoder_cache_manager.py:EncoderCacheManager",
+   "type": "class",
+   "name": "EncoderCacheManager",
+   "filePath": "vllm/v1/core/encoder_cache_manager.py",
+   "summary": "encoder 输出缓存生命周期管理（13 个方法）：按请求跟踪已缓存/已调度的 encoder 输入索引，分配/释放缓存槽并维护预算内调度顺序。",
+   "tags": [
+    "encoder-cache",
+    "lifecycle",
+    "multimodal"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    19,
+    330
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/encoder_cache_manager.py:EncoderDecoderCacheManager",
+   "type": "class",
+   "name": "EncoderDecoderCacheManager",
+   "filePath": "vllm/v1/core/encoder_cache_manager.py",
+   "summary": "enc-dec 模型变体：把 cross-attention 的 encoder KV 纳入同一缓存管理框架。",
+   "tags": [
+    "encoder-decoder",
+    "cross-attention",
+    "cache"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    387,
+    445
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/encoder_cache_manager.py:compute_mm_encoder_budget",
+   "type": "function",
+   "name": "compute_mm_encoder_budget",
+   "filePath": "vllm/v1/core/encoder_cache_manager.py",
+   "summary": "依据模型与调度配置计算多模态 encoder 缓存预算（槽位数）。",
+   "tags": [
+    "budget",
+    "multimodal",
+    "config"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    333,
+    380
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/kv_cache_config_builder.py:KVCacheConfigBuilder",
+   "type": "class",
+   "name": "KVCacheConfigBuilder",
+   "filePath": "vllm/v1/core/kv_cache_config_builder.py",
+   "summary": "平台 KV cache 放置接口（ABC、实验性）：分组与 num_blocks 契约 hooks，允许平台接管布局决策。",
+   "tags": [
+    "interface",
+    "kv-cache",
+    "platform"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    19,
+    84
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_config_builder.py:get_kv_cache_config_builder",
+   "type": "function",
+   "name": "get_kv_cache_config_builder",
+   "filePath": "vllm/v1/core/kv_cache_config_builder.py",
+   "summary": "按当前平台 hook 解析选用的 builder 类（支持 qualname 动态加载）。",
+   "tags": [
+    "factory",
+    "platform",
+    "resolution"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    87,
+    103
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_coordinator.py:_validate_prefix_cache_retention_interval",
+   "type": "function",
+   "name": "_validate_prefix_cache_retention_interval",
+   "filePath": "vllm/v1/core/kv_cache_coordinator.py",
+   "summary": "校验 prefix_cache_retention_interval 配置与缓存能力组合的合法性。",
+   "tags": [
+    "validation",
+    "config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    33,
+    62
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_coordinator.py:replay_boundaries",
+   "type": "function",
+   "name": "replay_boundaries",
+   "filePath": "vllm/v1/core/kv_cache_coordinator.py",
+   "summary": "计算后续请求重放 prompt 时可恢复的位置：取各组最短命中，保证每组保留一致前缀。",
+   "tags": [
+    "replay",
+    "prefix-cache",
+    "hybrid"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    65,
+    86
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/kv_cache_coordinator.py:KVCacheCoordinator",
+   "type": "class",
+   "name": "KVCacheCoordinator",
+   "filePath": "vllm/v1/core/kv_cache_coordinator.py",
+   "summary": "协调器抽象基类（14 个方法）：每组维护一个 manager，统一 find_longest_prefix_hit/allocate/free 的跨组协议及页对齐、EAGLE 边界处理。",
+   "tags": [
+    "abc",
+    "kv-cache",
+    "prefix-cache"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    89,
+    477
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/kv_cache_coordinator.py:KVCacheCoordinatorNoPrefixCache",
+   "type": "class",
+   "name": "KVCacheCoordinatorNoPrefixCache",
+   "filePath": "vllm/v1/core/kv_cache_coordinator.py",
+   "summary": "禁用/不支持前缀缓存时的协调器：任意组数下直接顺序分配，跳过哈希查找。",
+   "tags": [
+    "kv-cache",
+    "no-prefix-cache"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    480,
+    527
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/kv_cache_coordinator.py:UnitaryKVCacheCoordinator",
+   "type": "class",
+   "name": "UnitaryKVCacheCoordinator",
+   "filePath": "vllm/v1/core/kv_cache_coordinator.py",
+   "summary": "单一 KV cache 组模型的协调器：单 manager 直通的最简查找路径。",
+   "tags": [
+    "kv-cache",
+    "single-group"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    530,
+    599
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/kv_cache_coordinator.py:HybridKVCacheCoordinator",
+   "type": "class",
+   "name": "HybridKVCacheCoordinator",
+   "filePath": "vllm/v1/core/kv_cache_coordinator.py",
+   "summary": "混合模型协调器：多类型多组（full/sliding/mamba/HiSparse…）下按最短命中截齐、组间块数对齐与 SpecGroup 批量查找。",
+   "tags": [
+    "hybrid",
+    "kv-cache",
+    "alignment"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    617,
+    987
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_coordinator.py:get_kv_cache_coordinator",
+   "type": "function",
+   "name": "get_kv_cache_coordinator",
+   "filePath": "vllm/v1/core/kv_cache_coordinator.py",
+   "summary": "按 KVCacheConfig 的组结构选择 coordinator 实现（no-prefix/unitary/hybrid）并为各组构建 manager。",
+   "tags": [
+    "factory",
+    "kv-cache"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    990,
+    1052
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/kv_cache_manager.py:KVCacheBlocks",
+   "type": "class",
+   "name": "KVCacheBlocks",
+   "filePath": "vllm/v1/core/kv_cache_manager.py",
+   "summary": "KVCacheManager 的分配结果对象：按组持有块列表，提供切片/拼接/裁剪等代数操作，向 Scheduler 隐藏内部结构。",
+   "tags": [
+    "data-model",
+    "kv-cache",
+    "allocation"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    35,
+    128
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/kv_cache_manager.py:KVCacheManager",
+   "type": "class",
+   "name": "KVCacheManager",
+   "filePath": "vllm/v1/core/kv_cache_manager.py",
+   "summary": "KV cache 管理器（28 个方法）：allocate_slots/find_longest_prefix_hit/free，解耦 scheduler_block_size 与 hash_block_size 双粒度，处理 lookahead 哈希与 KV 事件/指标。",
+   "tags": [
+    "kv-cache",
+    "allocation",
+    "prefix-cache"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    131,
+    930
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:_check_enough_kv_cache_memory",
+   "type": "function",
+   "name": "_check_enough_kv_cache_memory",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "内存充足性检查的内部实现：日志与失败提示。",
+   "tags": [
+    "memory",
+    "validation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    50,
+    87
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:estimate_max_model_len",
+   "type": "function",
+   "name": "estimate_max_model_len",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "二分搜索可用内存能支撑的最大模型长度（搜索期间临时关闭 gc）。",
+   "tags": [
+    "memory",
+    "binary-search"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    97,
+    148
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:check_enough_kv_cache_memory",
+   "type": "function",
+   "name": "check_enough_kv_cache_memory",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "检查 available_memory 是否足以让 KV cache 容纳至少一个 max_model_len 请求（含 EAGLE draft 显存预留与失败建议日志）。",
+   "tags": [
+    "memory",
+    "validation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    151,
+    184
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:create_kv_cache_group_specs",
+   "type": "function",
+   "name": "create_kv_cache_group_specs",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "按层 spec 生成 KVCacheGroupSpec：同组各层共享同一 KVCacheSpec。",
+   "tags": [
+    "grouping",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    187,
+    215
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:is_kv_cache_spec_uniform",
+   "type": "function",
+   "name": "is_kv_cache_spec_uniform",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "判断各层 spec 是否一致（full attention 层忽略 block_size 差异）。",
+   "tags": [
+    "grouping",
+    "validation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    218,
+    239
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:_pool_bytes_per_block",
+   "type": "function",
+   "name": "_pool_bytes_per_block",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "计算 worker 共享 KV cache 池中单块字节数（镜像布局除数）。",
+   "tags": [
+    "memory",
+    "layout"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    251,
+    262
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:_pool_bytes_per_block_from_builder",
+   "type": "function",
+   "name": "_pool_bytes_per_block_from_builder",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "经平台 builder 放置单块并读取其字节数（Core 放置一块以获取真实尺寸）。",
+   "tags": [
+    "memory",
+    "builder",
+    "layout"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    265,
+    304
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:_get_kv_cache_groups_uniform_spec",
+   "type": "function",
+   "name": "_get_kv_cache_groups_uniform_spec",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "全层同 spec 时的单组配置生成。",
+   "tags": [
+    "grouping",
+    "uniform"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    314,
+    327
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:_get_kv_cache_groups_uniform_type",
+   "type": "function",
+   "name": "_get_kv_cache_groups_uniform_type",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "同类型不同 hidden size 层的均质分组。",
+   "tags": [
+    "grouping",
+    "uniform"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    330,
+    343
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:unify_kv_cache_spec_page_size",
+   "type": "function",
+   "name": "unify_kv_cache_spec_page_size",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "统一各层 page size（不一致时对齐处理）。",
+   "tags": [
+    "grouping",
+    "page-size"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    346,
+    408
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:_get_kv_cache_groups_uniform_page_size",
+   "type": "function",
+   "name": "_get_kv_cache_groups_uniform_page_size",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "混合注意力但统一 page size 模型的分组生成（物理页一致）。",
+   "tags": [
+    "grouping",
+    "hybrid",
+    "page-size"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    416,
+    556
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:_get_kv_cache_bytes_per_block",
+   "type": "function",
+   "name": "_get_kv_cache_bytes_per_block",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "返回最大 cache group 的每块字节数。",
+   "tags": [
+    "memory",
+    "layout"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    574,
+    605
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:validate_kv_cache_layout",
+   "type": "function",
+   "name": "validate_kv_cache_layout",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "校验已选布局可表达该模型的打包方式（越界即报错）。",
+   "tags": [
+    "layout",
+    "validation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    608,
+    639
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:get_kv_cache_config_from_groups",
+   "type": "function",
+   "name": "get_kv_cache_config_from_groups",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "由分组与每层 spec 生成最终 KVCacheConfig（张量布局、块数、页对齐）。",
+   "tags": [
+    "kv-cache",
+    "config"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    642,
+    737
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:_promote_local_kv_cache_specs",
+   "type": "function",
+   "name": "_promote_local_kv_cache_specs",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "把 local-attention spec 提升为 full-attention 分配（只影响 KV 管理，不改变注意力计算）。",
+   "tags": [
+    "local-attention",
+    "promotion"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    740,
+    812
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:_try_get_full_allocation_fallback_groups",
+   "type": "function",
+   "name": "_try_get_full_allocation_fallback_groups",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "为 local-attention 层尝试受支持的全分配回退分组。",
+   "tags": [
+    "local-attention",
+    "fallback"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    815,
+    846
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:unify_hybrid_kv_cache_specs",
+   "type": "function",
+   "name": "unify_hybrid_kv_cache_specs",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "尝试把混合模型的多种 spec 归一为单一类型。",
+   "tags": [
+    "hybrid",
+    "unification"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    849,
+    872
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:_approximate_gcd",
+   "type": "function",
+   "name": "_approximate_gcd",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "选取最小化向上 padding 总量的近似公约块大小。",
+   "tags": [
+    "math",
+    "packing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    875,
+    907
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:_get_packed_kv_cache_groups",
+   "type": "function",
+   "name": "_get_packed_kv_cache_groups",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "混合页大小层的 block-outermost 连续打包分组（贪心分桶）。",
+   "tags": [
+    "packing",
+    "grouping"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    910,
+    1037
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:_warn_if_unannotated_eagle_mamba",
+   "type": "function",
+   "name": "_warn_if_unannotated_eagle_mamba",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "EAGLE/Mamba 混合配置未标注 draft 组时打印告警。",
+   "tags": [
+    "eagle",
+    "mamba",
+    "warning"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1040,
+    1067
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:_ensure_min_page_size",
+   "type": "function",
+   "name": "_ensure_min_page_size",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "放大组块尺寸使公共页不小于最大 per-token hidden state 成本。",
+   "tags": [
+    "page-size",
+    "hidden-state"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1077,
+    1106
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:get_kv_cache_groups",
+   "type": "function",
+   "name": "get_kv_cache_groups",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "默认分组算法总入口：把模型层按 spec 切分为 KV cache 组。",
+   "tags": [
+    "grouping",
+    "default"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1109,
+    1196
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:get_kv_cache_groups_from_builder",
+   "type": "function",
+   "name": "get_kv_cache_groups_from_builder",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "经平台 builder 分组并做精确分区校验。",
+   "tags": [
+    "grouping",
+    "builder"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1199,
+    1211
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:_check_exact_partition",
+   "type": "function",
+   "name": "_check_exact_partition",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "确保分组恰好把每个输入层划分一次。",
+   "tags": [
+    "validation",
+    "partition"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1214,
+    1226
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:kv_cache_groups_tp_replicas",
+   "type": "function",
+   "name": "kv_cache_groups_tp_replicas",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "找出每层持有相同 KV 的连续 TP rank（KV 复制组）。",
+   "tags": [
+    "tensor-parallel",
+    "replication"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1237,
+    1246
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:_max_memory_usage_bytes_from_groups",
+   "type": "function",
+   "name": "_max_memory_usage_bytes_from_groups",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "按分组（正确计入 hybrid padding）计算最大内存用量。",
+   "tags": [
+    "memory",
+    "groups"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1249,
+    1281
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:_estimate_max_model_len_from_groups",
+   "type": "function",
+   "name": "_estimate_max_model_len_from_groups",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "基于分组的二分最大模型长度搜索（连 1 个 token 都放不下时返回 0）。",
+   "tags": [
+    "memory",
+    "binary-search"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1284,
+    1330
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:_auto_fit_max_model_len",
+   "type": "function",
+   "name": "_auto_fit_max_model_len",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "max_model_len=-1 时按可用显存自动拟合支持的最大上下文长度。",
+   "tags": [
+    "auto-fit",
+    "context-length"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1333,
+    1406
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:_project_kv_cache_groups_to_worker",
+   "type": "function",
+   "name": "_project_kv_cache_groups_to_worker",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "把全局 KV cache 分组投影到单个 worker 拥有的层（pipeline parallelism 场景）。",
+   "tags": [
+    "pipeline-parallel",
+    "projection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1409,
+    1454
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:get_kv_cache_configs",
+   "type": "function",
+   "name": "get_kv_cache_configs",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "生成全部 worker KV cache 配置的主流程：分组→内存检查→auto-fit→跨 rank 收敛（Core 拥有的不变量）。",
+   "tags": [
+    "kv-cache",
+    "config",
+    "pipeline"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1457,
+    1600
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_planning.py:get_global_kv_cache_groups",
+   "type": "function",
+   "name": "get_global_kv_cache_groups",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "合并所有 worker spec 后对整模型分层分组。",
+   "tags": [
+    "grouping",
+    "global"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1603,
+    1653
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/kv_cache_planning.py:DefaultKVCacheConfigBuilder",
+   "type": "class",
+   "name": "DefaultKVCacheConfigBuilder",
+   "filePath": "vllm/v1/core/kv_cache_planning.py",
+   "summary": "默认分组与放置 builder：转发到本模块函数；支持模型自定分组（SupportsKVCacheGrouping），且与 HiSparse 分组互斥（显式报错）。",
+   "tags": [
+    "builder",
+    "kv-cache",
+    "default-impl"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1656,
+    1714
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:make_block_hash_with_group_id",
+   "type": "function",
+   "name": "make_block_hash_with_group_id",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "把 BlockHash 与组 id 打包为 BlockHashWithGroupId（4 字节大端组 id 前缀）。",
+   "tags": [
+    "hashing",
+    "packing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    60,
+    69
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:resolve_none_hash_seed",
+   "type": "function",
+   "name": "resolve_none_hash_seed",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "解析 NONE_HASH 派生种子：PYTHONHASHSEED 优先，否则使用固定种子。",
+   "tags": [
+    "hashing",
+    "seed"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    117,
+    130
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:get_none_hash_seed",
+   "type": "function",
+   "name": "get_none_hash_seed",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "返回 NONE_HASH 的种子（P2P 层广告需要跨进程一致）。",
+   "tags": [
+    "hashing",
+    "seed"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    133,
+    143
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:init_none_hash",
+   "type": "function",
+   "name": "init_none_hash",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "初始化 NONE_HASH 全局常量。",
+   "tags": [
+    "hashing",
+    "init"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    146,
+    158
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/kv_cache_utils.py:KVCacheBlock",
+   "type": "class",
+   "name": "KVCacheBlock",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "单块元数据：block_id、引用计数、hash、prev/next 指针与请求归属，支撑 O(1) 队列摘除。",
+   "tags": [
+    "data-model",
+    "kv-cache",
+    "block"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    162,
+    224
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/kv_cache_utils.py:KVCacheBlockCopy",
+   "type": "class",
+   "name": "KVCacheBlockCopy",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "(src_block_id, dst_block_id) 块拷贝对 NamedTuple，用于 KV connector 的块复制计划。",
+   "tags": [
+    "data-model",
+    "namedtuple",
+    "kv-connector"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    253,
+    255
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/kv_cache_utils.py:FreeKVCacheBlockQueue",
+   "type": "class",
+   "name": "FreeKVCacheBlockQueue",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "自由块双向链表队列：手写实现以支持 O(1) 中间摘除与 LRU 语义（缓存块被 touch 时移回队尾），是逐出顺序的权威结构。",
+   "tags": [
+    "queue",
+    "lru",
+    "linked-list"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    258,
+    519
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:null_head_len",
+   "type": "function",
+   "name": "null_head_len",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "计算块序列的前导 null 块数（如滑窗表跳过的前缀）。",
+   "tags": [
+    "null-blocks",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    227,
+    241
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:trim_null_head",
+   "type": "function",
+   "name": "trim_null_head",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "剥去块序列的前导 null 块；无则原样返回。",
+   "tags": [
+    "null-blocks",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    247,
+    250
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:_gen_mm_extra_hash_keys",
+   "type": "function",
+   "name": "_gen_mm_extra_hash_keys",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "为多模态请求生成块哈希额外键（mm 项与 token 窗口交集）。",
+   "tags": [
+    "hashing",
+    "multimodal"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    522,
+    587
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:_gen_lora_extra_hash_keys",
+   "type": "function",
+   "name": "_gen_lora_extra_hash_keys",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "为 LoRA 请求生成额外哈希键（含 adapter 路径以区分重指向）。",
+   "tags": [
+    "hashing",
+    "lora"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    590,
+    607
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:_gen_prompt_embeds_extra_hash_keys",
+   "type": "function",
+   "name": "_gen_prompt_embeds_extra_hash_keys",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "为 prompt_embeds 请求生成额外哈希键。",
+   "tags": [
+    "hashing",
+    "prompt-embeds"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    610,
+    634
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:generate_block_hash_extra_keys",
+   "type": "function",
+   "name": "generate_block_hash_extra_keys",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "汇总多模态/LoRA/prompt-embeds 等来源的块哈希额外键。",
+   "tags": [
+    "hashing",
+    "extra-keys"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    637,
+    675
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:to_event_extra_keys",
+   "type": "function",
+   "name": "to_event_extra_keys",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "把块哈希额外键转为 KV 事件发布的无标签列表（外部消费者格式）。",
+   "tags": [
+    "kv-events",
+    "serialization"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    678,
+    704
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:hash_block_tokens",
+   "type": "function",
+   "name": "hash_block_tokens",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "计算块内容与前序块的哈希（prefix chaining，保证前缀一致性）。",
+   "tags": [
+    "hashing",
+    "blocks"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    707,
+    737
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:resolve_dcp_kv_cache_spec",
+   "type": "function",
+   "name": "resolve_dcp_kv_cache_spec",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "返回按 DCP 块尺寸调整后的 KV cache spec。",
+   "tags": [
+    "dcp",
+    "spec"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    745,
+    759
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:partial_hash_hits_enabled",
+   "type": "function",
+   "name": "partial_hash_hits_enabled",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "判断对齐 Mamba 状态是否支持子块前缀命中（可带 manager 类一并校验）。",
+   "tags": [
+    "mamba",
+    "prefix-cache"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    762,
+    801
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:eagle_proof_margin",
+   "type": "function",
+   "name": "eagle_proof_margin",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "EAGLE 组命中后为验证保留的额外 token 余量（细粒度查找丢一个哈希单位）。",
+   "tags": [
+    "eagle",
+    "spec-decode"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    804,
+    813
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:resolve_kv_cache_block_sizes",
+   "type": "function",
+   "name": "resolve_kv_cache_block_sizes",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "解析 (scheduler_block_size, hash_block_size) 双粒度及其不变量（含 DCP/HiSparse/EAGLE 约束）。",
+   "tags": [
+    "block-size",
+    "invariants"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    816,
+    918
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:resolve_cache_hit_alignment_tokens",
+   "type": "function",
+   "name": "resolve_cache_hit_alignment_tokens",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "前缀命中落点的对齐 token 粒度（与 hybrid coordinator 推送的对齐一致）。",
+   "tags": [
+    "alignment",
+    "prefix-cache"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    921,
+    950
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:get_request_block_hasher",
+   "type": "function",
+   "name": "get_request_block_hasher",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "构造请求级 block hasher 闭包：按 hash_block_size 计算未算块哈希，含 lookahead 与额外键处理。",
+   "tags": [
+    "hashing",
+    "request"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    953,
+    1036
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:generate_lookahead_block_hash_extra_keys",
+   "type": "function",
+   "name": "generate_lookahead_block_hash_extra_keys",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "为块及其 lookahead token 生成额外键（回卷 mm 索引保留与下一块重叠的输入）。",
+   "tags": [
+    "hashing",
+    "lookahead"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1039,
+    1058
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:get_max_concurrency_for_kv_cache_config",
+   "type": "function",
+   "name": "get_max_concurrency_for_kv_cache_config",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "按 KV cache 配置估算最大并发（满长请求整块占用的模型）。",
+   "tags": [
+    "concurrency",
+    "capacity"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1061,
+    1093
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:generate_scheduler_kv_cache_config",
+   "type": "function",
+   "name": "generate_scheduler_kv_cache_config",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "生成调度器使用的 KV cache 配置摘要。",
+   "tags": [
+    "kv-cache",
+    "scheduler"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1096,
+    1117
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:get_kv_cache_capacity",
+   "type": "function",
+   "name": "get_kv_cache_capacity",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "组感知的 KV cache token 容量与最大并发计算。",
+   "tags": [
+    "capacity",
+    "groups"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1120,
+    1128
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:_kv_cache_device_name",
+   "type": "function",
+   "name": "_kv_cache_device_name",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "返回 KV cache 所在设备名。",
+   "tags": [
+    "device",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1131,
+    1133
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:update_kv_cache_capacity",
+   "type": "function",
+   "name": "update_kv_cache_capacity",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "存储并记录解析出的 KV 容量。",
+   "tags": [
+    "capacity",
+    "logging"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1136,
+    1154
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/kv_cache_utils.py:BlockHashListWithBlockSize",
+   "type": "class",
+   "name": "BlockHashListWithBlockSize",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "把 hash_block_size 粒度的哈希视图换算到目标块大小（组间块大小不一致时使用），含预计算复用。",
+   "tags": [
+    "hashing",
+    "block-size",
+    "conversion"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1157,
+    1227
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/kv_cache_utils.py:resolve_block_hashes",
+   "type": "function",
+   "name": "resolve_block_hashes",
+   "filePath": "vllm/v1/core/kv_cache_utils.py",
+   "summary": "按目标块大小换算块哈希视图，等于 hash_block_size 时直接复用预计算结果。",
+   "tags": [
+    "hashing",
+    "conversion"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1233,
+    1263
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/single_type_kv_cache_manager.py:SingleTypeKVCacheManager",
+   "type": "class",
+   "name": "SingleTypeKVCacheManager",
+   "filePath": "vllm/v1/core/single_type_kv_cache_manager.py",
+   "summary": "单类型管理器 ABC（23 个方法）：块的滑动窗口调度、get_computed_blocks/append_slots/find_longest_cache_hit 协议、细粒度哈希查找与缓存写回。",
+   "tags": [
+    "abc",
+    "kv-cache",
+    "block-allocation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    49,
+    736
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/single_type_kv_cache_manager.py:FullAttentionManager",
+   "type": "class",
+   "name": "FullAttentionManager",
+   "filePath": "vllm/v1/core/single_type_kv_cache_manager.py",
+   "summary": "全注意力管理器：支持细粒度哈希查找，按块序列求最长前缀命中（可兼用于 chunked local spec）。",
+   "tags": [
+    "full-attention",
+    "prefix-cache"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    739,
+    897
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/single_type_kv_cache_manager.py:RSWAManager",
+   "type": "class",
+   "name": "RSWAManager",
+   "filePath": "vllm/v1/core/single_type_kv_cache_manager.py",
+   "summary": "Reference Sliding Window Attention 管理器：提供 num_prompt_tokens 时在 remove_skipped_blocks 中释放 prefill gap 块。",
+   "tags": [
+    "r-swa",
+    "sliding-window"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    900,
+    943
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/single_type_kv_cache_manager.py:SlidingWindowManager",
+   "type": "class",
+   "name": "SlidingWindowManager",
+   "filePath": "vllm/v1/core/single_type_kv_cache_manager.py",
+   "summary": "滑窗注意力管理器：按窗口界维护可保留块；启用 EAGLE 时多要求一个连续块并丢弃最后一个命中块以保证窗口可重构。",
+   "tags": [
+    "sliding-window",
+    "eagle"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    946,
+    1183
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/single_type_kv_cache_manager.py:CircularBufferManager",
+   "type": "class",
+   "name": "CircularBufferManager",
+   "filePath": "vllm/v1/core/single_type_kv_cache_manager.py",
+   "summary": "环形缓冲管理器：每请求只认领环上单块、禁用前缀缓存。",
+   "tags": [
+    "circular-buffer",
+    "ring"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1186,
+    1273
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/single_type_kv_cache_manager.py:ChunkedLocalAttentionManager",
+   "type": "class",
+   "name": "ChunkedLocalAttentionManager",
+   "filePath": "vllm/v1/core/single_type_kv_cache_manager.py",
+   "summary": "chunked local attention 管理器：命中前缀不得超过单 chunk，越界块标记为 null 已算。",
+   "tags": [
+    "chunked-local",
+    "prefix-cache"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1276,
+    1425
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/single_type_kv_cache_manager.py:MambaManager",
+   "type": "class",
+   "name": "MambaManager",
+   "filePath": "vllm/v1/core/single_type_kv_cache_manager.py",
+   "summary": "Mamba 状态管理器：align 模式支持前缀缓存/checkpoint 块/推测块原地重定位与共享前缀 handoff（producer partial tail 表），非 align 模式按位置稳定块管理。",
+   "tags": [
+    "mamba",
+    "state-cache",
+    "align-mode"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1428,
+    2135
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/single_type_kv_cache_manager.py:CrossAttentionManager",
+   "type": "class",
+   "name": "CrossAttentionManager",
+   "filePath": "vllm/v1/core/single_type_kv_cache_manager.py",
+   "summary": "enc-dec 模型 cross-attention 管理器：encoder KV 块的逐请求认领与释放。",
+   "tags": [
+    "cross-attention",
+    "encoder-decoder"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    2138,
+    2196
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/single_type_kv_cache_manager.py:SinkFullAttentionManager",
+   "type": "class",
+   "name": "SinkFullAttentionManager",
+   "filePath": "vllm/v1/core/single_type_kv_cache_manager.py",
+   "summary": "带 attention sink 的全注意力管理器：sink 长度按块对齐参与保留策略。",
+   "tags": [
+    "attention-sink",
+    "full-attention"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    2199,
+    2220
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/single_type_kv_cache_manager.py:HiSparseSourceManager",
+   "type": "class",
+   "name": "HiSparseSourceManager",
+   "filePath": "vllm/v1/core/single_type_kv_cache_manager.py",
+   "summary": "HiSparse host 源层管理器：私有池、每页必配 host 块（分配失败即失败）、durable 后才发布哈希。",
+   "tags": [
+    "hisparse",
+    "host-tier"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    2223,
+    2353
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/single_type_kv_cache_manager.py:_HiSparseAuxiliaryManager",
+   "type": "class",
+   "name": "_HiSparseAuxiliaryManager",
+   "filePath": "vllm/v1/core/single_type_kv_cache_manager.py",
+   "summary": "host 源持有前缀缓存的临时（ephemeral）组管理器基类。",
+   "tags": [
+    "hisparse",
+    "auxiliary"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    2356,
+    2384
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/single_type_kv_cache_manager.py:HiSparseHotManager",
+   "type": "class",
+   "name": "HiSparseHotManager",
+   "filePath": "vllm/v1/core/single_type_kv_cache_manager.py",
+   "summary": "HiSparse hot 区管理器：请求获得 CPU-only 历史后才分配 hot 区。",
+   "tags": [
+    "hisparse",
+    "hot-region"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    2387,
+    2469
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/single_type_kv_cache_manager.py:HiSparseResidentManager",
+   "type": "class",
+   "name": "HiSparseResidentManager",
+   "filePath": "vllm/v1/core/single_type_kv_cache_manager.py",
+   "summary": "HiSparse resident 区管理器：跟踪 host-backed KV 中 GPU 常驻的页集合。",
+   "tags": [
+    "hisparse",
+    "gpu-resident"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    2472,
+    2605
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/single_type_kv_cache_manager.py:get_manager_for_kv_cache_spec",
+   "type": "function",
+   "name": "get_manager_for_kv_cache_spec",
+   "filePath": "vllm/v1/core/single_type_kv_cache_manager.py",
+   "summary": "经 KVCacheSpecRegistry 按 spec 类型查 manager 类（注册表条目可覆盖内置映射）。",
+   "tags": [
+    "factory",
+    "registry"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    2608,
+    2653
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/single_type_kv_cache_manager.py:register_all_kvcache_specs",
+   "type": "function",
+   "name": "register_all_kvcache_specs",
+   "filePath": "vllm/v1/core/single_type_kv_cache_manager.py",
+   "summary": "把内置 spec→manager 映射批量注册进 KVCacheSpecRegistry。",
+   "tags": [
+    "registry",
+    "bootstrap"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    2656,
+    2730
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/sched/async_scheduler.py:AsyncScheduler",
+   "type": "class",
+   "name": "AsyncScheduler",
+   "filePath": "vllm/v1/core/sched/async_scheduler.py",
+   "summary": "Scheduler 子类：调度后按步更新每请求 output 占位数与 spec 占位表，并为 v2 model runner 设置 PP decode 资格步（decode stagger）。",
+   "tags": [
+    "scheduler",
+    "placeholders",
+    "pp"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    13,
+    56
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/sched/diffusion_scheduler.py:_read_in_flight",
+   "type": "function",
+   "name": "_read_in_flight",
+   "filePath": "vllm/v1/core/sched/diffusion_scheduler.py",
+   "summary": "判定只读 diffusion 请求是否全部 denoise 步均在途（占位数≥步数×canvas 宽度即丢弃多余步）。",
+   "tags": [
+    "diffusion",
+    "read-only"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    20,
+    34
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/sched/diffusion_scheduler.py:DiffusionScheduler",
+   "type": "class",
+   "name": "DiffusionScheduler",
+   "filePath": "vllm/v1/core/sched/diffusion_scheduler.py",
+   "summary": "在 update_draft_token_ids 中按 canvas 宽度裁剪 draft 占位后再走基类 grammar 校验。",
+   "tags": [
+    "diffusion",
+    "draft-tokens"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    37,
+    49
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/sched/diffusion_scheduler.py:DiffusionAsyncScheduler",
+   "type": "class",
+   "name": "DiffusionAsyncScheduler",
+   "filePath": "vllm/v1/core/sched/diffusion_scheduler.py",
+   "summary": "Diffusion+Async 双继承调度器：schedule 前按 canvas 宽度裁剪占位，并对 in-flight 只读请求跳过一次解码调度。",
+   "tags": [
+    "diffusion",
+    "async",
+    "mro"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    52,
+    67
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/sched/interface.py:PauseState",
+   "type": "class",
+   "name": "PauseState",
+   "filePath": "vllm/v1/core/sched/interface.py",
+   "summary": "调度器暂停状态枚举：UNPAUSED/PAUSE_NEW/PAUSED 区分『停收新请求』与『全局冻结』语义。",
+   "tags": [
+    "enum",
+    "pause",
+    "lifecycle"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    24,
+    35
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/sched/interface.py:SchedulerInterface",
+   "type": "class",
+   "name": "SchedulerInterface",
+   "filePath": "vllm/v1/core/sched/interface.py",
+   "summary": "调度器 ABC（24 个抽象方法）：schedule、update_from_output、pause/step/resume、KV connector 钩子与 spec-decode 接口，是 EngineCore 与调度实现之间的解耦点。",
+   "tags": [
+    "abc",
+    "scheduler",
+    "contract"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    38,
+    276
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/sched/output.py:NewRequestData",
+   "type": "class",
+   "name": "NewRequestData",
+   "filePath": "vllm/v1/core/sched/output.py",
+   "summary": "首次调度请求发往 worker 的完整数据（块分配、多模态特征、v2 prefill token ids、DeepSeek-V4.1 SWA replay_start），worker 端缓存以便后续只发差分。",
+   "tags": [
+    "data-model",
+    "prefill",
+    "worker-cache"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    41,
+    134
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/sched/output.py:CachedRequestData",
+   "type": "class",
+   "name": "CachedRequestData",
+   "filePath": "vllm/v1/core/sched/output.py",
+   "summary": "已缓存请求的差分更新（新块/新 token/已算 token 数），支持 resumed 请求整体替换并提供匿名化 repr。",
+   "tags": [
+    "data-model",
+    "diff",
+    "worker-cache"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    138,
+    203
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/sched/output.py:KVConnectorBlockState",
+   "type": "class",
+   "name": "KVConnectorBlockState",
+   "filePath": "vllm/v1/core/sched/output.py",
+   "summary": "提供给生产者侧 KV connector 的调度器本地块状态。",
+   "tags": [
+    "kv-connector",
+    "state"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    215,
+    228
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/sched/output.py:SchedulerOutput",
+   "type": "class",
+   "name": "SchedulerOutput",
+   "filePath": "vllm/v1/core/sched/output.py",
+   "summary": "单次调度步的全部输出：新/缓存请求、每请求 token 计划、spec-decode/encoder 输入索引、预分配 CUDA graph、finished 集合与 grammar/KV connector 元数据。",
+   "tags": [
+    "data-model",
+    "scheduler-output",
+    "batch-plan"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    232,
+    338
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/sched/output.py:GrammarOutput",
+   "type": "class",
+   "name": "GrammarOutput",
+   "filePath": "vllm/v1/core/sched/output.py",
+   "summary": "结构化输出 grammar bitmask 与每请求可接受 draft 数（None 表示全部拒绝）。",
+   "tags": [
+    "grammar",
+    "structured-output",
+    "bitmask"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    342,
+    351
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/sched/request_queue.py:SchedulingPolicy",
+   "type": "class",
+   "name": "SchedulingPolicy",
+   "filePath": "vllm/v1/core/sched/request_queue.py",
+   "summary": "调度策略枚举（fcfs/priority）。",
+   "tags": [
+    "enum",
+    "policy"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    13,
+    17
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/sched/request_queue.py:RequestQueue",
+   "type": "class",
+   "name": "RequestQueue",
+   "filePath": "vllm/v1/core/sched/request_queue.py",
+   "summary": "请求队列抽象基类：在 deque 语义（append/popleft/extend/remove/索引查找）之上定义调度策略扩展点。",
+   "tags": [
+    "abc",
+    "queue"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    20,
+    72
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/sched/request_queue.py:FCFSRequestQueue",
+   "type": "class",
+   "name": "FCFSRequestQueue",
+   "filePath": "vllm/v1/core/sched/request_queue.py",
+   "summary": "先来先服务队列（deque 直通实现）。",
+   "tags": [
+    "queue",
+    "fcfs"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    75,
+    128
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/sched/request_queue.py:PriorityRequestQueue",
+   "type": "class",
+   "name": "PriorityRequestQueue",
+   "filePath": "vllm/v1/core/sched/request_queue.py",
+   "summary": "堆实现的优先级队列：按 Request 排序键（priority 值小者优先），兼顾移除与迭代需求。",
+   "tags": [
+    "queue",
+    "priority-heap"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    131,
+    197
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/sched/request_queue.py:create_request_queue",
+   "type": "function",
+   "name": "create_request_queue",
+   "filePath": "vllm/v1/core/sched/request_queue.py",
+   "summary": "按 SchedulingPolicy 实例化对应队列的工厂函数。",
+   "tags": [
+    "factory",
+    "queue"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    200,
+    207
+   ]
+  },
+  {
+   "id": "class:vllm/v1/core/sched/scheduler.py:Scheduler",
+   "type": "class",
+   "name": "Scheduler",
+   "filePath": "vllm/v1/core/sched/scheduler.py",
+   "summary": "调度器实现：schedule() 产出每步 token 计划，配合 KVCacheManager 分配、KV/EC connector 异步传输、结构化输出 bitmask 与 prefill/decode 平衡（含 DP prefill throttle）。",
+   "tags": [
+    "scheduler",
+    "batch-formation",
+    "kv-cache"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    86,
+    3726
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/sched/utils.py:_has_repeating_pattern",
+   "type": "function",
+   "name": "_has_repeating_pattern",
+   "filePath": "vllm/v1/core/sched/utils.py",
+   "summary": "检查 token 序列尾部是否构成周期重复模式。",
+   "tags": [
+    "repetition",
+    "detection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    10,
+    25
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/sched/utils.py:check_sequence_repetition",
+   "type": "function",
+   "name": "check_sequence_repetition",
+   "filePath": "vllm/v1/core/sched/utils.py",
+   "summary": "按 RepetitionDetectionParams 判定序列是否命中重复退出条件。",
+   "tags": [
+    "repetition",
+    "stop-condition"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    28,
+    62
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/sched/utils.py:remove_all",
+   "type": "function",
+   "name": "remove_all",
+   "filePath": "vllm/v1/core/sched/utils.py",
+   "summary": "从列表移除集合内全部元素（针对常见少量移除场景优化）。",
+   "tags": [
+    "list",
+    "performance"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    65,
+    95
+   ]
+  },
+  {
+   "id": "function:vllm/v1/core/sched/utils.py:check_stop",
+   "type": "function",
+   "name": "check_stop",
+   "filePath": "vllm/v1/core/sched/utils.py",
+   "summary": "统一停止判定：长度上限、stop token/string（经 detokenizer 缓冲文本）与重复检测。",
+   "tags": [
+    "stop-condition",
+    "scheduler"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    98,
+    140
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/core/block_pool.py",
+   "target": "class:vllm/v1/core/block_pool.py:BlockHashToBlockMap",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/block_pool.py",
+   "target": "class:vllm/v1/core/block_pool.py:BlockHashToBlockMap",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/block_pool.py",
+   "target": "class:vllm/v1/core/block_pool.py:BlockPool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/block_pool.py",
+   "target": "class:vllm/v1/core/block_pool.py:BlockPool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/encoder_cache_manager.py",
+   "target": "class:vllm/v1/core/encoder_cache_manager.py:EncoderCacheManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/encoder_cache_manager.py",
+   "target": "class:vllm/v1/core/encoder_cache_manager.py:EncoderCacheManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/encoder_cache_manager.py",
+   "target": "class:vllm/v1/core/encoder_cache_manager.py:EncoderDecoderCacheManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/encoder_cache_manager.py",
+   "target": "class:vllm/v1/core/encoder_cache_manager.py:EncoderDecoderCacheManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/encoder_cache_manager.py",
+   "target": "function:vllm/v1/core/encoder_cache_manager.py:compute_mm_encoder_budget",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/encoder_cache_manager.py",
+   "target": "function:vllm/v1/core/encoder_cache_manager.py:compute_mm_encoder_budget",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_config_builder.py",
+   "target": "class:vllm/v1/core/kv_cache_config_builder.py:KVCacheConfigBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_config_builder.py",
+   "target": "class:vllm/v1/core/kv_cache_config_builder.py:KVCacheConfigBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_config_builder.py",
+   "target": "function:vllm/v1/core/kv_cache_config_builder.py:get_kv_cache_config_builder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_config_builder.py",
+   "target": "function:vllm/v1/core/kv_cache_config_builder.py:get_kv_cache_config_builder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "function:vllm/v1/core/kv_cache_coordinator.py:_validate_prefix_cache_retention_interval",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "function:vllm/v1/core/kv_cache_coordinator.py:replay_boundaries",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "function:vllm/v1/core/kv_cache_coordinator.py:replay_boundaries",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "class:vllm/v1/core/kv_cache_coordinator.py:KVCacheCoordinator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "class:vllm/v1/core/kv_cache_coordinator.py:KVCacheCoordinator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "class:vllm/v1/core/kv_cache_coordinator.py:KVCacheCoordinatorNoPrefixCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "class:vllm/v1/core/kv_cache_coordinator.py:KVCacheCoordinatorNoPrefixCache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "class:vllm/v1/core/kv_cache_coordinator.py:UnitaryKVCacheCoordinator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "class:vllm/v1/core/kv_cache_coordinator.py:UnitaryKVCacheCoordinator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "class:vllm/v1/core/kv_cache_coordinator.py:HybridKVCacheCoordinator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "class:vllm/v1/core/kv_cache_coordinator.py:HybridKVCacheCoordinator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "function:vllm/v1/core/kv_cache_coordinator.py:get_kv_cache_coordinator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "function:vllm/v1/core/kv_cache_coordinator.py:get_kv_cache_coordinator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_manager.py",
+   "target": "class:vllm/v1/core/kv_cache_manager.py:KVCacheBlocks",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_manager.py",
+   "target": "class:vllm/v1/core/kv_cache_manager.py:KVCacheBlocks",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_manager.py",
+   "target": "class:vllm/v1/core/kv_cache_manager.py:KVCacheManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_manager.py",
+   "target": "class:vllm/v1/core/kv_cache_manager.py:KVCacheManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:_check_enough_kv_cache_memory",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:estimate_max_model_len",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:estimate_max_model_len",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:check_enough_kv_cache_memory",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:check_enough_kv_cache_memory",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:create_kv_cache_group_specs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:create_kv_cache_group_specs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:is_kv_cache_spec_uniform",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:is_kv_cache_spec_uniform",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:_pool_bytes_per_block",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:_pool_bytes_per_block_from_builder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:_get_kv_cache_groups_uniform_spec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:_get_kv_cache_groups_uniform_type",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:unify_kv_cache_spec_page_size",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:unify_kv_cache_spec_page_size",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:_get_kv_cache_groups_uniform_page_size",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:_get_kv_cache_bytes_per_block",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:validate_kv_cache_layout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:validate_kv_cache_layout",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:get_kv_cache_config_from_groups",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:get_kv_cache_config_from_groups",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:_promote_local_kv_cache_specs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:_try_get_full_allocation_fallback_groups",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:unify_hybrid_kv_cache_specs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:unify_hybrid_kv_cache_specs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:_approximate_gcd",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:_get_packed_kv_cache_groups",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:_warn_if_unannotated_eagle_mamba",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:_ensure_min_page_size",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:get_kv_cache_groups",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:get_kv_cache_groups",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:get_kv_cache_groups_from_builder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:get_kv_cache_groups_from_builder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:_check_exact_partition",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:kv_cache_groups_tp_replicas",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:kv_cache_groups_tp_replicas",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:_max_memory_usage_bytes_from_groups",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:_estimate_max_model_len_from_groups",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:_auto_fit_max_model_len",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:_project_kv_cache_groups_to_worker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:get_kv_cache_configs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:get_kv_cache_configs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:get_global_kv_cache_groups",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:get_global_kv_cache_groups",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "class:vllm/v1/core/kv_cache_planning.py:DefaultKVCacheConfigBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "class:vllm/v1/core/kv_cache_planning.py:DefaultKVCacheConfigBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:make_block_hash_with_group_id",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:make_block_hash_with_group_id",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:resolve_none_hash_seed",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:resolve_none_hash_seed",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:get_none_hash_seed",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:get_none_hash_seed",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:init_none_hash",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:init_none_hash",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "class:vllm/v1/core/kv_cache_utils.py:KVCacheBlock",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "class:vllm/v1/core/kv_cache_utils.py:KVCacheBlock",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "class:vllm/v1/core/kv_cache_utils.py:KVCacheBlockCopy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "class:vllm/v1/core/kv_cache_utils.py:KVCacheBlockCopy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "class:vllm/v1/core/kv_cache_utils.py:FreeKVCacheBlockQueue",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "class:vllm/v1/core/kv_cache_utils.py:FreeKVCacheBlockQueue",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:null_head_len",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:null_head_len",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:trim_null_head",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:trim_null_head",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:_gen_mm_extra_hash_keys",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:_gen_lora_extra_hash_keys",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:_gen_prompt_embeds_extra_hash_keys",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:generate_block_hash_extra_keys",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:generate_block_hash_extra_keys",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:to_event_extra_keys",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:to_event_extra_keys",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:hash_block_tokens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:hash_block_tokens",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:resolve_dcp_kv_cache_spec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:resolve_dcp_kv_cache_spec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:partial_hash_hits_enabled",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:partial_hash_hits_enabled",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:eagle_proof_margin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:eagle_proof_margin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:resolve_kv_cache_block_sizes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:resolve_kv_cache_block_sizes",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:resolve_cache_hit_alignment_tokens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:resolve_cache_hit_alignment_tokens",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:get_request_block_hasher",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:get_request_block_hasher",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:generate_lookahead_block_hash_extra_keys",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:generate_lookahead_block_hash_extra_keys",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:get_max_concurrency_for_kv_cache_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:get_max_concurrency_for_kv_cache_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:generate_scheduler_kv_cache_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:generate_scheduler_kv_cache_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:get_kv_cache_capacity",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:get_kv_cache_capacity",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:_kv_cache_device_name",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:update_kv_cache_capacity",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:update_kv_cache_capacity",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "class:vllm/v1/core/kv_cache_utils.py:BlockHashListWithBlockSize",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "class:vllm/v1/core/kv_cache_utils.py:BlockHashListWithBlockSize",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:resolve_block_hashes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:resolve_block_hashes",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:SingleTypeKVCacheManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:SingleTypeKVCacheManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:FullAttentionManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:FullAttentionManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:RSWAManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:RSWAManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:SlidingWindowManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:SlidingWindowManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:CircularBufferManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:CircularBufferManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:ChunkedLocalAttentionManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:ChunkedLocalAttentionManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:MambaManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:MambaManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:CrossAttentionManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:CrossAttentionManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:SinkFullAttentionManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:SinkFullAttentionManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:HiSparseSourceManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:HiSparseSourceManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:_HiSparseAuxiliaryManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:HiSparseHotManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:HiSparseHotManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:HiSparseResidentManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:HiSparseResidentManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "function:vllm/v1/core/single_type_kv_cache_manager.py:get_manager_for_kv_cache_spec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "function:vllm/v1/core/single_type_kv_cache_manager.py:get_manager_for_kv_cache_spec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "function:vllm/v1/core/single_type_kv_cache_manager.py:register_all_kvcache_specs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "function:vllm/v1/core/single_type_kv_cache_manager.py:register_all_kvcache_specs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/sched/async_scheduler.py",
+   "target": "class:vllm/v1/core/sched/async_scheduler.py:AsyncScheduler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/async_scheduler.py",
+   "target": "class:vllm/v1/core/sched/async_scheduler.py:AsyncScheduler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/sched/diffusion_scheduler.py",
+   "target": "function:vllm/v1/core/sched/diffusion_scheduler.py:_read_in_flight",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/diffusion_scheduler.py",
+   "target": "class:vllm/v1/core/sched/diffusion_scheduler.py:DiffusionScheduler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/diffusion_scheduler.py",
+   "target": "class:vllm/v1/core/sched/diffusion_scheduler.py:DiffusionScheduler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/sched/diffusion_scheduler.py",
+   "target": "class:vllm/v1/core/sched/diffusion_scheduler.py:DiffusionAsyncScheduler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/diffusion_scheduler.py",
+   "target": "class:vllm/v1/core/sched/diffusion_scheduler.py:DiffusionAsyncScheduler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/sched/interface.py",
+   "target": "class:vllm/v1/core/sched/interface.py:PauseState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/interface.py",
+   "target": "class:vllm/v1/core/sched/interface.py:PauseState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/sched/interface.py",
+   "target": "class:vllm/v1/core/sched/interface.py:SchedulerInterface",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/interface.py",
+   "target": "class:vllm/v1/core/sched/interface.py:SchedulerInterface",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "class:vllm/v1/core/sched/output.py:NewRequestData",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "class:vllm/v1/core/sched/output.py:NewRequestData",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "class:vllm/v1/core/sched/output.py:CachedRequestData",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "class:vllm/v1/core/sched/output.py:CachedRequestData",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "class:vllm/v1/core/sched/output.py:KVConnectorBlockState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "class:vllm/v1/core/sched/output.py:KVConnectorBlockState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "class:vllm/v1/core/sched/output.py:SchedulerOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "class:vllm/v1/core/sched/output.py:SchedulerOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "class:vllm/v1/core/sched/output.py:GrammarOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "class:vllm/v1/core/sched/output.py:GrammarOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/sched/request_queue.py",
+   "target": "class:vllm/v1/core/sched/request_queue.py:SchedulingPolicy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/request_queue.py",
+   "target": "class:vllm/v1/core/sched/request_queue.py:SchedulingPolicy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/sched/request_queue.py",
+   "target": "class:vllm/v1/core/sched/request_queue.py:RequestQueue",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/request_queue.py",
+   "target": "class:vllm/v1/core/sched/request_queue.py:RequestQueue",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/sched/request_queue.py",
+   "target": "class:vllm/v1/core/sched/request_queue.py:FCFSRequestQueue",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/request_queue.py",
+   "target": "class:vllm/v1/core/sched/request_queue.py:FCFSRequestQueue",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/sched/request_queue.py",
+   "target": "class:vllm/v1/core/sched/request_queue.py:PriorityRequestQueue",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/request_queue.py",
+   "target": "class:vllm/v1/core/sched/request_queue.py:PriorityRequestQueue",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/sched/request_queue.py",
+   "target": "function:vllm/v1/core/sched/request_queue.py:create_request_queue",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/request_queue.py",
+   "target": "function:vllm/v1/core/sched/request_queue.py:create_request_queue",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "class:vllm/v1/core/sched/scheduler.py:Scheduler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "class:vllm/v1/core/sched/scheduler.py:Scheduler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/sched/utils.py",
+   "target": "function:vllm/v1/core/sched/utils.py:_has_repeating_pattern",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/utils.py",
+   "target": "function:vllm/v1/core/sched/utils.py:check_sequence_repetition",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/utils.py",
+   "target": "function:vllm/v1/core/sched/utils.py:check_sequence_repetition",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/sched/utils.py",
+   "target": "function:vllm/v1/core/sched/utils.py:remove_all",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/utils.py",
+   "target": "function:vllm/v1/core/sched/utils.py:remove_all",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/sched/utils.py",
+   "target": "function:vllm/v1/core/sched/utils.py:check_stop",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/core/sched/utils.py",
+   "target": "function:vllm/v1/core/sched/utils.py:check_stop",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/core/block_pool.py",
+   "target": "file:vllm/distributed/kv_events.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/block_pool.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/block_pool.py",
+   "target": "file:vllm/multimodal/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/block_pool.py",
+   "target": "file:vllm/v1/core/kv_cache_metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/block_pool.py",
+   "target": "file:vllm/v1/core/kv_cache_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/block_pool.py",
+   "target": "file:vllm/v1/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/encoder_cache_manager.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/encoder_cache_manager.py",
+   "target": "file:vllm/config/ec_manager_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/encoder_cache_manager.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/encoder_cache_manager.py",
+   "target": "file:vllm/v1/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_config_builder.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_config_builder.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_config_builder.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_config_builder.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "file:vllm/v1/core/block_pool.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "file:vllm/v1/core/kv_cache_metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "file:vllm/v1/core/kv_cache_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "target": "file:vllm/v1/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_manager.py",
+   "target": "file:vllm/distributed/kv_events.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_manager.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_manager.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_manager.py",
+   "target": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_manager.py",
+   "target": "file:vllm/v1/core/kv_cache_metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_manager.py",
+   "target": "file:vllm/v1/core/kv_cache_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_manager.py",
+   "target": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_manager.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_manager.py",
+   "target": "file:vllm/v1/metrics/stats.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_manager.py",
+   "target": "file:vllm/v1/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "file:vllm/utils/mem_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "file:vllm/v1/core/kv_cache_config_builder.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "file:vllm/v1/core/kv_cache_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "file:vllm/v1/hisparse/layout.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_planning.py",
+   "target": "file:vllm/v1/kv_cache_spec_registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "file:vllm/multimodal/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "file:vllm/utils/hashing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "file:vllm/v1/core/block_pool.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "file:vllm/v1/kv_cache_spec_registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "file:vllm/v1/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/kv_cache_utils.py",
+   "target": "file:vllm/v1/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "file:vllm/distributed/kv_events.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "file:vllm/v1/core/block_pool.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "file:vllm/v1/core/kv_cache_metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "file:vllm/v1/core/kv_cache_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "file:vllm/v1/hisparse/block_pool.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "file:vllm/v1/hisparse/coordinator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "file:vllm/v1/kv_cache_spec_registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "target": "file:vllm/v1/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/async_scheduler.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/async_scheduler.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/async_scheduler.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/async_scheduler.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/async_scheduler.py",
+   "target": "file:vllm/v1/core/sched/scheduler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/diffusion_scheduler.py",
+   "target": "file:vllm/v1/core/sched/async_scheduler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/diffusion_scheduler.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/diffusion_scheduler.py",
+   "target": "file:vllm/v1/core/sched/scheduler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/diffusion_scheduler.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/diffusion_scheduler.py",
+   "target": "file:vllm/v1/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/interface.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/interface.py",
+   "target": "file:vllm/config/kv_events.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/interface.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/interface.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/interface.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/interface.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/interface.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/interface.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/interface.py",
+   "target": "file:vllm/v1/metrics/stats.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/interface.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/interface.py",
+   "target": "file:vllm/v1/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/interface.py",
+   "target": "file:vllm/v1/structured_output/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "file:vllm/config/ec_manager_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "file:vllm/distributed/aux_output_connector/connector.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "file:vllm/multimodal/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "file:vllm/pooling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "file:vllm/v1/core/kv_cache_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/output.py",
+   "target": "file:vllm/v1/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/request_queue.py",
+   "target": "file:vllm/v1/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/compilation/cuda_graph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/distributed/aux_output_connector/connector.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/factory.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/distributed/kv_events.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/factory.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/multimodal/encoder_budget.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/multimodal/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/v1/core/encoder_cache_manager.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/v1/core/kv_cache_manager.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/v1/core/kv_cache_metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/v1/core/kv_cache_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/v1/core/sched/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/v1/core/sched/request_queue.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/v1/core/sched/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/v1/metrics/perf.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/v1/metrics/stats.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/v1/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/v1/spec_decode/dynamic/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/v1/spec_decode/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/v1/structured_output/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/v1/structured_output/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/scheduler.py",
+   "target": "file:vllm/v1/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/utils.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/core/sched/utils.py",
+   "target": "file:vllm/v1/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/v1/core/encoder_cache_manager.py:EncoderDecoderCacheManager",
+   "target": "class:vllm/v1/core/encoder_cache_manager.py:EncoderCacheManager",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/kv_cache_planning.py:DefaultKVCacheConfigBuilder",
+   "target": "class:vllm/v1/core/kv_cache_config_builder.py:KVCacheConfigBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/kv_cache_coordinator.py:KVCacheCoordinatorNoPrefixCache",
+   "target": "class:vllm/v1/core/kv_cache_coordinator.py:KVCacheCoordinator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/kv_cache_coordinator.py:UnitaryKVCacheCoordinator",
+   "target": "class:vllm/v1/core/kv_cache_coordinator.py:KVCacheCoordinator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/kv_cache_coordinator.py:HybridKVCacheCoordinator",
+   "target": "class:vllm/v1/core/kv_cache_coordinator.py:KVCacheCoordinator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/sched/async_scheduler.py:AsyncScheduler",
+   "target": "class:vllm/v1/core/sched/scheduler.py:Scheduler",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/sched/diffusion_scheduler.py:DiffusionScheduler",
+   "target": "class:vllm/v1/core/sched/scheduler.py:Scheduler",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/sched/diffusion_scheduler.py:DiffusionAsyncScheduler",
+   "target": "class:vllm/v1/core/sched/diffusion_scheduler.py:DiffusionScheduler",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/sched/diffusion_scheduler.py:DiffusionAsyncScheduler",
+   "target": "class:vllm/v1/core/sched/async_scheduler.py:AsyncScheduler",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/sched/scheduler.py:Scheduler",
+   "target": "class:vllm/v1/core/sched/interface.py:SchedulerInterface",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/sched/request_queue.py:FCFSRequestQueue",
+   "target": "class:vllm/v1/core/sched/request_queue.py:RequestQueue",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/sched/request_queue.py:PriorityRequestQueue",
+   "target": "class:vllm/v1/core/sched/request_queue.py:RequestQueue",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/single_type_kv_cache_manager.py:FullAttentionManager",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:SingleTypeKVCacheManager",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/single_type_kv_cache_manager.py:RSWAManager",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:FullAttentionManager",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/single_type_kv_cache_manager.py:SlidingWindowManager",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:SingleTypeKVCacheManager",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/single_type_kv_cache_manager.py:CircularBufferManager",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:FullAttentionManager",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/single_type_kv_cache_manager.py:ChunkedLocalAttentionManager",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:SingleTypeKVCacheManager",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/single_type_kv_cache_manager.py:MambaManager",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:SingleTypeKVCacheManager",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/single_type_kv_cache_manager.py:CrossAttentionManager",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:SingleTypeKVCacheManager",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/single_type_kv_cache_manager.py:SinkFullAttentionManager",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:FullAttentionManager",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/single_type_kv_cache_manager.py:HiSparseSourceManager",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:FullAttentionManager",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/single_type_kv_cache_manager.py:_HiSparseAuxiliaryManager",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:SingleTypeKVCacheManager",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/single_type_kv_cache_manager.py:HiSparseHotManager",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:_HiSparseAuxiliaryManager",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/single_type_kv_cache_manager.py:HiSparseResidentManager",
+   "target": "class:vllm/v1/core/single_type_kv_cache_manager.py:_HiSparseAuxiliaryManager",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/core/sched/scheduler.py:Scheduler",
+   "target": "function:vllm/v1/core/sched/request_queue.py:create_request_queue",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/core/sched/scheduler.py:Scheduler",
+   "target": "function:vllm/v1/core/sched/utils.py:check_stop",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/core/sched/scheduler.py:Scheduler",
+   "target": "function:vllm/v1/core/sched/utils.py:remove_all",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/core/kv_cache_manager.py:KVCacheManager",
+   "target": "function:vllm/v1/core/kv_cache_coordinator.py:get_kv_cache_coordinator",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/v1/core/kv_cache_coordinator.py:get_kv_cache_coordinator",
+   "target": "function:vllm/v1/core/single_type_kv_cache_manager.py:get_manager_for_kv_cache_spec",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/v1/core/kv_cache_planning.py:get_kv_cache_configs",
+   "target": "function:vllm/v1/core/kv_cache_config_builder.py:get_kv_cache_config_builder",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/v1/core/kv_cache_planning.py:get_global_kv_cache_groups",
+   "target": "function:vllm/v1/core/kv_cache_config_builder.py:get_kv_cache_config_builder",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

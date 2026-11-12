@@ -1,165 +1,252 @@
-> 来源: [https://deepwiki.com/deepseek-ai/DeepSeek-LLM/2-model-architecture](https://deepwiki.com/deepseek-ai/DeepSeek-LLM/2-model-architecture)
-> DeepWiki deepseek-ai/DeepSeek-LLM
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/DeepSeek-LLM · page 2 Model Architecture · fetched 2026-10-30 -->
 
 # Model Architecture
 
-  Relevant source files 
- - [README.md](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1)
- - [paper.pdf](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/paper.pdf)
- 
-  This document provides a technical overview of the DeepSeek-Coder-V2 model architecture. It covers the Mixture-of-Experts (MoE) design, model variants, and key architectural features that enable the model's performance in code-related tasks.
+<details>
+<summary>Relevant source files</summary>
 
- For specific information about different model sizes and implementations, see [Model Variants](https://deepwiki.com/deepseek-ai/DeepSeek-Coder-V2/2.1-model-variants). For details about the extended context window implementation, see [Context Length Capabilities](https://deepwiki.com/deepseek-ai/DeepSeek-Coder-V2/2.2-context-length-capabilities).
+The following files were used as context for generating this wiki page:
 
- 
-## Core Architecture
+- [README.md](README.md)
 
- DeepSeek-Coder-V2 is built on the DeepSeekMoE framework, implementing a sparse Mixture-of-Experts architecture. This design allows the model to maintain a large number of total parameters while only activating a fraction of those parameters during inference.
+</details>
 
- 
-### Mixture-of-Experts Architecture
 
- 
+
+This document describes the technical architecture of DeepSeek-LLM models, including their internal structure, parameter configurations, and implementation details. For information about training methodology and data composition, see [Training Methodology](#2.1), and for details about the data processing pipeline, see [Data Pipeline](#2.2).
+
+## Overview
+
+DeepSeek-LLM follows the auto-regressive transformer decoder architecture similar to LLaMA. The models are available in two main parameter sizes (7B and 67B), each with base and chat variants. Both sizes support a context length of 4096 tokens, enabling them to process and generate long-form content.
+
+### High-Level Architecture
+
+```mermaid
+graph TD
+    subgraph "DeepSeek-LLM Architecture"
+        Input["Input Tokens"] --> Embed["Token Embeddings"]
+        Embed --> Layers["Transformer Decoder Layers"]
+        Layers --> LN["Final Layer Normalization"]
+        LN --> OutProj["Output Projection"]
+        OutProj --> Output["Output Probabilities"]
+        
+        subgraph "Decoder Layer"
+            InNorm["Input Layer Norm"] --> SAttn["Self Attention<br>(MHA or GQA)"]
+            SAttn --> AttnOut["Attention Output"]
+            AttnOut --> AddResid1["Add Residual"]
+            AddResid1 --> FFNorm["FFN Layer Norm"]
+            FFNorm --> FFN["Feed Forward Network"]
+            FFN --> AddResid2["Add Residual"]
+        end
+    end
 ```
 
+Sources: [README.md:196-197]()
+
+## Model Variants and Specifications
+
+DeepSeek-LLM is available in two main parameter sizes, each with specific architectural choices optimized for performance and efficiency.
+
+| Parameter | DeepSeek-LLM 7B | DeepSeek-LLM 67B |
+|-----------|----------------|------------------|
+| Total Parameters | 7 billion | 67 billion |
+| Attention Mechanism | Multi-Head Attention (MHA) | Grouped-Query Attention (GQA) |
+| Context Length | 4096 tokens | 4096 tokens |
+| Training Batch Size | 2304 | 4608 |
+| Learning Rate | 4.2e-4 | 3.2e-4 |
+| Tokenizer | Byte-level BPE | Byte-level BPE |
+
+Sources: [README.md:196-197](), [README.md:198-199]()
+
+## Attention Mechanisms
+
+The DeepSeek-LLM models implement different attention mechanisms depending on model size to balance computational efficiency and model capability.
+
+### Multi-Head Attention (7B Model)
+
+The 7B model uses traditional Multi-Head Attention where queries, keys, and values are projected into multiple heads, each operating independently before being concatenated.
+
+```mermaid
+graph TD
+    subgraph "Multi-Head Attention (7B Model)"
+        Input["Input"] --> QProj["Query Projection"]
+        Input --> KProj["Key Projection"]
+        Input --> VProj["Value Projection"]
+        
+        QProj --> QSplit["Split into Heads"]
+        KProj --> KSplit["Split into Heads"]
+        VProj --> VSplit["Split into Heads"]
+        
+        QSplit --> |"Head 1"| Attn1["Attention Computation 1"]
+        KSplit --> |"Head 1"| Attn1
+        VSplit --> |"Head 1"| Attn1
+        
+        QSplit --> |"Head 2"| Attn2["Attention Computation 2"]
+        KSplit --> |"Head 2"| Attn2
+        VSplit --> |"Head 2"| Attn2
+        
+        QSplit --> |"..."| AttnN["..."]
+        KSplit --> |"..."| AttnN
+        VSplit --> |"..."| AttnN
+        
+        Attn1 --> Concat["Concatenate"]
+        Attn2 --> Concat
+        AttnN --> Concat
+        
+        Concat --> OutProj["Output Projection"]
+    end
 ```
 
- In this architecture:
+### Grouped-Query Attention (67B Model)
 
- 
- - Input tokens are embedded into continuous vector representations
- - These embeddings pass through multiple transformer layers
- - Within each transformer layer, after self-attention, a router network selectively activates only specific experts in the MoE feed-forward blocks
- - The outputs from activated experts are combined and processed through a language modeling head to produce the final output
- 
- Sources: [README.md57-59](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L57-L59) [README.md70](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L70-L70)
+The 67B model uses Grouped-Query Attention (GQA), which reduces computational requirements by sharing keys and values across multiple query heads, making large models more efficient.
 
- 
-### Parameter Efficiency
-
- The key innovation of the MoE architecture is parameter efficiency. For example:
-
- 
- - The 16B parameter model activates only 2.4B parameters for each token
- - The 236B parameter model activates only 21B parameters for each token
- 
- This sparse activation pattern enables DeepSeek-Coder-V2 to achieve better computational and memory efficiency than comparable dense models, making it possible to train and deploy larger models effectively.
-
- 
-## Model Variants
-
- DeepSeek-Coder-V2 encompasses four primary model variants:
-
- 
+```mermaid
+graph TD
+    subgraph "Grouped-Query Attention (67B Model)"
+        Input["Input"] --> QProj["Query Projection"]
+        Input --> KProj["Key Projection (Reduced)"]
+        Input --> VProj["Value Projection (Reduced)"]
+        
+        QProj --> QSplit["Split into Query Heads"]
+        KProj --> KSplit["Split into KV Groups"]
+        VProj --> VSplit["Split into KV Groups"]
+        
+        QSplit --> |"Query 1"| Attn1["Attention 1"]
+        QSplit --> |"Query 2"| Attn2["Attention 2"]
+        QSplit --> |"Query N"| AttnN["Attention N"]
+        
+        KSplit --> |"KV Group 1"| KV1["KV Group 1"]
+        VSplit --> |"KV Group 1"| KV1
+        KV1 --> Attn1
+        KV1 --> Attn2
+        
+        KSplit --> |"KV Group 2"| KV2["KV Group 2"]
+        VSplit --> |"KV Group 2"| KV2
+        KV2 --> AttnN
+        
+        Attn1 --> Concat["Concatenate"]
+        Attn2 --> Concat
+        AttnN --> Concat
+        
+        Concat --> OutProj["Output Projection"]
+    end
 ```
 
+GQA allows the 67B model to maintain strong performance while reducing memory footprint and computational requirements compared to standard Multi-Head Attention at that scale.
+
+Sources: [README.md:196-197]()
+
+## Tokenization
+
+DeepSeek-LLM uses a custom implementation of the Byte-level BPE (Byte Pair Encoding) algorithm through the Hugging Face Tokenizer library, with specially designed pre-tokenizers for optimal performance.
+
+```mermaid
+graph LR
+    Text["Raw Text"] --> PreTok["Custom Pre-tokenizers"]
+    PreTok --> BPE["Byte-level BPE"]
+    BPE --> Tokens["Tokenized Sequence"]
+    Tokens --> Embed["Embedding Layer"]
+    Embed --> ModelInput["Model Input"]
 ```
 
- 
-### Model Specifications
+Unlike some other models, DeepSeek-LLM does not use SentencePiece tokenization, which has implications for compatibility with certain quantization methods.
 
- 
-| Model | Total Parameters | Active Parameters | Context Length | Type |
-|---|---|---|---|---|
-| DeepSeek-Coder-V2-Lite-Base | 16B | 2.4B | 128K | Base |
-| DeepSeek-Coder-V2-Lite-Instruct | 16B | 2.4B | 128K | Instruct |
-| DeepSeek-Coder-V2-Base | 236B | 21B | 128K | Base |
-| DeepSeek-Coder-V2-Instruct | 236B | 21B | 128K | Instruct |
+Sources: [README.md:333-334]()
 
- Sources: [README.md69-80](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L69-L80)
+## Training Configuration
 
- 
-### Base vs. Instruct Models
+DeepSeek-LLM models were trained using the AdamW optimizer on a dataset of 2 trillion tokens. The training employed a multi-step learning rate schedule:
 
- The model family includes two types of variants:
-
- 
- - **Base Models**: Foundation models trained primarily for code completion and generation tasks
- - **Instruct Models**: Fine-tuned versions of the base models optimized for following instructions and engaging in dialogue interactions
- 
- The Instruct models are better suited for chat-based interactions and following complex instructions, while the Base models may perform better for pure code completion tasks.
-
- 
-## Development Process
-
- DeepSeek-Coder-V2 was developed through a systematic multi-stage process:
-
- 
+```mermaid
+graph LR
+    Start["Training Start"] --> Warmup["2000 Warmup Steps"]
+    Warmup --> MaxLR["Maximum Learning Rate"]
+    MaxLR --> Step1["Step at 1.6T Tokens<br>(31.6% of Max LR)"]
+    Step1 --> Step2["Step at 1.8T Tokens<br>(10% of Max LR)"]
+    Step2 --> End["Training End<br>(2T Tokens)"]
 ```
 
+Sources: [README.md:198-199]()
+
+## Memory Requirements for Inference
+
+The memory requirements for inference vary based on model size, batch size, and sequence length:
+
+### 7B Model (1 NVIDIA A100-40GB GPU)
+
+| Batch Size | 256 tokens | 512 tokens | 1024 tokens | 2048 tokens | 4096 tokens |
+|------------|------------|------------|-------------|-------------|-------------|
+| 1          | 13.29 GB   | 13.63 GB   | 14.47 GB    | 16.37 GB    | 21.25 GB    |
+| 2          | 13.63 GB   | 14.39 GB   | 15.98 GB    | 19.82 GB    | 29.59 GB    |
+| 4          | 14.47 GB   | 15.82 GB   | 19.04 GB    | 26.65 GB    | OOM         |
+| 8          | 15.99 GB   | 18.71 GB   | 25.14 GB    | 35.19 GB    | OOM         |
+| 16         | 19.06 GB   | 24.52 GB   | 37.28 GB    | OOM         | OOM         |
+
+### 67B Model (8 NVIDIA A100-40GB GPUs)
+
+| Batch Size | 256 tokens | 512 tokens | 1024 tokens | 2048 tokens | 4096 tokens |
+|------------|------------|------------|-------------|-------------|-------------|
+| 1          | 16.92 GB   | 17.11 GB   | 17.66 GB    | 20.01 GB    | 33.23 GB    |
+| 2          | 17.04 GB   | 17.28 GB   | 18.55 GB    | 25.27 GB    | OOM         |
+| 4          | 17.20 GB   | 17.80 GB   | 21.28 GB    | 33.71 GB    | OOM         |
+| 8          | 17.59 GB   | 19.25 GB   | 25.69 GB    | OOM         | OOM         |
+| 16         | 18.17 GB   | 21.69 GB   | 34.54 GB    | OOM         | OOM         |
+
+Sources: [README.md:365-369]()
+
+## Model Integration Architecture
+
+The following diagram shows how DeepSeek-LLM's architecture integrates with inference systems and user applications:
+
+```mermaid
+graph TD
+    User["User Application"] --> InterfaceLayer["Interface Layer"]
+    
+    subgraph "Inference Integration Options"
+        HF["HuggingFace Transformers"]
+        VLLM["vLLM"]
+        Quant["Quantization<br>GGUF/GPTQ"]
+    end
+    
+    InterfaceLayer --> HF
+    InterfaceLayer --> VLLM
+    InterfaceLayer --> Quant
+    
+    subgraph "DeepSeek-LLM Architecture"
+        HF --> TokenizerBPE["Tokenizer<br>(Byte-level BPE)"]
+        VLLM --> TokenizerBPE
+        Quant --> TokenizerQuant["Quantized Tokenizer"]
+        
+        TokenizerBPE --> Embedding["Embedding Layer"]
+        TokenizerQuant --> EmbeddingQuant["Quantized Embedding"]
+        
+        Embedding --> Decoder["Transformer Decoder<br>(MHA for 7B / GQA for 67B)"]
+        EmbeddingQuant --> DecoderQuant["Quantized Decoder"]
+        
+        Decoder --> LM["Language Model Head"]
+        DecoderQuant --> LMQuant["Quantized LM Head"]
+        
+        LM --> OutputProbs["Output Token Probabilities"]
+        LMQuant --> OutputProbsQuant["Quantized Output Probabilities"]
+    end
+    
+    OutputProbs --> Response["Generated Response"]
+    OutputProbsQuant --> Response
 ```
 
- The development process included:
+Sources: [README.md:196-197](), [README.md:337-358]()
 
- 
- - Starting from an intermediate checkpoint of the DeepSeek-V2 model
- - Additional pre-training with 6 trillion tokens of code-focused data
- - Creating base models optimized for code-related tasks
- - Fine-tuning with instruction data to create the instruct variants
- 
- This process enhanced the model's coding and mathematical reasoning capabilities while maintaining its general language understanding.
+## Base and Chat Model Variants
 
- Sources: [README.md58-59](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L58-L59)
+For each parameter size (7B and 67B), DeepSeek-LLM offers two variants:
 
- 
-## Technical Implementation
+1. **Base Models**: Foundation models trained on the full 2 trillion token dataset
+2. **Chat Models**: Fine-tuned versions of the base models optimized for conversational interactions
 
- 
-### Programming Language Coverage
+The underlying architecture remains consistent between base and chat variants of the same parameter size, with differences only in the training objectives used during fine-tuning.
 
- The model architecture is designed to support a wide range of programming languages - 338 in total, a significant expansion from the 86 languages supported in previous DeepSeek models. This comprehensive language coverage required architectural considerations to handle the diverse syntax and patterns across different programming languages.
+Sources: [README.md:77-78]()
 
- 
-### Memory and Computation Design
+---
 
- The MoE architecture is specifically designed to optimize memory usage and computational efficiency:
-
- 
-```
-
-```
-
- This selective activation approach allows the model to maintain strong performance while reducing the computational requirements for both training and inference.
-
- 
-### Inference Optimizations
-
- The architecture supports several inference optimization techniques:
-
- 
- - **Tensor Parallelism**: Distributing the model across multiple GPUs
- - **FP8 Support**: Reduced precision for more efficient computation
- - **FP8 KV Cache**: Memory-efficient key-value caching
- - **MLA Optimizations**: Multi-layer attention optimizations
- 
- Sources: [README.md280-291](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L280-L291)
-
- 
-## Hardware Requirements
-
- The hardware requirements for DeepSeek-Coder-V2 reflect its architecture:
-
- 
- - **DeepSeek-Coder-V2-Lite models**: Can run on consumer hardware with appropriate optimizations
- - **DeepSeek-Coder-V2 (full 236B models)**: Require 80GB*8 GPUs for inference when using BF16 format
- 
- These requirements stem directly from the model's architectural design and parameter count.
-
- Sources: [README.md188-190](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L188-L190)
-
- 
-## Model Input and Output Processing
-
- 
-```
-
-```
-
- The model architecture includes specialized tokenization designed to handle code-specific constructs effectively, including:
-
- 
- - Special tokens for code-specific elements
- - Support for FIM (Fill-In-Middle) operations with dedicated tokens (`<｜fim▁begin｜>`, `<｜fim▁hole｜>`, `<｜fim▁end｜>`)
- - Chat template format with role-based tokens for dialogue interactions
- 
- Sources: [README.md205-227](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L205-L227) [README.md229-274](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L229-L274)

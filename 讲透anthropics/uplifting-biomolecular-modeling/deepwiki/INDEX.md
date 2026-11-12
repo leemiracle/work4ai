@@ -1,0 +1,43 @@
+# DeepWiki 索引 — anthropics/uplifting-biomolecular-modeling
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 31 页 · 全文 756449 字符
+
+- [1 Overview: Inference Optimization Kits](1-overview-inference-optimization-kits.md)
+  - [1.1 Repository Layout and Kit Anatomy](1.1-repository-layout-and-kit-anatomy.md)
+  - [1.2 Getting Started: Install, Check, Run](1.2-getting-started-install-check-run.md)
+  - [1.3 Kit Catalog by Domain](1.3-kit-catalog-by-domain.md)
+- [2 Kit Runtime Architecture](2-kit-runtime-architecture.md)
+  - [2.1 Modes and Mode Resolution](2.1-modes-and-mode-resolution.md)
+  - [2.2 Lever Registries and Ablation](2.2-lever-registries-and-ablation.md)
+  - [2.3 Activation, Gates and Autoload](2.3-activation-gates-and-autoload.md)
+  - [2.4 Kit CLIs and Stock Routes](2.4-kit-clis-and-stock-routes.md)
+  - [2.5 Reporting, Manifests and Evidence](2.5-reporting-manifests-and-evidence.md)
+- [3 opt_core: The Shared Runtime](3-opt-core-the-shared-runtime.md)
+  - [3.1 Kernel Provider Framework](3.1-kernel-provider-framework.md)
+  - [3.2 Memory and Multi-GPU (rowpair / n_gpu)](3.2-memory-and-multi-gpu-rowpair-n-gpu.md)
+  - [3.3 Determinism, Precision and Compilation Caches](3.3-determinism-precision-and-compilation-caches.md)
+- [4 Stock Upstream Model Code](4-stock-upstream-model-code.md)
+  - [4.1 AlphaFold3-Family Model Architecture](4.1-alphafold3-family-model-architecture.md)
+  - [4.2 Data Pipelines, Featurization and Resources](4.2-data-pipelines-featurization-and-resources.md)
+  - [4.3 Sequence Models and Genomics Stock Code](4.3-sequence-models-and-genomics-stock-code.md)
+  - [4.4 Package Layout of the OpenFold3 / OpenDDE Stock Trees](4.4-package-layout-of-the-openfold3-opendde-stock-trees.md)
+- [5 Per-Kit Forward Optimization Packs](5-per-kit-forward-optimization-packs.md)
+  - [5.1 Structure-Kit Forward Packs](5.1-structure-kit-forward-packs.md)
+  - [5.2 Sequence/Genomics Kit Forward Packs](5.2-sequence-genomics-kit-forward-packs.md)
+  - [5.3 Design-Kit Forward Packs](5.3-design-kit-forward-packs.md)
+- [6 Reproducibility, Packaging and Environments](6-reproducibility-packaging-and-environments.md)
+  - [6.1 Pin Verification and Weights](6.1-pin-verification-and-weights.md)
+  - [6.2 Environments, Containers and GPU Configs](6.2-environments-containers-and-gpu-configs.md)
+  - [6.3 Licensing and Third-Party Notices](6.3-licensing-and-third-party-notices.md)
+- [7 Testing and Verification Strategy](7-testing-and-verification-strategy.md)
+  - [7.1 Activation, Gate and Refusal Tests](7.1-activation-gate-and-refusal-tests.md)
+  - [7.2 Numerics and Kernel Correctness Tests](7.2-numerics-and-kernel-correctness-tests.md)
+- [8 Glossary](8-glossary.md)
+
+## 附：结构清单外的页
+- [LayerNorm, Transition, MSA and Atom Kernels](x1-layernorm-transition-msa-and-atom-kernels.md)
+- [Per-Kit Tensor-Parallel Adapters](x2-per-kit-tensor-parallel-adapters.md)
+- [Rowpair Sharding Internals](x3-rowpair-sharding-internals.md)
+- [Triangle Multiplication Kernels (trimul)](x4-triangle-multiplication-kernels-trimul.md)
+- [Triangle and Pair-Bias Attention Kernels](x5-triangle-and-pair-bias-attention-kernels.md)

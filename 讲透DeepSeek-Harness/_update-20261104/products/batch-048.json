@@ -1,0 +1,231 @@
+{
+ "nodes": [
+  {
+   "id": "document:packages/plan/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/plan/README.md",
+   "summary": "plan 组级 README：计划协作状态能力族（plan-mode）概览与相关文档。",
+   "tags": [
+    "documentation",
+    "group-index",
+    "plan"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/plan/plan-mode/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/plan/plan-mode/README.md",
+   "summary": "dsh-plan-mode 文档：何时选用、最小配置、进入/退出 plan mode、经审 exit（exit_plan_mode 呈计划给用户复核）与 /plan off 直退、观察 plan 状态。",
+   "tags": [
+    "documentation",
+    "plan-mode",
+    "collaboration-state"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/plan/plan-mode/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/plan/plan-mode/package.json",
+   "summary": "包清单 @deepseek-ai/dsh-plan-mode：按 agent 记录的 plan mode——部署指导、直接 slash 命令与用户复核退出。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/plan/plan-mode/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/plan/plan-mode/tsconfig.json",
+   "summary": "包编译配置：extends tsconfig.base.json，rootDir src / outDir lib/types。",
+   "tags": [
+    "configuration",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/plan/plan-mode/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/plan/plan-mode/src/index.ts",
+   "summary": "plan mode 插件：PlanModeController extends Service——激活时每个模型请求含部署持有的指导节、exit_plan_mode 呈完成计划给用户复核、/plan off 直退；plan 投影折叠会话日志故 resume/fork 恢复状态，选择态在下一接受 pre-step 才生效，退出工具渐进披露后整 Session 保持 admitted。",
+   "tags": [
+    "service",
+    "plan-mode",
+    "session-projection",
+    "tools",
+    "commands"
+   ],
+   "complexity": "complex",
+   "languageNotes": "declare module 三处合并：MessageSourceMap plan-mode 源、SessionEventMap plan/mode（log-only 非表面事件）、Context.planMode。"
+  },
+  {
+   "id": "file:packages/plan/plan-mode/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/plan/plan-mode/src/types.ts",
+   "summary": "plan 域纯类型：plan 投影 key 声明的唯一 home，无宿主侧值导入；./types 与 ./client 两个命名空间投影共用零重复。",
+   "tags": [
+    "type-definition",
+    "projection-key",
+    "pure-types"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/plan/plan-mode/src/index.ts:resolveConfig",
+   "type": "function",
+   "name": "resolveConfig",
+   "filePath": "packages/plan/plan-mode/src/index.ts",
+   "lineRange": [
+    102,
+    115
+   ],
+   "summary": "解析并校验 plan mode 部署配置（指导文案等）。",
+   "tags": [
+    "config",
+    "resolution"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/plan/plan-mode/src/index.ts:PlanModeController",
+   "type": "class",
+   "name": "PlanModeController",
+   "filePath": "packages/plan/plan-mode/src/index.ts",
+   "lineRange": [
+    176,
+    481
+   ],
+   "summary": "plan mode 控制器服务：loggedActive/selectedActive 状态面、get/set、turn 边界观察与叙述渲染；组装提议 step 并在 agent/pre-step 接受时追加 plan/mode 事件。",
+   "tags": [
+    "controller",
+    "service",
+    "state",
+    "pre-step"
+   ],
+   "complexity": "complex"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/plan/plan-mode/src/index.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/plan/plan-mode/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/plan/plan-mode/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/plan/plan-mode/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/plan/plan-mode/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/plan/plan-mode/src/index.ts",
+   "target": "file:packages/interaction/user-questions/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/plan/plan-mode/src/index.ts",
+   "target": "file:packages/interaction/commands/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/plan/plan-mode/src/index.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/plan/plan-mode/src/index.ts",
+   "target": "file:packages/plan/plan-mode/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/plan/plan-mode/src/types.ts",
+   "target": "file:packages/interaction/commands/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/plan/plan-mode/src/index.ts",
+   "target": "function:packages/plan/plan-mode/src/index.ts:resolveConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/plan/plan-mode/src/index.ts",
+   "target": "function:packages/plan/plan-mode/src/index.ts:resolveConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/plan/plan-mode/src/index.ts",
+   "target": "class:packages/plan/plan-mode/src/index.ts:PlanModeController",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/plan/plan-mode/src/index.ts",
+   "target": "class:packages/plan/plan-mode/src/index.ts:PlanModeController",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "document:packages/plan/README.md",
+   "target": "file:packages/plan/plan-mode/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/plan/plan-mode/README.md",
+   "target": "file:packages/plan/plan-mode/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  }
+ ]
+}

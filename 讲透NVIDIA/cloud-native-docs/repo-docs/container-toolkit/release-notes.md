@@ -1,0 +1,1724 @@
+% Date: September 21 2021
+
+% Author: elezar
+
+(toolkit-release-notes)=
+
+# Release Notes
+
+This document describes the new features, improvements, fixes and known issues for the NVIDIA Container Toolkit.
+
+## NVIDIA Container Toolkit 1.20.1
+
+This release of the NVIDIA Container Toolkit `v1.20.1` is a bugfix release.
+
+### Fixes and Features
+
+- CDI specifications and JIT-CDI mode now inject MIG management capability devices into containers.
+  Set the `NVIDIA_MIG_CONFIG_DEVICES` or `NVIDIA_MIG_MONITOR_DEVICES` environment variable to `all` in a container with `CAP_SYS_ADMIN` to inject the `/dev/nvidia-caps/` device nodes for MIG partition management.
+  For supported values and constraints, refer to [MIG Management Devices](docker-specialized.md#mig-management-devices).
+  For more information, refer to [issue #1740](https://github.com/NVIDIA/nvidia-container-toolkit/issues/1740)
+  and [PR #1947](https://github.com/NVIDIA/nvidia-container-toolkit/pull/1947).
+- Containers can now enforce soft and hard per-GPU CUDA memory limits.
+  Set the `NVIDIA_GPU_MEMORY_REQUEST` and `NVIDIA_GPU_MEMORY_LIMIT` environment variables in MiB to control the limits.
+  This feature requires an R615 or later driver.
+  For more information, refer to [PR #2075](https://github.com/NVIDIA/nvidia-container-toolkit/pull/2075).
+- Containers running with an R615 or later driver now receive the GPU firmware files that the driver requires at runtime.
+  CDI specifications include the `ucode_*.bin` files automatically.
+  For more information, refer to [PR #2095](https://github.com/NVIDIA/nvidia-container-toolkit/pull/2095).
+- The `nvidia-ctk runtime configure` command now preserves existing Docker feature flags when enabling CDI.
+  Previously, running the command could overwrite flags such as `containerd-snapshotter`.
+  For more information, refer to [PR #2049](https://github.com/NVIDIA/nvidia-container-toolkit/pull/2049).
+- Fixed an intermittent `EBADF` error in the `create-symlinks` hook that caused container creation to fail on busy hosts.
+  The error occurred when the garbage collector closed a file descriptor while a system call was in progress.
+  For more information, refer to [PR #2082](https://github.com/NVIDIA/nvidia-container-toolkit/pull/2082).
+- Fixed a regression in the `update-ldcache` hook that caused container creation to fail under gVisor.
+  The hook now uses a sealed memfd to execute ldconfig, which avoids mounting `/proc` inside the container root.
+  For more information, refer to [PR #2059](https://github.com/NVIDIA/nvidia-container-toolkit/pull/2059).
+- On WSL2, setting `NVIDIA_VISIBLE_DEVICES=none` now correctly prevents GPU device injection.
+  For more information, refer to [PR #2025](https://github.com/NVIDIA/nvidia-container-toolkit/pull/2025).
+- Fixed NVIDIA X.Org driver module mount paths so that containers render correctly when the host uses a custom `ModulePath` in `xorg.conf.d`.
+  For more information, refer to [PR #1980](https://github.com/NVIDIA/nvidia-container-toolkit/pull/1980).
+- GPU devices are now available in the CDI specification on first boot.
+  The `nvidia-cdi-refresh` systemd service creates NVIDIA control device nodes before generating the specification.
+  For more information, refer to [PR #1979](https://github.com/NVIDIA/nvidia-container-toolkit/pull/1979).
+- GPU containers that start at boot no longer fail due to missing device nodes.
+  The `nvidia-cdi-refresh` service is now ordered before Docker, containerd, and CRI-O.
+  For more information, refer to [PR #2019](https://github.com/NVIDIA/nvidia-container-toolkit/pull/2019).
+- Containers on read-only filesystems no longer fail to start when the application profile cannot be updated.
+  The `update-application-profile` hook now ignores read-only filesystem errors.
+  For more information, refer to [PR #2028](https://github.com/NVIDIA/nvidia-container-toolkit/pull/2028).
+- Fixed malformed hook scratch directory names that could prevent hooks from running correctly.
+  For more information, refer to [PR #2042](https://github.com/NVIDIA/nvidia-container-toolkit/pull/2042).
+- Containers running under crun with user namespaces no longer encounter permission errors when resolving the rootfs path.
+  The OCI state parser now uses the non-standard `root` field from crun.
+  For more information, refer to [PR #1971](https://github.com/NVIDIA/nvidia-container-toolkit/pull/1971).
+
+### Included Packages
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.20.1`
+- `nvidia-container-toolkit-base 1.20.1`
+- `libnvidia-container-tools 1.20.1`
+- `libnvidia-container1 1.20.1`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.20.1`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.20.1-packaging`
+
+## NVIDIA Container Toolkit 1.20.0
+
+This release of the NVIDIA Container Toolkit `v1.20.0` is a feature release.
+
+### Fixes and Features
+
+- CDI specifications can now include an application-profile hook that limits EGL and Vulkan visibility to the GPUs assigned to the container.
+  Graphics applications no longer see unassigned host GPUs through these APIs.
+  For more information, refer to [issue #1899](https://github.com/NVIDIA/nvidia-container-toolkit/issues/1899) and [PR #1939](https://github.com/NVIDIA/nvidia-container-toolkit/pull/1939).
+- CUDA compatibility handling now uses `libcuda.so` ELF metadata whenever it is available.
+  This improves CUDA minor-version compatibility by selecting the container's compatibility libraries only when they are appropriate for the installed driver.
+- Driver file discovery now supports libraries spread across multiple directories, as occurs on distributions such as Debian, and matches graphics libraries against the exact installed driver version.
+  This fix avoids both missing required libraries and injecting libraries from another installed driver version.
+  For information about multiple-directory discovery, refer to [issue #1559](https://github.com/NVIDIA/nvidia-container-toolkit/issues/1559) and [PR #1820](https://github.com/NVIDIA/nvidia-container-toolkit/pull/1820). For information about exact-version matching, refer to [PR #1948](https://github.com/NVIDIA/nvidia-container-toolkit/pull/1948).
+- CDI specifications now include the NVIDIA OpenCL ICD file and the legacy `libnvidia-nvvm70.so` library when present.
+  OpenCL loaders can locate the NVIDIA implementation, and workloads that depend on the legacy NVVM library receive it automatically.
+  For information about OpenCL support, refer to [issue #682](https://github.com/NVIDIA/nvidia-container-toolkit/issues/682) and [PR #1893](https://github.com/NVIDIA/nvidia-container-toolkit/pull/1893). For information about legacy NVVM support, refer to [issue #1875](https://github.com/NVIDIA/nvidia-container-toolkit/issues/1875) and [PR #1876](https://github.com/NVIDIA/nvidia-container-toolkit/pull/1876).
+- On WSL2, CDI discovery now includes additional `.so`, `.bin`, and `.dll` files from the NVIDIA driver store instead of relying only on a fixed file list.
+  This fix enables containers to receive driver components introduced by newer Windows driver releases without waiting for a toolkit-specific allowlist update.
+  For more information, refer to [issue #1864](https://github.com/NVIDIA/nvidia-container-toolkit/issues/1864) and [PR #1890](https://github.com/NVIDIA/nvidia-container-toolkit/pull/1890).
+- IMEX channel requests in CDI and JIT-CDI mode are now validated for both the supported ID range and the presence of the corresponding host device.
+  Invalid requests fail with a clear error.
+  For more information, refer to [issue #1309](https://github.com/NVIDIA/nvidia-container-toolkit/issues/1309) and [PR #1913](https://github.com/NVIDIA/nvidia-container-toolkit/pull/1913).
+- JIT-CDI mode now honors the `nvidia-container-runtime.modes.jit-cdi.nvcdi-disable-hooks` configuration option.
+  You can disable individual CDI hooks for environments where a generated hook is unnecessary or incompatible.
+- Updating `config.toml` no longer reverts previously modified options to their defaults.
+- CDI generation no longer adds an `update-ldcache` hook when it discovers no driver libraries.
+  This fix prevents containers from running an unnecessary hook and avoids failures on systems or modes that do not inject libraries.
+  For more information, refer to [issue #373](https://github.com/NVIDIA/nvidia-container-toolkit/issues/373) and [PR #1894](https://github.com/NVIDIA/nvidia-container-toolkit/pull/1894).
+- Fixed an issue where NVIDIA runtime handlers in a generated containerd
+  drop-in configuration could omit `runtime_type` when the base configuration
+  did not define it.
+  The affected containers failed to start with a
+  `container.Runtime.Name must be set` error.
+  The toolkit now sets the default runtime type when the field is missing or empty.
+  For more information, refer to
+  [issue #1956](https://github.com/NVIDIA/nvidia-container-toolkit/issues/1956)
+  and [PR #1969](https://github.com/NVIDIA/nvidia-container-toolkit/pull/1969).
+
+### Packaging Changes
+
+- RPMs rebuilt by the toolkit packaging image now use XZ payload compression instead of zstd.
+  The resulting packages can be installed on older Linux distributions that do not support zstd compression, such as Amazon Linux 2.
+- Source package builds can use Podman by setting `DOCKER=podman`.
+  The build handles Podman's local image naming, SELinux volume labeling, and artifact-directory creation automatically.
+
+#### Enhancements to container-toolkit Container Images
+
+- The `container-toolkit` image now uses the non-development distroless base and includes a static BusyBox shell.
+  Init-container wrappers and lifecycle hooks retain the shell commands they need without depending on the development image.
+- The NRI plugin can inject ordinary workload CDI devices outside the toolkit namespace.
+  For management devices, you can authorize additional namespaces with the `--nri-management-cdi-device-namespaces` option or the `NRI_MANAGEMENT_CDI_DEVICE_NAMESPACES` environment variable, enabling centralized management workloads without granting access cluster-wide.
+- The toolkit installer now installs `nvidia-cdi-hook` instead of wrapping it with a shell script.
+  NRI-based deployments can invoke the hook on hosts that do not provide a shell.
+
+### Included Packages
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.20.0`
+- `nvidia-container-toolkit-base 1.20.0`
+- `libnvidia-container-tools 1.20.0`
+- `libnvidia-container1 1.20.0`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.20.0`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.20.0-packaging`
+
+## NVIDIA Container Toolkit 1.19.1
+
+This release of the NVIDIA Container Toolkit `v1.19.1` is a bugfix release.
+
+### Fixes and Features
+- Fix the `nvidia-cdi-refresh` systemd unit conditions to work on WSL2.
+- Remove the dependency on multi-user.target in the `nvidia-cdi-refresh` systemd service. For more information, see [issue #1735](https://github.com/NVIDIA/nvidia-container-toolkit/issues/1735).
+- The egl-wayland2 library and configuration file are now discovered and added to CDI specifications.
+- Fix handling of the CUDA compat header on Orin systems.
+- Fix default path used by `nvidia-ctk` and `nvidia-ctk-installer` for cri-o's drop-in configuration directory.
+- Add support for injecting /dev/dri* device nodes for MIG devices.
+- Add `disable-ipc-discoverer` feature flag to the nvcdi library for disabling the discovery of IPC sockets.
+
+#### Enhancements to container-toolkit Container Images
+- Improve the NRI Plugin server and add support for cri-o
+
+### Included Packages
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.19.1`
+- `nvidia-container-toolkit-base 1.19.1`
+- `libnvidia-container-tools 1.19.1`
+- `libnvidia-container1 1.19.1`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.19.1`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.19.1-packaging`
+
+### Known Issues
+
+CDI specifications for NVIDIA GPUs are now generated with version v0.7.0 of the CDI spec schema by default.
+As a result, the generated CDI specs may not work with container runtimes that do not support
+v0.7.0 of the CDI spec schema. The container runtime support for v0.7.0 of the CDI spec is as follows:
+
+- containerd >= 1.7.16 - [containerd/containerd@7a2f49f](https://github.com/containerd/containerd/commit/7a2f49f70f1d2cacfededbbf65452d481476bc10>)
+- docker >= 26.1.0 - [moby/moby@745e235](https://github.com/moby/moby/commit/745e2356ab01363a02cfec947c624a9f6220fe7f)
+- podman >= 5.1.0 - [containers/podman@a40cf31](https://github.com/containers/podman/commit/a40cf3195acb6ac5fea5ab4617afb99006a3bed7)
+- crio >= 1.30.0 - [cri-o/cri-o@fd9aa76](https://github.com/cri-o/cri-o/commit/fd9aa76250fe05625d8c968b922cd1a0ae88eb1b)
+
+If you are using a container runtime version that does not support v0.7.0 of the CDI spec schema,
+it is recommended to set the `no-additional-gids-for-device-nodes` CDI feature flag
+so that an older version of the CDI spec schema is used for spec file generation:
+
+   ```console
+   $ sudo nvidia-ctk cdi generate --feature-flag no-additional-gids-for-device-nodes
+   ```
+
+## NVIDIA Container Toolkit 1.19.0
+
+This release of the NVIDIA Container Toolkit `v1.19.0` is a feature release.
+
+### Fixes and Features
+- Report errors when unknown OCI runtime spec fields are detected.
+- Added support for IGX 2.0 Thor-based systems including those with dGPUs installed.
+- Added support for CUDA Forward Compatibility on Tegra-based systems. On Orin-based systems, this requires specific compat libraries in the container.
+- Added support for running containers as a user that may not have explicit access to a device node without requiring that additional groups be explicitly specified.
+- Improve triggering of systemd service that ensures that CDI specifications are up-to-date.
+- Add support for read-only root filesystems such as those on an initramfs.
+
+### Enhancements to libnvidia-container
+- Bump Golang version to match that used to build the NVIDIA Container Toolkit.
+
+#### Enhancements to container-toolkit Container Images
+- Add NRI plugin server for injecting CDI devices into GPU management containers.
+
+### Included Packages
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.19.0`
+- `nvidia-container-toolkit-base 1.19.0`
+- `libnvidia-container-tools 1.19.0`
+- `libnvidia-container1 1.19.0`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.19.0`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.19.0-packaging`
+
+## NVIDIA Container Toolkit 1.18.2
+
+This release of the NVIDIA Container Toolkit `v1.18.2` is a bugfix release.
+
+### Fixes and Features
+- Fix the trigger of the CDI refresh service to handle compressed kernels.
+- Return an error when JIT CDI spec generation failure. This makes it clearer as to why a container fails to start instead of reporting an unresolvable CDI device.
+- Allow driver libraries to be properly located in `musl`-based containers.
+- Properly construct the arguments of the hook used to create DRM device symlinks. This fixes a bug where a container would not start in `legacy` mode when `NVIDIA_DRIVER_CAPABILITIES` includes `graphics`.
+- Fix a bug where all GPUs were made available to a container when `NVIDIA_VISIBLE_DEVICES=none` was specified.
+- Add restart logic to the CDI refresh service to allow for the case where the driver may not be ready at boot.
+- Do not mount IPC sockets are read-only when using CDI. This fixes crashes in certain nested scenarios such as Slurm on K8s.
+
+#### Enhancements to container-toolkit Container Images
+- Bump the NVIDIA distroless base image to v3.2.2-dev.
+
+### Included Packages
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.18.2`
+- `nvidia-container-toolkit-base 1.18.2`
+- `libnvidia-container-tools 1.18.2`
+- `libnvidia-container1 1.18.2`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.18.2`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.18.2-packaging`
+
+## NVIDIA Container Toolkit 1.18.1
+
+This release of the NVIDIA Container Toolkit `v1.18.1` is a bugfix release.
+
+### Packaging Changes
+- The the RPM packages for the NVIDIA Container Toolkit are now generated with
+  SHA256 digests.
+
+### Fixes and Features
+- Fix a bug where the ldcache in a container may not be correctly generated if the
+  host and container have different system search paths.
+- Fix a bug where CUDA forward compatibility would not be configured in containers
+  where no ldcache exists.
+- Fix a bug where a container's ldcache is not updated if where the container image does not have an ld.so.conf file.
+- Fix a bug where updating the container's ldcache could cause the priority of user-installed libraries
+  to be changed.
+- Fix a bug where duplicate CDI specs (and CDI hooks) where generated for the default `jit-cdi` mode.
+- Allow `nvcdi` feature flags to be configured in `jit-cdi` mode.
+- Ensure that the CDI refresh service also triggers on systems where the `nvidia-current` kernel module is used.
+- Change the default containerd drop-in config root to `/etc/containerd/conf.d` to align with the value in
+  newer containerd versions.
+- Ensure that log messages in the `nvidia` runtime wrapper script (used by the GPU Operator) are output
+  to STDERR. This fixes a crash on certain systems when containers are run without the `nvidia` kernel modules loaded.
+- Fix a bug where existing imports in containerd were overridden when using a drop-in config file.
+- Fix a bug where the `nvidia-container-runtime.mode` setting in the config file was defining the mode used for CDI
+  spec generation.
+- Fix a bug in the `create-dev-char-symlinks` command when all symlinks were being created.
+
+#### Enhancements to container-toolkit Container Images
+- Bump the NVIDIA distroless base image to v3.2.1-dev.
+
+### Included Packages
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.18.1`
+- `nvidia-container-toolkit-base 1.18.1`
+- `libnvidia-container-tools 1.18.1`
+- `libnvidia-container1 1.18.1`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.18.1`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.18.1-packaging`
+
+## NVIDIA Container Toolkit 1.18.0
+
+This release of the NVIDIA Container Toolkit `v1.18.0` is feature release with the following high-level changes:
+- The default mode of the NVIDIA Container Runtime has been updated to make use
+  of a just-in-time-generated CDI specification instead of defaulting to the `legacy` mode.
+- Added a systemd unit to generate CDI specifications for available devices automatically. This allows
+  native CDI support in container engines such as Docker and Podman to be used without additional steps.
+
+### Deprecation Notices
+- The OCI `hook`-based config mode for cri-o is now deprecated. Updating the cri-o config through a
+  drop-in config file is now the recommended mechanism to configure this container engine.
+- The `chmod` CDI hook is deprecated. It was implemented as a workaround for `crun` issue that has
+  been resolved for some time now. The inclusion of this hook can still be
+  triggered when explicitly generating CDI specifications.
+- The `legacy` mode of the NVIDIA Container Runtime is deprecated. It is no longer the _default_ mode
+  when using the `nvidia-container-runtime` is used. It is still supported for use cases where it is
+  _required_.
+
+### Packaging Changes
+- The Container Toolkit now requires that the version of the `libnvidia-container*` libraries  _exactly_ match the version of the `nvidia-container-toolkit*` packages.
+  version of the `nvidia-container-toolkit*` packages.
+- This release no longer publishes `ppc64le` packages.
+
+### Fixes and Features
+- Added automatic generation of CDI specifications for available devices.
+- Update the behaviour of the `update-ldcache` hook to ALWAYS create an ldcache in the container
+  even if ldconfig is not present in the container being run.
+- Disable the injection of the `chmod` CDI hook by default. The inclusion of this hook can still be
+  triggered when explicitly generating CDI specifications.
+- The generated CDI specification will include `.so` (development) symlinks for ALL driver libraries
+  if these exist on the host.
+- The `nvidia-ctk cdi generate` command loads select settings from the `config.toml` file when generating
+  CDI specifications.
+- Allow CDI hooks to be explicitly disabled or enabled when using the `nvidia-ctk cdi generate` command
+  or the `nvcdi` API.
+
+#### Enhancements to libnvidia-container
+- Add clock_gettime to the set of allowed syscalls under seccomp. This allows ldconfig from distributions
+  such as Arch Linux to be run in the container.
+
+#### Enhancements to container-toolkit Container Images
+- Switched to a single image (based on a distroless base image) for all target platforms.
+- Default to use drop-in config files to add `nvidia` runtime definitions to containerd and cri-o.
+
+### Included Packages
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.18.0`
+- `nvidia-container-toolkit-base 1.18.0`
+- `libnvidia-container-tools 1.18.0`
+- `libnvidia-container1 1.18.0`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.18.0`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.18.0-packaging`
+
+
+## NVIDIA Container Toolkit 1.17.8
+
+This release of the NVIDIA Container Toolkit `v1.17.8` is a bugfix release.
+
+### Fixes and Features
+
+- Updated the ordering of Mounts in CDI to have a deterministic output. This makes testing more consistent.
+- Added NVIDIA_CTK_DEBUG environment variable to hooks.
+
+#### Enhancements to libnvidia-container
+
+- Fixed a bug in setting the default for the `--cuda-compat-mode` flag. This caused failures in use cases invoking the `nvidia-container-cli` directly or when an older `nvidia-container-toolkit` version was used with a newer `nvidia-container-cli`.
+- Added additional logging to the `nvidia-container-cli`.
+- Fixed variable initialisation when updating the ldcache. This caused failures on Arch linux or other platforms where the `nvidia-container-cli` was built from source.
+
+### Included Packages
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.17.8`
+- `nvidia-container-toolkit-base 1.17.8`
+- `libnvidia-container-tools 1.17.8`
+- `libnvidia-container1 1.17.8`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.17.8-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.17.8-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.17.8`)
+
+## NVIDIA Container Toolkit 1.17.7
+
+This release of the NVIDIA Container Toolkit `v1.17.7` is a bugfix and minor feature release.
+
+### Fixes and Features
+- Fixed mode detection on Thor-based systems. With this change, the runtime mode correctly resolves to `csv`.
+- Fixed the resolution of libraries in the LDCache on ARM. This fixes CDI spec generation on ARM-based systems using NVML.
+- Added a `nvidia-container-runtime-modes.legacy.cuda-compat-mode` option to provide finer control of how CUDA Forward Compatibility is handled. The default value (`ldconfig`) fixes CUDA Compatibility Support in cases where only the NVIDIA Container Runtime Hook is used (such as the Docker `--gpus` command line flag).
+- Improved the `update-ldcache` hook to run in isolated namespaces. This improves hook security.
+
+
+#### Enhancements to libnvidia-container
+- Added a `--cuda-compat-mode` flag to the `nvidia-container-cli configure` command. The `--no-cntlibs` argument is deprecated and is replaced by the `--cuda-compat-mode=disabled` option.
+  Refer to the [known issue](#known-issues) section for details on a known issue when using this flag.
+
+#### Enhancements to container-toolkit Container Images
+- Updated the CUDA base image version to 12.9.0.
+
+### Included Packages
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.17.7`
+- `nvidia-container-toolkit-base 1.17.7`
+- `libnvidia-container-tools 1.17.7`
+- `libnvidia-container1 1.17.7`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.17.7-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.17.7-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.17.7`)
+
+### Known Issues
+
+There is a [known issue](https://github.com/NVIDIA/nvidia-container-toolkit/issues/1093) in this release that causes unexpected failures when using the default value of the `cuda-compat-mode` flag in the following scenarios:
+
+* When invoking `nvidia-container-cli` directly. For example if you are using Enroot containers with Slurm.
+
+* When older versions of the `nvidia-container-toolkit` and `nvidia-container-toolkit-base` packages are used with the latest `libnvidia-container-tools` and `libnvidia-container1` packages.
+For example if you are only pinning the `nvidia-contianer-toolkit` and `nvidia-container-toolkit-base` package versions.
+
+This issue is caused by container flags being discarded when handling the default values of the `cuda-compat-mode` flag.
+This flag was added to the `nvidia-container-cli configure` command in the this release.
+
+```{important}
+If you are impacted by this issue, its recommended that you continue to use Container Toolkit v1.17.6 and pin all dependencies to v1.17.6 until this issue is resolved in the next patch release.
+```
+
+#### Pin dependencies to Container Toolkit 1.17.6
+
+**Using `apt` (Ubuntu, Debian):**
+
+```console
+NVIDIA_CONTAINER_TOOLKIT_VERSION=1.17.6-1
+sudo apt-get install -y --allow-downgrades \
+        nvidia-container-toolkit=${NVIDIA_CONTAINER_TOOLKIT_VERSION} \
+        nvidia-container-toolkit-base=${NVIDIA_CONTAINER_TOOLKIT_VERSION} \
+        libnvidia-container-tools=${NVIDIA_CONTAINER_TOOLKIT_VERSION} \
+        libnvidia-container1=${NVIDIA_CONTAINER_TOOLKIT_VERSION}
+```
+
+**Using `dnf` (RHEL/CentOS, Fedora, Amazon Linux):**
+
+```console
+NVIDIA_CONTAINER_TOOLKIT_VERSION=1.17.6-1
+sudo dnf install -y \
+        nvidia-container-toolkit-${NVIDIA_CONTAINER_TOOLKIT_VERSION} \
+        nvidia-container-toolkit-base-${NVIDIA_CONTAINER_TOOLKIT_VERSION} \
+        libnvidia-container-tools-${NVIDIA_CONTAINER_TOOLKIT_VERSION} \
+        libnvidia-container1-${NVIDIA_CONTAINER_TOOLKIT_VERSION}
+```
+
+## NVIDIA Container Toolkit 1.17.6
+
+This release of the NVIDIA Container Toolkit `v1.17.6` is a bugfix and minor feature release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.17.6`
+- `nvidia-container-toolkit-base 1.17.6`
+- `libnvidia-container-tools 1.17.6`
+- `libnvidia-container1 1.17.6`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.17.6-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.17.6-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.17.6`)
+
+### Fixes and Features
+
+#### Enhancements to libnvidia-container
+- Added logic to skip files when user has insufficient permissions to read them. This prevents errors discovering IPC sockets when the `nvidia-container-cli` is run as a non-root user.
+
+#### Enhancements to container-toolkit Container Images
+
+- Added functionality to allow the container runtime executable path to be specified when configuring containerd. The allows the Toolkit Container to be used in environments where multiple containerd executables are available.
+- Updated the CUDA base image version to 12.8.1.
+
+
+## NVIDIA Container Toolkit 1.17.5
+
+This release of the NVIDIA Container Toolkit `v1.17.5` is a bugfix and minor feature release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.17.5`
+- `nvidia-container-toolkit-base 1.17.5`
+- `libnvidia-container-tools 1.17.5`
+- `libnvidia-container1 1.17.5`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.17.5-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.17.5-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.17.5`)
+
+### Fixes and Features
+
+- Re-added support for CUDA Forward Compatibility (removed by default in v1.17.4) using a dedicated `enable-cuda-compat` hook. This can be disabled using a `disable-cuda-compat-lib-hook` feature flag and can be skipped from CDI specification generation when using the `nvcdi` API to allow compatibility with older NVIDIA Container Toolkit installations.
+- Added the IMEX binaries to a generated CDI specification if present on the host. This change ensures that the IMEX Daemon and IMEX Control executables are present in containers.
+- Fixed a bug that may overwrite docker feature flags when configuring CDI Docker from the `nvidia-ctk runtime configure` command.
+- Added an `ignore-imex-channel-requests` feature flag. When enabled, this feature flag ensures that the NVIDIA Container Runtime ignores IMEX channel requests to allow their injection to be managed solely by another component.
+- Updated the `update-ldcache` hook to run the host `ldconfig` from a MEMFD.
+- Fixed a bug where `cdi` mode would not work with the `--gpus` flag even if the NVIDIA Container Runtime was used.
+
+### Enhancements to container-toolkit Container Images
+
+- Added functionality to enable CDI in the selected container engine (Containerd, Cri-o, Docker) if `CDI_ENABLED` is set.
+- Updated the CUDA base image version to 12.8.0.
+
+## NVIDIA Container Toolkit 1.17.4
+
+This version includes updates for:
+
+* [NVIDIA CVE-2025-23359](https://nvidia.custhelp.com/app/answers/detail/a_id/5616)
+
+To view any published security bulletins for NVIDIA products, refer to the NVIDIA product security page at <https://www.nvidia.com/en-us/security/>.
+
+For more information regarding NVIDIA security vulnerability remediation policies, refer to <https://www.nvidia.com/en-us/security/psirt-policies/>.
+
+This release of the NVIDIA Container Toolkit `v1.17.4` is a bugfix release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.17.4`
+- `nvidia-container-toolkit-base 1.17.4`
+- `libnvidia-container-tools 1.17.4`
+- `libnvidia-container1 1.17.4`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.17.4-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.17.4-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.17.4`)
+
+### Fixes and Features
+
+- Disable the mounting of CUDA compat libraries from the container by default. The libraries are still available in their
+  original location. If the previous behaviour is required, the `allow-cuda-compat-libs-from-container` feature flag can be enabled.
+- Skip the detection and injection of graphics libraries when `NVIDIA_DRIVER_CAPABILITIES` includes `graphics` on iGPU-based systems.
+  This prevents conflicting ICD files causing errors when starting a container.
+- Fix a bug where `--config-search-path` arguments are ignored when running `nvidia-ctk generate`. This fix allows driver
+  to be located even if they are in non-standard locations.
+- Add support for Containerd version 3 config files.
+
+#### Enhancements to libnvidia-container
+
+- Add a `--no-cntlibs` CLI option to `nvidia-container-cli`.
+
+### Enhancements to container-toolkit Container Images
+
+- Updated the CUDA base image version to 12.6.3.
+
+## NVIDIA Container Toolkit 1.17.3
+
+This version includes updates for:
+
+* [NVIDIA CVE-2024-0135](https://nvidia.custhelp.com/app/answers/detail/a_id/5599)
+* [NVIDIA CVE-2024-0136](https://nvidia.custhelp.com/app/answers/detail/a_id/5599)
+* [NVIDIA CVE-2024-0137](https://nvidia.custhelp.com/app/answers/detail/a_id/5599)
+
+To view any published security bulletins for NVIDIA products, refer to the NVIDIA product security page at <https://www.nvidia.com/en-us/security/>.
+
+For more information regarding NVIDIA security vulnerability remediation policies, refer to <https://www.nvidia.com/en-us/security/psirt-policies/>.
+
+---
+
+This release of the NVIDIA Container Toolkit `v1.17.3` is a bugfix release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.17.3`
+- `nvidia-container-toolkit-base 1.17.3`
+- `libnvidia-container-tools 1.17.3`
+- `libnvidia-container1 1.17.3`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.17.3-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.17.3-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.17.3`)
+
+### Fixes and Features
+
+- Only allow host-relative LDConfig paths by default. The previous behaviour of allowing container-relative LDConfig paths can explicitly enable.
+
+#### Enhancements to libnvidia-container
+
+- Create virtual copy of host ldconfig binary before calling fexecve() to update the container's ldcache.
+
+## NVIDIA Container Toolkit 1.17.2
+
+This release of the NVIDIA Container Toolkit `v1.17.2` is a bugfix release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.17.2`
+- `nvidia-container-toolkit-base 1.17.2`
+- `libnvidia-container-tools 1.17.2`
+- `libnvidia-container1 1.17.2`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.17.2-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.17.2-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.17.2`)
+
+### Fixes and Features
+
+- Fixed a bug where legacy images would set imex channels as `all`.container to fail to start.
+
+## NVIDIA Container Toolkit 1.17.1
+
+This release of the NVIDIA Container Toolkit `v1.17.1` is a bugfix release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.17.1`
+- `nvidia-container-toolkit-base 1.17.1`
+- `libnvidia-container-tools 1.17.1`
+- `libnvidia-container1 1.17.1`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.17.1-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.17.1-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.17.1`)
+
+### Fixes and Features
+
+- Fixed a bug where specific symlinks existing in a container image could cause a container to fail to start.
+- Fixed a bug on Tegra-based systems where a container would fail to start.
+- Fixed a bug where the default container runtime config path was not properly set.
+
+### Enhancements to container-toolkit Container Images
+
+- Added a fallback to using a config file if the current runtime config can not be determined from the command line. This fixes deployments on environments such as microk8s.
+
+
+## NVIDIA Container Toolkit 1.17.0
+
+This version includes updates for:
+
+* [NVIDIA CVE-2024-0134](https://nvidia.custhelp.com/app/answers/detail/a_id/5585)
+
+To view any published security bulletins for NVIDIA products, refer to the NVIDIA product security page at <https://www.nvidia.com/en-us/security/>.
+
+For more information regarding NVIDIA security vulnerability remediation policies, refer to <https://www.nvidia.com/en-us/security/psirt-policies/>.
+
+---
+
+This release of the NVIDIA Container Toolkit `v1.17.0` is a feature update and bugfix release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.17.0`
+- `nvidia-container-toolkit-base 1.17.0`
+- `libnvidia-container-tools 1.17.0`
+- `libnvidia-container1 1.17.0`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.17.0-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.17.0-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.17.0`)
+
+### Fixes and Features
+
+- Fixed a bug where symlinks created as a container starts could escape the container root. This fix addresses CVE-2024-0134.
+- Fixed a bug with locating `libcuda.so` in the ldcache while generating CDI specifications. This fix enables the toolkit to locate driver libraries on systems that use a custom path for the driver installation.
+- Fixed a bug related to creating symlink chains on Tegra-based systems. This fix ensures that behavior is consistent across multiple runs of containers and do not depend on a random sort order.
+- Fixed a bug where VDPAU driver libraries are not discovered in CDI spec generation.
+
+- Added support for requesting IMEX channels as volume mounts.
+- Added a `disable-imex-channel-creation` feature flag to disable the creation of IMEX channel device nodes when creating a container.
+- Added IMEX channel device nodes to the CDI specifications in `management` mode.
+- Added the creation of select driver symlinks (such as `libcuda.so`) in CDI specification generation to match the behavior in the `legacy` mode.
+
+
+### Enhancements to container-toolkit Container Images
+
+- Added support for querying current container runtime configurations from the command line instead of config files. This ensures that the effective config is used when configuring the NVIDIA Container Runtimes.
+- Updated the CUDA base image version to 12.6.2.
+
+#### Enhancements to libnvidia-container
+
+- Added a `--no-create-imex-channels` command line option.
+
+## NVIDIA Container Toolkit 1.16.2
+
+**This release provides critical security updates and is recommended for all users.**
+
+This version includes updates for:
+
+* [NVIDIA CVE-2024-0132](https://nvidia.custhelp.com/app/answers/detail/a_id/5582)
+* [NVIDIA CVE-2024-0133](https://nvidia.custhelp.com/app/answers/detail/a_id/5582)
+
+To view any published security bulletins for NVIDIA products, refer to the NVIDIA product security page at <https://www.nvidia.com/en-us/security/>.
+
+For more information regarding NVIDIA security vulnerability remediation policies, refer to <https://www.nvidia.com/en-us/security/psirt-policies/>.
+
+---
+
+This release of the NVIDIA Container Toolkit `v1.16.2` is a bugfix and security release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.16.2`
+- `libnvidia-container-tools 1.16.2`
+- `libnvidia-container1 1.16.2`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.16.2-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.16.2-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.16.1`)
+
+### Fixes and Features
+
+- Excluded `libnvidia-allocator` from graphics mounts. This fixes a bug that leaks mounts when a container is started with bi-directional mount propagation.
+- Used empty string for default `runtime-config-override`. This removes a redundant warning for runtimes (such as Docker) where this is not applicable.
+
+### Enhancements to container-toolkit Container Images
+
+- Updated the CUDA base image version to 12.6.0.
+
+#### Enhancements to libnvidia-container
+
+- Added a `--no-gsp-firmware` command line option.
+- Added a `--no-fabricmanager` command line option.
+- Added a `--no-persistenced` command line option.
+- Updated logic to skip directories and symlinks when mounting libraries.
+
+## NVIDIA Container Toolkit 1.16.1
+
+This release of the NVIDIA Container Toolkit `v1.16.1` is a bugfix release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.16.1`
+- `libnvidia-container-tools 1.16.1`
+- `libnvidia-container1 1.16.1`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.16.1-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.16.1-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.16.1`)
+
+### Fixes and Features
+
+* Fixed bug with processing errors during CDI spec generation for MIG devices.
+
+
+## NVIDIA Container Toolkit 1.16.0
+
+This release of the NVIDIA Container Toolkit `v1.16.0` is a major feature release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.16.0`
+- `libnvidia-container-tools 1.16.0`
+- `libnvidia-container1 1.16.0`
+
+   ```{note}
+   The `v1.14.0` release was the last release to include the `nvidia-container-runtime`
+   and `nvidia-docker2` packages.
+   All required functionality is included in the `nvidia-container-toolkit` package.
+   This toolkit package includes a utility to configure the Docker daemon to use the NVIDIA Container Runtime.
+   ```
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.16.0-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.16.0-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.16.0`)
+
+### Fixes and Features
+
+* Added the injection of additional graphics libraries for improved X11 functionality.
+* Added support for extracting runtime options from the default runtime instead of assuming `runc`.
+* Reduced the verbosity of logging for the NVIDIA Container Runtime.
+* Fixed a bug in argument parsing for logger creation.
+* Increase priority of the `ld.so.conf.d` config file injected into container. This ensures that injected libraries are preferred over libraries present in the container.
+* Updated the default CDI spec permissions to 644. This fixes permission issues when using the `nvidia-ctk cdi transform` functions while specifying an output.
+* Fixed the discovery of `libnvidia-ml.so.1` when a non-standard driver root is used. This enabled CDI spec generation when using the driver container on a host.
+* Added support to recalculate minimum required CDI spec version on save. This ensures that version changes due to spec transforms are accounted for.
+* Moved the `nvidia-ctk hook` commands to a separate `nvidia-cdi-hook` binary (the same subcommands are supported). This allows for cleaner mapping to non-OCI-compliant use cases of generated CDI specifications.
+- Switched to using `:` as list separator in the `nvidia-ctk config --set` command. This fixes a bug when trying to set config options that are lists.
+
+### Enhancements to container-toolkit Container Images
+
+* Updated the CUDA base image version to 12.5.1.
+* Added support for custom driver installation paths.
+
+## NVIDIA Container Toolkit 1.15.0
+
+This release of the NVIDIA Container Toolkit `v1.15.0` is a major feature release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.15.0`
+- `libnvidia-container-tools 1.15.0`
+- `libnvidia-container1 1.15.0`
+
+   ```{note}
+   The `v1.14.0` release was the last release to include the `nvidia-container-runtime`
+   and `nvidia-docker2` packages.
+   All required functionality is included in the `nvidia-container-toolkit` package.
+   This toolkit package includes a utility to configure the Docker daemon to use the NVIDIA Container Runtime.
+   ```
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.15.0-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.15.0-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.15.0`)
+
+### Packaging Changes
+
+* Removed the `nvidia-container-runtime` and `nvidia-docker2` packages.
+* Removed the `libseccomp` dependency from the `nvidia-container-toolkit` package.
+* Added a `libnvidia-container-libseccomp2` meta package to allow for the `libseccomp` dependency to be satisfied by `libseccomp2` on SUSE-based systems.
+* Removed the `libnvidia-container0` jetpack dependency included for legacy Tegra-based systems.
+
+### Fixes and Features
+
+* Included `nvidia/nvoptix.bin` and `vulkan/icd.d/nvidia_layers.json` in list of graphics mounts.
+* Fixed a bug in `nvidia-ctk config` command when using `--set`. The types of applied config options are now applied correctly.
+* Added logging of the explicitly requested runtime mode.
+* Added detection of `libnvdxgdmal.so.1` on WSL2 systems. This library is required for newer driver versions.
+* Fixed a bug in determining default `nvidia-container-runtime.user` config value on SUSE-based systems. The incorrect default value caused permission errors when launching containers.
+* Added `crun` to the list of configured low-level runtimes. This enhancement improves CRI-O support.
+* Added a `--cdi.enabled` option to `nvidia-ctk runtime configure` command to enable CDI in containerd and Docker. For CDI support, Docker 25 or later is required.
+
+### Enhancements to container-toolkit Container Images
+
+* Updated the CUDA base image version to 12.4.1.
+* Removed the centos7 image. The ubi8 image can be used on all RPM-based platforms.
+
+## NVIDIA Container Toolkit 1.14.6
+
+This release of the NVIDIA Container Toolkit `v1.14.6` adds support for certain features of the the 550.x CUDA driver.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.14.6`
+- `libnvidia-container-tools 1.14.6`
+- `libnvidia-container1 1.14.6`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.6-centos7`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.6-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.6-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.14.6`)
+
+### Fixes and Features
+
+* Add support for extracting device major number from `/proc/devices` if `nvidia` is used as a device name over `nvidia-frontend`. This fixes the creation of `/dev/char` symlinks for `550.x` drivers.
+* Add support for selecting IMEX channels using the `NVIDIA_IMEX_CHANNELS` environment variable.
+
+## NVIDIA Container Toolkit 1.14.5
+
+This release of the NVIDIA Container Toolkit `v1.14.5` is a bugfix release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.14.5`
+- `libnvidia-container-tools 1.14.5`
+- `libnvidia-container1 1.14.5`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.5-centos7`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.5-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.5-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.14.5`)
+
+### Fixes and Features
+
+* Fixed the `nvidia-ctk runtime configure --cdi.enabled` command for Docker.
+  This was incorrectly setting `experimental = true` instead of setting
+  `features.cdi = true` for CDI support in Docker >= 25.
+
+## NVIDIA Container Toolkit 1.14.4
+
+This release of the NVIDIA Container Toolkit `v1.14.4` is a bugfix and minor feature release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.14.4`
+- `libnvidia-container-tools 1.14.4`
+- `libnvidia-container1 1.14.4`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.4-centos7`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.4-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.4-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.14.4`)
+
+### Packaging Changes
+* Removed the `libseccomp` dependency from the `nvidia-container-toolkit` package.
+
+### Fixes and Features
+
+* Included `nvidia/nvoptix.bin` and `vulkan/icd.d/nvidia_layers.json` in list of graphics mounts.
+* Fixed a bug in `nvidia-ctk config` command when using `--set`. The types of applied config options are now applied correctly.
+* Added logging of the explicitly requested runtime mode.
+* Added detection of `libnvdxgdmal.so.1` on WSL2 systems. This library is required for newer driver versions.
+* Fixed a bug in determining default `nvidia-container-runtime.user` config value on SUSE-based systems. The incorrect default value caused permission errors when launching containers.
+* Added `crun` to the list of configured low-level runtimes. This enhancement improves CRI-O support.
+* Added a `--cdi.enabled` option to `nvidia-ctk runtime configure` command to enable CDI in containerd and Docker. For CDI support, Docker 25 or later is required.
+
+#### Enhancements to libnvidia-container
+
+* Added detection of `libnvdxgdmal.so.1` on WSL2 systems. This library is required for newer driver versions.
+
+#### Enhancements to container-toolkit container images
+
+- Updated the CUDA base image version to 12.3.1.
+
+## NVIDIA Container Toolkit 1.14.3
+
+This release of the NVIDIA Container Toolkit `v1.14.3` is a bugfix release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.14.3`
+- `libnvidia-container-tools 1.14.3`
+- `libnvidia-container1 1.14.3`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.3-centos7`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.3-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.3-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.14.3`)
+
+### Fixes and Features
+
+#### Enhancements to container-toolkit container images
+
+- Updated the CUDA base image version to 12.2.2.
+
+## NVIDIA Container Toolkit 1.14.2
+
+This release of the NVIDIA Container Toolkit `v1.14.2` is a bugfix release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.14.2`
+- `libnvidia-container-tools 1.14.2`
+- `libnvidia-container1 1.14.2`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.2-centos7`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.2-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.2-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.14.2`)
+
+### Fixes and Features
+
+- Fixed a bug on Tegra-based systems where expected symlinks were not created in a container. This could cause certain applications to fail to start.
+
+## NVIDIA Container Toolkit 1.14.1
+
+This release of the NVIDIA Container Toolkit `v1.14.1` is a bugfix release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.14.1`
+- `libnvidia-container-tools 1.14.1`
+- `libnvidia-container1 1.14.1`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.1-centos7`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.1-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.1-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.14.1`)
+
+### Fixes and Features
+
+- Fixed a bug where the contents of `/etc/nvidia-container-runtime/config.toml` are ignored by the NVIDIA Container Runtime Hook.
+  This fix means that settings such as `no-cgroups` or a logfile path are now respected.
+
+#### Enhancements to libnvidia-container
+
+- Switched to using `libelf.so` from `elfutils-libelf-devel` on RPM-based systems.
+  This change is a build-only change.
+
+## NVIDIA Container Toolkit 1.14.0
+
+This release of the NVIDIA Container Toolkit `v1.14.0` is a feature release.
+
+The following packages are included:
+
+- `libnvidia-container 1.14.0`
+- `nvidia-container-toolkit 1.14.0`
+- `nvidia-container-runtime 3.14.0`
+- `nvidia-docker2 2.14.0`
+
+   ```{note}
+   This is the last release that includes the `nvidia-container-runtime`
+   and `nvidia-docker2` packages.
+   All required functionality is included in the `nvidia-container-toolkit` package.
+   This toolkit package includes a utility to configure the Docker daemon to use the NVIDIA Container Runtime.
+   ```
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.0-centos7`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.0-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.14.0-ubuntu20.04`
+
+### Fixes and Features
+
+- Improved support for the Container Device Interface (CDI) on Tegra-based systems.
+
+- Simplified the packaging and distribution of the toolkit.
+
+  Beginning with this release, unified `.deb` and `.rpm` packages are distributed.
+  These packages are compatible with all supported distributions.
+  This enhancement simplifies the installation process instead of releasing distributions-specific packages.
+
+#### Enhancements to libnvidia-container
+
+- Added logic to generate the `nvc.h` header file automatically so that the version does not need to be updated explicitly.
+- Added the Shared Compiler Library, `libnvidia-gpucomp.so`, to the list of included compute libraries.
+- Added OpenSSL 3 support to the Encrypt / Decrypt library.
+
+#### Enhancements to container-toolkit container images
+
+- Updated the CUDA base image version to 12.2.0.
+- Standardized the environment variable names that are used to configure container engines.
+- Removed installation of the `nvidia-experimental` runtime.
+  This runtime is superseded by the NVIDIA Container Runtime in CDI mode.
+- Set `NVIDIA_VISIBLE_DEVICES=void` to prevent injection of NVIDIA devices and drivers into the NVIDIA Container Toolkit container.
+
+## NVIDIA Container Toolkit 1.13.5
+
+This release of the NVIDIA Container Toolkit `v1.13.5` is a bugfix release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.13.5`
+- `libnvidia-container-tools 1.13.5`
+- `libnvidia-container1 1.13.5`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.13.5-centos7`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.13.5-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.13.5-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.13.5`)
+
+### Fixes and Features
+
+* Removed the dependency on `coreutils` when installing the NVIDIA Container Toolkit on RPM-based systems. Now the packages can be installed on clean systems using, for example, Anaconda.
+* Added support for detecting GSP firmware at custom paths when generating CDI specifications.
+
+#### specific to libnvidia-container
+
+- Added the Shared Compiler Library, `libnvidia-gpucomp.so`, to the list of included compute libraries.
+
+## NVIDIA Container Toolkit 1.13.4
+
+This release of the NVIDIA Container Toolkit `v1.13.4` is a bugfix release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.13.4`
+- `libnvidia-container-tools 1.13.4`
+- `libnvidia-container1 1.13.4`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.13.4-centos7`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.13.4-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.13.4-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.13.4`)
+
+### Fixes and Features
+#### specific to container-toolkit container images
+
+- Bumped the CUDA base image version to 12.1.0
+
+## NVIDIA Container Toolkit 1.13.3
+
+This release of the NVIDIA Container Toolkit `v1.13.3` is a bugfix release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.13.3`
+- `libnvidia-container-tools 1.13.3`
+- `libnvidia-container1 1.13.3`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.13.3-centos7`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.13.3-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.13.3-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.13.3`)
+
+### Fixes and Features
+
+- Fixed permissions in generated CDI specification files. Specifications files are now generated with `644` permissions to allow non-root users to read these. This means that rootless applications such as Podman can also read the specifications to inject CDI devices.
+- Fixed a bug that created an incorrect symlink to `nvidia-smi` on WSL2 systems with multiple driver stores. The bug was triggered sometimes when a system had an integrated GPU and a discrete NVIDIA GPU, for example.
+- Fixed a that caused CDI specification generation for management containers to fail. The bug was triggered when the driver version did not include a patch component its semantic version number.
+- Fixed a bug where additional modifications -- such as the injection of graphics libraries and devices -- were applied in CDI mode.
+- Fixed loading of kernel modules and creation of device nodes in containerized use cases when using the `nvidia-ctk system create-dev-char-symlinks` command.
+
+#### specific to container-toolkit container images
+
+- Added support for specifying options using the same environment variable across supported container runtimes. This simplifies integration with the GPU Operator.
+
+## NVIDIA Container Toolkit 1.13.2
+
+This release of the NVIDIA Container Toolkit `v1.13.2` is a bugfix release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.13.2`
+- `libnvidia-container-tools 1.13.2`
+- `libnvidia-container1 1.13.2`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.13.2-centos7`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.13.2-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.13.2-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.13.2`)
+
+### Fixes and Features
+
+- Added `nvidia-container-runtime-hook.path` config option to specify NVIDIA Container Runtime Hook path explicitly.
+- Fixed a bug in creation of `/dev/char` symlinks by failing operation if kernel modules are not loaded.
+- Added an option to load kernel modules when creating device nodes
+- Added option to create device nodes when creating `/dev/char` symlinks
+- Fixed a bug where failures to open debug log files were considered fatal errors. This could cause failures in rootless environments when the user had insufficient permissions to open the log file.
+
+#### specific to libnvidia-container
+
+- Added OpenSSL 3 support to the Encrypt / Decrypt library.
+
+#### specific to container-toolkit container images
+
+- Bumped CUDA base image version to 12.1.1.
+
+## NVIDIA Container Toolkit 1.13.1
+
+This release of the NVIDIA Container Toolkit `v1.13.1` is a bugfix release.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.13.1`
+- `libnvidia-container-tools 1.13.1`
+- `libnvidia-container1 1.13.1`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.13.1-centos7`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.13.1-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.13.1-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.13.1`)
+
+### Fixes and Features
+
+- Fixed a bug which would cause the update of an ldcache in the container to fail for images that do no use ldconfig (such as `busybox`).
+- Fixed a bug where a failure to determine the CUDA driver version would cause the container to fail to start if `NVIDIA_DRIVER_CAPABILITIES` included `graphics` or `display` on Debian systems.
+- Fixed CDI specification generation on Debian systems.
+
+## NVIDIA Container Toolkit 1.13.0
+
+This release of the NVIDIA Container Toolkit `v1.13.0` adds the following major features:
+
+- Improved support for the Container Device Interface (CDI) specifications for GPU devices when using the NVIDIA Container Toolkit in the context of the GPU Operator.
+- Added the generation CDI specifications on WSL2-based systems using the `nvidia-ctk cdi generate` command. This is now the recommended mechanism for using GPUs on WSL2 and `podman` is the recommended container engine.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.13.0`
+- `libnvidia-container-tools 1.13.0`
+- `libnvidia-container1 1.13.0`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.13.0-centos7`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.13.0-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.13.0-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.13.0`)
+
+The following packages have also been updated to depend on `nvidia-container-toolkit` of at least `1.13.0`:
+
+- `nvidia-container-runtime 3.13.0`
+- `nvidia-docker2 2.13.0`
+
+:::{note}
+This will be the last release that updates the `nvidia-container-runtime` and `nvidia-docker2` packages. All required functionality is now included in the `nvidia-container-toolkit` package. This includes a utility to configure the Docker daemon to use the NVIDIA Container Runtime.
+:::
+
+### Packaging Changes
+
+- Fixed a bug in the uninstall scriplet on RPM-based systems that would issue an error due to a missing `nvidia-container-runtime-hook` symlink. This did not prevent the uninstallation of the package.
+- Removed `fedora35` as a packaging target. Use the `centos8` packages instead.
+
+### Fixes and Features
+
+- Fixed a bug when running containers using a generated CDI specification or when `NVIDIA_DRIVER_CAPABILITIES` includes `graphics` or `display` or is set to `all`. Now, containers no longer fail with an error message indicating a missing `/dev/dri` or `/dev/nvidia-caps` path.
+- Added support for detecting and injecting multiple GSP firmware files as required by the `525.x` versions of the NVIDIA GPU drivers.
+- Fixed an issue that caused the `nvidia-ctk` path to be blank in generated CDI specifications.
+- Fixed missing NVML symbols for `nvidia-ctk` on some platforms.  For more information, see [issue #49](https://github.com/NVIDIA/nvidia-container-toolkit/issues/49).
+
+#### specific to libnvidia-container
+
+- Added support for detecting and injecting multiple GSP firmware files as required by the `525.x` versions of the NVIDIA GPU drivers.
+- Fixed a segmentation fault when RPC initialization fails.
+- Changed the centos variants of the NVIDIA Container Library to use a static libtirpc v1.3.2 to prevent errors when using RPC internally.
+- Removed `fedora35` as a packaging target. Use the `centos8` packages instead.
+
+#### specific to container-toolkit container images
+
+- Added `--cdi-enabled` flag to toolkit config. When this is set, a CDI specification for use in management containers will be generated.
+- Fixed bug where `nvidia-ctk` was not installed onto the host when installing the rest of the toolkit components.
+- Updated the NVIDIA Container Toolkit config to use the installed `nvidia-ctk` path.
+- Updated the installation of the experimental runtime to use `nvidia-container-runtime.experimental` as an executable name instead of `nvidia-container-runtime-experimental`. This aligns with the executables added for the mode-specific runtimes.
+- Added the installation and configuration of mode-specific runtimes for `cdi` and `legacy` modes.
+- Updated the CUDA base images to `12.1.0`.
+- Added an `nvidia-container-runtime.modes.cdi.annotation-prefixes` config option that allows the CDI annotation prefixes that are read to be overridden. This setting is used to update the `containerd` config to allow these annotations to be visible by the low-level runtime.
+- Added tooling to create device nodes when generating CDI specification for management containers. This ensures that the CDI specification for management containers has access to the required control devices.
+- Added an `nvidia-container-runtime.runtimes` config option to set the low-level runtime for the NVIDIA Container Runtime. This can be used on Crio-based systems where `crun` is the configured default low-level runtime.
+
+### Known Issues
+
+## NVIDIA Container Toolkit 1.12.1
+
+This release of the NVIDIA Container Toolkit `v1.12.1` is primarily a bugfix release.
+
+### Packaging Changes
+
+- Fixed a bug in the uninstall scriplet on RPM-based systems that would issue an error due to a missing `nvidia-container-runtime-hook` symlink. This did not prevent the uninstallation of the package.
+- Removed `fedora35` as a packaging target. Use the `centos8` packages instead.
+
+### Fixes and Features
+
+- Fixed a bug when running containers using a generated CDI specification or when `NVIDIA_DRIVER_CAPABILITIES` includes `graphics` or `display` or is set to `all`. Now, containers no longer fail with an error message indicating a missing `/dev/dri` or `/dev/nvidia-caps` path.
+- Added support for detecting and injecting multiple GSP firmware files as required by the `525.x` versions of the NVIDIA GPU drivers.
+- Fixed an issue that caused the `nvidia-ctk` path to be blank in generated CDI specifications.
+- Fixed missing NVML symbols for `nvidia-ctk` on some platforms.  For more information, see [issue #49](https://github.com/NVIDIA/nvidia-container-toolkit/issues/49).
+
+#### specific to libnvidia-container
+
+- Added support for detecting and injecting multiple GSP firmware files as required by the `525.x` versions of the NVIDIA GPU drivers.
+
+#### specific to container-toolkit container images
+
+- Updated CUDA base images to `12.1.0`.
+
+## NVIDIA Container Toolkit 1.12.0
+
+This release of the NVIDIA Container Toolkit `v1.12.0` adds the following major features:
+
+- Improved support for headless Vulkan applications in containerized environments.
+- Tooling to generate Container Device Interface (CDI) specifications for GPU devices. The use of CDI is now the recommended mechanism for using GPUs in `podman`.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.12.0`
+- `libnvidia-container-tools 1.12.0`
+- `libnvidia-container1 1.12.0`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.12.0-centos7`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.12.0-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.12.0-ubuntu18.04`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.12.0-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.12.0`)
+
+The following packages have also been updated to depend on `nvidia-container-toolkit` of at least `1.12.0`:
+
+- `nvidia-container-runtime 3.12.0`
+- `nvidia-docker2 2.12.0`
+
+:::{note}
+This will be the last release that updates the `nvidia-container-runtime` and `nvidia-docker2` packages. All required functionality is now included in the `nvidia-container-toolkit` package. This includes a utility to configure the Docker daemon to use the NVIDIA Container Runtime.
+:::
+
+### Packaging Changes
+
+- The `nvidia-container-toolkit` packages was updated to allow upgrades from pre-`v1.11.0` versions of the package without removing the `nvidia-container-runtime-hook` executable.
+- On certain distributions, full mirrors have been removed. The links to the `.list` and `.repo` files for Debian and RPM-based distributions respectively have been maintained to ensure that the official installation instructions continue to function. This change serves to further optimize the size of our package repository.
+
+### Fixes and Features
+
+- Add `nvidia-ctk cdi generate` command to generate CDI specifications for available NVIDIA devices. The generated CDI specification can be used to provide access to NVIDIA devices in CDI-enabled container engines such as `podman` -- especially in the rootless case.
+- Add full support for headless Vulkan applications in containerized environments when `NVIDIA_DRIVER_CAPABILITIES` includes
+  `graphics` or `display`. This includes the injection of Vulkan ICD loaders as well as direct rendering devices.
+- Improve the logging of errors in the NVIDIA Container Runtime.
+
+#### specific to libnvidia-container
+
+- Include the NVVM compiler library in the set of injected compute libraries
+- Skip the creation of files that are already mounted to allow paths such as `/var/run` to be mounted into containers.
+- Add `nvcubins.bin` to DriverStore components under WSL2
+
+#### specific to container-toolkit container images
+
+- Update CUDA base images to `12.0.1`
+
+### Known Issues
+
+- When running a container using CDI or if `NVIDIA_DRIVER_CAPABILITIES` includes `graphics` or `display`, and error may be raised citing missing
+  `/dev/dri` and / or `/dev/nvidia-caps` paths in container if the selected device does not have such nodes associated with it.
+
+```console
+$ docker run -it --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=nvidia.com/gpu=0 nvidia/cuda:11.0.3-base-ubuntu20.04 nvidia-smi -L
+    docker: Error response from daemon: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: error during container init: error running hook #1: error running hook: exit status 1, stdout: , stderr: chmod: cannot access '/var/lib/docker/overlay2/9069fafcb6e39ccf704fa47b52ca92a1d48ca5ccfedd381f407456fb6cd3f9f0/merged/dev/dri': No such file or directory: unknown.
+    ERROR[0000] error waiting for container: context canceled
+```
+
+This issue has been addressed in the `v1.12.1` release.
+
+## NVIDIA Container Toolkit 1.11.0
+
+This release of the NVIDIA Container Toolkit `v1.11.0` is primarily targeted at adding support for injection of GPUDirect Storage and MOFED devices into containerized environments.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.11.0`
+- `libnvidia-container-tools 1.11.0`
+- `libnvidia-container1 1.11.0`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.11.0-centos7`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.11.0-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.11.0-ubuntu18.04`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.11.0-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.11.0`)
+
+The following packages have also been updated to depend on `nvidia-container-toolkit` of at least `1.11.0`:
+
+- `nvidia-container-runtime 3.11.0`
+
+Note that this release does not include an update to `nvidia-docker2` and is compatible with `nvidia-docker2 2.11.0`.
+
+### Packaging Changes
+
+- An `nvidia-container-toolkit-base` package has been introduced that allows for the higher-level components to be
+  installed in cases where the NVIDIA Container Runtime Hook, NVIDIA Container CLI, and NVIDIA Container Library are not required.
+  This includes Tegra-based systems where the CSV mode of the NVIDIA Container Runtime is used.
+- The package repository includes support for Fedora 35 packages.
+- The package repository includes support for RHEL 8.6. This redirects to the Centos 8 packages.
+- Mirrors for older distributions have been removed to limit the size of the package repository.
+
+### Fixes and Features
+
+- Fix bug in CSV mode where libraries listed as `sym` entries in mount specification are not added to the LDCache.
+- Rename the `nvidia-container-toolkit` executable to `nvidia-container-runtime-hook` to better indicate intent.
+  A symlink named `nvidia-container-toolkit` is created that points to the `nvidia-container-runtime-hook` executable.
+- Inject platform files into container on Tegra-based systems to allow for future support of these systems in the GPU Device Plugin.
+- Add `cdi` mode to NVIDIA Container Runtime
+- Add discovery of GPUDirect Storage (`nvidia-fs*`) devices if the `NVIDIA_GDS` environment variable of the container is set to `enabled`
+- Add discovery of MOFED Infiniband devices if the `NVIDIA_MOFED` environment variable of the container is set to `enabled`
+- Add `nvidia-ctk runtime configure` command to configure the Docker config file (such as `/etc/docker/daemon.json`) for use with the NVIDIA Container Runtime.
+
+#### specific to libnvidia-container
+
+- Fix bug where LDCache was not updated when the `--no-pivot-root` option was specified
+- Preload `libgcc_s.so.1` on arm64 systems
+
+#### specific to container-toolkit container images
+
+- Update CUDA base images to `11.7.1`
+- Allow `accept-nvidia-visible-devices-*` config options to be set by toolkit container
+
+### Known Issues
+
+- When upgrading from an earlier version of the NVIDIA Container Toolkit on RPM-based systems, a package manager such as `yum` may remove
+  the installed `/usr/bin/nvidia-container-runtime-hook` executable due to the post-uninstall hooks defined in the older package version. To avoid this
+  problem either remove the older version of the `nvidia-container-toolkit` before installing `v1.11.0` or **reinstall** the `v1.11.0` package if the
+  `/usr/bin/nvidia-container-runtime-hook` file is missing. For systems where the `v1.11.0` version of the package has already been installed and left
+  in an unusable state, running `yum reinstall -y nvidia-container-toolkit-1.11.0-1` should address this issue.
+
+- The `container-toolkit:v1.11.0` images have been released with the following known HIGH Vulnerability CVEs. These are from the base images and are not in libraries used by the components included in the container image as part of the NVIDIA Container Toolkit:
+
+  - `nvcr.io/nvidia/k8s/container-toolkit:v1.11.0-centos7`:
+
+    - `systemd` - [CVE-2022-2526](https://access.redhat.com/security/cve/CVE-2022-2526)
+    - `systemd-libs` - [CVE-2022-2526](https://access.redhat.com/security/cve/CVE-2022-2526)
+
+  - `nvcr.io/nvidia/k8s/container-toolkit:v1.11.0-ubi8`:
+
+    - `systemd` - [CVE-2022-2526](https://access.redhat.com/security/cve/CVE-2022-2526)
+    - `systemd-libs` - [CVE-2022-2526](https://access.redhat.com/security/cve/CVE-2022-2526)
+    - `systemd-pam` - [CVE-2022-2526](https://access.redhat.com/security/cve/CVE-2022-2526)
+
+  - `nvcr.io/nvidia/k8s/container-toolkit:v1.11.0-ubuntu18.04`:
+
+    - `libsystemd0` - [CVE-2022-2526](http://people.ubuntu.com/~ubuntu-security/cve/CVE-2022-2526)
+    - `libudev1` - [CVE-2022-2526](http://people.ubuntu.com/~ubuntu-security/cve/CVE-2022-2526)
+
+## NVIDIA Container Toolkit 1.10.0
+
+This release of the NVIDIA Container Toolkit `v1.10.0` is primarily targeted at improving support for Tegra-based systems.
+It sees the introduction of a new mode of operation for the NVIDIA Container Runtime that makes modifications to the incoming OCI runtime
+specification directly instead of relying on the NVIDIA Container CLI.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.10.0`
+- `libnvidia-container-tools 1.10.0`
+- `libnvidia-container1 1.10.0`
+
+The following `container-toolkit` containers are included:
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.10.0-centos7`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.10.0-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.10.0-ubuntu18.04`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.10.0-ubuntu20.04` (also as `nvcr.io/nvidia/k8s/container-toolkit:v1.10.0`)
+
+The following packages have also been updated to depend on `nvidia-container-toolkit` of at least `1.10.0`:
+
+- `nvidia-container-runtime 3.10.0`
+- `nvidia-docker2 2.11.0`
+
+### Packaging Changes
+
+- The package repository includes support for Ubuntu 22.04. This redirects to the Ubuntu 18.04 packages.
+- The package repository includes support for RHEL 9.0. This redirects to the Centos 8 packages.
+- The package repository includes support for OpenSUSE 15.2 and 15.3. These redirect to the OpenSUSE 15.1 packages.
+- The `nvidia-docker2` Debian packages were updated to allow installation with `moby-engine` instead of requiring `docker-ce`, `docker-ee`, or `docker.io`.
+
+### Fixes and Features
+
+- Add `nvidia-ctk` CLI to provide utilities for interacting with the NVIDIA Container Toolkit
+- Add a new mode to the NVIDIA Container Runtime targeted at Tegra-based systems using CSV-file based mount specifications.
+- Use default config instead of raising an error if config file cannot be found
+- Switch to debug logging to reduce log verbosity
+- Support logging to logs requested in command line
+- Allow low-level runtime path to be set explicitly as `nvidia-container-runtime.runtimes` option
+- Fix failure to locate low-level runtime if PATH environment variables is unset
+- Add `--version` flag to all CLIs
+
+#### specific to libnvidia-container
+
+- Bump `libtirpc` to `1.3.2`
+- Fix bug when running host ldconfig using glibc compiled with a non-standard prefix
+- Add `libcudadebugger.so` to list of compute libraries
+- \[WSL2\] Fix segmentation fault on WSL2s system with no adapters present (such as `/dev/dxg` missing)
+- Ignore pending MIG mode when checking if a device is MIG enabled
+- \[WSL2\] Fix bug where `/dev/dxg` is not mounted when `NVIDIA_DRIVER_CAPABILITIES` does not include "compute"
+
+#### specific to container-toolkit container images
+
+- Fix a bug in applying runtime configuration to containerd when version 1 config files are used
+- Update base images to CUDA 11.7.0
+- Multi-arch images for Ubuntu 18.04 are no longer available. (For multi-arch support for the container toolkit images at least Ubuntu 20.04 is required)
+- Centos 8 images are no longer available since the OS is considered EOL and no CUDA base image updates are available
+- Images are no longer published to Docker Hub and the NGC images should be used instead
+
+### Known Issues
+
+- The `container-toolkit:v1.10.0` images have been released with the following known HIGH Vulnerability CVEs. These are from the base images and are not in libraries used by the components included in the container image as part of the NVIDIA Container Toolkit:
+
+  - `nvcr.io/nvidia/k8s/container-toolkit:v1.10.0-centos7`:
+
+    - `xz` - [CVE-2022-1271](https://access.redhat.com/security/cve/CVE-2022-1271)
+    - `xz-libs` - [CVE-2022-1271](https://access.redhat.com/security/cve/CVE-2022-1271)
+
+  - `nvcr.io/nvidia/k8s/container-toolkit:v1.10.0-ubi8`:
+
+    - `xz-libs` - [CVE-2022-1271](https://access.redhat.com/security/cve/CVE-2022-1271)
+
+## NVIDIA Container Toolkit 1.9.0
+
+This release of the NVIDIA Container Toolkit `v1.9.0` is primarily targeted at adding multi-arch support for the `container-toolkit` images.
+It also includes enhancements for use on Tegra-systems and some notable bugfixes.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.9.0`
+- `libnvidia-container-tools 1.9.0`
+- `libnvidia-container1 1.9.0`
+
+The following `container-toolkit` containers are included (note these are also available on Docker Hub as `nvidia/container-toolkit`):
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.9.0-centos7`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.9.0-centos8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.9.0-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.9.0` and `nvcr.io/nvidia/k8s/container-toolkit:v1.9.0-ubuntu18.04`
+
+The following packages have also been updated to depend on `nvidia-container-toolkit` of at least `1.9.0`:
+
+- `nvidia-container-runtime 3.9.0`
+- `nvidia-docker2 2.10.0`
+
+### Fixes and Features
+
+#### specific to libnvidia-container
+
+- Add additional check for Tegra in `/sys/.../family` file in CLI
+- Update jetpack-specific CLI option to only load Base CSV files by default
+- Fix bug (from `v1.8.0`) when mounting GSP firmware into containers without `/lib` to `/usr/lib` symlinks
+- Update `nvml.h` to CUDA 11.6.1 nvML_DEV 11.6.55
+- Update switch statement to include new brands from latest `nvml.h`
+- Process all `--require` flags on Jetson platforms
+- Fix long-standing issue with running ldconfig on Debian systems
+
+#### specific to container-toolkit container images
+
+- Publish an `nvcr.io/nvidia/k8s/container-toolkit:v1.9.0-ubuntu20.04` image based on `nvidia/cuda:11.6.0-base-ubuntu20.04`
+
+- The following images are available as multi-arch images including support for `linux/amd64` and `linux/arm64` platforms:
+
+  - `nvcr.io/nvidia/k8s/container-toolkit:v1.9.0-centos8`
+  - `nvcr.io/nvidia/k8s/container-toolkit:v1.9.0-ubi8`
+  - `nvcr.io/nvidia/k8s/container-toolkit:v1.9.0-ubuntu18.04` (and `nvcr.io/nvidia/k8s/container-toolkit:v1.9.0`)
+  - `nvcr.io/nvidia/k8s/container-toolkit:v1.9.0-ubuntu20.04`
+
+### Known Issues
+
+- The `container-toolkit:v1.9.0` images have been released with the following known HIGH Vulnerability CVEs. These are from the base images and are not in libraries used by the components included in the container image as part of the NVIDIA Container Toolkit:
+
+  - `nvcr.io/nvidia/k8s/container-toolkit:v1.9.0-centos7`:
+
+    - `expat` - [CVE-2022-25235](https://access.redhat.com/security/cve/CVE-2022-25235)
+    - `expat` - [CVE-2022-25236](https://access.redhat.com/security/cve/CVE-2022-25236)
+    - `expat` - [CVE-2022-25315](https://access.redhat.com/security/cve/CVE-2022-25315)
+
+  - `nvcr.io/nvidia/k8s/container-toolkit:v1.9.0-centos8`:
+
+    - `cyrus-sasl-lib` - [CVE-2022-24407](https://access.redhat.com/security/cve/CVE-2022-24407)
+    - `openssl`, `openssl-libs` - [CVE-2022-0778](https://access.redhat.com/security/cve/CVE-2022-0778)
+    - `expat` - [CVE-2022-25235](https://access.redhat.com/security/cve/CVE-2022-25235)
+    - `expat` - [CVE-2022-25236](https://access.redhat.com/security/cve/CVE-2022-25236)
+    - `expat` - [CVE-2022-25315](https://access.redhat.com/security/cve/CVE-2022-25315)
+
+  - `nvcr.io/nvidia/k8s/container-toolkit:v1.9.0-ubi8`:
+
+    - `openssl-libs` - [CVE-2022-0778](https://access.redhat.com/security/cve/CVE-2022-0778)
+
+## NVIDIA Container Toolkit 1.8.1
+
+This version of the NVIDIA Container Toolkit is a bugfix release and fixes issue with `cgroup` support found in
+NVIDIA Container Toolkit `1.8.0`.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.8.1`
+- `libnvidia-container-tools 1.8.1`
+- `libnvidia-container1 1.8.1`
+
+The following `container-toolkit` containers have are included (note these are also available on Docker Hub as `nvidia/container-toolkit`):
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.8.1-centos7`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.8.1-centos8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.8.1-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.8.1` and `nvcr.io/nvidia/k8s/container-toolkit:v1.8.1-ubuntu18.04`
+
+The following packages have also been updated to depend on `nvidia-container-toolkit` of at least `1.8.1`:
+
+- `nvidia-container-runtime 3.8.1`
+- `nvidia-docker2 2.9.1`
+
+### Fixes and Features
+
+#### specific to libnvidia-container
+
+- Fix bug in determining cgroup root when running in nested containers
+- Fix permission issue when determining cgroup version under certain conditions
+
+## NVIDIA Container Toolkit 1.8.0
+
+This version of the NVIDIA Container Toolkit adds `cgroupv2` support and removes packaging support for Amazon Linux 1.
+
+The following packages are included:
+
+- `nvidia-container-toolkit 1.8.0`
+- `libnvidia-container-tools 1.8.0`
+- `libnvidia-container1 1.8.0`
+
+The following `container-toolkit` containers have are included (note these are also available on Docker Hub as `nvidia/container-toolkit`):
+
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.8.0-centos7`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.8.0-centos8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.8.0-ubi8`
+- `nvcr.io/nvidia/k8s/container-toolkit:v1.8.0` and `nvcr.io/nvidia/k8s/container-toolkit:v1.8.0-ubuntu18.04`
+
+The following packages have also been updated to depend on `nvidia-container-toolkit` of at least `1.8.0`:
+
+- `nvidia-container-runtime 3.8.0`
+- `nvidia-docker2 2.9.0`
+
+### Packaging Changes
+
+- Packages for Amazon Linux 1 are no longer built or published
+- The `container-toolkit` container is built and released from the same repository as the NVIDIA Container Toolkit packages.
+
+### Fixes and Features
+
+#### specific to libnvidia-container
+
+- Add `cgroupv2` support
+- Fix a bug where the GSP firmware path was mounted with write permissions instead of read-only
+- Include the GSP firmware path (if present) in the output of the `nvidia-container-cli list` command
+- Add support for injecting PKS libraries into a container
+
+## NVIDIA Container Toolkit 1.7.0
+
+This version of the NVIDIA Container Toolkit allows up to date packages to be installed on Jetson devices.
+The following packages are included:
+
+- `nvidia-container-toolkit 1.7.0`
+- `libnvidia-container-tools 1.7.0`
+- `libnvidia-container1 1.7.0`
+
+The following packages have also been updated to depend on `nvidia-container-toolkit` of at least `1.7.0`:
+
+- `nvidia-container-runtime 3.7.0`
+- `nvidia-docker2 2.8.0`
+
+### Packaging Changes
+
+- On Ubuntu `arm64` distributions the `libnvidia-container-tools` package depends on both `libnvidia-container0` and `libnvidia-container1` to support Jetson devices
+
+### Fixes and Features
+
+- Add a `supported-driver-capabilities` config option to allow for a subset of all driver capabilities to be specified
+- Makes the fixes from `v1.6.0` to addresses an incompatibility with recent docker.io and containerd.io updates on Ubuntu installations (see [NVIDIA/nvidia-container-runtime#157](https://github.com/NVIDIA/nvidia-container-runtime/issues/157)) available on Jetson devices.
+
+#### specific to libnvidia-container
+
+- Filter command line options based on `libnvidia-container` library version
+- Include `libnvidia-container` version in CLI version output
+- Allow for `nvidia-container-cli` to load `libnvidia-container.so.0` dynamically on Jetson platforms
+
+## NVIDIA Container Toolkit 1.6.0
+
+This version of the NVIDIA Container Toolkit moves to unify the packaging of the components of the NVIDIA container stack.
+The following packages are included:
+
+- `nvidia-container-toolkit 1.6.0`
+- `libnvidia-container-tools 1.6.0`
+- `libnvidia-container1 1.6.0`
+
+The following packages have also been updated to depend on `nvidia-container-toolkit` of at least `1.6.0`:
+
+- `nvidia-container-runtime 3.6.0`
+- `nvidia-docker2 2.7.0`
+
+:::{note}
+All the above packages are published to the [libnvidia-container](https://nvidia.github.io/libnvidia-container/) repository.
+:::
+
+:::{note}
+As of version `2.7.0` the `nvidia-docker2` package depends directly on `nvidia-container-toolkit`.
+This means that the `nvidia-container-runtime` package is no longer required and may be uninstalled as part of the upgrade process.
+:::
+
+### Packaging Changes
+
+- The `nvidia-container-toolkit` package now provides the `nvidia-container-runtime` executable
+- The `nvidia-docker2` package now depends directly on the `nvidia-container-toolkit` directly
+- The `nvidia-container-runtime` package is now an architecture-independent meta-package serving only to define a dependency on the `nvidia-container-toolkit` for workflows that require this
+- Added packages for Amazon Linux 2 on AARC64 platforms for all components
+
+### Fixes and Features
+
+- Move OCI and command line checks for the NVIDIA Container Runtime to an internal go package (`oci`)
+- Update OCI runtime specification dependency to [opencontainers/runtime-spec@a3c33d6](https://github.com/opencontainers/runtime-spec/commit/a3c33d663ebc/) to fix compatibility with docker when overriding clone3 syscall return value \[fixes [NVIDIA/nvidia-container-runtime#157](https://github.com/NVIDIA/nvidia-container-runtime/issues/157)\]
+- Use relative path to OCI specification file (`config.json`) if bundle path is not specified as an argument to the nvidia-container-runtime
+
+#### specific to libnvidia-container
+
+- Bump `nvidia-modprobe` dependency to `495.44` in the NVIDIA Container Library to allow for non-root monitoring of MIG devices
+- Fix bug that lead to unexpected mount error when `/proc/driver/nvidia` does not exist on the host
+
+### Known Issues
+
+#### Dependency errors when installing older versions of `nvidia-container-runtime` on Debian-based systems
+
+With the release of the `1.6.0` and `3.6.0` versions of the `nvidia-container-toolkit` and
+`nvidia-container-runtime` packages, respectively, some files were reorganized and the package
+dependencies updated accordingly. (See case 10 in the [Debian Package Transition](https://wiki.debian.org/PackageTransition) documentation).
+
+Due to these new constraints a package manager may not correctly resolve the required version of `nvidia-container-toolkit` when
+pinning to versions of the `nvidia-container-runtime` prior to `3.6.0`.
+
+This means that if a command such as:
+
+```console
+sudo apt-get install nvidia-container-runtime=3.5.0-1
+```
+
+is used to install a specific version of the `nvidia-container-runtime` package, this may fail with the following error message:
+
+```console
+Some packages could not be installed. This may mean that you have
+requested an impossible situation or if you are using the unstable
+distribution that some required packages have not yet been created
+or been moved out of Incoming.
+The following information may help to resolve the situation:
+
+The following packages have unmet dependencies:
+nvidia-container-runtime : Depends: nvidia-container-toolkit (>= 1.5.0) but it is not going to be installed
+                            Depends: nvidia-container-toolkit (< 2.0.0) but it is not going to be installed
+E: Unable to correct problems, you have held broken packages.
+```
+
+In order to address this, the versions of the `nvidia-container-toolkit` package should be specified explicitly to be at most `1.5.1`
+
+```console
+sudo apt-get install \
+    nvidia-container-runtime=3.5.0-1 \
+    nvidia-container-toolkit=1.5.1-1
+```
+
+In general, it is suggested that all components of the NVIDIA container stack be pinned to their required versions.
+
+For the `nvidia-container-runtime` `3.5.0` these are:
+
+- `nvidia-container-toolkit 1.5.1`
+- `libnvidia-container-tools 1.5.1`
+- `libnvidia-container1 1.5.1`
+
+To pin all the package versions above, run:
+
+```console
+sudo apt-get install \
+    nvidia-container-runtime=3.5.0-1 \
+    nvidia-container-toolkit=1.5.1-1 \
+    libnvidia-container-tools=1.5.1-1 \
+    libnvidia-container1==1.5.1-1
+```
+
+## Toolkit Container 1.7.0
+
+### Known issues
+
+- The `container-toolkit:1.7.0-ubuntu18.04` image contains the [CVE-2021-3711](http://people.ubuntu.com/~ubuntu-security/cve/CVE-2021-3711). This CVE affects `libssl1.1` and `openssl` included in the ubuntu-based CUDA `11.4.1` base image. The components of the NVIDIA Container Toolkit included in the container do not use `libssl1.1` or `openssl` and as such this is considered low risk if the container is used as intended; that is to install and configure the NVIDIA Container Toolkit in the context of the NVIDIA GPU Operator.

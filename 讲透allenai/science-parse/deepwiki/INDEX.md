@@ -1,0 +1,31 @@
+# DeepWiki 索引 — allenai/science-parse
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 470589 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Architecture](1.1-architecture.md)
+  - [1.2 Getting Started](1.2-getting-started.md)
+- [2 Core Library](2-core-library.md)
+  - [2.1 Parser Class](2.1-parser-class.md)
+  - [2.2 PDF Processing Pipeline](2.2-pdf-processing-pipeline.md)
+  - [2.3 Reference and Citation Extraction](2.3-reference-and-citation-extraction.md)
+  - [2.4 CRF Feature Engineering](2.4-crf-feature-engineering.md)
+  - [2.5 Data Models](2.5-data-models.md)
+  - [2.6 Gazetteer System](2.6-gazetteer-system.md)
+- [3 Server Module](3-server-module.md)
+  - [3.1 REST API Endpoints](3.1-rest-api-endpoints.md)
+  - [3.2 Feedback System](3.2-feedback-system.md)
+  - [3.3 Server Deployment](3.3-server-deployment.md)
+- [4 CLI Module](4-cli-module.md)
+  - [4.1 CLI Usage and Options](4.1-cli-usage-and-options.md)
+  - [4.2 Paper Source Strategies](4.2-paper-source-strategies.md)
+- [5 Training and Evaluation](5-training-and-evaluation.md)
+  - [5.1 Training the Main CRF Model](5.1-training-the-main-crf-model.md)
+  - [5.2 Training the Bibliography Model](5.2-training-the-bibliography-model.md)
+  - [5.3 Model Evaluation](5.3-model-evaluation.md)
+- [6 Build and Development](6-build-and-development.md)
+  - [6.1 SBT Build System](6.1-sbt-build-system.md)
+  - [6.2 Development Environment Setup](6.2-development-environment-setup.md)
+  - [6.3 Release Process](6.3-release-process.md)
+- [7 External Dependencies](7-external-dependencies.md)

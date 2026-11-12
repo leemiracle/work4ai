@@ -1,19 +1,12 @@
-# DeepWiki 抓取覆盖率检查
+# Coverage Check
 
-- _links.txt 链接总数: 25
-- 实际 md 文件数: 24
-- 缺失页: 1
-- 空页(<= 500B): 0
+- repo: deepseek-ai/TileKernels
+- fetched: 2026-10-30
+- 结构清单页数: 34
+- 落盘页数: 34
 
-## 结论
-存在缺口，需补抓（重跑 dw_fetch.py 即断点续传补缺）：
-- 缺失: 6.2-fused-swiglu-+-quantization-kernels
+- 覆盖: 34/34 (100%)
 
-## 抽查 3 页
-
-| 页面 | 大小(B) | 状态 | 检查 |
-|---|---|---|---|
-| 4.1-mhc-kernels | 12986 | 正常 | PASS |
-| 5.2-moe-dispatch-and-reduction-kernels | 8406 | 正常 | PASS |
-| 4.2-mhc-modeling-api | 11769 | 正常 | PASS |
-
+## 全层级对账终判（dw_reconcile_dir.py, 2026-10-30）
+- 结构全层级 34 页 vs 落盘 46 页（结构外/三级页 extra 12）
+- 终判: TRUE_100

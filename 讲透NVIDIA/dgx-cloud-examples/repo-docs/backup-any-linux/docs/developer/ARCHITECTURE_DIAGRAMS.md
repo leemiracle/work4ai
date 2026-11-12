@@ -1,0 +1,648 @@
+<!--
+SPDX-FileCopyrightText: Copyright (c) 2024-2025, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+SPDX-License-Identifier: Apache-2.0
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+# Architecture Diagrams & Visual Reference
+## Visual Guide to Modular Backup System
+
+**Last Updated:** November 6, 2025
+
+---
+
+## 1. Module Dependency Graph
+
+```
+                    ┌──────────────────────┐
+                    │      core.sh         │
+                    │  - Logging           │
+                    │  - Error handling    │
+                    │  - Exit codes        │
+                    └──────────┬───────────┘
+                               │
+                               │ depends on
+                               │
+              ┌────────────────┴────────────────┐
+              │                                  │
+    ┌─────────▼──────────┐          ┌───────────▼──────────┐
+    │     utils.sh       │          │     config.sh        │
+    │  - File ops        │          │  - Config loading    │
+    │  - Conversions     │          │  - Validation        │
+    │  - Platform utils  │          │  - AWS credentials   │
+    └─────────┬──────────┘          └───────────┬──────────┘
+              │                                  │
+              │                                  │
+       ┌──────┴──────┬───────────────────┬──────┴──────┐
+       │             │                   │             │
+ ┌─────▼──────┐ ┌────▼─────┐      ┌────▼──────┐ ┌────▼─────┐
+ │  state.sh  │ │checksum  │      │   s3.sh   │ │filesystem│
+ │  - State   │ │  .sh     │      │  - Upload │ │   .sh    │
+ │    files   │ │  - MD5   │      │  - Download│ │  - Scan  │
+ │  - Locking │ │  - SHA256│      │  - List   │ │  - Map   │
+ └─────┬──────┘ └────┬─────┘      └────┬──────┘ └────┬─────┘
+       │             │                   │             │
+       └─────────────┴───────────┬───────┴─────────────┘
+                                 │
+                    ┌────────────▼────────────┐
+                    │      backup.sh          │
+                    │  - Backup workflow      │
+                    │  - Change tracking      │
+                    │  - File processing      │
+                    └────────────┬────────────┘
+                                 │
+                ┌────────────────┴────────────────┐
+                │                                  │
+     ┌──────────▼──────────┐          ┌───────────▼──────────┐
+     │    deletion.sh      │          │   alignment.sh       │
+     │  - Track deletions  │          │  - S3 reconciliation │
+     │  - Retention policy │          │  - Orphan cleanup    │
+     │  - Cleanup          │          │  - Reports           │
+     └─────────────────────┘          └──────────────────────┘
+```
+
+**Legend:**
+- **Top modules** = No dependencies (can be loaded first)
+- **Middle modules** = Core utilities and operations
+- **Bottom modules** = High-level business logic
+- **Arrow direction** = "depends on" relationship
+
+---
+
+## 2. Data Flow Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                        BACKUP WORKFLOW                              │
+└─────────────────────────────────────────────────────────────────────┘
+
+    ┌──────────────┐
+    │ User Trigger │
+    │  (cron job)  │
+    └──────┬───────┘
+           │
+           ▼
+    ┌──────────────────┐
+    │ s3-backup-linux  │ ← Main orchestrator (200 lines)
+    │     .sh          │   Loads all modules
+    └──────┬───────────┘
+           │
+           ├─────────────────────────────────┐
+           │                                 │
+           ▼                                 ▼
+    ┌──────────────┐                  ┌──────────────┐
+    │ Load Modules │                  │ Load Config  │
+    │ (loader.sh)  │                  │ (config.sh)  │
+    └──────┬───────┘                  └──────┬───────┘
+           │                                 │
+           └─────────────┬───────────────────┘
+                         │
+                         ▼
+                  ┌──────────────┐
+                  │ Validate AWS │
+                  │ Credentials  │
+                  └──────┬───────┘
+                         │
+              ┌──────────┴──────────┐
+              │ Decision Point:     │
+              │ Force Alignment?    │
+              └──────────┬──────────┘
+                         │
+           ┌─────────────┴─────────────┐
+           │                           │
+           ▼ YES                        ▼ NO
+    ┌──────────────┐            ┌──────────────┐
+    │  Alignment   │            │   Regular    │
+    │  Workflow    │            │   Backup     │
+    │              │            │   Workflow   │
+    │ 1. Scan FS   │            │              │
+    │ 2. Scan S3   │            │ 1. Find dirs │
+    │ 3. Compare   │            │ 2. Calc MD5  │
+    │ 4. Move      │            │ 3. Upload    │
+    │    orphans   │            │ 4. Track     │
+    │ 5. Report    │            │    changes   │
+    └──────┬───────┘            └──────┬───────┘
+           │                           │
+           └───────────┬───────────────┘
+                       │
+                       ▼
+              ┌────────────────┐
+              │ Update State   │
+              │ Files (atomic) │
+              └────────┬───────┘
+                       │
+                       ▼
+              ┌────────────────┐
+              │ Cleanup Old    │
+              │ Deletions      │
+              └────────┬───────┘
+                       │
+                       ▼
+              ┌────────────────┐
+              │  Success Exit  │
+              │   (code 0)     │
+              └────────────────┘
+```
+
+---
+
+## 3. State File Management
+
+```
+┌───────────────────────────────────────────────────────────────────┐
+│                    STATE FILE ECOSYSTEM                           │
+└───────────────────────────────────────────────────────────────────┘
+
+         ┌─────────────────────────────────────────────┐
+         │        Filesystem (Local Storage)           │
+         └─────────────────────────────────────────────┘
+                              │
+         ┌────────────────────┼────────────────────┐
+         │                    │                    │
+         ▼                    ▼                    ▼
+┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
+│ backup-state     │  │ yesterday-backup │  │ permanent-       │
+│    .json         │  │   -state.json    │  │  deletions-      │
+│                  │  │                  │  │  history.json    │
+│ Tracks:          │  │ Tracks:          │  │                  │
+│ - Current files  │  │ - Deleted files  │  │ Tracks:          │
+│ - MD5 checksums  │  │ - Retention time │  │ - Deleted files  │
+│ - Last modified  │  │ - Original size  │  │   (permanent)    │
+│                  │  │                  │  │ - Audit trail    │
+└────────┬─────────┘  └────────┬─────────┘  └────────┬─────────┘
+         │                     │                     │
+         └─────────────────────┼─────────────────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │   directory-state   │
+                    │       .json         │
+                    │                     │
+                    │ Tracks:             │
+                    │ - Backup modes      │
+                    │ - Mode changes      │
+                    │ - Alignment history │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │  s3-cache.json      │
+                    │  (from s3-inspect)  │
+                    │                     │
+                    │ - S3 file list      │
+                    │ - O(1) lookups      │
+                    └─────────────────────┘
+
+┌───────────────────────────────────────────────────────────────────┐
+│                         S3 Bucket                                 │
+├───────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│  s3://bucket/prefix/                                             │
+│     ├── current_state/           ← Active files                 │
+│     │   ├── project1/                                            │
+│     │   │   ├── file1.txt                                        │
+│     │   │   └── file2.dat                                        │
+│     │   └── project2/                                            │
+│     │       └── data.db                                          │
+│     │                                                             │
+│     ├── yesterday_state/         ← Recently deleted files        │
+│     │   ├── deleted_old.txt      (retention period)              │
+│     │   └── deleted_data.csv                                     │
+│     │                                                             │
+│     └── _state_backups/          ← State file backups           │
+│         ├── backup-state.json                                    │
+│         ├── yesterday-backup-state.json                          │
+│         └── permanent-deletions-history.json                     │
+│                                                                   │
+└───────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 4. Module Loading Sequence
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    MODULE LOADING FLOW                          │
+└─────────────────────────────────────────────────────────────────┘
+
+START
+  │
+  ▼
+┌────────────────────┐
+│ Source loader.sh   │
+└─────────┬──────────┘
+          │
+          ▼
+┌────────────────────┐
+│ load_modules()     │ ← User calls: load_modules core utils config
+└─────────┬──────────┘
+          │
+          ▼
+┌────────────────────┐
+│ For each module:   │
+│ Check if loaded    │
+└─────────┬──────────┘
+          │
+          ├─── Already loaded? ──→ Skip ──┐
+          │                                │
+          ▼ Not loaded                     │
+┌────────────────────┐                     │
+│ Get dependencies   │                     │
+│ from MODULE_DEPS   │                     │
+└─────────┬──────────┘                     │
+          │                                │
+          ▼                                │
+┌────────────────────┐                     │
+│ Load dependencies  │ ← Recursive call   │
+│ first (recursive)  │                     │
+└─────────┬──────────┘                     │
+          │                                │
+          ▼                                │
+┌────────────────────┐                     │
+│ Source module.sh   │                     │
+│ file               │                     │
+└─────────┬──────────┘                     │
+          │                                │
+          ▼                                │
+┌────────────────────┐                     │
+│ Module runs:       │                     │
+│ - Init code        │                     │
+│ - Validation       │                     │
+│ - Feature detect   │                     │
+└─────────┬──────────┘                     │
+          │                                │
+          ▼                                │
+┌────────────────────┐                     │
+│ Mark as loaded     │                     │
+│ in LOADED_MODULES  │                     │
+└─────────┬──────────┘                     │
+          │                                │
+          └────────────────────────────────┘
+          │
+          ▼
+┌────────────────────┐
+│ All modules ready  │
+└─────────┬──────────┘
+          │
+          ▼
+        DONE
+
+Example: load_modules backup
+  1. Load core (no deps)
+  2. Load utils (needs core)
+  3. Load config (needs core, utils)
+  4. Load state (needs core, utils)
+  5. Load filesystem (needs core, utils, state)
+  6. Load checksum (needs core, utils)
+  7. Load s3 (needs core, utils, config)
+  8. Load backup (needs all above) ✅
+```
+
+---
+
+## 5. Interface Contract Model
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│          HOW SCRIPT A STAYS COMPATIBLE WITH SCRIPT B            │
+└─────────────────────────────────────────────────────────────────┘
+
+┌────────────────────┐                    ┌────────────────────┐
+│    Script A        │                    │    Script B        │
+│   (backup.sh)      │                    │  (checksum.sh)     │
+│                    │                    │                    │
+│  Calls function:   │                    │  Provides:         │
+│  ┌──────────────┐  │                    │  ┌──────────────┐  │
+│  │calculate_    │  │─────────────────────→│  │calculate_    │  │
+│  │checksum()    │  │  Function call      │  │checksum()    │  │
+│  │              │  │  with 2 params      │  │              │  │
+│  │ FILE         │  │                    │  │ FILE         │  │
+│  │ ALGORITHM    │  │                    │  │ ALGORITHM    │  │
+│  └──────────────┘  │                    │  │ [OPTIONS]    │  │
+│                    │                    │  └──────────────┘  │
+└────────────────────┘                    └────────────────────┘
+         ▲                                         │
+         │                                         │
+         └──── Compatible because: ────────────────┘
+               1. Signature documented in B
+               2. New param is OPTIONAL
+               3. Version still v1.x (MINOR change)
+               4. Validation catches mismatches
+
+```
+
+---
+
+## 6. Change Management Flow
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│              MAKING CHANGES WITHOUT BREAKING THINGS             │
+└─────────────────────────────────────────────────────────────────┘
+
+                    ┌──────────────────┐
+                    │  Developer wants │
+                    │  to make change  │
+                    └────────┬─────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │  Is this change  │
+                    │  breaking?       │
+                    └────────┬─────────┘
+                             │
+          ┌──────────────────┴──────────────────┐
+          │                                     │
+          ▼ NO (Backward compatible)            ▼ YES (Breaking change)
+┌──────────────────────┐              ┌──────────────────────┐
+│  SAFE PATH           │              │  CAREFUL PATH        │
+│                      │              │                      │
+│ 1. Make change       │              │ 1. Create migration  │
+│ 2. Add new function  │              │    guide             │
+│    OR                │              │ 2. Increment MAJOR   │
+│    Add optional param│              │    version           │
+│ 3. Increment MINOR   │              │ 3. Update ALL        │
+│    version           │              │    callers           │
+│ 4. Update docs       │              │ 4. Add deprecation   │
+│ 5. Write test        │              │    warnings          │
+│ 6. Commit            │              │ 5. Test extensively  │
+│                      │              │ 6. Document in       │
+│ ✅ No callers break  │              │    commit msg        │
+│                      │              │                      │
+└──────────┬───────────┘              └──────────┬───────────┘
+           │                                     │
+           └──────────────┬──────────────────────┘
+                          │
+                          ▼
+                 ┌────────────────┐
+                 │ Run validation │
+                 │    scripts     │
+                 └────────┬───────┘
+                          │
+          ┌───────────────┴───────────────┐
+          │                               │
+          ▼ PASS                          ▼ FAIL
+    ┌────────────┐                ┌──────────────┐
+    │   Commit   │                │  Fix errors  │
+    │   Deploy   │                │  Re-validate │
+    └────────────┘                └──────┬───────┘
+                                         │
+                                         └──→ Retry
+```
+
+---
+
+## 7. Error Handling Strategy
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    ERROR HANDLING LAYERS                        │
+└─────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────┐
+│  Layer 1: Prevention (Before errors occur)                     │
+├────────────────────────────────────────────────────────────────┤
+│  - Input validation                                            │
+│  - Configuration validation                                    │
+│  - Dependency checking                                         │
+│  - File existence checks                                       │
+└────────────────┬───────────────────────────────────────────────┘
+                 │
+                 ▼
+┌────────────────────────────────────────────────────────────────┐
+│  Layer 2: Detection (Catch errors when they happen)            │
+├────────────────────────────────────────────────────────────────┤
+│  - set -e (exit on error)                                     │
+│  - set -u (exit on undefined variable)                        │
+│  - set -o pipefail (catch pipe errors)                        │
+│  - Return code checking                                        │
+└────────────────┬───────────────────────────────────────────────┘
+                 │
+                 ▼
+┌────────────────────────────────────────────────────────────────┐
+│  Layer 3: Handling (What to do when error occurs)             │
+├────────────────────────────────────────────────────────────────┤
+│  - log ERROR "message"     → Log and continue                 │
+│  - warn "message"          → Log warning                      │
+│  - die "message" $EX_CODE  → Log and exit                     │
+│  - return 1                → Return error to caller           │
+└────────────────┬───────────────────────────────────────────────┘
+                 │
+                 ▼
+┌────────────────────────────────────────────────────────────────┐
+│  Layer 4: Recovery (Try to fix the problem)                   │
+├────────────────────────────────────────────────────────────────┤
+│  - Retry logic (with exponential backoff)                     │
+│  - Fallback to alternative method                             │
+│  - State file recovery                                        │
+│  - Partial success tracking                                   │
+└────────────────┬───────────────────────────────────────────────┘
+                 │
+                 ▼
+┌────────────────────────────────────────────────────────────────┐
+│  Layer 5: Reporting (Tell user what happened)                 │
+├────────────────────────────────────────────────────────────────┤
+│  - Detailed logs in log file                                  │
+│  - Summary to stdout/stderr                                   │
+│  - Exit codes for automation                                  │
+│  - Metrics to monitoring system                               │
+└────────────────────────────────────────────────────────────────┘
+
+Example Flow:
+  User runs backup
+    → Validation fails (Layer 1)
+    → Error detected (Layer 2)
+    → die() called (Layer 3)
+    → Cannot recover (Layer 4)
+    → Log + exit code 78 (Layer 5)
+    → User sees clear error message ✅
+```
+
+---
+
+## 8. Testing Pyramid
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                       TESTING STRATEGY                          │
+└─────────────────────────────────────────────────────────────────┘
+
+                           ▲
+                          ╱ ╲
+                         ╱   ╲
+                        ╱     ╲
+                       ╱  E2E  ╲ ← End-to-End Tests (Few)
+                      ╱ Tests   ╲   - Full backup cycle
+                     ╱───────────╲   - Real S3 bucket
+                    ╱             ╲   - Long running
+                   ╱               ╲
+                  ╱   Integration   ╲ ← Integration Tests (Some)
+                 ╱      Tests        ╲   - Module interactions
+                ╱─────────────────────╲   - Mock S3
+               ╱                       ╲   - State files
+              ╱                         ╲
+             ╱         Unit Tests        ╲ ← Unit Tests (Many)
+            ╱   (Per function/module)     ╲   - Fast
+           ╱─────────────────────────────── ╲   - Isolated
+          ╱                                 ╲   - Deterministic
+         ╱___________________________________╲
+
+┌─────────────────────────────────────────────────────────────────┐
+│  Test Type       │ Count │ Speed │ Coverage                     │
+├──────────────────┼───────┼───────┼──────────────────────────────┤
+│  Unit            │  50+  │ Fast  │ Individual functions         │
+│  Integration     │  10+  │ Med   │ Module interactions          │
+│  E2E             │  3-5  │ Slow  │ Complete workflows           │
+└─────────────────────────────────────────────────────────────────┘
+
+Run Frequency:
+  - Unit tests: On every commit (< 10 seconds)
+  - Integration tests: On PR (< 1 minute)
+  - E2E tests: Before release (< 5 minutes)
+```
+
+---
+
+## 9. Deployment Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                  PRODUCTION DEPLOYMENT                          │
+└─────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────┐
+│                      Kubernetes Pod / VM                         │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌────────────────────────────────────────────────────────┐     │
+│  │  CronJob Schedule                                      │     │
+│  │  0 2 * * * /app/scripts/s3-backup-linux.sh           │     │
+│  └────────────────────┬───────────────────────────────────┘     │
+│                       │                                          │
+│                       ▼                                          │
+│  ┌────────────────────────────────────────────────────────┐     │
+│  │  Main Script (s3-backup-linux.sh)                     │     │
+│  │    - Loads modules from /app/scripts/lib/             │     │
+│  │    - Reads config from /app/config/                   │     │
+│  │    - Writes state to /app/state/                      │     │
+│  │    - Logs to /app/logs/                               │     │
+│  └────────────────────┬───────────────────────────────────┘     │
+│                       │                                          │
+│         ┌─────────────┼─────────────┐                           │
+│         │             │             │                           │
+│         ▼             ▼             ▼                           │
+│  ┌───────────┐ ┌───────────┐ ┌───────────┐                     │
+│  │ /mount    │ │ /app/state│ │ /app/logs │                     │
+│  │  (files   │ │  (JSON    │ │  (backup. │                     │
+│  │   to      │ │   state)  │ │   log)    │                     │
+│  │   backup) │ │           │ │           │                     │
+│  └───────────┘ └───────────┘ └───────────┘                     │
+│         │             │             │                           │
+│         │ PVC         │ PVC         │ PVC                       │
+└─────────┼─────────────┼─────────────┼───────────────────────────┘
+          │             │             │
+          ▼             ▼             ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                    Persistent Storage                            │
+└──────────────────────────────────────────────────────────────────┘
+                       │
+                       │ AWS CLI
+                       ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                      AWS S3 Bucket                               │
+│                                                                  │
+│  s3://backup-bucket/                                             │
+│    ├── current_state/     ← Synced by backup script            │
+│    ├── yesterday_state/   ← Managed by backup script           │
+│    └── _state_backups/    ← State file backups                 │
+└──────────────────────────────────────────────────────────────────┘
+                       │
+                       │ S3 Events
+                       ▼
+┌──────────────────────────────────────────────────────────────────┐
+│                    Monitoring & Alerts                           │
+│                                                                  │
+│  - CloudWatch Metrics  (upload count, size, errors)             │
+│  - CloudWatch Logs     (backup.log forwarded)                   │
+│  - SNS Alerts          (on failures)                            │
+│  - CloudWatch Alarms   (backup failed, size anomaly)           │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 10. Performance Optimization Flow
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│           BEFORE OPTIMIZATION (Sequential)                      │
+└─────────────────────────────────────────────────────────────────┘
+
+File 1 ──→ Checksum ──→ Upload ──→ ✓ (2 seconds)
+File 2 ──→ Checksum ──→ Upload ──→ ✓ (2 seconds)
+File 3 ──→ Checksum ──→ Upload ──→ ✓ (2 seconds)
+File 4 ──→ Checksum ──→ Upload ──→ ✓ (2 seconds)
+File 5 ──→ Checksum ──→ Upload ──→ ✓ (2 seconds)
+
+Total Time: 10 seconds for 5 files
+
+
+┌─────────────────────────────────────────────────────────────────┐
+│           AFTER OPTIMIZATION (Parallel)                         │
+└─────────────────────────────────────────────────────────────────┘
+
+File 1 ──→ Checksum ──→ Upload ──→ ✓ ╲
+File 2 ──→ Checksum ──→ Upload ──→ ✓  ├──→ All complete
+File 3 ──→ Checksum ──→ Upload ──→ ✓  │    in 2 seconds!
+File 4 ──→ Checksum ──→ Upload ──→ ✓  │
+File 5 ──→ Checksum ──→ Upload ──→ ✓ ╱
+
+Total Time: 2 seconds for 5 files (5x faster!)
+
+
+Other Optimizations:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Cache filesystem scans       → 22x faster
+2. Batch jq operations          → 3x faster  
+3. Sample large file checksums  → 5x faster
+4. Use S3 cache for verification → Skip unnecessary uploads
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Combined: 6.9x faster overall! 🚀
+```
+
+---
+
+## Summary
+
+These diagrams illustrate:
+
+1. **Module Dependencies** - Who needs who
+2. **Data Flow** - How data moves through the system
+3. **State Management** - How files are tracked
+4. **Loading Sequence** - Order of module initialization
+5. **Interface Contracts** - How modules stay compatible
+6. **Change Management** - How to make safe changes
+7. **Error Handling** - Multiple layers of protection
+8. **Testing Strategy** - Comprehensive test coverage
+9. **Deployment** - Production architecture
+10. **Performance** - Before/after optimization
+
+Use these diagrams as reference when:
+- Understanding the architecture
+- Making changes
+- Explaining to team members
+- Planning improvements
+

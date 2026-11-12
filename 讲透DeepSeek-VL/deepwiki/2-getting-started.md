@@ -1,150 +1,261 @@
-> 来源: [https://deepwiki.com/deepseek-ai/DeepSeek-VL/2-getting-started](https://deepwiki.com/deepseek-ai/DeepSeek-VL/2-getting-started)
-> DeepWiki deepseek-ai/DeepSeek-VL
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/DeepSeek-VL · page 2 Getting Started · fetched 2026-10-30 -->
 
 # Getting Started
 
-  Relevant source files 
- - [README.md](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1)
- - [install.sh](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/install.sh)
- - [setup.py](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py)
- 
-  This page provides an introduction to installing and using DeepEP V2. It covers system requirements, dependency installation, building the library, and first steps for new users. DeepEP V2 features a complete refactoring of Expert Parallelism (EP) with a new **NCCL Gin backend**, replacing the NVSHMEM-based V1 for primary paths [README.md9-14](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L9-L14)
+<details>
+<summary>Relevant source files</summary>
 
- For detailed build configuration options, see [Installation and Build](https://deepwiki.com/deepseek-ai/DeepEP/2.1-installation-and-build). For complete working examples, see [Quick Start Guide](https://deepwiki.com/deepseek-ai/DeepEP/2.2-quick-start-guide).
+The following files were used as context for generating this wiki page:
 
- **Sources:** [README.md1-109](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L1-L109)
+- [README.md](README.md)
+- [pyproject.toml](pyproject.toml)
+- [requirements.txt](requirements.txt)
 
- 
+</details>
+
+
+
+This guide provides instructions for setting up and using DeepSeek-VL, a vision-language model for processing and understanding both visual and textual information. It covers installation requirements, basic usage patterns, and how to interact with the model through different interfaces. For detailed information about the model architecture and capabilities, see [Overview](#1). For comprehensive installation steps, see [Installation](#2.1).
+
+## Prerequisites
+
+Before installing DeepSeek-VL, ensure your system meets the following requirements:
+
+- Python 3.8 or higher
+- PyTorch 2.0.1 or higher
+- CUDA-compatible GPU (recommended for inference)
+- Sufficient disk space for model weights (7B models require approximately 14GB)
+
+## Installation
+
+DeepSeek-VL can be installed directly from the repository:
+
+```bash
+# Clone the repository
+git clone https://github.com/deepseek-ai/DeepSeek-VL.git
+cd DeepSeek-VL
+
+# Install the basic package
+pip install -e .
+
+# For Gradio web UI support, install additional dependencies
+pip install -e .[gradio]
+```
+
+The installation process sets up all necessary dependencies, including:
+- `transformers` (version 4.38.2 or higher)
+- `timm` (version 0.9.16 or higher)
+- `accelerate`
+- `sentencepiece`
+- `attrdict`
+- `einops`
+
+Sources:
+- [README.md:109-115]()
+- [pyproject.toml:14-22]()
+- [requirements.txt:1-7]()
+
+## Available Models
+
+DeepSeek-VL offers several model variants to suit different needs and computational resources:
+
+| Model | Parameters | Context Length | Purpose |
+|-------|------------|----------------|---------|
+| DeepSeek-VL-1.3B-base | 1.3 billion | 4096 tokens | Base model for fine-tuning |
+| DeepSeek-VL-1.3B-chat | 1.3 billion | 4096 tokens | Optimized for chat/dialogue |
+| DeepSeek-VL-7B-base | 7 billion | 4096 tokens | Larger base model |
+| DeepSeek-VL-7B-chat | 7 billion | 4096 tokens | Larger chat-optimized model |
+
+All models can be loaded directly from Hugging Face using the model IDs (e.g., `deepseek-ai/deepseek-vl-7b-chat`) or used locally after downloading.
+
+Sources:
+- [README.md:89-104]()
+
+## System Architecture Overview
+
+The following diagram shows the high-level architecture of DeepSeek-VL and how components interact:
+
+```mermaid
+flowchart TD
+    User["User"] -->|"Inputs text & images"| Interfaces
+    
+    subgraph Interfaces
+        PyAPI["Python API\n(inference.py)"]
+        CLI["CLI Chat\n(cli_chat.py)"]
+        WebUI["Gradio Web UI\n(app_deepseek.py)"]
+    end
+    
+    subgraph CoreComponents
+        VLChatProc["VLChatProcessor\n(processes text & images)"]
+        MultiModal["MultiModalityCausalLM\n(integrates vision & language)"]
+        LangModel["Language Model\n(generates text)"]
+    end
+    
+    Interfaces --> VLChatProc
+    VLChatProc --> MultiModal
+    MultiModal -->|"prepare_inputs_embeds()"| InputEmbeds["Input Embeddings"]
+    InputEmbeds --> LangModel
+    LangModel -->|"generate()"| Outputs["Output Tokens"]
+    Outputs -->|"tokenizer.decode()"| Response["Final Text Response"]
+```
+
+Sources:
+- [README.md:119-187]()
+
+## Data Flow in DeepSeek-VL
+
+The following diagram illustrates how data flows through the system when processing a multimodal input:
+
+```mermaid
+flowchart LR
+    TextInput["Text Input"] --> VLChatProcessor
+    ImageInput["Image Input"] -->|"load_pil_images()"| PILImages["PIL Images"]
+    PILImages --> VLChatProcessor["VLChatProcessor"]
+    
+    VLChatProcessor --> PrepInputs["Prepared Inputs\n(conversations, images, attention_mask)"]
+    PrepInputs -->|"prepare_inputs_embeds()"| MultiModalityCausalLM
+    
+    MultiModalityCausalLM --> InputEmbeds["Input Embeddings"]
+    InputEmbeds -->|"language_model.generate()"| OutputTokens["Output Tokens"]
+    OutputTokens -->|"tokenizer.decode()"| TextResponse["Text Response"]
+```
+
+Sources:
+- [README.md:119-187]()
+
+## Python API Example
+
+Here's a basic example of using DeepSeek-VL with the Python API:
+
+```python
+import torch
+from transformers import AutoModelForCausalLM
+from deepseek_vl.models import VLChatProcessor, MultiModalityCausalLM
+from deepseek_vl.utils.io import load_pil_images
+
+# Specify the model path
+model_path = "deepseek-ai/deepseek-vl-7b-chat"
+
+# Load the processor and tokenizer
+vl_chat_processor = VLChatProcessor.from_pretrained(model_path)
+tokenizer = vl_chat_processor.tokenizer
+
+# Load the model
+vl_gpt = AutoModelForCausalLM.from_pretrained(model_path, trust_remote_code=True)
+vl_gpt = vl_gpt.to(torch.bfloat16).cuda().eval()
+
+# Create a conversation with an image
+conversation = [
+    {
+        "role": "User",
+        "content": "<image_placeholder>Describe this image.",
+        "images": ["path/to/your/image.jpg"],
+    },
+    {"role": "Assistant", "content": ""},
+]
+
+# Load images and prepare for inputs
+pil_images = load_pil_images(conversation)
+prepare_inputs = vl_chat_processor(
+    conversations=conversation,
+    images=pil_images,
+    force_batchify=True
+).to(vl_gpt.device)
+
+# Run image encoder to get the image embeddings
+inputs_embeds = vl_gpt.prepare_inputs_embeds(**prepare_inputs)
+
+# Generate the response
+outputs = vl_gpt.language_model.generate(
+    inputs_embeds=inputs_embeds,
+    attention_mask=prepare_inputs.attention_mask,
+    pad_token_id=tokenizer.eos_token_id,
+    bos_token_id=tokenizer.bos_token_id,
+    eos_token_id=tokenizer.eos_token_id,
+    max_new_tokens=512,
+    do_sample=False,
+    use_cache=True
+)
+
+# Decode the response
+answer = tokenizer.decode(outputs[0].cpu().tolist(), skip_special_tokens=True)
+print(answer)
+```
+
+Sources:
+- [README.md:119-187]()
+
+## Conversation Format
+
+DeepSeek-VL uses a structured format for conversations with images:
+
+```mermaid
+flowchart TD
+    ConvFormat["Conversation Format"] --> ConvItem1["User Message"]
+    ConvFormat --> ConvItem2["Assistant Message"]
+    
+    ConvItem1 --> Role1["role: User"]
+    ConvItem1 --> Content1["content: Text with <image_placeholder>"]
+    ConvItem1 --> Images1["images: List of image paths"]
+    
+    ConvItem2 --> Role2["role: Assistant"]
+    ConvItem2 --> Content2["content: Response text (empty for input)"]
+```
+
+Example structure:
+```python
+conversation = [
+    {
+        "role": "User",
+        "content": "<image_placeholder>Describe this image.",
+        "images": ["path/to/image.jpg"],
+    },
+    {"role": "Assistant", "content": ""},  # Empty for input, filled after generation
+]
+```
+
+Sources:
+- [README.md:135-143]()
+
+## Command Line Interface
+
+For interactive chat via command line:
+
+```bash
+python cli_chat.py --model_path "deepseek-ai/deepseek-vl-7b-chat"
+
+# Or with a local model path
+python cli_chat.py --model_path "/path/to/local/model"
+```
+
+Sources:
+- [README.md:190-196]()
+
+## Gradio Web Interface
+
+To launch the web interface:
+
+```bash
+# First install gradio dependencies if not already done
+pip install -e .[gradio]
+
+# Then run the Gradio app
+python deepseek_vl/serve/app_deepseek.py
+```
+
+The Gradio interface provides a user-friendly way to interact with DeepSeek-VL, allowing you to upload images and chat with the model.
+
+Sources:
+- [README.md:198-204]()
+- [pyproject.toml:24-36]()
+- [requirements.txt:9-19]()
+
+## Next Steps
+
+- Explore detailed [Installation](#2.1) instructions
+- Try [Quick Usage Examples](#2.2)
+- Learn about the [Model Architecture](#1.1) and [Capabilities](#1.3)
+- Explore different [Interfaces](#4) for interacting with DeepSeek-VL
+
 ---
 
- 
-## Prerequisites and System Requirements
-
- DeepEP V2 is optimized for modern NVIDIA GPU architectures and high-performance interconnects.
-
- 
-### Hardware Requirements
-
- 
-| Component | Requirement | Purpose |
-|---|---|---|
-| GPU Architecture | Hopper (SM90) or compatible | Primary target for V2 kernels README.md65 |
-| Intra-node Interconnect | NVLink | High-bandwidth scale-up communication README.md71 |
-| Inter-node Network | RDMA (InfiniBand/RoCE) | Scale-out communication README.md72 |
-
- 
-### Software Requirements
-
- 
-| Component | Version | Notes |
-|---|---|---|
-| Python | 3.8+ | README.md66 |
-| CUDA Toolkit | 12.3+ | Required for SM90 PTX support README.md68 |
-| PyTorch | 2.10+ | README.md69 |
-| NCCL | 2.30.4+ | Required for the Gin backend README.md70 |
-
- **Sources:** [README.md63-72](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L63-L72)
-
- 
----
-
- 
-## Installation Workflow Overview
-
- The following diagram shows the V2 installation and setup workflow, mapping steps to specific code entities and environment variables.
-
- 
-### Installation and Setup Pipeline
-
- 
-```
-
-```
-
- **Sources:** [README.md74-108](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L74-L108) [setup.py13-127](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L13-L127)
-
- 
----
-
- 
-## Core Installation Steps
-
- 
-### 1. Install NCCL
-
- DeepEP V2 relies on NCCL for its Gin backend. It is recommended to install it via pip so the build system can automatically locate it using the `find_pkgs` utility [README.md74-80](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L74-L80) [setup.py95](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L95-L95)
-
- 
-```
-
-```
-
- 
-### 2. Environment Variables
-
- The build system and JIT compiler use several persistent environment variables that are captured during installation into `deep_ep/envs.py` [setup.py13-14](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L13-L14) [setup.py78-89](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L78-L89):
-
- 
- - `EP_NCCL_ROOT_DIR`: Path to the NCCL installation for linking.
- - `EP_JIT_CACHE_DIR`: Directory where JIT-compiled kernels are stored.
- - `EP_NUM_TOPK_IDX_BITS`: Bits of `topk_idx.dtype` (32 or 64) [setup.py164](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L164-L164)
- - `EP_NIC_NAME`: The name of the NIC to use for RDMA communication.
- 
- 
-### 3. Build and Install
-
- DeepEP uses a standard `setup.py` for installation. Note that V2 kernels are header-only and compiled at runtime via JIT, so the installation phase primarily builds the Python bindings (`csrc/python_api.cpp`) and backend wrappers [README.md3-13](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L3-L13) [setup.py100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L100-L100)
-
- 
-```
-
-```
-
- For a detailed step-by-step guide including building from source and NCCL verification, see [Installation and Build](https://deepwiki.com/deepseek-ai/DeepEP/2.1-installation-and-build).
-
- **Sources:** [README.md88-106](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L88-L106) [setup.py13-100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L13-L100) [install.sh1-12](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/install.sh#L1-L12)
-
- 
----
-
- 
-## First Steps with ElasticBuffer
-
- In V2, the `ElasticBuffer` is the primary entry point for all EP operations [README.md113-115](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L113-L115) It unifies high-throughput and low-latency modes and handles analytical resource allocation [README.md17-20](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L17-L20)
-
- 
-### Component Relationship
-
- 
-```
-
-```
-
- 
-### Basic Initialization
-
- Unlike V1, V2 calculates the optimal number of SMs analytically using `get_theoretical_num_sms`, eliminating the need for manual auto-tuning [README.md158-160](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L158-L160)
-
- 
-```
-
-```
-
- For minimal working examples and a guide on handle caching for inference, see [Quick Start Guide](https://deepwiki.com/deepseek-ai/DeepEP/2.2-quick-start-guide).
-
- **Sources:** [README.md117-163](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L117-L163) [setup.py79-85](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L79-L85)
-
- 
----
-
- 
-## Verification
-
- After installation, you should verify the setup using the provided test suite in `tests/elastic/` [README.md94-101](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L94-L101)
-
- 
-```
-
-```
-
- **Sources:** [README.md94-101](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L94-L101)

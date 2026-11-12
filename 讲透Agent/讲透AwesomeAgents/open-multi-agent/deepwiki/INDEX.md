@@ -1,0 +1,31 @@
+# DeepWiki 索引 — JackChen-me/open-multi-agent
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 158581 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Public API Reference](1.2-public-api-reference.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 Orchestrator](2.1-orchestrator.md)
+  - [2.2 Team and Messaging](2.2-team-and-messaging.md)
+  - [2.3 Task System](2.3-task-system.md)
+  - [2.4 Scheduler and AgentPool](2.4-scheduler-and-agentpool.md)
+- [3 Agent Layer](3-agent-layer.md)
+  - [3.1 Agent Class](3.1-agent-class.md)
+  - [3.2 AgentRunner and Conversation Loop](3.2-agentrunner-and-conversation-loop.md)
+- [4 LLM Adapters](4-llm-adapters.md)
+  - [4.1 LLMAdapter Interface](4.1-llmadapter-interface.md)
+  - [4.2 Anthropic and OpenAI Adapters](4.2-anthropic-and-openai-adapters.md)
+- [5 Tool System](5-tool-system.md)
+  - [5.1 Tool Framework: defineTool and ToolRegistry](5.1-tool-framework-definetool-and-toolregistry.md)
+  - [5.2 ToolExecutor](5.2-toolexecutor.md)
+  - [5.3 Built-in Tools](5.3-built-in-tools.md)
+- [6 Memory System](6-memory-system.md)
+  - [6.1 MemoryStore and InMemoryStore](6.1-memorystore-and-inmemorystore.md)
+  - [6.2 SharedMemory](6.2-sharedmemory.md)
+- [7 Usage Examples](7-usage-examples.md)
+  - [7.1 Single Agent and Streaming](7.1-single-agent-and-streaming.md)
+  - [7.2 Team Collaboration and Task Pipelines](7.2-team-collaboration-and-task-pipelines.md)
+  - [7.3 Multi-Model Teams and Custom Tools](7.3-multi-model-teams-and-custom-tools.md)
+- [8 Glossary](8-glossary.md)

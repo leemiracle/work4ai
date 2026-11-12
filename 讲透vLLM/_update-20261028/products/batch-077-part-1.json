@@ -1,0 +1,1627 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/model_executor/warmup/attention_warmup.py",
+   "type": "file",
+   "name": "attention_warmup.py",
+   "filePath": "vllm/model_executor/warmup/attention_warmup.py",
+   "summary": "混合 prefill+decode 注意力批预热（单入口函数）。",
+   "tags": [
+    "warmup",
+    "attention",
+    "mixed-batch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "type": "file",
+   "name": "deep_gemm_warmup.py",
+   "filePath": "vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "summary": "DeepGEMM 预热（516 行，18 函数）：按最优 M 值覆盖全部 kernel 配置——FP8 GEMM NT、分组 contiguous GEMM 与 fp8_fp4 MegaMoE 三条预热线。",
+   "tags": [
+    "warmup",
+    "deepgemm",
+    "fp8",
+    "moe"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "type": "file",
+   "name": "flashinfer_autotune_cache.py",
+   "filePath": "vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "summary": "FlashInfer autotune 缓存管理：根目录/逐 rank 文件名、v2 managed store 布局、hash 与跨 rank 同步写。",
+   "tags": [
+    "flashinfer",
+    "autotune",
+    "cache",
+    "sync"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "type": "file",
+   "name": "flashinfer_sparse_mla_warmup.py",
+   "filePath": "vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "summary": "FlashInfer sparse-MLA 预热：HiSparse 配置逐项 autotune、SM120 decode 路径、V2 runner 的 managed autotune 上下文与 DSv4 混合批预热。",
+   "tags": [
+    "flashinfer",
+    "sparse-mla",
+    "autotune",
+    "warmup"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "file",
+   "name": "jit_warmup.py",
+   "filePath": "vllm/model_executor/warmup/jit_warmup.py",
+   "summary": "JIT 预热框架（1146 行）：VllmJitKernel 抽象（dispatch+warmup key+编译）、AST 追踪的 dispatch 表达式求值器与 JitWarmupRegistry（runner 设置期收集并编译选中的 kernel）。",
+   "tags": [
+    "jit",
+    "warmup",
+    "framework",
+    "ast-tracing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/warmup/jit_warmup_cutedsl_helper.py",
+   "type": "file",
+   "name": "jit_warmup_cutedsl_helper.py",
+   "filePath": "vllm/model_executor/warmup/jit_warmup_cutedsl_helper.py",
+   "summary": "CuTe DSL 的 JIT kernel 拥有者：编译执行器由 warmup 与 runtime 共享。",
+   "tags": [
+    "cute-dsl",
+    "jit",
+    "helper"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/warmup/jit_warmup_tilelang_helper.py",
+   "type": "file",
+   "name": "jit_warmup_tilelang_helper.py",
+   "filePath": "vllm/model_executor/warmup/jit_warmup_tilelang_helper.py",
+   "summary": "TileLang 的 JIT kernel 拥有者：最小张量替身（strides/TIR 缓存键）与声明式启动规格复用。",
+   "tags": [
+    "tilelang",
+    "jit",
+    "helper"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "type": "file",
+   "name": "jit_warmup_triton_helper.py",
+   "filePath": "vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "summary": "Triton 的 JIT 预热助手（801 行）：TritonWarmupTensor（仅编译的元数据张量）、key 派生/标量特化、装饰器式 dispatcher 注册与共享编译线程池。",
+   "tags": [
+    "triton",
+    "jit",
+    "warmup",
+    "dispatcher"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/warmup/jit_warmup.py:WarmupIntRange",
+   "type": "class",
+   "name": "WarmupIntRange",
+   "filePath": "vllm/model_executor/warmup/jit_warmup.py",
+   "summary": "带范围语义的整数 warmup 值展开。",
+   "tags": [
+    "warmup",
+    "range",
+    "expansion"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    57,
+    63
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/warmup/jit_warmup.py:WarmupChoices",
+   "type": "class",
+   "name": "WarmupChoices",
+   "filePath": "vllm/model_executor/warmup/jit_warmup.py",
+   "summary": "显式有限集合的 warmup 值展开。",
+   "tags": [
+    "warmup",
+    "choices",
+    "expansion"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    67,
+    73
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/warmup/jit_warmup.py:_DispatchExprEvaluator",
+   "type": "class",
+   "name": "_DispatchExprEvaluator",
+   "filePath": "vllm/model_executor/warmup/jit_warmup.py",
+   "summary": "AST 追踪 dispatch 表达式的求值器（16 方法，受限子集）。",
+   "tags": [
+    "ast",
+    "dispatch",
+    "evaluator"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    272,
+    395
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/warmup/jit_warmup.py:VllmJitKernel",
+   "type": "class",
+   "name": "VllmJitKernel",
+   "filePath": "vllm/model_executor/warmup/jit_warmup.py",
+   "summary": "JIT kernel 包装抽象（11 方法）：dispatch、warmup key 与编译的所有权。",
+   "tags": [
+    "jit",
+    "kernel",
+    "abc"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    651,
+    977
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/warmup/jit_warmup.py:JitWarmupRegistry",
+   "type": "class",
+   "name": "JitWarmupRegistry",
+   "filePath": "vllm/model_executor/warmup/jit_warmup.py",
+   "summary": "runner 设置期收集并编译选中 JIT kernel 的注册表（7 方法）。",
+   "tags": [
+    "registry",
+    "jit",
+    "warmup"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1008,
+    1145
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/warmup/jit_warmup_cutedsl_helper.py:VllmCuTeDSLJitKernel",
+   "type": "class",
+   "name": "VllmCuTeDSLJitKernel",
+   "filePath": "vllm/model_executor/warmup/jit_warmup_cutedsl_helper.py",
+   "summary": "CuTe DSL 拥有者：编译执行器 warmup/runtime 共享（3 方法）。",
+   "tags": [
+    "cute-dsl",
+    "jit-kernel",
+    "shared-executor"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    49,
+    79
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/warmup/jit_warmup_tilelang_helper.py:TileLangWarmupTensor",
+   "type": "class",
+   "name": "TileLangWarmupTensor",
+   "filePath": "vllm/model_executor/warmup/jit_warmup_tilelang_helper.py",
+   "summary": "TileLang compile() 接受的最小张量替身（缓存键/TIR）。",
+   "tags": [
+    "tilelang",
+    "warmup-tensor",
+    "minimal"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    45,
+    75
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/warmup/jit_warmup_tilelang_helper.py:VllmTileLangJitKernel",
+   "type": "class",
+   "name": "VllmTileLangJitKernel",
+   "filePath": "vllm/model_executor/warmup/jit_warmup_tilelang_helper.py",
+   "summary": "TileLang 拥有者：运行时启动规格复用（3 方法）。",
+   "tags": [
+    "tilelang",
+    "jit-kernel",
+    "launcher"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    114,
+    141
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/warmup/jit_warmup_triton_helper.py:TritonWarmupTensor",
+   "type": "class",
+   "name": "TritonWarmupTensor",
+   "filePath": "vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "summary": "仅编译用的张量元数据（strides=None 表紧凑行主序）。",
+   "tags": [
+    "triton",
+    "warmup-tensor",
+    "metadata"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    172,
+    217
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/warmup/jit_warmup_triton_helper.py:VllmTritonJitKernel",
+   "type": "class",
+   "name": "VllmTritonJitKernel",
+   "filePath": "vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "summary": "Triton 拥有者（7 方法）：key 派生/标量特化/编译池共享。",
+   "tags": [
+    "triton",
+    "jit-kernel",
+    "specialization"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    245,
+    359
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/warmup/jit_warmup_triton_helper.py:TritonJitKey",
+   "type": "class",
+   "name": "TritonJitKey",
+   "filePath": "vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "summary": "一个 Triton JIT 特化的进程内身份。",
+   "tags": [
+    "triton",
+    "identity",
+    "key"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    363,
+    369
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/warmup/jit_warmup_triton_helper.py:TritonCompileKey",
+   "type": "class",
+   "name": "TritonCompileKey",
+   "filePath": "vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "summary": "带单个不比较回放输入的 Triton 编译键。",
+   "tags": [
+    "triton",
+    "compile-key",
+    "replay"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    373,
+    377
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/warmup/jit_warmup_triton_helper.py:_DecoratedTritonJitKernel",
+   "type": "class",
+   "name": "_DecoratedTritonJitKernel",
+   "filePath": "vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "summary": "装饰器注册的 Triton kernel（5 方法）。",
+   "tags": [
+    "triton",
+    "decorated",
+    "registration"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    556,
+    679
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/warmup/jit_warmup_triton_helper.py:TritonKernelDispatcher",
+   "type": "class",
+   "name": "TritonKernelDispatcher",
+   "filePath": "vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "summary": "带编译期 warmup 的可调用 Triton launcher 协议。",
+   "tags": [
+    "triton",
+    "dispatcher",
+    "protocol"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    682,
+    695
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/attention_warmup.py:mixed_batch_attention_warmup",
+   "type": "function",
+   "name": "mixed_batch_attention_warmup",
+   "filePath": "vllm/model_executor/warmup/attention_warmup.py",
+   "summary": "跑一个混合 prefill+decode 批预热两条注意力路径。",
+   "tags": [
+    "warmup",
+    "mixed-batch",
+    "attention"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    16,
+    42
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/deep_gemm_warmup.py:_generate_optimal_warmup_m_values",
+   "type": "function",
+   "name": "_generate_optimal_warmup_m_values",
+   "filePath": "vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "summary": "生成覆盖全部 DeepGEMM kernel 配置的 M 值。",
+   "tags": [
+    "deepgemm",
+    "m-values",
+    "coverage"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    48,
+    90
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/deep_gemm_warmup.py:_get_fp8_gemm_nt_m_values",
+   "type": "function",
+   "name": "_get_fp8_gemm_nt_m_values",
+   "filePath": "vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "summary": "按权重张量取 FP8 GEMM NT 的预热 M 值。",
+   "tags": [
+    "deepgemm",
+    "fp8",
+    "m-values"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    178,
+    193
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/deep_gemm_warmup.py:_deepgemm_fp8_gemm_nt_warmup",
+   "type": "function",
+   "name": "_deepgemm_fp8_gemm_nt_warmup",
+   "filePath": "vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "summary": "FP8 GEMM NT 预热实现。",
+   "tags": [
+    "deepgemm",
+    "fp8",
+    "gemm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    196,
+    225
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/deep_gemm_warmup.py:_deepgemm_grouped_fp8_gemm_nt_contiguous_warmup",
+   "type": "function",
+   "name": "_deepgemm_grouped_fp8_gemm_nt_contiguous_warmup",
+   "filePath": "vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "summary": "分组 contiguous FP8 GEMM 预热。",
+   "tags": [
+    "deepgemm",
+    "grouped",
+    "gemm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    288,
+    333
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/deep_gemm_warmup.py:_get_fp8_fp4_mega_moe_m_values",
+   "type": "function",
+   "name": "_get_fp8_fp4_mega_moe_m_values",
+   "filePath": "vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "summary": "MegaMoE 配置的最大 M 值集合。",
+   "tags": [
+    "deepgemm",
+    "megamoe",
+    "m-values"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    350,
+    374
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/deep_gemm_warmup.py:_deepgemm_fp8_fp4_mega_moe_warmup",
+   "type": "function",
+   "name": "_deepgemm_fp8_fp4_mega_moe_warmup",
+   "filePath": "vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "summary": "fp8_fp4 MegaMoE 预热实现。",
+   "tags": [
+    "deepgemm",
+    "megamoe",
+    "warmup"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    377,
+    429
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/deep_gemm_warmup.py:deep_gemm_warmup",
+   "type": "function",
+   "name": "deep_gemm_warmup",
+   "filePath": "vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "summary": "DeepGEMM 预热总入口。",
+   "tags": [
+    "deepgemm",
+    "entry-point",
+    "warmup"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    501,
+    515
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/flashinfer_autotune_cache.py:flashinfer_autotune_cache_hash",
+   "type": "function",
+   "name": "flashinfer_autotune_cache_hash",
+   "filePath": "vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "summary": "autotune 缓存配置 hash。",
+   "tags": [
+    "flashinfer",
+    "hash",
+    "cache"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    32,
+    38
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/flashinfer_autotune_cache.py:flashinfer_autotune_root",
+   "type": "function",
+   "name": "flashinfer_autotune_root",
+   "filePath": "vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "summary": "autotune 缓存根目录（不带 runner 名）。",
+   "tags": [
+    "flashinfer",
+    "root",
+    "cache"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    41,
+    54
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/flashinfer_autotune_cache.py:use_flashinfer_autotune_v2",
+   "type": "function",
+   "name": "use_flashinfer_autotune_v2",
+   "filePath": "vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "summary": "是否用 v2 managed autotune store。",
+   "tags": [
+    "flashinfer",
+    "v2",
+    "predicate"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    79,
+    111
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/flashinfer_autotune_cache.py:sync_flashinfer_autotune_cache",
+   "type": "function",
+   "name": "sync_flashinfer_autotune_cache",
+   "filePath": "vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "summary": "跨 rank 同步 autotune 缓存。",
+   "tags": [
+    "flashinfer",
+    "sync",
+    "cross-rank"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    126,
+    161
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/flashinfer_autotune_cache.py:write_flashinfer_autotune_cache",
+   "type": "function",
+   "name": "write_flashinfer_autotune_cache",
+   "filePath": "vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "summary": "写出 autotune 缓存文件。",
+   "tags": [
+    "flashinfer",
+    "write",
+    "cache"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    164,
+    176
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py:autotune_hisparse_flashinfer_attention",
+   "type": "function",
+   "name": "autotune_hisparse_flashinfer_attention",
+   "filePath": "vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "summary": "逐项 autotune HiSparse FlashInfer sparse-MLA 配置。",
+   "tags": [
+    "hisparse",
+    "autotune",
+    "sparse-mla"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    53,
+    79
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py:_run_flashinfer_sparse_mla_decode_autotune",
+   "type": "function",
+   "name": "_run_flashinfer_sparse_mla_decode_autotune",
+   "filePath": "vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "summary": "autotune FlashInfer SM120 sparse-MLA decode 路径。",
+   "tags": [
+    "sm120",
+    "autotune",
+    "decode"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    122,
+    231
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py:_run_sparse_mla_decode_autotune_v2",
+   "type": "function",
+   "name": "_run_sparse_mla_decode_autotune_v2",
+   "filePath": "vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "summary": "V2 runner：managed autotune 上下文跑每 rank 预热。",
+   "tags": [
+    "v2",
+    "managed-autotune",
+    "per-rank"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    234,
+    283
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py:flashinfer_sparse_mla_decode_autotune_warmup",
+   "type": "function",
+   "name": "flashinfer_sparse_mla_decode_autotune_warmup",
+   "filePath": "vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "summary": "通用 FlashInfer sparse MLA decode autotune 预热入口。",
+   "tags": [
+    "autotune",
+    "entry-point",
+    "sparse-mla"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    304,
+    314
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py:deepseek_v4_sparse_mla_attention_warmup",
+   "type": "function",
+   "name": "deepseek_v4_sparse_mla_attention_warmup",
+   "filePath": "vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "summary": "DSv4 sparse-MLA 混合 prefill+decode 预热。",
+   "tags": [
+    "deepseek",
+    "sparse-mla",
+    "mixed-batch"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    317,
+    350
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/jit_warmup.py:kernel_launcher",
+   "type": "function",
+   "name": "kernel_launcher",
+   "filePath": "vllm/model_executor/warmup/jit_warmup.py",
+   "summary": "把声明式启动规格委托给后端 owner。",
+   "tags": [
+    "launcher",
+    "delegate",
+    "declarative"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    36,
+    53
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/jit_warmup.py:_expand_warmup_values",
+   "type": "function",
+   "name": "_expand_warmup_values",
+   "filePath": "vllm/model_executor/warmup/jit_warmup.py",
+   "summary": "展开一个 warmup 参数的全部取值。",
+   "tags": [
+    "warmup",
+    "expansion",
+    "values"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    105,
+    125
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/jit_warmup.py:zip_inputs",
+   "type": "function",
+   "name": "zip_inputs",
+   "filePath": "vllm/model_executor/warmup/jit_warmup.py",
+   "summary": "按行同步展开的 dispatch 输入编组。",
+   "tags": [
+    "inputs",
+    "zip",
+    "lockstep"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    128,
+    148
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/jit_warmup.py:_trace_compile_key_dispatch",
+   "type": "function",
+   "name": "_trace_compile_key_dispatch",
+   "filePath": "vllm/model_executor/warmup/jit_warmup.py",
+   "summary": "AST 追踪编译 key 的 dispatch 表达式。",
+   "tags": [
+    "ast",
+    "trace",
+    "dispatch"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    561,
+    624
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/jit_warmup.py:_validate_dispatch_expr",
+   "type": "function",
+   "name": "_validate_dispatch_expr",
+   "filePath": "vllm/model_executor/warmup/jit_warmup.py",
+   "summary": "编译追踪代码前强制 dispatch AST 受限子集。",
+   "tags": [
+    "ast",
+    "validation",
+    "subset"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    435,
+    471
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/jit_warmup_triton_helper.py:triton_warmup_inputs",
+   "type": "function",
+   "name": "triton_warmup_inputs",
+   "filePath": "vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "summary": "从 Triton 原生位置参数构建 launcher 输入。",
+   "tags": [
+    "triton",
+    "inputs",
+    "launcher"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    86,
+    132
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/jit_warmup_triton_helper.py:triton_scalar_specialization_rep",
+   "type": "function",
+   "name": "triton_scalar_specialization_rep",
+   "filePath": "vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "summary": "与 Triton 默认特化一致的整数表示。",
+   "tags": [
+    "triton",
+    "scalar",
+    "specialization"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    135,
+    168
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/jit_warmup_triton_helper.py:compile_triton_warmup",
+   "type": "function",
+   "name": "compile_triton_warmup",
+   "filePath": "vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "summary": "全部可用 warmup kernel 共享一个编译线程池。",
+   "tags": [
+    "triton",
+    "compile",
+    "thread-pool"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    225,
+    242
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/jit_warmup_triton_helper.py:_triton_key_deriver",
+   "type": "function",
+   "name": "_triton_key_deriver",
+   "filePath": "vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "summary": "为 kernel+设备准备一次 Triton key 派生。",
+   "tags": [
+    "triton",
+    "key-deriver",
+    "once"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    380,
+    460
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/jit_warmup_triton_helper.py:triton_kernel_dispatcher_with_warmup",
+   "type": "function",
+   "name": "triton_kernel_dispatcher_with_warmup",
+   "filePath": "vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "summary": "把 dispatch 函数或原生 Triton kernel 装饰为带 warmup 的 dispatcher。",
+   "tags": [
+    "triton",
+    "decorator",
+    "dispatcher"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    714,
+    730
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/model_executor/warmup/attention_warmup.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/attention_warmup.py",
+   "target": "file:vllm/v1/worker/gpu/warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/deep_gemm_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/deep_gemm_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/triton_deep_gemm_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "file:vllm/models/deepseek_v4/nvidia/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "file:vllm/tracing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "file:vllm/utils/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "file:vllm/utils/platform_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "target": "file:vllm/utils/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "target": "file:vllm/utils/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "target": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "target": "file:vllm/utils/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "target": "file:vllm/v1/attention/backends/mla/flashinfer_mla_sparse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "target": "file:vllm/v1/worker/gpu/warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_cutedsl_helper.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_tilelang_helper.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup.py:WarmupIntRange",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup.py:WarmupChoices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup.py:_DispatchExprEvaluator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup.py:VllmJitKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup.py:JitWarmupRegistry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "target": "function:vllm/model_executor/warmup/jit_warmup.py:kernel_launcher",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "target": "function:vllm/model_executor/warmup/jit_warmup.py:_expand_warmup_values",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "target": "function:vllm/model_executor/warmup/jit_warmup.py:zip_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "target": "function:vllm/model_executor/warmup/jit_warmup.py:_trace_compile_key_dispatch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "target": "function:vllm/model_executor/warmup/jit_warmup.py:_validate_dispatch_expr",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_cutedsl_helper.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup_cutedsl_helper.py:VllmCuTeDSLJitKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_tilelang_helper.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup_tilelang_helper.py:TileLangWarmupTensor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_tilelang_helper.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup_tilelang_helper.py:VllmTileLangJitKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup_triton_helper.py:TritonWarmupTensor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup_triton_helper.py:VllmTritonJitKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup_triton_helper.py:TritonJitKey",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup_triton_helper.py:TritonCompileKey",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup_triton_helper.py:_DecoratedTritonJitKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup_triton_helper.py:TritonKernelDispatcher",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "function:vllm/model_executor/warmup/jit_warmup_triton_helper.py:triton_warmup_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "function:vllm/model_executor/warmup/jit_warmup_triton_helper.py:triton_scalar_specialization_rep",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "function:vllm/model_executor/warmup/jit_warmup_triton_helper.py:compile_triton_warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "function:vllm/model_executor/warmup/jit_warmup_triton_helper.py:_triton_key_deriver",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "function:vllm/model_executor/warmup/jit_warmup_triton_helper.py:triton_kernel_dispatcher_with_warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/attention_warmup.py",
+   "target": "function:vllm/model_executor/warmup/attention_warmup.py:mixed_batch_attention_warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "function:vllm/model_executor/warmup/deep_gemm_warmup.py:_generate_optimal_warmup_m_values",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "function:vllm/model_executor/warmup/deep_gemm_warmup.py:_get_fp8_gemm_nt_m_values",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "function:vllm/model_executor/warmup/deep_gemm_warmup.py:_deepgemm_fp8_gemm_nt_warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "function:vllm/model_executor/warmup/deep_gemm_warmup.py:_deepgemm_grouped_fp8_gemm_nt_contiguous_warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "function:vllm/model_executor/warmup/deep_gemm_warmup.py:_get_fp8_fp4_mega_moe_m_values",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "function:vllm/model_executor/warmup/deep_gemm_warmup.py:_deepgemm_fp8_fp4_mega_moe_warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "function:vllm/model_executor/warmup/deep_gemm_warmup.py:deep_gemm_warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "target": "function:vllm/model_executor/warmup/flashinfer_autotune_cache.py:flashinfer_autotune_cache_hash",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "target": "function:vllm/model_executor/warmup/flashinfer_autotune_cache.py:flashinfer_autotune_root",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "target": "function:vllm/model_executor/warmup/flashinfer_autotune_cache.py:use_flashinfer_autotune_v2",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "target": "function:vllm/model_executor/warmup/flashinfer_autotune_cache.py:sync_flashinfer_autotune_cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "target": "function:vllm/model_executor/warmup/flashinfer_autotune_cache.py:write_flashinfer_autotune_cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "target": "function:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py:autotune_hisparse_flashinfer_attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "target": "function:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py:_run_flashinfer_sparse_mla_decode_autotune",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "target": "function:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py:_run_sparse_mla_decode_autotune_v2",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "target": "function:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py:flashinfer_sparse_mla_decode_autotune_warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "target": "function:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py:deepseek_v4_sparse_mla_attention_warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup.py:WarmupIntRange",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup.py:WarmupChoices",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup.py:VllmJitKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup.py:JitWarmupRegistry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "target": "function:vllm/model_executor/warmup/jit_warmup.py:kernel_launcher",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "target": "function:vllm/model_executor/warmup/jit_warmup.py:zip_inputs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_cutedsl_helper.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup_cutedsl_helper.py:VllmCuTeDSLJitKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_tilelang_helper.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup_tilelang_helper.py:TileLangWarmupTensor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_tilelang_helper.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup_tilelang_helper.py:VllmTileLangJitKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup_triton_helper.py:TritonWarmupTensor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup_triton_helper.py:VllmTritonJitKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup_triton_helper.py:TritonJitKey",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup_triton_helper.py:TritonCompileKey",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "class:vllm/model_executor/warmup/jit_warmup_triton_helper.py:TritonKernelDispatcher",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "function:vllm/model_executor/warmup/jit_warmup_triton_helper.py:triton_warmup_inputs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "function:vllm/model_executor/warmup/jit_warmup_triton_helper.py:triton_scalar_specialization_rep",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "function:vllm/model_executor/warmup/jit_warmup_triton_helper.py:compile_triton_warmup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "target": "function:vllm/model_executor/warmup/jit_warmup_triton_helper.py:triton_kernel_dispatcher_with_warmup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/attention_warmup.py",
+   "target": "function:vllm/model_executor/warmup/attention_warmup.py:mixed_batch_attention_warmup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "target": "function:vllm/model_executor/warmup/deep_gemm_warmup.py:deep_gemm_warmup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "target": "function:vllm/model_executor/warmup/flashinfer_autotune_cache.py:flashinfer_autotune_cache_hash",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "target": "function:vllm/model_executor/warmup/flashinfer_autotune_cache.py:flashinfer_autotune_root",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "target": "function:vllm/model_executor/warmup/flashinfer_autotune_cache.py:use_flashinfer_autotune_v2",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "target": "function:vllm/model_executor/warmup/flashinfer_autotune_cache.py:sync_flashinfer_autotune_cache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "target": "function:vllm/model_executor/warmup/flashinfer_autotune_cache.py:write_flashinfer_autotune_cache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "target": "function:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py:autotune_hisparse_flashinfer_attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "target": "function:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py:flashinfer_sparse_mla_decode_autotune_warmup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "target": "function:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py:deepseek_v4_sparse_mla_attention_warmup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/warmup/jit_warmup_cutedsl_helper.py:VllmCuTeDSLJitKernel",
+   "target": "class:vllm/model_executor/warmup/jit_warmup.py:VllmJitKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/warmup/jit_warmup_tilelang_helper.py:VllmTileLangJitKernel",
+   "target": "class:vllm/model_executor/warmup/jit_warmup.py:VllmJitKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/warmup/jit_warmup_triton_helper.py:VllmTritonJitKernel",
+   "target": "class:vllm/model_executor/warmup/jit_warmup.py:VllmJitKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/warmup/jit_warmup.py:JitWarmupRegistry",
+   "target": "class:vllm/model_executor/warmup/jit_warmup.py:VllmJitKernel",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/warmup/jit_warmup.py:kernel_launcher",
+   "target": "class:vllm/model_executor/warmup/jit_warmup.py:VllmJitKernel",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

@@ -1,0 +1,30 @@
+# DeepWiki 索引 — microsoft/Bringing-Old-Photos-Back-to-Life
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 266381 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation and Setup](1.1-installation-and-setup.md)
+  - [1.2 System Architecture](1.2-system-architecture.md)
+- [2 Restoration Pipeline](2-restoration-pipeline.md)
+  - [2.1 Global Restoration](2.1-global-restoration.md)
+  - [2.2 Face Detection](2.2-face-detection.md)
+  - [2.3 Face Enhancement](2.3-face-enhancement.md)
+  - [2.4 Face Blending](2.4-face-blending.md)
+- [3 Model Architecture](3-model-architecture.md)
+  - [3.1 Feature Mapping Models](3.1-feature-mapping-models.md)
+  - [3.2 Non-Local Operations](3.2-non-local-operations.md)
+  - [3.3 Generator and Discriminator Networks](3.3-generator-and-discriminator-networks.md)
+- [4 Training](4-training.md)
+  - [4.1 Domain Training](4.1-domain-training.md)
+  - [4.2 Mapping Network Training](4.2-mapping-network-training.md)
+  - [4.3 Dataset Preparation](4.3-dataset-preparation.md)
+- [5 Configuration](5-configuration.md)
+  - [5.1 Training Options](5.1-training-options.md)
+  - [5.2 Testing Options](5.2-testing-options.md)
+  - [5.3 Face Enhancement Options](5.3-face-enhancement-options.md)
+- [6 Usage Guide](6-usage-guide.md)
+  - [6.1 Command Line Interface](6.1-command-line-interface.md)
+  - [6.2 High-Resolution Processing](6.2-high-resolution-processing.md)
+  - [6.3 Scratch Detection and Removal](6.3-scratch-detection-and-removal.md)
+  - [6.4 Example Gallery](6.4-example-gallery.md)

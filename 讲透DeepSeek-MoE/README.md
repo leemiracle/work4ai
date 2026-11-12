@@ -7,7 +7,7 @@
 | 产物 | 规模 / 说明 |
 |---|---|
 | DeepWiki | 16 页（deepwiki/） |
-| 论文精读 | 无独立篇：《DeepSeekMoE》（arXiv:2401.06066）已在 [讲透DeepSeek-Coder/paper/](../讲透DeepSeek-Coder/paper/PAPER-DEEPREAD.md) 三合一篇中完整覆盖 |
+| 论文精读 | ✅ [paper/PAPER-DEEPREAD.md](paper/PAPER-DEEPREAD.md)（2026-11-03 新增，arXiv:2401.06066 独立精读：细粒度分割/共享隔离公式主线+finetune.py 勘误；与 Coder 三合一篇互补） |
 | 知识图谱 | 19 节点 / 20 边 / 3 层 / 8 步导览（发布仓，源码薄，重点在论文） |
 
 ## 论文精读要点（摘自 Coder 三合一篇）

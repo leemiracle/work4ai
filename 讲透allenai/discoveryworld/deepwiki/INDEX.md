@@ -1,0 +1,31 @@
+# DeepWiki 索引 — allenai/discoveryworld
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 245570 字符
+
+- [1 Overview](1-overview.md)
+- [2 Core API & Environment](2-core-api-environment.md)
+  - [2.1 API Reference](2.1-api-reference.md)
+  - [2.2 Observation & Action Systems](2.2-observation-action-systems.md)
+  - [2.3 Scenarios & Tasks](2.3-scenarios-tasks.md)
+- [3 Agent Development](3-agent-development.md)
+  - [3.1 Getting Started with Agents](3.1-getting-started-with-agents.md)
+  - [3.2 LLM Integration Patterns](3.2-llm-integration-patterns.md)
+- [4 Built-in Agents](4-built-in-agents.md)
+  - [4.1 Random Agent](4.1-random-agent.md)
+  - [4.2 Hypothesizer Agent](4.2-hypothesizer-agent.md)
+- [5 ReComA Framework](5-recoma-framework.md)
+  - [5.1 ReComA Setup & Configuration](5.1-recoma-setup-configuration.md)
+  - [5.2 Language Model Configurations](5.2-language-model-configurations.md)
+  - [5.3 React Agent Configuration](5.3-react-agent-configuration.md)
+  - [5.4 Plan & Execute Agent Configuration](5.4-plan-execute-agent-configuration.md)
+- [6 User Studies & Human Evaluation](6-user-studies-human-evaluation.md)
+  - [6.1 Running User Studies](6.1-running-user-studies.md)
+  - [6.2 Data Collection & Analysis](6.2-data-collection-analysis.md)
+- [7 Asset Management & Distribution](7-asset-management-distribution.md)
+  - [7.1 Asset Pipeline](7.1-asset-pipeline.md)
+  - [7.2 Package Distribution](7.2-package-distribution.md)
+- [8 Installation & Setup](8-installation-setup.md)
+  - [8.1 System Requirements](8.1-system-requirements.md)
+  - [8.2 Development Environment](8.2-development-environment.md)
+- [9 Legal & Licensing](9-legal-licensing.md)

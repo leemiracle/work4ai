@@ -1,0 +1,40 @@
+# DeepWiki 索引 — openai/apps-sdk-ui
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 30 页 · 全文 450466 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Repository Structure](1.1-repository-structure.md)
+- [2 Getting Started](2-getting-started.md)
+- [3 Storybook Configuration](3-storybook-configuration.md)
+  - [3.1 Main Configuration (main.ts)](3.1-main-configuration-main.ts.md)
+  - [3.2 Manager Configuration (manager.ts)](3.2-manager-configuration-manager.ts.md)
+  - [3.3 Manager UI Customization](3.3-manager-ui-customization.md)
+  - [3.4 Storybook App Integration](3.4-storybook-app-integration.md)
+- [4 Custom Addons](4-custom-addons.md)
+  - [4.1 Theme Addon](4.1-theme-addon.md)
+  - [4.2 Back to Docs Addon](4.2-back-to-docs-addon.md)
+  - [4.3 Title Addon](4.3-title-addon.md)
+  - [4.4 Toggle Addons Addon](4.4-toggle-addons-addon.md)
+- [5 Design System](5-design-system.md)
+  - [5.1 Design Tokens](5.1-design-tokens.md)
+  - [5.2 Theme System](5.2-theme-system.md)
+- [6 Documentation Components](6-documentation-components.md)
+  - [6.1 Card Components](6.1-card-components.md)
+  - [6.2 Colors Component](6.2-colors-component.md)
+  - [6.3 Design Tokens Component](6.3-design-tokens-component.md)
+  - [6.4 Icon Gallery Component](6.4-icon-gallery-component.md)
+  - [6.5 Table Components](6.5-table-components.md)
+  - [6.6 Hero Component](6.6-hero-component.md)
+  - [6.7 Navigation Components](6.7-navigation-components.md)
+  - [6.8 Utility Components](6.8-utility-components.md)
+- [7 CI/CD & Deployment](7-ci-cd-deployment.md)
+  - [7.1 GitHub Actions Workflow](7.1-github-actions-workflow.md)
+- [8 Development Tools & Configuration](8-development-tools-configuration.md)
+  - [8.1 Version Control Configuration](8.1-version-control-configuration.md)
+  - [8.2 Code Formatting Configuration](8.2-code-formatting-configuration.md)
+
+## 附：结构清单外的页
+- [Theme Definitions](x1-theme-definitions.md)
+- [Theme Storage System](x2-theme-storage-system.md)
+- [Theme Tool Component](x3-theme-tool-component.md)

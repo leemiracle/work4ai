@@ -1,0 +1,1337 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/watermarking/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/v1/watermarking/__init__.py",
+   "summary": "水印子系统包入口（barrel）：导出 Gumbel/DualKey 水印器与检测器、PRF 族、工厂与 key 派生等全部公共符号。",
+   "tags": [
+    "barrel",
+    "watermarking",
+    "package-init"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/watermarking/detector.py",
+   "type": "file",
+   "name": "detector.py",
+   "filePath": "vllm/v1/watermarking/detector.py",
+   "summary": "水印检测抽象基类：把 token 序列切成 context 窗口→逐 token 打分→聚合→p-value 统计判定是否含水印。",
+   "tags": [
+    "watermarking",
+    "detection",
+    "statistics",
+    "abstract-base"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/watermarking/detector.py:WatermarkDetector",
+   "type": "class",
+   "name": "WatermarkDetector",
+   "filePath": "vllm/v1/watermarking/detector.py",
+   "lineRange": [
+    21,
+    93
+   ],
+   "summary": "水印检测器抽象基类：context 窗口准备（含去重）、逐 token 打分、聚合与 p-value 阈值判定。",
+   "tags": [
+    "abstract-base",
+    "detection",
+    "p-value"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/watermarking/factory.py",
+   "type": "file",
+   "name": "factory.py",
+   "filePath": "vllm/v1/watermarking/factory.py",
+   "summary": "水印器工厂：按 WatermarkConfig.algorithm 分发 Gumbel / DualKeyGumbel 水印器。",
+   "tags": [
+    "factory",
+    "watermarking",
+    "dispatch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/watermarking/factory.py:create_watermarker",
+   "type": "function",
+   "name": "create_watermarker",
+   "filePath": "vllm/v1/watermarking/factory.py",
+   "lineRange": [
+    12,
+    22
+   ],
+   "summary": "按 algorithm（gumbel/dual_key_gumbel）构造水印器实例。",
+   "tags": [
+    "factory",
+    "dispatch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/watermarking/gpu_sampler.py",
+   "type": "file",
+   "name": "gpu_sampler.py",
+   "filePath": "vllm/v1/watermarking/gpu_sampler.py",
+   "summary": "GPU 批量水印采样器（继承 v1 Sampler）：逐请求水印开关（UVA backed）、重复 context 掩码与随机/贪心分流。",
+   "tags": [
+    "gpu-sampler",
+    "watermarking",
+    "sampling",
+    "uva"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/watermarking/gpu_sampler.py:GPUWatermarkSampler",
+   "type": "class",
+   "name": "GPUWatermarkSampler",
+   "filePath": "vllm/v1/watermarking/gpu_sampler.py",
+   "lineRange": [
+    20,
+    208
+   ],
+   "summary": "GPU 批量水印采样器：逐请求水印开关管理（UVA tensor）、重复 context 掩码与 watermarker 随机采样集成。",
+   "tags": [
+    "gpu-sampler",
+    "watermarking",
+    "batch-sampling"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/watermarking/gumbel.py",
+   "type": "file",
+   "name": "gumbel.py",
+   "filePath": "vllm/v1/watermarking/gumbel.py",
+   "summary": "Gumbel-max 水印生成与检测原语：Gumbel/DualKey（支持 spec-decode 拒绝采样）水印器与带加权早期融合的检测器。",
+   "tags": [
+    "gumbel",
+    "watermarking",
+    "generation",
+    "detection",
+    "dual-key"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/watermarking/gumbel.py:GumbelWatermarker",
+   "type": "class",
+   "name": "GumbelWatermarker",
+   "filePath": "vllm/v1/watermarking/gumbel.py",
+   "lineRange": [
+    43,
+    139
+   ],
+   "summary": "Gumbel-max 水印器：以 PRF(context) 生成 Gumbel 偏置引导采样留下水印。",
+   "tags": [
+    "gumbel",
+    "watermarking",
+    "generation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/watermarking/gumbel.py:DualKeyGumbelWatermarker",
+   "type": "class",
+   "name": "DualKeyGumbelWatermarker",
+   "filePath": "vllm/v1/watermarking/gumbel.py",
+   "lineRange": [
+    142,
+    218
+   ],
+   "summary": "双密钥 Gumbel 水印器：额外 alpha 混合密钥，兼容标准投机解码拒绝采样。",
+   "tags": [
+    "dual-key",
+    "gumbel",
+    "spec-decode"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/watermarking/gumbel.py:GumbelWatermarkDetector",
+   "type": "class",
+   "name": "GumbelWatermarkDetector",
+   "filePath": "vllm/v1/watermarking/gumbel.py",
+   "lineRange": [
+    221,
+    245
+   ],
+   "summary": "Gumbel 水印检测器（one-proportion z 检验）。",
+   "tags": [
+    "detection",
+    "statistics"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/watermarking/gumbel.py:DualKeyGumbelWatermarkDetector",
+   "type": "class",
+   "name": "DualKeyGumbelWatermarkDetector",
+   "filePath": "vllm/v1/watermarking/gumbel.py",
+   "lineRange": [
+    248,
+    300
+   ],
+   "summary": "双密钥水印检测器：加权早期融合两密钥证据。",
+   "tags": [
+    "dual-key",
+    "detection",
+    "early-fusion"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/watermarking/gumbel.py:_gamma_survival_integer_shape",
+   "type": "function",
+   "name": "_gamma_survival_integer_shape",
+   "filePath": "vllm/v1/watermarking/gumbel.py",
+   "lineRange": [
+    25,
+    40
+   ],
+   "summary": "整型 shape Gamma(shape,1) 变量的生存函数（检测统计量用）。",
+   "tags": [
+    "statistics",
+    "survival-function"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/watermarking/prfs/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/v1/watermarking/prfs/__init__.py",
+   "summary": "PRF（伪随机函数族）子包入口：create_prf 工厂导出。",
+   "tags": [
+    "barrel",
+    "prf",
+    "package-init"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/watermarking/prfs/__init__.py:create_prf",
+   "type": "function",
+   "name": "create_prf",
+   "filePath": "vllm/v1/watermarking/prfs/__init__.py",
+   "lineRange": [
+    9,
+    12
+   ],
+   "summary": "按名称构造 PRF 实例（当前 Philox）。",
+   "tags": [
+    "factory",
+    "prf"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/watermarking/prfs/base.py",
+   "type": "file",
+   "name": "base.py",
+   "filePath": "vllm/v1/watermarking/prfs/base.py",
+   "summary": "PRF 抽象：WatermarkPRF 协议与 uint32→uniform 映射工具。",
+   "tags": [
+    "prf",
+    "abstract-base",
+    "uniform-mapping"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/watermarking/prfs/philox.py",
+   "type": "file",
+   "name": "philox.py",
+   "filePath": "vllm/v1/watermarking/prfs/philox.py",
+   "summary": "Philox4x32-10 计数器 PRF（论文 doi:10.1145/2063384.2063405）：加速器友好的水印伪随机函数与 uniform 输出。",
+   "tags": [
+    "philox",
+    "prf",
+    "counter-based",
+    "rng"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/watermarking/prfs/philox.py:PhiloxPRF",
+   "type": "class",
+   "name": "PhiloxPRF",
+   "filePath": "vllm/v1/watermarking/prfs/philox.py",
+   "lineRange": [
+    131,
+    145
+   ],
+   "summary": "加速器友好的 Philox4x32-10 水印 PRF（批量 GPU/NumPy 双路径）。",
+   "tags": [
+    "philox",
+    "prf",
+    "accelerator"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/watermarking/prfs/philox.py:_mulhilo32",
+   "type": "function",
+   "name": "_mulhilo32",
+   "filePath": "vllm/v1/watermarking/prfs/philox.py",
+   "lineRange": [
+    19,
+    34
+   ],
+   "summary": "32 位乘法高低位分解。",
+   "tags": [
+    "mulhilo",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/watermarking/prfs/philox.py:_philox4x32_10",
+   "type": "function",
+   "name": "_philox4x32_10",
+   "filePath": "vllm/v1/watermarking/prfs/philox.py",
+   "lineRange": [
+    37,
+    55
+   ],
+   "summary": "Philox4x32-10 核心（10 轮 counter-based 混淆）。",
+   "tags": [
+    "philox",
+    "rng",
+    "core"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/watermarking/prfs/philox.py:_philox_uniform",
+   "type": "function",
+   "name": "_philox_uniform",
+   "filePath": "vllm/v1/watermarking/prfs/philox.py",
+   "lineRange": [
+    58,
+    125
+   ],
+   "summary": "Philox 批量 uniform 输出（含 key/counter 派生）。",
+   "tags": [
+    "philox",
+    "uniform",
+    "batch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/watermarking/spec_decode.py",
+   "type": "file",
+   "name": "spec_decode.py",
+   "filePath": "vllm/v1/watermarking/spec_decode.py",
+   "summary": "投机解码×水印集成：DraftWatermarker 维护 draft 侧 context 状态，watermarked_rejection_sample 实现水印版拒绝采样。",
+   "tags": [
+    "spec-decode",
+    "watermarking",
+    "rejection-sampling",
+    "draft"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/watermarking/spec_decode.py:DraftWatermarker",
+   "type": "class",
+   "name": "DraftWatermarker",
+   "filePath": "vllm/v1/watermarking/spec_decode.py",
+   "lineRange": [
+    20,
+    223
+   ],
+   "summary": "draft 侧水印器：维护逐请求 context/prior_contexts 状态，为投机解码 draft 提供水印采样。",
+   "tags": [
+    "spec-decode",
+    "draft",
+    "watermarking",
+    "state"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/watermarking/spec_decode.py:create_speculative_target_watermarker",
+   "type": "function",
+   "name": "create_speculative_target_watermarker",
+   "filePath": "vllm/v1/watermarking/spec_decode.py",
+   "lineRange": [
+    226,
+    229
+   ],
+   "summary": "构造 target 侧水印器（无状态薄封装）。",
+   "tags": [
+    "factory",
+    "target"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/watermarking/spec_decode.py:create_speculative_draft_watermarker",
+   "type": "function",
+   "name": "create_speculative_draft_watermarker",
+   "filePath": "vllm/v1/watermarking/spec_decode.py",
+   "lineRange": [
+    232,
+    256
+   ],
+   "summary": "构造 draft 侧水印器（含状态分配）。",
+   "tags": [
+    "factory",
+    "draft"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/watermarking/spec_decode.py:_philox_key",
+   "type": "function",
+   "name": "_philox_key",
+   "filePath": "vllm/v1/watermarking/spec_decode.py",
+   "lineRange": [
+    259,
+    268
+   ],
+   "summary": "把水印密钥转为 Philox key。",
+   "tags": [
+    "philox",
+    "key"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/watermarking/spec_decode.py:speculative_target_watermark_key",
+   "type": "function",
+   "name": "speculative_target_watermark_key",
+   "filePath": "vllm/v1/watermarking/spec_decode.py",
+   "lineRange": [
+    282,
+    291
+   ],
+   "summary": "从配置解析 resample 内核的 Philox key。",
+   "tags": [
+    "key",
+    "resolution"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/watermarking/spec_decode.py:watermarked_rejection_sample",
+   "type": "function",
+   "name": "watermarked_rejection_sample",
+   "filePath": "vllm/v1/watermarking/spec_decode.py",
+   "lineRange": [
+    294,
+    331
+   ],
+   "summary": "水印版拒绝采样：普通采样 context 用 target key 之外的密钥恢复。",
+   "tags": [
+    "rejection-sampling",
+    "watermarking",
+    "spec-decode"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/watermarking/watermarker.py",
+   "type": "file",
+   "name": "watermarker.py",
+   "filePath": "vllm/v1/watermarking/watermarker.py",
+   "summary": "水印器核心抽象：Watermarker ABC（sample 接口）、RandomSampler（包装 gumbel_sample）、DraftContextState 与 SupportsSpeculativeDecoding 协议。",
+   "tags": [
+    "watermarking",
+    "abstract-base",
+    "sampling",
+    "spec-decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/watermarking/watermarker.py:RandomSampler",
+   "type": "class",
+   "name": "RandomSampler",
+   "filePath": "vllm/v1/watermarking/watermarker.py",
+   "lineRange": [
+    21,
+    45
+   ],
+   "summary": "随机采样器 dataclass：包装 gumbel_sample（含 logits cache/fp64/draft 选项）。",
+   "tags": [
+    "sampler",
+    "gumbel",
+    "callable"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/watermarking/watermarker.py:Watermarker",
+   "type": "class",
+   "name": "Watermarker",
+   "filePath": "vllm/v1/watermarking/watermarker.py",
+   "lineRange": [
+    60,
+    122
+   ],
+   "summary": "水印器抽象基类：context_width 属性与 sample（logits+contexts→WatermarkSample）接口。",
+   "tags": [
+    "abstract-base",
+    "watermarking",
+    "sampling"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/version.py",
+   "type": "file",
+   "name": "version.py",
+   "filePath": "vllm/version.py",
+   "summary": "vLLM 版本号模块与前一 minor 版本比较工具（兼容性检查用）。",
+   "tags": [
+    "version",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/version.py:_prev_minor_version_was",
+   "type": "function",
+   "name": "_prev_minor_version_was",
+   "filePath": "vllm/version.py",
+   "lineRange": [
+    15,
+    30
+   ],
+   "summary": "判定给定版本是否为前一 minor 版本。",
+   "tags": [
+    "version",
+    "compat-check"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/vllm_flash_attn/flash_attn_interface.py",
+   "type": "file",
+   "name": "flash_attn_interface.py",
+   "filePath": "vllm/vllm_flash_attn/flash_attn_interface.py",
+   "summary": "vendored FlashAttention 接口层：FA2/3/4 支持探测、varlen/sparse 注意力入口与 torch.compile 规格化编译封装。",
+   "tags": [
+    "flash-attention",
+    "vendored",
+    "varlen",
+    "sparse-attn",
+    "torch-compile"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/vllm_flash_attn/flash_attn_interface.py:_is_fa4_supported",
+   "type": "function",
+   "name": "_is_fa4_supported",
+   "filePath": "vllm/vllm_flash_attn/flash_attn_interface.py",
+   "lineRange": [
+    72,
+    86
+   ],
+   "summary": "探测 FlashAttention-4 是否可用。",
+   "tags": [
+    "fa4",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/vllm_flash_attn/flash_attn_interface.py:is_fa_version_supported",
+   "type": "function",
+   "name": "is_fa_version_supported",
+   "filePath": "vllm/vllm_flash_attn/flash_attn_interface.py",
+   "lineRange": [
+    89,
+    97
+   ],
+   "summary": "判定给定 FA 版本是否被支持。",
+   "tags": [
+    "version-check",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/vllm_flash_attn/flash_attn_interface.py:fa_version_unsupported_reason",
+   "type": "function",
+   "name": "fa_version_unsupported_reason",
+   "filePath": "vllm/vllm_flash_attn/flash_attn_interface.py",
+   "lineRange": [
+    100,
+    108
+   ],
+   "summary": "返回 FA 版本不支持的原因字符串。",
+   "tags": [
+    "diagnostics",
+    "version"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/vllm_flash_attn/flash_attn_interface.py:get_scheduler_metadata",
+   "type": "function",
+   "name": "get_scheduler_metadata",
+   "filePath": "vllm/vllm_flash_attn/flash_attn_interface.py",
+   "lineRange": [
+    122,
+    173
+   ],
+   "summary": "构建 FlashAttention varlen 的 scheduler metadata。",
+   "tags": [
+    "scheduler-metadata",
+    "varlen"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/vllm_flash_attn/flash_attn_interface.py:flash_attn_varlen_func",
+   "type": "function",
+   "name": "flash_attn_varlen_func",
+   "filePath": "vllm/vllm_flash_attn/flash_attn_interface.py",
+   "lineRange": [
+    176,
+    499
+   ],
+   "summary": "变长序列 FlashAttention 主入口（FA2/3/4 分流，324 行参数适配）。",
+   "tags": [
+    "varlen",
+    "flash-attention",
+    "entry"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/vllm_flash_attn/flash_attn_interface.py:compile_flash_attn_varlen_func_from_specs",
+   "type": "function",
+   "name": "compile_flash_attn_varlen_func_from_specs",
+   "filePath": "vllm/vllm_flash_attn/flash_attn_interface.py",
+   "lineRange": [
+    502,
+    593
+   ],
+   "summary": "从编译规格预生成 varlen 函数（torch.compile 友好）。",
+   "tags": [
+    "torch-compile",
+    "spec-compile"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/vllm_flash_attn/flash_attn_interface.py:sparse_attn_func",
+   "type": "function",
+   "name": "sparse_attn_func",
+   "filePath": "vllm/vllm_flash_attn/flash_attn_interface.py",
+   "lineRange": [
+    596,
+    673
+   ],
+   "summary": "vertical/slash 稀疏模式注意力入口。",
+   "tags": [
+    "sparse-attn",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/vllm_flash_attn/flash_attn_interface.py:sparse_attn_varlen_func",
+   "type": "function",
+   "name": "sparse_attn_varlen_func",
+   "filePath": "vllm/vllm_flash_attn/flash_attn_interface.py",
+   "lineRange": [
+    676,
+    769
+   ],
+   "summary": "变长版稀疏注意力入口。",
+   "tags": [
+    "sparse-attn",
+    "varlen",
+    "entry"
+   ],
+   "complexity": "moderate"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/watermarking/detector.py",
+   "target": "class:vllm/v1/watermarking/detector.py:WatermarkDetector",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/detector.py",
+   "target": "class:vllm/v1/watermarking/detector.py:WatermarkDetector",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/watermarking/factory.py",
+   "target": "function:vllm/v1/watermarking/factory.py:create_watermarker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/factory.py",
+   "target": "function:vllm/v1/watermarking/factory.py:create_watermarker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gpu_sampler.py",
+   "target": "class:vllm/v1/watermarking/gpu_sampler.py:GPUWatermarkSampler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gpu_sampler.py",
+   "target": "class:vllm/v1/watermarking/gpu_sampler.py:GPUWatermarkSampler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gumbel.py",
+   "target": "class:vllm/v1/watermarking/gumbel.py:GumbelWatermarker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gumbel.py",
+   "target": "class:vllm/v1/watermarking/gumbel.py:GumbelWatermarker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gumbel.py",
+   "target": "class:vllm/v1/watermarking/gumbel.py:DualKeyGumbelWatermarker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gumbel.py",
+   "target": "class:vllm/v1/watermarking/gumbel.py:DualKeyGumbelWatermarker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gumbel.py",
+   "target": "class:vllm/v1/watermarking/gumbel.py:GumbelWatermarkDetector",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gumbel.py",
+   "target": "class:vllm/v1/watermarking/gumbel.py:GumbelWatermarkDetector",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gumbel.py",
+   "target": "class:vllm/v1/watermarking/gumbel.py:DualKeyGumbelWatermarkDetector",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gumbel.py",
+   "target": "class:vllm/v1/watermarking/gumbel.py:DualKeyGumbelWatermarkDetector",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gumbel.py",
+   "target": "function:vllm/v1/watermarking/gumbel.py:_gamma_survival_integer_shape",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/prfs/__init__.py",
+   "target": "function:vllm/v1/watermarking/prfs/__init__.py:create_prf",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/prfs/__init__.py",
+   "target": "function:vllm/v1/watermarking/prfs/__init__.py:create_prf",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/watermarking/prfs/philox.py",
+   "target": "class:vllm/v1/watermarking/prfs/philox.py:PhiloxPRF",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/prfs/philox.py",
+   "target": "class:vllm/v1/watermarking/prfs/philox.py:PhiloxPRF",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/watermarking/prfs/philox.py",
+   "target": "function:vllm/v1/watermarking/prfs/philox.py:_mulhilo32",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/prfs/philox.py",
+   "target": "function:vllm/v1/watermarking/prfs/philox.py:_philox4x32_10",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/prfs/philox.py",
+   "target": "function:vllm/v1/watermarking/prfs/philox.py:_philox_uniform",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/spec_decode.py",
+   "target": "class:vllm/v1/watermarking/spec_decode.py:DraftWatermarker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/spec_decode.py",
+   "target": "class:vllm/v1/watermarking/spec_decode.py:DraftWatermarker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/watermarking/spec_decode.py",
+   "target": "function:vllm/v1/watermarking/spec_decode.py:create_speculative_target_watermarker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/spec_decode.py",
+   "target": "function:vllm/v1/watermarking/spec_decode.py:create_speculative_target_watermarker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/watermarking/spec_decode.py",
+   "target": "function:vllm/v1/watermarking/spec_decode.py:create_speculative_draft_watermarker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/spec_decode.py",
+   "target": "function:vllm/v1/watermarking/spec_decode.py:create_speculative_draft_watermarker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/watermarking/spec_decode.py",
+   "target": "function:vllm/v1/watermarking/spec_decode.py:_philox_key",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/spec_decode.py",
+   "target": "function:vllm/v1/watermarking/spec_decode.py:speculative_target_watermark_key",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/spec_decode.py",
+   "target": "function:vllm/v1/watermarking/spec_decode.py:speculative_target_watermark_key",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/watermarking/spec_decode.py",
+   "target": "function:vllm/v1/watermarking/spec_decode.py:watermarked_rejection_sample",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/spec_decode.py",
+   "target": "function:vllm/v1/watermarking/spec_decode.py:watermarked_rejection_sample",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/watermarking/watermarker.py",
+   "target": "class:vllm/v1/watermarking/watermarker.py:RandomSampler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/watermarker.py",
+   "target": "class:vllm/v1/watermarking/watermarker.py:RandomSampler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/watermarking/watermarker.py",
+   "target": "class:vllm/v1/watermarking/watermarker.py:Watermarker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/watermarking/watermarker.py",
+   "target": "class:vllm/v1/watermarking/watermarker.py:Watermarker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/version.py",
+   "target": "function:vllm/version.py:_prev_minor_version_was",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/vllm_flash_attn/flash_attn_interface.py",
+   "target": "function:vllm/vllm_flash_attn/flash_attn_interface.py:_is_fa4_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/vllm_flash_attn/flash_attn_interface.py",
+   "target": "function:vllm/vllm_flash_attn/flash_attn_interface.py:is_fa_version_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/vllm_flash_attn/flash_attn_interface.py",
+   "target": "function:vllm/vllm_flash_attn/flash_attn_interface.py:is_fa_version_supported",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/vllm_flash_attn/flash_attn_interface.py",
+   "target": "function:vllm/vllm_flash_attn/flash_attn_interface.py:fa_version_unsupported_reason",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/vllm_flash_attn/flash_attn_interface.py",
+   "target": "function:vllm/vllm_flash_attn/flash_attn_interface.py:fa_version_unsupported_reason",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/vllm_flash_attn/flash_attn_interface.py",
+   "target": "function:vllm/vllm_flash_attn/flash_attn_interface.py:get_scheduler_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/vllm_flash_attn/flash_attn_interface.py",
+   "target": "function:vllm/vllm_flash_attn/flash_attn_interface.py:get_scheduler_metadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/vllm_flash_attn/flash_attn_interface.py",
+   "target": "function:vllm/vllm_flash_attn/flash_attn_interface.py:flash_attn_varlen_func",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/vllm_flash_attn/flash_attn_interface.py",
+   "target": "function:vllm/vllm_flash_attn/flash_attn_interface.py:flash_attn_varlen_func",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/vllm_flash_attn/flash_attn_interface.py",
+   "target": "function:vllm/vllm_flash_attn/flash_attn_interface.py:compile_flash_attn_varlen_func_from_specs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/vllm_flash_attn/flash_attn_interface.py",
+   "target": "function:vllm/vllm_flash_attn/flash_attn_interface.py:compile_flash_attn_varlen_func_from_specs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/vllm_flash_attn/flash_attn_interface.py",
+   "target": "function:vllm/vllm_flash_attn/flash_attn_interface.py:sparse_attn_func",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/vllm_flash_attn/flash_attn_interface.py",
+   "target": "function:vllm/vllm_flash_attn/flash_attn_interface.py:sparse_attn_func",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/vllm_flash_attn/flash_attn_interface.py",
+   "target": "function:vllm/vllm_flash_attn/flash_attn_interface.py:sparse_attn_varlen_func",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/vllm_flash_attn/flash_attn_interface.py",
+   "target": "function:vllm/vllm_flash_attn/flash_attn_interface.py:sparse_attn_varlen_func",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/watermarking/__init__.py",
+   "target": "file:vllm/config/watermarking.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/__init__.py",
+   "target": "file:vllm/v1/watermarking/detector.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/__init__.py",
+   "target": "file:vllm/v1/watermarking/factory.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/__init__.py",
+   "target": "file:vllm/v1/watermarking/gumbel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/__init__.py",
+   "target": "file:vllm/v1/watermarking/prfs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/__init__.py",
+   "target": "file:vllm/v1/watermarking/watermarker.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/factory.py",
+   "target": "file:vllm/config/watermarking.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/factory.py",
+   "target": "file:vllm/v1/watermarking/gumbel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/factory.py",
+   "target": "file:vllm/v1/watermarking/watermarker.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gpu_sampler.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gpu_sampler.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gpu_sampler.py",
+   "target": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gpu_sampler.py",
+   "target": "file:vllm/v1/watermarking/watermarker.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gpu_sampler.py",
+   "target": "file:vllm/v1/worker/gpu/buffer_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gpu_sampler.py",
+   "target": "file:vllm/v1/worker/gpu/sample/sampler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gpu_sampler.py",
+   "target": "file:vllm/v1/worker/gpu/sample/watermark.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gumbel.py",
+   "target": "file:vllm/config/watermarking.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gumbel.py",
+   "target": "file:vllm/v1/watermarking/detector.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gumbel.py",
+   "target": "file:vllm/v1/watermarking/prfs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gumbel.py",
+   "target": "file:vllm/v1/watermarking/watermarker.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/gumbel.py",
+   "target": "file:vllm/v1/worker/gpu/sample/watermark.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/prfs/__init__.py",
+   "target": "file:vllm/config/watermarking.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/prfs/__init__.py",
+   "target": "file:vllm/v1/watermarking/prfs/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/prfs/__init__.py",
+   "target": "file:vllm/v1/watermarking/prfs/philox.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/prfs/philox.py",
+   "target": "file:vllm/v1/watermarking/prfs/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/spec_decode.py",
+   "target": "file:vllm/config/watermarking.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/spec_decode.py",
+   "target": "file:vllm/v1/watermarking/factory.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/spec_decode.py",
+   "target": "file:vllm/v1/watermarking/gumbel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/spec_decode.py",
+   "target": "file:vllm/v1/watermarking/prfs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/spec_decode.py",
+   "target": "file:vllm/v1/watermarking/watermarker.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/spec_decode.py",
+   "target": "file:vllm/v1/worker/gpu/sample/watermark.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/spec_decode.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/rejection_sampler_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/watermarker.py",
+   "target": "file:vllm/config/watermarking.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/watermarking/watermarker.py",
+   "target": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/vllm_flash_attn/flash_attn_interface.py",
+   "target": "file:vllm/vllm_flash_attn/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/vllm_flash_attn/flash_attn_interface.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/v1/watermarking/gpu_sampler.py:GPUWatermarkSampler",
+   "target": "class:vllm/v1/worker/gpu/sample/sampler.py:Sampler",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/watermarking/gumbel.py:GumbelWatermarker",
+   "target": "class:vllm/v1/watermarking/watermarker.py:Watermarker",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/watermarking/gumbel.py:DualKeyGumbelWatermarker",
+   "target": "class:vllm/v1/watermarking/watermarker.py:Watermarker",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/watermarking/gumbel.py:DualKeyGumbelWatermarker",
+   "target": "class:vllm/v1/watermarking/watermarker.py:SupportsSpeculativeDecoding",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/watermarking/gumbel.py:GumbelWatermarkDetector",
+   "target": "class:vllm/v1/watermarking/detector.py:WatermarkDetector",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/watermarking/gumbel.py:DualKeyGumbelWatermarkDetector",
+   "target": "class:vllm/v1/watermarking/gumbel.py:GumbelWatermarkDetector",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/watermarking/prfs/philox.py:PhiloxPRF",
+   "target": "class:vllm/v1/watermarking/prfs/base.py:WatermarkPRF",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

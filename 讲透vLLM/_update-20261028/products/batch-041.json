@@ -1,0 +1,2932 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/glm5next/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/glm5next/__init__.py",
+   "summary": "glm5next 包入口：按平台注册 common 层的 Glm5NextForCausalLM/ForConditionalGeneration 与 Glm5NextMTP。",
+   "tags": [
+    "barrel",
+    "entry-point",
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/glm5next/amd/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/glm5next/amd/__init__.py",
+   "summary": "amd 平台子包入口（空占位）。",
+   "tags": [
+    "barrel",
+    "package-init"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/glm5next/amd/ops/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/glm5next/amd/ops/__init__.py",
+   "summary": "amd ops 子包入口（空占位）。",
+   "tags": [
+    "barrel",
+    "package-init"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/glm5next/amd/ops/kpool_compress.py",
+   "type": "file",
+   "name": "kpool_compress.py",
+   "filePath": "vllm/models/glm5next/amd/ops/kpool_compress.py",
+   "summary": "AMD 版 kpool（key-pooling）triton kernel（861 行）：以池（每 pool_size 连续 token 一条）为粒度的 indexer cache 压缩写入（softmax rotate + Hadamard-128 旋转）、tail seed、decode 增量更新与池展开回 token 级 topk 的全套算子。",
+   "tags": [
+    "triton",
+    "kpool",
+    "sparse-attention",
+    "indexer",
+    "rocm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/glm5next/amd/ops/kpool_compress.py:kpool_compress_and_write_cache",
+   "type": "function",
+   "name": "kpool_compress_and_write_cache",
+   "filePath": "vllm/models/glm5next/amd/ops/kpool_compress.py",
+   "lineRange": [
+    194,
+    313
+   ],
+   "summary": "压缩写入口：indexer 输出经 softmax/rotate/Hadamard 后按池粒度写入 KV cache。",
+   "tags": [
+    "triton",
+    "compression",
+    "kv-cache"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/glm5next/amd/ops/kpool_compress.py:kpool_decode_update_and_maybe_write_cache_batched",
+   "type": "function",
+   "name": "kpool_decode_update_and_maybe_write_cache_batched",
+   "filePath": "vllm/models/glm5next/amd/ops/kpool_compress.py",
+   "lineRange": [
+    569,
+    671
+   ],
+   "summary": "decode 步批量更新池条目（必要时落盘新池）。",
+   "tags": [
+    "triton",
+    "decode",
+    "update"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/glm5next/amd/ops/kpool_compress.py:expand_pools_and_append_tail",
+   "type": "function",
+   "name": "expand_pools_and_append_tail",
+   "filePath": "vllm/models/glm5next/amd/ops/kpool_compress.py",
+   "lineRange": [
+    830,
+    861
+   ],
+   "summary": "把选中的池展开回 token 级 topk 并追加 tail（kernel 化版本）。",
+   "tags": [
+    "triton",
+    "topk",
+    "expand"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/glm5next/amd/ops/third_party/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/glm5next/amd/ops/third_party/__init__.py",
+   "summary": "third_party ops 子包入口（空占位）。",
+   "tags": [
+    "barrel",
+    "package-init"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/glm5next/amd/ops/third_party/kda/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/glm5next/amd/ops/third_party/kda/__init__.py",
+   "summary": "AMD 版 KDA kernel 包入口：再导出 kernels 的 chunk/fused_recurrent 全套。",
+   "tags": [
+    "barrel",
+    "kda"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/glm5next/amd/ops/third_party/kda/fused_recurrent.py",
+   "type": "file",
+   "name": "fused_recurrent.py",
+   "filePath": "vllm/models/glm5next/amd/ops/third_party/kda/fused_recurrent.py",
+   "summary": "AMD 版 KDA 融合递归 kernel（682 行）：gated delta rule 的前向 fused_recurrent（prefill 全序列 kernel）与 packed decode kernel（每步状态更新），autograd Function 包装。",
+   "tags": [
+    "triton",
+    "kda",
+    "linear-attention",
+    "recurrent",
+    "rocm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/glm5next/amd/ops/third_party/kda/fused_recurrent.py:FusedRecurrentFunction",
+   "type": "class",
+   "name": "FusedRecurrentFunction",
+   "filePath": "vllm/models/glm5next/amd/ops/third_party/kda/fused_recurrent.py",
+   "lineRange": [
+    544,
+    576
+   ],
+   "summary": "autograd Function：组合 prefill/decode 两条 kernel 路径。",
+   "tags": [
+    "autograd",
+    "dispatch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/glm5next/amd/ops/third_party/kda/fused_recurrent.py:fused_recurrent_gated_delta_rule",
+   "type": "function",
+   "name": "fused_recurrent_gated_delta_rule",
+   "filePath": "vllm/models/glm5next/amd/ops/third_party/kda/fused_recurrent.py",
+   "lineRange": [
+    579,
+    682
+   ],
+   "summary": "gated delta rule 融合递归公共入口（按 prefill/decode 分派）。",
+   "tags": [
+    "linear-attention",
+    "entry-point"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/glm5next/amd/ops/third_party/kda/fused_recurrent.py:fused_recurrent_gated_delta_rule_fwd",
+   "type": "function",
+   "name": "fused_recurrent_gated_delta_rule_fwd",
+   "filePath": "vllm/models/glm5next/amd/ops/third_party/kda/fused_recurrent.py",
+   "lineRange": [
+    224,
+    308
+   ],
+   "summary": "prefill 路径：全序列一次性递归 kernel（含状态初始化/输出恢复）。",
+   "tags": [
+    "triton",
+    "prefill"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "type": "file",
+   "name": "kernels.py",
+   "filePath": "vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "summary": "AMD 版 KDA chunk kernel 集（1252 行）：fused_recurrent_kda（decode）与 chunk_kda 系（prefill 分块：KKT 点积双形态、w/u 重算、GLA 输出、gate cumsum、融合 gate 变体）——flash-linear-attention 移植的 ROCm 适配。",
+   "tags": [
+    "triton",
+    "kda",
+    "chunk",
+    "linear-attention",
+    "rocm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py:fused_recurrent_kda",
+   "type": "function",
+   "name": "fused_recurrent_kda",
+   "filePath": "vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "lineRange": [
+    146,
+    198
+   ],
+   "summary": "KDA decode 融合递归入口。",
+   "tags": [
+    "triton",
+    "decode"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py:chunk_kda_scaled_dot_kkt_fwd",
+   "type": "function",
+   "name": "chunk_kda_scaled_dot_kkt_fwd",
+   "filePath": "vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "lineRange": [
+    382,
+    469
+   ],
+   "summary": "分块 KKT 点积（intra-sub-inter/intra 双 kernel 形态）。",
+   "tags": [
+    "triton",
+    "chunk",
+    "matmul"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py:chunk_kda",
+   "type": "function",
+   "name": "chunk_kda",
+   "filePath": "vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "lineRange": [
+    1057,
+    1088
+   ],
+   "summary": "KDA 分块前向公共入口（标准 gate 路径）。",
+   "tags": [
+    "triton",
+    "chunk",
+    "entry-point"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py:chunk_kda_with_fused_gate",
+   "type": "function",
+   "name": "chunk_kda_with_fused_gate",
+   "filePath": "vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "lineRange": [
+    1091,
+    1131
+   ],
+   "summary": "融合 gate 版分块前向（gate cumsum 与主 kernel 合并）。",
+   "tags": [
+    "triton",
+    "chunk",
+    "fused-gate"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py:fused_kda_gate",
+   "type": "function",
+   "name": "fused_kda_gate",
+   "filePath": "vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "lineRange": [
+    1202,
+    1252
+   ],
+   "summary": "KDA gate 前向独立 kernel（递归形态）。",
+   "tags": [
+    "triton",
+    "gate"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "type": "file",
+   "name": "sparse_indexer.py",
+   "filePath": "vllm/models/glm5next/amd/sparse_indexer.py",
+   "summary": "AMD 版稀疏注意力索引器（843 行）：SparseAttnIndexerKpool(CustomOp) 用 kpool 压缩 cache + Aiter MLA sparse topk 实现 GLM-5.3-Flash 的 lightning indexer（fp8 量化 cache 视图 + DCP 分片）。",
+   "tags": [
+    "sparse-attention",
+    "indexer",
+    "kpool",
+    "rocm",
+    "aiter"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/glm5next/amd/sparse_indexer.py:SparseAttnIndexerKpool",
+   "type": "class",
+   "name": "SparseAttnIndexerKpool",
+   "filePath": "vllm/models/glm5next/amd/sparse_indexer.py",
+   "lineRange": [
+    711,
+    843
+   ],
+   "summary": "kpool 版稀疏索引器 CustomOp：native_call 分派 prefill/decode，Aiter 后端 topk。",
+   "tags": [
+    "custom-op",
+    "indexer",
+    "dispatch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/glm5next/amd/sparse_indexer.py:sparse_attn_indexer_kpool",
+   "type": "function",
+   "name": "sparse_attn_indexer_kpool",
+   "filePath": "vllm/models/glm5next/amd/sparse_indexer.py",
+   "lineRange": [
+    141,
+    707
+   ],
+   "summary": "kpool 索引器核心实现（566 行）：压缩写、池级 topk、展开、因果掩码与 DCP 合并全流程。",
+   "tags": [
+    "indexer",
+    "kpool",
+    "topk"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/glm5next/common/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/glm5next/common/__init__.py",
+   "summary": "common 平台无关层子包入口（空占位）。",
+   "tags": [
+    "barrel",
+    "package-init"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/glm5next/common/attention.py",
+   "type": "file",
+   "name": "attention.py",
+   "filePath": "vllm/models/glm5next/common/attention.py",
+   "summary": "GLM-5.3-Flash 注意力公共层：Indexer（lightning 索引器：q/k 投影+kpool 缓存+FP8 量化）与 Glm5NextMLAAttention（MLA 主注意力，复用 Deepseek MLA 层），附 Indexer/Tail 双 cache 管理（继承 DeepseekV32IndexerCache）。",
+   "tags": [
+    "attention",
+    "mla",
+    "indexer",
+    "common"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/glm5next/common/attention.py:Glm5NextIndexerCache",
+   "type": "class",
+   "name": "Glm5NextIndexerCache",
+   "filePath": "vllm/models/glm5next/common/attention.py",
+   "lineRange": [
+    79,
+    122
+   ],
+   "summary": "indexer cache 管理（DeepseekV32IndexerCache 子类，适配 kpool 池粒度）。",
+   "tags": [
+    "cache",
+    "indexer"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/glm5next/common/attention.py:Glm5NextTailCache",
+   "type": "class",
+   "name": "Glm5NextTailCache",
+   "filePath": "vllm/models/glm5next/common/attention.py",
+   "lineRange": [
+    125,
+    184
+   ],
+   "summary": "kpool tail cache 管理（池尾 token 的独立缓存）。",
+   "tags": [
+    "cache",
+    "kpool"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/glm5next/common/attention.py:Indexer",
+   "type": "class",
+   "name": "Indexer",
+   "filePath": "vllm/models/glm5next/common/attention.py",
+   "lineRange": [
+    187,
+    382
+   ],
+   "summary": "lightning 索引器模块：q/k 投影+k 归一化+head padding+平台分派的 kpool 稀疏索引 CustomOp。",
+   "tags": [
+    "indexer",
+    "sparse-attention",
+    "module"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/glm5next/common/attention.py:Glm5NextMLAAttention",
+   "type": "class",
+   "name": "Glm5NextMLAAttention",
+   "filePath": "vllm/models/glm5next/common/attention.py",
+   "lineRange": [
+    385,
+    575
+   ],
+   "summary": "MLA 注意力模块（复用 deepseek_v2 的 MLA 层族，含 TP 切分与 kv cache spec 声明）。",
+   "tags": [
+    "mla",
+    "attention",
+    "module"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/glm5next/common/kda.py",
+   "type": "file",
+   "name": "kda.py",
+   "filePath": "vllm/models/glm5next/common/kda.py",
+   "summary": "GLM-5.3-Flash KDA 线性注意力层（794 行，GatedDeltaNetAttention 子类）：独立卷积+有界安全 gate；平台分派加载 amd/nvidia 的 chunk/fused_recurrent kernel；含 prefill checkpoint（FlashKDA 导出）、状态 gather/scatter 与 conv1d 融合；显式标注 eager_break_during_capture（不可整图捕获）。",
+   "tags": [
+    "kda",
+    "linear-attention",
+    "gated-delta",
+    "hybrid"
+   ],
+   "complexity": "complex",
+   "languageNotes": "模块头钉版：separate convolutions + bounded safe gate；继承 GDN 基类复用状态缓存管理；ROCM/CUDA 条件导入双平台 kernel。"
+  },
+  {
+   "id": "class:vllm/models/glm5next/common/kda.py:_Glm5NextMergedColumnParallelLinear",
+   "type": "class",
+   "name": "_Glm5NextMergedColumnParallelLinear",
+   "filePath": "vllm/models/glm5next/common/kda.py",
+   "lineRange": [
+    67,
+    127
+   ],
+   "summary": "qkv 合并列并行线性层的定制变体（权重加载适配）。",
+   "tags": [
+    "linear",
+    "tp"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/glm5next/common/kda.py:Glm5NextLinearAttention",
+   "type": "class",
+   "name": "Glm5NextLinearAttention",
+   "filePath": "vllm/models/glm5next/common/kda.py",
+   "lineRange": [
+    196,
+    794
+   ],
+   "summary": "KDA 线性注意力主体（7 方法）：conv1d 预处理→平台 kernel（chunk prefill / fused_recurrent decode）→状态管理，MambaSpec 声明。",
+   "tags": [
+    "kda",
+    "linear-attention",
+    "state"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/glm5next/common/kda.py:_fused_qkv_conv1d",
+   "type": "function",
+   "name": "_fused_qkv_conv1d",
+   "filePath": "vllm/models/glm5next/common/kda.py",
+   "lineRange": [
+    166,
+    193
+   ],
+   "summary": "qkv 三路共享 causal conv1d 的融合包装。",
+   "tags": [
+    "conv1d",
+    "fusion"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/glm5next/common/mtp.py",
+   "type": "file",
+   "name": "mtp.py",
+   "filePath": "vllm/models/glm5next/common/mtp.py",
+   "summary": "GLM-5-Next MTP（多 token 预测）投机解码层：三层结构（Layer→Predictor→MTP 封装），复用 deepseek_mtp 范式，含 fused_eh_norm 融合 norm。",
+   "tags": [
+    "mtp",
+    "spec-decode",
+    "common"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/glm5next/common/mtp.py:Glm5NextMultiTokenPredictorLayer",
+   "type": "class",
+   "name": "Glm5NextMultiTokenPredictorLayer",
+   "filePath": "vllm/models/glm5next/common/mtp.py",
+   "lineRange": [
+    45,
+    106
+   ],
+   "summary": "MTP 单层（embedding 共享+ Transformer 块）。",
+   "tags": [
+    "mtp",
+    "layer"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/glm5next/common/mtp.py:Glm5NextMultiTokenPredictor",
+   "type": "class",
+   "name": "Glm5NextMultiTokenPredictor",
+   "filePath": "vllm/models/glm5next/common/mtp.py",
+   "lineRange": [
+    109,
+    203
+   ],
+   "summary": "MTP 层栈组装与共享 embedding 管理。",
+   "tags": [
+    "mtp",
+    "stack"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/glm5next/common/mtp.py:Glm5NextMTP",
+   "type": "class",
+   "name": "Glm5NextMTP",
+   "filePath": "vllm/models/glm5next/common/mtp.py",
+   "lineRange": [
+    206,
+    434
+   ],
+   "summary": "MTP 对外封装（nn.Module+DeepseekV2MixtureOfExperts）：权重加载、eagle 接口与投机前向。",
+   "tags": [
+    "mtp",
+    "spec-decode",
+    "wrapper"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/glm5next/common/sparse_indexer.py",
+   "type": "file",
+   "name": "sparse_indexer.py",
+   "filePath": "vllm/models/glm5next/common/sparse_indexer.py",
+   "summary": "kpool 索引器平台无关辅助：decode 散射索引构建/按请求 scatter、短 decode 因果索引填充、workspace 形状推导与 KV cache 的量化视图转换——被 amd/nvidia 两平台索引器共享。",
+   "tags": [
+    "sparse-attention",
+    "indexer",
+    "shared",
+    "utility"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/glm5next/common/sparse_indexer.py:_build_decode_scatter_indices",
+   "type": "function",
+   "name": "_build_decode_scatter_indices",
+   "filePath": "vllm/models/glm5next/common/sparse_indexer.py",
+   "lineRange": [
+    13,
+    42
+   ],
+   "summary": "构造 decode 步把 token 散射回各请求槽位的索引表。",
+   "tags": [
+    "decode",
+    "scatter"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/glm5next/common/sparse_indexer.py:_decode_topk_seq_lens",
+   "type": "function",
+   "name": "_decode_topk_seq_lens",
+   "filePath": "vllm/models/glm5next/common/sparse_indexer.py",
+   "lineRange": [
+    72,
+    106
+   ],
+   "summary": "计算 decode 步每请求的 topk 有效序列长度（池粒度换算）。",
+   "tags": [
+    "decode",
+    "topk"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/glm5next/common/sparse_indexer.py:kv_cache_as_quant_view",
+   "type": "function",
+   "name": "kv_cache_as_quant_view",
+   "filePath": "vllm/models/glm5next/common/sparse_indexer.py",
+   "lineRange": [
+    153,
+    170
+   ],
+   "summary": "把 KV cache 张量重视图为量化 dtype 视图（fp8 直读）。",
+   "tags": [
+    "quantization",
+    "view"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/glm5next/nvidia/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/glm5next/nvidia/__init__.py",
+   "summary": "nvidia 平台子包入口（空占位）。",
+   "tags": [
+    "barrel",
+    "package-init"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/glm5next/common/model.py",
+   "type": "file",
+   "name": "model.py",
+   "filePath": "vllm/models/glm5next/common/model.py",
+   "summary": "GLM-5-Next 主模型（1492 行，平台无关）：Glm5NextModel 混合层栈（MLA 注意力层+KDA 线性注意力层+MoE/dense MLP 按层型分派+MHC 超连接残差），ForCausalLM（纯文本）与 ForConditionalGeneration（多模态入口）双封装；含 FP8 indexer/attn 投影的按需反量化加载与 fused shared experts 调优。",
+   "tags": [
+    "model",
+    "hybrid",
+    "moe",
+    "mla",
+    "common"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/glm5next/common/model.py:Glm5NextMLP",
+   "type": "class",
+   "name": "Glm5NextMLP",
+   "filePath": "vllm/models/glm5next/common/model.py",
+   "lineRange": [
+    167,
+    217
+   ],
+   "summary": "dense MLP 子层（SiluAndMul/SiluAndMulWithClamp 变体）。",
+   "tags": [
+    "mlp",
+    "dense"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/glm5next/common/model.py:Glm5NextMoE",
+   "type": "class",
+   "name": "Glm5NextMoE",
+   "filePath": "vllm/models/glm5next/common/model.py",
+   "lineRange": [
+    220,
+    353
+   ],
+   "summary": "MoE 子层：GateLinear 路由+FusedMoE 专家+fused shared expert 兼容判定。",
+   "tags": [
+    "moe",
+    "sparse",
+    "router"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/glm5next/common/model.py:Glm5NextDecoderLayer",
+   "type": "class",
+   "name": "Glm5NextDecoderLayer",
+   "filePath": "vllm/models/glm5next/common/model.py",
+   "lineRange": [
+    356,
+    698
+   ],
+   "summary": "解码层：按层型在 MLA 注意力/KDA 线性注意力间分派，MHC pre/post 残差超连接，含 fused mm_input_norm。",
+   "tags": [
+    "decoder-layer",
+    "hybrid",
+    "mhc"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/glm5next/common/model.py:Glm5NextModel",
+   "type": "class",
+   "name": "Glm5NextModel",
+   "filePath": "vllm/models/glm5next/common/model.py",
+   "lineRange": [
+    701,
+    1048
+   ],
+   "summary": "主干（nn.Module+EagleModelMixin）：embedding+混合层栈+final norm+MHC head，EP/PP 支持。",
+   "tags": [
+    "backbone",
+    "eagle",
+    "pipeline-parallel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/glm5next/common/model.py:Glm5NextForCausalLM",
+   "type": "class",
+   "name": "Glm5NextForCausalLM",
+   "filePath": "vllm/models/glm5next/common/model.py",
+   "lineRange": [
+    1051,
+    1141
+   ],
+   "summary": "纯文本 causal LM 封装：lm_head/logits/权重加载。",
+   "tags": [
+    "causal-lm",
+    "wrapper"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/glm5next/common/model.py:Glm5NextForConditionalGeneration",
+   "type": "class",
+   "name": "Glm5NextForConditionalGeneration",
+   "filePath": "vllm/models/glm5next/common/model.py",
+   "lineRange": [
+    1149,
+    1283
+   ],
+   "summary": "多模态 conditional generation 封装：vision tower+projector+语言主干组合。",
+   "tags": [
+    "multimodal",
+    "conditional-generation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/glm5next/common/model.py:_try_load_fp8_attn_proj",
+   "type": "function",
+   "name": "_try_load_fp8_attn_proj",
+   "filePath": "vllm/models/glm5next/common/model.py",
+   "lineRange": [
+    1427,
+    1492
+   ],
+   "summary": "按需把 FP8 注意力投影权重视需反量化加载的辅助。",
+   "tags": [
+    "quantization",
+    "weight-loading"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/glm5next/common/multimodal.py",
+   "type": "file",
+   "name": "multimodal.py",
+   "filePath": "vllm/models/glm5next/common/multimodal.py",
+   "summary": "GLM-5-Next 视觉塔（835 行）：patch embed→conv 下采样→attention 块栈→patch merger 的 NaViT 风格变体；Glm5NextProcessingInfo/MultiModalProcessor（继承 Glm4v 系）负责多模态输入解析与 profiler。",
+   "tags": [
+    "multimodal",
+    "vision",
+    "encoder",
+    "common"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/glm5next/common/multimodal.py:Glm5NextVisionTransformer",
+   "type": "class",
+   "name": "Glm5NextVisionTransformer",
+   "filePath": "vllm/models/glm5next/common/multimodal.py",
+   "lineRange": [
+    341,
+    618
+   ],
+   "summary": "视觉主干（8 方法）：patch 化、位置嵌入、块栈与输出投影。",
+   "tags": [
+    "vision",
+    "backbone"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/glm5next/common/multimodal.py:Glm5NextPatchMerger",
+   "type": "class",
+   "name": "Glm5NextPatchMerger",
+   "filePath": "vllm/models/glm5next/common/multimodal.py",
+   "lineRange": [
+    289,
+    338
+   ],
+   "summary": "空间 patch 合并层（降采样 token 数）。",
+   "tags": [
+    "vision",
+    "merger"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/glm5next/common/multimodal.py:Glm5NextProcessingInfo",
+   "type": "class",
+   "name": "Glm5NextProcessingInfo",
+   "filePath": "vllm/models/glm5next/common/multimodal.py",
+   "lineRange": [
+    624,
+    817
+   ],
+   "summary": "多模态处理信息（Glm4vProcessingInfo 子类，9 方法）：分辨率/网格/预算策略。",
+   "tags": [
+    "multimodal",
+    "processing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/glm5next/common/multimodal.py:Glm5NextMultiModalProcessor",
+   "type": "class",
+   "name": "Glm5NextMultiModalProcessor",
+   "filePath": "vllm/models/glm5next/common/multimodal.py",
+   "lineRange": [
+    820,
+    835
+   ],
+   "summary": "多模态预处理器（Glm4v 系子类）。",
+   "tags": [
+    "multimodal",
+    "preprocessor"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/glm5next/nvidia/ops/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/glm5next/nvidia/ops/__init__.py",
+   "summary": "nvidia ops 子包入口（空占位）。",
+   "tags": [
+    "barrel",
+    "package-init"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/glm5next/nvidia/ops/fused_eh_norm.py",
+   "type": "file",
+   "name": "fused_eh_norm.py",
+   "filePath": "vllm/models/glm5next/nvidia/ops/fused_eh_norm.py",
+   "summary": "MTP 用的 fused E[h] norm triton kernel：RMS norm 与 eh 缩放单 kernel 融合。",
+   "tags": [
+    "triton",
+    "rmsnorm",
+    "fusion",
+    "mtp"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/glm5next/nvidia/ops/fused_eh_norm.py:fused_eh_norm",
+   "type": "function",
+   "name": "fused_eh_norm",
+   "filePath": "vllm/models/glm5next/nvidia/ops/fused_eh_norm.py",
+   "lineRange": [
+    52,
+    77
+   ],
+   "summary": "fused eh norm 启动器（含 shape 校验）。",
+   "tags": [
+    "triton",
+    "launcher"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/glm5next/nvidia/ops/kpool_compress.py",
+   "type": "file",
+   "name": "kpool_compress.py",
+   "filePath": "vllm/models/glm5next/nvidia/ops/kpool_compress.py",
+   "summary": "NVIDIA 版 kpool kernel（935 行）：在 AMD 版基础上增加 FWHT-128 FP8 量化路径（fwht128_quant_fp8，ue8m0 scale 打包）与 deep_gemm MX scale 支持；indexer head 维固定 128。",
+   "tags": [
+    "triton",
+    "kpool",
+    "fwht",
+    "sparse-attention",
+    "cuda"
+   ],
+   "complexity": "complex",
+   "languageNotes": "compress_ratio==pool_size 让 kv_cache_spec 元数据自动产出池粒度 slot_mapping；Hadamard-128 旋转两平台共享、FP8 量化为 NVIDIA 特有。"
+  },
+  {
+   "id": "function:vllm/models/glm5next/nvidia/ops/kpool_compress.py:fwht128_quant_fp8",
+   "type": "function",
+   "name": "fwht128_quant_fp8",
+   "filePath": "vllm/models/glm5next/nvidia/ops/kpool_compress.py",
+   "lineRange": [
+    110,
+    134
+   ],
+   "summary": "快速 Hadamard 变换 + FP8 量化融合 kernel。",
+   "tags": [
+    "fwht",
+    "fp8",
+    "quantization"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/glm5next/nvidia/ops/kpool_compress.py:kpool_compress_and_write_cache",
+   "type": "function",
+   "name": "kpool_compress_and_write_cache",
+   "filePath": "vllm/models/glm5next/nvidia/ops/kpool_compress.py",
+   "lineRange": [
+    269,
+    386
+   ],
+   "summary": "压缩写入口（NVIDIA 版：含 MX scale 路径分派）。",
+   "tags": [
+    "triton",
+    "compression",
+    "kv-cache"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/glm5next/nvidia/ops/kpool_compress.py:kpool_decode_update_and_maybe_write_cache_batched",
+   "type": "function",
+   "name": "kpool_decode_update_and_maybe_write_cache_batched",
+   "filePath": "vllm/models/glm5next/nvidia/ops/kpool_compress.py",
+   "lineRange": [
+    646,
+    745
+   ],
+   "summary": "decode 步批量池更新。",
+   "tags": [
+    "triton",
+    "decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/glm5next/nvidia/ops/kpool_compress.py:expand_pools_and_append_tail",
+   "type": "function",
+   "name": "expand_pools_and_append_tail",
+   "filePath": "vllm/models/glm5next/nvidia/ops/kpool_compress.py",
+   "lineRange": [
+    904,
+    935
+   ],
+   "summary": "池展开回 token 级 topk+tail 追加（kernel 化）。",
+   "tags": [
+    "triton",
+    "topk"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/glm5next/nvidia/ops/third_party/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/glm5next/nvidia/ops/third_party/__init__.py",
+   "summary": "third_party ops 子包入口（空占位）。",
+   "tags": [
+    "barrel",
+    "package-init"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/glm5next/nvidia/ops/third_party/kda/__init__.py",
+   "summary": "NVIDIA 版 KDA kernel 包入口：再导出 kernels 全套。",
+   "tags": [
+    "barrel",
+    "kda"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/fused_recurrent.py",
+   "type": "file",
+   "name": "fused_recurrent.py",
+   "filePath": "vllm/models/glm5next/nvidia/ops/third_party/kda/fused_recurrent.py",
+   "summary": "NVIDIA 版 KDA 融合递归 kernel（与 AMD 版同构，684 行）：gated delta rule prefill/decode 双路径+autograd Function。",
+   "tags": [
+    "triton",
+    "kda",
+    "linear-attention",
+    "cuda"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/glm5next/nvidia/ops/third_party/kda/fused_recurrent.py:FusedRecurrentFunction",
+   "type": "class",
+   "name": "FusedRecurrentFunction",
+   "filePath": "vllm/models/glm5next/nvidia/ops/third_party/kda/fused_recurrent.py",
+   "lineRange": [
+    546,
+    578
+   ],
+   "summary": "autograd Function（prefill/decode 分派）。",
+   "tags": [
+    "autograd",
+    "dispatch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/glm5next/nvidia/ops/third_party/kda/fused_recurrent.py:fused_recurrent_gated_delta_rule",
+   "type": "function",
+   "name": "fused_recurrent_gated_delta_rule",
+   "filePath": "vllm/models/glm5next/nvidia/ops/third_party/kda/fused_recurrent.py",
+   "lineRange": [
+    581,
+    684
+   ],
+   "summary": "gated delta rule 公共入口。",
+   "tags": [
+    "linear-attention",
+    "entry-point"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "type": "file",
+   "name": "kernels.py",
+   "filePath": "vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "summary": "NVIDIA 版 KDA chunk kernel 集（1254 行，与 AMD 版同构）：chunk_kda 系分块前向+fused_recurrent_kda decode+gate kernel。",
+   "tags": [
+    "triton",
+    "kda",
+    "chunk",
+    "cuda"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py:fused_recurrent_kda",
+   "type": "function",
+   "name": "fused_recurrent_kda",
+   "filePath": "vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "lineRange": [
+    148,
+    200
+   ],
+   "summary": "KDA decode 融合递归入口。",
+   "tags": [
+    "triton",
+    "decode"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py:chunk_kda_with_fused_gate",
+   "type": "function",
+   "name": "chunk_kda_with_fused_gate",
+   "filePath": "vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "lineRange": [
+    1093,
+    1133
+   ],
+   "summary": "融合 gate 版分块前向。",
+   "tags": [
+    "triton",
+    "chunk",
+    "fused-gate"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py:chunk_kda",
+   "type": "function",
+   "name": "chunk_kda",
+   "filePath": "vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "lineRange": [
+    1059,
+    1090
+   ],
+   "summary": "标准 gate 分块前向公共入口。",
+   "tags": [
+    "triton",
+    "chunk",
+    "entry-point"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "type": "file",
+   "name": "sparse_indexer.py",
+   "filePath": "vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "summary": "NVIDIA 版 kpool 稀疏索引器（841 行）：deep_gemm fp8/fp4 MQA logits（MX scale）+ CuteDSL DCP indexer 分支，池级 topk→展开→因果掩码全流程，SparseAttnIndexerKpool(CustomOp) 封装。",
+   "tags": [
+    "sparse-attention",
+    "indexer",
+    "kpool",
+    "deep-gemm",
+    "cuda"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/glm5next/nvidia/sparse_indexer.py:SparseAttnIndexerKpool",
+   "type": "class",
+   "name": "SparseAttnIndexerKpool",
+   "filePath": "vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "lineRange": [
+    698,
+    841
+   ],
+   "summary": "kpool 索引器 CustomOp（NVIDIA 版 native_call 分派）。",
+   "tags": [
+    "custom-op",
+    "indexer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/glm5next/nvidia/sparse_indexer.py:sparse_attn_indexer_kpool",
+   "type": "function",
+   "name": "sparse_attn_indexer_kpool",
+   "filePath": "vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "lineRange": [
+    108,
+    694
+   ],
+   "summary": "核心实现（586 行）：压缩写、deep_gemm MQA logits、池 topk、展开与 DCP 分片合并。",
+   "tags": [
+    "indexer",
+    "deep-gemm",
+    "topk"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/glm5next/sparse_indexer.py",
+   "type": "file",
+   "name": "sparse_indexer.py",
+   "filePath": "vllm/models/glm5next/sparse_indexer.py",
+   "summary": "平台分派 shim：按 current_platform 把 SparseAttnIndexerKpool 从 amd 或 nvidia 子包导入。",
+   "tags": [
+    "dispatch",
+    "platform-shim"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/glm5next/__init__.py",
+   "target": "file:vllm/models/glm5next/common/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/__init__.py",
+   "target": "file:vllm/models/glm5next/common/mtp.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/__init__.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/kpool_compress.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/kpool_compress.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/kpool_compress.py",
+   "target": "function:vllm/models/glm5next/amd/ops/kpool_compress.py:kpool_compress_and_write_cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/kpool_compress.py",
+   "target": "function:vllm/models/glm5next/amd/ops/kpool_compress.py:kpool_decode_update_and_maybe_write_cache_batched",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/kpool_compress.py",
+   "target": "function:vllm/models/glm5next/amd/ops/kpool_compress.py:expand_pools_and_append_tail",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/kpool_compress.py",
+   "target": "function:vllm/models/glm5next/amd/ops/kpool_compress.py:kpool_compress_and_write_cache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/kpool_compress.py",
+   "target": "function:vllm/models/glm5next/amd/ops/kpool_compress.py:expand_pools_and_append_tail",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/__init__.py",
+   "target": "file:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/fused_recurrent.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/fused_recurrent.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/fused_recurrent.py",
+   "target": "class:vllm/models/glm5next/amd/ops/third_party/kda/fused_recurrent.py:FusedRecurrentFunction",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/fused_recurrent.py",
+   "target": "function:vllm/models/glm5next/amd/ops/third_party/kda/fused_recurrent.py:fused_recurrent_gated_delta_rule",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/fused_recurrent.py",
+   "target": "function:vllm/models/glm5next/amd/ops/third_party/kda/fused_recurrent.py:fused_recurrent_gated_delta_rule_fwd",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/fused_recurrent.py",
+   "target": "function:vllm/models/glm5next/amd/ops/third_party/kda/fused_recurrent.py:fused_recurrent_gated_delta_rule",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/models/glm5next/amd/ops/third_party/kda/fused_recurrent.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/chunk_delta_h.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/cumsum.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/index.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/l2norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/solve_tril.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "target": "function:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py:fused_recurrent_kda",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "target": "function:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py:chunk_kda_scaled_dot_kkt_fwd",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "target": "function:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py:chunk_kda",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "target": "function:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py:chunk_kda_with_fused_gate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "target": "function:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py:fused_kda_gate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "target": "function:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py:chunk_kda_with_fused_gate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py",
+   "target": "function:vllm/models/glm5next/amd/ops/third_party/kda/kernels.py:fused_recurrent_kda",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "file:vllm/model_executor/layers/indexer_topk.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "file:vllm/models/glm5next/amd/ops/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "file:vllm/models/glm5next/common/sparse_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "file:vllm/v1/attention/backends/mla/indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "file:vllm/v1/attention/ops/common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "file:vllm/v1/attention/ops/rocm_aiter_mla_sparse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "class:vllm/models/glm5next/amd/sparse_indexer.py:SparseAttnIndexerKpool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "function:vllm/models/glm5next/amd/sparse_indexer.py:sparse_attn_indexer_kpool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "target": "class:vllm/models/glm5next/amd/sparse_indexer.py:SparseAttnIndexerKpool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "file:vllm/model_executor/layers/mla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "file:vllm/models/glm5next/nvidia/ops/kpool_compress.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "file:vllm/models/glm5next/sparse_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "file:vllm/v1/attention/backends/mla/indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "class:vllm/models/glm5next/common/attention.py:Glm5NextIndexerCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "class:vllm/models/glm5next/common/attention.py:Glm5NextTailCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "class:vllm/models/glm5next/common/attention.py:Indexer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "class:vllm/models/glm5next/common/attention.py:Glm5NextMLAAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/attention.py",
+   "target": "class:vllm/models/glm5next/common/attention.py:Glm5NextMLAAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/glm5next/common/attention.py:Glm5NextIndexerCache",
+   "target": "class:vllm/model_executor/models/deepseek_v2.py:DeepseekV32IndexerCache",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/glm5next/common/attention.py:Glm5NextTailCache",
+   "target": "class:vllm/model_executor/models/deepseek_v2.py:DeepseekV32IndexerCache",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/model_executor/layers/mamba/gdn/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/model_executor/layers/mamba/kda_checkpoint.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/causal_conv1d.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/gather_initial_states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/scatter_states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/models/glm5next/amd/ops/third_party/kda/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/kda.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/v1/attention/backends/gdn_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "class:vllm/models/glm5next/common/kda.py:_Glm5NextMergedColumnParallelLinear",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "class:vllm/models/glm5next/common/kda.py:Glm5NextLinearAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "function:vllm/models/glm5next/common/kda.py:_fused_qkv_conv1d",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/kda.py",
+   "target": "class:vllm/models/glm5next/common/kda.py:Glm5NextLinearAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/glm5next/common/kda.py:_Glm5NextMergedColumnParallelLinear",
+   "target": "class:vllm/model_executor/layers/linear.py:MergedColumnParallelLinear",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/glm5next/common/kda.py:Glm5NextLinearAttention",
+   "target": "class:vllm/model_executor/layers/mamba/gdn/base.py:GatedDeltaNetAttention",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/mtp.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/mtp.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/mtp.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/mtp.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/mtp.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/mtp.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/mtp.py",
+   "target": "file:vllm/model_executor/models/deepseek_mtp.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/mtp.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/mtp.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/mtp.py",
+   "target": "file:vllm/models/glm5next/common/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/mtp.py",
+   "target": "file:vllm/models/glm5next/nvidia/ops/fused_eh_norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/mtp.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/mtp.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/mtp.py",
+   "target": "class:vllm/models/glm5next/common/mtp.py:Glm5NextMultiTokenPredictorLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/mtp.py",
+   "target": "class:vllm/models/glm5next/common/mtp.py:Glm5NextMultiTokenPredictor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/mtp.py",
+   "target": "class:vllm/models/glm5next/common/mtp.py:Glm5NextMTP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/mtp.py",
+   "target": "class:vllm/models/glm5next/common/mtp.py:Glm5NextMTP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/glm5next/common/mtp.py:Glm5NextMTP",
+   "target": "class:vllm/model_executor/models/deepseek_v2.py:DeepseekV2MixtureOfExperts",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/sparse_indexer.py",
+   "target": "function:vllm/models/glm5next/common/sparse_indexer.py:_build_decode_scatter_indices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/sparse_indexer.py",
+   "target": "function:vllm/models/glm5next/common/sparse_indexer.py:_decode_topk_seq_lens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/sparse_indexer.py",
+   "target": "function:vllm/models/glm5next/common/sparse_indexer.py:kv_cache_as_quant_view",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/sparse_indexer.py",
+   "target": "function:vllm/models/glm5next/common/sparse_indexer.py:kv_cache_as_quant_view",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/model_executor/kernels/mhc/tilelang_kernels.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/model_executor/layers/mhc.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/model_executor/models/glm4_1v.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/models/common/ops/sequence_parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/models/glm5next/common/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/models/glm5next/common/kda.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/models/glm5next/common/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/utils/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "class:vllm/models/glm5next/common/model.py:Glm5NextMLP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "class:vllm/models/glm5next/common/model.py:Glm5NextMoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "class:vllm/models/glm5next/common/model.py:Glm5NextDecoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "class:vllm/models/glm5next/common/model.py:Glm5NextModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "class:vllm/models/glm5next/common/model.py:Glm5NextForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "class:vllm/models/glm5next/common/model.py:Glm5NextForConditionalGeneration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "function:vllm/models/glm5next/common/model.py:_try_load_fp8_attn_proj",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "class:vllm/models/glm5next/common/model.py:Glm5NextForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/model.py",
+   "target": "class:vllm/models/glm5next/common/model.py:Glm5NextForConditionalGeneration",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/glm5next/common/model.py:Glm5NextModel",
+   "target": "class:vllm/model_executor/models/interfaces.py:EagleModelMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "file:vllm/model_executor/layers/conv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "file:vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "file:vllm/model_executor/models/glm4_1v.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "file:vllm/model_executor/models/vision.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "file:vllm/models/common/ops/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "class:vllm/models/glm5next/common/multimodal.py:Glm5NextVisionTransformer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "class:vllm/models/glm5next/common/multimodal.py:Glm5NextPatchMerger",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "class:vllm/models/glm5next/common/multimodal.py:Glm5NextProcessingInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "class:vllm/models/glm5next/common/multimodal.py:Glm5NextMultiModalProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/common/multimodal.py",
+   "target": "class:vllm/models/glm5next/common/multimodal.py:Glm5NextVisionTransformer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/glm5next/common/multimodal.py:Glm5NextProcessingInfo",
+   "target": "class:vllm/model_executor/models/glm4_1v.py:Glm4vProcessingInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/glm5next/common/multimodal.py:Glm5NextMultiModalProcessor",
+   "target": "class:vllm/model_executor/models/glm4_1v.py:Glm4vMultiModalProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/fused_eh_norm.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/fused_eh_norm.py",
+   "target": "function:vllm/models/glm5next/nvidia/ops/fused_eh_norm.py:fused_eh_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/fused_eh_norm.py",
+   "target": "function:vllm/models/glm5next/nvidia/ops/fused_eh_norm.py:fused_eh_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/kpool_compress.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/kpool_compress.py",
+   "target": "file:vllm/utils/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/kpool_compress.py",
+   "target": "file:vllm/v1/attention/ops/common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/kpool_compress.py",
+   "target": "function:vllm/models/glm5next/nvidia/ops/kpool_compress.py:fwht128_quant_fp8",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/kpool_compress.py",
+   "target": "function:vllm/models/glm5next/nvidia/ops/kpool_compress.py:kpool_compress_and_write_cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/kpool_compress.py",
+   "target": "function:vllm/models/glm5next/nvidia/ops/kpool_compress.py:kpool_decode_update_and_maybe_write_cache_batched",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/kpool_compress.py",
+   "target": "function:vllm/models/glm5next/nvidia/ops/kpool_compress.py:expand_pools_and_append_tail",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/kpool_compress.py",
+   "target": "function:vllm/models/glm5next/nvidia/ops/kpool_compress.py:kpool_compress_and_write_cache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/kpool_compress.py",
+   "target": "function:vllm/models/glm5next/nvidia/ops/kpool_compress.py:expand_pools_and_append_tail",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/__init__.py",
+   "target": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/fused_recurrent.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/fused_recurrent.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/fused_recurrent.py",
+   "target": "class:vllm/models/glm5next/nvidia/ops/third_party/kda/fused_recurrent.py:FusedRecurrentFunction",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/fused_recurrent.py",
+   "target": "function:vllm/models/glm5next/nvidia/ops/third_party/kda/fused_recurrent.py:fused_recurrent_gated_delta_rule",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/fused_recurrent.py",
+   "target": "function:vllm/models/glm5next/nvidia/ops/third_party/kda/fused_recurrent.py:fused_recurrent_gated_delta_rule",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/fused_recurrent.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/chunk_delta_h.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/cumsum.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/index.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/l2norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/solve_tril.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "target": "function:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py:fused_recurrent_kda",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "target": "function:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py:chunk_kda_with_fused_gate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "target": "function:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py:chunk_kda",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "target": "function:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py:chunk_kda_with_fused_gate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py",
+   "target": "function:vllm/models/glm5next/nvidia/ops/third_party/kda/kernels.py:fused_recurrent_kda",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/model_executor/kernels/attention/dsa/dcp_indexer_cutedsl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/model_executor/layers/indexer_topk.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/model_executor/layers/sparse_attn_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/models/glm5next/common/sparse_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/models/glm5next/nvidia/ops/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/utils/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/v1/attention/backends/mla/indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/v1/attention/ops/common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "class:vllm/models/glm5next/nvidia/sparse_indexer.py:SparseAttnIndexerKpool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "function:vllm/models/glm5next/nvidia/sparse_indexer.py:sparse_attn_indexer_kpool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "target": "class:vllm/models/glm5next/nvidia/sparse_indexer.py:SparseAttnIndexerKpool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/glm5next/sparse_indexer.py",
+   "target": "file:vllm/models/glm5next/amd/sparse_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/sparse_indexer.py",
+   "target": "file:vllm/models/glm5next/nvidia/sparse_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/glm5next/sparse_indexer.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

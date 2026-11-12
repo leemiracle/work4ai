@@ -1,0 +1,1180 @@
+{
+ "nodes": [
+  {
+   "id": "document:packages/skill/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/skill/README.md",
+   "summary": "skill 包组 README：skill 能力 seam（ctx.skills 注册表）、文件系统 provider、打包 Office skills 与模型 skill 工具的组级导读。",
+   "tags": [
+    "documentation",
+    "package-group",
+    "skill"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/skill/skill/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/skill/skill/README.md",
+   "summary": "dsh-skill 包参考文档：agent skill provider 注册表的服务契约与使用指南。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "skill"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/skill/skill/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/skill/skill/package.json",
+   "summary": "@deepseek-ai/dsh-skill 包清单：agent skill provider 注册表（能力 seam 的 Service Definition 角色）。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "skill"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/skill/skill/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/skill/skill/src/index.ts",
+   "summary": "skill 能力 seam 的 Service Definition（ctx.skills）：SkillRegistry 以 ScopedLayers 按 host+scope 分层合并各 provider 目录、解析同名胜者（最近层直接覆盖、层内 rank 决胜）并按需加载完整定义；发现结果按 cwd+scope 链+revision 做 LRU 缓存，不完整观察永不缓存；另含 skill 名语法、调用策略过滤与模型可见内容渲染（<skill> 标签+资源提示转义）。",
+   "tags": [
+    "service-definition",
+    "capability-seam",
+    "layered-registry",
+    "caching"
+   ],
+   "complexity": "complex",
+   "languageNotes": "与 tools 注册表同构的 host+per-scope 分层影子规则；runtime 注册（RUNTIME_PROVIDER 保留名）同层首胜、重复仅警告拿 no-op disposer。"
+  },
+  {
+   "id": "class:packages/skill/skill/src/index.ts:SkillLayer",
+   "type": "class",
+   "name": "SkillLayer",
+   "filePath": "packages/skill/skill/src/index.ts",
+   "lineRange": [
+    327,
+    343
+   ],
+   "summary": "一个 scope 的完整注册表贡献（implements ScopeLayer）：插入序 providers（NamedEntries 拒绝层内重名）+ runtime skills Map；isEmpty 供 ScopedLayers 清层。",
+   "tags": [
+    "scope-layer",
+    "registry-structure",
+    "layered-registry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/skill/skill/src/index.ts:SkillRegistry",
+   "type": "class",
+   "name": "SkillRegistry",
+   "filePath": "packages/skill/skill/src/index.ts",
+   "lineRange": [
+    356,
+    660
+   ],
+   "summary": "Cordis Service（ctx.skills，注册名 'skills'）：registerProvider/register 按 scope 落层并返回精确 disposer（fiber 销毁即注销+失效缓存）；list/snapshot/get 走 collect（缓存键含 scope 链，revision 竞态最多重试 2 次后如实返回 incomplete）；get 加载后校验定义并撤销陈旧注册的缓存项；变更经 skills/change 事件通知且不使监听者的刷新成为负载路径。",
+   "tags": [
+    "service-definition",
+    "registry",
+    "cache-invalidation",
+    "cordis-plugin"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/skill/skill/src/index.ts:isSkillName",
+   "type": "function",
+   "name": "isSkillName",
+   "filePath": "packages/skill/skill/src/index.ts",
+   "lineRange": [
+    35,
+    37
+   ],
+   "summary": "校验字符串是否匹配公开的 kebab-case skill 名语法（^[a-z0-9]+(-[a-z0-9]+)*$）。",
+   "tags": [
+    "validation",
+    "naming",
+    "grammar"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/skill/skill/src/index.ts:isModelInvocable",
+   "type": "function",
+   "name": "isModelInvocable",
+   "filePath": "packages/skill/skill/src/index.ts",
+   "lineRange": [
+    126,
+    128
+   ],
+   "summary": "判定 skill 是否进入模型可见目录（调用策略默认为可）。",
+   "tags": [
+    "invocation-policy",
+    "predicate",
+    "skill-policy"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/skill/skill/src/index.ts:isUserInvocable",
+   "type": "function",
+   "name": "isUserInvocable",
+   "filePath": "packages/skill/skill/src/index.ts",
+   "lineRange": [
+    135,
+    137
+   ],
+   "summary": "判定 skill 是否进入人类命令目录。",
+   "tags": [
+    "invocation-policy",
+    "predicate",
+    "skill-policy"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/skill/skill/src/index.ts:renderSkillContent",
+   "type": "function",
+   "name": "renderSkillContent",
+   "filePath": "packages/skill/skill/src/index.ts",
+   "lineRange": [
+    170,
+    183
+   ],
+   "summary": "渲染模型可见的 skill 正文（<skill> 标签包裹名称与内容）。",
+   "tags": [
+    "model-facing",
+    "rendering",
+    "model-output"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/skill/skill/src/index.ts:renderResourceHint",
+   "type": "function",
+   "name": "renderResourceHint",
+   "filePath": "packages/skill/skill/src/index.ts",
+   "lineRange": [
+    185,
+    214
+   ],
+   "summary": "按 resourceBase 类型（directory/url/opaque）渲染相对资源提示块，属性与文本经 escapeAttr/escapeText 转义。",
+   "tags": [
+    "model-facing",
+    "resource-hint",
+    "rendering"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/skill/skill/src/index.ts:validateCandidate",
+   "type": "function",
+   "name": "validateCandidate",
+   "filePath": "packages/skill/skill/src/index.ts",
+   "lineRange": [
+    707,
+    739
+   ],
+   "summary": "校验 provider 返回的 skill 候选（名称语法、description 非空、rank 语义等），带 provider 名抛出可定位错误。",
+   "tags": [
+    "validation",
+    "provider-contract",
+    "provider-contract-guard"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/skill/skill/src/index.ts:validateDefinition",
+   "type": "function",
+   "name": "validateDefinition",
+   "filePath": "packages/skill/skill/src/index.ts",
+   "lineRange": [
+    748,
+    767
+   ],
+   "summary": "校验加载出的完整 skill 定义（body 必填、调用策略形状），防 provider 返回畸形定义。",
+   "tags": [
+    "validation",
+    "definition-contract",
+    "provider-contract-guard"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/skill/skill/src/index.ts:toSummary",
+   "type": "function",
+   "name": "toSummary",
+   "filePath": "packages/skill/skill/src/index.ts",
+   "lineRange": [
+    769,
+    781
+   ],
+   "summary": "把候选折成调用中立的 SkillSummary（去掉 locator 等发现内部字段）。",
+   "tags": [
+    "projection",
+    "summary",
+    "summary-view"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/skill/skill/src/index.ts:waitWithAbort",
+   "type": "function",
+   "name": "waitWithAbort",
+   "filePath": "packages/skill/skill/src/index.ts",
+   "lineRange": [
+    819,
+    842
+   ],
+   "summary": "用 AbortSignal 竞速一个 promise：取消时立即拒绝，不让不合作的 provider 卡死调用方。",
+   "tags": [
+    "cancellation",
+    "race",
+    "abort-signal"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "document:packages/skill/skill-filesystem/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/skill/skill-filesystem/README.md",
+   "summary": "dsh-skill-filesystem 包参考文档：本地文件系统 skill provider 的根目录发现、frontmatter 解析与监视配置指南。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "skill-filesystem"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/skill/skill-filesystem/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/skill/skill-filesystem/package.json",
+   "summary": "@deepseek-ai/dsh-skill-filesystem 包清单：目录 bundle 与平面 Markdown skill 发现（chokidar 依赖）。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "skill-filesystem"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/skill/skill-filesystem/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/skill/skill-filesystem/src/index.ts",
+   "summary": "本地文件系统 skill provider（ctx.skills 的具体实现）：从 project（.dsh/.agents）、custom、user 根发现目录 bundle 与平面 Markdown skill，解析 YAML frontmatter，文件系统服务在场时经 ctx.fs 读正文；SkillWatchManager 持有有界主机 watcher（chokidar + Fallback watchFile，maxProjects LRU 驱逐）驱动目录失效；监听 fs/observed 把模型变更工具的写路径即时反映进目录。",
+   "tags": [
+    "service-provider",
+    "skill-discovery",
+    "watching",
+    "frontmatter"
+   ],
+   "complexity": "complex",
+   "languageNotes": "函数插件形态（export name/inject/apply，无 default export）；bundled 根只在 includeDefaultRoots 时取 DSH_BUNDLED_SKILL_DIR，防隔离 provider 重复发现打包 skill。"
+  },
+  {
+   "id": "function:packages/skill/skill-filesystem/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/skill/skill-filesystem/src/index.ts",
+   "lineRange": [
+    133,
+    146
+   ],
+   "summary": "函数插件入口：注册 FileSystemSkillProvider（inject ['skills']）、effect 保证 dispose watcher，并挂 fs/observed 把变更工具写过的路径通知 provider 即时失效。",
+   "tags": [
+    "plugin-entry",
+    "registration",
+    "observation-hook"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/skill/skill-filesystem/src/index.ts:FileSystemSkillProvider",
+   "type": "class",
+   "name": "FileSystemSkillProvider",
+   "filePath": "packages/skill/skill-filesystem/src/index.ts",
+   "lineRange": [
+    149,
+    272
+   ],
+   "summary": "把本地 project/custom/user skill 根映射进 ctx.skills 的 provider（implements SkillProvider）：list 发现根下候选（失败根记日志省略、root/watcher 失败使观察标记 incomplete），get 经 ctx.fs（在场时）或 node:fs 读正文；abort 时整体 dispose。",
+   "tags": [
+    "service-provider",
+    "skill-discovery",
+    "provider-role"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/skill/skill/src/index.ts:escapeText",
+   "type": "function",
+   "name": "escapeText",
+   "filePath": "packages/skill/skill/src/index.ts",
+   "lineRange": [
+    226,
+    228
+   ],
+   "summary": "模型可见渲染的文本转义助手（与 escapeAttr 配套，防 skill 内容注入标签结构）。",
+   "tags": [
+    "escaping",
+    "rendering",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/skill/skill-filesystem/src/index.ts:SkillWatchManager",
+   "type": "class",
+   "name": "SkillWatchManager",
+   "filePath": "packages/skill/skill-filesystem/src/index.ts",
+   "lineRange": [
+    294,
+    615
+   ],
+   "summary": "有界主机 watcher 属主：按 root/ancestor 两模式持有 chokidar 或 watchFile 句柄（根缺失时退化为监视最近存在祖先的稳定性阈值 + 轮询间隔），maxProjects LRU 驱逐最旧项目；变更去抖后调 invalidate，closing 期静默收敛。",
+   "tags": [
+    "watching",
+    "lru-bounds",
+    "degradation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/skill/skill-filesystem/src/index.ts:parseSkillFile",
+   "type": "function",
+   "name": "parseSkillFile",
+   "filePath": "packages/skill/skill-filesystem/src/index.ts",
+   "lineRange": [
+    811,
+    854
+   ],
+   "summary": "解析一个 SKILL.md：frontmatter（name/description/调用策略/遗留键拒绝）+正文，产出候选或带行号的解析错误。",
+   "tags": [
+    "parsing",
+    "frontmatter",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/skill/skill-filesystem/src/index.ts:parseFrontmatter",
+   "type": "function",
+   "name": "parseFrontmatter",
+   "filePath": "packages/skill/skill-filesystem/src/index.ts",
+   "lineRange": [
+    931,
+    943
+   ],
+   "summary": "切分 YAML frontmatter 与正文：首行 --- 起到闭合分隔符，YAML 解析为对象否则返回 undefined。",
+   "tags": [
+    "parsing",
+    "frontmatter",
+    "yaml"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/skill/skill-office/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/skill/skill-office/README.md",
+   "summary": "dsh-skill-office 包参考文档：打包 Office skill 集（docx/xlsx/pptx/render/recalculate/export-pdf）的运行时与打包应用注意。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "office"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "document:packages/skill/skill-office/assets/office-docx/SKILL.md",
+   "type": "document",
+   "name": "SKILL.md",
+   "filePath": "packages/skill/skill-office/assets/office-docx/SKILL.md",
+   "summary": "打包 Office skill 定义：Word 文档读写操作指引。",
+   "tags": [
+    "skill-definition",
+    "office",
+    "docx",
+    "asset"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/skill/skill-office/assets/office-export-pdf/SKILL.md",
+   "type": "document",
+   "name": "SKILL.md",
+   "filePath": "packages/skill/skill-office/assets/office-export-pdf/SKILL.md",
+   "summary": "打包 Office skill 定义：导出 PDF 的操作指引。",
+   "tags": [
+    "skill-definition",
+    "office",
+    "export-pdf",
+    "asset"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/skill/skill-office/assets/office-pptx/SKILL.md",
+   "type": "document",
+   "name": "SKILL.md",
+   "filePath": "packages/skill/skill-office/assets/office-pptx/SKILL.md",
+   "summary": "打包 Office skill 定义：PowerPoint 演示文稿读写操作指引。",
+   "tags": [
+    "skill-definition",
+    "office",
+    "pptx",
+    "asset"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/skill/skill-office/assets/office-recalculate/SKILL.md",
+   "type": "document",
+   "name": "SKILL.md",
+   "filePath": "packages/skill/skill-office/assets/office-recalculate/SKILL.md",
+   "summary": "打包 Office skill 定义：重新计算文档（公式刷新）的操作指引。",
+   "tags": [
+    "skill-definition",
+    "office",
+    "recalculate",
+    "asset"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/skill/skill-office/assets/office-render/SKILL.md",
+   "type": "document",
+   "name": "SKILL.md",
+   "filePath": "packages/skill/skill-office/assets/office-render/SKILL.md",
+   "summary": "打包 Office skill 定义：文档渲染（预览/图像化）的操作指引。",
+   "tags": [
+    "skill-definition",
+    "office",
+    "render",
+    "asset"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/skill/skill-office/assets/office-xlsx/SKILL.md",
+   "type": "document",
+   "name": "SKILL.md",
+   "filePath": "packages/skill/skill-office/assets/office-xlsx/SKILL.md",
+   "summary": "打包 Office skill 定义：Excel 工作簿读写操作指引。",
+   "tags": [
+    "skill-definition",
+    "office",
+    "xlsx",
+    "asset"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/skill/skill-office/assets/office/SKILL.md",
+   "type": "document",
+   "name": "SKILL.md",
+   "filePath": "packages/skill/skill-office/assets/office/SKILL.md",
+   "summary": "打包 Office skill 入口定义：Office 文档家族的总览与路由指引。",
+   "tags": [
+    "skill-definition",
+    "office",
+    "entry",
+    "asset"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/skill/skill-office/assets/office/references/sidecar.md",
+   "type": "document",
+   "name": "sidecar.md",
+   "filePath": "packages/skill/skill-office/assets/office/references/sidecar.md",
+   "summary": "office skill 的附带参考文档（渐进披露的引用层资源）。",
+   "tags": [
+    "reference",
+    "office",
+    "asset"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/skill/skill-office/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/skill/skill-office/package.json",
+   "summary": "@deepseek-ai/dsh-skill-office 包清单：打包 Office skill 集 provider。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "office"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/skill/skill-office/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/skill/skill-office/src/index.ts",
+   "summary": "打包 Office skill 的注册插件（函数插件，inject ['skills']）：apply 从 assetRoot 读各 SKILL.md frontmatter 产候选（bundled 源+BUNDLED_SKILL_RANK），get 时按需附加 officeRuntime 注入的 LibreOffice Kit 绝对路径块；打包应用（SEA/Electron）必须显式供 standalone Node 可执行文件。",
+   "tags": [
+    "plugin-entry",
+    "bundled-skills",
+    "office",
+    "resource-injection"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/skill/skill-office/src/index.ts:officeRuntime",
+   "type": "function",
+   "name": "officeRuntime",
+   "filePath": "packages/skill/skill-office/src/index.ts",
+   "lineRange": [
+    47,
+    62
+   ],
+   "summary": "生成附加进 render/recalculate/export-pdf skill 正文的运行时块：校验 Node/CLI 绝对路径存在（打包应用无 process.execPath 可用时抛错），列出 LibreOffice Kit 调用约定。",
+   "tags": [
+    "runtime-injection",
+    "packaging",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/skill/skill-office/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/skill/skill-office/src/index.ts",
+   "lineRange": [
+    69,
+    95
+   ],
+   "summary": "函数插件入口：从绝对 assetRoot 解析全部 SKILL.md 建 dsh-office provider（候选静态化，get 惰性读正文+按 skill 附加运行时块）并 ctx.skills.registerProvider 注册。",
+   "tags": [
+    "plugin-entry",
+    "provider-registration",
+    "cordis-plugin"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/skill/skill-office/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/skill/skill-office/tsconfig.json",
+   "summary": "包级 TypeScript 编译配置。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/skill/tool-skill/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/skill/tool-skill/README.md",
+   "summary": "dsh-tool-skill 包参考文档（279 行）：持久会话 skill 目录与模型 skill 加载工具的组装指南。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "tool-skill"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:packages/skill/tool-skill/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/skill/tool-skill/package.json",
+   "summary": "@deepseek-ai/dsh-tool-skill 包清单：持久会话 skill 目录与模型可见 skill 加载工具。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "tool-skill"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/skill/tool-skill/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/skill/tool-skill/src/index.ts",
+   "summary": "模型 skill 加载工具 + 持久会话目录（函数插件，inject agents/tools/skills/workingDirectory）：catalog 以 catalog 形态 context 持久化（entries 与模型可见 prose 并存，非模型消费者不得重解析 <available_skills> 块）；skill 工具加载正文渲染进用户消息流；目录只在调用 agent 精确解析到本插件的工具注册时发布（restriction/影子同删 schema 与指引）。",
+   "tags": [
+    "tool-registration",
+    "session-catalog",
+    "durable-context",
+    "model-facing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/skill/tool-skill/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/skill/tool-skill/src/index.ts",
+   "lineRange": [
+    80,
+    256
+   ],
+   "summary": "函数插件入口：defineTool 注册 skill 工具（输出 schema 含 resourceBase 三态），目录消息渲染/替换/不完整通知全走此处组装；PreStepDecision 挂钩决定何时重发目录。",
+   "tags": [
+    "plugin-entry",
+    "tool-registration",
+    "catalog-publication"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/skill/tool-skill/src/index.ts:renderCatalogMessage",
+   "type": "function",
+   "name": "renderCatalogMessage",
+   "filePath": "packages/skill/tool-skill/src/index.ts",
+   "lineRange": [
+    258,
+    287
+   ],
+   "summary": "渲染模型可见的 skill 目录用户消息（<available_skills> 框架+逐条 name/description），携带 catalog 形态的持久化 source。",
+   "tags": [
+    "model-facing",
+    "rendering",
+    "catalog"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/skill/tool-skill/src/index.ts:renderCatalogUpdate",
+   "type": "function",
+   "name": "renderCatalogUpdate",
+   "filePath": "packages/skill/tool-skill/src/index.ts",
+   "lineRange": [
+    289,
+    327
+   ],
+   "summary": "渲染目录替换消息：只列新增/移除/变更条目的差异（update: true source），避免整目录重灌上下文。",
+   "tags": [
+    "model-facing",
+    "incremental-update",
+    "catalog"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/skill/tool-skill/src/index.ts:readCatalogEntries",
+   "type": "function",
+   "name": "readCatalogEntries",
+   "filePath": "packages/skill/tool-skill/src/index.ts",
+   "lineRange": [
+    368,
+    379
+   ],
+   "summary": "从持久化会话记录读回最近一次目录的条目（非模型消费路径），供差异计算。",
+   "tags": [
+    "session-read",
+    "catalog",
+    "session-log"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/skill/tool-skill/src/index.ts:invokedSkillNames",
+   "type": "function",
+   "name": "invokedSkillNames",
+   "filePath": "packages/skill/tool-skill/src/index.ts",
+   "lineRange": [
+    438,
+    451
+   ],
+   "summary": "从会话历史提取实际被调用过的 skill 名集合（目录再发布时保持已用项不丢）。",
+   "tags": [
+    "session-scan",
+    "invocation-history",
+    "session-log"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/skill/tool-skill/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/skill/tool-skill/tsconfig.json",
+   "summary": "包级 TypeScript 编译配置。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/skill/tool-workspace-dependencies/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/skill/tool-workspace-dependencies/README.md",
+   "summary": "dsh-tool-workspace-dependencies 包参考文档：工作区依赖相关工具指南（源码 index.ts 在后续批次）。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "workspace-deps"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/skill/tool-workspace-dependencies/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/skill/tool-workspace-dependencies/package.json",
+   "summary": "@deepseek-ai/dsh-tool-workspace-dependencies 包清单：工作区依赖工具。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "workspace-deps"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "file:packages/core/scope/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/skill/skill-filesystem/src/index.ts",
+   "target": "file:packages/fs/fs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/skill/skill-filesystem/src/index.ts",
+   "target": "file:packages/util/home-paths/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/skill/skill-filesystem/src/index.ts",
+   "target": "file:packages/skill/skill/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/skill/skill-office/src/index.ts",
+   "target": "file:packages/skill/skill/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/skill/tool-skill/src/index.ts",
+   "target": "file:packages/session/working-directory/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/skill/tool-skill/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/skill/tool-skill/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/skill/tool-skill/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/skill/tool-skill/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/skill/tool-skill/src/index.ts",
+   "target": "file:packages/skill/skill/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "class:packages/skill/skill/src/index.ts:SkillLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "class:packages/skill/skill/src/index.ts:SkillRegistry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "function:packages/skill/skill/src/index.ts:isSkillName",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "function:packages/skill/skill/src/index.ts:isModelInvocable",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "function:packages/skill/skill/src/index.ts:isUserInvocable",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "function:packages/skill/skill/src/index.ts:renderSkillContent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "function:packages/skill/skill/src/index.ts:renderResourceHint",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "function:packages/skill/skill/src/index.ts:validateCandidate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "function:packages/skill/skill/src/index.ts:validateDefinition",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "function:packages/skill/skill/src/index.ts:toSummary",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "function:packages/skill/skill/src/index.ts:waitWithAbort",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/skill-filesystem/src/index.ts",
+   "target": "function:packages/skill/skill-filesystem/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/skill-filesystem/src/index.ts",
+   "target": "class:packages/skill/skill-filesystem/src/index.ts:FileSystemSkillProvider",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/skill-filesystem/src/index.ts",
+   "target": "class:packages/skill/skill-filesystem/src/index.ts:SkillWatchManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/skill-filesystem/src/index.ts",
+   "target": "function:packages/skill/skill-filesystem/src/index.ts:parseSkillFile",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/skill-filesystem/src/index.ts",
+   "target": "function:packages/skill/skill-filesystem/src/index.ts:parseFrontmatter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/skill-office/src/index.ts",
+   "target": "function:packages/skill/skill-office/src/index.ts:officeRuntime",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/skill-office/src/index.ts",
+   "target": "function:packages/skill/skill-office/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/tool-skill/src/index.ts",
+   "target": "function:packages/skill/tool-skill/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/tool-skill/src/index.ts",
+   "target": "function:packages/skill/tool-skill/src/index.ts:renderCatalogMessage",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/tool-skill/src/index.ts",
+   "target": "function:packages/skill/tool-skill/src/index.ts:renderCatalogUpdate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/tool-skill/src/index.ts",
+   "target": "function:packages/skill/tool-skill/src/index.ts:readCatalogEntries",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/tool-skill/src/index.ts",
+   "target": "function:packages/skill/tool-skill/src/index.ts:invokedSkillNames",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "class:packages/skill/skill/src/index.ts:SkillRegistry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "function:packages/skill/skill/src/index.ts:isSkillName",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "function:packages/skill/skill/src/index.ts:isModelInvocable",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "function:packages/skill/skill/src/index.ts:isUserInvocable",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "function:packages/skill/skill/src/index.ts:renderSkillContent",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "function:packages/skill/skill/src/index.ts:escapeText",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "function:packages/skill/skill/src/index.ts:toSummary",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/skill/skill/src/index.ts",
+   "target": "function:packages/skill/skill/src/index.ts:waitWithAbort",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/skill/skill-filesystem/src/index.ts",
+   "target": "function:packages/skill/skill-filesystem/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/skill/skill-filesystem/src/index.ts",
+   "target": "class:packages/skill/skill-filesystem/src/index.ts:FileSystemSkillProvider",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/skill/skill-office/src/index.ts",
+   "target": "function:packages/skill/skill-office/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/skill/tool-skill/src/index.ts",
+   "target": "function:packages/skill/tool-skill/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/skill/skill-filesystem/src/index.ts:apply",
+   "target": "class:packages/skill/skill-filesystem/src/index.ts:FileSystemSkillProvider",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/skill/skill-office/src/index.ts:apply",
+   "target": "file:packages/skill/skill/src/index.ts",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "document:packages/skill/README.md",
+   "target": "file:packages/skill/skill/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/skill/skill/README.md",
+   "target": "file:packages/skill/skill/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/skill/skill-filesystem/README.md",
+   "target": "file:packages/skill/skill-filesystem/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/skill/skill-office/README.md",
+   "target": "file:packages/skill/skill-office/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/skill/skill-office/assets/office/SKILL.md",
+   "target": "file:packages/skill/skill-office/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/skill/tool-skill/README.md",
+   "target": "file:packages/skill/tool-skill/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/skill/tool-workspace-dependencies/README.md",
+   "target": "file:packages/skill/tool-workspace-dependencies/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/skill/skill/package.json",
+   "target": "file:packages/skill/skill/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/skill/skill-filesystem/package.json",
+   "target": "file:packages/skill/skill-filesystem/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/skill/skill-office/package.json",
+   "target": "file:packages/skill/skill-office/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/skill/tool-skill/package.json",
+   "target": "file:packages/skill/tool-skill/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  }
+ ]
+}

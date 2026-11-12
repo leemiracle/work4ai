@@ -1,148 +1,173 @@
-> 来源: [https://deepwiki.com/deepseek-ai/profile-data/1-overview](https://deepwiki.com/deepseek-ai/profile-data/1-overview)
-> DeepWiki deepseek-ai/profile-data
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/profile-data · page 1 Overview · fetched 2026-10-30 -->
 
 # Overview
 
-  Relevant source files 
- - [README.md](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1)
- - [deep_ep/__init__.py](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py)
- 
-  
+<details>
+<summary>Relevant source files</summary>
+
+The following files were used as context for generating this wiki page:
+
+- [README.md](README.md)
+
+</details>
+
+
+
+This document provides an introduction to the DeepSeek profile data repository, which contains profiling data from DeepSeek's training and inference framework. The repository focuses on showcasing communication-computation overlap strategies and low-level implementation details that enable efficient large-scale AI model training and inference.
+
+For detailed explanations about what profiling data is and why it's important, see [What is Profiling Data](#1.1). To learn more about the DeepSeek framework itself, see [DeepSeek Framework](#1.2).
+
 ## Purpose and Scope
 
- DeepEP (DeepEveryParallel) is a high-performance communication library tailored for modern machine learning training and inference, specifically optimized for **Mixture-of-Experts (MoE) expert parallelism**. It provides high-throughput and low-latency all-to-all GPU kernels for MoE dispatch and combine operations, supporting low-precision formats like FP8 [README.md1-5](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L1-L5)
+The DeepSeek profile data repository serves several key purposes:
 
- The library features a lightweight **Just-In-Time (JIT)** compilation system, allowing it to run without pre-compilation of CUDA kernels during installation [README.md3-5](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L3-L5) DeepEP V2 introduces a significant architectural shift from the NVSHMEM-based V1 to a more efficient **NCCL Gin backend**, achieving up to 1.3x peak performance while reducing SM occupancy by up to 4x [README.md9-57](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L9-L57)
+1. To demonstrate advanced techniques for overlapping communication and computation in large language model training and inference
+2. To provide insight into the performance characteristics of different parallel configurations
+3. To share performance optimization strategies used in production deployments
+4. To help the community better understand low-level implementation details of efficient AI systems
 
- **Sources:** [README.md1-17](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L1-L17) [deep_ep/__init__.py71-84](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L71-L84)
+The repository contains JSON-format profiling data captured using the PyTorch Profiler, which can be visualized using Chrome or Edge browser tracing tools.
 
- 
----
+Sources: [README.md:1-3]()
 
- 
-## Architectural Evolution: V1 to V2
+## Repository Structure
 
- DeepEP V2 represents a complete refactoring of the communication layer. The transition from V1 to V2 involves several major shifts in backend technology and resource management:
+The repository contains three main JSON files representing different aspects of the DeepSeek system:
 
- 
-| Feature | V1 (Legacy) | V2 (Elastic) |
-|---|---|---|
-| Backend | NVSHMEM (IBGDA/Symmetric Heap) | NCCL Gin (Header-only, lightweight) |
-| Interface | Buffer class | ElasticBuffer & EPHandle |
-| Resource Allocation | Manual tuning (num_sms, Config) | Analytical calculation via formulas |
-| Domain Scale | Limited scale-out | Up to EP2048 |
-| SM Occupancy | High (e.g., 24 SMs) | Low (e.g., 4-6 SMs) |
-| JIT Pipeline | Partial / Pre-compiled | Fully JIT (NVRTC-based) |
-
- **Sources:** [README.md9-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L9-L25) [README.md115-116](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L116) [deep_ep/buffers/elastic.py16-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L30)
-
- 
----
-
- 
-## System Architecture and Code Entities
-
- The following diagram maps the high-level system components to their corresponding code entities and files, illustrating the bridge between the Python user space and the CUDA kernel implementations.
-
- 
+```mermaid
+flowchart TD
+    A["DeepSeek Profile Data Repository"] --> B["train.json"]
+    A --> C["prefill.json"]
+    A --> D["decode.json"]
+    
+    B -- "visualize" --> E["Chrome/Edge Tracing Tools"]
+    C -- "visualize" --> E
+    D -- "visualize" --> E
+    
+    B -- "represents" --> F["Training Process (DualPipe)"]
+    C -- "represents" --> G["Inference Prefilling"]
+    D -- "represents" --> H["Inference Decoding"]
 ```
 
+**Diagram: Repository Structure and Data Visualization Flow**
+
+Sources: [README.md:5-30]()
+
+## System Components Overview
+
+The DeepSeek profiling data covers three main system components:
+
+### 1. Training Process
+
+The training profiling data (`train.json`) demonstrates the overlapping strategy implemented in DualPipe for forward and backward computations. Each processing chunk contains 4 MoE (Mixture of Experts) layers. For training, DeepSeek uses a parallel configuration of EP64 (Expert Parallelism with 64 partitions) and TP1 (Tensor Parallelism of 1) with a 4K sequence length.
+
+For more details about the training process, see [Training Process](#2).
+
+Sources: [README.md:5-12]()
+
+### 2. Inference Prefilling
+
+The prefilling profiling data (`prefill.json`) showcases the process of handling initial prompt tokens. It employs an EP32, TP1 configuration with a prompt length of 4K and processes 16K tokens per GPU. It uses two micro-batches to overlap computation with all-to-all communication.
+
+For more details about the prefilling stage, see [Prefilling Stage](#3.1).
+
+Sources: [README.md:16-22]()
+
+### 3. Inference Decoding
+
+The decoding profiling data (`decode.json`) represents the token generation process. It uses an EP128, TP1 configuration with a 4K prompt length and handles 128 requests per GPU. Like prefilling, it uses two micro-batches for overlapping computation and communication, but with a key difference: all-to-all communication during decoding doesn't occupy GPU SMs thanks to RDMA (Remote Direct Memory Access) implementation.
+
+For more details about the decoding stage, see [Decoding Stage](#3.2).
+
+Sources: [README.md:24-30]()
+
+## Parallel Configurations
+
+The profiling data demonstrates different parallel configurations optimized for specific workloads:
+
+```mermaid
+flowchart LR
+    A["DeepSeek Parallel Configurations"] --> B["Training: EP64, TP1"]
+    A --> C["Prefilling: EP32, TP1"]
+    A --> D["Decoding: EP128, TP1"]
+    
+    B -- "used in" --> E["DualPipe with MoE Layers"]
+    C -- "used in" --> F["2 Micro-batches with All-to-All"]
+    D -- "used in" --> G["2 Micro-batches with RDMA"]
 ```
 
- **Diagram: DeepEP V2 Code Entity Mapping**
+**Diagram: Parallel Configurations and Their Applications**
 
- **Sources:** [deep_ep/__init__.py87-97](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L87-L97) [deep_ep/buffers/elastic.py16-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L30) [README.md13-17](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L13-L17) [csrc/python_api.cpp1-39](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/python_api.cpp#L1-L39)
+Sources: [README.md:5-30]()
 
- 
----
+## Communication-Computation Overlap Strategies
 
- 
-## Core Abstractions: ElasticBuffer and EPHandle
+A key focus of the repository is demonstrating efficient strategies for overlapping communication and computation:
 
- 
-### ElasticBuffer
-
- The `ElasticBuffer` is the primary interface in V2. It manages a single contiguous GPU buffer that serves as a symmetric memory window across the communication group [README.md115-116](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L116) It uses `NCCLSymmetricMemoryContext` to handle cross-GPU memory registration and RDMA window management [csrc/kernels/backend/nccl.cu10-50](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/kernels/backend/nccl.cu#L10-L50) It supports both standard EP operations and experimental features like PP and Engram.
-
- 
-### EPHandle
-
- The `EPHandle` is a metadata object produced during the dispatch phase. It caches critical routing information, including:
-
- 
- - **Expert Alignment**: Padding information for memory efficiency [deep_ep/buffers/elastic.py32-40](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L32-L40)
- - **Token Counts**: `psum_num_recv_tokens_per_expert` and `num_recv_tokens` [deep_ep/buffers/elastic.py45-55](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L45-L55)
- - **Routing Metadata**: `topk_idx` and `recv_src_metadata` for the combine phase [deep_ep/buffers/elastic.py42-50](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L42-L50)
- 
- This handle can be reused for subsequent `combine` operations or cached during inference decoding to eliminate redundant metadata calculation [README.md18-20](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L18-L20)
-
- **Sources:** [deep_ep/buffers/elastic.py16-110](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L110) [README.md115-130](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L130)
-
- 
----
-
- 
-## Supported Communication Modes
-
- DeepEP V2 provides a unified interface for several high-performance primitives, executed via the NCCL Gin backend:
-
- 
- - **EP Dispatch/Combine**: The core MoE all-to-all kernels. Supports `do_expand` for GEMM layout optimization and `expert_alignment` for memory efficiency [deep_ep/buffers/elastic.py134-210](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L134-L210)
- - **Engram (Remote Memory Access)**: Zero-SM RDMA-based remote memory fetching (e.g., for KV cache). Uses `engram_write` and `engram_fetch` (returning a hook) to access remote memory with minimal compute overhead [README.md23-31](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L23-L31)
- - **Pipeline Parallelism (PP)**: Experimental zero-SM RDMA primitives (`pp_send`, `pp_recv`) for point-to-point communication between pipeline stages [README.md24-100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L24-L100)
- - **All-Gather Reduce-Scatter (AGRS)**: Experimental primitives for data and tensor parallelism, including `all_gather` updates [README.md37-98](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L37-L98)
- 
- 
+```mermaid
+flowchart TD
+    A["Communication-Computation Overlap Strategies"] --> B["Training Strategy: DualPipe"]
+    A --> C["Inference Strategy: Micro-batches"]
+    
+    B --> D["Forward & Backward Chunks with MoE Layers"]
+    
+    C --> E["Prefilling: Micro-batches with All-to-All"]
+    C --> F["Decoding: Micro-batches with RDMA"]
+    
+    E --> G["Balanced Attention Computation Across Micro-batches"]
+    F --> H["GPU SMs Freed After RDMA Issues (DeepEP)"]
 ```
 
+**Diagram: Communication-Computation Overlap Strategies**
+
+Sources: [README.md:11-30]()
+
+## Data Visualization
+
+All profiling data in this repository can be visualized by:
+
+1. Downloading the JSON files
+2. Navigating to `chrome://tracing` in Chrome browser or `edge://tracing` in Edge browser
+3. Loading the JSON files to analyze performance characteristics
+
+For detailed guidance on visualization and analysis, see [Visualization and Analysis](#5).
+
+Sources: [README.md:3]()
+
+## DeepSeek System Architecture
+
+The following diagram provides a high-level overview of the DeepSeek system components represented in the profiling data:
+
+```mermaid
+flowchart TB
+    A["DeepSeek Framework"] --> B["Training Pipeline"]
+    A --> C["Inference Pipeline"]
+    
+    B --> D["DualPipe Implementation"]
+    D --> E["Forward Chunk (4 MoE Layers)"]
+    D --> F["Backward Chunk (4 MoE Layers)"]
+    
+    C --> G["Prefilling Stage"]
+    C --> H["Decoding Stage"]
+    
+    G --> I["EP32, TP1 Configuration"]
+    G --> J["2 Micro-batches for Overlap"]
+    J --> K["All-to-All Communication"]
+    
+    H --> L["EP128, TP1 Configuration"]
+    H --> M["2 Micro-batches for Overlap"]
+    M --> N["RDMA-based All-to-All (DeepEP)"]
 ```
 
- **Diagram: V2 Dispatch Execution Flow**
+**Diagram: DeepSeek System Architecture Overview**
 
- **Sources:** [deep_ep/buffers/elastic.py113-400](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L113-L400) [README.md97-101](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L97-L101) [csrc/kernels/backend/nccl.cu60-100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/kernels/backend/nccl.cu#L60-L100)
+Sources: [README.md:5-30]()
 
- 
+For detailed information about specific components of the system, refer to the following pages:
+- [Training Process](#2) for information about DualPipe and MoE layers
+- [Inference Process](#3) for details about prefilling and decoding
+- [Parallel Configurations](#4) for more on Expert Parallelism and Tensor Parallelism
+- [Visualization and Analysis](#5) for guidance on using the profiling data
+
 ---
 
- 
-## Resource Allocation and Topology
-
- V2 eliminates the need for manual auto-tuning by using analytical formulas to determine optimal resource usage.
-
- 
-### Analytical SM Tuning
-
- The method `get_theoretical_num_sms` calculates the required SM count based on hardware performance characteristics:
-
- 
- - **Bandwidth Modeling**: Considers `sm_read_gbs`, `sm_write_gbs`, `rdma_gbs`, and `nvlink_gbs` [deep_ep/buffers/elastic.py441-450](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L441-L450)
- - **Overlap**: Adjusts counts based on the `prefer_overlap_with_compute` flag to allow communication to hide behind computation [deep_ep/buffers/elastic.py121-125](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L121-L125)
- 
- 
-### Topology Domains
-
- DeepEP models the cluster as a logical grid of ranks:
-
- 
- - **Scale-up Domain**: Communication via NVLink (Intra-node/Intra-LSA) [deep_ep/utils/envs.py10-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L10-L25)
- - **Scale-out Domain**: Communication via RDMA (Inter-node/Rail-only) [deep_ep/utils/envs.py10-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L10-L25)
- - **Hybrid Mode**: When `allow_hybrid_mode=True`, the library uses a hierarchical approach, combining NVLink and RDMA to maximize throughput in large clusters [deep_ep/buffers/elastic.py120-121](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L120-L121)
- 
- **Sources:** [deep_ep/buffers/elastic.py113-470](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L113-L470) [README.md18-22](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L18-L22) [deep_ep/utils/envs.py7-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L7-L30)
-
- 
----
-
- 
-## Hardware and Software Requirements
-
- To utilize DeepEP V2, the following environment is required:
-
- 
- - **GPU Architecture**: NVIDIA Hopper (SM90) or newer (e.g., Blackwell/SM100) [README.md63-65](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L63-L65)
- - **CUDA**: 12.3 or above for SM90 support [README.md67-68](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L67-L68)
- - **NCCL**: 2.30.4 or above (recommended via `nvidia-nccl-cu13` pip package) [README.md70-79](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L70-L79)
- - **Interconnect**: NVLink for intra-node; RDMA (InfiniBand/RoCE) for inter-node [README.md71-72](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L71-L72)
- - **Python**: 3.8+ with PyTorch 2.10+ [README.md66-69](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L66-L69)
- 
- **Sources:** [README.md63-72](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L63-L72) [deep_ep/__init__.py46-70](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L46-L70)

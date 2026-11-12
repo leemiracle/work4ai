@@ -1,0 +1,2311 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/parser/chat_parsing/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/parser/chat_parsing/__init__.py",
+   "summary": "chat_parsing 包入口（再导出）。",
+   "tags": [
+    "barrel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/parser/chat_parsing/content_parsers.py",
+   "type": "file",
+   "name": "content_parsers.py",
+   "filePath": "vllm/parser/chat_parsing/content_parsers.py",
+   "summary": "内容字段解析器（255 行）：_json/_xml_inline/_kv_lines 三态格式解析+transform 字符串校验+process_field——响应模板字段的通用值解析。",
+   "tags": [
+    "parsing",
+    "content",
+    "response-template"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/parser/chat_parsing/content_parsers.py:_json",
+   "type": "function",
+   "name": "_json",
+   "filePath": "vllm/parser/chat_parsing/content_parsers.py",
+   "lineRange": [
+    51,
+    93
+   ],
+   "summary": "JSON 字段解析（43 行）。",
+   "tags": [
+    "json"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/parser/chat_parsing/content_parsers.py:validate_transform_strings",
+   "type": "function",
+   "name": "validate_transform_strings",
+   "filePath": "vllm/parser/chat_parsing/content_parsers.py",
+   "lineRange": [
+    197,
+    217
+   ],
+   "summary": "transform 表达式合法性校验。",
+   "tags": [
+    "validation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/parser/chat_parsing/response_parser.py",
+   "type": "file",
+   "name": "response_parser.py",
+   "filePath": "vllm/parser/chat_parsing/response_parser.py",
+   "summary": "ResponseParser（449 行，14 方法）：schema 驱动的响应结构化解析（_schema_types/_coerce 类型强转/parse_response）——chat 输出按 JSON Schema 拆字段。",
+   "tags": [
+    "parsing",
+    "response",
+    "schema"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/parser/chat_parsing/response_parser.py:ResponseParser",
+   "type": "class",
+   "name": "ResponseParser",
+   "filePath": "vllm/parser/chat_parsing/response_parser.py",
+   "lineRange": [
+    103,
+    448
+   ],
+   "summary": "响应解析器（14 方法）。",
+   "tags": [
+    "parser"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/parser/chat_parsing/response_parser.py:parse_response",
+   "type": "function",
+   "name": "parse_response",
+   "filePath": "vllm/parser/chat_parsing/response_parser.py",
+   "lineRange": [
+    80,
+    100
+   ],
+   "summary": "解析入口（schema→字段值）。",
+   "tags": [
+    "entry-point"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/parser/chat_parsing/response_templates.py",
+   "type": "file",
+   "name": "response_templates.py",
+   "filePath": "vllm/parser/chat_parsing/response_templates.py",
+   "summary": "响应模板（249 行）：ResponseTemplate/Field+锚点编译（_compile_anchor）+模板形状校验——模型输出到字段的锚定提取（response_template tool parser 与 reasoning parser 的公共基座）。",
+   "tags": [
+    "response-template",
+    "anchor",
+    "parsing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/parser/chat_parsing/response_templates.py:ResponseTemplate",
+   "type": "class",
+   "name": "ResponseTemplate",
+   "filePath": "vllm/parser/chat_parsing/response_templates.py",
+   "lineRange": [
+    55,
+    78
+   ],
+   "summary": "响应模板（1 方法）。",
+   "tags": [
+    "template"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/parser/chat_parsing/response_templates.py:_compile_anchor",
+   "type": "function",
+   "name": "_compile_anchor",
+   "filePath": "vllm/parser/chat_parsing/response_templates.py",
+   "lineRange": [
+    81,
+    126
+   ],
+   "summary": "锚点编译（正则化匹配）。",
+   "tags": [
+    "anchor"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/parser/chat_parsing/response_templates.py:load_response_template",
+   "type": "function",
+   "name": "load_response_template",
+   "filePath": "vllm/parser/chat_parsing/response_templates.py",
+   "lineRange": [
+    219,
+    245
+   ],
+   "summary": "模板加载入口。",
+   "tags": [
+    "loader"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/platforms/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/platforms/__init__.py",
+   "summary": "平台入口（345 行）：cuda/rocm/xpu/cpu 平台插件发现（含环境变量覆盖）+resolve_current_platform_cls_qualname+惰性 __getattr__——current_platform 的装配点。",
+   "tags": [
+    "platform",
+    "discovery",
+    "entry-point"
+   ],
+   "complexity": "complex",
+   "languageNotes": "平台解析顺序：显式插件>VLLM_PLATFORM>自动探测；__getattr__ 惰性导入避免重量级初始化。"
+  },
+  {
+   "id": "function:vllm/platforms/__init__.py:resolve_current_platform_cls_qualname",
+   "type": "function",
+   "name": "resolve_current_platform_cls_qualname",
+   "filePath": "vllm/platforms/__init__.py",
+   "lineRange": [
+    240,
+    292
+   ],
+   "summary": "平台类解析（插件/环境变量/自动探测三级）。",
+   "tags": [
+    "resolve",
+    "dispatch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/platforms/__init__.py:cuda_platform_plugin",
+   "type": "function",
+   "name": "cuda_platform_plugin",
+   "filePath": "vllm/platforms/__init__.py",
+   "lineRange": [
+    57,
+    105
+   ],
+   "summary": "CUDA 平台插件发现。",
+   "tags": [
+    "plugin",
+    "cuda"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/platforms/__init__.py:rocm_platform_plugin",
+   "type": "function",
+   "name": "rocm_platform_plugin",
+   "filePath": "vllm/platforms/__init__.py",
+   "lineRange": [
+    108,
+    140
+   ],
+   "summary": "ROCm 平台插件发现。",
+   "tags": [
+    "plugin",
+    "rocm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/platforms/cpu.py",
+   "type": "file",
+   "name": "cpu.py",
+   "filePath": "vllm/platforms/cpu.py",
+   "summary": "CpuPlatform（815 行，23 方法）：ISA 探测/后端选择/mamba 后端适配——CPU 平台全能力。",
+   "tags": [
+    "platform",
+    "cpu"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/platforms/cpu.py:CpuPlatform",
+   "type": "class",
+   "name": "CpuPlatform",
+   "filePath": "vllm/platforms/cpu.py",
+   "lineRange": [
+    108,
+    815
+   ],
+   "summary": "CPU 平台（23 方法）。",
+   "tags": [
+    "platform",
+    "cpu"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/platforms/cpu.py:_cpu_mamba_backend",
+   "type": "function",
+   "name": "_cpu_mamba_backend",
+   "filePath": "vllm/platforms/cpu.py",
+   "lineRange": [
+    44,
+    96
+   ],
+   "summary": "CPU mamba 后端选择。",
+   "tags": [
+    "mamba",
+    "backend"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/platforms/cuda.py",
+   "type": "file",
+   "name": "cuda.py",
+   "filePath": "vllm/platforms/cuda.py",
+   "summary": "CUDA 平台（1058 行）：CudaPlatformBase（37 方法：后端优先级矩阵/量化支持/内存）+NvmlCudaPlatform（16 方法，NVML 硬件探测）与 NonNvmlCudaPlatform 分裂——最大的平台实现。",
+   "tags": [
+    "platform",
+    "cuda",
+    "nvml"
+   ],
+   "complexity": "complex",
+   "languageNotes": "_get_backend_priorities（98 行）：注意力/线性/MoE 后端的全平台优先级矩阵中心。"
+  },
+  {
+   "id": "class:vllm/platforms/cuda.py:CudaPlatformBase",
+   "type": "class",
+   "name": "CudaPlatformBase",
+   "filePath": "vllm/platforms/cuda.py",
+   "lineRange": [
+    226,
+    748
+   ],
+   "summary": "CUDA 基座（37 方法）。",
+   "tags": [
+    "platform",
+    "cuda"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/platforms/cuda.py:NvmlCudaPlatform",
+   "type": "class",
+   "name": "NvmlCudaPlatform",
+   "filePath": "vllm/platforms/cuda.py",
+   "lineRange": [
+    755,
+    1008
+   ],
+   "summary": "NVML 平台（16 方法：SM 数/显存/能力查询）。",
+   "tags": [
+    "platform",
+    "nvml"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/platforms/cuda.py:_get_backend_priorities",
+   "type": "function",
+   "name": "_get_backend_priorities",
+   "filePath": "vllm/platforms/cuda.py",
+   "lineRange": [
+    84,
+    181
+   ],
+   "summary": "后端优先级矩阵（98 行）。",
+   "tags": [
+    "priorities",
+    "backend"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/platforms/interface.py",
+   "type": "file",
+   "name": "interface.py",
+   "filePath": "vllm/platforms/interface.py",
+   "summary": "Platform 接口（1503 行，91 方法）：平台抽象基类的全能力面（设备类型/能力/注意力后端/量化/dtype/内存/算子支持判定）+DeviceCapability+UnspecifiedPlatform——全部平台实现的契约。",
+   "tags": [
+    "platform",
+    "interface",
+    "base-class",
+    "core"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/platforms/interface.py:Platform",
+   "type": "class",
+   "name": "Platform",
+   "filePath": "vllm/platforms/interface.py",
+   "lineRange": [
+    137,
+    1498
+   ],
+   "summary": "平台 ABC（91 方法——vLLM 硬件抽象层的完整表面）。",
+   "tags": [
+    "platform",
+    "abc"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/platforms/interface.py:DeviceCapability",
+   "type": "class",
+   "name": "DeviceCapability",
+   "filePath": "vllm/platforms/interface.py",
+   "lineRange": [
+    93,
+    134
+   ],
+   "summary": "设备能力（8 方法，比较运算）。",
+   "tags": [
+    "capability"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/platforms/rocm.py",
+   "type": "file",
+   "name": "rocm.py",
+   "filePath": "vllm/platforms/rocm.py",
+   "summary": "RocmPlatform（1466 行，43 方法）：GCN 架构探测（amdsmi）+CDN 版本判定+DSV4 mxfp4 索引器默认——ROCm 平台全能力。",
+   "tags": [
+    "platform",
+    "rocm",
+    "amdsmi"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/platforms/rocm.py:RocmPlatform",
+   "type": "class",
+   "name": "RocmPlatform",
+   "filePath": "vllm/platforms/rocm.py",
+   "lineRange": [
+    653,
+    1466
+   ],
+   "summary": "ROCm 平台（43 方法）。",
+   "tags": [
+    "platform",
+    "rocm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/platforms/rocm.py:_capability_from_gcn_arch",
+   "type": "function",
+   "name": "_capability_from_gcn_arch",
+   "filePath": "vllm/platforms/rocm.py",
+   "lineRange": [
+    236,
+    304
+   ],
+   "summary": "GCN 架构名→能力版本映射。",
+   "tags": [
+    "gcn",
+    "capability"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/platforms/xpu.py",
+   "type": "file",
+   "name": "xpu.py",
+   "filePath": "vllm/platforms/xpu.py",
+   "summary": "XPUPlatform（642 行，31 方法）：Intel GPU 平台（内存查询包装/后端选择）。",
+   "tags": [
+    "platform",
+    "xpu",
+    "intel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/platforms/xpu.py:XPUPlatform",
+   "type": "class",
+   "name": "XPUPlatform",
+   "filePath": "vllm/platforms/xpu.py",
+   "lineRange": [
+    103,
+    642
+   ],
+   "summary": "XPU 平台（31 方法）。",
+   "tags": [
+    "platform",
+    "xpu"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/platforms/zen_cpu.py",
+   "type": "file",
+   "name": "zen_cpu.py",
+   "filePath": "vllm/platforms/zen_cpu.py",
+   "summary": "ZenCpuPlatform：CpuPlatform 子类（AMD Zen 特调）。",
+   "tags": [
+    "platform",
+    "cpu",
+    "zen"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/platforms/zen_cpu.py:ZenCpuPlatform",
+   "type": "class",
+   "name": "ZenCpuPlatform",
+   "filePath": "vllm/platforms/zen_cpu.py",
+   "lineRange": [
+    12,
+    34
+   ],
+   "summary": "Zen CPU 平台（2 方法）。",
+   "tags": [
+    "platform",
+    "zen"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/plugins/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/plugins/__init__.py",
+   "summary": "插件加载器（159 行）：load_plugins_by_group（entry_points 分组发现）/load_general_plugins/load_endpoint_plugins——vLLM 插件生态的入口。",
+   "tags": [
+    "plugins",
+    "entry-points",
+    "loader"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/plugins/__init__.py:load_plugins_by_group",
+   "type": "function",
+   "name": "load_plugins_by_group",
+   "filePath": "vllm/plugins/__init__.py",
+   "lineRange": [
+    36,
+    74
+   ],
+   "summary": "按 entry_points 组加载插件。",
+   "tags": [
+    "loader",
+    "entry-points"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/plugins/endpoint_plugins/interface.py",
+   "type": "file",
+   "name": "interface.py",
+   "filePath": "vllm/plugins/endpoint_plugins/interface.py",
+   "summary": "EndpointPlugin（Protocol）+attach/attach_endpoint_plugins——第三方端点扩展协议。",
+   "tags": [
+    "plugins",
+    "endpoint",
+    "protocol"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/plugins/endpoint_plugins/interface.py:EndpointPlugin",
+   "type": "class",
+   "name": "EndpointPlugin",
+   "filePath": "vllm/plugins/endpoint_plugins/interface.py",
+   "lineRange": [
+    50,
+    94
+   ],
+   "summary": "端点插件协议（2 方法）。",
+   "tags": [
+    "protocol",
+    "plugin"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/plugins/endpoint_plugins/interface.py:attach_endpoint_plugins",
+   "type": "function",
+   "name": "attach_endpoint_plugins",
+   "filePath": "vllm/plugins/endpoint_plugins/interface.py",
+   "lineRange": [
+    97,
+    146
+   ],
+   "summary": "向 app 挂接全部端点插件。",
+   "tags": [
+    "attach"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/plugins/lora_resolvers/filesystem_resolver.py",
+   "type": "file",
+   "name": "filesystem_resolver.py",
+   "filePath": "vllm/plugins/lora_resolvers/filesystem_resolver.py",
+   "summary": "FilesystemResolver：LoRA 权重本地文件系统解析器。",
+   "tags": [
+    "plugins",
+    "lora",
+    "resolver"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/plugins/lora_resolvers/filesystem_resolver.py:FilesystemResolver",
+   "type": "class",
+   "name": "FilesystemResolver",
+   "filePath": "vllm/plugins/lora_resolvers/filesystem_resolver.py",
+   "lineRange": [
+    11,
+    46
+   ],
+   "summary": "文件系统解析器（3 方法）。",
+   "tags": [
+    "resolver",
+    "lora"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/plugins/lora_resolvers/hf_hub_resolver.py",
+   "type": "file",
+   "name": "hf_hub_resolver.py",
+   "filePath": "vllm/plugins/lora_resolvers/hf_hub_resolver.py",
+   "summary": "HfHubResolver：LoRA 权重 HF Hub 解析器（FilesystemResolver 子类：先下载到本地再走文件系统）。",
+   "tags": [
+    "plugins",
+    "lora",
+    "resolver",
+    "hf-hub"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/plugins/lora_resolvers/hf_hub_resolver.py:HfHubResolver",
+   "type": "class",
+   "name": "HfHubResolver",
+   "filePath": "vllm/plugins/lora_resolvers/hf_hub_resolver.py",
+   "lineRange": [
+    16,
+    126
+   ],
+   "summary": "HF Hub 解析器（5 方法）。",
+   "tags": [
+    "resolver",
+    "lora"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/pooling_params.py",
+   "type": "file",
+   "name": "pooling_params.py",
+   "filePath": "vllm/pooling_params.py",
+   "summary": "PoolingParams（312 行，10 方法）+LateInteractionParams/LateChunkingParams（msgspec Struct）——池化请求参数全集。",
+   "tags": [
+    "pooling",
+    "params",
+    "data-model"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/pooling_params.py:PoolingParams",
+   "type": "class",
+   "name": "PoolingParams",
+   "filePath": "vllm/pooling_params.py",
+   "lineRange": [
+    83,
+    312
+   ],
+   "summary": "池化参数（10 方法）。",
+   "tags": [
+    "params",
+    "pooling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/pooling_params.py:LateInteractionParams",
+   "type": "class",
+   "name": "LateInteractionParams",
+   "filePath": "vllm/pooling_params.py",
+   "lineRange": [
+    18,
+    52
+   ],
+   "summary": "延迟交互参数（Struct）。",
+   "tags": [
+    "params",
+    "late-interaction"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/profiler/layerwise_profile.py",
+   "type": "file",
+   "name": "layerwise_profile.py",
+   "filePath": "vllm/profiler/layerwise_profile.py",
+   "summary": "层级剖析（400 行）：LayerwiseProfileResults（15 方法）+layerwise_profile 上下文管理器——逐层耗时统计。",
+   "tags": [
+    "profiler",
+    "layerwise",
+    "observability"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/profiler/layerwise_profile.py:LayerwiseProfileResults",
+   "type": "class",
+   "name": "LayerwiseProfileResults",
+   "filePath": "vllm/profiler/layerwise_profile.py",
+   "lineRange": [
+    83,
+    370
+   ],
+   "summary": "层级结果（15 方法）。",
+   "tags": [
+    "profiler",
+    "results"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/profiler/layerwise_profile.py:layerwise_profile",
+   "type": "class",
+   "name": "layerwise_profile",
+   "filePath": "vllm/profiler/layerwise_profile.py",
+   "lineRange": [
+    373,
+    400
+   ],
+   "summary": "剖析上下文管理器（3 方法）。",
+   "tags": [
+    "profiler",
+    "context-manager"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/profiler/wrapper.py",
+   "type": "file",
+   "name": "wrapper.py",
+   "filePath": "vllm/profiler/wrapper.py",
+   "summary": "剖析器包装（830 行）：WorkerProfiler(ABC)+Torch/Proton/Cuda 三 wrapper（11/13/4 方法）+create_worker_profiler 工厂——worker 侧剖析器家族。",
+   "tags": [
+    "profiler",
+    "wrapper",
+    "observability"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/profiler/wrapper.py:WorkerProfiler",
+   "type": "class",
+   "name": "WorkerProfiler",
+   "filePath": "vllm/profiler/wrapper.py",
+   "lineRange": [
+    36,
+    217
+   ],
+   "summary": "剖析器基类（17 方法，ABC）。",
+   "tags": [
+    "profiler",
+    "base-class"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/profiler/wrapper.py:TorchProfilerWrapper",
+   "type": "class",
+   "name": "TorchProfilerWrapper",
+   "filePath": "vllm/profiler/wrapper.py",
+   "lineRange": [
+    228,
+    465
+   ],
+   "summary": "PyTorch 剖析包装（11 方法）。",
+   "tags": [
+    "profiler",
+    "torch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/profiler/wrapper.py:create_worker_profiler",
+   "type": "function",
+   "name": "create_worker_profiler",
+   "filePath": "vllm/profiler/wrapper.py",
+   "lineRange": [
+    758,
+    786
+   ],
+   "summary": "剖析器工厂（按配置组合三 wrapper）。",
+   "tags": [
+    "factory"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/ray/lazy_utils.py",
+   "type": "file",
+   "name": "lazy_utils.py",
+   "filePath": "vllm/ray/lazy_utils.py",
+   "summary": "Ray 惰性工具：is_ray_initialized/is_in_ray_actor。",
+   "tags": [
+    "ray",
+    "lazy",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/ray/ray_env.py",
+   "type": "file",
+   "name": "ray_env.py",
+   "filePath": "vllm/ray/ray_env.py",
+   "summary": "Ray 环境变量（118 行）：get_env_vars_to_copy——Ray actor 间需透传的环境变量集。",
+   "tags": [
+    "ray",
+    "environment"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/ray/ray_env.py:get_env_vars_to_copy",
+   "type": "function",
+   "name": "get_env_vars_to_copy",
+   "filePath": "vllm/ray/ray_env.py",
+   "lineRange": [
+    56,
+    118
+   ],
+   "summary": "需复制的环境变量清单（63 行白名单逻辑）。",
+   "tags": [
+    "env",
+    "copy"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/reasoning/response_template_reasoning_parser.py",
+   "type": "file",
+   "name": "response_template_reasoning_parser.py",
+   "filePath": "vllm/reasoning/response_template_reasoning_parser.py",
+   "summary": "response_template 推理解析器薄壳（4 行委托 parser 层）。",
+   "tags": [
+    "reasoning",
+    "response-template",
+    "shim"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/reasoning/step3_reasoning_parser.py",
+   "type": "file",
+   "name": "step3_reasoning_parser.py",
+   "filePath": "vllm/reasoning/step3_reasoning_parser.py",
+   "summary": "Step3ReasoningParser（128 行，9 方法）：Step3 系思考标签流式解析。",
+   "tags": [
+    "reasoning",
+    "step3",
+    "streaming"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/reasoning/step3_reasoning_parser.py:Step3ReasoningParser",
+   "type": "class",
+   "name": "Step3ReasoningParser",
+   "filePath": "vllm/reasoning/step3_reasoning_parser.py",
+   "lineRange": [
+    19,
+    128
+   ],
+   "summary": "Step3 推理解析器（9 方法）。",
+   "tags": [
+    "reasoning",
+    "parser"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/reasoning/step3p5_engine_reasoning_parser.py",
+   "type": "file",
+   "name": "step3p5_engine_reasoning_parser.py",
+   "filePath": "vllm/reasoning/step3p5_engine_reasoning_parser.py",
+   "summary": "Step3.5 引擎推理解析器薄壳（4 行）。",
+   "tags": [
+    "reasoning",
+    "step3p5",
+    "shim"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/parser/chat_parsing/__init__.py",
+   "target": "file:vllm/parser/chat_parsing/response_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/chat_parsing/content_parsers.py",
+   "target": "function:vllm/parser/chat_parsing/content_parsers.py:_json",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/chat_parsing/content_parsers.py",
+   "target": "function:vllm/parser/chat_parsing/content_parsers.py:validate_transform_strings",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/chat_parsing/content_parsers.py",
+   "target": "function:vllm/parser/chat_parsing/content_parsers.py:validate_transform_strings",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/chat_parsing/response_parser.py",
+   "target": "file:vllm/parser/chat_parsing/content_parsers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/chat_parsing/response_parser.py",
+   "target": "file:vllm/parser/chat_parsing/response_templates.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/chat_parsing/response_parser.py",
+   "target": "class:vllm/parser/chat_parsing/response_parser.py:ResponseParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/chat_parsing/response_parser.py",
+   "target": "class:vllm/parser/chat_parsing/response_parser.py:ResponseParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/chat_parsing/response_parser.py",
+   "target": "function:vllm/parser/chat_parsing/response_parser.py:parse_response",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/chat_parsing/response_parser.py",
+   "target": "function:vllm/parser/chat_parsing/response_parser.py:parse_response",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/chat_parsing/response_templates.py",
+   "target": "file:vllm/parser/chat_parsing/content_parsers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/chat_parsing/response_templates.py",
+   "target": "class:vllm/parser/chat_parsing/response_templates.py:ResponseTemplate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/chat_parsing/response_templates.py",
+   "target": "class:vllm/parser/chat_parsing/response_templates.py:ResponseTemplate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/chat_parsing/response_templates.py",
+   "target": "function:vllm/parser/chat_parsing/response_templates.py:_compile_anchor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/chat_parsing/response_templates.py",
+   "target": "function:vllm/parser/chat_parsing/response_templates.py:load_response_template",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/chat_parsing/response_templates.py",
+   "target": "function:vllm/parser/chat_parsing/response_templates.py:load_response_template",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/platforms/__init__.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/__init__.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/__init__.py",
+   "target": "file:vllm/platforms/xpu.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/__init__.py",
+   "target": "file:vllm/plugins/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/__init__.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/__init__.py",
+   "target": "function:vllm/platforms/__init__.py:resolve_current_platform_cls_qualname",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/platforms/__init__.py",
+   "target": "function:vllm/platforms/__init__.py:resolve_current_platform_cls_qualname",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/platforms/__init__.py",
+   "target": "function:vllm/platforms/__init__.py:cuda_platform_plugin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/platforms/__init__.py",
+   "target": "function:vllm/platforms/__init__.py:cuda_platform_plugin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/platforms/__init__.py",
+   "target": "function:vllm/platforms/__init__.py:rocm_platform_plugin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/platforms/__init__.py",
+   "target": "function:vllm/platforms/__init__.py:rocm_platform_plugin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/platforms/cpu.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cpu.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cpu.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cpu.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cpu.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cpu.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cpu.py",
+   "target": "file:vllm/triton_utils/dispatcher.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cpu.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cpu.py",
+   "target": "file:vllm/utils/cpu_resource_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cpu.py",
+   "target": "file:vllm/utils/mem_constants.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cpu.py",
+   "target": "file:vllm/v1/attention/backends/cpu_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cpu.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cpu.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cpu.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/selector.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cpu.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cpu.py",
+   "target": "file:vllm/v1/attention/selector.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cpu.py",
+   "target": "class:vllm/platforms/cpu.py:CpuPlatform",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/platforms/cpu.py",
+   "target": "class:vllm/platforms/cpu.py:CpuPlatform",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/platforms/cpu.py",
+   "target": "function:vllm/platforms/cpu.py:_cpu_mamba_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/platforms/cpu.py:CpuPlatform",
+   "target": "class:vllm/platforms/interface.py:Platform",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/platforms/cuda.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cuda.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cuda.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cuda.py",
+   "target": "file:vllm/config/kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cuda.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cuda.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cuda.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cuda.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cuda.py",
+   "target": "file:vllm/utils/platform_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cuda.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cuda.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cuda.py",
+   "target": "file:vllm/v1/attention/selector.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cuda.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/cuda.py",
+   "target": "class:vllm/platforms/cuda.py:CudaPlatformBase",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/platforms/cuda.py",
+   "target": "class:vllm/platforms/cuda.py:CudaPlatformBase",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/platforms/cuda.py",
+   "target": "class:vllm/platforms/cuda.py:NvmlCudaPlatform",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/platforms/cuda.py",
+   "target": "class:vllm/platforms/cuda.py:NvmlCudaPlatform",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/platforms/cuda.py",
+   "target": "function:vllm/platforms/cuda.py:_get_backend_priorities",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/platforms/cuda.py:CudaPlatformBase",
+   "target": "class:vllm/platforms/interface.py:Platform",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/platforms/cuda.py:NvmlCudaPlatform",
+   "target": "class:vllm/platforms/cuda.py:CudaPlatformBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/platforms/cuda.py:NonNvmlCudaPlatform",
+   "target": "class:vllm/platforms/cuda.py:CudaPlatformBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/config/kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/config/vllm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/device_allocator/cumem.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/kernels/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/model_executor/layers/attention_layer_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/model_executor/models/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/pooling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/utils/argparse_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/selector.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/v1/attention/backends/turboquant_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/v1/attention/backends/ultraquant_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/v1/attention/selector.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "class:vllm/platforms/interface.py:Platform",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "class:vllm/platforms/interface.py:Platform",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "class:vllm/platforms/interface.py:DeviceCapability",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/platforms/interface.py",
+   "target": "class:vllm/platforms/interface.py:DeviceCapability",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/platforms/rocm.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/rocm.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/rocm.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/rocm.py",
+   "target": "file:vllm/config/kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/rocm.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/rocm.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/rocm.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/rocm.py",
+   "target": "file:vllm/utils/argparse_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/rocm.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/rocm.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/rocm.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/rocm.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/selector.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/rocm.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/rocm.py",
+   "target": "file:vllm/v1/attention/selector.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/rocm.py",
+   "target": "class:vllm/platforms/rocm.py:RocmPlatform",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/platforms/rocm.py",
+   "target": "class:vllm/platforms/rocm.py:RocmPlatform",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/platforms/rocm.py",
+   "target": "function:vllm/platforms/rocm.py:_capability_from_gcn_arch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "class:vllm/platforms/rocm.py:RocmPlatform",
+   "target": "class:vllm/platforms/interface.py:Platform",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/platforms/xpu.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/xpu.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/xpu.py",
+   "target": "file:vllm/config/kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/xpu.py",
+   "target": "file:vllm/config/vllm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/xpu.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/xpu.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/xpu.py",
+   "target": "file:vllm/model_executor/layers/attention_layer_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/xpu.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/xpu.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/xpu.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/xpu.py",
+   "target": "file:vllm/v1/attention/backends/mla/flashattn_mla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/xpu.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/xpu.py",
+   "target": "file:vllm/v1/attention/backends/triton_flash_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/xpu.py",
+   "target": "file:vllm/v1/attention/selector.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/xpu.py",
+   "target": "class:vllm/platforms/xpu.py:XPUPlatform",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/platforms/xpu.py",
+   "target": "class:vllm/platforms/xpu.py:XPUPlatform",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/platforms/xpu.py:XPUPlatform",
+   "target": "class:vllm/platforms/interface.py:Platform",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/platforms/zen_cpu.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/zen_cpu.py",
+   "target": "file:vllm/platforms/cpu.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/platforms/zen_cpu.py",
+   "target": "class:vllm/platforms/zen_cpu.py:ZenCpuPlatform",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/platforms/zen_cpu.py",
+   "target": "class:vllm/platforms/zen_cpu.py:ZenCpuPlatform",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/platforms/zen_cpu.py:ZenCpuPlatform",
+   "target": "class:vllm/platforms/cpu.py:CpuPlatform",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/plugins/__init__.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/plugins/__init__.py",
+   "target": "file:vllm/plugins/endpoint_plugins/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/plugins/__init__.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/plugins/__init__.py",
+   "target": "function:vllm/plugins/__init__.py:load_plugins_by_group",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/plugins/__init__.py",
+   "target": "function:vllm/plugins/__init__.py:load_plugins_by_group",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/plugins/endpoint_plugins/interface.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/plugins/endpoint_plugins/interface.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/plugins/endpoint_plugins/interface.py",
+   "target": "file:vllm/plugins/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/plugins/endpoint_plugins/interface.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/plugins/endpoint_plugins/interface.py",
+   "target": "class:vllm/plugins/endpoint_plugins/interface.py:EndpointPlugin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/plugins/endpoint_plugins/interface.py",
+   "target": "class:vllm/plugins/endpoint_plugins/interface.py:EndpointPlugin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/plugins/endpoint_plugins/interface.py",
+   "target": "function:vllm/plugins/endpoint_plugins/interface.py:attach_endpoint_plugins",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/plugins/endpoint_plugins/interface.py",
+   "target": "function:vllm/plugins/endpoint_plugins/interface.py:attach_endpoint_plugins",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/plugins/lora_resolvers/filesystem_resolver.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/plugins/lora_resolvers/filesystem_resolver.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/plugins/lora_resolvers/filesystem_resolver.py",
+   "target": "file:vllm/lora/resolver.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/plugins/lora_resolvers/filesystem_resolver.py",
+   "target": "class:vllm/plugins/lora_resolvers/filesystem_resolver.py:FilesystemResolver",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/plugins/lora_resolvers/filesystem_resolver.py",
+   "target": "class:vllm/plugins/lora_resolvers/filesystem_resolver.py:FilesystemResolver",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/plugins/lora_resolvers/hf_hub_resolver.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/plugins/lora_resolvers/hf_hub_resolver.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/plugins/lora_resolvers/hf_hub_resolver.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/plugins/lora_resolvers/hf_hub_resolver.py",
+   "target": "file:vllm/lora/resolver.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/plugins/lora_resolvers/hf_hub_resolver.py",
+   "target": "file:vllm/plugins/lora_resolvers/filesystem_resolver.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/plugins/lora_resolvers/hf_hub_resolver.py",
+   "target": "file:vllm/transformers_utils/repo_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/plugins/lora_resolvers/hf_hub_resolver.py",
+   "target": "class:vllm/plugins/lora_resolvers/hf_hub_resolver.py:HfHubResolver",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/plugins/lora_resolvers/hf_hub_resolver.py",
+   "target": "class:vllm/plugins/lora_resolvers/hf_hub_resolver.py:HfHubResolver",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/plugins/lora_resolvers/hf_hub_resolver.py:HfHubResolver",
+   "target": "class:vllm/plugins/lora_resolvers/filesystem_resolver.py:FilesystemResolver",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/pooling_params.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/pooling_params.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/pooling_params.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/pooling_params.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/pooling_params.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/pooling_params.py",
+   "target": "class:vllm/pooling_params.py:PoolingParams",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/pooling_params.py",
+   "target": "class:vllm/pooling_params.py:PoolingParams",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/pooling_params.py",
+   "target": "class:vllm/pooling_params.py:LateInteractionParams",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/pooling_params.py",
+   "target": "class:vllm/pooling_params.py:LateInteractionParams",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/profiler/layerwise_profile.py",
+   "target": "file:vllm/profiler/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/profiler/layerwise_profile.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/profiler/layerwise_profile.py",
+   "target": "class:vllm/profiler/layerwise_profile.py:LayerwiseProfileResults",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/profiler/layerwise_profile.py",
+   "target": "class:vllm/profiler/layerwise_profile.py:LayerwiseProfileResults",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/profiler/layerwise_profile.py",
+   "target": "class:vllm/profiler/layerwise_profile.py:layerwise_profile",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/profiler/layerwise_profile.py",
+   "target": "class:vllm/profiler/layerwise_profile.py:layerwise_profile",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/profiler/wrapper.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/profiler/wrapper.py",
+   "target": "file:vllm/config/profiler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/profiler/wrapper.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/profiler/wrapper.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/profiler/wrapper.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/profiler/wrapper.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/profiler/wrapper.py",
+   "target": "file:vllm/version.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/profiler/wrapper.py",
+   "target": "class:vllm/profiler/wrapper.py:WorkerProfiler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/profiler/wrapper.py",
+   "target": "class:vllm/profiler/wrapper.py:WorkerProfiler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/profiler/wrapper.py",
+   "target": "class:vllm/profiler/wrapper.py:TorchProfilerWrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/profiler/wrapper.py",
+   "target": "class:vllm/profiler/wrapper.py:TorchProfilerWrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/profiler/wrapper.py",
+   "target": "function:vllm/profiler/wrapper.py:create_worker_profiler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/profiler/wrapper.py",
+   "target": "function:vllm/profiler/wrapper.py:create_worker_profiler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/profiler/wrapper.py:TorchProfilerWrapper",
+   "target": "class:vllm/profiler/wrapper.py:WorkerProfiler",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/profiler/wrapper.py:ProtonProfilerWrapper",
+   "target": "class:vllm/profiler/wrapper.py:WorkerProfiler",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/profiler/wrapper.py:CudaProfilerWrapper",
+   "target": "class:vllm/profiler/wrapper.py:WorkerProfiler",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/ray/ray_env.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/ray/ray_env.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/ray/ray_env.py",
+   "target": "function:vllm/ray/ray_env.py:get_env_vars_to_copy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/ray/ray_env.py",
+   "target": "function:vllm/ray/ray_env.py:get_env_vars_to_copy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/response_template_reasoning_parser.py",
+   "target": "file:vllm/parser/response_template.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/step3_reasoning_parser.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/step3_reasoning_parser.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/step3_reasoning_parser.py",
+   "target": "file:vllm/entrypoints/openai/responses/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/step3_reasoning_parser.py",
+   "target": "file:vllm/reasoning/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/step3_reasoning_parser.py",
+   "target": "class:vllm/reasoning/step3_reasoning_parser.py:Step3ReasoningParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/step3_reasoning_parser.py",
+   "target": "class:vllm/reasoning/step3_reasoning_parser.py:Step3ReasoningParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/step3p5_engine_reasoning_parser.py",
+   "target": "file:vllm/parser/engine/registered_adapters.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

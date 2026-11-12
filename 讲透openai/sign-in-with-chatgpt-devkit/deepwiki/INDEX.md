@@ -1,0 +1,30 @@
+# DeepWiki 索引 — openai/sign-in-with-chatgpt-devkit
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 260814 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Licensing and Contributing](1.2-licensing-and-contributing.md)
+- [2 @siwc/local — Local Node SDK](2-siwc-local-local-node-sdk.md)
+  - [2.1 OAuth and Sign-In Flow](2.1-oauth-and-sign-in-flow.md)
+  - [2.2 Credential Storage and Encryption](2.2-credential-storage-and-encryption.md)
+  - [2.3 Models and Streaming Responses](2.3-models-and-streaming-responses.md)
+  - [2.4 Error Model and Types](2.4-error-model-and-types.md)
+- [3 @siwc/react — Component Library](3-siwc-react-component-library.md)
+  - [3.1 Sign-In and Connection Components](3.1-sign-in-and-connection-components.md)
+  - [3.2 Usage Components](3.2-usage-components.md)
+  - [3.3 Styling, Tokens and Packaging](3.3-styling-tokens-and-packaging.md)
+- [4 Paste Perfect Example App](4-paste-perfect-example-app.md)
+  - [4.1 Electron Main Process](4.1-electron-main-process.md)
+  - [4.2 Native macOS Helper](4.2-native-macos-helper.md)
+  - [4.3 Settings Dashboard UI](4.3-settings-dashboard-ui.md)
+  - [4.4 Build, Packaging and Tests](4.4-build-packaging-and-tests.md)
+- [5 Component Gallery and Design Assets](5-component-gallery-and-design-assets.md)
+  - [5.1 Gallery Application](5.1-gallery-application.md)
+  - [5.2 Brand Assets and Icons](5.2-brand-assets-and-icons.md)
+  - [5.3 Fonts and Provenance](5.3-fonts-and-provenance.md)
+- [6 Security and Repo Tooling](6-security-and-repo-tooling.md)
+  - [6.1 Security Model](6.1-security-model.md)
+  - [6.2 License and Notice Automation](6.2-license-and-notice-automation.md)
+- [7 Glossary](7-glossary.md)

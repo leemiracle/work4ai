@@ -1,0 +1,33 @@
+# DeepWiki 索引 — openai/codex-security
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 208868 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Repository Structure and Build System](1.2-repository-structure-and-build-system.md)
+- [2 CLI Reference](2-cli-reference.md)
+  - [2.1 Scan Commands](2.1-scan-commands.md)
+  - [2.2 Export, Validate, Patch, and Utility Commands](2.2-export-validate-patch-and-utility-commands.md)
+  - [2.3 Bulk Scan and Multi-Repository Scanning](2.3-bulk-scan-and-multi-repository-scanning.md)
+- [3 TypeScript SDK](3-typescript-sdk.md)
+  - [3.1 CodexSecurity Class and Scan Lifecycle](3.1-codexsecurity-class-and-scan-lifecycle.md)
+  - [3.2 Runtime and Plugin Bootstrap](3.2-runtime-and-plugin-bootstrap.md)
+  - [3.3 Scan Targets and Configuration](3.3-scan-targets-and-configuration.md)
+  - [3.4 Cost Tracking and Worker Progress](3.4-cost-tracking-and-worker-progress.md)
+  - [3.5 Authentication](3.5-authentication.md)
+  - [3.6 Data Models and Contracts](3.6-data-models-and-contracts.md)
+- [4 Bundled Plugin Architecture](4-bundled-plugin-architecture.md)
+  - [4.1 Scan Skills and Workflows](4.1-scan-skills-and-workflows.md)
+  - [4.2 Python Plugin Scripts](4.2-python-plugin-scripts.md)
+  - [4.3 Scan Artifact Conventions and Reference Documents](4.3-scan-artifact-conventions-and-reference-documents.md)
+  - [4.4 MCP Server Integration](4.4-mcp-server-integration.md)
+- [5 Workbench: State Persistence and Scan History](5-workbench-state-persistence-and-scan-history.md)
+  - [5.1 Workbench Database and Lifecycle Commands](5.1-workbench-database-and-lifecycle-commands.md)
+  - [5.2 Workbench Indexes, Queries, and Scan History](5.2-workbench-indexes-queries-and-scan-history.md)
+- [6 Security Model and Sandboxing](6-security-model-and-sandboxing.md)
+  - [6.1 Path Protection and Output Isolation](6.1-path-protection-and-output-isolation.md)
+  - [6.2 Docker Container Deployment](6.2-docker-container-deployment.md)
+- [7 CI/CD and Release Infrastructure](7-ci-cd-and-release-infrastructure.md)
+  - [7.1 Testing Infrastructure](7.1-testing-infrastructure.md)
+- [8 Glossary](8-glossary.md)

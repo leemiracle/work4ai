@@ -1,0 +1,30 @@
+# DeepWiki 索引 — browser-use/bux
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-30
+> 结构 25 页 · 全文 145272 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 What is bux?](1.1-what-is-bux.md)
+  - [1.2 Key Concepts and Terminology](1.2-key-concepts-and-terminology.md)
+- [2 Installation and Deployment](2-installation-and-deployment.md)
+  - [2.1 Installation Guide](2.1-installation-guide.md)
+  - [2.2 install.sh Reference](2.2-install.sh-reference.md)
+  - [2.3 Provider Deploy Recipes](2.3-provider-deploy-recipes.md)
+- [3 Core Architecture](3-core-architecture.md)
+  - [3.1 Browser Keeper Service](3.1-browser-keeper-service.md)
+  - [3.2 Telegram Bot Service](3.2-telegram-bot-service.md)
+  - [3.3 Web Terminal Service (ttyd)](3.3-web-terminal-service-ttyd.md)
+- [4 Browser Automation Layer](4-browser-automation-layer.md)
+  - [4.1 browser-harness-js and CDP Interface](4.1-browser-harness-js-and-cdp-interface.md)
+  - [4.2 Agent Context File (CLAUDE.md / SKILL.md)](4.2-agent-context-file-claude.md-skill.md.md)
+  - [4.3 Profile and Session Management](4.3-profile-and-session-management.md)
+- [5 Configuration Reference](5-configuration-reference.md)
+  - [5.1 Environment Variables](5.1-environment-variables.md)
+  - [5.2 Filesystem Layout](5.2-filesystem-layout.md)
+- [6 Security Model](6-security-model.md)
+  - [6.1 Privilege Separation](6.1-privilege-separation.md)
+  - [6.2 Credential and Secret Management](6.2-credential-and-secret-management.md)
+- [7 CI/CD and Development](7-ci-cd-and-development.md)
+  - [7.1 CI Pipeline](7.1-ci-pipeline.md)
+  - [7.2 Contributing and Extending bux](7.2-contributing-and-extending-bux.md)
+- [8 Glossary](8-glossary.md)

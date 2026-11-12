@@ -1,0 +1,31 @@
+### L2 数据链路层 —— MAC 寻址 / ARP / 以太网帧
+
+-- ip link show（MAC 地址、MTU、状态——L2 的「身份证」）
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+18: eth0@if19: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default 
+    link/ether 02:42:ac:11:00:04 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+
+-- ip neigh show（ARP 缓存：IP→MAC 映射表，通信过的邻居才有行）
+172.17.0.1 dev eth0 lladdr 02:42:b3:d8:21:5c REACHABLE 
+172.17.0.3 dev eth0 lladdr 02:42:ac:11:00:03 REACHABLE 
+
+-- /proc/net/arp（同一张表的内核原始视图）
+IP address       HW type     Flags       HW address            Mask     Device
+172.17.0.1       0x1         0x2         02:42:b3:d8:21:5c     *        eth0
+172.17.0.3       0x1         0x2         02:42:ac:11:00:03     *        eth0
+
+-- 本轮抓到的 ARP 帧（sniffer jsonl 过滤）
+{"ts": 1793880228.683743, "cap_len": 42, "eth": {"dst": "02:42:b3:d8:21:5c", "src": "02:42:ac:11:00:04", "ethertype": "0x0806(ARP)", "vlan": null}, "arp": {"op": "request", "sender": "172.17.0.4 is-at 02:42:ac:11:00:04", "asking_about": "172.17.0.1", "target": "172.17.0.1 at 00:00:00:00:00:00"}}
+{"ts": 1793880228.683819, "cap_len": 42, "eth": {"dst": "02:42:ac:11:00:04", "src": "02:42:b3:d8:21:5c", "ethertype": "0x0806(ARP)", "vlan": null}, "arp": {"op": "request", "sender": "172.17.0.1 is-at 02:42:b3:d8:21:5c", "asking_about": "172.17.0.4", "target": "172.17.0.4 at 00:00:00:00:00:00"}}
+{"ts": 1793880228.683857, "cap_len": 42, "eth": {"dst": "02:42:b3:d8:21:5c", "src": "02:42:ac:11:00:04", "ethertype": "0x0806(ARP)", "vlan": null}, "arp": {"op": "reply", "sender": "172.17.0.4 is-at 02:42:ac:11:00:04", "asking_about": "172.17.0.1", "target": "172.17.0.1 at 02:42:b3:d8:21:5c"}}
+{"ts": 1793880228.68389, "cap_len": 42, "eth": {"dst": "02:42:ac:11:00:04", "src": "02:42:b3:d8:21:5c", "ethertype": "0x0806(ARP)", "vlan": null}, "arp": {"op": "reply", "sender": "172.17.0.1 is-at 02:42:b3:d8:21:5c", "asking_about": "172.17.0.4", "target": "172.17.0.4 at 02:42:ac:11:00:04"}}
+{"ts": 1793880257.355754, "cap_len": 42, "eth": {"dst": "02:42:ac:11:00:04", "src": "02:42:b3:d8:21:5c", "ethertype": "0x0806(ARP)", "vlan": null}, "arp": {"op": "request", "sender": "172.17.0.1 is-at 02:42:b3:d8:21:5c", "asking_about": "172.17.0.4", "target": "172.17.0.4 at 00:00:00:00:00:00"}}
+{"ts": 1793880257.355818, "cap_len": 42, "eth": {"dst": "02:42:b3:d8:21:5c", "src": "02:42:ac:11:00:04", "ethertype": "0x0806(ARP)", "vlan": null}, "arp": {"op": "reply", "sender": "172.17.0.4 is-at 02:42:ac:11:00:04", "asking_about": "172.17.0.1", "target": "172.17.0.1 at 02:42:b3:d8:21:5c"}}
+
+-- 本轮以太网帧头样本（src/dst MAC + ethertype）
+ts=1793880223.553 dst=02:42:ac:11:00:04 src=02:42:b3:d8:21:5c type=0x0800(IPv4)
+ts=1793880223.553 dst=02:42:b3:d8:21:5c src=02:42:ac:11:00:04 type=0x0800(IPv4)
+ts=1793880223.553 dst=02:42:ac:11:00:04 src=02:42:b3:d8:21:5c type=0x0800(IPv4)
+ts=1793880223.553 dst=02:42:ac:11:00:04 src=02:42:b3:d8:21:5c type=0x0800(IPv4)
+ts=1793880223.553 dst=02:42:b3:d8:21:5c src=02:42:ac:11:00:04 type=0x0800(IPv4)

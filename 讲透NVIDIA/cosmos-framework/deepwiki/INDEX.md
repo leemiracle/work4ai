@@ -1,0 +1,42 @@
+# DeepWiki 索引 — NVIDIA/cosmos-framework
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 33 页 · 全文 268724 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Repository Layout and Code Structure](1.1-repository-layout-and-code-structure.md)
+  - [1.2 Getting Started: Setup and Installation](1.2-getting-started-setup-and-installation.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 Configuration System](2.1-configuration-system.md)
+  - [2.2 Model Architecture](2.2-model-architecture.md)
+  - [2.3 Data Pipeline](2.3-data-pipeline.md)
+  - [2.4 Training Infrastructure](2.4-training-infrastructure.md)
+  - [2.5 Utilities and Shared Infrastructure](2.5-utilities-and-shared-infrastructure.md)
+- [3 Training (Supervised Fine-Tuning)](3-training-supervised-fine-tuning.md)
+  - [3.1 SFT Recipes and Launch Scripts](3.1-sft-recipes-and-launch-scripts.md)
+  - [3.2 Distributed Parallelism for Training](3.2-distributed-parallelism-for-training.md)
+  - [3.3 Checkpoint Lifecycle: DCP and HuggingFace Export](3.3-checkpoint-lifecycle-dcp-and-huggingface-export.md)
+- [4 Inference](4-inference.md)
+  - [4.1 Offline Batch Inference](4.1-offline-batch-inference.md)
+  - [4.2 Inference Configuration and Modality Defaults](4.2-inference-configuration-and-modality-defaults.md)
+  - [4.3 Online Serving: Ray and Gradio](4.3-online-serving-ray-and-gradio.md)
+  - [4.4 Guardrails and Content Safety](4.4-guardrails-and-content-safety.md)
+- [5 Ecosystem Backend Packages](5-ecosystem-backend-packages.md)
+  - [5.1 diffusers-cosmos3](5.1-diffusers-cosmos3.md)
+  - [5.2 transformers-cosmos3 and vllm-cosmos3](5.2-transformers-cosmos3-and-vllm-cosmos3.md)
+- [6 CLI Scripts Reference](6-cli-scripts-reference.md)
+  - [6.1 Data Preparation Scripts](6.1-data-preparation-scripts.md)
+  - [6.2 Action Policy Servers](6.2-action-policy-servers.md)
+- [7 Infrastructure and Developer Tooling](7-infrastructure-and-developer-tooling.md)
+  - [7.1 Docker and Containerization](7.1-docker-and-containerization.md)
+  - [7.2 CI, Linting, and Testing](7.2-ci-linting-and-testing.md)
+  - [7.3 Environment Troubleshooting](7.3-environment-troubleshooting.md)
+- [9 Action Policy: Post-Training and Robotics](9-action-policy-post-training-and-robotics.md)
+  - [9.1 DROID Action Policy Post-Training](9.1-droid-action-policy-post-training.md)
+  - [9.2 Action Datasets: Multi-Embodiment LeRobot Framework](9.2-action-datasets-multi-embodiment-lerobot-framework.md)
+  - [9.3 DROID Policy Server Deployment](9.3-droid-policy-server-deployment.md)
+- [10 Glossary](10-glossary.md)
+
+## 附：结构清单外的页
+- [Attention Backends](x1-attention-backends.md)
+- [Video Tokenizers (VAE)](x2-video-tokenizers-vae.md)

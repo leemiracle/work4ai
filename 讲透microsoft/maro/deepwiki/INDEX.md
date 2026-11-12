@@ -1,0 +1,30 @@
+# DeepWiki 索引 — microsoft/maro
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 280907 字符
+
+- [1 MARO Platform Overview](1-maro-platform-overview.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 Simulation Framework](2.1-simulation-framework.md)
+  - [2.2 Reinforcement Learning Framework](2.2-reinforcement-learning-framework.md)
+  - [2.3 High-Performance Data Backends](2.3-high-performance-data-backends.md)
+- [3 Simulation Scenarios](3-simulation-scenarios.md)
+  - [3.1 Container Inventory Management (CIM)](3.1-container-inventory-management-cim.md)
+  - [3.2 VM Scheduling](3.2-vm-scheduling.md)
+  - [3.3 Citi Bike Repositioning](3.3-citi-bike-repositioning.md)
+- [4 Getting Started](4-getting-started.md)
+  - [4.1 Hello World Examples](4.1-hello-world-examples.md)
+  - [4.2 Playground Environment](4.2-playground-environment.md)
+- [5 Command Line Interface](5-command-line-interface.md)
+  - [5.1 Cluster Management](5.1-cluster-management.md)
+  - [5.2 Environment and Data Commands](5.2-environment-and-data-commands.md)
+- [6 Visualization and Monitoring](6-visualization-and-monitoring.md)
+  - [6.1 Dashboard Visualization](6.1-dashboard-visualization.md)
+  - [6.2 Geographic Visualization](6.2-geographic-visualization.md)
+- [7 Development and Deployment](7-development-and-deployment.md)
+  - [7.1 Environment Setup](7.1-environment-setup.md)
+  - [7.2 CI/CD Pipeline](7.2-ci-cd-pipeline.md)
+  - [7.3 Code Quality and Testing](7.3-code-quality-and-testing.md)
+- [8 Advanced Topics](8-advanced-topics.md)
+  - [8.1 Event System](8.1-event-system.md)
+  - [8.2 Logging and Utilities](8.2-logging-and-utilities.md)

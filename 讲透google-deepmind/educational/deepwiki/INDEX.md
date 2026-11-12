@@ -1,0 +1,33 @@
+# DeepWiki 索引 — google-deepmind/educational
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 344156 字符
+
+- [1 Overview](1-overview.md)
+- [2 Graph Neural Networks](2-graph-neural-networks.md)
+  - [2.1 GraphsTuple and Basic Graph Operations](2.1-graphstuple-and-basic-graph-operations.md)
+  - [2.2 Graph Convolutional Networks](2.2-graph-convolutional-networks.md)
+  - [2.3 Graph Attention Networks](2.3-graph-attention-networks.md)
+  - [2.4 Graph Learning Tasks](2.4-graph-learning-tasks.md)
+- [3 Language Models](3-language-models.md)
+  - [3.1 Character-based Language Models](3.1-character-based-language-models.md)
+  - [3.2 Text Generation Techniques](3.2-text-generation-techniques.md)
+  - [3.3 Message Decoding Application](3.3-message-decoding-application.md)
+- [4 Unsupervised Learning](4-unsupervised-learning.md)
+  - [4.1 K-means Clustering](4.1-k-means-clustering.md)
+  - [4.2 Expectation-Maximization Algorithm](4.2-expectation-maximization-algorithm.md)
+  - [4.3 Autoencoders](4.3-autoencoders.md)
+- [5 Supervised Learning: Regression](5-supervised-learning-regression.md)
+  - [5.1 Linear Regression Fundamentals](5.1-linear-regression-fundamentals.md)
+  - [5.2 Gradient Descent and Autodiff](5.2-gradient-descent-and-autodiff.md)
+  - [5.3 Regularization and Model Selection](5.3-regularization-and-model-selection.md)
+- [6 Reinforcement Learning](6-reinforcement-learning.md)
+  - [6.1 DQN and Gym Environments](6.1-dqn-and-gym-environments.md)
+  - [6.2 Catch Environment and Agents](6.2-catch-environment-and-agents.md)
+  - [6.3 Evolutionary Algorithms: Fluttering Avians](6.3-evolutionary-algorithms-fluttering-avians.md)
+- [7 Additional Educational Examples](7-additional-educational-examples.md)
+  - [7.1 Generative Models and GANs](7.1-generative-models-and-gans.md)
+  - [7.2 Protein Folding](7.2-protein-folding.md)
+  - [7.3 Scientific Thinking](7.3-scientific-thinking.md)
+  - [7.4 Python and NumPy Fundamentals](7.4-python-and-numpy-fundamentals.md)
+- [8 Contributing and License](8-contributing-and-license.md)

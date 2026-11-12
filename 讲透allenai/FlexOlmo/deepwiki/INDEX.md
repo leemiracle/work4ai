@@ -1,0 +1,31 @@
+# DeepWiki 索引 — allenai/FlexOlmo
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 227853 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+- [2 Architecture](2-architecture.md)
+  - [2.1 MoE Router System](2.1-moe-router-system.md)
+  - [2.2 Model Components](2.2-model-components.md)
+  - [2.3 Configuration System](2.3-configuration-system.md)
+- [3 Training Pipeline](3-training-pipeline.md)
+  - [3.1 Public Model Training](3.1-public-model-training.md)
+  - [3.2 Expert Training](3.2-expert-training.md)
+  - [3.3 Model Combination and Upcycling](3.3-model-combination-and-upcycling.md)
+- [4 Evaluation System](4-evaluation-system.md)
+  - [4.1 Evaluation Pipeline](4.1-evaluation-pipeline.md)
+  - [4.2 Task Configuration and Suites](4.2-task-configuration-and-suites.md)
+  - [4.3 Results Analysis and Reporting](4.3-results-analysis-and-reporting.md)
+  - [4.4 Model Backends](4.4-model-backends.md)
+- [5 Data Management](5-data-management.md)
+  - [5.1 Data Mixes and Configuration](5.1-data-mixes-and-configuration.md)
+  - [5.2 Domain Embeddings](5.2-domain-embeddings.md)
+  - [5.3 Data Extraction Analysis](5.3-data-extraction-analysis.md)
+- [6 Infrastructure and Deployment](6-infrastructure-and-deployment.md)
+  - [6.1 Beaker Platform Integration](6.1-beaker-platform-integration.md)
+  - [6.2 CI/CD and Containerization](6.2-ci-cd-and-containerization.md)
+- [7 Development and Utilities](7-development-and-utilities.md)
+  - [7.1 Utilities and Tools](7.1-utilities-and-tools.md)
+  - [7.2 Project Configuration](7.2-project-configuration.md)
+  - [7.3 Attribution and Licensing](7.3-attribution-and-licensing.md)

@@ -1,319 +1,374 @@
-> 来源: [https://deepwiki.com/deepseek-ai/DeepSeek-Prover-V2/2-system-architecture](https://deepwiki.com/deepseek-ai/DeepSeek-Prover-V2/2-system-architecture)
-> DeepWiki deepseek-ai/DeepSeek-Prover-V2
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/DeepSeek-Prover-V2 · page 2 System Architecture · fetched 2026-10-30 -->
 
 # System Architecture
 
-  Relevant source files 
- - [DeepSeekMath_V2.pdf](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/DeepSeekMath_V2.pdf)
- - [README.md](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1)
- 
-  
+<details>
+<summary>Relevant source files</summary>
+
+The following files were used as context for generating this wiki page:
+
+- [DeepSeek_Prover_V2.pdf](DeepSeek_Prover_V2.pdf)
+- [README.md](README.md)
+
+</details>
+
+
+
 ## Purpose and Scope
 
- This document provides a high-level architectural overview of DeepSeekMath-V2, explaining how the system's major components interact to achieve self-verifiable mathematical reasoning. This page focuses on the structural organization and communication patterns between subsystems.
+This document details the internal architecture of DeepSeek-Prover-V2, explaining how its components interact to enable formal theorem proving in Lean 4. We focus on the technical structure of the system and the relationships between components rather than usage instructions or performance metrics.
 
- For detailed information about specific components, see:
+For information about using the models for inference, see [Inference Guide](#3.2). For details about the training methodology, see [Training Pipeline](#3.1). For performance evaluation, see [Evaluation and Benchmarks](#4).
 
- 
- - Core system components (verifier and generator): [Core Components](https://deepwiki.com/deepseek-ai/DeepSeek-Math-V2/2.1-core-components)
- - Training methodology and stages: [Training Pipeline](https://deepwiki.com/deepseek-ai/DeepSeek-Math-V2/2.2-training-pipeline)
- - Self-verification mechanisms: [Self-Verification Mechanism](https://deepwiki.com/deepseek-ai/DeepSeek-Math-V2/2.3-self-verification-mechanism)
- - Foundation model details: [Foundation Model](https://deepwiki.com/deepseek-ai/DeepSeek-Math-V2/6.3-foundation-model)
- 
- 
+## High-Level System Architecture
+
+DeepSeek-Prover-V2 implements a recursive theorem proving architecture that bridges informal mathematical reasoning with formal proof construction through a specialized language model pipeline.
+
+### System Components Overview
+
+```mermaid
+graph TD
+    A["Formal Theorem Statement"] --> B["DeepSeekProverV2Model"]
+    B --> C["ProofPlanGenerator"]
+    C --> D["SubgoalDecomposer"]
+    D --> E["FormalProofConstructor"]
+    E --> F["CompleteLean4Proof"]
+    
+    subgraph "ModelInternalProcessing"
+        C
+        D
+        E
+    end
+```
+
+The high-level flow consists of:
+
+1. A formal theorem statement in Lean 4 format is input to the system
+2. The DeepSeek-Prover-V2 model processes the statement
+3. A proof plan is generated with step-by-step reasoning
+4. Complex theorems are decomposed into manageable subgoals
+5. Formal proofs are constructed for each subgoal
+6. The complete Lean 4 proof is produced as output
+
+Sources: [README.md:42-44](), [README.md:54-58]()
+
+## Core Components
+
+### Recursive Theorem Proving Pipeline
+
+The recursive theorem proving pipeline is a central architectural component that enables the system to tackle complex mathematical problems by breaking them down into manageable parts.
+
+```mermaid
+flowchart TD
+    A["ComplexTheorem"] --> B["TheoremAnalyzer_DeepSeekV3"]
+    B -->|"InformalDecomposition"| C["ProofStepsAndStrategy"]
+    B -->|"FormalDecomposition"| D["Lean4Subgoals"]
+    D --> E["SubgoalSolver_7BModel"]
+    E -->|"Resolution"| F["IndividualSubgoalProofs"]
+    F --> G["ProofComposer"]
+    G --> H["CompleteFormalProof"]
+    C --> I["ChainOfThoughtGenerator"]
+    H --> J["TrainingDataSynthesizer"]
+    I --> J
+```
+
+The pipeline functions as follows:
+
+1. **Theorem Analysis**: DeepSeek-V3 analyzes a complex theorem
+2. **Dual Decomposition**:
+   - Informal: Creates high-level proof sketches with mathematical reasoning
+   - Formal: Translates into precise Lean 4 subgoals
+3. **Subgoal Solving**: The 7B parameter model handles proof search for each subgoal
+4. **Proof Composition**: Individual subgoal proofs are combined into a complete proof
+5. **Training Data Synthesis**: The formal proof is paired with the chain-of-thought reasoning
+
+Sources: [README.md:54-58]()
+
+### Cold-Start Training Component
+
+The cold-start training component prepares the model for reinforcement learning by creating synthetic data that pairs informal reasoning with formal proof construction.
+
+```mermaid
+graph TD
+    A["ProblemSelector"] --> B["ChallengingTheoremsWithSolvedSubgoals"]
+    B --> C["ProofComposer"]
+    C --> D["CompleteFormalProofs"]
+    E["ChainOfThoughtExtractor"] --> F["DeepSeekV3ReasoningSteps"]
+    D --> G["DataSynthesizer"]
+    F --> G
+    G --> H["SyntheticTrainingDataset"]
+    H --> I["FineTuningProcess"]
+    I --> J["ColdStartedModel"]
+```
+
+The component implements the following process:
+
+1. **Problem Selection**: Curates challenging problems where all decomposed subgoals are successfully solved
+2. **Proof Composition**: Constructs complete formal proofs by combining subgoal proofs
+3. **Reasoning Extraction**: Obtains DeepSeek-V3's chain-of-thought reasoning
+4. **Data Synthesis**: Pairs formal proofs with informal reasoning steps
+5. **Fine-tuning**: Uses the synthetic data to initialize the prover model
+
+Sources: [README.md:62-66]()
+
+### Reinforcement Learning Component
+
+After cold-start training, the reinforcement learning component further enhances the model's capabilities through feedback-based learning.
+
+```mermaid
+graph TD
+    A["ColdStartedModel"] --> B["ProofGenerator"]
+    B --> C["GeneratedProofs"]
+    C --> D["VerificationSystem"]
+    D -->|"Correct/Incorrect"| E["BinaryFeedback"]
+    E --> F["RewardCalculator"]
+    F --> G["RLOptimizer"]
+    G --> H["UpdatedModelParameters"]
+    H --> A
+```
+
+The reinforcement learning component:
+
+1. **Proof Generation**: The cold-started model generates proof attempts
+2. **Verification**: Proofs are checked for correctness
+3. **Feedback**: Binary (correct/incorrect) feedback is provided
+4. **Reward Calculation**: Feedback is translated into numerical rewards
+5. **Optimization**: The model parameters are updated to maximize expected rewards
+6. **Iteration**: The process repeats with the improved model
+
+Sources: [README.md:66-67]()
+
+## Model Architecture
+
+DeepSeek-Prover-V2 is available in two variants, each with different parameter counts, base models, and capabilities.
+
+```mermaid
+graph TD
+    subgraph "DeepSeekProverV2Models"
+        subgraph "DeepSeekProverV2_7B"
+            A1["Base: DeepSeekProverV1.5Base"]
+            B1["Parameters: 7Billion"]
+            C1["ContextLength: 32KTokens"]
+        end
+        
+        subgraph "DeepSeekProverV2_671B"
+            A2["Base: DeepSeekV3Base"]
+            B2["Parameters: 671Billion"]
+            C2["ExtendedContextHandling"]
+        end
+    end
+```
+
+### Technical Specifications
+
+| Model | Parameters | Base Model | Context Length | Model ID |
+|-------|------------|------------|----------------|----------|
+| DeepSeek-Prover-V2-7B | 7 Billion | DeepSeek-Prover-V1.5-Base | 32K tokens | deepseek-ai/DeepSeek-Prover-V2-7B |
+| DeepSeek-Prover-V2-671B | 671 Billion | DeepSeek-V3-Base | Extended | deepseek-ai/DeepSeek-Prover-V2-671B |
+
+Sources: [README.md:95-104]()
+
+## Integration Points
+
+### Lean 4 Integration
+
+The system directly integrates with the Lean 4 formal verification environment, enabling automatic verification of generated proofs.
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Tokenizer as "AutoTokenizer"
+    participant Model as "DeepSeekProverV2"
+    participant Lean4 as "Lean4Environment"
+    
+    User->>User: Prepare theorem statement
+    User->>Tokenizer: Apply chat template
+    Tokenizer->>Model: Send tokenized input
+    Model->>Model: Generate proof
+    Model->>Tokenizer: Return tokens
+    Tokenizer->>User: Decode to text
+    User->>Lean4: Verify proof
+    Lean4->>User: Return verification result
+```
+
+The integration with Lean 4 enables:
+
+1. Direct verification of generated proofs
+2. Compatibility with the Lean 4 ecosystem
+3. Integration with existing mathematical libraries
+4. Formal guarantees of proof correctness
+
+Sources: [README.md:115-119]()
+
+### Transformers Library Integration
+
+DeepSeek-Prover-V2 models are designed to work seamlessly with Hugging Face's Transformers library, following standard inference patterns.
+
+```mermaid
+graph LR
+    A["AutoTokenizer.fromPretrained()"] --> B["TokenizerInstance"]
+    C["AutoModelForCausalLM.fromPretrained()"] --> D["ModelInstance"]
+    E["InputText"] --> F["ChatTemplateFormatting"]
+    F --> G["Tokenization"]
+    G --> H["Model.generate()"]
+    H --> I["OutputTokens"]
+    I --> J["Detokenization"]
+    J --> K["FormalProof"]
+    
+    subgraph "Initialization"
+        A
+        B
+        C
+        D
+    end
+    
+    subgraph "InferencePipeline"
+        E
+        F
+        G
+        H
+        I
+        J
+        K
+    end
+```
+
+The integration process involves:
+
+1. **Initialization**: Loading the tokenizer and model from Hugging Face
+2. **Input Preparation**: Formatting the input as a chat prompt
+3. **Tokenization**: Converting text to token IDs
+4. **Generation**: Running the model with appropriate parameters (max_new_tokens=8192)
+5. **Output Processing**: Decoding token IDs back to text
+
+Sources: [README.md:115-163]()
+
+## Inference Data Flow
+
+The inference process follows a structured flow from input theorem statement to formal proof output.
+
+```mermaid
+flowchart LR
+    A["FormalTheoremStatement"] --> B["ChatTemplateApplication"]
+    B --> C["Tokenization"]
+    C --> D["ModelInputTensor"]
+    D --> E["DeepSeekProverV2Model"]
+    E --> F["TokenGeneration_maxNewTokens8192"]
+    F --> G["TokenDecoding"]
+    G --> H["FormalProofInLean4"]
+```
+
+### Inference Process Steps:
+
+1. **Input Preparation**: A theorem statement in Lean 4 format is prepared
+2. **Chat Formatting**: The statement is formatted using the model's chat template
+3. **Tokenization**: The formatted input is converted to token IDs
+4. **Model Processing**: The model generates output tokens (up to 8192 new tokens)
+5. **Decoding**: Output tokens are converted back to text
+6. **Verification**: The generated proof can be verified in Lean 4
+
+Example code pattern for inference:
+
+```python
+# Load model and tokenizer
+tokenizer = AutoTokenizer.from_pretrained("DeepSeek-Prover-V2-7B")
+model = AutoModelForCausalLM.from_pretrained("DeepSeek-Prover-V2-7B", 
+                                             device_map="auto", 
+                                             torch_dtype=torch.bfloat16)
+
+# Format input as chat
+chat = [{"role": "user", "content": prompt.format(formal_statement)}]
+inputs = tokenizer.apply_chat_template(chat, 
+                                       tokenize=True, 
+                                       add_generation_prompt=True, 
+                                       return_tensors="pt").to(model.device)
+
+# Generate proof
+outputs = model.generate(inputs, max_new_tokens=8192)
+proof = tokenizer.batch_decode(outputs)[0]
+```
+
+Sources: [README.md:118-163]()
+
+## Training Data Flow
+
+The training process involves multiple stages to prepare the model for formal theorem proving.
+
+```mermaid
+flowchart TD
+    A["MathematicalProblems"] --> B["DeepSeekV3Processor"]
+    B --> C["SubgoalDecomposer"]
+    B --> D["ReasoningExtractor"]
+    C --> E["SubgoalSolver_7BModel"]
+    E --> F["ProofComposer"]
+    F --> G["CompleteFormalProofs"]
+    D --> H["ChainOfThoughtReasoning"]
+    G --> I["ColdStartDataSynthesizer"]
+    H --> I
+    I --> J["FineTuningProcess"]
+    J --> K["ColdStartedModel"]
+    K --> L["ReinforcementLearning"]
+    L --> M["FinalDeepSeekProverV2Model"]
+```
+
+The training data flow consists of:
+
+1. **Problem Processing**: Mathematical problems are analyzed by DeepSeek-V3
+2. **Dual Extraction**:
+   - Subgoal decomposition for formal proof structure
+   - Chain-of-thought reasoning for informal mathematical insight
+3. **Subgoal Resolution**: The 7B model solves individual subgoals
+4. **Proof Composition**: Individual proofs are combined into complete solutions
+5. **Data Synthesis**: Formal proofs are paired with informal reasoning
+6. **Cold-Start Training**: The model is fine-tuned on the synthetic data
+7. **Reinforcement Learning**: Further training with binary feedback
+
+Sources: [README.md:54-67]()
+
+## Integration with Benchmarks and Evaluation
+
+The DeepSeek-Prover-V2 system is designed to integrate with multiple evaluation benchmarks to assess model performance.
+
+```mermaid
+graph TD
+    A["DeepSeekProverV2Model"] --> B["EvaluationPipeline"]
+    B --> C["MiniF2FBenchmark"]
+    B --> D["PutnamBench"]
+    B --> E["ProverBench"]
+    
+    subgraph "MiniF2FComponents"
+        C --> C1["TestSuite"]
+    end
+    
+    subgraph "PutnamBenchComponents"
+        D --> D1["658Problems"]
+    end
+    
+    subgraph "ProverBenchComponents"
+        E --> E1["AIMEProblems_15"]
+        E --> E2["TextbookExamples_310"]
+        
+        E2 --> F1["NumberTheory"]
+        E2 --> F2["ElementaryAlgebra"]
+        E2 --> F3["LinearAlgebra"]
+        E2 --> F4["AbstractAlgebra"]
+        E2 --> F5["Calculus"]
+        E2 --> F6["RealAnalysis"]
+        E2 --> F7["ComplexAnalysis"]
+        E2 --> F8["FunctionalAnalysis"]
+        E2 --> F9["Probability"]
+    end
+```
+
+The model evaluation architecture enables comprehensive assessment across multiple benchmarks, including:
+
+1. **MiniF2F**: Standard benchmark for formal mathematics
+2. **PutnamBench**: Collection of 658 challenging mathematical problems
+3. **ProverBench**: Newly introduced benchmark with 325 problems:
+   - 15 problems from AIME competitions
+   - 310 examples from various mathematical domains
+
+Sources: [README.md:71-91]()
+
 ---
 
- 
-## Architectural Overview
-
- DeepSeekMath-V2 is a self-verifiable mathematical reasoning system built on the DeepSeek-V3.2-Exp-Base foundation model. The architecture implements a closed-loop feedback system where a proof generator and an LLM-based verifier continuously improve each other through iterative training cycles.
-
- **Key Architectural Principles:**
-
- 
-| Principle | Description | Impact |
-|---|---|---|
-| Self-Verification | Generator and verifier are trained together to maintain tight coupling | Ensures rigorous step-by-step proof validation |
-| Feedback-Driven Learning | Verifier provides reward signals to guide generator improvement | Moves beyond final-answer accuracy to comprehensive reasoning |
-| Gap Management | System actively addresses generation-verification capability gaps | Maintains verification fidelity as generator becomes stronger |
-| Compute Scaling | Test-time compute can be scaled for harder problems | Enables gold-level performance on competition mathematics |
-
- The system is designed to solve mathematical problems that require rigorous proof rather than just numerical answers, making it particularly effective for theorem proving and competition-level mathematics ([README.md34-45](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L34-L45)).
-
- 
-### System Deployment Architecture
-
- 
-```
-
-```
-
- **Sources:** [README.md1-88](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L1-L88)
-
- 
----
-
- 
-## System Layers
-
- DeepSeekMath-V2 follows a layered architecture with clear separation of concerns:
-
- 
-### 1. Foundation Layer
-
- The foundation layer consists of the DeepSeek-V3.2-Exp-Base model, which provides the underlying language understanding and generation capabilities. This model is accessible via Hugging Face and serves as the base for both the verifier and generator components ([README.md69-70](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L69-L70)).
-
- **Characteristics:**
-
- 
- - Pre-trained large language model
- - Shared weights between verifier and generator (initially)
- - Provides mathematical reasoning capabilities
- - Supports inference through dedicated repository
- 
- 
-### 2. Reasoning Layer
-
- The reasoning layer implements the dual-component architecture:
-
- **Verifier Component:**
-
- 
- - Evaluates proof correctness and rigor
- - Provides step-by-step validation
- - Generates reward signals for generator training
- - Trained on verification datasets
- 
- **Generator Component:**
-
- 
- - Produces step-by-step mathematical proofs
- - Optimized using verifier rewards
- - Incentivized to self-resolve issues before finalization
- - Creates challenging proofs for verifier improvement
- 
- 
-### 3. Data Layer
-
- The data layer manages input problems, training data, and output results:
-
- 
-```
-
-```
-
- All output files follow a consistent JSONL schema with structured problem data, proofs, and ratings. The `outputs/` directory contains evaluation results from various benchmarks ([README.md50](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L50-L50)).
-
- 
-### 4. Distribution Layer
-
- The distribution layer provides multiple access points for different user types:
-
- 
-| Channel | Purpose | Target Users |
-|---|---|---|
-| Hugging Face | Model download and hosting | Researchers, developers |
-| chat.deepseek.com | Interactive web interface | End users, experimenters |
-| GitHub (DeepSeek-V3.2-Exp) | Inference code and documentation | Technical integrators |
-
- **Sources:** [README.md1-88](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L1-L88)
-
- 
----
-
- 
-## Component Interactions
-
- The core innovation of DeepSeekMath-V2 lies in how the verifier and generator components interact through a feedback loop:
-
- 
-### Feedback Loop Architecture
-
- 
-```
-
-```
-
- **Interaction Patterns:**
-
- 
- - **Reward Signal Flow:** The verifier evaluates generator outputs and provides reward signals that guide training ([README.md42](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L42-L42))
- - **Challenge Generation:** As the generator improves, it creates harder proofs that challenge the verifier's capabilities ([README.md43](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L43-L43))
- - **Scaled Verification:** The system applies additional compute to verify challenging proofs, creating labeled training data ([README.md43](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L43-L43))
- - **Iterative Refinement:** Improved verifier provides better rewards, enabling further generator improvements ([README.md43](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L43-L43))
- 
- **Sources:** [README.md41-45](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L41-L45)
-
- 
----
-
- 
-## Data Flow Architecture
-
- The system processes mathematical problems through several stages, maintaining structured data at each step:
-
- 
-### End-to-End Data Flow
-
- 
-```
-
-```
-
- 
-### Data Transformation Pipeline
-
- The system transforms raw mathematical problems into structured proof outputs:
-
- 
-| Stage | Input | Process | Output |
-|---|---|---|---|
-| Problem Ingestion | Competition questions (text) | Parse and structure | Structured problem representation |
-| Proof Generation | Problem + context | Generator produces step-by-step proof | Draft proof with LaTeX formatting |
-| Verification | Draft proof | Verifier evaluates each step | Automatic rating (float) |
-| Scaling | Challenging cases | Apply additional compute | Refined proof + human rating |
-| Storage | Verified proofs | Serialize to JSONL | Files in outputs/ directory |
-
- All output files follow a consistent schema with `question`, `problem_idx`, and `model_prediction` fields containing the proof text and ratings.
-
- **Sources:** [README.md47-65](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L47-L65)
-
- 
----
-
- 
-## Repository Structure
-
- The physical organization of the system reflects its logical architecture:
-
- 
-```
-DeepSeek-Math-V2/
-├── outputs/                    # Evaluation results (JSONL format)
-│   ├── IMO2025.jsonl          # IMO 2025 solutions
-│   ├── CMO2024.jsonl          # CMO 2024 solutions  
-│   ├── Putnam2024.jsonl       # Putnam 2024 solutions
-│   ├── IMO-ProofBench-Basic.jsonl      # Basic theorem proving
-│   └── IMO-ProofBench-Advanced.jsonl   # Advanced formal proofs
-├── figures/                    # Performance visualizations
-│   ├── Competitions.png       # Competition results chart
-│   ├── IMO-ProofBench.png    # ProofBench performance
-│   ├── logo.svg              # DeepSeek logo
-│   └── ...                   # Additional graphics
-├── LICENSE                    # Apache License 2.0
-└── README.md                 # Main documentation
-```
-
- **Key Directories:**
-
- 
- - **`outputs/`**: Contains all evaluation results in structured JSONL format. Each file represents results from a specific benchmark or competition ([README.md50](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L50-L50))
- - **`figures/`**: Stores performance visualizations referenced in documentation and presentations ([README.md55-65](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L55-L65))
- 
- **Sources:** [README.md1-88](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L1-L88)
-
- 
----
-
- 
-## Model Foundation
-
- DeepSeekMath-V2 is built on the DeepSeek-V3.2-Exp-Base foundation model, which provides the core language understanding and generation capabilities:
-
- 
-### Foundation Model Integration
-
- 
-```
-
-```
-
- **Integration Points:**
-
- 
- - **Model Weights:** Both verifier and generator initialize from DeepSeek-V3.2-Exp-Base weights
- - **Inference Infrastructure:** Uses the DeepSeek-V3.2-Exp repository for model serving and inference
- - **Specialization:** Components are fine-tuned from the base model for their specific roles
- 
- For inference setup and model access, refer to the [DeepSeek-V3.2-Exp GitHub repository](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/DeepSeek-V3.2-Exp GitHub repository) as documented in [README.md70](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L70-L70)
-
- **Sources:** [README.md69-70](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L69-L70)
-
- 
----
-
- 
-## Performance Characteristics
-
- The architectural design enables strong performance across multiple evaluation domains:
-
- 
-### Evaluation Results Summary
-
- 
-| Benchmark | Result | Metric |
-|---|---|---|
-| IMO 2025 | Gold Medal | 6/6 problems solved |
-| CMO 2024 | Gold Medal | 6/6 problems solved |
-| Putnam 2024 | 118/120 | Near-perfect score |
-| IMO-ProofBench | State-of-the-art | Basic and advanced problems |
-
- These results are achieved through the combination of:
-
- 
- - Self-verifiable reasoning architecture
- - Scaled test-time compute
- - Iterative verifier-generator improvement
- - Rigorous step-by-step proof validation
- 
- Performance data is available in the `outputs/` directory, with visualizations in `figures/Competitions.png` and `figures/IMO-ProofBench.png` ([README.md47-65](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L47-L65)).
-
- **Sources:** [README.md44-65](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L44-L65)
-
- 
----
-
- 
-## Architectural Trade-offs
-
- The design makes several intentional trade-offs:
-
- 
-| Aspect | Design Choice | Trade-off |
-|---|---|---|
-| Verification Overhead | Verifier evaluates every proof step | Higher compute cost, but ensures rigor |
-| Training Complexity | Multi-stage iterative training | Longer training time, but better quality |
-| Gap Management | Active scaling of verification compute | Additional resources needed for hard cases |
-| Generalization | Focus on theorem proving domain | Specialized for mathematics vs. general reasoning |
-
- The architecture prioritizes proof correctness and rigor over raw speed, reflecting the system's focus on self-verifiable mathematical reasoning rather than just final answer accuracy ([README.md36-40](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L36-L40)).
-
- **Sources:** [README.md34-45](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L34-L45)
-
- 
----
-
- 
-## Integration with External Systems
-
- DeepSeekMath-V2 integrates with several external systems and benchmarks:
-
- 
-### External Dependencies
-
- 
- - **IMO-ProofBench:** The system is evaluated against Google DeepMind's IMO-ProofBench benchmark for formal theorem proving ([README.md49](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L49-L49))
- - **Competition Problems:** Processes problems from IMO, CMO, and Putnam competitions
- - **Inference Infrastructure:** Relies on the DeepSeek-V3.2-Exp repository for model serving ([README.md70](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L70-L70))
- 
- 
-### Distribution Interfaces
-
- The system provides multiple interfaces for different use cases:
-
- 
- - **Research Access:** Direct model download from Hugging Face for academic research
- - **Production Inference:** Integration through the DeepSeek-V3.2-Exp inference repository
- - **Interactive Use:** Web-based chat interface for exploratory problem-solving
- 
- **Sources:** [README.md69-70](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L69-L70) [README.md49](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L49-L49)

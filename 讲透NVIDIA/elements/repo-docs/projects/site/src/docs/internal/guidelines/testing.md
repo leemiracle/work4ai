@@ -1,0 +1,82 @@
+---
+{
+  title: 'Testing Guidelines',
+  description: 'Internal guidelines: an overview of the test types used by NVIDIA Elements (unit, accessibility, visual, SSR, Lighthouse) and when to apply each.',
+  layout: 'docs.11ty.js'
+}
+---
+
+# {{ title }}
+
+The Elements library uses a comprehensive testing strategy with many test types to ensure quality, accessibility, and performance. All tests follow consistent patterns and use shared utilities from `@internals/testing` and `@internals/vite`.
+
+## Running Tests
+
+Run test scripts from the root directory of the project where the `package.json` lives.
+
+```shell
+# Unit tests
+pnpm run test
+
+# Single test suite
+pnpm run test -- src/badge/badge.test.ts
+
+# Accessibility tests
+pnpm run test:axe
+
+# Performance tests
+pnpm run test:lighthouse
+
+# WebGPU rendering tests
+pnpm run test:webgpu
+
+# Visual regression tests
+pnpm run test:visual
+
+# SSR tests
+pnpm run test:ssr
+```
+
+## Test Types
+
+### Unit Tests (`.test.ts`)
+
+- [Unit Tests (`.test.ts`)](/docs/internal/guidelines/testing-unit/): Standard behavior tests.
+- [Accessibility Tests (`.test.axe.ts`)](/docs/internal/guidelines/testing-accessibility/): best practices tests using axe-core.
+- [Lighthouse Performance Tests (`.test.lighthouse.ts`)](/docs/internal/guidelines/testing-lighthouse/): performance audits and best practices via Lighthouse
+- [Visual Regression Tests (`.test.visual.ts`)](/docs/internal/guidelines/testing-visual/): Visual regression tests using Playwright screenshots.
+- [SSR Tests (`.test.ssr.ts`)](/docs/internal/guidelines/testing-ssr/): Server-side rendering compatibility tests.
+- **WebGPU rendering tests (`.test.webgpu.ts`)**: External rendering, resource, timing, diagnostic, and lifecycle tests
+  orchestrated by Vitest against a clean Playwright page.
+
+## Test Configuration
+
+### Vitest Configs
+
+Each test type has its own Vitest configuration:
+
+- **Unit tests**: `vitest.config.ts` using `libraryTestConfig`
+- **Axe tests**: `vitest.axe.ts` using `libraryAxeTestConfig`
+- **Lighthouse tests**: `vitest.lighthouse.ts` using `libraryLighthouseConfig`
+- **WebGPU tests**: `vitest.webgpu.ts` using `libraryWebGPUTestConfig`
+- **Visual tests**: `vitest.visual.ts` using `libraryVisualTestConfig`
+- **SSR tests**: `vitest.ssr.ts` using `libraryLitSSRTestConfig`
+
+### HTML Templates
+
+Lighthouse and Visual tests require HTML templates:
+
+- `vitest.lighthouse.html` - Base template for Lighthouse tests
+- `vitest.visual.html` - Base template for Visual tests
+
+## Testing Utilities
+
+### @internals/testing
+
+Core testing utilities for DOM manipulation and element stability:
+
+- `createFixture`: Creates test fixture DOM element
+- `removeFixture`: Removes test fixture DOM
+- `elementIsStable`: Waits for Lit element to be stable
+- `emulateClick`: Triggers native click events
+- `untilEvent`: Creates promise for event results

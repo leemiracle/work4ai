@@ -1,150 +1,103 @@
-> 来源: [https://deepwiki.com/deepseek-ai/FlashMLA/2-getting-started](https://deepwiki.com/deepseek-ai/FlashMLA/2-getting-started)
-> DeepWiki deepseek-ai/FlashMLA
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/FlashMLA · page 2 Getting Started · fetched 2026-10-30 -->
 
 # Getting Started
 
-  Relevant source files 
- - [README.md](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1)
- - [install.sh](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/install.sh)
- - [setup.py](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py)
- 
-  This page provides an introduction to installing and using DeepEP V2. It covers system requirements, dependency installation, building the library, and first steps for new users. DeepEP V2 features a complete refactoring of Expert Parallelism (EP) with a new **NCCL Gin backend**, replacing the NVSHMEM-based V1 for primary paths [README.md9-14](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L9-L14)
+<details>
+<summary>Relevant source files</summary>
 
- For detailed build configuration options, see [Installation and Build](https://deepwiki.com/deepseek-ai/DeepEP/2.1-installation-and-build). For complete working examples, see [Quick Start Guide](https://deepwiki.com/deepseek-ai/DeepEP/2.2-quick-start-guide).
+The following files were used as context for generating this wiki page:
 
- **Sources:** [README.md1-109](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L1-L109)
+- [README.md](README.md)
+- [setup.py](setup.py)
 
- 
+</details>
+
+
+
+This document provides a quickstart guide for installing and using FlashMLA for NVIDIA SM100/SM103 GPUs and Huawei Ascend 950 NPUs [README.md:13-16, 79-86](). FlashMLA provides token-level sparse attention kernels for prefill and decoding with FP8/FP4 KV caches, dense prefill and backward kernels, and fused attention pipelines [README.md:5-7]().
+
+For detailed installation and build orchestration, see [Building from Source](#2.1). For comprehensive usage patterns and code examples, see [Usage Examples](#2.2).
+
 ---
 
- 
-## Prerequisites and System Requirements
+## 2.1. Building from Source
 
- DeepEP V2 is optimized for modern NVIDIA GPU architectures and high-performance interconnects.
+FlashMLA relies on a custom `setup.py` script to orchestrate compilation for either the NVIDIA CUDA platform or the Huawei Ascend NPU platform [setup.py:20-22, 92](). The build system inspects the target environment, configures architecture-specific nvcc or bisheng compiler flags, manages submodules such as CUTLASS and kerutils, and performs post-build checks like register-spill validation [setup.py:79-137]().
 
- 
-### Hardware Requirements
+"Build Orchestration Flow"
+```mermaid
+graph TB
+    subgraph "Python Build Script"
+    SetupPy["setup.py"]
+    GetArch["get_cuda_arch_flags()<br/>sm_100a / sm_103a"]
+    GetThreads["get_nvcc_thread_args()<br/>NVCC_THREADS env"]
+    end
 
- 
-| Component | Requirement | Purpose |
-|---|---|---|
-| GPU Architecture | Hopper (SM90) or compatible | Primary target for V2 kernels README.md65 |
-| Intra-node Interconnect | NVLink | High-bandwidth scale-up communication README.md71 |
-| Inter-node Network | RDMA (InfiniBand/RoCE) | Scale-out communication README.md72 |
+    subgraph "C++ Extension Targets"
+    ExtCUDA["flash_mla.cuda<br/>CUDAExtension"]
+    ExtAscend["flash_mla.npu<br/>Ascend Extension"]
+    end
 
- 
-### Software Requirements
+    subgraph "Post-Build Validation"
+    RegSpill["BuildExtensionWithPostActions<br/>check_kernel_reg_spill_in_artifact"]
+    end
 
- 
-| Component | Version | Notes |
-|---|---|---|
-| Python | 3.8+ | README.md66 |
-| CUDA Toolkit | 12.3+ | Required for SM90 PTX support README.md68 |
-| PyTorch | 2.10+ | README.md69 |
-| NCCL | 2.30.4+ | Required for the Gin backend README.md70 |
+    SetupPy --> GetArch
+    SetupPy --> GetThreads
+    GetArch --> ExtCUDA
+    GetThreads --> ExtCUDA
+    SetupPy --> ExtAscend
+    ExtCUDA --> RegSpill
+```
 
- **Sources:** [README.md63-72](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L63-L72)
+**Build Orchestration Flow**: This diagram maps build configuration routines in `setup.py` to extension targets (`flash_mla.cuda` and `flash_mla.npu`) and post-build register-spill validation [setup.py:20-27, 111-137]().
 
- 
+For detailed configuration instructions, environment variables (`FLASH_MLA_BUILD_TARGET_PLATFORM`, `NVCC_THREADS`), and submodule requirements, see [Building from Source](#2.1).
+
+Sources: [setup.py:20-137]()
+
 ---
 
- 
-## Installation Workflow Overview
+## 2.2. Usage Examples
 
- The following diagram shows the V2 installation and setup workflow, mapping steps to specific code entities and environment variables.
+FlashMLA exposes high-level Python APIs that dispatch to optimized CUDA and Ascend C++ kernels [README.md:5-16, 83-88](). Common workflows include sparse MLA decoding with paged FP8/FP4 KV cache, sparse prefill, dense varlen prefill/backward, and the fused `norm-RoPE-attention-RoPE-cast` pipeline [README.md:5-7, 25-41]().
 
- 
-### Installation and Setup Pipeline
+"API Dispatch Architecture"
+```mermaid
+graph TB
+    subgraph "Python Interface Space"
+    GetMeta["get_mla_metadata()<br/>FlashMLASchedMeta"]
+    WithCache["flash_mla_with_kvcache()"]
+    SparseFwd["flash_mla_sparse_fwd()"]
+    FusedPipe["flash_mla/fused_norm_rope_attn_rope_cast.py"]
+    end
 
- 
+    subgraph "C++ API Layer"
+    ApiCpp["csrc/api/api.cpp"]
+    SparseDec["csrc/api/sparse_decode.cpp"]
+    SparsePre["csrc/api/sparse_prefill.cpp"]
+    FusedApi["csrc/api/fused_norm_rope_attn_rope_cast_fwd.cpp"]
+    end
+
+    GetMeta --> WithCache
+    WithCache --> ApiCpp
+    ApiCpp --> SparseDec
+    SparseFwd --> SparsePre
+    FusedPipe --> FusedApi
 ```
 
-```
+**API Dispatch Architecture**: This diagram connects user-facing Python functions to underlying C++ translation units in `csrc/api/` [setup.py:11-18]().
 
- **Sources:** [README.md74-108](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L74-L108) [setup.py13-127](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L13-L127)
+For concrete code examples, tensor shape specifications, and pre-permutation requirements for weights, see [Usage Examples](#2.2).
 
- 
+Sources: [README.md:33-74](), [setup.py:11-18]()
+
 ---
 
- 
-## Core Installation Steps
+## Next Steps
 
- 
-### 1. Install NCCL
+- **Building from Source**: For complete details on compilation settings, environment variables, and toolchain versions, see [Building from Source](#2.1).
+- **Usage Examples**: For full Python code snippets covering decoding, prefill, and fused pipelines, see [Usage Examples](#2.2).
 
- DeepEP V2 relies on NCCL for its Gin backend. It is recommended to install it via pip so the build system can automatically locate it using the `find_pkgs` utility [README.md74-80](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L74-L80) [setup.py95](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L95-L95)
-
- 
-```
-
-```
-
- 
-### 2. Environment Variables
-
- The build system and JIT compiler use several persistent environment variables that are captured during installation into `deep_ep/envs.py` [setup.py13-14](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L13-L14) [setup.py78-89](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L78-L89):
-
- 
- - `EP_NCCL_ROOT_DIR`: Path to the NCCL installation for linking.
- - `EP_JIT_CACHE_DIR`: Directory where JIT-compiled kernels are stored.
- - `EP_NUM_TOPK_IDX_BITS`: Bits of `topk_idx.dtype` (32 or 64) [setup.py164](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L164-L164)
- - `EP_NIC_NAME`: The name of the NIC to use for RDMA communication.
- 
- 
-### 3. Build and Install
-
- DeepEP uses a standard `setup.py` for installation. Note that V2 kernels are header-only and compiled at runtime via JIT, so the installation phase primarily builds the Python bindings (`csrc/python_api.cpp`) and backend wrappers [README.md3-13](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L3-L13) [setup.py100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L100-L100)
-
- 
-```
-
-```
-
- For a detailed step-by-step guide including building from source and NCCL verification, see [Installation and Build](https://deepwiki.com/deepseek-ai/DeepEP/2.1-installation-and-build).
-
- **Sources:** [README.md88-106](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L88-L106) [setup.py13-100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L13-L100) [install.sh1-12](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/install.sh#L1-L12)
-
- 
 ---
 
- 
-## First Steps with ElasticBuffer
-
- In V2, the `ElasticBuffer` is the primary entry point for all EP operations [README.md113-115](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L113-L115) It unifies high-throughput and low-latency modes and handles analytical resource allocation [README.md17-20](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L17-L20)
-
- 
-### Component Relationship
-
- 
-```
-
-```
-
- 
-### Basic Initialization
-
- Unlike V1, V2 calculates the optimal number of SMs analytically using `get_theoretical_num_sms`, eliminating the need for manual auto-tuning [README.md158-160](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L158-L160)
-
- 
-```
-
-```
-
- For minimal working examples and a guide on handle caching for inference, see [Quick Start Guide](https://deepwiki.com/deepseek-ai/DeepEP/2.2-quick-start-guide).
-
- **Sources:** [README.md117-163](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L117-L163) [setup.py79-85](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L79-L85)
-
- 
----
-
- 
-## Verification
-
- After installation, you should verify the setup using the provided test suite in `tests/elastic/` [README.md94-101](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L94-L101)
-
- 
-```
-
-```
-
- **Sources:** [README.md94-101](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L94-L101)

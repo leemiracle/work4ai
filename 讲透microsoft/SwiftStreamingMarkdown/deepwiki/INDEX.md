@@ -1,0 +1,32 @@
+# DeepWiki 索引 — microsoft/SwiftStreamingMarkdown
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 215576 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Public API Reference](1.2-public-api-reference.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 Parsing Pipeline](2.1-parsing-pipeline.md)
+  - [2.2 AST-to-Renderable Conversion](2.2-ast-to-renderable-conversion.md)
+  - [2.3 RenderableDocument and Data Models](2.3-renderabledocument-and-data-models.md)
+- [3 UI Layer](3-ui-layer.md)
+  - [3.1 Document and Block Views](3.1-document-and-block-views.md)
+  - [3.2 Paragraph Rendering and Text Animations](3.2-paragraph-rendering-and-text-animations.md)
+  - [3.3 Context Menus and Text Interaction](3.3-context-menus-and-text-interaction.md)
+- [4 Configuration and Styling](4-configuration-and-styling.md)
+  - [4.1 MarkdownRenderConfig](4.1-markdownrenderconfig.md)
+  - [4.2 Typography and Color System](4.2-typography-and-color-system.md)
+- [5 Inline Citations](5-inline-citations.md)
+  - [5.1 CitationCoder and On-Wire Format](5.1-citationcoder-and-on-wire-format.md)
+  - [5.2 Citation Rendering and Accessibility](5.2-citation-rendering-and-accessibility.md)
+- [6 Sample Application](6-sample-application.md)
+  - [6.1 Demonstration View and Streaming Simulation](6.1-demonstration-view-and-streaming-simulation.md)
+  - [6.2 Themes, Settings, and Fixtures](6.2-themes-settings-and-fixtures.md)
+- [7 Testing](7-testing.md)
+  - [7.1 Unit Tests](7.1-unit-tests.md)
+  - [7.2 Snapshot Tests](7.2-snapshot-tests.md)
+- [8 Developer Tooling and CI](8-developer-tooling-and-ci.md)
+  - [8.1 Local Development Setup](8.1-local-development-setup.md)
+  - [8.2 CI Pipeline and Contributing](8.2-ci-pipeline-and-contributing.md)
+- [9 Glossary](9-glossary.md)

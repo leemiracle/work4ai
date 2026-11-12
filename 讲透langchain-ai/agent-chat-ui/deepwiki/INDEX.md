@@ -1,0 +1,32 @@
+# DeepWiki 索引 — langchain-ai/agent-chat-ui
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 407956 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation and Setup](1.1-installation-and-setup.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 Thread Component](2.1-thread-component.md)
+  - [2.2 Stream Provider](2.2-stream-provider.md)
+  - [2.3 Thread Provider](2.3-thread-provider.md)
+  - [2.4 Artifact System](2.4-artifact-system.md)
+- [3 Message System](3-message-system.md)
+  - [3.1 AI Messages](3.1-ai-messages.md)
+  - [3.2 Human Messages](3.2-human-messages.md)
+  - [3.3 Tool Calls and Results](3.3-tool-calls-and-results.md)
+- [4 Agent Inbox System](4-agent-inbox-system.md)
+  - [4.1 Agent Interaction Components](4.1-agent-interaction-components.md)
+  - [4.2 Handling Interrupted Actions](4.2-handling-interrupted-actions.md)
+- [5 Thread History and Management](5-thread-history-and-management.md)
+- [6 File Upload and Multimodal Content](6-file-upload-and-multimodal-content.md)
+- [7 Content Rendering](7-content-rendering.md)
+- [8 State Management](8-state-management.md)
+- [9 API Integration](9-api-integration.md)
+  - [9.1 Configuration System](9.1-configuration-system.md)
+  - [9.2 API Passthrough for Production](9.2-api-passthrough-for-production.md)
+  - [9.3 Custom Authentication](9.3-custom-authentication.md)
+- [10 Development Guide](10-development-guide.md)
+  - [10.1 Build and CI System](10.1-build-and-ci-system.md)
+  - [10.2 TypeScript Configuration](10.2-typescript-configuration.md)
+  - [10.3 Dependency Management](10.3-dependency-management.md)
+  - [10.4 Application Configuration](10.4-application-configuration.md)

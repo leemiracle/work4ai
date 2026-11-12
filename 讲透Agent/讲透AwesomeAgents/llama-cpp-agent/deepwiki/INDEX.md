@@ -1,0 +1,30 @@
+# DeepWiki 索引 — Maximilian-Winter/llama-cpp-agent
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 282774 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+- [3 Core Framework](3-core-framework.md)
+  - [3.1 LlamaCppAgent](3.1-llamacppagent.md)
+  - [3.2 FunctionCallingAgent](3.2-functioncallingagent.md)
+  - [3.3 StructuredOutputAgent](3.3-structuredoutputagent.md)
+  - [3.4 Output Processing](3.4-output-processing.md)
+- [4 Provider System](4-provider-system.md)
+  - [4.1 Provider Architecture](4.1-provider-architecture.md)
+  - [4.2 Provider Implementations](4.2-provider-implementations.md)
+- [5 Memory System](5-memory-system.md)
+  - [5.1 Memory Architecture](5.1-memory-architecture.md)
+  - [5.2 Memory Tools Integration](5.2-memory-tools-integration.md)
+- [6 Tools and Function Calling](6-tools-and-function-calling.md)
+  - [6.1 Function Tools Framework](6.1-function-tools-framework.md)
+  - [6.2 Web Search Tools](6.2-web-search-tools.md)
+  - [6.3 Prompt Templates](6.3-prompt-templates.md)
+- [7 Examples and Applications](7-examples-and-applications.md)
+  - [7.1 Basic Examples](7.1-basic-examples.md)
+  - [7.2 Virtual Game Master](7.2-virtual-game-master.md)
+  - [7.3 Memory Assistant](7.3-memory-assistant.md)
+  - [7.4 Advanced Applications](7.4-advanced-applications.md)
+- [8 Development and Deployment](8-development-and-deployment.md)
+  - [8.1 Project Configuration](8.1-project-configuration.md)
+  - [8.2 CI/CD Pipeline](8.2-ci-cd-pipeline.md)

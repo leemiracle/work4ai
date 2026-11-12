@@ -67,4 +67,4 @@
 全部图谱在各自仓内 `.understand-anything/knowledge-graph.json`（fingerprints 基线齐备），仓库更新后重跑 `/understand` 走增量（分钟级）。
 
 ---
-姊妹篇：[讲透vLLM](讲透vLLM/README.md) · [讲透SGLang](讲透SGLang/README.md) · [讲透TIRx](讲透TIRx/README.md)（同流水线）
+姊妹篇：[讲透vLLM](讲透vLLM/README.md) · [讲透SGLang](讲透SGLang/README.md) · [讲透TIRx](讲透TIRx/README.md)（同流水线） · [讲透WeKnora](讲透WeKnora/README.md)（2026-09-20 同流水线：DeepWiki 90/90 + 图谱 12951n/112010e/12层/15步 + onboard 5962字 + explain 12篇；Tencent/WeKnora v0.8.0 RAG×Agent×Wiki 知识框架，图谱在 /usr-data/data1/WeKnora/.understand-anything/）

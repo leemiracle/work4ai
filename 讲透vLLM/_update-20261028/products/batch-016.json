@@ -1,0 +1,3742 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/config/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/config/__init__.py",
+   "summary": "vLLM 配置包入口：从各子模块聚合导出全部 *Config 类与工具（get_current_vllm_config 等）。",
+   "tags": [
+    "barrel",
+    "config",
+    "package-init"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/config/attention.py",
+   "type": "file",
+   "name": "attention.py",
+   "filePath": "vllm/config/attention.py",
+   "summary": "注意力机制配置：AttentionConfig（后端选择/backend_per_kind/sink/DCP 等）与 HiSparseConfig（稀疏 MLA KV 卸载）。",
+   "tags": [
+    "attention",
+    "config",
+    "backend-selection",
+    "hisparse"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/config/attention.py:AttentionConfig",
+   "type": "class",
+   "name": "AttentionConfig",
+   "filePath": "vllm/config/attention.py",
+   "lineRange": [
+    37,
+    266
+   ],
+   "summary": "注意力机制配置类：后端选择（含 backend_per_kind 按 KVCacheSpecKind 分派）、sink/水印等选项与校验。",
+   "tags": [
+    "config",
+    "attention",
+    "backend-selection"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/config/aux_output.py",
+   "type": "file",
+   "name": "aux_output.py",
+   "filePath": "vllm/config/aux_output.py",
+   "summary": "执行辅助输出（auxiliary outputs）投递配置。",
+   "tags": [
+    "aux-output",
+    "config"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/config/aux_output.py:AuxOutputConfig",
+   "type": "class",
+   "name": "AuxOutputConfig",
+   "filePath": "vllm/config/aux_output.py",
+   "lineRange": [
+    11,
+    32
+   ],
+   "summary": "辅助输出投递配置类。",
+   "tags": [
+    "config",
+    "aux-output"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/config/cache.py",
+   "type": "file",
+   "name": "cache.py",
+   "filePath": "vllm/config/cache.py",
+   "summary": "KV cache 配置：CacheConfig（块大小/布局/dtype/前缀缓存等）与自定义 kv-cache-dtype 的 KVCacheDTypeHandler 注册机制。",
+   "tags": [
+    "kv-cache",
+    "config",
+    "dtype-registry",
+    "layout"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/config/cache.py:KVCacheDTypeHandler",
+   "type": "class",
+   "name": "KVCacheDTypeHandler",
+   "filePath": "vllm/config/cache.py",
+   "lineRange": [
+    77,
+    106
+   ],
+   "summary": "自定义 --kv-cache-dtype 值的处理协议（注册表契约）。",
+   "tags": [
+    "protocol",
+    "kv-dtype",
+    "registry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/config/cache.py:CacheConfig",
+   "type": "class",
+   "name": "CacheConfig",
+   "filePath": "vllm/config/cache.py",
+   "lineRange": [
+    182,
+    500
+   ],
+   "summary": "KV cache 配置类：块大小/布局/dtype/前缀缓存/cache 比例与逐字段校验。",
+   "tags": [
+    "config",
+    "kv-cache",
+    "layout"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/config/cache.py:register_kv_cache_dtype",
+   "type": "function",
+   "name": "register_kv_cache_dtype",
+   "filePath": "vllm/config/cache.py",
+   "lineRange": [
+    114,
+    158
+   ],
+   "summary": "注册自定义 kv-cache-dtype 处理器（装饰器）。",
+   "tags": [
+    "registry",
+    "decorator",
+    "kv-dtype"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/cache.py:get_kv_cache_dtype_handler",
+   "type": "function",
+   "name": "get_kv_cache_dtype_handler",
+   "filePath": "vllm/config/cache.py",
+   "lineRange": [
+    161,
+    167
+   ],
+   "summary": "按名取已注册的 kv dtype 处理器。",
+   "tags": [
+    "registry",
+    "lookup"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/config/compilation.py",
+   "type": "file",
+   "name": "compilation.py",
+   "filePath": "vllm/config/compilation.py",
+   "summary": "torch.compile 编译配置：CompilationMode/CUDAGraphMode/PassConfig（Inductor 自定义 pass）/DynamicShapes 与 CompilationConfig 主类。",
+   "tags": [
+    "compilation",
+    "torch-compile",
+    "cuda-graph",
+    "config"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/config/compilation.py:CUDAGraphMode",
+   "type": "class",
+   "name": "CUDAGraphMode",
+   "filePath": "vllm/config/compilation.py",
+   "lineRange": [
+    53,
+    110
+   ],
+   "summary": "CUDA Graph 模式枚举（13 个组合常量：NONE/FULL/PIECEWISE/...）。",
+   "tags": [
+    "enum",
+    "cuda-graph",
+    "mode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/config/compilation.py:PassConfig",
+   "type": "class",
+   "name": "PassConfig",
+   "filePath": "vllm/config/compilation.py",
+   "lineRange": [
+    114,
+    319
+   ],
+   "summary": "Inductor 自定义 pass 配置（fusion/量化 pass 开关与调试模式）。",
+   "tags": [
+    "config",
+    "inductor",
+    "passes"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/config/compilation.py:DynamicShapesConfig",
+   "type": "class",
+   "name": "DynamicShapesConfig",
+   "filePath": "vllm/config/compilation.py",
+   "lineRange": [
+    343,
+    379
+   ],
+   "summary": "torch.compile 动态形状处理配置（automatic/manual 与调试）。",
+   "tags": [
+    "config",
+    "dynamic-shapes"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/config/compilation.py:CompilationConfig",
+   "type": "class",
+   "name": "CompilationConfig",
+   "filePath": "vllm/config/compilation.py",
+   "lineRange": [
+    383,
+    1572
+   ],
+   "summary": "编译配置主类（1190 行）：编译模式/级别、CUDA Graph 捕获范围、pass 与动态形状子配置、缓存与符号注解。",
+   "tags": [
+    "config",
+    "compilation",
+    "cuda-graph",
+    "torch-compile"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/config/device.py",
+   "type": "file",
+   "name": "device.py",
+   "filePath": "vllm/config/device.py",
+   "summary": "执行设备配置（DeviceConfig：device 类型与平台解析）。",
+   "tags": [
+    "device",
+    "config",
+    "platform"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/config/device.py:DeviceConfig",
+   "type": "class",
+   "name": "DeviceConfig",
+   "filePath": "vllm/config/device.py",
+   "lineRange": [
+    17,
+    77
+   ],
+   "summary": "执行设备配置（device 类型与平台初始化）。",
+   "tags": [
+    "config",
+    "device",
+    "platform"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/config/ec_manager_config.py",
+   "type": "file",
+   "name": "ec_manager_config.py",
+   "filePath": "vllm/config/ec_manager_config.py",
+   "summary": "encoder cache 管理器配置（EncoderCacheManagerConfig 与 Metadata 抽象）。",
+   "tags": [
+    "encoder-cache",
+    "config",
+    "ec"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/config/ec_manager_config.py:EncoderCacheManagerConfig",
+   "type": "class",
+   "name": "EncoderCacheManagerConfig",
+   "filePath": "vllm/config/ec_manager_config.py",
+   "lineRange": [
+    13,
+    30
+   ],
+   "summary": "encoder cache 管理器配置。",
+   "tags": [
+    "config",
+    "encoder-cache"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/config/ec_transfer.py",
+   "type": "file",
+   "name": "ec_transfer.py",
+   "filePath": "vllm/config/ec_transfer.py",
+   "summary": "分布式 EC cache transfer 配置（ECTransferConfig）。",
+   "tags": [
+    "ec-transfer",
+    "distributed",
+    "config"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/config/ec_transfer.py:ECTransferConfig",
+   "type": "class",
+   "name": "ECTransferConfig",
+   "filePath": "vllm/config/ec_transfer.py",
+   "lineRange": [
+    16,
+    119
+   ],
+   "summary": "分布式 EC cache transfer 配置类。",
+   "tags": [
+    "config",
+    "ec-transfer",
+    "distributed"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/config/engram.py",
+   "type": "file",
+   "name": "engram.py",
+   "filePath": "vllm/config/engram.py",
+   "summary": "Engram n-gram 嵌入存储与分片配置（含模型层检测工具）。",
+   "tags": [
+    "engram",
+    "n-gram",
+    "config",
+    "sharding"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/config/engram.py:EngramConfig",
+   "type": "class",
+   "name": "EngramConfig",
+   "filePath": "vllm/config/engram.py",
+   "lineRange": [
+    34,
+    120
+   ],
+   "summary": "Engram n-gram 嵌入存储与分片配置。",
+   "tags": [
+    "config",
+    "engram",
+    "n-gram"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/config/engram.py:model_has_engram_layers",
+   "type": "function",
+   "name": "model_has_engram_layers",
+   "filePath": "vllm/config/engram.py",
+   "lineRange": [
+    23,
+    30
+   ],
+   "summary": "判定模型是否携带 n-gram 嵌入层。",
+   "tags": [
+    "detection",
+    "engram"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/config/kernel.py",
+   "type": "file",
+   "name": "kernel.py",
+   "filePath": "vllm/config/kernel.py",
+   "summary": "内核选择与 warmup 配置：KernelConfig 与 IrOpPriorityConfig（IR 算子调度优先级）。",
+   "tags": [
+    "kernel",
+    "config",
+    "ir-op-priority",
+    "warmup"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/config/kernel.py:IrOpPriorityConfig",
+   "type": "class",
+   "name": "IrOpPriorityConfig",
+   "filePath": "vllm/config/kernel.py",
+   "lineRange": [
+    21,
+    119
+   ],
+   "summary": "vLLM IR 算子调度/降级优先级配置。",
+   "tags": [
+    "config",
+    "ir-op",
+    "priority"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/config/kernel.py:KernelConfig",
+   "type": "class",
+   "name": "KernelConfig",
+   "filePath": "vllm/config/kernel.py",
+   "lineRange": [
+    274,
+    509
+   ],
+   "summary": "内核选择与 warmup 行为配置主类。",
+   "tags": [
+    "config",
+    "kernel",
+    "warmup"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/config/kernel.py:bind_passthrough_all2all_backend",
+   "type": "function",
+   "name": "bind_passthrough_all2all_backend",
+   "filePath": "vllm/config/kernel.py",
+   "lineRange": [
+    194,
+    228
+   ],
+   "summary": "把 all2all_backend=passthrough 绑定到自带通信的 MoE 后端。",
+   "tags": [
+    "moe",
+    "all2all",
+    "binding"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/kernel.py:validate_flashinfer_moe_ep_model",
+   "type": "function",
+   "name": "validate_flashinfer_moe_ep_model",
+   "filePath": "vllm/config/kernel.py",
+   "lineRange": [
+    231,
+    242
+   ],
+   "summary": "拒绝模型专用的 FlashInfer MoE-EP 后端。",
+   "tags": [
+    "validation",
+    "flashinfer",
+    "moe"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/config/kv_events.py",
+   "type": "file",
+   "name": "kv_events.py",
+   "filePath": "vllm/config/kv_events.py",
+   "summary": "KV 事件发布配置（KVEventsConfig：启用/发布器选择）。",
+   "tags": [
+    "kv-events",
+    "config",
+    "publishing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/config/kv_events.py:KVEventsConfig",
+   "type": "class",
+   "name": "KVEventsConfig",
+   "filePath": "vllm/config/kv_events.py",
+   "lineRange": [
+    11,
+    54
+   ],
+   "summary": "KV 事件发布配置（发布器与话题）。",
+   "tags": [
+    "config",
+    "kv-events"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/config/kv_transfer.py",
+   "type": "file",
+   "name": "kv_transfer.py",
+   "filePath": "vllm/config/kv_transfer.py",
+   "summary": "分布式 KV cache transfer 配置（KVTransferConfig：连接器选择与 HiSparse host pool 参数）。",
+   "tags": [
+    "kv-transfer",
+    "distributed",
+    "config",
+    "connector"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/config/kv_transfer.py:KVTransferConfig",
+   "type": "class",
+   "name": "KVTransferConfig",
+   "filePath": "vllm/config/kv_transfer.py",
+   "lineRange": [
+    57,
+    148
+   ],
+   "summary": "分布式 KV transfer 配置（连接器类型与参数）。",
+   "tags": [
+    "config",
+    "kv-transfer",
+    "connector"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/config/kv_transfer.py:hisparse_host_pool_gib",
+   "type": "function",
+   "name": "hisparse_host_pool_gib",
+   "filePath": "vllm/config/kv_transfer.py",
+   "lineRange": [
+    16,
+    47
+   ],
+   "summary": "计算 HiSparse host pool 的 GiB 容量。",
+   "tags": [
+    "hisparse",
+    "sizing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/kv_transfer.py:kv_buffer_device_default_factory",
+   "type": "function",
+   "name": "kv_buffer_device_default_factory",
+   "filePath": "vllm/config/kv_transfer.py",
+   "lineRange": [
+    50,
+    53
+   ],
+   "summary": "kv_buffer_device 默认值工厂。",
+   "tags": [
+    "default-factory",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/config/load.py",
+   "type": "file",
+   "name": "load.py",
+   "filePath": "vllm/config/load.py",
+   "summary": "模型权重加载配置（LoadConfig：格式/加载器/下载 源）。",
+   "tags": [
+    "load",
+    "config",
+    "weights"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/config/load.py:LoadConfig",
+   "type": "class",
+   "name": "LoadConfig",
+   "filePath": "vllm/config/load.py",
+   "lineRange": [
+    27,
+    150
+   ],
+   "summary": "模型权重加载配置（格式/加载器/下载源/映射）。",
+   "tags": [
+    "config",
+    "load",
+    "weights"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/config/logging.py",
+   "type": "file",
+   "name": "logging.py",
+   "filePath": "vllm/config/logging.py",
+   "summary": "vLLM 日志配置（LoggingConfig：dictConfig 默认流 handler 等）。",
+   "tags": [
+    "logging",
+    "config"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/config/logging.py:LoggingConfig",
+   "type": "class",
+   "name": "LoggingConfig",
+   "filePath": "vllm/config/logging.py",
+   "lineRange": [
+    16,
+    50
+   ],
+   "summary": "vLLM 日志配置（dictConfig 默认 handler）。",
+   "tags": [
+    "config",
+    "logging"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/config/lora.py",
+   "type": "file",
+   "name": "lora.py",
+   "filePath": "vllm/config/lora.py",
+   "summary": "LoRA 配置（LoRAConfig：r/alpha/最大多 LoRA 数等）。",
+   "tags": [
+    "lora",
+    "config",
+    "fine-tuning"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/config/lora.py:LoRAConfig",
+   "type": "class",
+   "name": "LoRAConfig",
+   "filePath": "vllm/config/lora.py",
+   "lineRange": [
+    31,
+    170
+   ],
+   "summary": "LoRA 配置类（r/alpha/max_loras/max_lora_rank 等）。",
+   "tags": [
+    "config",
+    "lora"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/config/model.py",
+   "type": "file",
+   "name": "model.py",
+   "filePath": "vllm/config/model.py",
+   "summary": "模型配置主类 ModelConfig（2176 行，85 个方法：架构解析/dtype 校验/max len 推导/HF 配置获取等）。",
+   "tags": [
+    "model",
+    "config",
+    "hf-config",
+    "dtype"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/config/model.py:ModelConfig",
+   "type": "class",
+   "name": "ModelConfig",
+   "filePath": "vllm/config/model.py",
+   "lineRange": [
+    152,
+    2327
+   ],
+   "summary": "模型配置主类（85 个方法）：HF 配置获取、架构解析、dtype 推导校验、max len 计算、多任务/生成配置与 mm 配置联动。",
+   "tags": [
+    "config",
+    "model",
+    "hf-config",
+    "dtype",
+    "max-len"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/config/model.py:_modelopt_mixed_has_nvfp4",
+   "type": "function",
+   "name": "_modelopt_mixed_has_nvfp4",
+   "filePath": "vllm/config/model.py",
+   "lineRange": [
+    131,
+    143
+   ],
+   "summary": "判定 ModelOpt MIXED_PRECISION 检查点是否有 NVFP4 层。",
+   "tags": [
+    "modelopt",
+    "nvfp4",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/model.py:get_served_model_name",
+   "type": "function",
+   "name": "get_served_model_name",
+   "filePath": "vllm/config/model.py",
+   "lineRange": [
+    2330,
+    2341
+   ],
+   "summary": "取 served model name（列表取首个）。",
+   "tags": [
+    "utility",
+    "served-model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/model.py:try_match_architecture_defaults",
+   "type": "function",
+   "name": "try_match_architecture_defaults",
+   "filePath": "vllm/config/model.py",
+   "lineRange": [
+    2371,
+    2388
+   ],
+   "summary": "尝试匹配架构默认配置表。",
+   "tags": [
+    "architecture",
+    "defaults"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/model.py:_resolve_auto_dtype",
+   "type": "function",
+   "name": "_resolve_auto_dtype",
+   "filePath": "vllm/config/model.py",
+   "lineRange": [
+    2430,
+    2471
+   ],
+   "summary": "解析 auto dtype 的实际取值。",
+   "tags": [
+    "dtype",
+    "resolution"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/model.py:_get_and_verify_dtype",
+   "type": "function",
+   "name": "_get_and_verify_dtype",
+   "filePath": "vllm/config/model.py",
+   "lineRange": [
+    2474,
+    2525
+   ],
+   "summary": "获取并校验模型 dtype（auto 推导+支持列表校验）。",
+   "tags": [
+    "dtype",
+    "validation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/model.py:_get_head_dtype",
+   "type": "function",
+   "name": "_get_head_dtype",
+   "filePath": "vllm/config/model.py",
+   "lineRange": [
+    2528,
+    2549
+   ],
+   "summary": "获取 head 层 dtype。",
+   "tags": [
+    "dtype",
+    "head"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/model.py:_get_and_verify_max_len",
+   "type": "function",
+   "name": "_get_and_verify_max_len",
+   "filePath": "vllm/config/model.py",
+   "lineRange": [
+    2552,
+    2691
+   ],
+   "summary": "推导并校验模型最大长度（140 行：derived max len/截断/一致性检查）。",
+   "tags": [
+    "max-len",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/config/model_arch.py",
+   "type": "file",
+   "name": "model_arch.py",
+   "filePath": "vllm/config/model_arch.py",
+   "summary": "vLLM 运行时所需的模型架构配置（ModelArchitectureConfig）。",
+   "tags": [
+    "model-architecture",
+    "config",
+    "runtime"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/config/model_arch.py:ModelArchitectureConfig",
+   "type": "class",
+   "name": "ModelArchitectureConfig",
+   "filePath": "vllm/config/model_arch.py",
+   "lineRange": [
+    16,
+    141
+   ],
+   "summary": "vLLM 运行时所需模型架构配置类。",
+   "tags": [
+    "config",
+    "architecture",
+    "runtime"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/config/multimodal.py",
+   "type": "file",
+   "name": "multimodal.py",
+   "filePath": "vllm/config/multimodal.py",
+   "summary": "多模态配置：MultiModalConfig 与逐模态 dummy 选项、mm processor kwargs 三层合并逻辑。",
+   "tags": [
+    "multimodal",
+    "config",
+    "processor-kwargs",
+    "profiling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/config/multimodal.py:MultiModalDummyOptions",
+   "type": "class",
+   "name": "MultiModalDummyOptions",
+   "filePath": "vllm/config/multimodal.py",
+   "lineRange": [
+    243,
+    286
+   ],
+   "summary": "profiling 用逐模态 dummy 数据选项聚合。",
+   "tags": [
+    "dummy-data",
+    "profiling",
+    "multimodal"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/config/multimodal.py:MultiModalConfig",
+   "type": "class",
+   "name": "MultiModalConfig",
+   "filePath": "vllm/config/multimodal.py",
+   "lineRange": [
+    301,
+    760
+   ],
+   "summary": "多模态模型行为配置（限制/处理器 kwargs/tokenizer 后处理等）。",
+   "tags": [
+    "config",
+    "multimodal",
+    "processor"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/config/multimodal.py:_recursively_merge_mm_processor_kwargs",
+   "type": "function",
+   "name": "_recursively_merge_mm_processor_kwargs",
+   "filePath": "vllm/config/multimodal.py",
+   "lineRange": [
+    42,
+    60
+   ],
+   "summary": "递归合并 mm processor kwargs（overrides 优先）。",
+   "tags": [
+    "merge",
+    "processor-kwargs"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/multimodal.py:_merge_mm_processor_scope",
+   "type": "function",
+   "name": "_merge_mm_processor_scope",
+   "filePath": "vllm/config/multimodal.py",
+   "lineRange": [
+    63,
+    94
+   ],
+   "summary": "按 HF processor kwargs 作用域合并。",
+   "tags": [
+    "merge",
+    "processor-kwargs"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/multimodal.py:_merge_mm_processor_kwargs",
+   "type": "function",
+   "name": "_merge_mm_processor_kwargs",
+   "filePath": "vllm/config/multimodal.py",
+   "lineRange": [
+    97,
+    208
+   ],
+   "summary": "合并配置态与推理态的 mm processor kwargs（112 行三层合并）。",
+   "tags": [
+    "merge",
+    "processor-kwargs",
+    "resolution"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/config/observability.py",
+   "type": "file",
+   "name": "observability.py",
+   "filePath": "vllm/config/observability.py",
+   "summary": "可观测性配置（ObservabilityConfig：OTLP 指标/tracing）。",
+   "tags": [
+    "observability",
+    "metrics",
+    "tracing",
+    "config"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/config/observability.py:ObservabilityConfig",
+   "type": "class",
+   "name": "ObservabilityConfig",
+   "filePath": "vllm/config/observability.py",
+   "lineRange": [
+    20,
+    222
+   ],
+   "summary": "可观测性配置（OTLP metrics/tracing/周期）。",
+   "tags": [
+    "config",
+    "observability",
+    "otlp"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/config/offload.py",
+   "type": "file",
+   "name": "offload.py",
+   "filePath": "vllm/config/offload.py",
+   "summary": "模型权重 CPU 卸载配置（OffloadConfig + UVA/Prefetch 两种卸载方式）。",
+   "tags": [
+    "offload",
+    "cpu-offload",
+    "uva",
+    "config"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/config/offload.py:OffloadConfig",
+   "type": "class",
+   "name": "OffloadConfig",
+   "filePath": "vllm/config/offload.py",
+   "lineRange": [
+    80,
+    152
+   ],
+   "summary": "权重卸载配置主类（UVA/Prefetch 二选一）。",
+   "tags": [
+    "config",
+    "offload",
+    "cpu"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/config/parallel.py",
+   "type": "file",
+   "name": "parallel.py",
+   "filePath": "vllm/config/parallel.py",
+   "summary": "分布式并行配置：ParallelConfig（TP/PP/DP/EP/CP/DCP 全家 1085 行）与 EPLBConfig（专家负载均衡）。",
+   "tags": [
+    "parallel",
+    "distributed",
+    "tp-pp-dp-ep",
+    "eplb",
+    "config"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/config/parallel.py:EPLBConfig",
+   "type": "class",
+   "name": "EPLBConfig",
+   "filePath": "vllm/config/parallel.py",
+   "lineRange": [
+    64,
+    133
+   ],
+   "summary": "专家并行负载均衡（EPLB）配置。",
+   "tags": [
+    "config",
+    "eplb",
+    "expert-parallel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/config/parallel.py:ParallelConfig",
+   "type": "class",
+   "name": "ParallelConfig",
+   "filePath": "vllm/config/parallel.py",
+   "lineRange": [
+    137,
+    1221
+   ],
+   "summary": "分布式执行配置主类（1085 行）：TP/PP/DP/EP/CP/DCP 全部并行维度、通信后端与 init 进程组参数校验。",
+   "tags": [
+    "config",
+    "parallel",
+    "distributed",
+    "tp-pp-dp-ep"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/config/pooler.py",
+   "type": "file",
+   "name": "pooler.py",
+   "filePath": "vllm/config/pooler.py",
+   "summary": "pooling 模型输出池化配置（PoolerConfig）。",
+   "tags": [
+    "pooler",
+    "config",
+    "pooling-models"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/config/pooler.py:PoolerConfig",
+   "type": "class",
+   "name": "PoolerConfig",
+   "filePath": "vllm/config/pooler.py",
+   "lineRange": [
+    30,
+    201
+   ],
+   "summary": "pooling 模型输出池化配置（pooling 类型/normalize 等）。",
+   "tags": [
+    "config",
+    "pooler"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/config/profiler.py",
+   "type": "file",
+   "name": "profiler.py",
+   "filePath": "vllm/config/profiler.py",
+   "summary": "性能剖析器配置（ProfilerConfig 与 trace 前缀/迭代边界校验）。",
+   "tags": [
+    "profiler",
+    "config",
+    "tracing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/config/profiler.py:ProfilerConfig",
+   "type": "class",
+   "name": "ProfilerConfig",
+   "filePath": "vllm/config/profiler.py",
+   "lineRange": [
+    67,
+    307
+   ],
+   "summary": "性能剖析器配置（trace 目录/前缀/迭代边界）。",
+   "tags": [
+    "config",
+    "profiler",
+    "trace"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/config/profiler.py:validate_profile_prefix",
+   "type": "function",
+   "name": "validate_profile_prefix",
+   "filePath": "vllm/config/profiler.py",
+   "lineRange": [
+    24,
+    38
+   ],
+   "summary": "校验 profiling trace 文件名前缀。",
+   "tags": [
+    "validation",
+    "profiler"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/profiler.py:validate_profile_iteration_bounds",
+   "type": "function",
+   "name": "validate_profile_iteration_bounds",
+   "filePath": "vllm/config/profiler.py",
+   "lineRange": [
+    41,
+    49
+   ],
+   "summary": "校验 profiling 迭代边界。",
+   "tags": [
+    "validation",
+    "profiler"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/profiler.py:_is_uri_path",
+   "type": "function",
+   "name": "_is_uri_path",
+   "filePath": "vllm/config/profiler.py",
+   "lineRange": [
+    52,
+    63
+   ],
+   "summary": "判定路径是否 URI（排除 Windows 盘符）。",
+   "tags": [
+    "uri",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/config/quantization.py",
+   "type": "file",
+   "name": "quantization.py",
+   "filePath": "vllm/config/quantization.py",
+   "summary": "量化配置：QuantSpec/QuantizationConfigArgs 与 --quantization 简写解析（resolve_quantization_config）。",
+   "tags": [
+    "quantization",
+    "config",
+    "resolution"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/config/quantization.py:QuantSpec",
+   "type": "class",
+   "name": "QuantSpec",
+   "filePath": "vllm/config/quantization.py",
+   "lineRange": [
+    81,
+    107
+   ],
+   "summary": "单层类别（linear/MoE）的量化规格。",
+   "tags": [
+    "quantization",
+    "spec"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/config/quantization.py:QuantizationConfigArgs",
+   "type": "class",
+   "name": "QuantizationConfigArgs",
+   "filePath": "vllm/config/quantization.py",
+   "lineRange": [
+    111,
+    190
+   ],
+   "summary": "面向用户的量化配置参数集。",
+   "tags": [
+    "quantization",
+    "config-args"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/config/quantization.py:_coerce_quant_key",
+   "type": "function",
+   "name": "_coerce_quant_key",
+   "filePath": "vllm/config/quantization.py",
+   "lineRange": [
+    54,
+    65
+   ],
+   "summary": "归一化量化键格式。",
+   "tags": [
+    "quantization",
+    "normalize"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/quantization.py:resolve_quantization_config",
+   "type": "function",
+   "name": "resolve_quantization_config",
+   "filePath": "vllm/config/quantization.py",
+   "lineRange": [
+    241,
+    286
+   ],
+   "summary": "把 --quantization 简写与 --quantization-config 解析为最终配置。",
+   "tags": [
+    "quantization",
+    "resolution"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/config/scheduler.py",
+   "type": "file",
+   "name": "scheduler.py",
+   "filePath": "vllm/config/scheduler.py",
+   "summary": "调度器配置（SchedulerConfig：chunked prefill/前缀缓存/调度策略/async scheduling 等）。",
+   "tags": [
+    "scheduler",
+    "config",
+    "chunked-prefill"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/config/scheduler.py:SchedulerConfig",
+   "type": "class",
+   "name": "SchedulerConfig",
+   "filePath": "vllm/config/scheduler.py",
+   "lineRange": [
+    25,
+    362
+   ],
+   "summary": "调度器配置（chunked prefill/前缀缓存/调度策略/token 预算/async scheduling 等）。",
+   "tags": [
+    "config",
+    "scheduler",
+    "chunked-prefill"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/config/speculative.py",
+   "type": "file",
+   "name": "speculative.py",
+   "filePath": "vllm/config/speculative.py",
+   "summary": "投机解码配置（SpeculativeConfig 1766 行：方法选择/num_speculative_tokens/draft 模型解析/Qwen3-Omni DSpark 校验）。",
+   "tags": [
+    "speculative",
+    "config",
+    "spec-decode",
+    "dspark"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/config/speculative.py:SpeculativeConfig",
+   "type": "class",
+   "name": "SpeculativeConfig",
+   "filePath": "vllm/config/speculative.py",
+   "lineRange": [
+    407,
+    2172
+   ],
+   "summary": "投机解码配置主类（36 个方法）：方法选择、num_speculative_tokens、draft 模型/参数解析与各方法校验。",
+   "tags": [
+    "config",
+    "speculative",
+    "spec-decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/config/speculative.py:_get_attention_head_dim",
+   "type": "function",
+   "name": "_get_attention_head_dim",
+   "filePath": "vllm/config/speculative.py",
+   "lineRange": [
+    133,
+    146
+   ],
+   "summary": "获取注意力 head dim（Qwen3-Omni 校验用）。",
+   "tags": [
+    "head-dim",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/speculative.py:_validate_qwen3_omni_dspark",
+   "type": "function",
+   "name": "_validate_qwen3_omni_dspark",
+   "filePath": "vllm/config/speculative.py",
+   "lineRange": [
+    167,
+    392
+   ],
+   "summary": "校验独立 Qwen3-Omni DSpark 检查点契约（226 行）。",
+   "tags": [
+    "validation",
+    "qwen3-omni",
+    "dspark"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/config/structured_outputs.py",
+   "type": "file",
+   "name": "structured_outputs.py",
+   "filePath": "vllm/config/structured_outputs.py",
+   "summary": "结构化输出配置（StructuredOutputsConfig：后端选择与引导解码参数）。",
+   "tags": [
+    "structured-outputs",
+    "config",
+    "guided-decoding"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/config/structured_outputs.py:StructuredOutputsConfig",
+   "type": "class",
+   "name": "StructuredOutputsConfig",
+   "filePath": "vllm/config/structured_outputs.py",
+   "lineRange": [
+    20,
+    85
+   ],
+   "summary": "结构化输出配置（后端选择与引导解码参数）。",
+   "tags": [
+    "config",
+    "structured-outputs",
+    "guided-decoding"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/config/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/config/utils.py",
+   "summary": "配置 dataclass 工具集：pydantic config 装饰器、属性文档提取、哈希（normalize_value/get_hash_factors/compute_hash_cached）与 deprecated env 迁移。",
+   "tags": [
+    "utility",
+    "config",
+    "hashing",
+    "pydantic"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/config/utils.py:Range",
+   "type": "class",
+   "name": "Range",
+   "filePath": "vllm/config/utils.py",
+   "lineRange": [
+    403,
+    430
+   ],
+   "summary": "数值范围工具类（min/max 序列化）。",
+   "tags": [
+    "range",
+    "utility"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/config/utils.py:config",
+   "type": "function",
+   "name": "config",
+   "filePath": "vllm/config/utils.py",
+   "lineRange": [
+    52,
+    82
+   ],
+   "summary": "pydantic dataclass 创建装饰器（默认 config）。",
+   "tags": [
+    "decorator",
+    "pydantic",
+    "dataclass"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/utils.py:get_field",
+   "type": "function",
+   "name": "get_field",
+   "filePath": "vllm/config/utils.py",
+   "lineRange": [
+    85,
+    114
+   ],
+   "summary": "按名取 dataclass 字段。",
+   "tags": [
+    "dataclass",
+    "field"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/utils.py:replace",
+   "type": "function",
+   "name": "replace",
+   "filePath": "vllm/config/utils.py",
+   "lineRange": [
+    121,
+    129
+   ],
+   "summary": "类 dataclasses.replace（支持 init_var 处理）。",
+   "tags": [
+    "dataclass",
+    "replace"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/utils.py:getattr_iter",
+   "type": "function",
+   "name": "getattr_iter",
+   "filePath": "vllm/config/utils.py",
+   "lineRange": [
+    132,
+    158
+   ],
+   "summary": "沿 MRO 迭代取属性。",
+   "tags": [
+    "mro",
+    "attribute"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/utils.py:_get_own_attr_docs",
+   "type": "function",
+   "name": "_get_own_attr_docs",
+   "filePath": "vllm/config/utils.py",
+   "lineRange": [
+    161,
+    198
+   ],
+   "summary": "提取类体内属性后置 docstring（本类）。",
+   "tags": [
+    "docstring",
+    "extraction"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/utils.py:get_attr_docs",
+   "type": "function",
+   "name": "get_attr_docs",
+   "filePath": "vllm/config/utils.py",
+   "lineRange": [
+    201,
+    214
+   ],
+   "summary": "提取类或 MRO 链上属性后置 docstring。",
+   "tags": [
+    "docstring",
+    "extraction"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/utils.py:compute_hash_cached",
+   "type": "function",
+   "name": "compute_hash_cached",
+   "filePath": "vllm/config/utils.py",
+   "lineRange": [
+    225,
+    239
+   ],
+   "summary": "按对象身份缓存 config.compute_hash()。",
+   "tags": [
+    "hash",
+    "cached"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/utils.py:_update_config",
+   "type": "function",
+   "name": "_update_config",
+   "filePath": "vllm/config/utils.py",
+   "lineRange": [
+    250,
+    279
+   ],
+   "summary": "递归更新 config 字段的实现。",
+   "tags": [
+    "update",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/utils.py:normalize_value",
+   "type": "function",
+   "name": "normalize_value",
+   "filePath": "vllm/config/utils.py",
+   "lineRange": [
+    282,
+    373
+   ],
+   "summary": "把任意值归一化为稳定可 JSON 序列化的规范形（哈希用）。",
+   "tags": [
+    "normalize",
+    "hash",
+    "serialization"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/config/utils.py:get_hash_factors",
+   "type": "function",
+   "name": "get_hash_factors",
+   "filePath": "vllm/config/utils.py",
+   "lineRange": [
+    376,
+    394
+   ],
+   "summary": "获取 config 类的哈希因子（字段+默认值规范化）。",
+   "tags": [
+    "hash",
+    "factors"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/utils.py:handle_deprecated",
+   "type": "function",
+   "name": "handle_deprecated",
+   "filePath": "vllm/config/utils.py",
+   "lineRange": [
+    433,
+    455
+   ],
+   "summary": "处理已废弃字段/环境变量的公共装饰器逻辑。",
+   "tags": [
+    "deprecated",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/utils.py:get_from_deprecated_env_if_set",
+   "type": "function",
+   "name": "get_from_deprecated_env_if_set",
+   "filePath": "vllm/config/utils.py",
+   "lineRange": [
+    458,
+    484
+   ],
+   "summary": "从已废弃环境变量取值（带警告）。",
+   "tags": [
+    "deprecated",
+    "env"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/config/utils.py:set_from_deprecated_env_if_set",
+   "type": "function",
+   "name": "set_from_deprecated_env_if_set",
+   "filePath": "vllm/config/utils.py",
+   "lineRange": [
+    487,
+    518
+   ],
+   "summary": "从已废弃环境变量设置对象字段（带警告）。",
+   "tags": [
+    "deprecated",
+    "env",
+    "setter"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/config/attention.py",
+   "target": "class:vllm/config/attention.py:AttentionConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/attention.py",
+   "target": "class:vllm/config/attention.py:AttentionConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/aux_output.py",
+   "target": "class:vllm/config/aux_output.py:AuxOutputConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/aux_output.py",
+   "target": "class:vllm/config/aux_output.py:AuxOutputConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/cache.py",
+   "target": "class:vllm/config/cache.py:KVCacheDTypeHandler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/cache.py",
+   "target": "class:vllm/config/cache.py:KVCacheDTypeHandler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/cache.py",
+   "target": "class:vllm/config/cache.py:CacheConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/cache.py",
+   "target": "class:vllm/config/cache.py:CacheConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/cache.py",
+   "target": "function:vllm/config/cache.py:register_kv_cache_dtype",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/cache.py",
+   "target": "function:vllm/config/cache.py:register_kv_cache_dtype",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/cache.py",
+   "target": "function:vllm/config/cache.py:get_kv_cache_dtype_handler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/cache.py",
+   "target": "function:vllm/config/cache.py:get_kv_cache_dtype_handler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "class:vllm/config/compilation.py:CUDAGraphMode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "class:vllm/config/compilation.py:CUDAGraphMode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "class:vllm/config/compilation.py:PassConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "class:vllm/config/compilation.py:PassConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "class:vllm/config/compilation.py:DynamicShapesConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "class:vllm/config/compilation.py:DynamicShapesConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "class:vllm/config/compilation.py:CompilationConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "class:vllm/config/compilation.py:CompilationConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/device.py",
+   "target": "class:vllm/config/device.py:DeviceConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/device.py",
+   "target": "class:vllm/config/device.py:DeviceConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/ec_manager_config.py",
+   "target": "class:vllm/config/ec_manager_config.py:EncoderCacheManagerConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/ec_manager_config.py",
+   "target": "class:vllm/config/ec_manager_config.py:EncoderCacheManagerConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/ec_transfer.py",
+   "target": "class:vllm/config/ec_transfer.py:ECTransferConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/ec_transfer.py",
+   "target": "class:vllm/config/ec_transfer.py:ECTransferConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/engram.py",
+   "target": "class:vllm/config/engram.py:EngramConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/engram.py",
+   "target": "class:vllm/config/engram.py:EngramConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/engram.py",
+   "target": "function:vllm/config/engram.py:model_has_engram_layers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/engram.py",
+   "target": "function:vllm/config/engram.py:model_has_engram_layers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/kernel.py",
+   "target": "class:vllm/config/kernel.py:IrOpPriorityConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/kernel.py",
+   "target": "class:vllm/config/kernel.py:IrOpPriorityConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/kernel.py",
+   "target": "class:vllm/config/kernel.py:KernelConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/kernel.py",
+   "target": "class:vllm/config/kernel.py:KernelConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/kernel.py",
+   "target": "function:vllm/config/kernel.py:bind_passthrough_all2all_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/kernel.py",
+   "target": "function:vllm/config/kernel.py:bind_passthrough_all2all_backend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/kernel.py",
+   "target": "function:vllm/config/kernel.py:validate_flashinfer_moe_ep_model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/kernel.py",
+   "target": "function:vllm/config/kernel.py:validate_flashinfer_moe_ep_model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/kv_events.py",
+   "target": "class:vllm/config/kv_events.py:KVEventsConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/kv_events.py",
+   "target": "class:vllm/config/kv_events.py:KVEventsConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/kv_transfer.py",
+   "target": "class:vllm/config/kv_transfer.py:KVTransferConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/kv_transfer.py",
+   "target": "class:vllm/config/kv_transfer.py:KVTransferConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/kv_transfer.py",
+   "target": "function:vllm/config/kv_transfer.py:hisparse_host_pool_gib",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/kv_transfer.py",
+   "target": "function:vllm/config/kv_transfer.py:hisparse_host_pool_gib",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/kv_transfer.py",
+   "target": "function:vllm/config/kv_transfer.py:kv_buffer_device_default_factory",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/kv_transfer.py",
+   "target": "function:vllm/config/kv_transfer.py:kv_buffer_device_default_factory",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/load.py",
+   "target": "class:vllm/config/load.py:LoadConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/load.py",
+   "target": "class:vllm/config/load.py:LoadConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/logging.py",
+   "target": "class:vllm/config/logging.py:LoggingConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/logging.py",
+   "target": "class:vllm/config/logging.py:LoggingConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/lora.py",
+   "target": "class:vllm/config/lora.py:LoRAConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/lora.py",
+   "target": "class:vllm/config/lora.py:LoRAConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "class:vllm/config/model.py:ModelConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "class:vllm/config/model.py:ModelConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "function:vllm/config/model.py:_modelopt_mixed_has_nvfp4",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "function:vllm/config/model.py:get_served_model_name",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "function:vllm/config/model.py:get_served_model_name",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "function:vllm/config/model.py:try_match_architecture_defaults",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "function:vllm/config/model.py:try_match_architecture_defaults",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "function:vllm/config/model.py:_resolve_auto_dtype",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "function:vllm/config/model.py:_get_and_verify_dtype",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "function:vllm/config/model.py:_get_head_dtype",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "function:vllm/config/model.py:_get_and_verify_max_len",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/model_arch.py",
+   "target": "class:vllm/config/model_arch.py:ModelArchitectureConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/model_arch.py",
+   "target": "class:vllm/config/model_arch.py:ModelArchitectureConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/multimodal.py",
+   "target": "class:vllm/config/multimodal.py:MultiModalDummyOptions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/multimodal.py",
+   "target": "class:vllm/config/multimodal.py:MultiModalDummyOptions",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/multimodal.py",
+   "target": "class:vllm/config/multimodal.py:MultiModalConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/multimodal.py",
+   "target": "class:vllm/config/multimodal.py:MultiModalConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/multimodal.py",
+   "target": "function:vllm/config/multimodal.py:_recursively_merge_mm_processor_kwargs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/multimodal.py",
+   "target": "function:vllm/config/multimodal.py:_merge_mm_processor_scope",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/multimodal.py",
+   "target": "function:vllm/config/multimodal.py:_merge_mm_processor_kwargs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/observability.py",
+   "target": "class:vllm/config/observability.py:ObservabilityConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/observability.py",
+   "target": "class:vllm/config/observability.py:ObservabilityConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/offload.py",
+   "target": "class:vllm/config/offload.py:OffloadConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/offload.py",
+   "target": "class:vllm/config/offload.py:OffloadConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/parallel.py",
+   "target": "class:vllm/config/parallel.py:EPLBConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/parallel.py",
+   "target": "class:vllm/config/parallel.py:EPLBConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/parallel.py",
+   "target": "class:vllm/config/parallel.py:ParallelConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/parallel.py",
+   "target": "class:vllm/config/parallel.py:ParallelConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/pooler.py",
+   "target": "class:vllm/config/pooler.py:PoolerConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/pooler.py",
+   "target": "class:vllm/config/pooler.py:PoolerConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/profiler.py",
+   "target": "class:vllm/config/profiler.py:ProfilerConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/profiler.py",
+   "target": "class:vllm/config/profiler.py:ProfilerConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/profiler.py",
+   "target": "function:vllm/config/profiler.py:validate_profile_prefix",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/profiler.py",
+   "target": "function:vllm/config/profiler.py:validate_profile_prefix",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/profiler.py",
+   "target": "function:vllm/config/profiler.py:validate_profile_iteration_bounds",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/profiler.py",
+   "target": "function:vllm/config/profiler.py:validate_profile_iteration_bounds",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/profiler.py",
+   "target": "function:vllm/config/profiler.py:_is_uri_path",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/quantization.py",
+   "target": "class:vllm/config/quantization.py:QuantSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/quantization.py",
+   "target": "class:vllm/config/quantization.py:QuantSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/quantization.py",
+   "target": "class:vllm/config/quantization.py:QuantizationConfigArgs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/quantization.py",
+   "target": "class:vllm/config/quantization.py:QuantizationConfigArgs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/quantization.py",
+   "target": "function:vllm/config/quantization.py:_coerce_quant_key",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/quantization.py",
+   "target": "function:vllm/config/quantization.py:resolve_quantization_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/quantization.py",
+   "target": "function:vllm/config/quantization.py:resolve_quantization_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/scheduler.py",
+   "target": "class:vllm/config/scheduler.py:SchedulerConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/scheduler.py",
+   "target": "class:vllm/config/scheduler.py:SchedulerConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "class:vllm/config/speculative.py:SpeculativeConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "class:vllm/config/speculative.py:SpeculativeConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "function:vllm/config/speculative.py:_get_attention_head_dim",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "function:vllm/config/speculative.py:_validate_qwen3_omni_dspark",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/structured_outputs.py",
+   "target": "class:vllm/config/structured_outputs.py:StructuredOutputsConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/structured_outputs.py",
+   "target": "class:vllm/config/structured_outputs.py:StructuredOutputsConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "class:vllm/config/utils.py:Range",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "class:vllm/config/utils.py:Range",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:get_field",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:get_field",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:replace",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:replace",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:getattr_iter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:getattr_iter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:_get_own_attr_docs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:get_attr_docs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:get_attr_docs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:compute_hash_cached",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:compute_hash_cached",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:_update_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:normalize_value",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:normalize_value",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:get_hash_factors",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:get_hash_factors",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:handle_deprecated",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:handle_deprecated",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:get_from_deprecated_env_if_set",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:get_from_deprecated_env_if_set",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:set_from_deprecated_env_if_set",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "function:vllm/config/utils.py:set_from_deprecated_env_if_set",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/aux_output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/device.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/diffusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/ec_manager_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/ec_transfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/engram.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/fault_tolerance.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/kv_events.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/kv_transfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/load.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/logging.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/lora.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/mamba.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/observability.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/offload.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/pooler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/profiler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/reasoning.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/scheduler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/speculative.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/speech_to_text.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/structured_outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/vllm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/watchdog_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/watermarking.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/__init__.py",
+   "target": "file:vllm/config/weight_transfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/attention.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/attention.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/attention.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/attention.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/aux_output.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/cache.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/cache.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/cache.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/cache.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/cache.py",
+   "target": "file:vllm/v1/kv_cache_layout.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "file:vllm/compilation/passes/inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "file:vllm/compilation/passes/fusion/allreduce_rms_fusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "file:vllm/compilation/backends.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/compilation.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/device.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/device.py",
+   "target": "file:vllm/utils/hashing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/device.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/ec_manager_config.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/ec_manager_config.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/ec_transfer.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/engram.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/engram.py",
+   "target": "file:vllm/config/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/engram.py",
+   "target": "file:vllm/config/parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/kernel.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/kernel.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/kernel.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/kernel.py",
+   "target": "file:vllm/config/parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/kernel.py",
+   "target": "file:vllm/ir/op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/kernel.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/kv_events.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/kv_transfer.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/kv_transfer.py",
+   "target": "file:vllm/utils/hashing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/kv_transfer.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/load.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/load.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/load.py",
+   "target": "file:vllm/utils/hashing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/load.py",
+   "target": "file:vllm/model_executor/model_loader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/load.py",
+   "target": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/logging.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/logging.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/lora.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/lora.py",
+   "target": "file:vllm/config/kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/lora.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/lora.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/lora.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/lora.py",
+   "target": "file:vllm/utils/hashing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/lora.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/lora.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/config/model_arch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/config/pooler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/config/quantization.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/config/scheduler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/transformers_utils/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/transformers_utils/model_arch_config_convertor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/transformers_utils/repo_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/transformers_utils/runai_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/transformers_utils/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/model_executor/models/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/config/load.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/config/parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/model_executor/models/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/model_arch.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/multimodal.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/multimodal.py",
+   "target": "file:vllm/config/ec_transfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/multimodal.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/multimodal.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/multimodal.py",
+   "target": "file:vllm/utils/hashing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/multimodal.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/multimodal.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/multimodal.py",
+   "target": "file:vllm/multimodal/video.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/observability.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/observability.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/observability.py",
+   "target": "file:vllm/utils/hashing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/observability.py",
+   "target": "file:vllm/tracing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/observability.py",
+   "target": "file:vllm/v1/metrics/buckets.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/offload.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/parallel.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/parallel.py",
+   "target": "file:vllm/config/fault_tolerance.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/parallel.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/parallel.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/parallel.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/parallel.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/parallel.py",
+   "target": "file:vllm/utils/network_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/parallel.py",
+   "target": "file:vllm/v1/executor/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/parallel.py",
+   "target": "file:vllm/distributed/nixl_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/pooler.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/pooler.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/pooler.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/pooler.py",
+   "target": "file:vllm/utils/hashing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/profiler.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/profiler.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/profiler.py",
+   "target": "file:vllm/utils/hashing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/quantization.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/quantization.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/scheduler.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/scheduler.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/scheduler.py",
+   "target": "file:vllm/utils/hashing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/scheduler.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/scheduler.py",
+   "target": "file:vllm/v1/core/sched/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/scheduler.py",
+   "target": "file:vllm/v1/core/sched/async_scheduler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/scheduler.py",
+   "target": "file:vllm/v1/core/sched/scheduler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "file:vllm/config/kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "file:vllm/config/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "file:vllm/config/parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "file:vllm/transformers_utils/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "file:vllm/utils/hashing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "file:vllm/config/vllm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "file:vllm/transformers_utils/configs/extract_hidden_states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "file:vllm/transformers_utils/configs/eagle.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/speculative.py",
+   "target": "file:vllm/transformers_utils/configs/speculators/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/structured_outputs.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/structured_outputs.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/structured_outputs.py",
+   "target": "file:vllm/utils/hashing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/config/utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

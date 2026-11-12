@@ -1,0 +1,31 @@
+# DeepWiki 索引 — allenai/codescientist
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 269099 字符
+
+- [1 CodeScientist Overview](1-codescientist-overview.md)
+- [2 Core System Architecture](2-core-system-architecture.md)
+  - [2.1 Web Interface and User Interaction](2.1-web-interface-and-user-interaction.md)
+  - [2.2 Data Storage and Management](2.2-data-storage-and-management.md)
+- [3 Agent Architectures](3-agent-architectures.md)
+  - [3.1 ReAct Agents](3.1-react-agents.md)
+  - [3.2 Memory-Augmented Agents](3.2-memory-augmented-agents.md)
+- [4 Game Environments](4-game-environments.md)
+  - [4.1 DiscoveryWorld Environment](4.1-discoveryworld-environment.md)
+  - [4.2 ScienceWorld Environment](4.2-scienceworld-environment.md)
+  - [4.3 TextWorldExpress Environment](4.3-textworldexpress-environment.md)
+- [5 Knowledge Systems](5-knowledge-systems.md)
+  - [5.1 ConceptNet Integration](5.1-conceptnet-integration.md)
+  - [5.2 WordNet Integration](5.2-wordnet-integration.md)
+- [6 LLM Integration and Cost Control](6-llm-integration-and-cost-control.md)
+  - [6.1 LLM Proxy System](6.1-llm-proxy-system.md)
+  - [6.2 API Configuration](6.2-api-configuration.md)
+- [7 Experiment Infrastructure](7-experiment-infrastructure.md)
+  - [7.1 Common Experiment Library](7.1-common-experiment-library.md)
+  - [7.2 Logging and Debugging](7.2-logging-and-debugging.md)
+  - [7.3 Data Generation](7.3-data-generation.md)
+  - [7.4 Statistical Analysis](7.4-statistical-analysis.md)
+  - [7.5 Visualization Tools](7.5-visualization-tools.md)
+- [8 Configuration and Setup](8-configuration-and-setup.md)
+- [9 Code Templates and Examples](9-code-templates-and-examples.md)
+- [10 Benchmarks and Research Ideas](10-benchmarks-and-research-ideas.md)

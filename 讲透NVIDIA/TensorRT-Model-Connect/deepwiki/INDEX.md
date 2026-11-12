@@ -1,0 +1,31 @@
+# DeepWiki 索引 — NVIDIA/TensorRT-Model-Connect
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 368844 字符
+
+- [1 TensorRT-Model-Connect Overview](1-tensorrt-model-connect-overview.md)
+  - [1.1 Getting Started: Installation and Quick Start](1.1-getting-started-installation-and-quick-start.md)
+  - [1.2 Repository Source Layout](1.2-repository-source-layout.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 Build Pipeline: From Checkpoint to .bundle](2.1-build-pipeline-from-checkpoint-to-.bundle.md)
+  - [2.2 Bundle Format and Runtime Lifecycle](2.2-bundle-format-and-runtime-lifecycle.md)
+  - [2.3 C++ Public API (IPipeline and CLI)](2.3-c-public-api-ipipeline-and-cli.md)
+  - [2.4 Build System: CMake, DSO Boundaries, and Packaging](2.4-build-system-cmake-dso-boundaries-and-packaging.md)
+- [3 Model Family System](3-model-family-system.md)
+  - [3.1 Text Generation Families (Decoders, MoE, Recurrent)](3.1-text-generation-families-decoders-moe-recurrent.md)
+  - [3.2 Vision-Language, Audio, and Speech Families](3.2-vision-language-audio-and-speech-families.md)
+  - [3.3 Diffusion, Perception, and Time-Series Families](3.3-diffusion-perception-and-time-series-families.md)
+  - [3.4 Cross-Cutting Features: Quantization, Parallelism, and Tokenization](3.4-cross-cutting-features-quantization-parallelism-and-tokenization.md)
+- [4 Testing Infrastructure](4-testing-infrastructure.md)
+  - [4.1 E2E Test Harness: Orchestrator, Manifests, and Runners](4.1-e2e-test-harness-orchestrator-manifests-and-runners.md)
+  - [4.2 E2E Report Generation and Model Manifests](4.2-e2e-report-generation-and-model-manifests.md)
+  - [4.3 Validation Framework: trtmc_validate and Gate Policies](4.3-validation-framework-trtmc-validate-and-gate-policies.md)
+  - [4.4 Performance Benchmarking: perf_matrix and trtmc-bench](4.4-performance-benchmarking-perf-matrix-and-trtmc-bench.md)
+- [5 CI/CD Infrastructure](5-ci-cd-infrastructure.md)
+  - [5.1 GitHub Actions Workflows and Test Impact Analysis](5.1-github-actions-workflows-and-test-impact-analysis.md)
+  - [5.2 Model Proof: Hermetic Certification Pipeline](5.2-model-proof-hermetic-certification-pipeline.md)
+  - [5.3 Docker Environments and Python Profiles](5.3-docker-environments-and-python-profiles.md)
+- [6 Developer and Agent Guide](6-developer-and-agent-guide.md)
+  - [6.1 Adding Model Families and Runtime Strategies](6.1-adding-model-families-and-runtime-strategies.md)
+  - [6.2 Agent Skills and Agentic Workflow](6.2-agent-skills-and-agentic-workflow.md)
+- [7 Glossary](7-glossary.md)

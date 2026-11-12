@@ -1,0 +1,43 @@
+# DeepWiki 索引 — GreyhavenHQ/greywall
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 29 页 · 全文 368107 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+  - [2.1 Installation](2.1-installation.md)
+  - [2.2 Quick Start Guide](2.2-quick-start-guide.md)
+  - [2.3 CLI Reference](2.3-cli-reference.md)
+- [3 Core Concepts](3-core-concepts.md)
+  - [3.1 Network Isolation](3.1-network-isolation.md)
+  - [3.2 Filesystem Isolation](3.2-filesystem-isolation.md)
+  - [3.3 Security Model](3.3-security-model.md)
+- [4 Platform Implementations](4-platform-implementations.md)
+  - [4.1 Linux Sandboxing](4.1-linux-sandboxing.md)
+  - [4.2 macOS Sandboxing](4.2-macos-sandboxing.md)
+- [5 Network Architecture](5-network-architecture.md)
+  - [5.1 greyproxy Service](5.1-greyproxy-service.md)
+  - [5.2 Proxy Bridges and Unix Sockets](5.2-proxy-bridges-and-unix-sockets.md)
+  - [5.3 Domain-Based Filtering](5.3-domain-based-filtering.md)
+- [6 Configuration System](6-configuration-system.md)
+  - [6.1 Configuration Files](6.1-configuration-files.md)
+  - [6.2 Profile System](6.2-profile-system.md)
+  - [6.3 Learning Mode](6.3-learning-mode.md)
+- [7 Go Library API](7-go-library-api.md)
+- [8 Development Guide](8-development-guide.md)
+  - [8.1 Building from Source](8.1-building-from-source.md)
+  - [8.2 CI/CD Pipeline](8.2-ci-cd-pipeline.md)
+  - [8.3 Release Process](8.3-release-process.md)
+- [9 Reference](9-reference.md)
+  - [9.1 Security Policy](9.1-security-policy.md)
+  - [9.2 License](9.2-license.md)
+- [10 Glossary](10-glossary.md)
+
+## 附：结构清单外的页
+- [Landlock Filesystem Control](x1-landlock-filesystem-control.md)
+- [Seatbelt Profile Generation](x2-seatbelt-profile-generation.md)
+- [Seccomp Syscall Filtering](x3-seccomp-syscall-filtering.md)
+- [Transparent Network Proxying](x4-transparent-network-proxying.md)
+- [Unified Log Monitoring](x5-unified-log-monitoring.md)
+- [bubblewrap and Namespaces](x6-bubblewrap-and-namespaces.md)
+- [eBPF Violation Monitoring](x7-ebpf-violation-monitoring.md)

@@ -1,0 +1,30 @@
+# DeepWiki 索引 — microsoft/torchscale
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 285742 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation & Setup](1.1-installation-setup.md)
+  - [1.2 Key Features](1.2-key-features.md)
+- [2 Architecture Overview](2-architecture-overview.md)
+  - [2.1 Encoder Architecture](2.1-encoder-architecture.md)
+  - [2.2 Decoder Architecture](2.2-decoder-architecture.md)
+  - [2.3 RetNet Architecture](2.3-retnet-architecture.md)
+  - [2.4 LongNet Architecture](2.4-longnet-architecture.md)
+- [3 Configuration System](3-configuration-system.md)
+  - [3.1 EncoderConfig & DecoderConfig](3.1-encoderconfig-decoderconfig.md)
+  - [3.2 EncoderDecoderConfig & RetNetConfig](3.2-encoderdecoderconfig-retnetconfig.md)
+- [4 Core Components](4-core-components.md)
+  - [4.1 Multi-head Attention](4.1-multi-head-attention.md)
+  - [4.2 FeedForward Network](4.2-feedforward-network.md)
+  - [4.3 Flash Attention](4.3-flash-attention.md)
+  - [4.4 Mixture of Experts (MoE)](4.4-mixture-of-experts-moe.md)
+  - [4.5 Positional Embeddings](4.5-positional-embeddings.md)
+  - [4.6 Multiway Network](4.6-multiway-network.md)
+- [5 Integration with Fairseq](5-integration-with-fairseq.md)
+  - [5.1 BERT Pretraining](5.1-bert-pretraining.md)
+  - [5.2 GPT & RetNet Language Models](5.2-gpt-retnet-language-models.md)
+  - [5.3 Machine Translation](5.3-machine-translation.md)
+- [6 LongViT for Vision Applications](6-longvit-for-vision-applications.md)
+  - [6.1 Architecture & Use Cases](6.1-architecture-use-cases.md)
+  - [6.2 Data Preprocessing](6.2-data-preprocessing.md)

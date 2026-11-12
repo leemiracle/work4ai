@@ -1,0 +1,2407 @@
+{
+ "nodes": [
+  {
+   "id": "file:rust/src/engine-core-client/src/client.rs",
+   "type": "file",
+   "name": "client.rs",
+   "filePath": "rust/src/engine-core-client/src/client.rs",
+   "summary": "EngineCoreClient 对外门面（1107 行，53 方法）：TransportMode/CoordinatorMode 配置、连接握手、call/abort/utility/collective_rpc/权重更新全套 API——Rust 前端到引擎核心的唯一入口。",
+   "tags": [
+    "client",
+    "engine-core",
+    "rust",
+    "facade"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/client.rs:EngineCoreClientConfig",
+   "type": "class",
+   "name": "EngineCoreClientConfig",
+   "filePath": "rust/src/engine-core-client/src/client.rs",
+   "lineRange": [
+    149,
+    164
+   ],
+   "summary": "客户端配置（7 方法：transport/coordinator 模式与校验）。",
+   "tags": [
+    "config",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/client.rs:EngineCoreClient",
+   "type": "class",
+   "name": "EngineCoreClient",
+   "filePath": "rust/src/engine-core-client/src/client.rs",
+   "lineRange": [
+    279,
+    299
+   ],
+   "summary": "客户端主体（53 方法：call/abort/utility/权重传输/前缀缓存）。",
+   "tags": [
+    "client",
+    "facade"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:rust/src/engine-core-client/src/client.rs:from_connected",
+   "type": "function",
+   "name": "from_connected",
+   "filePath": "rust/src/engine-core-client/src/client.rs",
+   "lineRange": [
+    367,
+    446
+   ],
+   "summary": "握手完成后的客户端装配（80 行：输出通道+协调器线程拉起）。",
+   "tags": [
+    "connect",
+    "lifecycle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "type": "file",
+   "name": "imp.rs",
+   "filePath": "rust/src/engine-core-client/src/client/imp.rs",
+   "summary": "客户端内部实现（ClientInner，27 方法）：请求注册表互操作、abort 循环、输出分发循环（run_output_dispatcher_loop）与健康错误上报。",
+   "tags": [
+    "client",
+    "internal",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/client/imp.rs:ClientInner",
+   "type": "class",
+   "name": "ClientInner",
+   "filePath": "rust/src/engine-core-client/src/client/imp.rs",
+   "lineRange": [
+    44,
+    63
+   ],
+   "summary": "内部实现（27 方法：注册/发送/abort/dispatcher）。",
+   "tags": [
+    "client",
+    "internal"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:rust/src/engine-core-client/src/client/imp.rs:run_output_dispatcher_loop",
+   "type": "function",
+   "name": "run_output_dispatcher_loop",
+   "filePath": "rust/src/engine-core-client/src/client/imp.rs",
+   "lineRange": [
+    434,
+    538
+   ],
+   "summary": "输出分发主循环（105 行：解码输出帧并路由到注册表）。",
+   "tags": [
+    "dispatcher",
+    "loop"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/client/output_channel.rs",
+   "type": "file",
+   "name": "output_channel.rs",
+   "filePath": "rust/src/engine-core-client/src/client/output_channel.rs",
+   "summary": "输出通道（OutputSender）：请求级输出 mpsc 通道的创建/发送/关闭，背压由 channel 容量承担。",
+   "tags": [
+    "client",
+    "channel",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/client/output_channel.rs:OutputSender",
+   "type": "class",
+   "name": "OutputSender",
+   "filePath": "rust/src/engine-core-client/src/client/output_channel.rs",
+   "lineRange": [
+    46,
+    56
+   ],
+   "summary": "输出发送端（5 方法：send/drop 语义）。",
+   "tags": [
+    "channel",
+    "sender"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/client/state.rs",
+   "type": "file",
+   "name": "state.rs",
+   "filePath": "rust/src/engine-core-client/src/client/state.rs",
+   "summary": "客户端共享状态（1320 行）：RequestRegistry（16 方法，请求注册/引擎选择/LoRA 事件应用/调度统计）+UtilityRegistry——引擎选择与输出去向的权威状态机。",
+   "tags": [
+    "client",
+    "state",
+    "registry",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/client/state.rs:RequestRegistry",
+   "type": "class",
+   "name": "RequestRegistry",
+   "filePath": "rust/src/engine-core-client/src/client/state.rs",
+   "lineRange": [
+    133,
+    138
+   ],
+   "summary": "请求注册表（16 方法：register/choose_engine_for_request/finish_many/abort_many）。",
+   "tags": [
+    "registry",
+    "routing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/client/state.rs:EngineRoutingState",
+   "type": "class",
+   "name": "EngineRoutingState",
+   "filePath": "rust/src/engine-core-client/src/client/state.rs",
+   "lineRange": [
+    63,
+    79
+   ],
+   "summary": "引擎路由状态（负载快照+调度计数）。",
+   "tags": [
+    "routing",
+    "state"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/engine-core-client/src/client/state.rs:choose_engine_for_request",
+   "type": "function",
+   "name": "choose_engine_for_request",
+   "filePath": "rust/src/engine-core-client/src/client/state.rs",
+   "lineRange": [
+    201,
+    222
+   ],
+   "summary": "为请求选引擎（负载均衡决策点）。",
+   "tags": [
+    "routing",
+    "load-balancing"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/client/stream.rs",
+   "type": "file",
+   "name": "stream.rs",
+   "filePath": "rust/src/engine-core-client/src/client/stream.rs",
+   "summary": "流式输出（EngineCoreOutputStream，7 方法）：tokio Stream 实现的请求级输出迭代器，poll_next 驱动。",
+   "tags": [
+    "client",
+    "stream",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/client/stream.rs:EngineCoreOutputStream",
+   "type": "class",
+   "name": "EngineCoreOutputStream",
+   "filePath": "rust/src/engine-core-client/src/client/stream.rs",
+   "lineRange": [
+    114,
+    120
+   ],
+   "summary": "输出流（7 方法：Stream trait 实现）。",
+   "tags": [
+    "stream",
+    "async"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/coordinator/bootstrap.rs",
+   "type": "file",
+   "name": "bootstrap.rs",
+   "filePath": "rust/src/engine-core-client/src/coordinator/bootstrap.rs",
+   "summary": "协调器启动引导（CoordinatorBootstrap）：绑定地址/等待 startup gate/等待引擎订阅。",
+   "tags": [
+    "coordinator",
+    "bootstrap",
+    "rust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/coordinator/bootstrap.rs:CoordinatorBootstrap",
+   "type": "class",
+   "name": "CoordinatorBootstrap",
+   "filePath": "rust/src/engine-core-client/src/coordinator/bootstrap.rs",
+   "lineRange": [
+    13,
+    18
+   ],
+   "summary": "启动引导（2 方法）。",
+   "tags": [
+    "bootstrap"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/coordinator/external.rs",
+   "type": "file",
+   "name": "external.rs",
+   "filePath": "rust/src/engine-core-client/src/coordinator/external.rs",
+   "summary": "外部协调器服务（ExternalCoordinatorService）：处理状态发布订阅，DP 波次协调的外部模式。",
+   "tags": [
+    "coordinator",
+    "external",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/coordinator/external.rs:ExternalCoordinatorService",
+   "type": "class",
+   "name": "ExternalCoordinatorService",
+   "filePath": "rust/src/engine-core-client/src/coordinator/external.rs",
+   "lineRange": [
+    44,
+    47
+   ],
+   "summary": "外部协调服务（3 方法：handle_publish/run）。",
+   "tags": [
+    "coordinator",
+    "pubsub"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/coordinator/handle.rs",
+   "type": "file",
+   "name": "handle.rs",
+   "filePath": "rust/src/engine-core-client/src/coordinator/handle.rs",
+   "summary": "协调器句柄（CoordinatorHandle）：快照查询+外部协调器连接的门面。",
+   "tags": [
+    "coordinator",
+    "handle",
+    "rust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/coordinator/handle.rs:CoordinatorHandle",
+   "type": "class",
+   "name": "CoordinatorHandle",
+   "filePath": "rust/src/engine-core-client/src/coordinator/handle.rs",
+   "lineRange": [
+    32,
+    34
+   ],
+   "summary": "句柄（4 方法）。",
+   "tags": [
+    "handle"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/coordinator/inproc.rs",
+   "type": "file",
+   "name": "inproc.rs",
+   "filePath": "rust/src/engine-core-client/src/coordinator/inproc.rs",
+   "summary": "进程内协调器（InProcCoordinatorRunner）：DP 波次广播（StartDpWaveMessage）与输出处理循环——单进程多引擎的协调模式。",
+   "tags": [
+    "coordinator",
+    "inproc",
+    "dp",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/coordinator/inproc.rs:InProcCoordinatorRunner",
+   "type": "class",
+   "name": "InProcCoordinatorRunner",
+   "filePath": "rust/src/engine-core-client/src/coordinator/inproc.rs",
+   "lineRange": [
+    43,
+    46
+   ],
+   "summary": "进程内协调器（4 方法：broadcast_start_wave/handle_outputs/run）。",
+   "tags": [
+    "coordinator",
+    "inproc"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/error.rs",
+   "type": "file",
+   "name": "error.rs",
+   "filePath": "rust/src/engine-core-client/src/error.rs",
+   "summary": "错误类型（Error 枚举全量定义）。",
+   "tags": [
+    "error",
+    "rust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/error.rs:Error",
+   "type": "class",
+   "name": "Error",
+   "filePath": "rust/src/engine-core-client/src/error.rs",
+   "lineRange": [
+    16,
+    104
+   ],
+   "summary": "统一错误枚举。",
+   "tags": [
+    "error"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/lib.rs",
+   "type": "file",
+   "name": "lib.rs",
+   "filePath": "rust/src/engine-core-client/src/lib.rs",
+   "summary": "crate 入口：模块声明与核心类型再导出（EngineCoreClient/OutputStream/Error 等）。",
+   "tags": [
+    "lib",
+    "barrel",
+    "rust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/metrics.rs",
+   "type": "file",
+   "name": "metrics.rs",
+   "filePath": "rust/src/engine-core-client/src/metrics.rs",
+   "summary": "指标模块（688 行）：SchedulerStatsRecorder 导出 Prometheus 指标（调度统计/mooncake 传输/NIXL 传输/LoRA 状态），指标名按配置解析。",
+   "tags": [
+    "metrics",
+    "prometheus",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/metrics.rs:SchedulerStatsRecorder",
+   "type": "class",
+   "name": "SchedulerStatsRecorder",
+   "filePath": "rust/src/engine-core-client/src/metrics.rs",
+   "lineRange": [
+    43,
+    45
+   ],
+   "summary": "统计录制器（2 方法）。",
+   "tags": [
+    "metrics",
+    "recorder"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:rust/src/engine-core-client/src/metrics.rs:resolve_scheduler_stats_handles",
+   "type": "function",
+   "name": "resolve_scheduler_stats_handles",
+   "filePath": "rust/src/engine-core-client/src/metrics.rs",
+   "lineRange": [
+    144,
+    241
+   ],
+   "summary": "按引擎标签解析指标句柄（动态指标族注册）。",
+   "tags": [
+    "metrics",
+    "handles"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:rust/src/engine-core-client/src/metrics.rs:record_scheduler_stats_with_handles",
+   "type": "function",
+   "name": "record_scheduler_stats_with_handles",
+   "filePath": "rust/src/engine-core-client/src/metrics.rs",
+   "lineRange": [
+    244,
+    346
+   ],
+   "summary": "调度统计落指标（102 行）。",
+   "tags": [
+    "metrics",
+    "scheduler-stats"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/mock_engine.rs",
+   "type": "file",
+   "name": "mock_engine.rs",
+   "filePath": "rust/src/engine-core-client/src/mock_engine.rs",
+   "summary": "Mock 引擎（测试用）：伪造引擎 socket 对（MockCoordinatorSockets/MockEngineSockets）+ready 响应与连接协议，供集成测试无引擎联调。",
+   "tags": [
+    "mock",
+    "test-util",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/mock_engine.rs:MockEngineSockets",
+   "type": "class",
+   "name": "MockEngineSockets",
+   "filePath": "rust/src/engine-core-client/src/mock_engine.rs",
+   "lineRange": [
+    104,
+    115
+   ],
+   "summary": "mock socket 对（协调器+数据双通道）。",
+   "tags": [
+    "mock",
+    "sockets"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:rust/src/engine-core-client/src/mock_engine.rs:connect_to_frontend",
+   "type": "function",
+   "name": "connect_to_frontend",
+   "filePath": "rust/src/engine-core-client/src/mock_engine.rs",
+   "lineRange": [
+    173,
+    277
+   ],
+   "summary": "mock 引擎连接前端全流程（105 行）。",
+   "tags": [
+    "mock",
+    "connect"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/protocol/dtype.rs",
+   "type": "file",
+   "name": "dtype.rs",
+   "filePath": "rust/src/engine-core-client/src/protocol/dtype.rs",
+   "summary": "张量 dtype 协议：TensorDtype/Endianness/NumpyDtype/ModelDtype 四层 dtype 体系（含大端支持）。",
+   "tags": [
+    "protocol",
+    "dtype",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/protocol/dtype.rs:TensorDtype",
+   "type": "class",
+   "name": "TensorDtype",
+   "filePath": "rust/src/engine-core-client/src/protocol/dtype.rs",
+   "lineRange": [
+    12,
+    26
+   ],
+   "summary": "张量 dtype 枚举（4 方法）。",
+   "tags": [
+    "dtype"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/protocol/dtype.rs:ModelDtype",
+   "type": "class",
+   "name": "ModelDtype",
+   "filePath": "rust/src/engine-core-client/src/protocol/dtype.rs",
+   "lineRange": [
+    192,
+    199
+   ],
+   "summary": "模型 dtype（torch 语义映射）。",
+   "tags": [
+    "dtype",
+    "model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/protocol/handshake.rs",
+   "type": "file",
+   "name": "handshake.rs",
+   "filePath": "rust/src/engine-core-client/src/protocol/handshake.rs",
+   "summary": "握手协议：ReadyMessage/KvEventsConfig/EngineCoreReadyResponse/HandshakeAddresses——前端与引擎核心的启动协商。",
+   "tags": [
+    "protocol",
+    "handshake",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/protocol/handshake.rs:EngineCoreReadyResponse",
+   "type": "class",
+   "name": "EngineCoreReadyResponse",
+   "filePath": "rust/src/engine-core-client/src/protocol/handshake.rs",
+   "lineRange": [
+    50,
+    114
+   ],
+   "summary": "ready 响应（能力声明：dtype/LoRA/KV events）。",
+   "tags": [
+    "handshake",
+    "capabilities"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/protocol/kv_hints.rs",
+   "type": "file",
+   "name": "kv_hints.rs",
+   "filePath": "rust/src/engine-core-client/src/protocol/kv_hints.rs",
+   "summary": "KV hint 协议（KvHintAction/KvHintsEnvelope）。",
+   "tags": [
+    "protocol",
+    "kv-hints",
+    "rust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/protocol/logprobs.rs",
+   "type": "file",
+   "name": "logprobs.rs",
+   "filePath": "rust/src/engine-core-client/src/protocol/logprobs.rs",
+   "summary": "logprobs 协议（306 行）：TokenLogprob/PositionLogprobs/Logprobs/MaybeWireLogprobs——inline 与 multipart 两种线上格式的解码与 resolve。",
+   "tags": [
+    "protocol",
+    "logprobs",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/protocol/logprobs.rs:MaybeWireLogprobs",
+   "type": "class",
+   "name": "MaybeWireLogprobs",
+   "filePath": "rust/src/engine-core-client/src/protocol/logprobs.rs",
+   "lineRange": [
+    109,
+    116
+   ],
+   "summary": "惰性 logprobs 载荷（5 方法：direct/inline/数组三态解析）。",
+   "tags": [
+    "logprobs",
+    "lazy"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/engine-core-client/src/protocol/logprobs.rs:from_direct",
+   "type": "function",
+   "name": "from_direct",
+   "filePath": "rust/src/engine-core-client/src/protocol/logprobs.rs",
+   "lineRange": [
+    180,
+    225
+   ],
+   "summary": "直接载荷解码（dtype/字节序分派）。",
+   "tags": [
+    "logprobs",
+    "decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/protocol/logprobs/array.rs",
+   "type": "file",
+   "name": "array.rs",
+   "filePath": "rust/src/engine-core-client/src/protocol/logprobs/array.rs",
+   "summary": "logprobs 数组解码（224 行）：u32/i32/f32/i64 多 dtype 一维/二维数组解码+字节序处理+长度校验。",
+   "tags": [
+    "protocol",
+    "logprobs",
+    "array",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:rust/src/engine-core-client/src/protocol/logprobs/array.rs:decode_array2_u32",
+   "type": "function",
+   "name": "decode_array2_u32",
+   "filePath": "rust/src/engine-core-client/src/protocol/logprobs/array.rs",
+   "lineRange": [
+    21,
+    51
+   ],
+   "summary": "二维 u32 数组解码（含字节序翻转）。",
+   "tags": [
+    "decode",
+    "array"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/engine-core-client/src/protocol/logprobs/array.rs:validate_byte_length",
+   "type": "function",
+   "name": "validate_byte_length",
+   "filePath": "rust/src/engine-core-client/src/protocol/logprobs/array.rs",
+   "lineRange": [
+    131,
+    151
+   ],
+   "summary": "字节长度一致性校验。",
+   "tags": [
+    "validation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/protocol/logprobs/tests.rs",
+   "type": "file",
+   "name": "tests.rs",
+   "filePath": "rust/src/engine-core-client/src/protocol/logprobs/tests.rs",
+   "summary": "logprobs 协议测试（516 行，16 个 test）：inline/multipart/大端/dtype 兼容性/零行等边角覆盖。",
+   "tags": [
+    "test",
+    "protocol",
+    "logprobs",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/protocol/lora.rs",
+   "type": "file",
+   "name": "lora.rs",
+   "filePath": "rust/src/engine-core-client/src/protocol/lora.rs",
+   "summary": "LoRA 请求协议（LoraRequest）。",
+   "tags": [
+    "protocol",
+    "lora",
+    "rust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/protocol/lora.rs:LoraRequest",
+   "type": "class",
+   "name": "LoraRequest",
+   "filePath": "rust/src/engine-core-client/src/protocol/lora.rs",
+   "lineRange": [
+    11,
+    21
+   ],
+   "summary": "LoRA 请求结构。",
+   "tags": [
+    "lora"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "type": "file",
+   "name": "mod.rs",
+   "filePath": "rust/src/engine-core-client/src/protocol/mod.rs",
+   "summary": "协议模块入口：msgpack 编解码（encode_msgpack/decode_msgpack）与子模块组织。",
+   "tags": [
+    "protocol",
+    "msgpack",
+    "rust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:rust/src/engine-core-client/src/protocol/mod.rs:encode_msgpack",
+   "type": "function",
+   "name": "encode_msgpack",
+   "filePath": "rust/src/engine-core-client/src/protocol/mod.rs",
+   "lineRange": [
+    42,
+    54
+   ],
+   "summary": "msgpack 编码。",
+   "tags": [
+    "msgpack",
+    "encode"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/protocol/multimodal.rs",
+   "type": "file",
+   "name": "multimodal.rs",
+   "filePath": "rust/src/engine-core-client/src/protocol/multimodal.rs",
+   "summary": "多模态协议（344 行）：MmFeatureSpec/PlaceholderRange/MmField 三态（Batched/Flat/Shared）+MmKwargValue——Python 预处理输出到引擎的多模态字段线上格式。",
+   "tags": [
+    "protocol",
+    "multimodal",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/protocol/multimodal.rs:MmField",
+   "type": "class",
+   "name": "MmField",
+   "filePath": "rust/src/engine-core-client/src/protocol/multimodal.rs",
+   "lineRange": [
+    176,
+    180
+   ],
+   "summary": "多模态字段（1 方法：三种布局形态的枚举封装）。",
+   "tags": [
+    "multimodal",
+    "field"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/protocol/multimodal.rs:MmFeatureSpec",
+   "type": "class",
+   "name": "MmFeatureSpec",
+   "filePath": "rust/src/engine-core-client/src/protocol/multimodal.rs",
+   "lineRange": [
+    47,
+    67
+   ],
+   "summary": "特征规格（placeholder 范围与编码器输入声明）。",
+   "tags": [
+    "multimodal",
+    "spec"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "type": "file",
+   "name": "output.rs",
+   "filePath": "rust/src/engine-core-client/src/protocol/output.rs",
+   "summary": "引擎输出协议（684 行）：EngineCoreOutput/FinishReason/EngineCoreEvent/WireEngineCoreOutputs/EngineCoreOutputs——生成流与 utility 双路输出，DP 控制消息。",
+   "tags": [
+    "protocol",
+    "output",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/protocol/output.rs:EngineCoreOutput",
+   "type": "class",
+   "name": "EngineCoreOutput",
+   "filePath": "rust/src/engine-core-client/src/protocol/output.rs",
+   "lineRange": [
+    91,
+    152
+   ],
+   "summary": "单请求输出（2 方法构造器：token/logprob/finish 全字段）。",
+   "tags": [
+    "output",
+    "data-model"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/protocol/output.rs:EngineCoreOutputs",
+   "type": "class",
+   "name": "EngineCoreOutputs",
+   "filePath": "rust/src/engine-core-client/src/protocol/output.rs",
+   "lineRange": [
+    315,
+    319
+   ],
+   "summary": "批输出（7 方法：拆分与流分发）。",
+   "tags": [
+    "output",
+    "batch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/protocol/output.rs:RequestError",
+   "type": "class",
+   "name": "RequestError",
+   "filePath": "rust/src/engine-core-client/src/protocol/output.rs",
+   "lineRange": [
+    161,
+    166
+   ],
+   "summary": "请求级错误（1 方法）。",
+   "tags": [
+    "error"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/protocol/request.rs",
+   "type": "file",
+   "name": "request.rs",
+   "filePath": "rust/src/engine-core-client/src/protocol/request.rs",
+   "summary": "引擎请求协议（EngineCoreRequest/RequestType/ReasoningParserKwargs，含 aux frame 提取）。",
+   "tags": [
+    "protocol",
+    "request",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/protocol/request.rs:EngineCoreRequest",
+   "type": "class",
+   "name": "EngineCoreRequest",
+   "filePath": "rust/src/engine-core-client/src/protocol/request.rs",
+   "lineRange": [
+    76,
+    134
+   ],
+   "summary": "引擎请求（2 方法：validate+aux frames）。",
+   "tags": [
+    "request",
+    "data-model"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/protocol/sampling.rs",
+   "type": "file",
+   "name": "sampling.rs",
+   "filePath": "rust/src/engine-core-client/src/protocol/sampling.rs",
+   "summary": "采样参数协议（EngineCoreSamplingParams/RepetitionDetectionParams，含 for_test 构造器）。",
+   "tags": [
+    "protocol",
+    "sampling",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/protocol/sampling.rs:EngineCoreSamplingParams",
+   "type": "class",
+   "name": "EngineCoreSamplingParams",
+   "filePath": "rust/src/engine-core-client/src/protocol/sampling.rs",
+   "lineRange": [
+    72,
+    170
+   ],
+   "summary": "采样参数全集（1 方法）。",
+   "tags": [
+    "sampling",
+    "data-model"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/protocol/sampling_mask.rs",
+   "type": "file",
+   "name": "sampling_mask.rs",
+   "filePath": "rust/src/engine-core-client/src/protocol/sampling_mask.rs",
+   "summary": "采样掩码协议（SamplingMask/MaybeWireSamplingMask，与 logprobs 同构的惰性三态）。",
+   "tags": [
+    "protocol",
+    "sampling-mask",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/protocol/sampling_mask.rs:MaybeWireSamplingMask",
+   "type": "class",
+   "name": "MaybeWireSamplingMask",
+   "filePath": "rust/src/engine-core-client/src/protocol/sampling_mask.rs",
+   "lineRange": [
+    33,
+    36
+   ],
+   "summary": "惰性掩码载荷（5 方法：serialize/resolve）。",
+   "tags": [
+    "mask",
+    "lazy"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/protocol/serde_utils.rs",
+   "type": "file",
+   "name": "serde_utils.rs",
+   "filePath": "rust/src/engine-core-client/src/protocol/serde_utils.rs",
+   "summary": "serde 工具（AllowTrailingFields：容忍未知字段的反序列化包装）。",
+   "tags": [
+    "protocol",
+    "serde",
+    "rust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/protocol/serde_utils.rs:AllowTrailingFields",
+   "type": "class",
+   "name": "AllowTrailingFields",
+   "filePath": "rust/src/engine-core-client/src/protocol/serde_utils.rs",
+   "lineRange": [
+    14,
+    14
+   ],
+   "summary": "容忍尾随字段的反序列化辅助。",
+   "tags": [
+    "serde",
+    "compat"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/engine-core-client/src/protocol/stats.rs",
+   "type": "file",
+   "name": "stats.rs",
+   "filePath": "rust/src/engine-core-client/src/protocol/stats.rs",
+   "summary": "统计协议（435 行）：PrefixCacheStats/SpecDecodingStats/PrefillStats/PerfStats/CudagraphStats/SchedulerStats 全家——引擎侧性能计数器的线上格式。",
+   "tags": [
+    "protocol",
+    "stats",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/protocol/stats.rs:SchedulerStats",
+   "type": "class",
+   "name": "SchedulerStats",
+   "filePath": "rust/src/engine-core-client/src/protocol/stats.rs",
+   "lineRange": [
+    344,
+    372
+   ],
+   "summary": "调度统计（28 字段聚合）。",
+   "tags": [
+    "stats",
+    "scheduler"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/engine-core-client/src/protocol/stats.rs:PrefixCacheStats",
+   "type": "class",
+   "name": "PrefixCacheStats",
+   "filePath": "rust/src/engine-core-client/src/protocol/stats.rs",
+   "lineRange": [
+    59,
+    72
+   ],
+   "summary": "前缀缓存命中统计。",
+   "tags": [
+    "stats",
+    "prefix-cache"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "file:rust/src/engine-core-client/src/coordinator/mod.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "file:rust/src/engine-core-client/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/dtype.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/handshake.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/lora.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/request.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/utility.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "file:rust/src/engine-core-client/src/runtime.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "file:rust/src/engine-core-client/src/transport.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "class:rust/src/engine-core-client/src/client.rs:EngineCoreClientConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "class:rust/src/engine-core-client/src/client.rs:EngineCoreClientConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "class:rust/src/engine-core-client/src/client.rs:EngineCoreClient",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "class:rust/src/engine-core-client/src/client.rs:EngineCoreClient",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "function:rust/src/engine-core-client/src/client.rs:from_connected",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "function:rust/src/engine-core-client/src/client.rs:from_connected",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "target": "file:rust/src/engine-core-client/src/client.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "target": "file:rust/src/engine-core-client/src/client/state.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "target": "file:rust/src/engine-core-client/src/client/stream.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "target": "file:rust/src/engine-core-client/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "target": "file:rust/src/engine-core-client/src/metrics.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "target": "file:rust/src/engine-core-client/src/mock_engine.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/request.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/stats.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/utility.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "target": "file:rust/src/engine-core-client/src/transport.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "target": "class:rust/src/engine-core-client/src/client/imp.rs:ClientInner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "target": "class:rust/src/engine-core-client/src/client/imp.rs:ClientInner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "target": "function:rust/src/engine-core-client/src/client/imp.rs:run_output_dispatcher_loop",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "target": "function:rust/src/engine-core-client/src/client/imp.rs:run_output_dispatcher_loop",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/output_channel.rs",
+   "target": "file:rust/src/engine-core-client/src/client/stream.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/output_channel.rs",
+   "target": "file:rust/src/engine-core-client/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/output_channel.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/output_channel.rs",
+   "target": "class:rust/src/engine-core-client/src/client/output_channel.rs:OutputSender",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/output_channel.rs",
+   "target": "class:rust/src/engine-core-client/src/client/output_channel.rs:OutputSender",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/state.rs",
+   "target": "file:rust/src/engine-core-client/src/client/output_channel.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/state.rs",
+   "target": "file:rust/src/engine-core-client/src/client/stream.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/state.rs",
+   "target": "file:rust/src/engine-core-client/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/state.rs",
+   "target": "file:rust/src/engine-core-client/src/mock_engine.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/state.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/state.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/stats.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/state.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/utility.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/state.rs",
+   "target": "file:rust/src/engine-core-client/src/transport.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/state.rs",
+   "target": "class:rust/src/engine-core-client/src/client/state.rs:RequestRegistry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/state.rs",
+   "target": "class:rust/src/engine-core-client/src/client/state.rs:RequestRegistry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/state.rs",
+   "target": "class:rust/src/engine-core-client/src/client/state.rs:EngineRoutingState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/state.rs",
+   "target": "class:rust/src/engine-core-client/src/client/state.rs:EngineRoutingState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/state.rs",
+   "target": "function:rust/src/engine-core-client/src/client/state.rs:choose_engine_for_request",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/state.rs",
+   "target": "function:rust/src/engine-core-client/src/client/state.rs:choose_engine_for_request",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/stream.rs",
+   "target": "file:rust/src/engine-core-client/src/client.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/stream.rs",
+   "target": "file:rust/src/engine-core-client/src/client/state.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/stream.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/stream.rs",
+   "target": "class:rust/src/engine-core-client/src/client/stream.rs:EngineCoreOutputStream",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client/stream.rs",
+   "target": "class:rust/src/engine-core-client/src/client/stream.rs:EngineCoreOutputStream",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/bootstrap.rs",
+   "target": "file:rust/src/engine-core-client/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/bootstrap.rs",
+   "target": "class:rust/src/engine-core-client/src/coordinator/bootstrap.rs:CoordinatorBootstrap",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/bootstrap.rs",
+   "target": "class:rust/src/engine-core-client/src/coordinator/bootstrap.rs:CoordinatorBootstrap",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/external.rs",
+   "target": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/external.rs",
+   "target": "file:rust/src/engine-core-client/src/coordinator/handle.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/external.rs",
+   "target": "file:rust/src/engine-core-client/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/external.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/external.rs",
+   "target": "class:rust/src/engine-core-client/src/coordinator/external.rs:ExternalCoordinatorService",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/external.rs",
+   "target": "class:rust/src/engine-core-client/src/coordinator/external.rs:ExternalCoordinatorService",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/handle.rs",
+   "target": "file:rust/src/engine-core-client/src/coordinator/external.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/handle.rs",
+   "target": "file:rust/src/engine-core-client/src/coordinator/inproc.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/handle.rs",
+   "target": "file:rust/src/engine-core-client/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/handle.rs",
+   "target": "class:rust/src/engine-core-client/src/coordinator/handle.rs:CoordinatorHandle",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/handle.rs",
+   "target": "class:rust/src/engine-core-client/src/coordinator/handle.rs:CoordinatorHandle",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/inproc.rs",
+   "target": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/inproc.rs",
+   "target": "file:rust/src/engine-core-client/src/coordinator/bootstrap.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/inproc.rs",
+   "target": "file:rust/src/engine-core-client/src/coordinator/handle.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/inproc.rs",
+   "target": "file:rust/src/engine-core-client/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/inproc.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/inproc.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/inproc.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/request.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/inproc.rs",
+   "target": "class:rust/src/engine-core-client/src/coordinator/inproc.rs:InProcCoordinatorRunner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/coordinator/inproc.rs",
+   "target": "class:rust/src/engine-core-client/src/coordinator/inproc.rs:InProcCoordinatorRunner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/error.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/utility.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/error.rs",
+   "target": "class:rust/src/engine-core-client/src/error.rs:Error",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/error.rs",
+   "target": "class:rust/src/engine-core-client/src/error.rs:Error",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/metrics.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/stats.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/metrics.rs",
+   "target": "file:rust/src/engine-core-client/src/transport.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/metrics.rs",
+   "target": "class:rust/src/engine-core-client/src/metrics.rs:SchedulerStatsRecorder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/metrics.rs",
+   "target": "class:rust/src/engine-core-client/src/metrics.rs:SchedulerStatsRecorder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/metrics.rs",
+   "target": "function:rust/src/engine-core-client/src/metrics.rs:resolve_scheduler_stats_handles",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/metrics.rs",
+   "target": "function:rust/src/engine-core-client/src/metrics.rs:resolve_scheduler_stats_handles",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/metrics.rs",
+   "target": "function:rust/src/engine-core-client/src/metrics.rs:record_scheduler_stats_with_handles",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/metrics.rs",
+   "target": "function:rust/src/engine-core-client/src/metrics.rs:record_scheduler_stats_with_handles",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/mock_engine.rs",
+   "target": "file:rust/src/engine-core-client/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/mock_engine.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/dtype.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/mock_engine.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/handshake.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/mock_engine.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/mock_engine.rs",
+   "target": "class:rust/src/engine-core-client/src/mock_engine.rs:MockEngineSockets",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/mock_engine.rs",
+   "target": "class:rust/src/engine-core-client/src/mock_engine.rs:MockEngineSockets",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/mock_engine.rs",
+   "target": "function:rust/src/engine-core-client/src/mock_engine.rs:connect_to_frontend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/mock_engine.rs",
+   "target": "function:rust/src/engine-core-client/src/mock_engine.rs:connect_to_frontend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/dtype.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/dtype.rs:TensorDtype",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/dtype.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/dtype.rs:TensorDtype",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/dtype.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/dtype.rs:ModelDtype",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/dtype.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/dtype.rs:ModelDtype",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/handshake.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/dtype.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/handshake.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/handshake.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/handshake.rs:EngineCoreReadyResponse",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/handshake.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/handshake.rs:EngineCoreReadyResponse",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/logprobs.rs",
+   "target": "file:rust/src/engine-core-client/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/logprobs.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/dtype.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/logprobs.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/tensor.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/logprobs.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/logprobs.rs:MaybeWireLogprobs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/logprobs.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/logprobs.rs:MaybeWireLogprobs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/logprobs.rs",
+   "target": "function:rust/src/engine-core-client/src/protocol/logprobs.rs:from_direct",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/logprobs.rs",
+   "target": "function:rust/src/engine-core-client/src/protocol/logprobs.rs:from_direct",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/logprobs/array.rs",
+   "target": "file:rust/src/engine-core-client/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/logprobs/array.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/dtype.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/logprobs/array.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/tensor.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/logprobs/array.rs",
+   "target": "function:rust/src/engine-core-client/src/protocol/logprobs/array.rs:decode_array2_u32",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/logprobs/array.rs",
+   "target": "function:rust/src/engine-core-client/src/protocol/logprobs/array.rs:decode_array2_u32",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/logprobs/array.rs",
+   "target": "function:rust/src/engine-core-client/src/protocol/logprobs/array.rs:validate_byte_length",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/logprobs/array.rs",
+   "target": "function:rust/src/engine-core-client/src/protocol/logprobs/array.rs:validate_byte_length",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/logprobs/tests.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/lora.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/lora.rs:LoraRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/lora.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/lora.rs:LoraRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "target": "file:rust/src/engine-core-client/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "target": "function:rust/src/engine-core-client/src/protocol/mod.rs:encode_msgpack",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "target": "function:rust/src/engine-core-client/src/protocol/mod.rs:encode_msgpack",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/multimodal.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/multimodal.rs:MmField",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/multimodal.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/multimodal.rs:MmField",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/multimodal.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/multimodal.rs:MmFeatureSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/multimodal.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/multimodal.rs:MmFeatureSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "target": "file:rust/src/engine-core-client/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/logprobs.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/sampling_mask.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/stats.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/tensor.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/output.rs:EngineCoreOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/output.rs:EngineCoreOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/output.rs:EngineCoreOutputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/output.rs:EngineCoreOutputs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/output.rs:RequestError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/output.rs:RequestError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/request.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/dtype.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/request.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/kv_hints.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/request.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/lora.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/request.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/request.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/multimodal.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/request.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/sampling.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/request.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/tensor.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/request.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/request.rs:EngineCoreRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/request.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/request.rs:EngineCoreRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/sampling.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/sampling.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/request.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/sampling.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/structured_outputs.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/sampling.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/tensor.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/sampling.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/sampling.rs:EngineCoreSamplingParams",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/sampling.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/sampling.rs:EngineCoreSamplingParams",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/sampling_mask.rs",
+   "target": "file:rust/src/engine-core-client/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/sampling_mask.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/dtype.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/sampling_mask.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/logprobs/array.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/sampling_mask.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/sampling_mask.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/sampling_mask.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/tensor.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/sampling_mask.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/sampling_mask.rs:MaybeWireSamplingMask",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/sampling_mask.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/sampling_mask.rs:MaybeWireSamplingMask",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/serde_utils.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/serde_utils.rs:AllowTrailingFields",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/serde_utils.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/serde_utils.rs:AllowTrailingFields",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/stats.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/stats.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/stats.rs:SchedulerStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/stats.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/stats.rs:SchedulerStats",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/stats.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/stats.rs:PrefixCacheStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/stats.rs",
+   "target": "class:rust/src/engine-core-client/src/protocol/stats.rs:PrefixCacheStats",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/lib.rs",
+   "target": "file:rust/src/engine-core-client/src/client.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/lib.rs",
+   "target": "file:rust/src/engine-core-client/src/coordinator/mod.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/lib.rs",
+   "target": "file:rust/src/engine-core-client/src/error.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/lib.rs",
+   "target": "file:rust/src/engine-core-client/src/metrics.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/lib.rs",
+   "target": "file:rust/src/engine-core-client/src/mock_engine.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/lib.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/lib.rs",
+   "target": "file:rust/src/engine-core-client/src/transport.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "file:rust/src/engine-core-client/src/client/imp.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "file:rust/src/engine-core-client/src/client/output_channel.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "file:rust/src/engine-core-client/src/client/state.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/client.rs",
+   "target": "file:rust/src/engine-core-client/src/client/stream.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/dtype.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/handshake.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/kv_hints.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/lora.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/multimodal.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/output.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/request.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/sampling.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/sampling_mask.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/stats.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/serde_utils.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/tensor.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/utility.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/structured_outputs.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/mod.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/logprobs.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/logprobs.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/logprobs/array.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/engine-core-client/src/protocol/logprobs.rs",
+   "target": "file:rust/src/engine-core-client/src/protocol/logprobs/tests.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  }
+ ]
+}

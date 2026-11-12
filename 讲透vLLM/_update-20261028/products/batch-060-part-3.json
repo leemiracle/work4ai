@@ -1,0 +1,804 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "type": "file",
+   "name": "checkpoint.py",
+   "filePath": "vllm/model_executor/layers/mamba/checkpoint.py",
+   "summary": "Mamba prefill checkpoint 体系：后端中立的位置计算/构建器/导出器（存 pre-conv 窗口与循环状态）+存储 kernel。",
+   "tags": [
+    "mamba",
+    "checkpoints",
+    "prefill",
+    "exporter"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/gdn/base.py",
+   "type": "file",
+   "name": "base.py",
+   "filePath": "vllm/model_executor/layers/mamba/gdn/base.py",
+   "summary": "GatedDeltaNet 注意力基类（PluggableLayer+MambaBase）。",
+   "tags": [
+    "gdn",
+    "gated-delta-net",
+    "base-class"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "type": "file",
+   "name": "kimi_gdn_linear_attn.py",
+   "filePath": "vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "summary": "Kimi K2 GatedDeltaNet 线性注意力：TP 复制分片的 merged 投影与 KDA A_log 兼容权重加载。",
+   "tags": [
+    "gdn",
+    "kimi",
+    "linear-attention",
+    "weights"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "type": "file",
+   "name": "olmo_gdn_linear_attn.py",
+   "filePath": "vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "summary": "OLMo Hybrid GatedDeltaNet 线性注意力：融合门控 kernel 与全前向 custom op。",
+   "tags": [
+    "gdn",
+    "olmo",
+    "gating",
+    "linear-attention"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/checkpoint.py:MambaPrefillCheckpointMetadata",
+   "type": "class",
+   "name": "MambaPrefillCheckpointMetadata",
+   "filePath": "vllm/model_executor/layers/mamba/checkpoint.py",
+   "summary": "prefill checkpoint 元数据。",
+   "tags": [
+    "checkpoint",
+    "metadata",
+    "prefill"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    75,
+    97
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/checkpoint.py:MambaPrefillCheckpointBuilder",
+   "type": "class",
+   "name": "MambaPrefillCheckpointBuilder",
+   "filePath": "vllm/model_executor/layers/mamba/checkpoint.py",
+   "summary": "后端中立的 prefill checkpoint 位置构建器。",
+   "tags": [
+    "checkpoint",
+    "builder",
+    "prefill"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    100,
+    165
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/checkpoint.py:MambaPrefillCheckpointExporter",
+   "type": "class",
+   "name": "MambaPrefillCheckpointExporter",
+   "filePath": "vllm/model_executor/layers/mamba/checkpoint.py",
+   "summary": "存每个 checkpoint 的 pre-conv 窗口与循环状态。",
+   "tags": [
+    "checkpoint",
+    "exporter",
+    "states"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    169,
+    237
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/gdn/base.py:GatedDeltaNetAttention",
+   "type": "class",
+   "name": "GatedDeltaNetAttention",
+   "filePath": "vllm/model_executor/layers/mamba/gdn/base.py",
+   "summary": "GDN 注意力基类。",
+   "tags": [
+    "gdn",
+    "gated-delta-net",
+    "base-class"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    22,
+    58
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py:_KimiGDNMergedColumnParallelLinear",
+   "type": "class",
+   "name": "_KimiGDNMergedColumnParallelLinear",
+   "filePath": "vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "summary": "带 TP 复制分片的 merged 投影（3 方法）。",
+   "tags": [
+    "merged",
+    "replicated-shard",
+    "kimi"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    95,
+    152
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py:KimiGatedDeltaNetAttention",
+   "type": "class",
+   "name": "KimiGatedDeltaNetAttention",
+   "filePath": "vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "summary": "Kimi K2 GDN 线性注意力（6 方法）。",
+   "tags": [
+    "kimi",
+    "gdn",
+    "linear-attention"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    156,
+    646
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py:OlmoHybridGatedDeltaNetAttention",
+   "type": "class",
+   "name": "OlmoHybridGatedDeltaNetAttention",
+   "filePath": "vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "summary": "OLMo Hybrid GDN 线性注意力（6 方法）。",
+   "tags": [
+    "olmo",
+    "gdn",
+    "hybrid"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    52,
+    516
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/checkpoint.py:compute_mamba_prefill_checkpoints",
+   "type": "function",
+   "name": "compute_mamba_prefill_checkpoints",
+   "filePath": "vllm/model_executor/layers/mamba/checkpoint.py",
+   "summary": "逐行内部 prefill checkpoint 偏移与因果窗口。",
+   "tags": [
+    "checkpoints",
+    "offsets",
+    "prefill"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    21,
+    63
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/checkpoint.py:store_cache_checkpoints_kernel",
+   "type": "function",
+   "name": "store_cache_checkpoints_kernel",
+   "filePath": "vllm/model_executor/layers/mamba/checkpoint.py",
+   "summary": "checkpoint 状态存储 Triton kernel。",
+   "tags": [
+    "triton",
+    "storage",
+    "checkpoints"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    241,
+    311
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py:a_log_weight_loader",
+   "type": "function",
+   "name": "a_log_weight_loader",
+   "filePath": "vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "summary": "KDA A_log 旧 4D/现行布局兼容加载器。",
+   "tags": [
+    "weight-loader",
+    "a-log",
+    "compat"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    47,
+    69
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py:olmo_hybrid_gdn_full_forward",
+   "type": "function",
+   "name": "olmo_hybrid_gdn_full_forward",
+   "filePath": "vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "summary": "全线性注意力前向 custom op 包装。",
+   "tags": [
+    "custom-op",
+    "forward",
+    "olmo"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    541,
+    557
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py:fused_olmo_hybrid_gdn_gating",
+   "type": "function",
+   "name": "fused_olmo_hybrid_gdn_gating",
+   "filePath": "vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "summary": "OLMo 混合 GDN 融合门控入口。",
+   "tags": [
+    "gating",
+    "fused",
+    "olmo"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    609,
+    638
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/base.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/base.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/base.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/base.py",
+   "target": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/base.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/base.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/base.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/mamba/gdn/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/causal_conv1d.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/gather_initial_states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/parameter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/kda.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "file:vllm/transformers_utils/configs/kimi_linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "file:vllm/v1/attention/backends/gdn_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/mamba/gdn/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/mamba/gdn/qwen_gdn_linear_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/causal_conv1d.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "file:vllm/triton_utils/allocation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "file:vllm/v1/attention/backends/gdn_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "target": "class:vllm/model_executor/layers/mamba/checkpoint.py:MambaPrefillCheckpointMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "target": "class:vllm/model_executor/layers/mamba/checkpoint.py:MambaPrefillCheckpointBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "target": "class:vllm/model_executor/layers/mamba/checkpoint.py:MambaPrefillCheckpointExporter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "target": "function:vllm/model_executor/layers/mamba/checkpoint.py:compute_mamba_prefill_checkpoints",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "target": "function:vllm/model_executor/layers/mamba/checkpoint.py:store_cache_checkpoints_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/base.py",
+   "target": "class:vllm/model_executor/layers/mamba/gdn/base.py:GatedDeltaNetAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "class:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py:_KimiGDNMergedColumnParallelLinear",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "class:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py:KimiGatedDeltaNetAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "function:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py:a_log_weight_loader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "class:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py:OlmoHybridGatedDeltaNetAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "function:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py:olmo_hybrid_gdn_full_forward",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "function:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py:fused_olmo_hybrid_gdn_gating",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "target": "class:vllm/model_executor/layers/mamba/checkpoint.py:MambaPrefillCheckpointMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "target": "class:vllm/model_executor/layers/mamba/checkpoint.py:MambaPrefillCheckpointBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "target": "class:vllm/model_executor/layers/mamba/checkpoint.py:MambaPrefillCheckpointExporter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "target": "function:vllm/model_executor/layers/mamba/checkpoint.py:compute_mamba_prefill_checkpoints",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "target": "function:vllm/model_executor/layers/mamba/checkpoint.py:store_cache_checkpoints_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/base.py",
+   "target": "class:vllm/model_executor/layers/mamba/gdn/base.py:GatedDeltaNetAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "class:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py:_KimiGDNMergedColumnParallelLinear",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "class:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py:KimiGatedDeltaNetAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py",
+   "target": "function:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py:a_log_weight_loader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "class:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py:OlmoHybridGatedDeltaNetAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "function:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py:olmo_hybrid_gdn_full_forward",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py",
+   "target": "function:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py:fused_olmo_hybrid_gdn_gating",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/layers/mamba/gdn/base.py:GatedDeltaNetAttention",
+   "target": "class:vllm/model_executor/layers/mamba/abstract.py:MambaBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/mamba/gdn/kimi_gdn_linear_attn.py:KimiGatedDeltaNetAttention",
+   "target": "class:vllm/model_executor/layers/mamba/gdn/base.py:GatedDeltaNetAttention",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/mamba/gdn/olmo_gdn_linear_attn.py:OlmoHybridGatedDeltaNetAttention",
+   "target": "class:vllm/model_executor/layers/mamba/gdn/base.py:GatedDeltaNetAttention",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

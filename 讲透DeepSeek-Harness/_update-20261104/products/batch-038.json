@@ -1,0 +1,1741 @@
+{
+ "nodes": [
+  {
+   "id": "document:packages/mcp/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/mcp/README.md",
+   "summary": "mcp 包组 README：连接外部 Model Context Protocol 服务器、调用其工具、发现资源与 fleet 管理的组级导读。",
+   "tags": [
+    "documentation",
+    "package-group",
+    "mcp"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/mcp/mcp-client/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/mcp/mcp-client/README.md",
+   "summary": "dsh-mcp-client 包参考文档（253 行）：MCP 客户端桥的连接配置、传输选择与重连策略指南。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "mcp-client"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:packages/mcp/mcp-client/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/mcp/mcp-client/package.json",
+   "summary": "@deepseek-ai/dsh-mcp-client 包清单：连接 MCP 服务器并把其工具注册进 harness 工具运行时。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "mcp-client"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/mcp/mcp-client/src/connection.ts",
+   "type": "file",
+   "name": "connection.ts",
+   "filePath": "packages/mcp/mcp-client/src/connection.ts",
+   "summary": "连接监督者：为一个插件实例持有 MCP client/transport 世代（generation），使 harness 工具注册表与活世代同步；断连时按有界指数退避重启配置的服务器，一次停机共享一个尝试预算（maxAttempts 连续失败、延迟从 initialDelayMs 翻倍到 maxDelayMs）。",
+   "tags": [
+    "connection-supervisor",
+    "reconnect",
+    "backoff",
+    "generation-tracking"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/mcp/mcp-client/src/connection.ts:resolveReconnectPolicy",
+   "type": "function",
+   "name": "resolveReconnectPolicy",
+   "filePath": "packages/mcp/mcp-client/src/connection.ts",
+   "lineRange": [
+    70,
+    95
+   ],
+   "summary": "校验并缺省重连策略（fail-loud 于加载期）：maxAttempts/initialDelayMs/maxDelayMs 的边界与组合约束，带实例标签的定位错误。",
+   "tags": [
+    "validation",
+    "reconnect-policy",
+    "fail-loud"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/mcp/mcp-client/src/connection.ts:startConnection",
+   "type": "function",
+   "name": "startConnection",
+   "filePath": "packages/mcp/mcp-client/src/connection.ts",
+   "lineRange": [
+    130,
+    406
+   ],
+   "summary": "构建连接监督者：创建世代、经 createTransport + MCP Client 建链、syncTools 同步工具、按退避策略重连；dispose 停止重连、静默在途工作并注销当前世代（closeResult 独立报告传输关闭与本地清理）。",
+   "tags": [
+    "connection-lifecycle",
+    "reconnect-loop",
+    "disposal"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/mcp/mcp-client/src/credentials.ts",
+   "type": "file",
+   "name": "credentials.ts",
+   "filePath": "packages/mcp/mcp-client/src/credentials.ts",
+   "summary": "一个 MCP 实例的运行时模板解析与秘密脱敏：McpTemplateBinding 从原始配置收集启用的 credential 引用，经当前 credential provider 解析值，并把每个已解析值在离开实例前替换为 [redacted]。",
+   "tags": [
+    "credentials",
+    "template-resolution",
+    "secret-redaction"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/mcp/mcp-client/src/credentials.ts:McpTemplateBinding",
+   "type": "class",
+   "name": "McpTemplateBinding",
+   "filePath": "packages/mcp/mcp-client/src/credentials.ts",
+   "lineRange": [
+    10,
+    96
+   ],
+   "summary": "原始配置的当前解析器：持有 refs（含未配置引用的启用集合）、按 dsh-credentials provider 解析 ${credential:REF} 值，展开供传输使用且任何诊断文本先经 redactSecrets 脱敏。",
+   "tags": [
+    "credential-binding",
+    "redaction",
+    "runtime-resolution"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/mcp/mcp-client/src/deadline.ts",
+   "type": "file",
+   "name": "deadline.ts",
+   "filePath": "packages/mcp/mcp-client/src/deadline.ts",
+   "summary": "启动与探测预算共享的结算 deadline 助手。",
+   "tags": [
+    "timeout",
+    "utility",
+    "timeout-helper"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/mcp/mcp-client/src/deadline.ts:withDeadline",
+   "type": "function",
+   "name": "withDeadline",
+   "filePath": "packages/mcp/mcp-client/src/deadline.ts",
+   "lineRange": [
+    14,
+    31
+   ],
+   "summary": "以 remainingMs 为限结算 promise：超时以携带诊断的 Error 拒绝；timer 不挂住进程，非 Error 拒绝包装成 Error。",
+   "tags": [
+    "deadline",
+    "race",
+    "timeout"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/mcp/mcp-client/src/diagnostic.ts",
+   "type": "file",
+   "name": "diagnostic.ts",
+   "filePath": "packages/mcp/mcp-client/src/diagnostic.ts",
+   "summary": "连接诊断层：McpLocalError 标记不含展开配置的本地失败；解析过秘密的配置在文本离开实例前经 redactSecrets 把每个已知秘密值替换为占位符；describeError 保留 cause 链分节描述。",
+   "tags": [
+    "diagnostics",
+    "secret-redaction",
+    "error-chains"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/mcp/mcp-client/src/diagnostic.ts:McpLocalError",
+   "type": "class",
+   "name": "McpLocalError",
+   "filePath": "packages/mcp/mcp-client/src/diagnostic.ts",
+   "lineRange": [
+    7,
+    7
+   ],
+   "summary": "Error 子类：消息不含展开配置或上游文本的本地失败标记，供模板/工具错误类型继承。",
+   "tags": [
+    "error-type",
+    "marker-class",
+    "error-handling"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/mcp/mcp-client/src/diagnostic.ts:redactSecrets",
+   "type": "function",
+   "name": "redactSecrets",
+   "filePath": "packages/mcp/mcp-client/src/diagnostic.ts",
+   "lineRange": [
+    19,
+    23
+   ],
+   "summary": "把文本中出现的每个已知秘密值替换为 [redacted] 占位符。",
+   "tags": [
+    "redaction",
+    "security",
+    "secret-protection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/mcp/mcp-client/src/diagnostic.ts:describeError",
+   "type": "function",
+   "name": "describeError",
+   "filePath": "packages/mcp/mcp-client/src/diagnostic.ts",
+   "lineRange": [
+    42,
+    55
+   ],
+   "summary": "沿 cause 链分段描述错误（本地段与上游段分开标注），脱敏后输出诊断串。",
+   "tags": [
+    "error-chains",
+    "diagnostics",
+    "cause-preservation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/mcp/mcp-client/src/generation.ts",
+   "type": "file",
+   "name": "generation.ts",
+   "filePath": "packages/mcp/mcp-client/src/generation.ts",
+   "summary": "一个传输生命周期：McpGeneration 持有传输与全部所属工作共享的取消、跟踪实际任务（区别于可中断的调用方）、确认关闭；世代边界保证重连后旧传输的在途工作被取消且资源按代释放。",
+   "tags": [
+    "generation",
+    "lifecycle",
+    "cancellation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/mcp/mcp-client/src/generation.ts:McpGeneration",
+   "type": "class",
+   "name": "McpGeneration",
+   "filePath": "packages/mcp/mcp-client/src/generation.ts",
+   "lineRange": [
+    11,
+    113
+   ],
+   "summary": "传输世代：AbortController 共享取消、任务表区分实际任务与中断调用方、close 确认关闭并结算清场结果。",
+   "tags": [
+    "generation",
+    "task-tracking",
+    "close-confirmation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/mcp/mcp-client/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/mcp/mcp-client/src/index.ts",
+   "summary": "mcp-client 插件入口（async apply，显式 async 防 Cordis 把带原型的普通函数当构造器）：加载期校验重连策略、scope 内 serverName 唯一占用、状态 cell 挂真实 Fiber 存活重载；启动时连接 + 初始工具发现阻塞插件激活（failOnStartupError 时失败回滚 fiber），internal/plugin 卸载公告即关闭传输释放仍在等待的启动请求。",
+   "tags": [
+    "plugin-entry",
+    "startup-gating",
+    "namespace-reservation",
+    "cordis-plugin"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/mcp/mcp-client/src/index.ts:connectionStatusOf",
+   "type": "function",
+   "name": "connectionStatusOf",
+   "filePath": "packages/mcp/mcp-client/src/index.ts",
+   "lineRange": [
+    67,
+    69
+   ],
+   "summary": "读取一个 fiber 的连接状态（从状态 cell）。",
+   "tags": [
+    "status-query",
+    "utility",
+    "status"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/mcp/mcp-client/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/mcp/mcp-client/src/index.ts",
+   "lineRange": [
+    203,
+    263
+   ],
+   "summary": "插件入口：resolveReconnectPolicy fail-loud、scope 内 serverName 唯一注册、status cell 注册、startConnection 起监督者并挂 dispose、registerServerContext 发布资源与服务器指令，最后 await connection.ready 按策略放行或抛错。",
+   "tags": [
+    "plugin-apply",
+    "lifecycle-wiring",
+    "plugin-entry"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/mcp/mcp-client/src/probe.ts",
+   "type": "file",
+   "name": "probe.ts",
+   "filePath": "packages/mcp/mcp-client/src/probe.ts",
+   "summary": "一次性 MCP 服务器探测：连接、读服务器身份、列工具、关闭——不在 ctx.tools 注册、不占 serverName、不持久化，供配置面 test this server；预期失败按 stage 分类返回值而非抛错。",
+   "tags": [
+    "probe",
+    "one-shot",
+    "stage-classification",
+    "no-registration"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/mcp/mcp-client/src/probe.ts:probeServer",
+   "type": "function",
+   "name": "probeServer",
+   "filePath": "packages/mcp/mcp-client/src/probe.ts",
+   "lineRange": [
+    61,
+    103
+   ],
+   "summary": "执行整探针：模板绑定 → Client 建链 → 服务器信息+工具列表（有界预算与列表上限）→ 独立清理关闭，返回带独立 closeResult 的分类结果。",
+   "tags": [
+    "probe",
+    "bounded-budget",
+    "cleanup-independent"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/mcp/mcp-client/src/server-context.ts",
+   "type": "file",
+   "name": "server-context.ts",
+   "filePath": "packages/mcp/mcp-client/src/server-context.ts",
+   "summary": "发布连接拥有的 MCP 资源与字面服务器指令：registerServerContext 把连接的资源访问与 instructions 注册进 mcpResources 运行时与系统提示。",
+   "tags": [
+    "server-context",
+    "system-prompt",
+    "resource-publishing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/mcp/mcp-client/src/server-context.ts:registerServerContext",
+   "type": "function",
+   "name": "registerServerContext",
+   "filePath": "packages/mcp/mcp-client/src/server-context.ts",
+   "lineRange": [
+    28,
+    40
+   ],
+   "summary": "把 serverName+connection 注册为 mcpResources provider 并向 systemPrompt 贡献服务器指令节，dispose 时撤销。",
+   "tags": [
+    "registration",
+    "system-prompt-section",
+    "ctx-effect"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/mcp/mcp-client/src/status.ts",
+   "type": "file",
+   "name": "status.ts",
+   "filePath": "packages/mcp/mcp-client/src/status.ts",
+   "summary": "按持有 Fiber 键控的连接状态与清理结果：McpStatusCell 在该 Fiber 重载间存活、终局 dispose 后仍可读（观察者分离）；状态随连接世代更新。",
+   "tags": [
+    "status-cell",
+    "fiber-lifecycle",
+    "observability"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/mcp/mcp-client/src/status.ts:McpStatusCell",
+   "type": "class",
+   "name": "McpStatusCell",
+   "filePath": "packages/mcp/mcp-client/src/status.ts",
+   "lineRange": [
+    35,
+    107
+   ],
+   "summary": "一个实例连接状态的读观察句柄（implements McpConnectionStatusHandle）：8 方法覆盖状态更新、闭包结果、观察者通知与 detach 存活语义。",
+   "tags": [
+    "status-handle",
+    "observers",
+    "fiber-survival"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/mcp/mcp-client/src/status.ts:registerStatusCell",
+   "type": "function",
+   "name": "registerStatusCell",
+   "filePath": "packages/mcp/mcp-client/src/status.ts",
+   "lineRange": [
+    117,
+    124
+   ],
+   "summary": "为 fiber 注册（或复用）状态 cell，接诊断日志回调。",
+   "tags": [
+    "registration",
+    "status-cell",
+    "status-registry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/mcp/mcp-client/src/status.ts:connectionStatusIn",
+   "type": "function",
+   "name": "connectionStatusIn",
+   "filePath": "packages/mcp/mcp-client/src/status.ts",
+   "lineRange": [
+    131,
+    133
+   ],
+   "summary": "从状态 cell 读当前连接状态视图。",
+   "tags": [
+    "status-query",
+    "utility",
+    "status"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/mcp/mcp-client/src/templates.ts",
+   "type": "file",
+   "name": "templates.ts",
+   "filePath": "packages/mcp/mcp-client/src/templates.ts",
+   "summary": "${credential:REF} 语法与替换：manager 在配置写入时校验语法，client 在运行时解析值而不改存储的配置；credentialRefsIn/assertTemplateSyntax/resolveTemplateString 三段分离。",
+   "tags": [
+    "template-syntax",
+    "credentials",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/mcp/mcp-client/src/templates.ts:MissingTemplateValue",
+   "type": "class",
+   "name": "MissingTemplateValue",
+   "filePath": "packages/mcp/mcp-client/src/templates.ts",
+   "lineRange": [
+    12,
+    12
+   ],
+   "summary": "McpLocalError 子类：被引用 credential 无已配置值的错误。",
+   "tags": [
+    "error-type",
+    "credentials",
+    "error-handling"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/mcp/mcp-client/src/templates.ts:credentialRefsIn",
+   "type": "function",
+   "name": "credentialRefsIn",
+   "filePath": "packages/mcp/mcp-client/src/templates.ts",
+   "lineRange": [
+    30,
+    32
+   ],
+   "summary": "枚举字符串中的全部 credential 引用（不解析值）。",
+   "tags": [
+    "enumeration",
+    "template-refs",
+    "template-syntax"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/mcp/mcp-client/src/templates.ts:assertTemplateSyntax",
+   "type": "function",
+   "name": "assertTemplateSyntax",
+   "filePath": "packages/mcp/mcp-client/src/templates.ts",
+   "lineRange": [
+    40,
+    49
+   ],
+   "summary": "校验模板语法（引用闭合、无未知占位形态），配置写入期调用。",
+   "tags": [
+    "validation",
+    "syntax-check",
+    "template-syntax"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/mcp/mcp-client/src/templates.ts:resolveTemplateString",
+   "type": "function",
+   "name": "resolveTemplateString",
+   "filePath": "packages/mcp/mcp-client/src/templates.ts",
+   "lineRange": [
+    59,
+    76
+   ],
+   "summary": "用已解析的 credential 值替换字符串中的全部引用；缺失值抛 MissingTemplateValue。",
+   "tags": [
+    "substitution",
+    "runtime-resolution",
+    "template-syntax"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/mcp/mcp-client/src/tools.ts",
+   "type": "file",
+   "name": "tools.ts",
+   "filePath": "packages/mcp/mcp-client/src/tools.ts",
+   "summary": "工具桥：发现 MCP 工具、以确定性 server 限定公共名 mcp__<serverName>__<rawName>（归一化到函数名约束；raw 名只在 wire 上发送、公共名从不反向解析）注册进 harness ToolRuntime，服务器工具列表变化时 re-sync；含图像输出投影（decodeImage/prepareImageProjection 使二进制走 attachment 而非模型历史）。",
+   "tags": [
+    "tool-bridge",
+    "name-invariants",
+    "re-sync",
+    "image-projection"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/mcp/mcp-client/src/tools.ts:McpToolRegistrationError",
+   "type": "class",
+   "name": "McpToolRegistrationError",
+   "filePath": "packages/mcp/mcp-client/src/tools.ts",
+   "lineRange": [
+    43,
+    43
+   ],
+   "summary": "McpLocalError 子类：工具注册失败的本地错误标记。",
+   "tags": [
+    "error-type",
+    "registration",
+    "error-handling"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/mcp/mcp-client/src/tools.ts:publicToolName",
+   "type": "function",
+   "name": "publicToolName",
+   "filePath": "packages/mcp/mcp-client/src/tools.ts",
+   "lineRange": [
+    91,
+    97
+   ],
+   "summary": "由 (serverName, rawName) 推导模型可见公共名并归一化到函数名约束。",
+   "tags": [
+    "naming",
+    "normalization",
+    "name-normalization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/mcp/mcp-client/src/tools.ts:syncTools",
+   "type": "function",
+   "name": "syncTools",
+   "filePath": "packages/mcp/mcp-client/src/tools.ts",
+   "lineRange": [
+    126,
+    188
+   ],
+   "summary": "把一个世代的 MCP 工具列表同步进工具运行时：新增建定义、消失注销、同名变化重建，注册错误按工具收集不中断整批。",
+   "tags": [
+    "re-sync",
+    "registration",
+    "diffing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/mcp/mcp-client/src/tools.ts:createMcpToolDefinition",
+   "type": "function",
+   "name": "createMcpToolDefinition",
+   "filePath": "packages/mcp/mcp-client/src/tools.ts",
+   "lineRange": [
+    251,
+    273
+   ],
+   "summary": "把一个 MCP 工具描述折成 harness defineTool 定义（参数 schema 透传、输出 schema 仅支持子集、执行器带超时与世代取消）。",
+   "tags": [
+    "tool-definition",
+    "schema-adaptation",
+    "tool-bridge"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/mcp/mcp-client/src/tools.ts:prepareImageProjection",
+   "type": "function",
+   "name": "prepareImageProjection",
+   "filePath": "packages/mcp/mcp-client/src/tools.ts",
+   "lineRange": [
+    412,
+    466
+   ],
+   "summary": "检测工具结果中的图像内容并按准入策略投影为 attachment 引用（二进制载荷不进模型历史），纯文本部分走 extractText。",
+   "tags": [
+    "image-admission",
+    "attachment-projection",
+    "model-history-protection"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/mcp/mcp-client/src/transport.ts",
+   "type": "file",
+   "name": "transport.ts",
+   "filePath": "packages/mcp/mcp-client/src/transport.ts",
+   "summary": "传输工厂：按解析后的配置创建 MCP transport——stdio spawn 子进程（凭据经模板展开后环境洗刷 buildChildEnv）、Streamable HTTP 连 URL。",
+   "tags": [
+    "transport-factory",
+    "stdio",
+    "streamable-http"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/mcp/mcp-client/src/transport.ts:createTransport",
+   "type": "function",
+   "name": "createTransport",
+   "filePath": "packages/mcp/mcp-client/src/transport.ts",
+   "lineRange": [
+    31,
+    46
+   ],
+   "summary": "按 transport 配置分派 StdioClientTransport（command/args/env/cwd，凭据展开后的子进程环境）或 StreamableHTTPClientTransport（URL/headers）。",
+   "tags": [
+    "dispatch",
+    "transport-creation",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/mcp/mcp-client/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/mcp/mcp-client/src/types.ts",
+   "summary": "客户端安全的 MCP 连接状态与探测结果类型（仅类型无运行时代码）：McpCloseResult 把传输关闭与本地清理分开报告。",
+   "tags": [
+    "type-definition",
+    "connection-status",
+    "probe-results"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/mcp/mcp-client/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/mcp/mcp-client/tsconfig.json",
+   "summary": "包级 TypeScript 编译配置（52 行，references 覆盖 credentials/tools/typert 等依赖）。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/mcp/mcp-manager/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/mcp/mcp-manager/README.md",
+   "summary": "dsh-mcp-manager 包参考文档：增删改重启 MCP 服务器、fleet 状态与探测的管理面指南。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "mcp-manager"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:packages/mcp/mcp-manager/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/mcp/mcp-manager/package.json",
+   "summary": "@deepseek-ai/dsh-mcp-manager 包清单：settings 驱动的 mcp-client 实例 fleet 管理器。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "mcp-manager"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/mcp/mcp-manager/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/mcp/mcp-manager/src/index.ts",
+   "summary": "MCP 服务器管理器（ctx.mcpManager，default export）：volatile Config.servers（Settings 按 Loader entry id 暴露、profile 继承与 revision 检查）+ 插件经 register() 贡献条目，两源任一变化都调和活实例集（新条目挂载、移除/禁用卸载、变更重建）；连接处理全在 mcp-client，manager 持有校验、实例生命周期、聚合状态注册表与经 Remote 的 restart/probe/watch 操作，全部生命周期操作经 tail 串行化。",
+   "tags": [
+    "service-provider",
+    "fleet-management",
+    "reconciliation",
+    "typert-remote"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/mcp/mcp-manager/src/index.ts:validateEntries",
+   "type": "function",
+   "name": "validateEntries",
+   "filePath": "packages/mcp/mcp-manager/src/index.ts",
+   "lineRange": [
+    127,
+    165
+   ],
+   "summary": "校验解析后的服务器条目：transport 与 command/url 互斥、模板语法（assertTemplateSyntax）、超时与重连边界，错误定位到 servers.<name> 路径。",
+   "tags": [
+    "validation",
+    "entry-schema",
+    "entry-validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/mcp/mcp-manager/src/index.ts:McpServerManager",
+   "type": "class",
+   "name": "McpServerManager",
+   "filePath": "packages/mcp/mcp-manager/src/index.ts",
+   "lineRange": [
+    193,
+    604
+   ],
+   "summary": "TypertRemoteService 子类（ctx.mcpManager，static inject ['tools']，20 方法）：Service.init 校验配置并调和初始集合、internal/config 监听 Settings 变更、register() 收插件条目；restart/probe/watch 经 @Remote 暴露给管理面；teardown 取消探测、逐实例卸载并把清理失败留在可读状态表。",
+   "tags": [
+    "service-provider",
+    "typert-remote-service",
+    "reconciliation",
+    "cordis-plugin"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/mcp/mcp-manager/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/mcp/mcp-manager/src/types.ts",
+   "summary": "manager 侧类型（仅类型）：McpManagedServerStatus 扩展 mcp-client 连接状态，加 disabled（配置要求无活实例）/failed load（激活失败）/cleanup（关闭未确认）三种 manager 自有条件。",
+   "tags": [
+    "type-definition",
+    "managed-status",
+    "types-only"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/mcp/mcp-manager/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/mcp/mcp-manager/tsconfig.json",
+   "summary": "包级 TypeScript 编译配置。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/mcp/mcp-resources/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/mcp/mcp-resources/README.md",
+   "summary": "dsh-mcp-resources 包参考文档：显式服务器选择的共享资源发现与读取工具。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "mcp-resources"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/mcp/mcp-resources/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/mcp/mcp-resources/package.json",
+   "summary": "@deepseek-ai/dsh-mcp-resources 包清单：经共享工具的 scoped MCP 资源发现与读取。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "mcp-resources"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/mcp/mcp-resources/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/mcp/mcp-resources/src/index.ts",
+   "summary": "scoped MCP 资源运行时（ctx.mcpResources）：ResourceLayer 按 scope 收 McpResourceProvider（连接插件注册其资源访问），McpResourceRuntime 合并层链解析服务器、暴露三个共享模型工具（list/read/templates）并把服务器指令并入系统提示。",
+   "tags": [
+    "service-definition",
+    "resource-runtime",
+    "scoped-providers",
+    "shared-tools"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/mcp/mcp-resources/src/index.ts:ResourceLayer",
+   "type": "class",
+   "name": "ResourceLayer",
+   "filePath": "packages/mcp/mcp-resources/src/index.ts",
+   "lineRange": [
+    36,
+    44
+   ],
+   "summary": "一个 scope 的资源 provider 贡献（implements ScopeLayer）。",
+   "tags": [
+    "scope-layer",
+    "provider-registry",
+    "layered-registry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/mcp/mcp-resources/src/index.ts:McpResourceRuntime",
+   "type": "class",
+   "name": "McpResourceRuntime",
+   "filePath": "packages/mcp/mcp-resources/src/index.ts",
+   "lineRange": [
+    47,
+    127
+   ],
+   "summary": "Cordis Service（ctx.mcpResources）：注册/解析 scoped provider、注册三个模型工具（依赖 tools.ts 的适配）、系统提示贡献。",
+   "tags": [
+    "service-provider",
+    "tool-registration",
+    "cordis-plugin"
+   ],
+   "complexity": "complex"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/mcp/mcp-client/src/connection.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/connection.ts",
+   "target": "file:packages/mcp/mcp-client/src/server-context.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/connection.ts",
+   "target": "file:packages/util/timeout/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/connection.ts",
+   "target": "file:packages/mcp/mcp-client/src/deadline.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/connection.ts",
+   "target": "file:packages/mcp/mcp-client/src/diagnostic.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/connection.ts",
+   "target": "file:packages/mcp/mcp-client/src/status.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/connection.ts",
+   "target": "file:packages/mcp/mcp-client/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/connection.ts",
+   "target": "file:packages/mcp/mcp-client/src/generation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/connection.ts",
+   "target": "file:packages/mcp/mcp-client/src/credentials.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/connection.ts",
+   "target": "file:packages/mcp/mcp-client/src/templates.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/connection.ts",
+   "target": "file:packages/mcp/mcp-client/src/tools.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/connection.ts",
+   "target": "file:packages/mcp/mcp-client/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/credentials.ts",
+   "target": "file:packages/credentials/credentials/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/credentials.ts",
+   "target": "file:packages/mcp/mcp-client/src/templates.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/credentials.ts",
+   "target": "file:packages/mcp/mcp-client/src/diagnostic.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/credentials.ts",
+   "target": "file:packages/mcp/mcp-client/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/deadline.ts",
+   "target": "file:packages/mcp/mcp-client/src/diagnostic.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/generation.ts",
+   "target": "file:packages/mcp/mcp-client/src/deadline.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/generation.ts",
+   "target": "file:packages/mcp/mcp-client/src/diagnostic.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/generation.ts",
+   "target": "file:packages/mcp/mcp-client/src/transport.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/generation.ts",
+   "target": "file:packages/mcp/mcp-client/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/generation.ts",
+   "target": "file:packages/mcp/mcp-client/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/index.ts",
+   "target": "file:packages/core/scope/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/index.ts",
+   "target": "file:packages/util/timeout/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/index.ts",
+   "target": "file:packages/mcp/mcp-client/src/connection.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/index.ts",
+   "target": "file:packages/mcp/mcp-client/src/server-context.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/index.ts",
+   "target": "file:packages/mcp/mcp-client/src/status.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/index.ts",
+   "target": "file:packages/mcp/mcp-client/src/tools.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/index.ts",
+   "target": "file:packages/mcp/mcp-client/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/index.ts",
+   "target": "file:packages/mcp/mcp-client/src/probe.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/index.ts",
+   "target": "file:packages/mcp/mcp-client/src/templates.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/probe.ts",
+   "target": "file:packages/mcp/mcp-client/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/probe.ts",
+   "target": "file:packages/mcp/mcp-client/src/credentials.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/probe.ts",
+   "target": "file:packages/mcp/mcp-client/src/generation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/probe.ts",
+   "target": "file:packages/mcp/mcp-client/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/server-context.ts",
+   "target": "file:packages/mcp/mcp-resources/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/server-context.ts",
+   "target": "file:packages/core/system-prompt/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/status.ts",
+   "target": "file:packages/mcp/mcp-client/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/templates.ts",
+   "target": "file:packages/mcp/mcp-client/src/diagnostic.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/tools.ts",
+   "target": "file:packages/attachment/attachment/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/tools.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/tools.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/tools.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/tools.ts",
+   "target": "file:packages/mcp/mcp-client/src/diagnostic.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/transport.ts",
+   "target": "file:packages/subprocess/subprocess/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/transport.ts",
+   "target": "file:packages/mcp/mcp-client/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-manager/src/index.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-manager/src/index.ts",
+   "target": "file:packages/mcp/mcp-client/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-manager/src/index.ts",
+   "target": "file:packages/util/timeout/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-manager/src/index.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-manager/src/index.ts",
+   "target": "file:packages/mcp/mcp-manager/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-manager/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-manager/src/types.ts",
+   "target": "file:packages/mcp/mcp-client/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-resources/src/index.ts",
+   "target": "file:packages/core/scope/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-resources/src/index.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-resources/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-resources/src/index.ts",
+   "target": "file:packages/core/system-prompt/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-resources/src/index.ts",
+   "target": "file:packages/mcp/mcp-resources/src/tools.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/connection.ts",
+   "target": "function:packages/mcp/mcp-client/src/connection.ts:resolveReconnectPolicy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/connection.ts",
+   "target": "function:packages/mcp/mcp-client/src/connection.ts:startConnection",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/credentials.ts",
+   "target": "class:packages/mcp/mcp-client/src/credentials.ts:McpTemplateBinding",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/deadline.ts",
+   "target": "function:packages/mcp/mcp-client/src/deadline.ts:withDeadline",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/diagnostic.ts",
+   "target": "class:packages/mcp/mcp-client/src/diagnostic.ts:McpLocalError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/diagnostic.ts",
+   "target": "function:packages/mcp/mcp-client/src/diagnostic.ts:redactSecrets",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/diagnostic.ts",
+   "target": "function:packages/mcp/mcp-client/src/diagnostic.ts:describeError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/generation.ts",
+   "target": "class:packages/mcp/mcp-client/src/generation.ts:McpGeneration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/index.ts",
+   "target": "function:packages/mcp/mcp-client/src/index.ts:connectionStatusOf",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/index.ts",
+   "target": "function:packages/mcp/mcp-client/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/probe.ts",
+   "target": "function:packages/mcp/mcp-client/src/probe.ts:probeServer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/server-context.ts",
+   "target": "function:packages/mcp/mcp-client/src/server-context.ts:registerServerContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/status.ts",
+   "target": "class:packages/mcp/mcp-client/src/status.ts:McpStatusCell",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/status.ts",
+   "target": "function:packages/mcp/mcp-client/src/status.ts:registerStatusCell",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/status.ts",
+   "target": "function:packages/mcp/mcp-client/src/status.ts:connectionStatusIn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/templates.ts",
+   "target": "class:packages/mcp/mcp-client/src/templates.ts:MissingTemplateValue",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/templates.ts",
+   "target": "function:packages/mcp/mcp-client/src/templates.ts:credentialRefsIn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/templates.ts",
+   "target": "function:packages/mcp/mcp-client/src/templates.ts:assertTemplateSyntax",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/templates.ts",
+   "target": "function:packages/mcp/mcp-client/src/templates.ts:resolveTemplateString",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/tools.ts",
+   "target": "class:packages/mcp/mcp-client/src/tools.ts:McpToolRegistrationError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/tools.ts",
+   "target": "function:packages/mcp/mcp-client/src/tools.ts:publicToolName",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/tools.ts",
+   "target": "function:packages/mcp/mcp-client/src/tools.ts:syncTools",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/tools.ts",
+   "target": "function:packages/mcp/mcp-client/src/tools.ts:createMcpToolDefinition",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/tools.ts",
+   "target": "function:packages/mcp/mcp-client/src/tools.ts:prepareImageProjection",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/transport.ts",
+   "target": "function:packages/mcp/mcp-client/src/transport.ts:createTransport",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-manager/src/index.ts",
+   "target": "function:packages/mcp/mcp-manager/src/index.ts:validateEntries",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-manager/src/index.ts",
+   "target": "class:packages/mcp/mcp-manager/src/index.ts:McpServerManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-resources/src/index.ts",
+   "target": "class:packages/mcp/mcp-resources/src/index.ts:ResourceLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-resources/src/index.ts",
+   "target": "class:packages/mcp/mcp-resources/src/index.ts:McpResourceRuntime",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/connection.ts",
+   "target": "function:packages/mcp/mcp-client/src/connection.ts:resolveReconnectPolicy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/connection.ts",
+   "target": "function:packages/mcp/mcp-client/src/connection.ts:startConnection",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/credentials.ts",
+   "target": "class:packages/mcp/mcp-client/src/credentials.ts:McpTemplateBinding",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/deadline.ts",
+   "target": "function:packages/mcp/mcp-client/src/deadline.ts:withDeadline",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/diagnostic.ts",
+   "target": "class:packages/mcp/mcp-client/src/diagnostic.ts:McpLocalError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/diagnostic.ts",
+   "target": "function:packages/mcp/mcp-client/src/diagnostic.ts:redactSecrets",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/diagnostic.ts",
+   "target": "function:packages/mcp/mcp-client/src/diagnostic.ts:describeError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/generation.ts",
+   "target": "class:packages/mcp/mcp-client/src/generation.ts:McpGeneration",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/index.ts",
+   "target": "function:packages/mcp/mcp-client/src/index.ts:connectionStatusOf",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/index.ts",
+   "target": "function:packages/mcp/mcp-client/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/probe.ts",
+   "target": "function:packages/mcp/mcp-client/src/probe.ts:probeServer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/server-context.ts",
+   "target": "function:packages/mcp/mcp-client/src/server-context.ts:registerServerContext",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/status.ts",
+   "target": "class:packages/mcp/mcp-client/src/status.ts:McpStatusCell",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/status.ts",
+   "target": "function:packages/mcp/mcp-client/src/status.ts:registerStatusCell",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/status.ts",
+   "target": "function:packages/mcp/mcp-client/src/status.ts:connectionStatusIn",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/templates.ts",
+   "target": "class:packages/mcp/mcp-client/src/templates.ts:MissingTemplateValue",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/templates.ts",
+   "target": "function:packages/mcp/mcp-client/src/templates.ts:credentialRefsIn",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/templates.ts",
+   "target": "function:packages/mcp/mcp-client/src/templates.ts:assertTemplateSyntax",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/templates.ts",
+   "target": "function:packages/mcp/mcp-client/src/templates.ts:resolveTemplateString",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/tools.ts",
+   "target": "class:packages/mcp/mcp-client/src/tools.ts:McpToolRegistrationError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/tools.ts",
+   "target": "function:packages/mcp/mcp-client/src/tools.ts:publicToolName",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/tools.ts",
+   "target": "function:packages/mcp/mcp-client/src/tools.ts:syncTools",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/tools.ts",
+   "target": "function:packages/mcp/mcp-client/src/tools.ts:createMcpToolDefinition",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/tools.ts",
+   "target": "function:packages/mcp/mcp-client/src/tools.ts:prepareImageProjection",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-client/src/transport.ts",
+   "target": "function:packages/mcp/mcp-client/src/transport.ts:createTransport",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-manager/src/index.ts",
+   "target": "class:packages/mcp/mcp-manager/src/index.ts:McpServerManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/mcp/mcp-resources/src/index.ts",
+   "target": "class:packages/mcp/mcp-resources/src/index.ts:McpResourceRuntime",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:packages/mcp/mcp-client/src/templates.ts:MissingTemplateValue",
+   "target": "class:packages/mcp/mcp-client/src/diagnostic.ts:McpLocalError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:packages/mcp/mcp-client/src/tools.ts:McpToolRegistrationError",
+   "target": "class:packages/mcp/mcp-client/src/diagnostic.ts:McpLocalError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:packages/mcp/mcp-manager/src/index.ts:McpServerManager",
+   "target": "class:packages/typert/protocol/src/index.ts:TypertRemoteService",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "function:packages/mcp/mcp-client/src/index.ts:apply",
+   "target": "function:packages/mcp/mcp-client/src/connection.ts:startConnection",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/mcp/mcp-client/src/probe.ts:probeServer",
+   "target": "class:packages/mcp/mcp-client/src/credentials.ts:McpTemplateBinding",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/mcp/mcp-client/src/tools.ts:syncTools",
+   "target": "function:packages/mcp/mcp-client/src/tools.ts:createMcpToolDefinition",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "document:packages/mcp/README.md",
+   "target": "file:packages/mcp/mcp-client/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/mcp/mcp-client/README.md",
+   "target": "file:packages/mcp/mcp-client/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/mcp/mcp-manager/README.md",
+   "target": "file:packages/mcp/mcp-manager/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/mcp/mcp-resources/README.md",
+   "target": "file:packages/mcp/mcp-resources/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/mcp/mcp-client/package.json",
+   "target": "file:packages/mcp/mcp-client/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/mcp/mcp-client/tsconfig.json",
+   "target": "file:packages/mcp/mcp-client/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/mcp/mcp-manager/package.json",
+   "target": "file:packages/mcp/mcp-manager/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/mcp/mcp-manager/tsconfig.json",
+   "target": "file:packages/mcp/mcp-manager/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/mcp/mcp-resources/package.json",
+   "target": "file:packages/mcp/mcp-resources/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  }
+ ]
+}

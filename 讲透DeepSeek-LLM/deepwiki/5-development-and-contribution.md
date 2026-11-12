@@ -1,271 +1,316 @@
-> 来源: [https://deepwiki.com/deepseek-ai/DeepSeek-LLM/5-development-and-contribution](https://deepwiki.com/deepseek-ai/DeepSeek-LLM/5-development-and-contribution)
-> DeepWiki deepseek-ai/DeepSeek-LLM
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/DeepSeek-LLM · page 5 Development and Contribution · fetched 2026-10-30 -->
 
 # Development and Contribution
 
-  Relevant source files 
- - [.editorconfig](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/.editorconfig)
- - [.flake8](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/.flake8)
- - [.gitattributes](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/.gitattributes)
- - [.gitignore](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/.gitignore)
- - [.pre-commit-config.yaml](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/.pre-commit-config.yaml)
- - [.pylintrc](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/.pylintrc)
- - [Makefile](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/Makefile)
- 
-  This page provides comprehensive guidance for developers who want to contribute to the DeepSeek-LLM project. It covers development environment setup, coding standards, and the contribution workflow. For information about using the models, see [Usage Guide](https://deepwiki.com/deepseek-ai/DeepSeek-LLM/3-usage-guide), and for licensing details, see [Licensing](https://deepwiki.com/deepseek-ai/DeepSeek-LLM/6-licensing).
+<details>
+<summary>Relevant source files</summary>
 
- 
+The following files were used as context for generating this wiki page:
+
+- [.editorconfig](.editorconfig)
+- [.flake8](.flake8)
+- [.gitattributes](.gitattributes)
+- [.gitignore](.gitignore)
+- [.pre-commit-config.yaml](.pre-commit-config.yaml)
+- [.pylintrc](.pylintrc)
+- [Makefile](Makefile)
+
+</details>
+
+
+
+This page provides comprehensive guidance for developers who want to contribute to the DeepSeek-LLM project. It covers development environment setup, coding standards, and the contribution workflow. For information about using the models, see [Usage Guide](#3), and for licensing details, see [Licensing](#6).
+
 ## Overview of Development Environment
 
- DeepSeek-LLM uses a structured development environment with enforced code quality standards through various tools and configurations. This ensures consistency and maintainability across the codebase.
+DeepSeek-LLM uses a structured development environment with enforced code quality standards through various tools and configurations. This ensures consistency and maintainability across the codebase.
 
- 
+```mermaid
+flowchart TD
+    subgraph "Development Tools"
+        direction LR
+        A["Code Formatting"] --> A1["black"]
+        A --> A2["isort"]
+        B["Linting"] --> B1["flake8"]
+        B --> B2["pylint"] 
+        B --> B3["ruff"]
+        C["Type Checking"] --> C1["mypy"]
+        D["Pre-commit"] --> D1["pre-commit hooks"]
+    end
+    
+    subgraph "Workflow"
+        direction TB
+        E["Setup Environment"] --> F["Make Code Changes"]
+        F --> G["Run Pre-commit Checks"] 
+        G --> H["Create Pull Request"]
+    end
+    
+    D1 -.-> G
 ```
 
-```
+Sources: [.pre-commit-config.yaml](), [Makefile]()
 
- Sources: [.pre-commit-config.yaml](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/.pre-commit-config.yaml) [Makefile](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/Makefile)
-
- 
 ## Setting Up the Development Environment
 
- To contribute to DeepSeek-LLM, you need to set up a proper development environment with all the required tools and configurations.
+To contribute to DeepSeek-LLM, you need to set up a proper development environment with all the required tools and configurations.
 
- 
 ### Prerequisites
 
- 
- - Python 3.8 or higher
- - Git
- - Make (for Unix-based systems)
- 
- 
+- Python 3.8 or higher
+- Git
+- Make (for Unix-based systems)
+
 ### Installation Steps
 
- 
- - **Clone the repository**:
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/deepseek-ai/DeepSeek-LLM.git
+   cd DeepSeek-LLM
+   ```
 
- 
-```
+2. **Set up development tools**:
 
-```
- - **Set up development tools**:
+   The project includes a Makefile with commands to install all necessary development tools:
 
- The project includes a Makefile with commands to install all necessary development tools:
+   ```bash
+   make pre-commit-install  # Install pre-commit hooks
+   ```
 
- 
-```
+   This will install all the required linting and formatting tools configured for the project.
 
-```
+3. **Install additional dependencies as needed**:
 
- This will install all the required linting and formatting tools configured for the project.
- - **Install additional dependencies as needed**:
+   The Makefile provides commands for installing specific tools:
 
- The Makefile provides commands for installing specific tools:
+   ```bash
+   make py-format-install   # Install code formatters
+   make flake8-install      # Install flake8 and plugins
+   make pylint-install      # Install pylint
+   make ruff-install        # Install ruff
+   make mypy-install        # Install mypy
+   ```
 
- 
-```
+Sources: [Makefile:14-52]()
 
-```
- 
- Sources: [Makefile14-52](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/Makefile#L14-L52)
-
- 
 ## Development Workflow
 
- The typical development workflow for contributing to DeepSeek-LLM follows these steps:
+The typical development workflow for contributing to DeepSeek-LLM follows these steps:
 
- 
+```mermaid
+sequenceDiagram
+    participant D as "Developer"
+    participant L as "Local Environment"
+    participant R as "Remote Repository"
+    
+    D->>L: Clone repository
+    D->>L: Install pre-commit hooks
+    D->>L: Make code changes
+    L->>L: Run pre-commit checks
+    Note over L: Code formatting<br>Linting<br>Type checking
+    D->>L: Create commit
+    D->>R: Push changes
+    D->>R: Create pull request
 ```
 
-```
-
- 
 ### Key Development Commands
 
- The Makefile provides various utility commands to help with development:
+The Makefile provides various utility commands to help with development:
 
- 
 | Command | Description |
-|---|---|
-| make lint | Run all linting checks |
-| make format | Format all Python files |
-| make clean | Clean Python cache files |
-| make pylint | Run pylint checks |
-| make flake8 | Run flake8 checks |
-| make mypy | Run mypy type checking |
-| make ruff | Run ruff linter |
-| make pre-commit | Run all pre-commit hooks |
+|---------|-------------|
+| `make lint` | Run all linting checks |
+| `make format` | Format all Python files |
+| `make clean` | Clean Python cache files |
+| `make pylint` | Run pylint checks |
+| `make flake8` | Run flake8 checks |
+| `make mypy` | Run mypy type checking |
+| `make ruff` | Run ruff linter |
+| `make pre-commit` | Run all pre-commit hooks |
 
- Sources: [Makefile83-96](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/Makefile#L83-L96)
+Sources: [Makefile:83-96]()
 
- 
 ## Coding Standards
 
- DeepSeek-LLM maintains strict coding standards enforced by automated tools. These standards are defined in configuration files within the repository.
+DeepSeek-LLM maintains strict coding standards enforced by automated tools. These standards are defined in configuration files within the repository.
 
- 
 ### Code Formatting
 
- Code formatting is handled by:
+Code formatting is handled by:
+- **Black** - For consistent Python code formatting
+- **isort** - For organizing and sorting imports
 
- 
- - **Black** - For consistent Python code formatting
- - **isort** - For organizing and sorting imports
- 
- 
 #### Editor Configuration
 
- The project includes an `.editorconfig` file that defines basic formatting rules for different file types:
+The project includes an `.editorconfig` file that defines basic formatting rules for different file types:
 
- 
 | File Type | Indentation | Line Endings | Other Rules |
-|---|---|---|---|
+|-----------|-------------|--------------|-------------|
 | Python (.py) | 4 spaces | LF | UTF-8 encoding |
 | YAML/JSON | 2 spaces | LF | UTF-8 encoding |
 | Markdown (.md) | 2 spaces | LF | Soft wrap text |
 | RST (.rst) | 4 spaces | LF | Soft wrap text |
 | C/C++ (.cpp, .h, .cu, .cuh) | 2 spaces | LF | UTF-8 encoding |
 
- Sources: [.editorconfig](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/.editorconfig)
+Sources: [.editorconfig]()
 
- 
 ### Linting Configuration
 
- Multiple linters are used to ensure code quality:
+Multiple linters are used to ensure code quality:
 
- 
- - **Flake8** with plugins:
+1. **Flake8** with plugins:
+   - flake8-bugbear
+   - flake8-comprehensions
+   - flake8-docstrings
+   - flake8-pyi
+   - flake8-simplify
 
- 
- - flake8-bugbear
- - flake8-comprehensions
- - flake8-docstrings
- - flake8-pyi
- - flake8-simplify
- 
- Configured in [.flake8](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/.flake8) with settings like:
+   Configured in [.flake8]() with settings like:
+   - Maximum line length: 120 characters
+   - Ignoring specific rules: E203, W503, W504, E501, W505
 
- 
- - Maximum line length: 120 characters
- - Ignoring specific rules: E203, W503, W504, E501, W505
- - **Pylint** with comprehensive configuration:
+2. **Pylint** with comprehensive configuration:
+   - Naming conventions (snake_case for functions/variables, PascalCase for classes)
+   - Code complexity limits
+   - Docstring requirements
 
- 
- - Naming conventions (snake_case for functions/variables, PascalCase for classes)
- - Code complexity limits
- - Docstring requirements
- 
- Configured in [.pylintrc](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/.pylintrc) with settings for code structure, formatting, and error checking.
- - **Ruff** for fast Python linting
- 
- 
+   Configured in [.pylintrc]() with settings for code structure, formatting, and error checking.
+
+3. **Ruff** for fast Python linting
+
+```mermaid
+graph TD
+    subgraph "Code Quality Enforcement"
+        A["Pre-commit Hooks"] --> B["Code Checking"]
+        A --> C["Code Formatting"]
+        
+        B --> B1["flake8"]
+        B --> B2["pylint"]
+        B --> B3["ruff"]
+        B --> B4["mypy"]
+        
+        C --> C1["black"]
+        C --> C2["isort"]
+        
+        D["File Checks"] --> D1["check-yaml"]
+        D --> D2["check-toml"]
+        D --> D3["check-merge-conflict"]
+        D --> D4["end-of-file-fixer"]
+    end
 ```
 
-```
+Sources: [.flake8](), [.pylintrc](), [.pre-commit-config.yaml]()
 
- Sources: [.flake8](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/.flake8) [.pylintrc](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/.pylintrc) [.pre-commit-config.yaml](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/.pre-commit-config.yaml)
-
- 
 ## Pre-commit Hooks
 
- The project uses pre-commit hooks to automate code quality checks before each commit. These hooks are defined in [.pre-commit-config.yaml](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/.pre-commit-config.yaml) and include:
+The project uses pre-commit hooks to automate code quality checks before each commit. These hooks are defined in [.pre-commit-config.yaml]() and include:
 
- 
- - **Basic checks**:
+1. **Basic checks**:
+   - Trailing whitespace
+   - End-of-file fixes
+   - YAML/TOML validation
+   - Merge conflict detection
+   - Large file checks
 
- 
- - Trailing whitespace
- - End-of-file fixes
- - YAML/TOML validation
- - Merge conflict detection
- - Large file checks
- - **Code formatters**:
+2. **Code formatters**:
+   - ruff (with auto-fix)
+   - isort
+   - black for Python and Jupyter notebooks
 
- 
- - ruff (with auto-fix)
- - isort
- - black for Python and Jupyter notebooks
- - **Linters**:
+3. **Linters**:
+   - flake8 with multiple plugins
+   - pylint
 
- 
- - flake8 with multiple plugins
- - pylint
- 
- To use pre-commit hooks:
+To use pre-commit hooks:
 
- 
- - Install pre-commit: `make pre-commit-install`
- - Pre-commit will automatically run on `git commit`
- - Run manually on all files: `make pre-commit`
- 
- Sources: [.pre-commit-config.yaml1-76](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/.pre-commit-config.yaml#L1-L76)
+1. Install pre-commit: `make pre-commit-install`
+2. Pre-commit will automatically run on `git commit`
+3. Run manually on all files: `make pre-commit`
 
- 
+Sources: [.pre-commit-config.yaml:1-76]()
+
 ## Contribution Guidelines
 
- When contributing to DeepSeek-LLM, please follow these guidelines:
+When contributing to DeepSeek-LLM, please follow these guidelines:
 
- 
 ### Pull Request Process
 
- 
- - Ensure all pre-commit hooks pass locally
- - Make focused commits with clear commit messages
- - Include documentation updates when adding features
- - Reference any related issues in your pull request
- 
- 
+1. Ensure all pre-commit hooks pass locally
+2. Make focused commits with clear commit messages
+3. Include documentation updates when adding features
+4. Reference any related issues in your pull request
+
 ### Code Review Expectations
 
- 
- - Address review comments promptly
- - Be open to feedback and suggestions
- - Maintain a respectful and collaborative attitude
- 
- 
+- Address review comments promptly
+- Be open to feedback and suggestions
+- Maintain a respectful and collaborative attitude
+
 ### Testing Requirements
 
- Before submitting a pull request, ensure:
+Before submitting a pull request, ensure:
+- All existing tests pass
+- New features include appropriate tests
+- Code coverage is maintained or improved
 
- 
- - All existing tests pass
- - New features include appropriate tests
- - Code coverage is maintained or improved
- 
- 
 ## Useful Development Commands
 
- The project's Makefile provides several useful commands for development:
+The project's Makefile provides several useful commands for development:
 
- 
+```bash
+# Format code
+make format
+
+# Run all linters
+make lint
+
+# Run specific linters
+make flake8
+make pylint
+make ruff
+
+# Type checking
+make mypy
+
+# Clean Python cache files
+make clean-py
 ```
 
-```
+Sources: [Makefile:83-96]()
 
- Sources: [Makefile83-96](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/Makefile#L83-L96)
-
- 
 ## Repository Organization
 
- The DeepSeek-LLM repository is organized with a focus on clear separation of concerns:
+The DeepSeek-LLM repository is organized with a focus on clear separation of concerns:
 
- 
+```mermaid
+graph TD
+    A["DeepSeek-LLM Repository"] --> B["evaluation/"]
+    A --> C["model configuration files"]
+    A --> D["documentation"]
+    A --> E["example scripts"]
+    
+    B --> B1["Evaluation Scripts"]
+    B --> B2["Benchmark Tools"]
+    
+    F["Development Configuration"] --> F1[".editorconfig"]
+    F --> F2[".flake8"]
+    F --> F3[".pre-commit-config.yaml"]
+    F --> F4[".pylintrc"]
+    F --> F5["Makefile"]
+    
+    A --> F
 ```
 
-```
-
- 
 ## Conclusion
 
- Contributing to DeepSeek-LLM involves adhering to established coding standards and using the provided development tools. By following the workflow and guidelines outlined in this document, you can ensure that your contributions maintain the quality and consistency of the project.
+Contributing to DeepSeek-LLM involves adhering to established coding standards and using the provided development tools. By following the workflow and guidelines outlined in this document, you can ensure that your contributions maintain the quality and consistency of the project.
 
- For further information about the project, refer to:
+For further information about the project, refer to:
+- [Project Overview](#1) for general information
+- [Model Architecture](#2) for technical details
+- [Usage Guide](#3) for using the models
+- [Evaluation and Benchmarks](#4) for performance metrics
 
- 
- - [Project Overview](https://deepwiki.com/deepseek-ai/DeepSeek-LLM/1-overview) for general information
- - [Model Architecture](https://deepwiki.com/deepseek-ai/DeepSeek-LLM/2-model-architecture) for technical details
- - [Usage Guide](https://deepwiki.com/deepseek-ai/DeepSeek-LLM/3-usage-guide) for using the models
- - [Evaluation and Benchmarks](https://deepwiki.com/deepseek-ai/DeepSeek-LLM/4-evaluation-and-benchmarks) for performance metrics
- 
- Sources: [.editorconfig](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/.editorconfig) [.flake8](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/.flake8) [.pre-commit-config.yaml](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/.pre-commit-config.yaml) [.pylintrc](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/.pylintrc) [Makefile](https://github.com/deepseek-ai/DeepSeek-LLM/blob/6712a86b/Makefile)
+Sources: [.editorconfig](), [.flake8](), [.pre-commit-config.yaml](), [.pylintrc](), [Makefile]()
+
+---
+

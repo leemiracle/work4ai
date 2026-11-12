@@ -1,0 +1,31 @@
+# DeepWiki 索引 — mozilla/gecko-dev
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-09
+> 结构 26 页 · 全文 644654 字符
+
+- [1 Firefox Architecture Overview](1-firefox-architecture-overview.md)
+  - [1.1 Core Components and Systems](1.1-core-components-and-systems.md)
+- [2 Gecko Engine](2-gecko-engine.md)
+  - [2.1 DOM and Layout System](2.1-dom-and-layout-system.md)
+  - [2.2 JavaScript Engine (SpiderMonkey)](2.2-javascript-engine-spidermonkey.md)
+  - [2.3 WebRTC Implementation](2.3-webrtc-implementation.md)
+- [3 User Interface Architecture](3-user-interface-architecture.md)
+  - [3.1 Tab Management System](3.1-tab-management-system.md)
+  - [3.2 Sidebar System](3.2-sidebar-system.md)
+  - [3.3 New Tab Page and Activity Stream](3.3-new-tab-page-and-activity-stream.md)
+- [4 Security and Privacy Features](4-security-and-privacy-features.md)
+  - [4.1 Content Security System](4.1-content-security-system.md)
+  - [4.2 Form Autofill System](4.2-form-autofill-system.md)
+  - [4.3 Content Analysis and DLP](4.3-content-analysis-and-dlp.md)
+  - [4.4 Web Compatibility System](4.4-web-compatibility-system.md)
+- [5 Experimentation and Telemetry](5-experimentation-and-telemetry.md)
+  - [5.1 Nimbus Experimentation System](5.1-nimbus-experimentation-system.md)
+  - [5.2 Telemetry Collection](5.2-telemetry-collection.md)
+- [6 Mobile Platforms](6-mobile-platforms.md)
+  - [6.1 Firefox for Android (Fenix)](6.1-firefox-for-android-fenix.md)
+  - [6.2 Android Components](6.2-android-components.md)
+  - [6.3 GeckoView](6.3-geckoview.md)
+- [7 Build System and Infrastructure](7-build-system-and-infrastructure.md)
+  - [7.1 Crash Reporting System](7.1-crash-reporting-system.md)
+  - [7.2 Android Build Configuration](7.2-android-build-configuration.md)
+  - [7.3 Preferences System](7.3-preferences-system.md)

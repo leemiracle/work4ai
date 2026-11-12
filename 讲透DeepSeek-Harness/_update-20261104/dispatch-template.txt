@@ -1,0 +1,33 @@
+你是 understand 流水线的 file-analyzer worker。任务：分析 deepseek-harness 仓的指定批次文件，产出知识图谱增量节点与边。
+
+## 必读方法论（先读）
+/home/lwz/.understand-anything-plugin/agents/file-analyzer.md
+
+## 你的批次
+/data/usershare/ai/work4ai/讲透DeepSeek-Harness/_update-20261104/batches/batch-{NNN}.json
+（每个文件含 batchIndex 与 files 列表，路径相对仓根 /usr-data/data2/repos/deepseek-ai/deepseek-harness）
+
+## 产出（每批一个文件，做完一批立即落盘，防中断丢稿）
+/data/usershare/ai/work4ai/讲透DeepSeek-Harness/_update-20261104/products/batch-{NNN}.json
+格式：{"nodes":[...], "edges":[...]}，与下列真实样例同构：
+节点: {"id":"class:packages/core/session/session.ts:SessionManager","type":"class","name":"SessionManager","filePath":"packages/core/session/session.ts","lineRange":[91,330],"summary":"中文一句话职责","tags":["..."],"complexity":"simple|moderate|complex"}
+     file 级节点 id 为 "file:<相对路径>"，必须有（每文件≥1个）；class/function 节点 id 为 "class:<路径>:<名>"/"function:<路径>:<名>"，带 lineRange。
+边:   {"source":"file:A.ts","target":"file:B.ts","type":"imports","direction":"forward","weight":0.7}
+类型规范：imports(file→file,0.7) / contains(file→成员节点) / exports / inherits(class→class) / calls(仅确凿调用，批内或指向磁盘上存在的文件均可)。
+
+## 硬性质量条款（钉版，历轮实证）
+1. **行号锚从源码核实，禁止凭记忆**——lineRange 必须打开文件确认；summary 必须基于真实读到的代码，任务书/直觉与源码冲突时以源码为准并如实描述。
+2. **imports 1:1 对账**——用 re.S 多行正则重扫源码（单行正则会漏多行 `import {...} from`）；每条 imports 边的目标路径必须在磁盘上验证存在。本仓三类解析：
+   a. `@deepseek-ai/dsh-*` 包名导入 → 查 /data/usershare/ai/work4ai/讲透DeepSeek-Harness/_update-20261104/packages-map.json（379 包名→目录映射）；包根导入（如 '@deepseek-ai/dsh-util'）目标为该包 src/index.ts。
+   b. 相对导入（'./x' '../y/z'）——本仓 ESM 相对导入常带 .js/.ts 显式扩展名，'./x.js' 实际指 './x.ts'，剥 .js 补 .ts 再验证；无扩展名则依次试 .ts/.tsx/index.ts。
+   c. `import type` 与动态 `import()` 都是真实依赖，收 imports 边。
+3. **Cordis 插件语义**：define()/inject 声明、ctx.effect/ctx.on 注册、Service 抽象类继承（extends Service）都是重要信号——Service 子类建 class 节点，summary 点明它是 Service Definition/Provider/Consumer 哪个角色（若可判断）。
+4. **CI 生成目录文档特殊处理**：docs/persistence-catalog.md、docs/config-catalog.md、docs/module-graph.md、docs/dependency-catalog.json、docs/persistence-schema.json 是生成器产物——只读头 ~120 行+结构扫描，给 file/document 节点+中文综述，**禁止逐条提取目录条目成节点**。
+5. 纯模板/数据文件（yaml/json/snippet/tsconfig/package.json）：file+config/document 节点+一句中文简述，不硬造函数节点。空文件也保留 file 节点。
+6. summary 全中文（专有名词保留英文），tags 3-5 个英文小写关键词，complexity 按行数与逻辑复杂度诚实评级。
+7. **禁止修改原仓任何文件**；禁止在原仓运行编译/tsc/生成 __pycache__。
+8. 若 products/ 下已有本批产物（前次运行残留）：验证其质量（抽查 3 文件行号锚+imports 对账），合格则采纳并只做增量增强（只增不重复 ID），不合格则重写。
+9. 完成后回报：每批节点数（file/class/function 分列）、边数、imports 对账差异（应为 0）、被甄别为低价值跳过深析的文件清单。
+
+## 上下文
+本批文件属于 deepseek-harness 0.1.2-rc.1(76fda72)→0.2.2-alpha.3(8bd073392e) 增量（10607 commits：everything-is-a-plugin 架构深化、Typert API Gateway、GUI host/client、experimental 能力区、docs 22 主题双语化）。图谱基线 3368 节点，本次增量并入。

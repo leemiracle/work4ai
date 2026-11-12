@@ -1,0 +1,30 @@
+# DeepWiki 索引 — allenai/molmoact2
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 134634 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Project Background and Research Context](1.1-project-background-and-research-context.md)
+  - [1.2 Repository Structure and Setup](1.2-repository-structure-and-setup.md)
+- [2 Model Architecture](2-model-architecture.md)
+  - [2.1 Backbone: Molmo2-ER Vision-Language Model](2.1-backbone-molmo2-er-vision-language-model.md)
+  - [2.2 Continuous Flow-Matching Action Expert](2.2-continuous-flow-matching-action-expert.md)
+  - [2.3 Depth-Token Reasoning (MolmoAct2-Think)](2.3-depth-token-reasoning-molmoact2-think.md)
+- [3 Model Checkpoints and Training Stages](3-model-checkpoints-and-training-stages.md)
+  - [3.1 Base (Foundation) Checkpoints](3.1-base-foundation-checkpoints.md)
+  - [3.2 Fine-Tuned Deployment Checkpoints](3.2-fine-tuned-deployment-checkpoints.md)
+- [4 Datasets](4-datasets.md)
+  - [4.1 Robotics Training Datasets](4.1-robotics-training-datasets.md)
+  - [4.2 Embodied Reasoning (ER) Datasets](4.2-embodied-reasoning-er-datasets.md)
+- [5 LeRobot Integration](5-lerobot-integration.md)
+  - [5.1 Training and Evaluation Workflows](5.1-training-and-evaluation-workflows.md)
+  - [5.2 Inference and Benchmark Reproduction](5.2-inference-and-benchmark-reproduction.md)
+- [6 Real-World Deployment](6-real-world-deployment.md)
+  - [6.1 SO-100 / SO-101 Setup](6.1-so-100-so-101-setup.md)
+  - [6.2 Bimanual YAM Setup](6.2-bimanual-yam-setup.md)
+  - [6.3 Franka DROID Setup](6.3-franka-droid-setup.md)
+  - [6.4 Safety Guidelines and Validation](6.4-safety-guidelines-and-validation.md)
+- [7 License and Legal](7-license-and-legal.md)
+  - [7.1 Apache 2.0 License Terms](7.1-apache-2.0-license-terms.md)
+  - [7.2 Responsible Use and Citation](7.2-responsible-use-and-citation.md)
+- [8 Glossary](8-glossary.md)

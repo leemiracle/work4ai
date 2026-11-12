@@ -1,0 +1,133 @@
+# AI Factory Operations Agent
+
+Deploy specialized AI agents to investigate cluster issues and streamline governed AI factory operations.
+
+## Overview
+
+> [!NOTE]
+> This is an experimental release. Please reference [SUPPORT.md](./SUPPORT.md) prior to installation.
+
+AI Factory Operations Agent is an NVIDIA blueprint for deploying an extensible agentic operations framework built with NemoClaw. Specialized agents gather and correlate evidence across cluster systems, generate clear root cause summaries, and recommend next steps through governed, auditable workflows that teams can adapt to their own AI factory environments.
+
+Supported workflows include:
+
+- Read-only Kubernetes workload and cluster inspection.
+- Prometheus and VictoriaMetrics queries and Grafana dashboard creation.
+- Slurm job root-cause analysis from scheduler and log evidence.
+- Optional cluster-management integrations.
+- Sandboxed command execution with an auditable agent workflow.
+
+## Architecture
+
+![AI Factory Operations Agent architecture](https://assets.ngc.nvidia.com/products/api-catalog/operate-ai-factories-with-agents/diagram.jpg)
+
+OpenShell isolates general agent command execution. Kubernetes, observability, Slurm, and Base Command Manager access use module-specific server-side tools and the credentials explicitly configured for those modules. Browser and MCP clients do not receive cluster credentials. Kubernetes Secrets remain mounted only in the pods that require them.
+
+## Requirements
+
+- OS/architecture: a Kubernetes environment compatible with the container images selected in Helm values.
+- Runtime: Kubernetes, `kubectl`, and Helm 3.
+- LLM: an OpenAI-compatible endpoint or a cluster capable of running chart-managed vLLM.
+- GPU/driver: required only when deploying chart-managed vLLM; requirements depend on the selected model profile.
+- Optional services: Prometheus or VictoriaMetrics, Grafana, Slurm, or cluster-management endpoints for the corresponding modules.
+
+## Getting Started
+
+The documentation site can be built locally from the guides in this repository. See [Building the documentation](docs/building.md).
+
+In the early access stage, the published Helm chart and container images require an early access invitation to the private NGC registry; `nvcr.io` login alone does not grant pull access. To request access before installing, [complete the onboarding form](https://forms.gle/toVA2noFzz5UR2gr5) or email [ai-factory-operations-agent@nvidia.com](mailto:ai-factory-operations-agent@nvidia.com). You can also contact your NVIDIA account team.
+
+Use the complete installation guide for your environment:
+
+- [NVIDIA Mission Control installation](docs/nmc_installation.md)
+- [Base Command Manager installation without Kubernetes](docs/bcm.md)
+- [Kind installation](docs/kind_installation.md)
+- [Custom installation and module configuration](docs/installation.md)
+
+## Usage
+
+After installation, forward the AI Factory Operations Agent UI service:
+
+```bash
+kubectl -n mosaic port-forward svc/mosaic-ui 3000:3000
+```
+
+Open `http://localhost:3000`.
+
+Choose the interface that matches the caller:
+
+| Interface | Intended caller | Contract |
+| --- | --- | --- |
+| Browser UI | Cluster operators | Interactive chat, dashboards, and enabled operational workflows. |
+| HTTP API | Services and scripts | `POST /api/headless/chat` with `prompt` and `sessionKey`; returns the completed assistant turn and run metadata. |
+| `mosaic` CLI | Shell and Slurm automation | Sends one prompt to an AI Factory Operations Agent URL and waits for the completed assistant turn. |
+| `mosaic-mcp` | Claude Code, Codex, and other MCP clients | Local stdio bridge to the AI Factory Operations Agent HTTP service; exposes chat, history, commands, and enabled module tools. |
+
+The [AI Factory Operations Agent headless skill](docs/skills/ai-factory-operations-agent-headless/SKILL.md) gives coding agents the HTTP, CLI, and MCP contracts. Install it for Codex with:
+
+```bash
+install -d ~/.codex/skills/ai-factory-operations-agent-headless
+install -m 0644 docs/skills/ai-factory-operations-agent-headless/SKILL.md \
+  ~/.codex/skills/ai-factory-operations-agent-headless/SKILL.md
+```
+
+For Claude Code:
+
+```bash
+install -d ~/.claude/skills/ai-factory-operations-agent-headless
+install -m 0644 docs/skills/ai-factory-operations-agent-headless/SKILL.md \
+  ~/.claude/skills/ai-factory-operations-agent-headless/SKILL.md
+```
+
+Invoke the installed skill when an agent needs to discover an AI Factory Operations Agent service, ask an operational question, or configure the MCP bridge.
+
+- More examples and deployment options: [docs/installation.md](docs/installation.md)
+- Use cases: [docs/use_cases.md](docs/use_cases.md)
+- Slurm RCA reference: [docs/slurm_rca.md](docs/slurm_rca.md)
+- Headless agent integration: [docs/skills/ai-factory-operations-agent-headless/SKILL.md](docs/skills/ai-factory-operations-agent-headless/SKILL.md)
+
+## Releases & Roadmap
+
+- Release history: [CHANGELOG.md](CHANGELOG.md)
+- Planned work is tracked through [GitHub issues](https://github.com/NVIDIA/AI-Factory-Operations-Agent/issues).
+
+## Contribution Guidelines
+
+- Start with [CONTRIBUTING.md](CONTRIBUTING.md).
+- Follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+- Sign external contributions under the [Developer Certificate of Origin](DCO.md).
+- Build and validate the Helm chart as described in the contribution guide.
+
+## Governance & Maintainers
+
+- Governance: [GOVERNANCE.md](GOVERNANCE.md)
+- Maintainers: [MAINTAINERS.md](MAINTAINERS.md)
+- Repository ownership: [.github/CODEOWNERS](.github/CODEOWNERS)
+
+## Security
+
+- Vulnerability disclosure: [SECURITY.md](SECURITY.md)
+- Do not file public issues for security reports.
+
+## Support
+
+- Level: Experimental
+- Support policy: [SUPPORT.md](SUPPORT.md)
+- Use [GitHub issues](https://github.com/NVIDIA/AI-Factory-Operations-Agent/issues) for non-security problems and feature requests.
+
+## Community
+
+Use GitHub issues and pull requests for project discussions and collaboration. Participation is governed by the project [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## References
+
+- [OpenClaw](https://github.com/openclaw/openclaw)
+- [OpenShell](https://github.com/NVIDIA/OpenShell)
+- [Helm](https://helm.sh/)
+- [Kubernetes](https://kubernetes.io/)
+
+## License
+
+This project is licensed under the [Apache License 2.0](LICENSE).
+
+NVIDIA and third-party attributions and license texts are provided in [NOTICE](NOTICE) and [LICENSE-3rd-party.txt](LICENSE-3rd-party.txt).

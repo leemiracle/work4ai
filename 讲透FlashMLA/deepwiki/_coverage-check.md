@@ -1,19 +1,12 @@
-# DeepWiki 抓取覆盖率检查
+# Coverage Check
 
-- _links.txt 链接总数: 28
-- 实际 md 文件数: 27
-- 缺失页: 1
-- 空页(<= 500B): 0
+- repo: deepseek-ai/FlashMLA
+- fetched: 2026-10-30
+- 结构清单页数: 30
+- 落盘页数: 30
 
-## 结论
-存在缺口，需补抓（重跑 dw_fetch.py 即断点续传补缺）：
-- 缺失: 3.2-c++-interface
+- 覆盖: 30/30 (100%)
 
-## 抽查 3 页
-
-| 页面 | 大小(B) | 状态 | 检查 |
-|---|---|---|---|
-| 7.1-development-environment-setup | 8510 | 正常 | PASS |
-| 7-development-guide | 7038 | 正常 | PASS |
-| 8-glossary | 8559 | 正常 | PASS |
-
+## 全层级对账终判（dw_reconcile_dir.py, 2026-10-30）
+- 结构全层级 30 页 vs 落盘 41 页（结构外/三级页 extra 11）
+- 终判: TRUE_100

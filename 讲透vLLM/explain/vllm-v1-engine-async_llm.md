@@ -1,61 +1,75 @@
 # vllm/v1/engine/async_llm.py — AsyncLLM：异步门面与前端的全部生命周期能力
 
-> 源码：`vllm/v1/engine/async_llm.py`（约 1230 行）｜知识图谱 tags: `async-engine`, `entry-point`, `api-handler`, `v1-engine`
+> 源码：`vllm/v1/engine/async_llm.py`（1454 行，vLLM 2026-10-28 @06e172b5cf）｜tags: `async-engine`, `entry-point`, `v1-engine`
+> 2026-09 版重写：多客户端准入共享、前端 profiler、checkpoint 三件套、RL 权重传输族为新增主线
 
-## 角色定位
+## ① 角色定位
 
-`AsyncLLM` 是 v1 引擎在**前端进程侧的异步门面**（facade）。图谱上它 `implements EngineClient`（`vllm/engine/protocol.py` 定义的协议），也就是说 OpenAI API server、gRPC server 依赖的抽象正是它。它自己不执行任何模型计算，职责是三件事：把用户输入加工成 `EngineCoreRequest` 发给 EngineCore 进程；用一个后台 task 把输出泵回各请求；以及承载引擎的全部**生命周期能力**（准入控制、abort、pause/resume、睡眠唤醒、LoRA 热加载、elastic EP 扩缩容、在线权重更新）。
+`AsyncLLM` 是 v1 引擎在**前端进程侧的异步门面**，实现 `EngineClient` 协议（`vllm/engine/protocol.py:43`），是 OpenAI API server、gRPC server、RL online 路由所依赖的稳定抽象。它自己不算一个 token，职责三件事：把用户输入加工成 `EngineCoreRequest` 发给 EngineCore 进程；用唯一一个后台 task 把输出泵回各请求；承载引擎全部**生命周期能力**——准入控制、abort、pause/resume、睡眠唤醒、LoRA 热加载、elastic EP 扩缩容、进程 checkpoint、在线权重更新。2026-09 以来它明显变"厚"：多 API server 客户端共享一个引擎的部署形态（`client_count/client_index`，`vllm/v1/engine/async_llm.py:108`）让准入统计与输出路由都要跨客户端记账。
 
-## 内部结构
+## ② 内部结构
 
-图谱 contains：`InputStreamError`（流式输入中断异常）与 `AsyncLLM` 两个符号——本文件是**单类文件**，复杂度在方法与协作对象上。
+单类文件（`InputStreamError` 异常包装在 81 行 + `AsyncLLM`）。`__init__` 组装线（96-247 行）：
 
-`__init__` 的组装线：
-1. `renderer = renderer_from_config(vllm_config)`——tokenizer/多模态预处理器/聊天模板的统一入口；
-2. `InputProcessor(vllm_config, renderer)`——`EngineInput → EngineCoreRequest`（tokenize、mm 预处理）；
-3. `OutputProcessor`——反向：`EngineCoreOutputs → RequestOutput`（detokenize、stream_interval 节流、parent request 聚合）；
-4. `EngineCoreClient.make_async_mp_client(...)`——**spawn EngineCoreProc 后台进程**并建立 ZMQ 连接；
-5. `StatLoggerManager`（指标）；
-6. 若已在事件循环内则惰性启动 `output_handler` task。
+1. `renderer_from_config`（167）——tokenizer/多模态预处理/聊天模板统一入口，同时是 MM 共享渲染缓存（P0 sender cache）持有者；
+2. `InputProcessor`（170）——EngineInput → EngineCoreRequest；
+3. `SharedAdmissionStats`（172-177）——**新增**：多客户端模式经共享内存 `mp_admission_counters` 聚合各 API server 的在途请求计数；
+4. `OutputProcessor`（180）——反向转换 + stream_interval 节流 + parent request 聚合；
+5. `EngineCoreClient.make_async_mp_client`（193）——spawn EngineCore 进程并建 ZMQ 连接，renderer 随行以便 fork 后再做 MM warmup；
+6. `StatLoggerManager`（206）——支持多引擎 rank 与 `aggregate_engine_logging` 聚合日志；
+7. 前端 profiler（226-247）——**新增**：`profiler_config.should_profile_frontend` 时自动创建 CPU profiler；多客户端共享引擎时禁用并告警。
 
-关键方法群：
-- `generate()/encode()`：async generator。`add_request()` 返回 `RequestOutputCollector`，随后循环 `q.get_nowait() or await q.get()`——非阻塞优先，减少高负载下的任务切换；
-- `add_request()`（341 行起）三分支：prompt 为 `AsyncGenerator` → 走 `_add_streaming_input_request`（流式输入会话）；已渲染 dict → 同步 `process_inputs`；**raw prompt → `process_inputs_async`（丢线程池，tokenize 绝不阻塞事件循环）**。`n>1` 时用 `ParentRequest` fan-out 出 child requests（parallel sampling）；
-- `check_admission()`：`max_num_queued_reqs`（在途请求上限）与 `max_num_queued_tokens`（TTFT QoS：排队 prompt token 总量上限）两级准入，超限抛 503 语义异常，让 LB 重试到别的实例；
-- `_run_output_handler()`（733 行）：**唯一的**后台消费 task——`await engine_core.get_output_async()` → 按 `VLLM_V1_OUTPUT_PROC_CHUNK_SIZE` 分片喂给 `output_processor.process_outputs`（结果直接 push 进各请求的 collector，方法本身不返回 outputs）→ 片间 `asyncio.sleep(0)` 让出事件循环 → 处理 stop-string 触发的反向 abort → 记录 scheduler/iteration stats；
-- 生命周期族：`pause_generation/resume_generation`（在线权重更新：abort/wait/keep 三模式 + 可选清缓存）、`sleep/wake_up`、`add_lora/pin_lora`、`scale_elastic_ep`（弹性专家并行扩缩容）、`update_weights` 系列。
+关键方法群（行号为当前源码锚）：
 
-## 外部连接
+| 方法 | 行号 | 说明 |
+|---|---|---|
+| `check_admission` | 325 | 两级准入：`max_num_queued_reqs`（在途请求数，n>1 计 n 槽）+ `max_num_queued_tokens`（TTFT QoS），超限抛 `QueueOverflowError`/`MaxQueuedTokensError`（HTTP 503 语义，让 LB 重试他机） |
+| `add_request` | 397 | 四分支：AsyncGenerator 流式输入（438）、`EngineCoreRequest`（458，**已标废弃**，应传 Renderer 输出）、已渲染 dict（481 同步 `process_inputs`）、raw prompt（500 `process_inputs_async` 丢线程池） |
+| `_add_streaming_input_request` | 589 | 流式输入会话：每 chunk 造一个 resumable 请求；`handle_inputs` 收尾发空 final_req 作结束信号（688） |
+| `generate`/`encode` | 726/1034 | async generator；`q.get_nowait() or await q.get()` 快路径（795） |
+| `_run_output_handler` | 856 | 唯一输出泵 task：分片喂 `process_outputs`、MM 缓存失效联动、stop-string 反向 abort |
+| `pause_generation`/`resume_generation` | 989/1026 | abort/wait/keep 三模式 + clear_cache |
+| `sleep`/`wake_up`/`release_kv_cache_memory` | 1198/1213/1206 | RL 省电模式，level 0/1/2 |
+| `checkpoint_prepare/restore/state` | 1221/1228/1231 | **新增**：进程 checkpoint 生命周期 |
+| `scale_elastic_ep` | 1300 | 弹性 EP 扩缩容：retire 标记（1348）与 logger 热替换（1327-1336） |
+| `init_weight_transfer_engine` 等权重族 | 1403-1451 | **重构**：在线权重更新统一走 `collective_rpc`，`weight_version` 随输出回传 |
 
-- **imports**：`input_processor`、`output_processor`、`core_client`、`parallel_sampling`（n>1 实现）、`renderers`、`metrics/*`、`fault_tolerance/utils`、`elastic_ep/middleware` 等约 35 个模块——典型的门面依赖扇入。
-- **被 imports**：`v1/engine/async_llm.py` 被 `engine/async_llm_engine.py` re-export（V0 命名兼容层，`from vllm.engine.async_llm_engine import AsyncLLMEngine` 实际就是 AsyncLLM）；`entrypoints/grpc_server.py` 直接引用。图谱反向边干净，说明 API server 经由 EngineClient 协议间接依赖。
+## ③ 外部连接
 
-## 数据流
+- **imports**：`input_processor`/`output_processor`/`core_client`/`parallel_sampling`/`renderers`/`admission_control`/`metrics/*`/`elastic_ep/middleware`/`fault_tolerance/utils`/`kv_hints` 等约 40 个模块——门面典型依赖扇入。
+- **被 imports**：`vllm/engine/async_llm_engine.py`（V0 命名兼容层 re-export）、`vllm/entrypoints/launchers/api_server/entry.py`、`launchers/grpc_server.py`、`vllm/entrypoints/rl/online/api_router.py`；API server 经由 EngineClient 协议间接依赖。
+- **下游**：EngineCoreClient（ZMQ mp 或 Inproc 两形态）；Renderer；OutputProcessor（`RequestOutputCollector`/`StreamingInputOutputCollector`）。
+
+## ④ 数据流
 
 ```
-HTTP/gRPC 请求
-  → generate() → add_request()
-      → [线程池] InputProcessor: tokenize + mm 处理 → EngineCoreRequest
-      → engine_core.add_request_async() ──ZMQ──▶ EngineCore 进程
-  输出侧（独立 task）:
-  output_handler: get_output_async() ──ZMQ──◀ EngineCoreOutputs
-      → 分片 → OutputProcessor.process_outputs（detokenize/聚合）
-      → push RequestOutput 到该请求的 RequestOutputCollector
-  → generate() 循环 q.get() → yield RequestOutput → SSE 响应
+HTTP/gRPC 请求 → generate() → add_request()
+  → [线程池] InputProcessor.process_inputs_async: tokenize+mm → EngineCoreRequest
+  → engine_core.add_request_async() ──ZMQ──▶ EngineCore 进程
+输出侧（唯一 task）:
+  output_handler(856): await engine_core.get_output_async()
+    → 按 VLLM_V1_OUTPUT_PROC_CHUNK_SIZE 分片(891-916)
+    → mm_cache_miss_hashes → renderer.queue_mm_cache_invalidations(894-902) # 新增:P0/P1缓存漂移自愈
+    → output_processor.process_outputs(905) → push 进各请求 collector
+    → processed_outputs.reqs_to_abort → 反向 abort(919-922)
+    → weight_version 随 EngineCoreOutputs 透传(909)
+  → generate() 循环 q.get() → yield RequestOutput → SSE
 ```
 
-## 关键设计决策
+准入路径：`check_admission` 先查 `admission_stats.get_num_requests()`（355，跨客户端共享计数），无则本地 `get_num_unfinished_requests()`；tokens 侧用 `get_num_queued_tokens()`（373）。docstring 明言这是**保守高估**——chunked prefill 进度与 prefix 命中不扣减（337-341），宁可早拒保 TTFT。
 
-1. **门面 + 协议**：AsyncLLM 把"异步引擎"抽象成 `EngineClient` 协议的稳定实现，entrypoints 只依赖协议——未来换传输（如 gRPC 直连引擎）不动上层。
-2. **重活零残留**：连 tokenize 都不放事件循环（`process_inputs_async`）。事件循环里只剩纯 Python 的输出分发，这是 vLLM 能在高 QPS 下保持 SSE 流平滑的关键。
-3. **单泵 + 扇出**：只有一个 `output_handler` 从 ZMQ 拉，再由 `OutputProcessor` 扇出到每请求 collector；分片处理 + `sleep(0)` 防"一批大输出饿死其他 asyncio 任务"。collector 用 `get_nowait() or await get()` 的快路径。
-4. **异常分类传播**：`generate()` 里 `CancelledError`（客户端断连）→ 内部 abort；`EngineDeadError` → 直接抛（引擎已死无从 abort）；client error → 原样抛给 HTTP 层；其余未知异常 → abort + 包装。output_handler 崩溃时经 `propagate_error` 打进所有活跃 collector，保证每个等待者都能被唤醒并收到错误。
-5. **output_handler 惰性启动**：`__init__` 可在事件循环外调用（OpenAI server 启动失败要能优雅返回），首个 `add_request` 才真正起 task。
+## ⑤ 设计决策
 
-## 新人提示
+1. **重活零残留**：连 tokenize 都不放事件循环（`process_inputs_async`，500）；事件循环只剩纯 Python 输出分发。分片 + `asyncio.sleep(0)`（916）防一批大输出饿死其他任务。
+2. **单泵 + 跨客户端扇出**：一个 `output_handler` 从 ZMQ 拉，`EngineCoreOutputs.client_index` 决定发给哪个 API server。handler 通过 `_logger_ref = [self.logger_manager]` 可变列表持引用（869），既避免 task→AsyncLLM 循环引用阻塞 GC（861 注释），又允许 elastic EP 扩容时热替换 logger（1335）。
+3. **异常五分类**（807-851）：CancelledError/GeneratorExit（断连）→ internal abort；EngineDeadError → 直接抛（死了无从 abort）；VLLMClientError 族 → abort 回收 n>1 兄弟请求后原样抛；InputStreamError → 解包 `.cause` 抛（流式输入的用户异常不被吞）；未知 → abort + 包 `EngineGenerateError`。
+4. **MM 缓存漂移自愈闭环（新）**：EngineCore 侧发现多模态特征在 P0 sender cache 已失效时回 `mm_cache_miss_hashes`；前端在**发布错误前**先标记失效（902），客户端带数据重发——跨进程缓存一致性的关键顺序。
+5. **Elastic EP 优雅退场**：retired rank 的 output_handler 收到 EngineDeadError 不算故障，记 info 后 `propagate_error` 安静退出（937-942）。
 
-- 切入点：`generate()` 的 docstring（923 行起）就是官方架构图，三步 + output_handler，先读它。
-- 易混淆点①：`add_request` 是**发起**（返回 collector），`generate` 是**消费**（async generator）；两者都可被 API 层直接调用。
-- 易混淆点②：`abort(internal=True)` vs `False`——internal 表示 vLLM 自身（断连/stop string）发起，不触发用户回调路径。
-- `stream_interval` 控制输出节流粒度，与 `VLLM_V1_OUTPUT_PROC_CHUNK_SIZE`（handler 分片）是两层不同的批处理，别混。
-- 想理解 n>1 parallel sampling，去看 `parallel_sampling.ParentRequest`，AsyncLLM 只做 fan-out 骨架。
+## ⑥ 新人提示
+
+- 切入点：`generate()` docstring（746-757）的官方四步图 → `_run_output_handler`（856，约 90 行）→ `add_request` 四分支。
+- 易混①：`add_request` 是发起（返回 collector），`generate` 是消费；API 层可分别直调。易混②：`abort(internal=True)` 表示 vLLM 自身发起（断连/stop string），不走用户回调路径。易混③：`stream_interval`（OutputProcessor 节流）与 `VLLM_V1_OUTPUT_PROC_CHUNK_SIZE`（handler 分片）是两层不同的批处理，别混。
+- **2026-09→10 变化**：新增 checkpoint 三件套（1221-1232）——resume/sleep/wake 全部受 EngineCore 侧 `CheckpointState` 状态机约束；权重更新重构为 `collective_rpc` + `weight_version` 溯源（1439-1451，draft 模型也有独立入口 1424）；`notify_kv_transfer_request_rejected`（961）把 P 节点预准入 KV 资源回收做成显式的 pre-aborted 请求。
+- 想懂 n>1 parallel sampling 看 `parallel_sampling.ParentRequest`（542-564 fan-out 骨架）；想懂流式输入会话看 `handle_inputs` 闭包（637-696）的取消/错误/收尾三分支。
+- 关联测试：`tests/v1/engine/test_async_llm.py`、`tests/entrypoints/openai/`（streaming input、checkpoint 用例）。

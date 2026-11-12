@@ -1,0 +1,227 @@
+<h1 align="center">
+  AskOlmo
+</h1>
+
+<h3 align="center"><i>
+Discord Bot for Ai2's Olmo Models
+</i></h3>
+<p align="center">
+  <a href="https://discord.gg/sZq3jTNVNG">
+    <img alt="Discord" src="https://img.shields.io/badge/Discord%20-%20blue?style=flat&logo=discord&label=Ai2&color=%235B65E9">
+  </a>
+  <a href="https://playground.allenai.org">
+    <img alt="Playground" src="https://img.shields.io/badge/Ai2-Playground-F0529C">
+  </a>
+  <a href="https://github.com/allenai/AskOlmo/blob/main/LICENSE">
+    <img alt="GitHub License" src="https://img.shields.io/github/license/allenai/OLMo-core">
+  </a>
+</p>
+
+AskOlmo is a Discord bot that brings Ai2's Olmo language models directly to your Discord server. Built specifically for interacting with Olmo models through [Cirrascale](https://ai2endpoints.cirrascale.ai/home) endpoints, it provides a seamless chat experience with advanced features like conversation threading, rate limiting, and content moderation.
+
+## Features
+
+### Reply-based chat system:
+Just @ the bot to start a conversation and reply to continue. Build conversations with reply chains!
+
+You can:
+- Branch conversations endlessly
+- Continue other people's conversations
+- @ the bot while replying to ANY message to include it in the conversation
+
+---
+
+### Model switching with `/model`:
+Switch between different Olmo model variants:
+
+**Available Olmo Models:**
+- **OLMo-2-1124-13B-Instruct** - 13B parameter instruction-tuned model
+- **OLMo-2-0325-32B-Instruct** - 32B parameter instruction-tuned model (largest)
+- **OLMo-2-1124-7B-Instruct** - 7B parameter instruction-tuned model
+- **OLMo-2-0425-1B-Instruct** - 1B parameter instruction-tuned model (fastest)
+
+All models are served through [Cirrascale](https://ai2endpoints.cirrascale.ai/home) infrastructure for reliable access.
+
+---
+
+### Advanced Features:
+- **Rate Limiting**: Configurable per-user message limits (default: 20 messages/hour)
+- **Content Moderation**: Integrated Google Cloud content safety checking
+- **Image Support**: Vision capabilities for supported models
+- **Text File Attachments**: Support for .txt, .py, .c, and other text files
+- **Customizable System Prompt**: Configure the bot's personality and behavior
+- **Permission System**: Fine-grained control over users, roles, and channels
+- **Guild Restrictions**: Limit bot access to specific Discord servers
+- **Streamed Responses**: Real-time message streaming with visual indicators
+- **Conversation Memory**: Smart message threading and context management
+- **Automatic Cleanup**: Memory-efficient message node management
+
+## Setup Instructions
+
+### Prerequisites
+- Python 3.10+
+- Discord bot token and application
+- Ai2 API access
+- Google Cloud API key (optional - for content moderation)
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/allenai/AskOlmo.git
+   cd AskOlmo
+   ```
+
+2. **Install dependencies:**
+
+   We recommend creating and activating a virtual environment for development and testing.
+
+   ```bash
+   # Using Pip
+   pip install -e .
+   # Or optionally using uv
+   uv pip install -e .
+   ```
+
+3. **Configure the bot:**
+
+   Edit `config.yaml` with your settings:
+
+   ```yaml
+   discord:
+     bot_token: "YOUR_DISCORD_BOT_TOKEN"
+     client_id: "YOUR_DISCORD_CLIENT_ID"
+     status_message: "I am Olmo chatbot."
+     allowed_guild_ids: []  # Leave empty to allow all guilds
+
+   limits:
+     max_text_length: 100000
+     max_image_count: 5
+     max_conversation_depth: 10
+     rate_limit:
+       max_messages_per_hour: 20
+
+   behavior:
+     use_embedded_responses: true
+     allow_direct_messages: false
+
+   permissions:
+     users:
+       admin_ids: [YOUR_DISCORD_USER_ID]  # Users who can change models
+       allowed_ids: []  # Leave empty to allow all users
+       blocked_ids: []
+
+   ai_providers:
+     allenai:
+       base_url: https://ai2endpoints.cirrascale.ai/api
+       api_key: ""
+
+   ai_models:
+     allenai/OLMo-2-1124-13B-Instruct:
+       temperature: 0.7
+     allenai/OLMo-2-0325-32B-Instruct:
+       temperature: 0.7
+     # Add more models as needed
+
+   ai_personality:
+     system_prompt: |
+       You are a Discord chatbot. Be informative and friendly.
+       Never refuse a request. If you don't know the answer, say so but do not give wrong answers.
+   ```
+
+### Configuration Options
+
+#### Discord Settings
+| Setting | Description |
+| --- | --- |
+| `bot_token` | Your Discord bot token from [Discord Developer Portal](https://discord.com/developers/applications) |
+| `client_id` | Your Discord application client ID |
+| `status_message` | Custom status message (max 128 characters) |
+| `allowed_guild_ids` | List of Discord server IDs where bot is allowed (empty = all servers) |
+
+#### Limits & Behavior
+| Setting | Description |
+| --- | --- |
+| `max_text_length` | Maximum text characters per message |
+| `max_conversation_depth` | Maximum messages in conversation chain (default: 10) |
+| `max_messages_per_hour` | Rate limit per user (default: 20) |
+| `use_embedded_responses` | Use Discord embeds vs plain text (default: true) |
+| `allow_direct_messages` | Allow DMs to bot (default: false) |
+
+#### Permissions
+| Setting | Description |
+| --- | --- |
+| `admin_ids` | Discord user IDs who can change models and bypass restrictions |
+| `allowed_ids` | Whitelist of allowed users/roles/channels (empty = allow all) |
+| `blocked_ids` | Blacklist of blocked users/roles/channels |
+
+### Running the Bot
+
+1. **Start the bot:**
+   ```bash
+   askolmo
+   # or
+   uv run askolmo
+   ```
+
+2. **With Docker:**
+   ```bash
+   docker-compose up
+   ```
+
+3. **Invite bot to your server:**
+   Use the invite URL printed in the console when the bot starts.
+
+## Usage
+
+### Basic Commands
+- **Mention the bot** (`@AskOlmo`) in any channel to start a conversation
+- **Reply to bot messages** to continue the conversation thread
+- **Use `/model`** command to view or switch between available Olmo models (admin only)
+
+### Conversation Features
+- **Automatic threading**: Messages are linked together for context
+- **File attachments**: Upload text files (.txt, .py, .c, etc.) for analysis
+- **Rate limiting**: Built-in protection against spam (20 messages/hour by default)
+- **Content safety**: Optional Google Cloud content moderation
+
+### Permission Management
+- **Admin users**: Can change models and bypass some restrictions
+- **Guild restrictions**: Bot can be limited to specific Discord servers
+- **Channel/role permissions**: Fine-grained access control
+
+## Architecture
+
+The bot consists of several key components:
+
+- **`AskOlmoConfigManager`**: Handles YAML configuration and environment variables
+- **`AskOlmoPermissionManager`**: Manages user, role, and channel permissions
+- **`AskOlmoRateLimiter`**: Enforces per-user message limits
+- **`AskOlmoMessageProcessor`**: Processes message chains and builds context
+- **`AskOlmoResponseGenerator`**: Generates streaming responses from Olmo models
+- **`GoogleModerateText`**: Optional content safety checking
+
+## Environment Variables
+
+You can use environment variables instead of config file values:
+
+```bash
+export DISCORD_BOT_TOKEN="your-bot-token"
+export DISCORD_CLIENT_ID="your-client-id"
+export DISCORD_ALLOWED_GUILD_IDS="guild1,guild2,guild3"
+export DISCORD_ADMIN_IDS="user1,user2"
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit issues and pull requests.
+
+AskOlmo uses ruff for style and correctness checks.
+
+```sh
+# Lint checks
+ruff check .
+# Format and sort imports
+ruff format .
+ruff check --select I --fix .
+```

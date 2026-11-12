@@ -1,0 +1,31 @@
+# DeepWiki 索引 — openai/chz
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 256771 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Core Concepts](1.2-core-concepts.md)
+- [2 Blueprint System](2-blueprint-system.md)
+  - [2.1 Blueprint Class](2.1-blueprint-class.md)
+  - [2.2 Argument Resolution](2.2-argument-resolution.md)
+  - [2.3 Lazy Evaluation](2.3-lazy-evaluation.md)
+  - [2.4 Error Handling](2.4-error-handling.md)
+  - [2.5 Command Line Integration](2.5-command-line-integration.md)
+- [3 MetaFactory System](3-metafactory-system.md)
+  - [3.1 MetaFactory API](3.1-metafactory-api.md)
+  - [3.2 Factory Types](3.2-factory-types.md)
+- [4 Type System](4-type-system.md)
+  - [4.1 Type Representation](4.1-type-representation.md)
+  - [4.2 Type Checking](4.2-type-checking.md)
+  - [4.3 Type Casting](4.3-type-casting.md)
+- [5 Data Model](5-data-model.md)
+  - [5.1 chz Decorator](5.1-chz-decorator.md)
+  - [5.2 Field System](5.2-field-system.md)
+  - [5.3 Validation](5.3-validation.md)
+  - [5.4 Serialization](5.4-serialization.md)
+- [6 Advanced Topics](6-advanced-topics.md)
+  - [6.1 Polymorphic Construction](6.1-polymorphic-construction.md)
+  - [6.2 References and Dependencies](6.2-references-and-dependencies.md)
+  - [6.3 Variadic Types](6.3-variadic-types.md)
+  - [6.4 Custom Extensions](6.4-custom-extensions.md)

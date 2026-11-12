@@ -1,0 +1,32 @@
+# DeepWiki 索引 — android/testing-samples
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-23
+> 结构 27 页 · 全文 325204 字符
+
+- [1 Overview](1-overview.md)
+- [2 Build Systems](2-build-systems.md)
+  - [2.1 Gradle Configuration](2.1-gradle-configuration.md)
+  - [2.2 Bazel Configuration](2.2-bazel-configuration.md)
+  - [2.3 Dependency Management](2.3-dependency-management.md)
+  - [2.4 Gradle Wrapper](2.4-gradle-wrapper.md)
+- [3 UI Testing with Espresso](3-ui-testing-with-espresso.md)
+  - [3.1 Basic Espresso Testing](3.1-basic-espresso-testing.md)
+  - [3.2 RecyclerView Testing](3.2-recyclerview-testing.md)
+  - [3.3 Intents Testing](3.3-intents-testing.md)
+  - [3.4 IdlingResource for Asynchronous Testing](3.4-idlingresource-for-asynchronous-testing.md)
+  - [3.5 Multi-Window Testing](3.5-multi-window-testing.md)
+  - [3.6 WebView Testing](3.6-webview-testing.md)
+  - [3.7 Accessibility Testing](3.7-accessibility-testing.md)
+  - [3.8 Screenshot Testing](3.8-screenshot-testing.md)
+  - [3.9 Device Control Testing](3.9-device-control-testing.md)
+- [4 UI Testing with UI Automator](4-ui-testing-with-ui-automator.md)
+- [5 Test Runners](5-test-runners.md)
+  - [5.1 AndroidJUnitRunner](5.1-androidjunitrunner.md)
+  - [5.2 Android Test Orchestrator](5.2-android-test-orchestrator.md)
+  - [5.3 Test Coverage](5.3-test-coverage.md)
+- [6 Unit Testing](6-unit-testing.md)
+  - [6.1 Local Unit Tests](6.1-local-unit-tests.md)
+  - [6.2 Native Unit Tests](6.2-native-unit-tests.md)
+- [7 Integration Testing](7-integration-testing.md)
+  - [7.1 Service Testing](7.1-service-testing.md)
+- [8 Contributing](8-contributing.md)

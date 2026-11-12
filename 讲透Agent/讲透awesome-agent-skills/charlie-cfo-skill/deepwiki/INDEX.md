@@ -1,0 +1,42 @@
+# DeepWiki 索引 — EveryInc/charlie-cfo-skill
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 722260 字符
+
+- [1 Charlie CFO Skill Overview](1-charlie-cfo-skill-overview.md)
+  - [1.1 Installation and Setup](1.1-installation-and-setup.md)
+  - [1.2 How Charlie Activates and Processes Queries](1.2-how-charlie-activates-and-processes-queries.md)
+- [2 Core Philosophy and Mental Models](2-core-philosophy-and-mental-models.md)
+  - [2.1 Profit as a Constraint, Not a Goal](2.1-profit-as-a-constraint-not-a-goal.md)
+  - [2.2 Unit Economics as Survival Requirements](2.2-unit-economics-as-survival-requirements.md)
+  - [2.3 Revenue Per Employee and Efficiency Targets](2.3-revenue-per-employee-and-efficiency-targets.md)
+- [3 The Five Financial Frameworks](3-the-five-financial-frameworks.md)
+  - [3.1 Cash Management Framework](3.1-cash-management-framework.md)
+  - [3.2 Unit Economics Framework](3.2-unit-economics-framework.md)
+  - [3.3 Capital Allocation Framework](3.3-capital-allocation-framework.md)
+  - [3.4 Working Capital Optimization](3.4-working-capital-optimization.md)
+  - [3.5 Forecasting Approach](3.5-forecasting-approach.md)
+- [4 Decision-Making Guides](4-decision-making-guides.md)
+  - [4.1 Evaluating Hiring Decisions](4.1-evaluating-hiring-decisions.md)
+  - [4.2 Investment and Spending Decisions](4.2-investment-and-spending-decisions.md)
+  - [4.3 Financial Review Rhythms](4.3-financial-review-rhythms.md)
+  - [4.4 Key Metrics Dashboard](4.4-key-metrics-dashboard.md)
+- [5 Reference Materials](5-reference-materials.md)
+  - [5.1 Metrics and Benchmarks Reference](5.1-metrics-and-benchmarks-reference.md)
+  - [5.2 Bootstrapped Company Case Studies](5.2-bootstrapped-company-case-studies.md)
+- [6 System Architecture and Design](6-system-architecture-and-design.md)
+  - [6.1 Framework Integration and Dependencies](6.1-framework-integration-and-dependencies.md)
+  - [6.2 Knowledge Base Architecture](6.2-knowledge-base-architecture.md)
+- [7 License and Legal](7-license-and-legal.md)
+
+## 附：结构清单外的页
+- [Basecamp: 25+ Years of Profitable Growth](x1-basecamp-25-years-of-profitable-growth.md)
+- [Cash Flow and Efficiency Metrics](x2-cash-flow-and-efficiency-metrics.md)
+- [Common Patterns Across Bootstrapped Success](x3-common-patterns-across-bootstrapped-success.md)
+- [ConvertKit: Crisis to 51% Margins](x4-convertkit-crisis-to-51-margins.md)
+- [Mailchimp: $12B Exit on Zero Funding](x5-mailchimp-12b-exit-on-zero-funding.md)
+- [SaaS Metrics and Benchmarks](x6-saas-metrics-and-benchmarks.md)
+- [Unit Economics Calculations](x7-unit-economics-calculations.md)
+- [Working Capital and Rule of 40](x8-working-capital-and-rule-of-40.md)
+- [Zapier: $5B Valuation on Minimal Funding](x9-zapier-5b-valuation-on-minimal-funding.md)
+- [Zoho: $1B+ Revenue on Zero Funding](x10-zoho-1b-revenue-on-zero-funding.md)

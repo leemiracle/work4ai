@@ -1,0 +1,31 @@
+# DeepWiki 索引 — microsoft/onnxconverter-common
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 259518 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation and Requirements](1.1-installation-and-requirements.md)
+  - [1.2 Package Structure](1.2-package-structure.md)
+- [2 ONNX Optimization System](2-onnx-optimization-system.md)
+  - [2.1 Graph Optimization](2.1-graph-optimization.md)
+  - [2.2 Constant Folding](2.2-constant-folding.md)
+  - [2.3 De-Cast Optimization](2.3-de-cast-optimization.md)
+- [3 Data Type Conversion](3-data-type-conversion.md)
+  - [3.1 Float16 Conversion](3.1-float16-conversion.md)
+  - [3.2 Mixed Precision Conversion](3.2-mixed-precision-conversion.md)
+- [4 Model Representation](4-model-representation.md)
+  - [4.1 Topology System](4.1-topology-system.md)
+  - [4.2 ONNX Operations](4.2-onnx-operations.md)
+  - [4.3 Container System](4.3-container-system.md)
+  - [4.4 Data Types](4.4-data-types.md)
+- [5 Graph Construction Utilities](5-graph-construction-utilities.md)
+  - [5.1 ONNX Function System](5.1-onnx-function-system.md)
+  - [5.2 ONNX to Python Conversion](5.2-onnx-to-python-conversion.md)
+  - [5.3 ONNX Operator Builder](5.3-onnx-operator-builder.md)
+  - [5.4 ONNX Extensions](5.4-onnx-extensions.md)
+  - [5.5 Utility Functions](5.5-utility-functions.md)
+  - [5.6 Performance Statistics](5.6-performance-statistics.md)
+- [6 Development and CI/CD](6-development-and-ci-cd.md)
+  - [6.1 GitHub Workflows](6.1-github-workflows.md)
+  - [6.2 Azure Pipelines](6.2-azure-pipelines.md)
+  - [6.3 Testing Infrastructure](6.3-testing-infrastructure.md)

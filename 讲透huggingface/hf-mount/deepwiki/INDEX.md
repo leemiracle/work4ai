@@ -1,0 +1,30 @@
+# DeepWiki 索引 — huggingface/hf-mount
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 161309 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Architecture Overview](1.2-architecture-overview.md)
+- [2 Core Filesystem Layer](2-core-filesystem-layer.md)
+  - [2.1 VirtualFs: Inode Table and Metadata](2.1-virtualfs-inode-table-and-metadata.md)
+  - [2.2 Read Path and Prefetching](2.2-read-path-and-prefetching.md)
+  - [2.3 Write Path: Streaming and Advanced Modes](2.3-write-path-streaming-and-advanced-modes.md)
+  - [2.4 Background Polling and Cache Invalidation](2.4-background-polling-and-cache-invalidation.md)
+- [3 Filesystem Backends](3-filesystem-backends.md)
+  - [3.1 FUSE Backend](3.1-fuse-backend.md)
+  - [3.2 NFS Backend](3.2-nfs-backend.md)
+- [4 Hub API and Authentication](4-hub-api-and-authentication.md)
+  - [4.1 HubApiClient and HubOps Trait](4.1-hubapiclient-and-hubops-trait.md)
+  - [4.2 Authentication and Token Management](4.2-authentication-and-token-management.md)
+  - [4.3 Xet CAS Layer](4.3-xet-cas-layer.md)
+- [5 Daemon and Process Management](5-daemon-and-process-management.md)
+  - [5.1 Mount Setup and Configuration](5.1-mount-setup-and-configuration.md)
+- [6 Testing](6-testing.md)
+  - [6.1 Integration Test Framework](6.1-integration-test-framework.md)
+  - [6.2 Functional and POSIX Tests](6.2-functional-and-posix-tests.md)
+  - [6.3 Benchmarks and Performance Tests](6.3-benchmarks-and-performance-tests.md)
+- [7 CI/CD and Release](7-ci-cd-and-release.md)
+  - [7.1 Build System and Feature Flags](7.1-build-system-and-feature-flags.md)
+  - [7.2 Release Pipeline and Installation](7.2-release-pipeline-and-installation.md)
+- [8 Glossary](8-glossary.md)

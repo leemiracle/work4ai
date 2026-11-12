@@ -1,0 +1,31 @@
+# DeepWiki 索引 — hypermodeinc/modus
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-27
+> 结构 26 页 · 全文 325685 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+  - [2.1 Installation](2.1-installation.md)
+  - [2.2 Quick Start Tutorial](2.2-quick-start-tutorial.md)
+- [3 Modus CLI](3-modus-cli.md)
+  - [3.1 CLI Commands Reference](3.1-cli-commands-reference.md)
+  - [3.2 Version Management](3.2-version-management.md)
+- [4 Software Development Kits](4-software-development-kits.md)
+  - [4.1 Go SDK](4.1-go-sdk.md)
+  - [4.2 AssemblyScript SDK](4.2-assemblyscript-sdk.md)
+  - [4.3 SDK Internals](4.3-sdk-internals.md)
+- [5 Modus Runtime](5-modus-runtime.md)
+  - [5.1 Runtime Architecture](5.1-runtime-architecture.md)
+  - [5.2 GraphQL Engine](5.2-graphql-engine.md)
+  - [5.3 Agent System](5.3-agent-system.md)
+  - [5.4 Database Integration](5.4-database-integration.md)
+  - [5.5 AI Model Integration](5.5-ai-model-integration.md)
+- [6 Configuration](6-configuration.md)
+  - [6.1 Application Manifests](6.1-application-manifests.md)
+  - [6.2 Connections and Secrets](6.2-connections-and-secrets.md)
+- [7 Development Tools](7-development-tools.md)
+  - [7.1 Development Environment](7.1-development-environment.md)
+  - [7.2 API Explorer](7.2-api-explorer.md)
+- [8 Deployment and Operations](8-deployment-and-operations.md)
+  - [8.1 Docker Deployment](8.1-docker-deployment.md)
+  - [8.2 CI/CD Integration](8.2-ci-cd-integration.md)

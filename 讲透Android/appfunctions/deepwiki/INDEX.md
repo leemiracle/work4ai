@@ -1,0 +1,30 @@
+# DeepWiki 索引 — android/appfunctions
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-23
+> 结构 25 页 · 全文 165062 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Repository Structure](1.2-repository-structure.md)
+- [2 AppFunctions Integration](2-appfunctions-integration.md)
+  - [2.1 AppFunction Definitions](2.1-appfunction-definitions.md)
+  - [2.2 AppFunctionSerializable Data Models](2.2-appfunctionserializable-data-models.md)
+  - [2.3 AppFunctionConfiguration and Registration](2.3-appfunctionconfiguration-and-registration.md)
+  - [2.4 AppFunctions Settings Screen](2.4-appfunctions-settings-screen.md)
+- [3 Application Architecture](3-application-architecture.md)
+  - [3.1 Data Layer](3.1-data-layer.md)
+  - [3.2 ViewModels](3.2-viewmodels.md)
+  - [3.3 Navigation and Entry Point](3.3-navigation-and-entry-point.md)
+- [4 UI Layer](4-ui-layer.md)
+  - [4.1 Screens and UI Components](4.1-screens-and-ui-components.md)
+  - [4.2 Theme and Resources](4.2-theme-and-resources.md)
+- [5 Testing](5-testing.md)
+  - [5.1 AppFunctions Unit Tests](5.1-appfunctions-unit-tests.md)
+  - [5.2 Instrumentation Tests and Hilt Test Infrastructure](5.2-instrumentation-tests-and-hilt-test-infrastructure.md)
+- [6 Build System and CI](6-build-system-and-ci.md)
+  - [6.1 Gradle Build Configuration](6.1-gradle-build-configuration.md)
+  - [6.2 CI/CD and Tooling](6.2-ci-cd-and-tooling.md)
+- [7 Contributing and Community](7-contributing-and-community.md)
+  - [7.1 Contribution Guidelines](7.1-contribution-guidelines.md)
+  - [7.2 Issue Reporting and Code of Conduct](7.2-issue-reporting-and-code-of-conduct.md)
+- [8 Glossary](8-glossary.md)

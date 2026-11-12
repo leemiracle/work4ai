@@ -1,0 +1,33 @@
+# DeepWiki 索引 — SakanaAI/AI-Scientist
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 227272 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 System Architecture](1.1-system-architecture.md)
+  - [1.2 Installation and Setup](1.2-installation-and-setup.md)
+- [2 Core Components](2-core-components.md)
+  - [2.1 Launch Scientist](2.1-launch-scientist.md)
+  - [2.2 LLM Integration](2.2-llm-integration.md)
+  - [2.3 Idea Generation](2.3-idea-generation.md)
+  - [2.4 Experiment Execution](2.4-experiment-execution.md)
+  - [2.5 Paper Writing](2.5-paper-writing.md)
+  - [2.6 Paper Review](2.6-paper-review.md)
+- [3 Templates and Data](3-templates-and-data.md)
+  - [3.1 Template System](3.1-template-system.md)
+  - [3.2 Data Preparation Scripts](3.2-data-preparation-scripts.md)
+  - [3.3 Available Templates](3.3-available-templates.md)
+- [4 Review System Training](4-review-system-training.md)
+  - [4.1 Few-Shot Learning Approach](4.1-few-shot-learning-approach.md)
+  - [4.2 Training Examples](4.2-training-examples.md)
+  - [4.3 ICLR Benchmark Evaluation](4.3-iclr-benchmark-evaluation.md)
+- [5 Example Papers and Results](5-example-papers-and-results.md)
+  - [5.1 Generated Paper Catalog](5.1-generated-paper-catalog.md)
+  - [5.2 Experiment Run Structure](5.2-experiment-run-structure.md)
+  - [5.3 AI Scientist Self-Review Analysis](5.3-ai-scientist-self-review-analysis.md)
+- [6 Advanced Usage](6-advanced-usage.md)
+  - [6.1 Creating Custom Templates](6.1-creating-custom-templates.md)
+  - [6.2 Advanced LLM Configuration](6.2-advanced-llm-configuration.md)
+  - [6.3 Parallel Experimentation](6.3-parallel-experimentation.md)
+- [7 Contributing](7-contributing.md)
+- [8 Glossary](8-glossary.md)

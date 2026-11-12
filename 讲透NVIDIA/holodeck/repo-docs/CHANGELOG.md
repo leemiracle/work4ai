@@ -1,0 +1,339 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [v0.5.1] - 2026-10-25
+
+### Security
+
+- **fix(build): build releases with the CI Go toolchain, now 1.27.3 (#910)**: Release binaries were built with Go 1.26.0, because `release.yaml` installed whatever Go version `go.mod`'s `go` line named. The v0.5.0 binaries embed go1.26.0 and contain 46 known standard-library vulnerabilities, including GO-2026-6809, the `crypto/x509` intermediate-CA block added in go1.27.3 and go1.26.10. Releases now build with the Dockerfile's Go, the same as CI, and the Dockerfile moves to `golang:1.27.3-bookworm`.
+
+### Bug Fixes
+
+- **CI: golangci-lint 2.15.0 and ubuntu-26.04 runner fixes (#908, #909)**: An unchecked error in a `pkg/sshutil` test now fails the test with the error message. The docs-check job pins Ruby 4.0, because `'3.5'` only ever resolved to a preview build that has no ubuntu-26.04 binary.
+
+### Dependencies
+
+- Go module and GitHub Actions bumps (#907): `golang.org/x/crypto` v0.58.0 (with `x/sys` v0.49.0, `x/text` v0.43.0, `x/tools` v0.51.0), `urfave/cli/v3` v3.14.0, `onsi/gomega` v1.44.0, `stretchr/testify` v1.12.1, `mattn/go-isatty` v0.0.24 and `github/codeql-action` v4.39.1.
+
+## [v0.5.0] - 2026-10-13
+
+### Features
+
+- **feat(aws): optional `availabilityZone` on instance and cluster specs (#878, @abrarshivani)**: Pins every subnet and node to one zone of the region. The pre-flight rejects a pinned zone that does not offer the requested instance types and lists the zones that do.
+
+### Bug Fixes
+
+- **fix(aws): create subnets in an availability zone that offers the instance types (#878, @abrarshivani)**: Subnets were created without an Availability Zone, so AWS could place them in a zone that does not offer the instance type (for example `g5g.xlarge` in us-west-2d). RunInstances then failed after the VPC existed, and the rollback could leak the VPC. The pre-flight now uses `DescribeInstanceTypeOfferings` to pick a standard zone that offers every instance type the environment needs, and `Create()`, `CreateCluster()` and `DryRun()` fail before anything is created when no zone does. An identity without `ec2:DescribeAvailabilityZones` or `ec2:DescribeInstanceTypeOfferings` gets a warning and the previous behaviour, unless `availabilityZone` is set.
+- **fix(release): open tap bumps as PRs from per-release branches (#884)**: GoReleaser now commits the Homebrew Formula and Cask bumps to `brew/holodeck-formula-X.Y.Z` and `brew/holodeck-cask-X.Y.Z` and opens a PR for each, instead of committing to `main`. `HOMEBREW_TAP_GITHUB_TOKEN` needs only `Contents` and `Pull requests` write access.
+
+### Security
+
+- **golang.org/x/net bumped to v0.60.0 (#895)**: Fixes GO-2026-6603, GO-2026-6610, GO-2026-6611, GO-2026-6612 and GO-2026-6617. The other `golang.org/x` modules move with it (crypto v0.57.0, sys v0.48.0, text v0.42.0).
+
+### Dependencies
+
+- Go module, GitHub Actions and Dockerfile bumps (#894, #896). AWS SDK for Go v2 moves to v1.47.3 (`service/ec2` v1.338.4, `service/ssm` v1.79.3, `config` v1.33.9), `k8s.io/apimachinery` to v0.37.1 and `golang.org/x/sync` to v0.24.0. The release image builder moves to Go 1.27.2.
+
+### New Contributors
+
+- @abrarshivani made their first contribution in #878.
+
+## [v0.4.0] - 2026-10-09
+
+### Features
+
+#### Unified SSH Subsystem (#856)
+- **feat(ssh): unified SSH subsystem (#856)**: The provisioner, CLI and dryrun now share one context-aware dialer in `pkg/sshutil` with a single retry, timeout and keepalive policy. The earlier code had three separate dial implementations.
+- **New optional `auth.sshConfig` block in env.yaml**: Configures a bastion (ProxyJump-style two-hop), ssh-agent authentication, the known_hosts policy (`accept-new`, `strict` or `off`), timeouts and retries. It is validated before any cloud action. An env.yaml without `sshConfig` behaves exactly as before. Cluster mode rejects `sshConfig` with an error until its semantics are designed (#855).
+- **Hardened trust-on-first-use host key checking**: known_hosts verification now uses `x/crypto/ssh/knownhosts`, which handles hashed entries and is guarded by a cross-process file lock. The known_hosts location and format are unchanged.
+- **Credential-free real-SSH E2E**: A new `real-ssh` lane provisions against a digest-pinned dockerized openssh-server in PR CI.
+
+### Security
+
+- **golang.org/x/crypto bumped to v0.56.0 (#881)**: Fixes GO-2026-6355 and GO-2026-6354 (denial of service on deadlocked SSH channels) and GO-2026-6303 (source-address critical option not enforced for non-public-key auth callbacks). `pkg/sshutil` reaches the affected code.
+- **docs: add SECURITY.md security policy (#871)**
+
+### Dependencies
+
+- Go module, GitHub Actions and Dockerfile bumps (#845, #846, #847, #849, #857, #858, #859, #860, #861, #879). The release image builder moves to Go 1.27.1. `actions/setup-go` moves to v7 and `actions/stale` to v11.
+
+## [v0.3.7] - 2026-07-13
+
+### Bug Fixes
+
+- **fix(cli): migrate to urfave/cli v3 (#850)**: Flags and positional arguments can now be interleaved in any order on the command line.
+
+### CI
+
+- **test(e2e): credential-free mock E2E suite (#844)**: Adds a mock E2E suite that needs no cloud credentials. Real-AWS runs are capped at 1 per PR, 2 post-merge and a weekly matrix.
+
+### Documentation
+
+- **docs(brew): split macOS Cask and Linux Formula install commands (#836)**
+
+## [v0.3.6] - 2026-06-10
+
+### Features
+
+- **feat(release): ship macOS via Homebrew Cask (#835)**: macOS installs use a Cask, which avoids the Formula build-sandbox failure on macOS Tahoe. Linux keeps the Formula.
+
+## [v0.3.5] - 2026-06-09
+
+### Features
+
+- **feat(release): make holodeck installable via Homebrew (#825)**
+
+## [v0.3.4] - 2026-05-26
+
+### Features
+
+- **feat(api): add Kubernetes.RemoteAccess for external kubeconfig access (#818)**
+- **feat: holodeck skill command (#812)**: Ships a skill catalog with installers for Claude, Cursor, Codex and Gemini.
+- **Add Ubuntu 26.04 support (#811)**
+
+### Bug Fixes
+
+- **fix(provisioner): expose CRI-O bundled runtimes on PATH for AL2023 (#824)**
+
+### Documentation
+
+- **docs(guides): add holodeck + AICR integration preview (#819)**
+
+## [v0.3.3] - 2026-05-06
+
+### Bug Fixes
+
+- **fix(provisioner): route containerd 2.x through the containerd.io package (#800)**: Removes the separate containerd 2.x binary-download template. All OS families now use the unified containerd.io template.
+
+### Changes
+
+- **update default driver branch to 580 (#790)**
+- **update default versions of k8s components (#796)**
+- **remove go dependency on sigs.k8s.io/controller-runtime (#793)**
+- **chore(repo): adopt DGXC OSS issue-mgmt policy (#801)**
+
+## [v0.3.2] - 2026-04-22
+
+### Bug Fixes
+
+#### Provisioning
+- **fix containerd.io apt package install (#779)**
+- **fix bug in NVIDIA Driver install script when package version is specified (#782)**
+- **fix(nv-driver): strict post-install version check for pinned driver installs (#786)**
+
+## [v0.3.1] - 2026-04-02
+
+### Bug Fixes
+
+#### SSH Reliability
+- **fix: add SSH keepalive and handshake timeout (#772)** — SSH connections now send keepalive probes every 30 seconds to prevent session drops during long operations (e.g., `kubeadm init`). A 15-second handshake timeout prevents `connectOrDie` from blocking indefinitely against hosts that accept TCP but never complete the SSH handshake.
+
+#### AWS Resource Cleanup — Provider
+- **fix: HA NLB hairpin routing (#746, #762)** — Control-plane nodes now use `localhost:6443` for kubectl instead of the NLB endpoint, avoiding AWS NLB hairpin/loopback timeouts.
+- **fix: switch HA NLB to internal scheme (#760)** — NLB uses internal scheme to keep traffic within the VPC.
+- **fix: handle InvalidInternetGatewayID.NotFound in IGW detach (#772)** — The detach step now recognizes `InvalidInternetGatewayID.NotFound` alongside `Gateway.NotAttached` and skips retries.
+- **fix: handle NotFound errors in NLB/listener/target-group deletion (#772)** — All NLB cleanup paths now check for `LoadBalancerNotFound`, `ListenerNotFound`, and `TargetGroupNotFound`, treating already-deleted resources as success.
+
+#### AWS Resource Cleanup — Periodic Cleanup Action
+- **fix: NLB cleanup in periodic VPC cleaner (#762)** — `DeleteVPCResources` now deletes NLB listeners, target groups, and load balancers before attempting subnet/IGW/VPC deletion, preventing `DependencyViolation` errors from NLB-owned ENIs.
+- **fix: revoke cross-referencing SG rules before deletion (#766)** — Security groups that reference each other are now cleaned up by revoking all ingress/egress rules before attempting deletion.
+- **fix: treat InvalidVpcID.NotFound as success in VPC cleanup (#769)** — VPCs that no longer exist are treated as successfully cleaned up.
+- **fix: suppress NotFound warnings in all cleanup delete functions (#772)** — The periodic cleanup job no longer logs misleading warnings when IGWs, security groups, subnets, or route tables are already gone.
+
+### CI
+
+- **ci: update periodic cleanup and add manual trigger (#758, #765)** — Periodic cleanup workflow uses the latest holodeck binary and supports manual dispatch.
+
+## [v0.3.0] - 2026-03-30
+
+### Features
+
+#### Production-Grade Cluster Networking (#720–#728)
+
+A complete overhaul of multi-node cluster networking for production workloads:
+
+- Add cluster networking cache constants and struct fields (#720, @ArangoGutierrez)
+- Add public subnet for cluster mode (#723, @ArangoGutierrez)
+- Add Transport abstraction for SSH connections (#724, @ArangoGutierrez)
+- Separate control-plane and worker security groups (#725, @ArangoGutierrez)
+- Cleanup dual security groups on cluster delete (#726, @ArangoGutierrez)
+- Wire SSM transport for private-subnet cluster nodes (#727, @ArangoGutierrez)
+- Wire cluster networking — private subnets, NAT, hostForNode, real tests (#728, @ArangoGutierrez)
+- Add ELBv2/NLB support for HA clusters (#614, @ArangoGutierrez)
+
+#### Custom Templates (#701–#706)
+
+User-defined provisioning templates with full lifecycle phase support:
+
+- Add `CustomTemplate` type and `TemplatePhase` enum to API (#701, @ArangoGutierrez)
+- Implement custom template loader and executor (#702, @ArangoGutierrez)
+- Add custom template input validation (#703, @ArangoGutierrez)
+- Integrate custom templates into dependency resolver (#706, @ArangoGutierrez)
+
+#### RPM Support (#676–#681, #693)
+
+First-class support for RPM-based Linux distributions including Rocky Linux 9, Amazon Linux 2023, and Fedora 42 across all runtime stacks (Docker, containerd, CRI-O):
+
+- Add RPM support to Docker template (#677, @ArangoGutierrez)
+- Add RPM support to NVIDIA driver template (#676, @ArangoGutierrez)
+- Add RPM support to Kubernetes templates (#678, @ArangoGutierrez)
+- Add RPM support to kernel template (#681, @ArangoGutierrez)
+- Add RPM support to CRI-O template (#680, @ArangoGutierrez)
+- Add RPM support to container-toolkit package template (#679, @ArangoGutierrez)
+- Add RPM docs, e2e validation, and Fedora 42 support (#693, @ArangoGutierrez)
+- Add DNF/YUM package manager support to provisioner
+
+#### ARM64 Support
+
+- Add AMI architecture detection and cross-validation (#664, @ArangoGutierrez)
+- Infer AMI architecture from instance type for ARM64 support (#669, @ArangoGutierrez)
+- Propagate image architecture in cluster mode (#661, @ArangoGutierrez)
+- Add ARM64 GPU end-to-end test on merge to main (#670, @ArangoGutierrez)
+- Detect Kubernetes arch at runtime instead of defaulting to amd64 (#663, @ArangoGutierrez)
+- Use runtime arch for NVIDIA CUDA repository URL (#662, @ArangoGutierrez)
+- Make architecture field case-insensitive for backward compatibility
+
+#### Multi-Node Kubernetes Cluster Support (#562, #660)
+
+- Add full multinode Kubernetes cluster support (#562, @ArangoGutierrez)
+- Parallelize node provisioning, join info, and source/dest check (#660, @ArangoGutierrez)
+- Fix cluster-mode OS resolution to use per-node specs
+
+#### Multi-Source Installation (#635–#637)
+
+- Add component provenance tracking to environment status (#635, @ArangoGutierrez)
+- Support multiple installation sources for container runtimes (package, runfile, git) (#637, @ArangoGutierrez)
+- Support multiple installation sources for NVIDIA drivers (package, runfile, git) (#636, @ArangoGutierrez)
+- Add git ref resolution for CTK installation from GitHub sources
+- Add Kubernetes installation from custom sources
+
+#### CLI Improvements (#563, #621)
+
+- Complete CLI with full CRUD operations (create, delete, list, status, dryrun) (#563, #621, @ArangoGutierrez)
+
+#### AWS Infrastructure
+
+- Add retry logic with exponential backoff (#616, @ArangoGutierrez)
+- Add cleanup mode for standalone VPC cleanup to GitHub Action (#4938a2ee, @ArangoGutierrez)
+- Replace bash cleanup script with native Go implementation (@ArangoGutierrez)
+- Idempotent provisioning templates with enhanced error handling (#570, @ArangoGutierrez)
+- Add Ubuntu 20.04 to OS AMI registry
+
+#### Stale Issue Management (#695)
+
+- Add GitHub workflow to mark issues as stale after 90 days of inactivity (#695, @ArangoGutierrez)
+
+---
+
+### Bug Fixes
+
+#### Cluster Networking
+
+- Wait for NAT Gateway available state before creating routes, fixing race condition (#735, @ArangoGutierrez)
+- Verify API server against local IP before switching to NLB (#721, @ArangoGutierrez)
+- Remove local kubeadm config cleanup that races in cluster mode (#718, @ArangoGutierrez)
+- Make kubeadm config local path unique per environment (#717, @ArangoGutierrez)
+- Guard substring slice and redact join credentials in logs (#654, @ArangoGutierrez)
+- Surface NLB errors instead of swallowing them (#645, @ArangoGutierrez)
+- Disable Source/Dest Check on ENI for single-node deployments
+- Restrict security group CIDR to detected public IP (#615, @ArangoGutierrez)
+- Fail instead of silently falling back to `0.0.0.0/0` for security group (#650, @ArangoGutierrez)
+- Implement cleanup on partial creation failures (#612, @ArangoGutierrez)
+- Propagate image architecture in cluster mode (#661)
+
+#### Provisioner / SSH
+
+- Close SSH client before reassign, close pipe reader (#659, @ArangoGutierrez)
+- Split SSH sessions in `createKindConfig` (#657, @ArangoGutierrez)
+- Remove unreachable code in `connectOrDie`, wrap last error (#655, @ArangoGutierrez)
+- Correct retry count in `connectOrDie` error message (#628, @ArangoGutierrez)
+- Guard nil provider for SSH provider mode (#643, @ArangoGutierrez)
+- Close SSH client in `GetKubeConfig` (#640, @ArangoGutierrez)
+- Use TOFU known_hosts for interactive SSH sessions (#653, @ArangoGutierrez)
+- Add mutex to TOFU known_hosts to prevent race condition (#644, @ArangoGutierrez)
+- Use TOFU host key verification in all SSH connections (#625, #630, @ArangoGutierrez)
+- Log SFTP `MkdirAll` error instead of discarding (#642, @ArangoGutierrez)
+
+#### Security
+
+- Validate node labels and IPs before shell interpolation (#656, @ArangoGutierrez)
+- Security and concurrency: template input validation, error wrapping (#623, @ArangoGutierrez)
+- Critical bugs: `storageSizeGB` race, `log.Fatalf` in goroutine, file permissions (#622, @ArangoGutierrez)
+- Create kubeconfig with 0600 permissions (#629, @ArangoGutierrez)
+- Handle `crypto/rand` failure in retry jitter (#641, @ArangoGutierrez)
+- Validate instance type before creating resources (#672, @ArangoGutierrez)
+
+#### AWS Provider
+
+- Preserve error chain with `errors.Join`, copy tags for goroutines (#651, @ArangoGutierrez)
+- Return errors from `GenerateInstanceID`, validate ID format (#648, @ArangoGutierrez)
+- Replace `context.TODO()` with proper timeouts in `create.go` (#611, @ArangoGutierrez)
+- Add context propagation and timeout support to cleanup (#608, @ArangoGutierrez)
+- Address ignored errors with logging and documentation (#610, @ArangoGutierrez)
+- Use `%w` for proper error wrapping (#609, @ArangoGutierrez)
+- Validate instance type before creating resources (#672)
+
+#### Templates and Provisioning
+
+- Pre-release validation fixes for kubeadm, networking, and CTK (#716, @ArangoGutierrez)
+- E2E fixes for RPM-based distros (Rocky Linux 9)
+- Validate feature gates, track branches, and endpoint host (#647, @ArangoGutierrez)
+- Address audit fixes for heterogeneous cluster support
+- Restore CTK/K8s validation and fix test schema
+
+#### Logger / Utility
+
+- Replace shared channels with per-invocation context cancellation (#631, @ArangoGutierrez)
+- Nil out completed cancel entries in `activeCancels` (#646, @ArangoGutierrez)
+- Replace signal goroutine with `signal.NotifyContext` (#649, @ArangoGutierrez)
+
+#### Tests
+
+- Use valid hex instance IDs in delete and status tests (#713, @ArangoGutierrez)
+
+---
+
+### Performance
+
+- Inject sleep function to speed up AWS provider tests (~200x faster) (#739, @ArangoGutierrez)
+- Parallelize node provisioning, join info, and source/dest check in cluster mode (#660, @ArangoGutierrez)
+- Pre-compile templates, hoist regex, filter `DescribeLoadBalancers` (#652, @ArangoGutierrez)
+
+---
+
+### CI/CD
+
+- Split E2E tests into smoke (pre-merge) and full (post-merge) tiers (#740, @ArangoGutierrez)
+- Add ARM64 GPU end-to-end test on merge to main (#670, @ArangoGutierrez)
+- Add workflow to mark issues as stale with no activity (#695, @ArangoGutierrez)
+- Pin holodeck action to v0.2.18 in periodic CI workflow
+
+---
+
+### Documentation
+
+- Update multinode cluster guide with production-grade networking (#734, @ArangoGutierrez)
+- Comprehensive documentation refresh (#707, @ArangoGutierrez)
+- Add multi-source installation guides and examples (#634, @ArangoGutierrez)
+- Add OS selection guide
+- Add CTK multi-source installation guide
+- Add GitHub project management templates and AI instructions
+
+---
+
+### Dependencies
+
+- Updated AWS SDK Go v2 to latest (multiple bumps: `aws-sdk-go-v2`, `service/ec2`, `service/ssm`, `service/elasticloadbalancingv2`, `config`)
+- Updated Kubernetes libraries: `k8s.io/apimachinery`, `sigs.k8s.io/controller-runtime` to v0.23.3
+- Updated `golang.org/x/crypto` to v0.49.0 and `golang.org/x/sync` to v0.20.0
+- Updated Go base image from 1.25.5 to 1.26.1 (bookworm)
+- Updated GitHub Actions: `docker/build-push-action` v7, `docker/setup-buildx-action` v4, `docker/metadata-action` v6, `docker/login-action` v4, `docker/setup-qemu-action` v4, `aws-actions/configure-aws-credentials` v6, `actions/upload-artifact` v7
+- Updated `github.com/onsi/ginkgo/v2` and `github.com/onsi/gomega` to latest
+- Updated `github.com/pkg/sftp` to v1.13.10
+
+---
+
+## [v0.2.18] - 2025-12-13
+
+See [GitHub Release](https://github.com/NVIDIA/holodeck/releases/tag/v0.2.18)

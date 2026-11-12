@@ -1,0 +1,21 @@
+### L7 应用层 —— HTTP 语义与访问日志
+
+-- curl -v 一次完整交互（请求行/头/体 + 响应 + 计时）
+*   Trying 127.0.0.1:8080...
+* connect to 127.0.0.1 port 8080 failed: Connection refused
+* Failed to connect to 127.0.0.1 port 8080 after 0 ms: Couldn't connect to server
+* Closing connection
+
+-- 本轮 JSONL 访问日志（应用自证视角，与网络侧抓包互为对照）
+{"ts": 1793881102.0501359, "client": "127.0.0.1", "port_client": 36024, "method": "GET", "path": "/files/../../../etc/hostname", "query": {}, "headers": {"Host": "127.0.0.1:8080", "User-Agent": "curl/8.4.0", "Accept": "*/*"}, "body": "", "resp_code": 404, "rt_ms": 0.13}
+{"ts": 1793881102.0553355, "client": "127.0.0.1", "port_client": 36026, "method": "GET", "path": "/files/../../../proc/version", "query": {}, "headers": {"Host": "127.0.0.1:8080", "User-Agent": "curl/8.4.0", "Accept": "*/*"}, "body": "", "resp_code": 404, "rt_ms": 0.13}
+{"ts": 1793881102.0601761, "client": "127.0.0.1", "port_client": 36030, "method": "GET", "path": "/api/time", "query": {}, "headers": {"Host": "127.0.0.1:8080", "User-Agent": "curl/8.4.0", "Accept": "*/*"}, "body": "", "resp_code": 200, "rt_ms": 0.1}
+{"ts": 1793881196.3378766, "client": "172.17.0.1", "port_client": 56212, "method": "POST", "path": "/api/login", "query": {}, "headers": {"Host": "127.0.0.1:8188", "User-Agent": "curl/7.71.1", "Accept": "*/*", "Content-Length": "23", "Content-Type": "application/x-www-form-urlencoded"}, "body": "user=alice&pass=S3cret!", "resp_code": 200, "rt_ms": 0.15}
+{"ts": 1793881212.5882697, "client": "127.0.0.1", "port_client": 37552, "method": "GET", "path": "/files/../../../etc/hostname", "query": {}, "headers": {"Host": "127.0.0.1:8080", "User-Agent": "curl/8.4.0", "Accept": "*/*"}, "body": "", "resp_code": 404, "rt_ms": 0.11}
+{"ts": 1793881212.5936038, "client": "127.0.0.1", "port_client": 37556, "method": "GET", "path": "/files/../../../../etc/hostname", "query": {}, "headers": {"Host": "127.0.0.1:8080", "User-Agent": "curl/8.4.0", "Accept": "*/*"}, "body": "", "resp_code": 200, "rt_ms": 0.1}
+{"ts": 1793881212.59853, "client": "127.0.0.1", "port_client": 37562, "method": "GET", "path": "/files/../../../../proc/version", "query": {}, "headers": {"Host": "127.0.0.1:8080", "User-Agent": "curl/8.4.0", "Accept": "*/*"}, "body": "", "resp_code": 200, "rt_ms": 0.09}
+{"ts": 1793881212.6034825, "client": "127.0.0.1", "port_client": 37564, "method": "GET", "path": "/api/time", "query": {}, "headers": {"Host": "127.0.0.1:8080", "User-Agent": "curl/8.4.0", "Accept": "*/*"}, "body": "", "resp_code": 200, "rt_ms": 0.08}
+
+-- 抓包侧看到的明文 HTTP（L2-L6 都透明，只有 L7 的字节最有趣）
+"payload": "POST /api/login HTTP/1.1..Host: 127.0.0.1:8188..User-Agent: curl/7.71.1..Accept: */*..Content-Length: 23..Content-Type: application/x-www-form-urlencoded....user=alice&pass=S3cret!"
+"payload": "HTTP/1.1 200 OK..Server: tracehttp/1.0 Python/3.11.6..Date: Thu, 05 Nov 2026 12:19:56 GMT..Content-Type: application/json..Content-Length: 29...."

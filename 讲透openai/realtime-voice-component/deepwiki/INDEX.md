@@ -1,0 +1,32 @@
+# DeepWiki 索引 — openai/realtime-voice-component
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 187837 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Architecture Choices](1.2-architecture-choices.md)
+- [2 Core Controller & Hook](2-core-controller-hook.md)
+  - [2.1 VoiceControlController Internals](2.1-voicecontrolcontroller-internals.md)
+  - [2.2 State Model & Snapshot](2.2-state-model-snapshot.md)
+  - [2.3 Event System](2.3-event-system.md)
+- [3 Tool System](3-tool-system.md)
+  - [3.1 defineVoiceTool & VoiceTool](3.1-definevoicetool-voicetool.md)
+  - [3.2 Tool Call Lifecycle](3.2-tool-call-lifecycle.md)
+- [4 Transport Layer](4-transport-layer.md)
+  - [4.1 WebRTC Transport](4.1-webrtc-transport.md)
+  - [4.2 Authentication & Session Proxy](4.2-authentication-session-proxy.md)
+- [5 Session Configuration](5-session-configuration.md)
+  - [5.1 Audio Configuration](5.1-audio-configuration.md)
+  - [5.2 Model, Voice & Session Options](5.2-model-voice-session-options.md)
+- [6 UI Components](6-ui-components.md)
+  - [6.1 VoiceControlWidget](6.1-voicecontrolwidget.md)
+  - [6.2 Ghost Cursor Overlay](6.2-ghost-cursor-overlay.md)
+- [7 Demo Application](7-demo-application.md)
+  - [7.1 Theme & Form Demos](7.1-theme-form-demos.md)
+  - [7.2 Chess Demo](7.2-chess-demo.md)
+  - [7.3 Wake Word Activation](7.3-wake-word-activation.md)
+- [8 Testing](8-testing.md)
+  - [8.1 Unit & Integration Tests](8.1-unit-integration-tests.md)
+  - [8.2 Type-Check & Smoke Tests](8.2-type-check-smoke-tests.md)
+- [9 Glossary](9-glossary.md)

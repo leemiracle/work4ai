@@ -1,0 +1,1649 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py",
+   "type": "file",
+   "name": "indexer_cp_exchange.py",
+   "filePath": "vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py",
+   "summary": "CP top-k 交换：本 rank 打包 int64 key、AITER IPC all-gather 聚到 [world,...] 再合并出全局 top-k。",
+   "tags": [
+    "context-parallel",
+    "all-gather",
+    "ipc",
+    "merge"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/ops/sparse_attn.py",
+   "type": "file",
+   "name": "sparse_attn.py",
+   "filePath": "vllm/models/minimax_m3/amd/ops/sparse_attn.py",
+   "summary": "GQA 块稀疏注意力 prefill kernel（MFMA + pipeline launch 参数）。",
+   "tags": [
+    "triton",
+    "sparse-attention",
+    "prefill",
+    "gqa"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "type": "file",
+   "name": "sparse_pa.py",
+   "filePath": "vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "summary": "稀疏 paged attention 工具集：page-16 稀疏块表构建（prefill/decode）、index key 散插入侧缓存、AITER page-16 rebase 与 Gluon decode 运行器。",
+   "tags": [
+    "sparse-attention",
+    "paged",
+    "block-table",
+    "aiter"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/ops/swiglu_oai.py",
+   "type": "file",
+   "name": "swiglu_oai.py",
+   "filePath": "vllm/models/minimax_m3/amd/ops/swiglu_oai.py",
+   "summary": "SwiGLU-OAI（split 布局）Triton kernel：纯 BF16 与融合 per-32-block MXFP8 (E4M3+UE8M0) 激活量化两版。",
+   "tags": [
+    "swiglu",
+    "mxfp8",
+    "triton",
+    "quantization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "type": "file",
+   "name": "sparse_attention_msa.py",
+   "filePath": "vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "summary": "MiniMax M3 的 AITER page-16 稀疏 PA 后端：块表 rebase 进索引器 top-k 所需页号、SHUFFLE 稀疏 paged attention 实现。",
+   "tags": [
+    "sparse-attention",
+    "aiter",
+    "page-16",
+    "backend"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "document:vllm/models/minimax_m3/amd/specialized_decode/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/README.md",
+   "summary": "MiniMax M3 专用 decode（monokernel）设计文档：MI355X/gfx950 上每个稀疏层=vLLM 输入 norm+注意力+一个持久 FlyDSL launch（TP all-reduce、Gemma norm、FP32 router top-4、共享/路由专家、MoE all-reduce）；fail-stop 机制（内核等待 10s 上限、粘性错误字、每 forward 设备端 assert）；工具链钉死 FlyDSL 0.3.4.1 的 LLVM AMDGPU 内存模型。",
+   "tags": [
+    "documentation",
+    "monokernel",
+    "fail-stop",
+    "flydsl"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/specialized_decode/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/__init__.py",
+   "summary": "specialized_decode 包 barrel（1 导入）。",
+   "tags": [
+    "barrel",
+    "specialized-decode",
+    "minimax-m3"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/__init__.py",
+   "summary": "mono 包标记文件，仅含 SPDX 头。",
+   "tags": [
+    "package-marker",
+    "mono",
+    "flydsl"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py",
+   "type": "file",
+   "name": "a16w4.py",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py",
+   "summary": "A16W4 MFMA 原语（FlyDSL）：16 字节权重字/尺度 dword 加载、fp4x2→BF16 反量化与逐步 MFMA。",
+   "tags": [
+    "flydsl",
+    "a16w4",
+    "mfma",
+    "dequantization"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "type": "file",
+   "name": "ffn.py",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "summary": "monokernel FFN 主体（1081 行，FlyDSL）：attention TP all-reduce+残差、Gemma norm、FP32 router/top-4、共享+路由专家（stage_router/route/up/down）、跨 rank Lamport 式 stage_reduce 与 epoch 推进、故障注入。",
+   "tags": [
+    "flydsl",
+    "monokernel",
+    "moe",
+    "persistent-kernel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/residency.py",
+   "type": "file",
+   "name": "residency.py",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/residency.py",
+   "summary": "FlyDSL 产物驻留：链接 ELF（gpu.binary/MLIR）的 HIP 模块加载与每 CU 活动工作组计算。",
+   "tags": [
+    "flydsl",
+    "residency",
+    "hip",
+    "code-object"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/runner.py",
+   "type": "file",
+   "name": "runner.py",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/runner.py",
+   "summary": "FfnRunner：本 rank peer 缓冲与全 rank peer 地址（int64 设备侧），驱动 monokernel 的 epoch 推进；可写 FlyDSL 缓存重定向。",
+   "tags": [
+    "flydsl",
+    "runner",
+    "peers",
+    "launch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/sources.py",
+   "type": "file",
+   "name": "sources.py",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/sources.py",
+   "summary": "FlyDSL 源摘要（digest）工具。",
+   "tags": [
+    "flydsl",
+    "digest",
+    "sources"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPABackend",
+   "type": "class",
+   "name": "MiniMaxM3SparseAiterPABackend",
+   "filePath": "vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "summary": "携带 AITER page-16 块表 rebase 的稀疏后端。",
+   "tags": [
+    "sparse-attention",
+    "aiter",
+    "backend"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    27,
+    32
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPAPrefillMetadata",
+   "type": "class",
+   "name": "MiniMaxM3SparseAiterPAPrefillMetadata",
+   "filePath": "vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "summary": "AITER PA prefill 元数据标记。",
+   "tags": [
+    "metadata",
+    "prefill",
+    "aiter"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    36,
+    39
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPADecodeMetadata",
+   "type": "class",
+   "name": "MiniMaxM3SparseAiterPADecodeMetadata",
+   "filePath": "vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "summary": "AITER PA decode 元数据标记。",
+   "tags": [
+    "metadata",
+    "decode",
+    "aiter"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    43,
+    44
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPAMetadataBuilder",
+   "type": "class",
+   "name": "MiniMaxM3SparseAiterPAMetadataBuilder",
+   "filePath": "vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "summary": "索引器 top-k 输出所需的 page-16 块表 rebase 构建器。",
+   "tags": [
+    "metadata-builder",
+    "page-16",
+    "rebase"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    47,
+    116
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPAImpl",
+   "type": "class",
+   "name": "MiniMaxM3SparseAiterPAImpl",
+   "filePath": "vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "summary": "ROCm AITER page-16 SHUFFLE 稀疏 paged attention 实现。",
+   "tags": [
+    "sparse-attention",
+    "paged",
+    "aiter"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    119,
+    247
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:Experts",
+   "type": "class",
+   "name": "Experts",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "summary": "combine 求和的专家项选择（生产全用/奇偶单侧做阶段对齐）。",
+   "tags": [
+    "moe",
+    "parity",
+    "enum"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    126,
+    132
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/specialized_decode/mono/runner.py:FfnRunner",
+   "type": "class",
+   "name": "FfnRunner",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/runner.py",
+   "summary": "monokernel 宿主 launcher：peer 缓冲/地址与 epoch 推进（6 方法）。",
+   "tags": [
+    "flydsl",
+    "runner",
+    "launcher"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    40,
+    159
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py:_merge_topk_keys",
+   "type": "function",
+   "name": "_merge_topk_keys",
+   "filePath": "vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py",
+   "summary": "合并 gathered key 的 kernel。",
+   "tags": [
+    "merge",
+    "top-k",
+    "kernel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    123,
+    193
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py:local_topk_keys",
+   "type": "function",
+   "name": "local_topk_keys",
+   "filePath": "vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py",
+   "summary": "写出本 rank 的 [heads,tokens,topk] 打包 int64 key。",
+   "tags": [
+    "top-k",
+    "packing",
+    "local"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    196,
+    240
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py:aiter_all_gather",
+   "type": "function",
+   "name": "aiter_all_gather",
+   "filePath": "vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py",
+   "summary": "AITER IPC all-gather 聚到 [world, *shape]。",
+   "tags": [
+    "aiter",
+    "all-gather",
+    "ipc"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    243,
+    265
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py:merge_topk_keys",
+   "type": "function",
+   "name": "merge_topk_keys",
+   "filePath": "vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py",
+   "summary": "合并 [world,heads,tokens,topk] key 为全局 top-k。",
+   "tags": [
+    "merge",
+    "top-k",
+    "global"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    282,
+    331
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/sparse_attn.py:_gqa_sparse_fwd_kernel",
+   "type": "function",
+   "name": "_gqa_sparse_fwd_kernel",
+   "filePath": "vllm/models/minimax_m3/amd/ops/sparse_attn.py",
+   "summary": "GQA 块稀疏 prefill kernel（sub-tiled MFMA）。",
+   "tags": [
+    "triton",
+    "sparse-attention",
+    "prefill"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    74,
+    242
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/sparse_attn.py:minimax_m3_sparse_attn",
+   "type": "function",
+   "name": "minimax_m3_sparse_attn",
+   "filePath": "vllm/models/minimax_m3/amd/ops/sparse_attn.py",
+   "summary": "选定块上的 GQA 块稀疏注意力入口。",
+   "tags": [
+    "sparse-attention",
+    "entry-point",
+    "gqa"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    246,
+    331
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:_build_sparse_block_table_kernel",
+   "type": "function",
+   "name": "_build_sparse_block_table_kernel",
+   "filePath": "vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "summary": "稀疏块表构建 kernel。",
+   "tags": [
+    "block-table",
+    "triton",
+    "build"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    121,
+    160
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:minimax_m3_build_sparse_block_table_decode",
+   "type": "function",
+   "name": "minimax_m3_build_sparse_block_table_decode",
+   "filePath": "vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "summary": "每 decode 查询构建 page-16 稀疏块表行。",
+   "tags": [
+    "block-table",
+    "decode",
+    "page-16"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    244,
+    277
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:minimax_m3_insert_index_cache",
+   "type": "function",
+   "name": "minimax_m3_insert_index_cache",
+   "filePath": "vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "summary": "把 index key 散插入 MiniMax-M3 的 key-only 侧缓存。",
+   "tags": [
+    "indexer",
+    "side-cache",
+    "scatter"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    321,
+    353
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:minimax_m3_sparse_block_page_stride",
+   "type": "function",
+   "name": "minimax_m3_sparse_block_page_stride",
+   "filePath": "vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "summary": "一个稀疏块跨多少 page id（K/V 分侧持有）。",
+   "tags": [
+    "page-stride",
+    "blocks",
+    "layout"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    361,
+    370
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:minimax_m3_rebase_block_table_to_page16",
+   "type": "function",
+   "name": "minimax_m3_rebase_block_table_to_page16",
+   "filePath": "vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "summary": "逻辑页表 rebase 到 AITER page-16 页号。",
+   "tags": [
+    "page-16",
+    "rebase",
+    "aiter"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    380,
+    396
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:minimax_m3_sparse_attn_decode_aiter",
+   "type": "function",
+   "name": "minimax_m3_sparse_attn_decode_aiter",
+   "filePath": "vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "summary": "AITER 稀疏 decode 注意力入口。",
+   "tags": [
+    "aiter",
+    "decode",
+    "sparse-attention"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    432,
+    475
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:minimax_m3_sparse_attn_prefill_aiter",
+   "type": "function",
+   "name": "minimax_m3_sparse_attn_prefill_aiter",
+   "filePath": "vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "summary": "AITER 稀疏 prefill 注意力入口。",
+   "tags": [
+    "aiter",
+    "prefill",
+    "sparse-attention"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    479,
+    520
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:_run_gluon_decode",
+   "type": "function",
+   "name": "_run_gluon_decode",
+   "filePath": "vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "summary": "Gluon decode 运行器（尺度参数适配）。",
+   "tags": [
+    "gluon",
+    "decode",
+    "runner"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    523,
+    624
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/swiglu_oai.py:_swiglu_oai_quant_kernel",
+   "type": "function",
+   "name": "_swiglu_oai_quant_kernel",
+   "filePath": "vllm/models/minimax_m3/amd/ops/swiglu_oai.py",
+   "summary": "SwiGLU-OAI（split 布局）融合 per-32-block MXFP8 量化 kernel。",
+   "tags": [
+    "swiglu",
+    "mxfp8",
+    "triton"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    69,
+    127
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/swiglu_oai.py:swiglu_oai_quantize_mxfp8",
+   "type": "function",
+   "name": "swiglu_oai_quantize_mxfp8",
+   "filePath": "vllm/models/minimax_m3/amd/ops/swiglu_oai.py",
+   "summary": "split [M,2I] SwiGLU + MXFP8 激活量化入口。",
+   "tags": [
+    "swiglu",
+    "mxfp8",
+    "quantization"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    130,
+    184
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/swiglu_oai.py:swiglu_oai_split",
+   "type": "function",
+   "name": "swiglu_oai_split",
+   "filePath": "vllm/models/minimax_m3/amd/ops/swiglu_oai.py",
+   "summary": "split [*,2I]→[*,I] 的纯 SwiGLU-OAI。",
+   "tags": [
+    "swiglu",
+    "split",
+    "triton"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    187,
+    227
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py:weight_loads",
+   "type": "function",
+   "name": "weight_loads",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py",
+   "summary": "lane 的 16 字节权重字加载（16 行组）。",
+   "tags": [
+    "a16w4",
+    "loads",
+    "flydsl"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    26,
+    42
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py:scale_loads",
+   "type": "function",
+   "name": "scale_loads",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py",
+   "summary": "lane 的尺度 dword 加载。",
+   "tags": [
+    "a16w4",
+    "scales",
+    "loads"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    45,
+    61
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py:dequant",
+   "type": "function",
+   "name": "dequant",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py",
+   "summary": "fp4x2 dword（8 值低 nibble 在前）→8 个 BF16。",
+   "tags": [
+    "a16w4",
+    "dequantization",
+    "bf16"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    72,
+    82
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:stage_reduce",
+   "type": "function",
+   "name": "stage_reduce",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "summary": "各 rank 值按 rank 序求和（16 任务三元组）。",
+   "tags": [
+    "cross-rank",
+    "reduce",
+    "stage"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    296,
+    325
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:stage_norm",
+   "type": "function",
+   "name": "stage_norm",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "summary": "token 的 Gemma RMSNorm：SRES→XN→XRDY。",
+   "tags": [
+    "rmsnorm",
+    "gemma",
+    "stage"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    329,
+    355
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:stage_router",
+   "type": "function",
+   "name": "stage_router",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "summary": "专家 tile 的 FP32 router（384 列/48 每 wave）。",
+   "tags": [
+    "router",
+    "fp32",
+    "stage"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    386,
+    436
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:stage_route",
+   "type": "function",
+   "name": "stage_route",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "summary": "sigmoid top-4 路由（wave 内归约）。",
+   "tags": [
+    "routing",
+    "sigmoid",
+    "top-4"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    445,
+    510
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:load_table",
+   "type": "function",
+   "name": "load_table",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "summary": "有效 token 的选择→LDS slot（slot 0 共享专家）。",
+   "tags": [
+    "slots",
+    "lds",
+    "table"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    523,
+    582
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:stage_up",
+   "type": "function",
+   "name": "stage_up",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "summary": "gate/up 行 tile 的 MFMA。",
+   "tags": [
+    "gate-up",
+    "mfma",
+    "stage"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    655,
+    688
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:stage_down",
+   "type": "function",
+   "name": "stage_down",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "summary": "down 投影行 tile（slot/wave 分派）。",
+   "tags": [
+    "down-proj",
+    "mfma",
+    "stage"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    699,
+    761
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:run_ffn",
+   "type": "function",
+   "name": "run_ffn",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "summary": "monokernel 主循环入口。",
+   "tags": [
+    "monokernel",
+    "entry-point",
+    "loop"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    795,
+    837
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:build_ffn",
+   "type": "function",
+   "name": "build_ffn",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "summary": "构建（编译链接）monokernel。",
+   "tags": [
+    "flydsl",
+    "build",
+    "compile"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    853,
+    987
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:finish",
+   "type": "function",
+   "name": "finish",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "summary": "每 CTA 标记 launch 完成；CTA 0 等全部完成。",
+   "tags": [
+    "completion",
+    "cta",
+    "barrier"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    997,
+    1011
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:epoch_end",
+   "type": "function",
+   "name": "epoch_end",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "summary": "CTA 0 在全部标记后推进 epoch。",
+   "tags": [
+    "epoch",
+    "advancement",
+    "cta"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1042,
+    1066
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/residency.py:code_object",
+   "type": "function",
+   "name": "code_object",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/residency.py",
+   "summary": "FlyDSL 产物 gpu.binary（MLIR ELF）的链接。",
+   "tags": [
+    "flydsl",
+    "elf",
+    "linking"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    12,
+    31
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/residency.py:active_workgroups_per_cu",
+   "type": "function",
+   "name": "active_workgroups_per_cu",
+   "filePath": "vllm/models/minimax_m3/amd/specialized_decode/mono/residency.py",
+   "summary": "每 CU 活动工作组数（flyc.compile 结果）。",
+   "tags": [
+    "workgroups",
+    "cu",
+    "occupancy"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    64,
+    83
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py",
+   "target": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_attn.py",
+   "target": "file:vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_attn.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_attn.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "target": "file:vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/swiglu_oai.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/mxfp8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/swiglu_oai.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "target": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/__init__.py",
+   "target": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/sync.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/sources.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/sync.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/runner.py",
+   "target": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/runner.py",
+   "target": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/residency.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/sources.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPABackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPAPrefillMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPADecodeMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPAMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPAImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:Experts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:stage_reduce",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:stage_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:stage_router",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:stage_route",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:load_table",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:stage_up",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:stage_down",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:run_ffn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:build_ffn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:finish",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:epoch_end",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/runner.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/mono/runner.py:FfnRunner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py:_merge_topk_keys",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py:local_topk_keys",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py:aiter_all_gather",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py:merge_topk_keys",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_attn.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/sparse_attn.py:_gqa_sparse_fwd_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_attn.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/sparse_attn.py:minimax_m3_sparse_attn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:_build_sparse_block_table_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:minimax_m3_build_sparse_block_table_decode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:minimax_m3_insert_index_cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:minimax_m3_sparse_block_page_stride",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:minimax_m3_rebase_block_table_to_page16",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:minimax_m3_sparse_attn_decode_aiter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:minimax_m3_sparse_attn_prefill_aiter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:_run_gluon_decode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/swiglu_oai.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/swiglu_oai.py:_swiglu_oai_quant_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/swiglu_oai.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/swiglu_oai.py:swiglu_oai_quantize_mxfp8",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/swiglu_oai.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/swiglu_oai.py:swiglu_oai_split",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py:weight_loads",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py:scale_loads",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py:dequant",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/residency.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/residency.py:code_object",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/residency.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/residency.py:active_workgroups_per_cu",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPABackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPAPrefillMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPADecodeMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPAMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPAImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:Experts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:stage_reduce",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:stage_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:stage_router",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:stage_route",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:load_table",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:stage_up",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:stage_down",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:run_ffn",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:build_ffn",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:finish",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:epoch_end",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/runner.py",
+   "target": "class:vllm/models/minimax_m3/amd/specialized_decode/mono/runner.py:FfnRunner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py:local_topk_keys",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py:aiter_all_gather",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py:merge_topk_keys",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_attn.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/sparse_attn.py:minimax_m3_sparse_attn",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:minimax_m3_build_sparse_block_table_decode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:minimax_m3_insert_index_cache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:minimax_m3_sparse_block_page_stride",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:minimax_m3_rebase_block_table_to_page16",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:minimax_m3_sparse_attn_decode_aiter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/sparse_pa.py:minimax_m3_sparse_attn_prefill_aiter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/swiglu_oai.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/swiglu_oai.py:swiglu_oai_quantize_mxfp8",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/swiglu_oai.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/swiglu_oai.py:swiglu_oai_split",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py:weight_loads",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py:scale_loads",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/a16w4.py:dequant",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/residency.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/residency.py:code_object",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/specialized_decode/mono/residency.py",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/residency.py:active_workgroups_per_cu",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPABackend",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPAPrefillMetadata",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparsePrefillMetadata",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPADecodeMetadata",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseDecodeMetadata",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPAMetadataBuilder",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/amd/sparse_attention_msa.py:MiniMaxM3SparseAiterPAImpl",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseImpl",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "function:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py:merge_topk_keys",
+   "target": "function:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py:_merge_topk_keys",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py:merge_topk_keys",
+   "target": "function:vllm/models/minimax_m3/amd/ops/indexer_cp_exchange.py:aiter_all_gather",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/amd/specialized_decode/mono/runner.py:FfnRunner",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:build_ffn",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/ffn.py:build_ffn",
+   "target": "function:vllm/models/minimax_m3/amd/specialized_decode/mono/residency.py:code_object",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

@@ -1,0 +1,42 @@
+# DeepWiki 索引 — ultraworkers/claw-code
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-27
+> 结构 30 页 · 全文 333529 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Repository Structure](1.2-repository-structure.md)
+- [2 Rust Implementation](2-rust-implementation.md)
+  - [2.1 CLI and REPL (claw-cli)](2.1-cli-and-repl-claw-cli.md)
+  - [2.2 Runtime and Conversation Engine](2.2-runtime-and-conversation-engine.md)
+  - [2.3 API Client and Provider Abstraction](2.3-api-client-and-provider-abstraction.md)
+  - [2.4 Tool Execution Engine](2.4-tool-execution-engine.md)
+  - [2.5 MCP Integration](2.5-mcp-integration.md)
+  - [2.6 Plugin System](2.6-plugin-system.md)
+  - [2.7 Worker Boot and Lane System](2.7-worker-boot-and-lane-system.md)
+  - [2.8 LSP Integration](2.8-lsp-integration.md)
+  - [2.9 Compat Harness](2.9-compat-harness.md)
+  - [2.10 Policy Engine, Green Contract, and Approval Tokens](2.10-policy-engine-green-contract-and-approval-tokens.md)
+  - [2.11 Task Packet, Task Registry, and Team/Cron System](2.11-task-packet-task-registry-and-team-cron-system.md)
+  - [2.12 Lane Events and Report Schema](2.12-lane-events-and-report-schema.md)
+  - [2.13 claw-analog: Lightweight Agent Harness](2.13-claw-analog-lightweight-agent-harness.md)
+  - [2.14 claw-rag-service: Workspace RAG and Embedding Service](2.14-claw-rag-service-workspace-rag-and-embedding-service.md)
+- [3 Python Porting Workspace](3-python-porting-workspace.md)
+  - [3.1 Python CLI and Query Engine](3.1-python-cli-and-query-engine.md)
+  - [3.2 Python Runtime and Subsystem Modules](3.2-python-runtime-and-subsystem-modules.md)
+  - [3.3 Parity Audit and Reference Data](3.3-parity-audit-and-reference-data.md)
+  - [3.4 Python Commands and Tools Registries](3.4-python-commands-and-tools-registries.md)
+- [4 Configuration and Permissions](4-configuration-and-permissions.md)
+  - [4.1 Runtime Configuration (Rust)](4.1-runtime-configuration-rust.md)
+  - [4.2 Permission Modes and OAuth](4.2-permission-modes-and-oauth.md)
+- [5 Testing and CI](5-testing-and-ci.md)
+  - [5.1 Rust Test Suite](5.1-rust-test-suite.md)
+  - [5.2 Python Test Suite and CI Pipeline](5.2-python-test-suite-and-ci-pipeline.md)
+- [6 Glossary](6-glossary.md)
+
+## 附：结构清单外的页
+- [Model Compatibility and Provider Routing](x1-model-compatibility-and-provider-routing.md)
+- [Recovery Recipes and Branch Management](x2-recovery-recipes-and-branch-management.md)
+- [Session Management and Compaction](x3-session-management-and-compaction.md)
+- [Slash Commands and Input Handling](x4-slash-commands-and-input-handling.md)
+- [System Prompt and Project Context](x5-system-prompt-and-project-context.md)

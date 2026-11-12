@@ -1,0 +1,1508 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/model_executor/kernels/mhc/warmup.py",
+   "type": "file",
+   "name": "warmup.py",
+   "filePath": "vllm/model_executor/kernels/mhc/warmup.py",
+   "summary": "MHC pre-norm kernel 的 JIT 包装与 num splits 计算。",
+   "tags": [
+    "mhc",
+    "warmup",
+    "jit-kernel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/offloader/base.py",
+   "type": "file",
+   "name": "base.py",
+   "filePath": "vllm/model_executor/offloader/base.py",
+   "summary": "参数 offloader 基础：BaseOffloader 抽象、Noop 实现与全局 offloader 的 set/create。",
+   "tags": [
+    "offloader",
+    "base-class",
+    "global-state"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/offloader/prefetch.py",
+   "type": "file",
+   "name": "prefetch.py",
+   "filePath": "vllm/model_executor/offloader/prefetch.py",
+   "summary": "预取 offloader（772 行，6 类）：层分组+静态 GPU 缓冲池+异步 H2D 预取，逐模块/逐参数两级 offloader。",
+   "tags": [
+    "offloader",
+    "prefetch",
+    "static-buffers",
+    "h2d"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/offloader/prefetch_ops.py",
+   "type": "file",
+   "name": "prefetch_ops.py",
+   "filePath": "vllm/model_executor/offloader/prefetch_ops.py",
+   "summary": "预取 offloader 的自定义 op（wait/start prefetch 注册）。",
+   "tags": [
+    "offloader",
+    "custom-op",
+    "prefetch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/offloader/uva.py",
+   "type": "file",
+   "name": "uva.py",
+   "filePath": "vllm/model_executor/offloader/uva.py",
+   "summary": "UVA offloader：统一虚拟寻址零拷贝访问 CPU 权重。",
+   "tags": [
+    "offloader",
+    "uva",
+    "zero-copy"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/parameter.py",
+   "type": "file",
+   "name": "parameter.py",
+   "filePath": "vllm/model_executor/parameter.py",
+   "summary": "vLLM 参数类型体系（11 类）：Column/Row/Model 权重参数、各粒度量化 scale 参数（group/channel/per-tensor/block）、打包参数与共享权重参数。",
+   "tags": [
+    "parameter",
+    "weights",
+    "quantization-scales",
+    "packing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/model_executor/utils.py",
+   "summary": "model_executor 工具（7 函数）：权重后处理标记、属性设置、参数替换（保持加载能力）、打包模块映射与 MoE 专家映射。",
+   "tags": [
+    "utils",
+    "weights",
+    "parameters",
+    "mapping"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/common/ops/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/common/ops/__init__.py",
+   "summary": "common ops 包 barrel（1 导入）。",
+   "tags": [
+    "barrel",
+    "ops",
+    "common"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/common/ops/fused_qk_rmsnorm.py",
+   "type": "file",
+   "name": "fused_qk_rmsnorm.py",
+   "filePath": "vllm/models/common/ops/fused_qk_rmsnorm.py",
+   "summary": "融合 QKV RMSNorm kernel（Triton JIT 包装）。",
+   "tags": [
+    "rmsnorm",
+    "fused",
+    "triton",
+    "qkv"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/common/ops/gemm_rs_ar.py",
+   "type": "file",
+   "name": "gemm_rs_ar.py",
+   "filePath": "vllm/models/common/ops/gemm_rs_ar.py",
+   "summary": "SM100 BF16 GEMM-RS/AR（multimem 16B 加载/存储原语）：GEMM 后直接 reduce-scatter 或 all-reduce，TP 对称工作区。",
+   "tags": [
+    "gemm",
+    "reduce-scatter",
+    "all-reduce",
+    "multimem",
+    "sm100"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/common/ops/sequence_parallel.py",
+   "type": "file",
+   "name": "sequence_parallel.py",
+   "filePath": "vllm/models/common/ops/sequence_parallel.py",
+   "summary": "序列并行 ops：激活判定、sp_all_gather/reduce_scatter/shard/padding_mask。",
+   "tags": [
+    "sequence-parallel",
+    "all-gather",
+    "sharding"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/mhc/warmup.py:MHCPreNormKernel",
+   "type": "class",
+   "name": "MHCPreNormKernel",
+   "filePath": "vllm/model_executor/kernels/mhc/warmup.py",
+   "summary": "mHC pre-norm kernel 的 JIT 包装（5 方法）。",
+   "tags": [
+    "mhc",
+    "jit-kernel",
+    "pre-norm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    24,
+    98
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/offloader/base.py:BaseOffloader",
+   "type": "class",
+   "name": "BaseOffloader",
+   "filePath": "vllm/model_executor/offloader/base.py",
+   "summary": "参数 offload 策略抽象（6 方法）。",
+   "tags": [
+    "offloader",
+    "abc",
+    "strategy"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    47,
+    108
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/offloader/base.py:NoopOffloader",
+   "type": "class",
+   "name": "NoopOffloader",
+   "filePath": "vllm/model_executor/offloader/base.py",
+   "summary": "直通 offloader。",
+   "tags": [
+    "offloader",
+    "noop",
+    "passthrough"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    111,
+    120
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/offloader/prefetch.py:ParamInfo",
+   "type": "class",
+   "name": "ParamInfo",
+   "filePath": "vllm/model_executor/offloader/prefetch.py",
+   "summary": "offload 参数元数据。",
+   "tags": [
+    "param-info",
+    "metadata",
+    "offload"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    30,
+    57
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/offloader/prefetch.py:StaticBufferPool",
+   "type": "class",
+   "name": "StaticBufferPool",
+   "filePath": "vllm/model_executor/offloader/prefetch.py",
+   "summary": "预分配 GPU 缓冲池（每唯一形状一份槽位容量）。",
+   "tags": [
+    "static-buffers",
+    "pool",
+    "gpu"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    60,
+    124
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/offloader/prefetch.py:PrefetchOffloader",
+   "type": "class",
+   "name": "PrefetchOffloader",
+   "filePath": "vllm/model_executor/offloader/prefetch.py",
+   "summary": "层分组+异步 H2D 预取的 offloader（8 方法）。",
+   "tags": [
+    "prefetch",
+    "h2d",
+    "layer-groups"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    142,
+    391
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/offloader/prefetch.py:_ModuleOffloader",
+   "type": "class",
+   "name": "_ModuleOffloader",
+   "filePath": "vllm/model_executor/offloader/prefetch.py",
+   "summary": "单模块 offload 管理（共享池静态缓冲，6 方法）。",
+   "tags": [
+    "module",
+    "offload",
+    "static-buffers"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    394,
+    569
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/offloader/prefetch.py:_CpuParamOffloader",
+   "type": "class",
+   "name": "_CpuParamOffloader",
+   "filePath": "vllm/model_executor/offloader/prefetch.py",
+   "summary": "CPU pinned 存储：GPU 静态缓冲为实际参数（6 方法）。",
+   "tags": [
+    "cpu",
+    "pinned",
+    "param"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    626,
+    771
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/offloader/uva.py:UVAOffloader",
+   "type": "class",
+   "name": "UVAOffloader",
+   "filePath": "vllm/model_executor/offloader/uva.py",
+   "summary": "统一虚拟寻址零拷贝 offloader（3 方法）。",
+   "tags": [
+    "uva",
+    "zero-copy",
+    "offloader"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    23,
+    155
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/parameter.py:BasevLLMParameter",
+   "type": "class",
+   "name": "BasevLLMParameter",
+   "filePath": "vllm/model_executor/parameter.py",
+   "summary": "vLLM 线性层参数基类（12 方法）。",
+   "tags": [
+    "parameter",
+    "base-class",
+    "weights"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    32,
+    118
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/parameter.py:RowvLLMParameter",
+   "type": "class",
+   "name": "RowvLLMParameter",
+   "filePath": "vllm/model_executor/parameter.py",
+   "summary": "行并行加载参数。",
+   "tags": [
+    "parameter",
+    "row-parallel",
+    "loading"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    195,
+    220
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/parameter.py:ModelWeightParameter",
+   "type": "class",
+   "name": "ModelWeightParameter",
+   "filePath": "vllm/model_executor/parameter.py",
+   "summary": "列+行并行权重参数。",
+   "tags": [
+    "parameter",
+    "model-weight",
+    "mixed-parallel"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    223,
+    228
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/parameter.py:PerTensorScaleParameter",
+   "type": "class",
+   "name": "PerTensorScaleParameter",
+   "filePath": "vllm/model_executor/parameter.py",
+   "summary": "per-tensor scale 参数。",
+   "tags": [
+    "parameter",
+    "per-tensor",
+    "scale"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    247,
+    294
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/parameter.py:PackedColumnParameter",
+   "type": "class",
+   "name": "PackedColumnParameter",
+   "filePath": "vllm/model_executor/parameter.py",
+   "summary": "磁盘打包列并行参数。",
+   "tags": [
+    "parameter",
+    "packed",
+    "column"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    297,
+    333
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/parameter.py:PackedvLLMParameter",
+   "type": "class",
+   "name": "PackedvLLMParameter",
+   "filePath": "vllm/model_executor/parameter.py",
+   "summary": "磁盘打包模型权重（如 GPTQ Marlin int4）。",
+   "tags": [
+    "parameter",
+    "packed",
+    "marlin"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    336,
+    376
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/parameter.py:SharedWeightParameter",
+   "type": "class",
+   "name": "SharedWeightParameter",
+   "filePath": "vllm/model_executor/parameter.py",
+   "summary": "模型内多张量共享权重参数（10 方法）。",
+   "tags": [
+    "parameter",
+    "shared",
+    "tied"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    387,
+    521
+   ]
+  },
+  {
+   "id": "class:vllm/models/common/ops/fused_qk_rmsnorm.py:FusedQKVRMSNormKernel",
+   "type": "class",
+   "name": "FusedQKVRMSNormKernel",
+   "filePath": "vllm/models/common/ops/fused_qk_rmsnorm.py",
+   "summary": "融合 QKV RMSNorm kernel（Triton JIT，5 方法）。",
+   "tags": [
+    "rmsnorm",
+    "fused",
+    "qkv",
+    "triton"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    19,
+    192
+   ]
+  },
+  {
+   "id": "class:vllm/models/common/ops/gemm_rs_ar.py:Sm100GemmRsArBF16",
+   "type": "class",
+   "name": "Sm100GemmRsArBF16",
+   "filePath": "vllm/models/common/ops/gemm_rs_ar.py",
+   "summary": "SM100 BF16 GEMM-RS/AR kernel（multimem 原语，5 方法）。",
+   "tags": [
+    "sm100",
+    "gemm",
+    "multimem"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    86,
+    677
+   ]
+  },
+  {
+   "id": "class:vllm/models/common/ops/gemm_rs_ar.py:GemmRsAr",
+   "type": "class",
+   "name": "GemmRsAr",
+   "filePath": "vllm/models/common/ops/gemm_rs_ar.py",
+   "summary": "TP 对称工作区拥有者（RS 或 AR 启动，2 方法）。",
+   "tags": [
+    "gemm",
+    "workspace",
+    "tp"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    680,
+    795
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/offloader/base.py:create_offloader",
+   "type": "function",
+   "name": "create_offloader",
+   "filePath": "vllm/model_executor/offloader/base.py",
+   "summary": "按 offload 配置创建 offloader。",
+   "tags": [
+    "factory",
+    "offloader",
+    "create"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    142,
+    178
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/offloader/base.py:should_pin_memory",
+   "type": "function",
+   "name": "should_pin_memory",
+   "filePath": "vllm/model_executor/offloader/base.py",
+   "summary": "权重 offload 是否用 pinned 内存。",
+   "tags": [
+    "pinned",
+    "predicate",
+    "memory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    23,
+    32
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/offloader/prefetch_ops.py:register_prefetch_offloader_ops",
+   "type": "function",
+   "name": "register_prefetch_offloader_ops",
+   "filePath": "vllm/model_executor/offloader/prefetch_ops.py",
+   "summary": "注册 wait/start prefetch 自定义 op。",
+   "tags": [
+    "custom-op",
+    "register",
+    "prefetch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    58,
+    74
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/utils.py:replace_parameter",
+   "type": "function",
+   "name": "replace_parameter",
+   "filePath": "vllm/model_executor/utils.py",
+   "summary": "替换层参数且保持加载能力。",
+   "tags": [
+    "parameter",
+    "replace",
+    "weights"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    71,
+    149
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/utils.py:get_packed_modules_mapping",
+   "type": "function",
+   "name": "get_packed_modules_mapping",
+   "filePath": "vllm/model_executor/utils.py",
+   "summary": "打包模块映射查询。",
+   "tags": [
+    "packed",
+    "mapping",
+    "modules"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    152,
+    172
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/utils.py:get_moe_expert_mapping",
+   "type": "function",
+   "name": "get_moe_expert_mapping",
+   "filePath": "vllm/model_executor/utils.py",
+   "summary": "从模型取 MoE 专家映射。",
+   "tags": [
+    "moe",
+    "expert-mapping",
+    "query"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    175,
+    187
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/parameter.py:permute_param_layout_",
+   "type": "function",
+   "name": "permute_param_layout_",
+   "filePath": "vllm/model_executor/parameter.py",
+   "summary": "参数布局置换（输入/输出维度）。",
+   "tags": [
+    "permute",
+    "layout",
+    "parameter"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    524,
+    577
+   ]
+  },
+  {
+   "id": "function:vllm/models/common/ops/fused_qk_rmsnorm.py:fused_q_kv_rmsnorm",
+   "type": "function",
+   "name": "fused_q_kv_rmsnorm",
+   "filePath": "vllm/models/common/ops/fused_qk_rmsnorm.py",
+   "summary": "融合 QKV RMSNorm 入口。",
+   "tags": [
+    "rmsnorm",
+    "fused",
+    "entry-point"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    195,
+    221
+   ]
+  },
+  {
+   "id": "function:vllm/models/common/ops/gemm_rs_ar.py:multimem_ld_reduce_16B",
+   "type": "function",
+   "name": "multimem_ld_reduce_16B",
+   "filePath": "vllm/models/common/ops/gemm_rs_ar.py",
+   "summary": "16B multimem 归约加载原语。",
+   "tags": [
+    "multimem",
+    "load",
+    "reduce"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    33,
+    65
+   ]
+  },
+  {
+   "id": "function:vllm/models/common/ops/gemm_rs_ar.py:multimem_st_16B",
+   "type": "function",
+   "name": "multimem_st_16B",
+   "filePath": "vllm/models/common/ops/gemm_rs_ar.py",
+   "summary": "16B multimem 存储原语。",
+   "tags": [
+    "multimem",
+    "store",
+    "16b"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    69,
+    83
+   ]
+  },
+  {
+   "id": "function:vllm/models/common/ops/sequence_parallel.py:is_sequence_parallel_active",
+   "type": "function",
+   "name": "is_sequence_parallel_active",
+   "filePath": "vllm/models/common/ops/sequence_parallel.py",
+   "summary": "该批是否沿序列维分片。",
+   "tags": [
+    "sequence-parallel",
+    "predicate",
+    "active"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    26,
+    32
+   ]
+  },
+  {
+   "id": "function:vllm/models/common/ops/sequence_parallel.py:sp_all_gather",
+   "type": "function",
+   "name": "sp_all_gather",
+   "filePath": "vllm/models/common/ops/sequence_parallel.py",
+   "summary": "序列并行 all-gather。",
+   "tags": [
+    "sp",
+    "all-gather",
+    "collective"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    35,
+    39
+   ]
+  },
+  {
+   "id": "function:vllm/models/common/ops/sequence_parallel.py:sp_reduce_scatter",
+   "type": "function",
+   "name": "sp_reduce_scatter",
+   "filePath": "vllm/models/common/ops/sequence_parallel.py",
+   "summary": "序列并行 reduce-scatter。",
+   "tags": [
+    "sp",
+    "reduce-scatter",
+    "collective"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    42,
+    51
+   ]
+  },
+  {
+   "id": "function:vllm/models/common/ops/sequence_parallel.py:sp_padding_mask",
+   "type": "function",
+   "name": "sp_padding_mask",
+   "filePath": "vllm/models/common/ops/sequence_parallel.py",
+   "summary": "序列并行 padding 掩码。",
+   "tags": [
+    "sp",
+    "padding-mask",
+    "batch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    65,
+    80
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/model_executor/kernels/mhc/warmup.py",
+   "target": "file:vllm/model_executor/kernels/mhc/tilelang_kernels.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/mhc/warmup.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/mhc/warmup.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/mhc/warmup.py",
+   "target": "file:vllm/utils/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/mhc/warmup.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/base.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/base.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/base.py",
+   "target": "file:vllm/model_executor/offloader/prefetch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/base.py",
+   "target": "file:vllm/model_executor/offloader/uva.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/base.py",
+   "target": "file:vllm/utils/platform_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/prefetch.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/prefetch.py",
+   "target": "file:vllm/model_executor/offloader/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/prefetch.py",
+   "target": "file:vllm/model_executor/offloader/prefetch_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/prefetch.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/prefetch_ops.py",
+   "target": "file:vllm/model_executor/offloader/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/prefetch_ops.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/uva.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/uva.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/uva.py",
+   "target": "file:vllm/model_executor/offloader/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/uva.py",
+   "target": "file:vllm/utils/gpu_sync_debug.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/uva.py",
+   "target": "file:vllm/utils/mem_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/uva.py",
+   "target": "file:vllm/utils/platform_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/uva.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/parameter.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/parameter.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/utils.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/common/ops/__init__.py",
+   "target": "file:vllm/models/common/ops/fused_qk_rmsnorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/common/ops/fused_qk_rmsnorm.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/common/ops/fused_qk_rmsnorm.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/common/ops/fused_qk_rmsnorm.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/common/ops/fused_qk_rmsnorm.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/common/ops/fused_qk_rmsnorm.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/common/ops/gemm_rs_ar.py",
+   "target": "file:vllm/cute_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/common/ops/gemm_rs_ar.py",
+   "target": "file:vllm/cute_utils/_tcgen05.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/common/ops/gemm_rs_ar.py",
+   "target": "file:vllm/cute_utils/mbarrier.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/common/ops/gemm_rs_ar.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/common/ops/sequence_parallel.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/mhc/warmup.py",
+   "target": "class:vllm/model_executor/kernels/mhc/warmup.py:MHCPreNormKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/base.py",
+   "target": "class:vllm/model_executor/offloader/base.py:BaseOffloader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/base.py",
+   "target": "class:vllm/model_executor/offloader/base.py:NoopOffloader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/base.py",
+   "target": "function:vllm/model_executor/offloader/base.py:create_offloader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/base.py",
+   "target": "function:vllm/model_executor/offloader/base.py:should_pin_memory",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/prefetch.py",
+   "target": "class:vllm/model_executor/offloader/prefetch.py:ParamInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/prefetch.py",
+   "target": "class:vllm/model_executor/offloader/prefetch.py:StaticBufferPool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/prefetch.py",
+   "target": "class:vllm/model_executor/offloader/prefetch.py:PrefetchOffloader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/prefetch.py",
+   "target": "class:vllm/model_executor/offloader/prefetch.py:_ModuleOffloader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/prefetch.py",
+   "target": "class:vllm/model_executor/offloader/prefetch.py:_CpuParamOffloader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/uva.py",
+   "target": "class:vllm/model_executor/offloader/uva.py:UVAOffloader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/parameter.py",
+   "target": "class:vllm/model_executor/parameter.py:BasevLLMParameter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/parameter.py",
+   "target": "class:vllm/model_executor/parameter.py:RowvLLMParameter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/parameter.py",
+   "target": "class:vllm/model_executor/parameter.py:ModelWeightParameter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/parameter.py",
+   "target": "class:vllm/model_executor/parameter.py:PerTensorScaleParameter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/parameter.py",
+   "target": "class:vllm/model_executor/parameter.py:PackedColumnParameter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/parameter.py",
+   "target": "class:vllm/model_executor/parameter.py:PackedvLLMParameter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/parameter.py",
+   "target": "class:vllm/model_executor/parameter.py:SharedWeightParameter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/parameter.py",
+   "target": "function:vllm/model_executor/parameter.py:permute_param_layout_",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/common/ops/fused_qk_rmsnorm.py",
+   "target": "class:vllm/models/common/ops/fused_qk_rmsnorm.py:FusedQKVRMSNormKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/common/ops/fused_qk_rmsnorm.py",
+   "target": "function:vllm/models/common/ops/fused_qk_rmsnorm.py:fused_q_kv_rmsnorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/common/ops/gemm_rs_ar.py",
+   "target": "class:vllm/models/common/ops/gemm_rs_ar.py:Sm100GemmRsArBF16",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/common/ops/gemm_rs_ar.py",
+   "target": "class:vllm/models/common/ops/gemm_rs_ar.py:GemmRsAr",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/common/ops/gemm_rs_ar.py",
+   "target": "function:vllm/models/common/ops/gemm_rs_ar.py:multimem_ld_reduce_16B",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/common/ops/gemm_rs_ar.py",
+   "target": "function:vllm/models/common/ops/gemm_rs_ar.py:multimem_st_16B",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/prefetch_ops.py",
+   "target": "function:vllm/model_executor/offloader/prefetch_ops.py:register_prefetch_offloader_ops",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/utils.py",
+   "target": "function:vllm/model_executor/utils.py:replace_parameter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/utils.py",
+   "target": "function:vllm/model_executor/utils.py:get_packed_modules_mapping",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/utils.py",
+   "target": "function:vllm/model_executor/utils.py:get_moe_expert_mapping",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/common/ops/sequence_parallel.py",
+   "target": "function:vllm/models/common/ops/sequence_parallel.py:is_sequence_parallel_active",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/common/ops/sequence_parallel.py",
+   "target": "function:vllm/models/common/ops/sequence_parallel.py:sp_all_gather",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/common/ops/sequence_parallel.py",
+   "target": "function:vllm/models/common/ops/sequence_parallel.py:sp_reduce_scatter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/common/ops/sequence_parallel.py",
+   "target": "function:vllm/models/common/ops/sequence_parallel.py:sp_padding_mask",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/mhc/warmup.py",
+   "target": "class:vllm/model_executor/kernels/mhc/warmup.py:MHCPreNormKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/base.py",
+   "target": "class:vllm/model_executor/offloader/base.py:BaseOffloader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/base.py",
+   "target": "class:vllm/model_executor/offloader/base.py:NoopOffloader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/base.py",
+   "target": "function:vllm/model_executor/offloader/base.py:create_offloader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/base.py",
+   "target": "function:vllm/model_executor/offloader/base.py:should_pin_memory",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/prefetch.py",
+   "target": "class:vllm/model_executor/offloader/prefetch.py:ParamInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/prefetch.py",
+   "target": "class:vllm/model_executor/offloader/prefetch.py:StaticBufferPool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/prefetch.py",
+   "target": "class:vllm/model_executor/offloader/prefetch.py:PrefetchOffloader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/uva.py",
+   "target": "class:vllm/model_executor/offloader/uva.py:UVAOffloader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/parameter.py",
+   "target": "class:vllm/model_executor/parameter.py:BasevLLMParameter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/parameter.py",
+   "target": "class:vllm/model_executor/parameter.py:RowvLLMParameter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/parameter.py",
+   "target": "class:vllm/model_executor/parameter.py:ModelWeightParameter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/parameter.py",
+   "target": "class:vllm/model_executor/parameter.py:PerTensorScaleParameter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/parameter.py",
+   "target": "class:vllm/model_executor/parameter.py:PackedColumnParameter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/parameter.py",
+   "target": "class:vllm/model_executor/parameter.py:PackedvLLMParameter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/parameter.py",
+   "target": "class:vllm/model_executor/parameter.py:SharedWeightParameter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/parameter.py",
+   "target": "function:vllm/model_executor/parameter.py:permute_param_layout_",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/common/ops/fused_qk_rmsnorm.py",
+   "target": "class:vllm/models/common/ops/fused_qk_rmsnorm.py:FusedQKVRMSNormKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/common/ops/fused_qk_rmsnorm.py",
+   "target": "function:vllm/models/common/ops/fused_qk_rmsnorm.py:fused_q_kv_rmsnorm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/common/ops/gemm_rs_ar.py",
+   "target": "class:vllm/models/common/ops/gemm_rs_ar.py:Sm100GemmRsArBF16",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/common/ops/gemm_rs_ar.py",
+   "target": "class:vllm/models/common/ops/gemm_rs_ar.py:GemmRsAr",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/common/ops/gemm_rs_ar.py",
+   "target": "function:vllm/models/common/ops/gemm_rs_ar.py:multimem_ld_reduce_16B",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/common/ops/gemm_rs_ar.py",
+   "target": "function:vllm/models/common/ops/gemm_rs_ar.py:multimem_st_16B",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/offloader/prefetch_ops.py",
+   "target": "function:vllm/model_executor/offloader/prefetch_ops.py:register_prefetch_offloader_ops",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/utils.py",
+   "target": "function:vllm/model_executor/utils.py:replace_parameter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/utils.py",
+   "target": "function:vllm/model_executor/utils.py:get_packed_modules_mapping",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/utils.py",
+   "target": "function:vllm/model_executor/utils.py:get_moe_expert_mapping",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/common/ops/sequence_parallel.py",
+   "target": "function:vllm/models/common/ops/sequence_parallel.py:is_sequence_parallel_active",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/common/ops/sequence_parallel.py",
+   "target": "function:vllm/models/common/ops/sequence_parallel.py:sp_all_gather",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/common/ops/sequence_parallel.py",
+   "target": "function:vllm/models/common/ops/sequence_parallel.py:sp_reduce_scatter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/common/ops/sequence_parallel.py",
+   "target": "function:vllm/models/common/ops/sequence_parallel.py:sp_padding_mask",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/offloader/base.py:NoopOffloader",
+   "target": "class:vllm/model_executor/offloader/base.py:BaseOffloader",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/offloader/prefetch.py:PrefetchOffloader",
+   "target": "class:vllm/model_executor/offloader/base.py:BaseOffloader",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/offloader/uva.py:UVAOffloader",
+   "target": "class:vllm/model_executor/offloader/base.py:BaseOffloader",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/parameter.py:RowvLLMParameter",
+   "target": "class:vllm/model_executor/parameter.py:BasevLLMParameter",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/mhc/warmup.py:MHCPreNormKernel",
+   "target": "class:vllm/model_executor/warmup/jit_warmup.py:VllmJitKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/common/ops/fused_qk_rmsnorm.py:FusedQKVRMSNormKernel",
+   "target": "class:vllm/model_executor/warmup/jit_warmup_triton_helper.py:VllmTritonJitKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "function:vllm/model_executor/offloader/base.py:create_offloader",
+   "target": "class:vllm/model_executor/offloader/prefetch.py:PrefetchOffloader",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/offloader/base.py:create_offloader",
+   "target": "class:vllm/model_executor/offloader/uva.py:UVAOffloader",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/offloader/prefetch.py:PrefetchOffloader",
+   "target": "class:vllm/model_executor/offloader/prefetch.py:StaticBufferPool",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/offloader/prefetch.py:PrefetchOffloader",
+   "target": "class:vllm/model_executor/offloader/prefetch.py:_ModuleOffloader",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/common/ops/gemm_rs_ar.py:GemmRsAr",
+   "target": "class:vllm/models/common/ops/gemm_rs_ar.py:Sm100GemmRsArBF16",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

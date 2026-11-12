@@ -1,0 +1,199 @@
+# Frontend
+
+STATUS: partial — Phase 0 ships file tree + single editor + tabs scaffolding.
+
+## Stack
+
+- Svelte 5 (runes) + TypeScript
+- Vite (Tauri's recommended bundler)
+- CodeMirror 6 for the editor
+- `@pierre/trees` (vanilla mode) for the file tree
+- CSS variables for theming, no CSS framework
+- No global CSS reset beyond a tiny `:root` defaults block
+
+## Module layout
+
+```
+src/
+├── App.svelte                  Root layout: sidebar | editor area | status bar
+├── main.ts                     Mount + global setup
+├── styles.css                  CSS variables (theme tokens) + a small reset
+├── lib/
+│   ├── ipc.ts                  Typed wrappers around Tauri commands
+│   ├── protocol.ts             TS types mirroring crates/moon-protocol
+│   ├── state.svelte.ts         Workspace/editor state ($state runes)
+│   ├── components/
+│   │   ├── FileTree.svelte     Wraps @pierre/trees vanilla
+│   │   ├── Editor.svelte       Wraps CodeMirror 6
+│   │   ├── EditorTabs.svelte   Tab strip
+│   │   ├── StatusBar.svelte
+│   │   └── Sidebar.svelte
+│   └── editor/
+│       └── language.ts         Lezer/CM6 language extension picker per file
+```
+
+## State
+
+Workspace and editor state lives in `state.svelte.ts` using Svelte 5 `$state`. Single shared store; components read it directly via `import { workspace } from '$lib/state.svelte'`.
+
+```ts
+type WorkspaceState = {
+	rootPath: string | null;
+	paths: string[]; // flat path list for Pierre Trees
+	openFiles: OpenFile[];
+	activeFileId: string | null;
+};
+```
+
+Avoid Svelte stores (`writable`) — runes are simpler for app-level state. Use stores only for cross-cutting reactive primitives if we need them.
+
+## IPC convention
+
+Every Tauri command is wrapped in `lib/ipc.ts` with a typed function:
+
+```ts
+export const ipc = {
+	fs: {
+		readDir: (path: string) => invoke<DirEntry[]>('fs_read_dir', { path }),
+		readFile: (path: string) => invoke<ReadFileResult>('fs_read_file', { path }),
+		// ...
+	},
+};
+```
+
+Components never call `invoke` directly. This keeps the Rust/TS surface auditable in one file.
+
+## Editor
+
+CodeMirror 6 is configured in `Editor.svelte`. Language extensions are loaded per file (lazy via dynamic import). Phase 0 includes TS/JS, JSON, CSS, MD, HTML.
+
+State per editor:
+
+- doc + selection + scroll
+- dirty flag
+- file mtime at load (to detect external changes later)
+- per-tab view-state snapshot (caret + anchor + `scrollTop` + serialized CM history) cached on `WorkspaceState.viewStateByKey`, captured right before a tab swap and replayed on return. Includes the undo history (`EditorState.toJSON({ history: historyField })`) so `Ctrl+Z` after `Alt+Left`-ing back to an unsaved buffer still walks through edits made before the user clicked away. Dropped when the buffer falls out of every pane (`closeFile`'s GC block), so a fresh open from the tree starts with an empty undo stack.
+
+Saves go through `ipc.fs.writeFile`. The editor only tracks dirty state; persistence is owned by the workspace state module.
+
+### Extensions baseline
+
+`baseExtensions()` in `Editor.svelte` is the single source of truth for what every editor instance gets. It's deliberately explicit rather than pulled from `codemirror`'s kitchen-sink `basicSetup` — we want to know exactly which behaviours are on:
+
+- **Line numbers + active line/gutter** — structural.
+- **`bracketMatching` + `closeBrackets`** — matches the paren/bracket/brace under the caret, and auto-inserts the matching close glyph on opener input. `closeBracketsKeymap` is merged into the keymap so backspace on an empty pair deletes both sides.
+- **`indentOnInput` + `history`** — language-aware reindent after tokens and full undo/redo.
+- **`highlightSelectionMatches`** — highlights other occurrences of the current selection in the buffer (matches VSCode's "selection highlights").
+- **`searchAsYouType()`** (`editor/searchAsYouType.ts`) — the Ctrl-F find panel. We replace the stock `@codemirror/search` panel (which only commits the query on Enter) with a custom `createPanel` that keeps the same DOM + feature set (case / regexp / whole-word toggles, replace fields, next/prev/all buttons) but jumps the selection to the first match on every keystroke, like the browser find bar. The first-match search anchors to the caret position captured when the panel opens, so refining the query stays on the same match instead of marching the caret forward. Enter / Shift+Enter still step to the next / previous match from the current selection. This extension must be present (not just `searchKeymap`) so `openSearchPanel` uses our panel rather than auto-enabling the default `search()`. Wired into all three editor surfaces (regular editor, working-tree diff, review sections).
+- **`autocompletion({ activateOnTyping: false })`** — completion surface only; no source is registered yet. Opens explicitly on Ctrl-Space or when a future LSP source dispatches one. We keep the popover off the typing path because the built-in identifier-from-document source is too noisy to show unprompted, and the real sources (LSP, snippets) arrive in a later phase.
+- **`foldGutter`** — code folding driven by each language's Lezer grammar (`languageData.foldNodeProp`). Languages with a Lezer grammar (TS/JS, JSON, Rust, Go, Python, HTML/Svelte, Vue, CSS, Markdown, YAML) fold; legacy `StreamLanguage` modes (TOML, shell, Dockerfile, properties, ignore/dotenv, JSONL, Dart) have no fold info and render an empty marker column. Gutter sits immediately right of the line numbers; click the marker to fold/unfold. Fold state is in-memory per editor instance — we don't persist folds across file reopens. Wired into `DiffView` on both sides too: `@codemirror/merge` re-measures and rebalances its block spacers when a side's height changes (its update listener calls `updateSpacers` on `heightChanged`), so folds on one pane don't desynchronise the alignment — the other pane gains spacers at the next unchanged-region boundary. We deliberately skip CM's `foldKeymap` because `Ctrl-Alt-[` / `Ctrl-Alt-]` (foldAll / unfoldAll) shadow the AltGr-`[` / AltGr-`]` glyphs on French AZERTY and other AltGr-using layouts (Linux browsers report AltGr as `ctrlKey + altKey`, and CM's keyName-based match fires before any layout heuristic) — installing the keymap would mean a French-keyboard user couldn't type `[` without folding the entire file. Add a layout-stable keyboard binding (F-key, or a `Ctrl+K` leader sequence) if one becomes a real ask.
+- **Tab / indent** — `indentWithTab` keyed, indent unit and tab size driven by the `editorConfigCompartment`.
+- **Sticky scroll** (`editor/stickyScroll.ts`) — VS Code-style pinned header showing the chain of enclosing definitions (class → method → inner fn) of the first visible line, capped at 5 rows, one row per scope, clickable to jump to the definition. Scope detection reuses `enclosingStack` from `editor/diffCollapseContext.ts` (the same indent-walk heuristic as the review tab's collapse labels — never wrong, occasionally absent; see [ADR 0038](decisions/0038-sticky-scroll.md)). Rows render the real line text through the live syntax tree + active highlight style, so colors and column alignment match the document. Installed on the regular editor and both `DiffView` panes; not on review-tab sections (their editors don't scroll — the outer container does, and the section already has a sticky file header).
+
+Anything not in that list is intentionally off. Notably **no** rectangular selection, **no** rainbow brackets (deferred — wants a Lezer-aware scan to skip strings/comments; will land as a small standalone extension when it's someone's actual itch).
+
+### Per-file language extensions
+
+`languageFor(path, firstLine?)` in `editor/language.ts` is the single entry point that picks a CodeMirror language extension for a buffer. It maps filename → extension (`.ts` → `javascript({ typescript: true })`, `.rs` → `rust()`, …), with filename-fallbacks for extensionless files the repo ships (`Cargo.lock` → toml, `Dockerfile.*` → dockerfile) and shebang sniffing for the rest. Diff and review editors share the same resolver so a file highlights identically in every pane. Fenced ```dart code blocks in Markdown previews and LSP hover popovers highlight through the same grammar via `editor/highlightCode.ts`.
+
+**GitHub Actions workflow files** (`.github/workflows/*.{yml,yaml}`) get a derived YAML grammar instead of the plain `yaml()`: the upstream Lezer YAML parser configured with a `parseMixed` wrapper that overlays the legacy shell stream-parser onto `run:` and `shell:` values. Both block scalars (`run: |` → `BlockLiteralContent`) and plain scalars (`run: echo x` → `Literal`) are overlaid; the wrapper climbs to the enclosing `Pair`, reads the `Key` text, and mounts the shell parser over the value's range only. Keys, `env:`, `with:`, and every other YAML node keep their original grammar — block-mapping folding and indentation survive untouched. Plain `.yml`/`.yaml` files outside `.github/workflows/` still get the standard `yaml()` extension. The overlay is a behaviour of the workflow grammar, not a separate file kind: LSP, git, blame, and editorconfig wiring are unchanged.
+
+**Doc-comment tags** (`editor/doctags.ts`) get an emphasis layer on top of the grammar's flat comment styling. One flavor per language branch, each with its own "is this a doc comment" rule because the signal differs:
+
+- **JSDoc** (JS/TS, and Svelte `<script>` bodies) — marker bytes: `/** … */` blocks get `@param` / `{@link Target}` (sigil + target, `linkcode`/`linkplain` included), plain `//` lines get only the `@ts-*` pragmas (allowlist, so `@handle` mentions stay plain). The nested `BlockComment` nodes the composite Svelte grammar produces are covered too.
+- **rustdoc** (Rust) — `///` / `//!` / `/**` / `/*!` docs only: `# Section` headings (whole-line span) and `[Foo]` / `[`Bar`]` / `[crate::baz]` intra-doc links; ordinary `//` chatter stays plain.
+- **godoc** (Go) — position rule, since Go has no doc marker bytes: a comment block counts when its last line directly precedes a declaration (walk `nextSibling` through comment siblings — gopls applies the same adjacency). Decorates `[Name]` / `[pkg.Name]` doc links (identifier-path inner only, so `[1, 2]` prose stays plain) and single-`#` headings.
+- **pydoc** (Python) — docstrings are _string_ nodes in the first-statement position of a module/class/function body (PEP 257; `String` under the body's first `ExpressionStatement`). Decorates Sphinx fields (`:param x:`) and roles (`:func:`foo`` → sigil tag + payload link). Ordinary strings stay plain.
+
+Implementation: a `ViewPlugin` that iterates **syntax-tree nodes** in the visible ranges and decorates tag / link / heading spans (`cm-doctag`, `cm-doctag-link`, `cm-doctag-heading`; colors via `--m-syntax-doctag` + `--m-syntax-link` + `--m-syntax-heading` so theme flips repaint for free). The tree gate keeps TS `@decorator` syntax, annotations, and emails in prose from lighting up. Registered per-language branch in `language.ts`, not globally. Rebuild is gated on doc/viewport/tree-generation change.
+
+**Ctrl/Cmd-click jumps through doc-link targets with no extra wiring**: the goto-definition extension already probes any word under the held modifier (comment or not), and the servers answer — verified live: tsgo resolves `definition` on the target inside `{@link Widget.spin}` (the method, when the click lands on `spin`), rust-analyzer on `[Widget]` in a doc comment. Servers that refuse comment positions just return null → no underline, no jump — the gesture degrades to nothing rather than breaking.
+
+**Dart** (`.dart`) has no upstream Lezer grammar (`@lezer/dart` doesn't exist), so it uses the legacy CM5 mode exported from `@codemirror/legacy-modes/mode/clike` rather than a `lang-*` package. That mode is the right call regardless: it handles Dart's `$x` / `${…}` string interpolation, `r'…'` raw strings, triple-quoted strings, and `@annotations`, which a keyword-and-string clike would mis-highlight. Like the other stream modes it has no fold info.
+
+**Zig** (`.zig`) uses `codemirror-lang-zig` — the de-facto CM6 grammar (Jared Hughes, Zed team), generated from the zig-spec repository's `grammar.y`. No official `@codemirror/lang-zig` exists upstream. It's a proper Lezer parser with `styleTags` wired to the standard tag set, so the `--m-syntax-*` theme paints it with zero extra theme work; its `languageData` also registers keyword autocomplete and `//` comment tokens (which the comment-toggle keymap picks up for free). `build.zig.zon` (Zig's package manifest) stays plain text — no grammar for the ZON format exists and `languageFor` keys on the final extension. Highlighting-only: no ZLS / LSP wiring; add `zig` to `lspLanguageFor` + a broker spec when the team asks for more than colors.
+
+### Diff and conflict surfaces
+
+Different jobs, different tools:
+
+- **Working-tree diff** (modified-file `View diff`, deleted files): `@codemirror/merge`'s `MergeView` — two CodeMirror editors side by side, sharing the regular editor's language / theme / editorconfig stack. Left side (`HEAD`) is read-only, right side (working tree) is editable so the user can fix things up directly inside the diff. `Ctrl+S` writes the right-hand buffer back through the normal `saveActive` path.
+- **Hide-whitespace toggle** (review tab + working-tree diff): `workspace.ignoreWhitespace`, **default-on** and persisted per folder (`FolderSession.ignore_whitespace`, same reasoning as `compare_baseline`); palette `Toggle Whitespace in Diffs`, banner pill in the review tab. When on, the `diffConfig.override` wrapper in `editor/diffWhitespace.ts` drops changes whose A/B texts differ only in whitespace — `git diff -w` semantics, string literals included — so line tints, chunk highlights, collapse placeholders, and chunk navigation all agree. Flips reconfigure the live MergeView in place (no remount; docs/folds/selections survive).
+- **Read-only diffs** (commit detail, SCM review panel, PR hover): same `@codemirror/merge` engine, configured with both sides read-only. Avoids carrying two diff renderers around.
+- **Review changes pseudo-tab** (`review://default-branch`, see Phase 5 §5.4): same `@codemirror/merge` engine, stacked one `MergeView` per changed file inside a single scrollable container; each section lazy-mounts on `IntersectionObserver` hit so opening a 100-file branch stays snappy. Long unchanged runs collapse behind `… N unchanged lines` placeholders, each annotated with the enclosing definition (function / class / method) of the code that follows — GitHub's `@@`-header trick — via the `editor/diffCollapseContext.ts` view plugin. The symbol comes from a text heuristic (nearest shallower definition-looking line), not LSP, so it stays in step with the tab's deliberately-silent broker; it produces no label rather than a wrong one when it can't find a convincing match. **Left side (base / `HEAD`) is read-only; right side (working tree) is editable** for everything except `deleted` rows, matching the working-tree-diff surface above. Edits route through `workspace.updateText` against a lazily-attached `OpenFile`; `Ctrl+S` from inside a section saves the underlying file via `saveReviewSection` (the global Ctrl+S handler delegates when the active tab is the synthetic `review://` buffer and a section has focus). Ctrl/Cmd-click goto-definition is wired on the right side with a lazy first-modifier-hover attach (the section calls `ensureBackingBuffer` only when the user is actually probing it, so broker traffic stays proportional to user intent); the jump itself routes through `workspace.jumpTo`, which opens the target as a regular editor tab in the same pane — exactly the "leave review mode and land on the function" behaviour. Hover / completion / diagnostics still aren't wired (they'd require eager `didOpen` on every visible section); click the section header's path to open the file as a regular tab when those are wanted.
+- **Editable merge conflicts**: handled in the regular CM editor (not a MergeView) by the `editor/conflictMarkers.ts` extension. It decorates the `<<<<<<<` / `|||||||` / `=======` / `>>>>>>>` block in place and overlays an inline `Accept current` / `Accept incoming` / `Accept both` widget on the opening marker line. Same keybindings, theme, selection, undo stack as any other buffer — the conflict surface is just the regular editor with extra decoration. Gated on `gitStatusEntries[path].status === 'conflicted'` so files that happen to contain marker syntax (this very document, test fixtures) stay inert. The full conflict-resolution flow (SCM panel reshape, abort, auto-stage on save, commit-merge with soft-warn on residual markers) lives in Phase 5 §5.6.
+- **Main editor buffer**: CodeMirror 6, as above.
+
+The split matters because Pierre Diffs is display-only — forcing it to also edit would either duplicate CM's work or give us a second inferior editor. Keeping CM for every editable surface keeps "what works in the main editor" identical to "what works in the conflict editor".
+
+### Markdown preview images
+
+`MarkdownView.svelte` resolves relative `<img src>` in the rendered preview against the markdown file's own directory (`/foo.png` = workspace root, same rules as relative links) and rewrites them to asset-protocol URLs — the same streaming path the binary viewers use. The rewrite happens per file _after_ the shared render cache, which is keyed by source text only and must not leak resolved URLs across directories. Absolute `http(s)`/`data:` srcs pass through untouched; unresolvable ones (escape the root via `..`) stay as-is and render as broken images with their alt text. Untitled buffers skip resolution (no directory to resolve against).
+
+### Binary file viewers
+
+`util/fileKind.ts` maps a path to a `FileKind` (`text` / `image` / `pdf` / `video`); anything not recognised as a previewable binary is `text`. All binary kinds open as **read-only preview buffers**: `OpenFile.text` stays empty, the bytes never round-trip through the editor, and the buffer carries a `previewUrl` (`convertFileSrc(absolutePath)` — a Tauri asset-protocol URL that streams the on-disk bytes through the active host). All the `kind === 'text'` guards (LSP `didOpen`, blame, HEAD seed, format-on-save, Save As) naturally skip them. Save As is refused with a toast — copying bytes through the host is unimplemented until someone asks.
+
+- **Images** (`ImageView.svelte`): an `<img src={previewUrl}>` on a checkerboard, footer reports natural dimensions. When the fs-watcher reports the image's own path changed, `WorkspaceState.refreshPreviewFile` re-resolves the bytes with a cache-busted URL (`?t=<previewToken>`) and bumps `previewToken`, which re-keys the `<img>` — the webview caches `asset:` responses per URL, so an unchanged URL would keep the stale render. The `null`-subset full sweep (window focus, palette refresh) deliberately skips binaries. `PdfView` re-renders on the same token. See [ADR 0051](decisions/0051-tab-rename-reveal-live-previews.md).
+- **Videos** (`VideoView.svelte`): a native `<video controls src={previewUrl}>`, footer reports dimensions and duration. The asset protocol answers HTTP Range requests (206 / `Accept-Ranges`), so seeking streams from disk instead of buffering the file. Extensions are limited to containers the webviews can actually decode (`mp4` / `m4v` / `webm` / `mov`); playback still depends on platform codecs — WKWebView decodes H.264 natively, WebKitGTK needs the GStreamer plugins — so a decode failure shows an in-pane explanation rather than a black box. Same `previewToken` refresh as images. Note videos do **not** flow to the coder: there is no portable LLM wire format for video (see `coder.md` § Image attachments), so `read_file` on a video still errors as binary.
+- **PDFs** (`PdfView.svelte`): rendered with **pdf.js** (`pdfjs-dist`), one `<canvas>` per page stacked in a scrollable column. We rasterise ourselves rather than embedding an `<iframe>`/`<embed>` because WebKitGTK — the Linux / container webview — ships no native PDF viewer, so a browser-native embed renders blank there. The library (~400 kB) and its worker load lazily on first PDF open (dynamic `import('pdfjs-dist')`) so they stay out of the main bundle. Bytes are fetched from `previewUrl` as an `ArrayBuffer` and handed to pdf.js as `{ data }` (simpler than teaching pdf.js's URL transport about the custom asset scheme; PDFs are small enough that one-shot loading is fine). Read-only — no text selection, search, or zoom controls yet; add them when the team asks.
+
+**Out-of-workspace previews** (an agent's screenshot under `/tmp`, a fixture in `~/Downloads`) can't use the asset protocol: it resolves through the workspace-root-gated host and only ever reads the _host_ filesystem, so a path outside every bound folder is refused and a container-only path is invisible. Those load through `fs_read_preview_host` instead, which returns a `data:` URL — bytes read host-first, falling back to `docker exec cat` when the workspace shell container is running and the host has no such file. Capped at 25 MB (base64 in memory, versus streaming for the in-workspace path). Same read-only buffer otherwise, with `isExternal: true`. Extension→MIME lives in `commands/fs.rs::preview_mime` and must stay in step with `fileKindFor`'s `IMAGE_EXTS` / `VIDEO_EXTS`; a test pins the pairing.
+
+### Editor context menu
+
+Right-clicking inside the main `Editor` opens a small `ContextMenu.svelte` popover (the same component the tab strip and file tree use, portaled onto `document.body` so it isn't clipped by the editor's `overflow: hidden`). Opening the menu first moves the caret to the click position unless the click landed inside the current selection, so the entries target what the user right-clicked on. It carries **Rename symbol** (drives the same LSP F2 flow via `triggerRename`; greyed out for buffers with no LSP server, i.e. `lspLanguageFor(path) === null`) and **Copy repo link**, the latter operating on the lines under the current selection (or the caret line when nothing is selected). It routes through `ipc.fs.gitPermalink` → `WorkspaceHost::git_permalink`, which builds a permalink pinned to the current commit SHA (so the link is stable across later commits, matching GitHub's own "Copy permalink") — `blob/<HEAD-sha>/<path>#L<a>-L<b>` on GitHub, `src/commit/<HEAD-sha>/…` on Forgejo (see [ADR 0073](decisions/0073-forgejo-support.md)). The menu is suppressed for untitled / external / `review://` buffers — a permalink makes no sense there, so the platform menu shows instead.
+
+The menu lives in `editor/editorContextMenu.ts` (`EditorContextMenu` class) so the diff view's **editable right-hand pane** mounts the same actions — only right-clicks inside that pane qualify (left-pane / HEAD clicks fall through to the platform menu), and Rename is forced off on deleted-file diffs (empty, LSP-less right pane). See [test plan 0091](test-plans/0091-editor-github-permalink.md).
+
+### Tab strip and file-tree context menus
+
+The tab strip's right-click menu (`EditorTabs.svelte`) carries **Rename…** (inline edit of the tab label — leaf name only, separators refused — routed through `WorkspaceState.renamePath`, which rebinds open buffers and now refuses while the affected buffer is dirty), **Reveal in file manager** (`fs_reveal_in_folder`), copy-path entries, and the close-family actions. The file tree's row menu (`FileTree.svelte`) has its own Pierre-driven inline **Rename**, the same **Reveal in file manager** entry, and the new-file / diff / discard / delete actions. Both mount the shared `ContextMenu.svelte` portaled onto `document.body`. See [ADR 0051](decisions/0051-tab-rename-reveal-live-previews.md).
+
+### LSP hook
+
+Planned shape (not yet built): a per-file `ViewPlugin` subscribes to moon-core's LSP broker (one adapter per capability — hover, go-to-def, diagnostics, completions). The adapter translates LSP events into CM's `hoverTooltip`, `gotoDefinition` command, `setDiagnostics` effect, and `autocompletion` source respectively. Nothing goes to the UI that didn't come through moon-core — no direct LSP process ownership on the frontend.
+
+Git blame is shaped the same way: a `ViewPlugin` that reads per-line blame from moon-core and decorates the gutter with a soft right-aligned annotation. Both ride the same infra that discard-changes already uses (workspace state → IPC → rust core → surface).
+
+## File tree
+
+`@pierre/trees` `FileTree` class is instantiated in `FileTree.svelte`'s `onMount`. Mounted into a div via `tree.render({ containerWrapper })`. Selection and double-click are wired to `workspace.openFile(path)`. The component cleans up via `tree.cleanUp()` in `onDestroy`.
+
+We don't wrap Pierre Trees behind an adapter — we use it directly. If we need to swap implementations later, this single component is the only place that changes.
+
+The path list fed to Pierre comes from `WorkspaceHost::collect_paths` (one IPC, full recursive walk on the blocking pool). Two performance choices matter:
+
+- **Backend prunes gitignored directories.** Before walking, `collect_paths` runs `git status --porcelain=v1 -z --ignored=matching` to learn which directories git would collapse to a single `!! dir/` row. The walk emits each such directory as a single collapsed entry and **does not enumerate its descendants**. On a moon-ide-sized repo this drops the path count from ~127k to ~25k — the bulk of the savings is `node_modules/` and `target/`. Non-repo folders see an empty skip set and walk everything (no authoritative ignore source to consult).
+- **Backend depth cap with lazy frontier.** `collect_paths` recurses to `MAX_TREE_DEPTH=16` (frontend constant). Directories whose recursion the cap stops short of return alongside the path set in `CollectPathsResult.depth_capped`; the frontend feeds them into the same lazy-load bucket as gitignored directories. 16 covers every realistic project (deepest SvelteKit `[param]/` route stacks, monorepo `packages/<scope>/<name>/src/**`); the lazy frontier is defence-in-depth for genuinely deeper trees we haven't seen yet. Empty leaf directories at the cap aren't marked lazy — there's nothing to fetch on expansion.
+- **Lazy descendant fetch.** When the user expands a collapsed-ignored or depth-capped directory in the file tree, `FileTree.svelte` issues `fs_collect_paths_under(rel, max_depth=0)` to fetch its direct children and batch-adds them to Pierre. The same response carries a `depth_capped` list: only those direct children get re-flagged as lazy, so drilling deeper into `node_modules/foo/bar/` re-issues the command at the next level while empty leaves stay non-lazy. Loaded paths are tracked separately from `workspace.paths` and re-unioned into the merged path set on every refresh so the path-set effect's `applyPathsDiff` doesn't churn them. Folder switches reset the lazy bucket; same-folder watcher refreshes preserve it.
+- **`resetPaths` over `applyPathsDiff` for wholesale changes.** Pierre's `tree.batch([{type:'add', path}, …])` runs an event-per-op emit + child-index update; on 80k+ paths that's seconds of main-thread time. `resetPaths` rebuilds the path store in one shot. `FileTree.svelte` picks `resetPaths` whenever the active folder changes, when the previous snapshot was empty and the next isn't, and on first mount; otherwise small steady-state diffs (save, delete, watcher event) use the cheaper `applyPathsDiff`. See [test plan 0076](test-plans/0076-folder-switch-perf.md).
+
+## Theming
+
+CSS custom properties only. The only stylesheet-global signal is the `.light` class on `:root`: present → light palette, absent → dark palette. Pierre Trees is themed via the same custom properties (it reads CSS vars from the host).
+
+The user picks one of three modes in the status-bar theme picker — **System**, **Dark**, **Light** — persisted in `AppState.theme` (see `crates/moon-protocol/src/theme.rs`). System is the default for fresh installs.
+
+- The picked mode is stored verbatim. The painted palette is the _resolved_ `WorkspaceState.effectiveTheme`, which is `dark` / `light` when the user picked one of those and the OS preference when they picked `System`.
+- The OS preference is resolved by the desktop shell via the `system_theme` Tauri command. On Linux / BSD the command talks to the XDG Desktop Portal (`org.freedesktop.appearance color-scheme`) through `ashpd`, which is the same channel Firefox and Chromium listen on; on macOS / Windows it forwards `tauri::WebviewWindow::theme()`. The detour matters because in a WebKitGTK webview both `matchMedia('(prefers-color-scheme: dark)')` and Tauri's own `getCurrentWindow().theme()` ignore the GTK / GNOME / KDE preference and default to light, so System mode flipped to light on every launch for users on a dark desktop. `restoreAppState` awaits the probe before the first `applyTheme` call so the UI doesn't flash.
+- Live OS-theme flips go through the same platform split. On Linux a tokio task in the desktop shell subscribes to `Settings.receive_color_scheme_changed` via ashpd and re-broadcasts each change as the `system:theme-changed` Tauri event, which the frontend `listen`s for. On macOS / Windows `getCurrentWindow().onThemeChanged` fires directly on the webview, so the Linux watcher compiles to a no-op there. `matchMedia` is left wired as a last-resort fallback for non-Tauri dev shells (vite-only).
+- Surfaces that can't read CSS variables (CodeMirror's `dark: boolean` build-time flag, xterm.js's option-bag palette) have their own `$effect` blocks keyed on `effectiveTheme` and reconfigure when it flips.
+
+### Workspace colour scheme
+
+Each workspace's badge colour (`WorkspaceMeta.color`, else the hash-derived hue) drives a full per-workspace colour scheme so multiple open windows are distinguishable at a glance — see [ADR 0047](decisions/0047-workspace-chrome-tint.md). At hydrate, JS derives the whole `--m-*` surface/border/text/accent token set from the colour's hue and writes it on `:root` (dark values on the plain names, light on `*-light` twins; `:root.light` re-points the plain names at the twins, so theme flips stay pure CSS). Surfaces get the hue at low saturation, text stays neutral, and `--m-accent` carries the hue at full voice so every existing accent consumer follows for free. Warning re-pins to amber unless the workspace hue is amber itself. Syntax highlighting (`--m-syntax-*`) and ANSI terminal colours are deliberately untouched.
+
+## Window state
+
+Window size, position, maximized, and fullscreen state are persisted by the official `tauri-plugin-window-state` plugin. It writes its own JSON next to `state.json` and hooks window creation / close automatically — we don't roll our own because it handles monitor placement and DPI edge cases we'd rather not reimplement. That means this slice of UI state lives outside `AppState`; everything else (theme, last session, bottom panel) stays in `state.json`.
+
+## Keymap
+
+Cm6 default keymap + a small layer of app-level shortcuts wired in `App.svelte`:
+
+- `Cmd/Ctrl+S` — save active file
+- `Cmd/Ctrl+P` — quick open (Phase 1)
+- `Cmd/Ctrl+Shift+P` — command palette (Phase 1)
+
+Linux uses `Ctrl`; macOS `Cmd`. We test for `navigator.platform`.

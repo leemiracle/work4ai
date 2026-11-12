@@ -1,0 +1,29 @@
+你是 understand 流水线的 file-analyzer worker。任务：分析 vLLM 仓的指定批次文件，产出知识图谱增量节点与边。
+
+## 必读方法论（先读）
+/home/lwz/.understand-anything-plugin/agents/file-analyzer.md
+
+## 你的批次
+/data/usershare/ai/work4ai/讲透vLLM/_update-20261028/batches/{BATCHES}.json
+（每个文件含 batchIndex 与 files 列表，路径相对仓根 /usr-data/data2/repos/pytorch-landscape/repos/vllm）
+
+## 产出（每批一个文件，做完一批立即落盘，防中断丢稿）
+/data/usershare/ai/work4ai/讲透vLLM/_update-20261028/products/{BATCH}.json
+格式：{"nodes":[...], "edges":[...]}，与下列真实样例同构：
+节点: {"id":"class:vllm/distributed/device_communicators/symm_mem.py:RdtRouter","type":"class","name":"RdtRouter","filePath":"vllm/distributed/.../symm_mem.py","lineRange":[91,330],"summary":"中文一句话职责","tags":["..."],"complexity":"simple|moderate|complex"}
+     file 级节点 id 为 "file:<相对路径>"，必须有（每文件≥1个）；class/function 节点 id 为 "class:<路径>:<名>"/"function:<路径>:<名>"，带 lineRange。
+边:   {"source":"file:A.py","target":"file:B.py","type":"imports","direction":"forward","weight":0.7}
+类型规范：imports(file→file,0.7) / contains(file→成员节点) / exports / inherits(class→class) / calls(仅确凿调用，批内或指向已存在文件均可)。
+
+## 硬性质量条款（钉版，历轮实证）
+1. **行号锚从源码核实，禁止凭记忆**——lineRange 必须打开文件确认；summary 必须基于真实读到的代码，任务书/直觉与源码冲突时以源码为准并如实描述。
+2. **imports 1:1 对账**——用 AST 或 re.S 多行正则重扫（单行正则会漏多行 import）；每条 imports 边的目标路径必须在磁盘上验证存在（相对导入补全根路径，多候选根探测：vllm/ 与仓根）。importlib 字符串动态加载→type 用 depends_on；函数体内延迟 import 也要收。
+3. Rust 文件（rust/src）：跨 crate use 语句按 rust 工作区映射解析（use vllm_router_* → rust/src/ 下子目录），目标必须磁盘验证；BOM/edition2024 uniform paths 注意。
+4. 空 __init__.py / 纯模板（jinja/yaml/txt）：只给 file 节点+一句中文简述，不硬造函数节点。
+5. summary 全中文（专有名词保留英文），tags 3-5 个英文小写关键词，complexity 按行数与逻辑复杂度诚实评级。
+6. **禁止修改原仓任何文件**；禁止在原仓运行编译/生成 __pycache__。
+7. 若 products/ 下已有本批产物（前次运行残留）：验证其质量（抽查 3 文件行号锚+imports 对账），合格则采纳并只做增量增强（只增不重复 ID），不合格则重写。
+8. 完成后回报：每批节点数（file/class/function 分列）、边数、imports 对账差异（应为 0）、被甄别为低价值跳过深析的文件清单。
+
+## 上下文
+本批文件属于 vLLM 2026-09 基线→2026-10-28 增量（3222 commits：v1 引擎演进、DeepSeek v3.2/v4 新模型、rust 前端扩展、RL entrypoints 等）。图谱基线 11615 节点，本次增量并入。

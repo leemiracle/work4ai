@@ -1,0 +1,1298 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "file",
+   "name": "layernorm.py",
+   "filePath": "vllm/model_executor/layers/layernorm.py",
+   "summary": "归一化层族：RMSNorm/GemmaRMSNorm/LayerNorm（XPU fused 分发）/RMSNormGated（含 FLA gated 变体）与 poly_norm。",
+   "tags": [
+    "layernorm",
+    "rmsnorm",
+    "gemma",
+    "gated"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/lightning_attn.py",
+   "type": "file",
+   "name": "lightning_attn.py",
+   "filePath": "vllm/model_executor/layers/lightning_attn.py",
+   "summary": "Lightning attention（线性注意力）：prefill 双路 kernel（对角/无对角+KV 并行）与 decode 带 KV cache 的 Triton kernel。",
+   "tags": [
+    "linear-attention",
+    "lightning",
+    "triton",
+    "prefill-decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/linear.py",
+   "type": "file",
+   "name": "linear.py",
+   "filePath": "vllm/model_executor/layers/linear.py",
+   "summary": "线性层族（1834 行）：LinearBase→Replicated/ColumnParallel/RowParallel 及 QKV/Merged 合并变体、DCP 组列并行、MiniMax-M3 融合 indexer QKV、Kimi-K3 QKV+gate 融合。",
+   "tags": [
+    "linear",
+    "parallelism",
+    "qkv",
+    "column-row"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "file",
+   "name": "logits_processor.py",
+   "filePath": "vllm/model_executor/layers/logits_processor.py",
+   "summary": "LogitsProcessor：logits 收集与采样处理（PluggableLayer，8 方法），FlashInfer radix top-k 可选。",
+   "tags": [
+    "logits",
+    "processor",
+    "sampling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "type": "file",
+   "name": "abstract.py",
+   "filePath": "vllm/model_executor/layers/mamba/abstract.py",
+   "summary": "Mamba 层公共基类 MambaBase（v1 引擎适配）与 prefill checkpoint 对齐/网格工具。",
+   "tags": [
+    "mamba",
+    "base-class",
+    "checkpoints"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/layernorm.py:RMSNorm",
+   "type": "class",
+   "name": "RMSNorm",
+   "filePath": "vllm/model_executor/layers/layernorm.py",
+   "summary": "根均方归一化 CustomOp。",
+   "tags": [
+    "rmsnorm",
+    "custom-op",
+    "norm"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    39,
+    140
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/layernorm.py:GemmaRMSNorm",
+   "type": "class",
+   "name": "GemmaRMSNorm",
+   "filePath": "vllm/model_executor/layers/layernorm.py",
+   "summary": "Gemma 归一化（x*(1+w)、fp32 权重）。",
+   "tags": [
+    "gemma",
+    "rmsnorm",
+    "norm"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    145,
+    217
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/layernorm.py:LayerNorm",
+   "type": "class",
+   "name": "LayerNorm",
+   "filePath": "vllm/model_executor/layers/layernorm.py",
+   "summary": "标准 LayerNorm（XPU fused 分发）。",
+   "tags": [
+    "layernorm",
+    "xpu",
+    "norm"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    221,
+    292
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/layernorm.py:RMSNormGated",
+   "type": "class",
+   "name": "RMSNormGated",
+   "filePath": "vllm/model_executor/layers/layernorm.py",
+   "summary": "带门控 RMS 归一化（含 FLA gated 变体）。",
+   "tags": [
+    "gated",
+    "rmsnorm",
+    "fla"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    297,
+    429
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/lightning_attn.py:_attention",
+   "type": "class",
+   "name": "_attention",
+   "filePath": "vllm/model_executor/layers/lightning_attn.py",
+   "summary": "lightning 注意力 autograd.Function（prefill 前向）。",
+   "tags": [
+    "autograd",
+    "lightning",
+    "prefill"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    398,
+    529
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/linear.py:LinearMethodBase",
+   "type": "class",
+   "name": "LinearMethodBase",
+   "filePath": "vllm/model_executor/layers/linear.py",
+   "summary": "（量化）线性方法基类。",
+   "tags": [
+    "linear",
+    "method",
+    "base-class"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    124,
+    163
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/linear.py:UnquantizedLinearMethod",
+   "type": "class",
+   "name": "UnquantizedLinearMethod",
+   "filePath": "vllm/model_executor/layers/linear.py",
+   "summary": "未量化线性方法。",
+   "tags": [
+    "linear",
+    "unquantized",
+    "method"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    166,
+    242
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/linear.py:LinearBase",
+   "type": "class",
+   "name": "LinearBase",
+   "filePath": "vllm/model_executor/layers/linear.py",
+   "summary": "线性层基类（PluggableLayer）。",
+   "tags": [
+    "linear",
+    "base-class",
+    "pluggable"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    245,
+    324
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/linear.py:ReplicatedLinear",
+   "type": "class",
+   "name": "ReplicatedLinear",
+   "filePath": "vllm/model_executor/layers/linear.py",
+   "summary": "复制线性层。",
+   "tags": [
+    "linear",
+    "replicated",
+    "tp"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    329,
+    431
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/linear.py:ColumnParallelLinear",
+   "type": "class",
+   "name": "ColumnParallelLinear",
+   "filePath": "vllm/model_executor/layers/linear.py",
+   "summary": "列并行线性（按输出维切分）。",
+   "tags": [
+    "linear",
+    "column-parallel",
+    "tp"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    436,
+    642
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/linear.py:DCPGroupColumnParallelLinear",
+   "type": "class",
+   "name": "DCPGroupColumnParallelLinear",
+   "filePath": "vllm/model_executor/layers/linear.py",
+   "summary": "权重跨 DCP 组切分的列并行（Decode Context Parallelism）。",
+   "tags": [
+    "linear",
+    "column-parallel",
+    "dcp"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    645,
+    683
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/linear.py:MergedColumnParallelLinear",
+   "type": "class",
+   "name": "MergedColumnParallelLinear",
+   "filePath": "vllm/model_executor/layers/linear.py",
+   "summary": "打包多层的列并行（gate/up 等）。",
+   "tags": [
+    "linear",
+    "merged",
+    "column-parallel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    686,
+    1008
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/linear.py:QKVParallelLinear",
+   "type": "class",
+   "name": "QKVParallelLinear",
+   "filePath": "vllm/model_executor/layers/linear.py",
+   "summary": "QKV 变换合并列并行（含 TP/PP 分片逻辑）。",
+   "tags": [
+    "linear",
+    "qkv",
+    "merged"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1011,
+    1362
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/linear.py:MinimaxM3QKVParallelLinearWithIndexer",
+   "type": "class",
+   "name": "MinimaxM3QKVParallelLinearWithIndexer",
+   "filePath": "vllm/model_executor/layers/linear.py",
+   "summary": "MiniMax-M3 专用：QKV+lightning-indexer 的 index_q/index_k 融合投影。",
+   "tags": [
+    "linear",
+    "qkv",
+    "indexer",
+    "minimax"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1365,
+    1559
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/linear.py:KimiK3MergedQKVGateLinear",
+   "type": "class",
+   "name": "KimiK3MergedQKVGateLinear",
+   "filePath": "vllm/model_executor/layers/linear.py",
+   "summary": "Kimi-K3 专用：QKV-A 投影+输出 gate 投影合并。",
+   "tags": [
+    "linear",
+    "qkv",
+    "gate",
+    "kimi"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1562,
+    1648
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/linear.py:RowParallelLinear",
+   "type": "class",
+   "name": "RowParallelLinear",
+   "filePath": "vllm/model_executor/layers/linear.py",
+   "summary": "行并行线性（输入切分+输出 all-reduce）。",
+   "tags": [
+    "linear",
+    "row-parallel",
+    "all-reduce"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1653,
+    1833
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/logits_processor.py:LogitsProcessor",
+   "type": "class",
+   "name": "LogitsProcessor",
+   "filePath": "vllm/model_executor/layers/logits_processor.py",
+   "summary": "logits 处理层（收集+采样处理，8 方法）。",
+   "tags": [
+    "logits",
+    "processor",
+    "sampling"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    58,
+    324
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/abstract.py:MambaBase",
+   "type": "class",
+   "name": "MambaBase",
+   "filePath": "vllm/model_executor/layers/mamba/abstract.py",
+   "summary": "Mamba 类层基类（AttentionLayerBase，8 方法）。",
+   "tags": [
+    "mamba",
+    "base-class",
+    "v1-engine"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    18,
+    95
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/layernorm.py:poly_norm",
+   "type": "function",
+   "name": "poly_norm",
+   "filePath": "vllm/model_executor/layers/layernorm.py",
+   "summary": "poly norm 工具。",
+   "tags": [
+    "poly-norm",
+    "utility",
+    "poly-norm-extra"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    21,
+    34
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/lightning_attn.py:_fwd_diag_kernel",
+   "type": "function",
+   "name": "_fwd_diag_kernel",
+   "filePath": "vllm/model_executor/layers/lightning_attn.py",
+   "summary": "lightning 前向对角块 kernel。",
+   "tags": [
+    "triton",
+    "diagonal",
+    "lightning"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    13,
+    138
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/lightning_attn.py:_fwd_kv_parallel",
+   "type": "function",
+   "name": "_fwd_kv_parallel",
+   "filePath": "vllm/model_executor/layers/lightning_attn.py",
+   "summary": "KV 并行前向 kernel。",
+   "tags": [
+    "triton",
+    "kv-parallel",
+    "lightning"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    142,
+    247
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/lightning_attn.py:lightning_attention",
+   "type": "function",
+   "name": "lightning_attention",
+   "filePath": "vllm/model_executor/layers/lightning_attn.py",
+   "summary": "lightning 注意力算法入口。",
+   "tags": [
+    "lightning",
+    "entry-point",
+    "attention"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    536,
+    591
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/lightning_attn.py:linear_decode_forward_triton",
+   "type": "function",
+   "name": "linear_decode_forward_triton",
+   "filePath": "vllm/model_executor/layers/lightning_attn.py",
+   "summary": "带 KV cache 的线性注意力 decode（Triton）。",
+   "tags": [
+    "decode",
+    "triton",
+    "linear-attention"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    676,
+    741
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/linear.py:adjust_scalar_to_fused_array",
+   "type": "function",
+   "name": "adjust_scalar_to_fused_array",
+   "filePath": "vllm/model_executor/layers/linear.py",
+   "summary": "融合模块（QKV/MLP）标量→数组适配。",
+   "tags": [
+    "scalar",
+    "fused",
+    "adjustment"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    97,
+    121
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/logits_processor.py:_flashinfer_topk",
+   "type": "function",
+   "name": "_flashinfer_topk",
+   "filePath": "vllm/model_executor/layers/logits_processor.py",
+   "summary": "FlashInfer radix top-k（或 None 走 torch.topk）。",
+   "tags": [
+    "flashinfer",
+    "topk",
+    "optional"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    30,
+    46
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/abstract.py:get_mamba_prefill_checkpoint_alignment",
+   "type": "function",
+   "name": "get_mamba_prefill_checkpoint_alignment",
+   "filePath": "vllm/model_executor/layers/mamba/abstract.py",
+   "summary": "各层 prefill checkpoint 对齐的 LCM。",
+   "tags": [
+    "alignment",
+    "lcm",
+    "checkpoints"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    98,
+    113
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/abstract.py:get_mamba_prefill_checkpoint_grid",
+   "type": "function",
+   "name": "get_mamba_prefill_checkpoint_grid",
+   "filePath": "vllm/model_executor/layers/mamba/abstract.py",
+   "summary": "各层 prefill checkpoint 的公共 token 网格。",
+   "tags": [
+    "grid",
+    "tokens",
+    "checkpoints"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    116,
+    129
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "file:vllm/kernels/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/layernorm_guard.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/lightning_attn.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/lightning_attn.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/lightning_attn.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "file:vllm/model_executor/layers/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "file:vllm/model_executor/parameter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/logits_processor.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/logits_processor.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/logits_processor.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/logits_processor.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/logits_processor.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/logits_processor.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/logits_processor.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/logits_processor.py",
+   "target": "file:vllm/utils/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "target": "file:vllm/model_executor/layers/attention_layer_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "target": "file:vllm/v1/attention/selector.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "class:vllm/model_executor/layers/layernorm.py:RMSNorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "class:vllm/model_executor/layers/layernorm.py:GemmaRMSNorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "class:vllm/model_executor/layers/layernorm.py:LayerNorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "class:vllm/model_executor/layers/layernorm.py:RMSNormGated",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "function:vllm/model_executor/layers/layernorm.py:poly_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/lightning_attn.py",
+   "target": "class:vllm/model_executor/layers/lightning_attn.py:_attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/lightning_attn.py",
+   "target": "function:vllm/model_executor/layers/lightning_attn.py:_fwd_diag_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/lightning_attn.py",
+   "target": "function:vllm/model_executor/layers/lightning_attn.py:_fwd_kv_parallel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/lightning_attn.py",
+   "target": "function:vllm/model_executor/layers/lightning_attn.py:lightning_attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/lightning_attn.py",
+   "target": "function:vllm/model_executor/layers/lightning_attn.py:linear_decode_forward_triton",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:LinearMethodBase",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:UnquantizedLinearMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:LinearBase",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:ReplicatedLinear",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:ColumnParallelLinear",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:DCPGroupColumnParallelLinear",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:MergedColumnParallelLinear",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:QKVParallelLinear",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:MinimaxM3QKVParallelLinearWithIndexer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:KimiK3MergedQKVGateLinear",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:RowParallelLinear",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "function:vllm/model_executor/layers/linear.py:adjust_scalar_to_fused_array",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/logits_processor.py",
+   "target": "class:vllm/model_executor/layers/logits_processor.py:LogitsProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/logits_processor.py",
+   "target": "function:vllm/model_executor/layers/logits_processor.py:_flashinfer_topk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "target": "class:vllm/model_executor/layers/mamba/abstract.py:MambaBase",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "target": "function:vllm/model_executor/layers/mamba/abstract.py:get_mamba_prefill_checkpoint_alignment",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "target": "function:vllm/model_executor/layers/mamba/abstract.py:get_mamba_prefill_checkpoint_grid",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "class:vllm/model_executor/layers/layernorm.py:RMSNorm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "class:vllm/model_executor/layers/layernorm.py:GemmaRMSNorm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "class:vllm/model_executor/layers/layernorm.py:LayerNorm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "class:vllm/model_executor/layers/layernorm.py:RMSNormGated",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/layernorm.py",
+   "target": "function:vllm/model_executor/layers/layernorm.py:poly_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/lightning_attn.py",
+   "target": "class:vllm/model_executor/layers/lightning_attn.py:_attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/lightning_attn.py",
+   "target": "function:vllm/model_executor/layers/lightning_attn.py:lightning_attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/lightning_attn.py",
+   "target": "function:vllm/model_executor/layers/lightning_attn.py:linear_decode_forward_triton",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:LinearMethodBase",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:UnquantizedLinearMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:LinearBase",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:ReplicatedLinear",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:ColumnParallelLinear",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:DCPGroupColumnParallelLinear",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:MergedColumnParallelLinear",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:QKVParallelLinear",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:MinimaxM3QKVParallelLinearWithIndexer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:KimiK3MergedQKVGateLinear",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "class:vllm/model_executor/layers/linear.py:RowParallelLinear",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/linear.py",
+   "target": "function:vllm/model_executor/layers/linear.py:adjust_scalar_to_fused_array",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/logits_processor.py",
+   "target": "class:vllm/model_executor/layers/logits_processor.py:LogitsProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "target": "class:vllm/model_executor/layers/mamba/abstract.py:MambaBase",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "target": "function:vllm/model_executor/layers/mamba/abstract.py:get_mamba_prefill_checkpoint_alignment",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "target": "function:vllm/model_executor/layers/mamba/abstract.py:get_mamba_prefill_checkpoint_grid",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/layers/layernorm.py:RMSNorm",
+   "target": "class:vllm/model_executor/custom_op.py:CustomOp",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/layernorm.py:GemmaRMSNorm",
+   "target": "class:vllm/model_executor/custom_op.py:CustomOp",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/layernorm.py:LayerNorm",
+   "target": "class:vllm/model_executor/custom_op.py:CustomOp",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/layernorm.py:RMSNormGated",
+   "target": "class:vllm/model_executor/custom_op.py:CustomOp",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/linear.py:LinearBase",
+   "target": "class:vllm/model_executor/custom_op.py:PluggableLayer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/linear.py:UnquantizedLinearMethod",
+   "target": "class:vllm/model_executor/layers/linear.py:LinearMethodBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/linear.py:ReplicatedLinear",
+   "target": "class:vllm/model_executor/layers/linear.py:LinearBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/linear.py:ColumnParallelLinear",
+   "target": "class:vllm/model_executor/layers/linear.py:LinearBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/linear.py:DCPGroupColumnParallelLinear",
+   "target": "class:vllm/model_executor/layers/linear.py:ColumnParallelLinear",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/linear.py:MergedColumnParallelLinear",
+   "target": "class:vllm/model_executor/layers/linear.py:ColumnParallelLinear",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/linear.py:QKVParallelLinear",
+   "target": "class:vllm/model_executor/layers/linear.py:ColumnParallelLinear",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/linear.py:MinimaxM3QKVParallelLinearWithIndexer",
+   "target": "class:vllm/model_executor/layers/linear.py:QKVParallelLinear",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/linear.py:KimiK3MergedQKVGateLinear",
+   "target": "class:vllm/model_executor/layers/linear.py:MergedColumnParallelLinear",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/linear.py:RowParallelLinear",
+   "target": "class:vllm/model_executor/layers/linear.py:LinearBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/logits_processor.py:LogitsProcessor",
+   "target": "class:vllm/model_executor/custom_op.py:PluggableLayer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/mamba/abstract.py:MambaBase",
+   "target": "class:vllm/model_executor/layers/attention_layer_base.py:AttentionLayerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "function:vllm/model_executor/layers/lightning_attn.py:lightning_attention",
+   "target": "class:vllm/model_executor/layers/lightning_attn.py:_attention",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

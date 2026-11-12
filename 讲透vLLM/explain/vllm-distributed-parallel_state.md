@@ -1,49 +1,59 @@
-# vllm/distributed/parallel_state.py — 分布式并行态深解
+# vllm/distributed/parallel_state.py — GroupCoordinator：全维度并行进程组的单一事实源
 
-## 角色定位
+> 源码：`vllm/distributed/parallel_state.py`（2780 行）｜改编自 Megatron-LM parallel_state（:6）｜vLLM 2026-10-28 @06e172b5cf
 
-位于 **distributed（分布式执行层）**，改编自 **Megatron-LM 的 parallel_state**（文件头注明）。它是 vLLM 从 PyTorch 手里接管分布式环境的**进程组世界中枢**：TP/PP/DP/EP/EPLB/PCP/DCP 各维度的 `GroupCoordinator` 单例全部在此创建、暴露访问器、销毁。docstring 给出标准工作流：`init_distributed_environment` → `initialize_model_parallel`（或 `ensure_model_parallel_initialized`）→ 业务代码 → `destroy_model_parallel` + `destroy_distributed_environment`。它不 spawn 进程（那是 executor 的活），只管理"进程排布成组"后的通信语义——**每个 GPU worker 进程各持有一份本模块状态**。图谱 60+ 条入边印证其底座地位：device_communicators、EPLB、elastic_ep、kv_transfer、以及大量模型层（mla_attention/mamba/fused_moe...）。
+## ① 角色定位
 
-## 内部结构
+位于 **distributed（分布式执行层）**，是 vLLM 从 PyTorch 手里接管分布式环境的**进程组世界中枢**：把裸 rank 排布成有语义的组，再以 `GroupCoordinator`（vllm/distributed/parallel_state.py:427）统一暴露通信原语。docstring（:8-24）钉死工作流：`init_distributed_environment` → `initialize_model_parallel` → 业务代码 → `destroy_model_parallel` + `destroy_distributed_environment`。2026-09→10 的形态变化：组族从旧版 6 个扩到 **9 个全局单例**——新增 ETP（Engram 张量并行，:1599）、ENGRAM_DP（共享 Engram 嵌入表的 DP 组，:1608）、INNER_DP_WORLD（DP 内多节点 world，:1494）。它不 spawn 进程（那是 executor 的活），每个 GPU worker 进程各持一份本模块状态；模型层（fused_moe/mla_attention/mamba）与 EPLB、kv_transfer、elastic_ep 都以 `get_xx_group()` 断言访问器为唯一入口。
 
-- **`GroupCoordinator`**（核心类，~1000 行）：包一个 PyTorch ProcessGroup 双通道——`cpu_group`（gloo，控制面：broadcast_object/协调）+ `device_group`（nccl 等，数据面）。rank 语义三兄弟看类注释的表格：`rank`=全局 rank；`local_rank`=**节点内**序号（决定用哪块 GPU）；`rank_in_group`=组内序号（PP/TP 通信寻址用）。属性族 `is_first_rank/is_last_rank/next_rank/prev_rank` 直接服务 PP 相邻 stage 通信。集合通信方法（all_reduce/all_gather/reduce_scatter/broadcast*）world_size==1 时直通返回；可经 `torch.ops.vllm.*` custom op 走（torch.compile/Dynamo 兼容，group 用名字字符串寻址）。P2P：`send/recv_tensor_dict`（`_split_tensor_dict` 把 dict 拆 metadata+tensors 两段传）是 **PP stage 间传 IntermediateTensors 的通道**；`_RetainedHandle` 保活已发送张量且 `wait()` 幂等（gloo 二次 wait 会永久阻塞，注释里写明是实测坑）。
-- **模块级全局单例 + 访问器**：`_WORLD/_INNER_DP_WORLD/_TP/_DCP/_PP/_DP/_EP/_EPLB/_PCP` 配 `get_tp_group()` 等断言访问器——教科书式"全局变量构成单例状态机"。`_groups` 注册表用 weakref 支撑按名分发与批量 `_apply_to_device_comms`（suspend/resume/checkpoint 状态恢复）。
-- **`graph_capture`** 上下文：切独立 CUDA stream 捕获，同时让 custom all-reduce/flashinfer IPC/aiter 通信器进入捕获模式——CUDA graph 与 NCCL 冲突的经典解法。
+## ② 内部结构
 
-## 外部连接
+`GroupCoordinator` 每组持双通道：`cpu_group`（gloo 控制面：对象广播/协调/barrier）+ `device_group`（nccl 等数据面）。rank 三兄弟看类注释表（vllm/distributed/parallel_state.py:440-446）：`rank` 全局、`local_rank` 节点内序号（决定用哪块 GPU）、`rank_in_group` 组内寻址号；`is_first_rank/next_rank/prev_rank` 属性族（:640-672）服务 PP 相邻 stage。集合通信 `all_reduce/all_gather/reduce_scatter`（:726/:754/:785）在 `use_custom_op_call`（:572，TPU 或平台声明 `use_custom_op_collectives()`）时走 `torch.ops.vllm.*`、以组名字符串寻址——torch.compile/Dynamo 兼容的关键；world_size==1 一律直通。MoE 通信门面 `dispatch/combine/dispatch_router_logits/combine_into_output`（:1436/:1458/:1416/:1479）整体委托 `device_communicator`（EP all-to-all 由平台通信器实现，:550）。`_groups` weakref 注册表（:160）支撑按名分发与批量 `_apply_to_device_comms`（:167）——`suspend/resume_device_comms`（:189）与 `checkpoint_prepare/restore_distributed_state`（:2455/:2462）两组生命周期钩子都靠它。
 
-出边：`device_communicators/base_device_communicator`（按平台解析具体通信器类，custom all-reduce 等）、`utils.py`（StatelessProcessGroup/TCP store）、`envs`、平台层。**与 Ray 的关系**：本模块不含 Ray；Ray 只是 `distributed_executor_backend` 的一种——RayDistributedExecutor 负责跨节点拉起 worker 进程，之后每个 worker 仍调用本模块的 init 函数建组。`cleanup_dist_env_and_memory(shutdown_ray=True)` 才顺手 `ray.shutdown()`。
+## ③ 外部连接
 
-## 数据流（初始化）
+- **依赖**：`device_communicators/`（custom all-reduce 等平台通信器）、`shm_broadcast.MessageQueue`（共享内存对象广播，:562）、`utils.py`（StatelessProcessGroup/TCP store）、平台层（设备寻址 :530）、`torch.distributed._symmetric_memory`（symm-mem 补丁 op，:247/:420）。
+- **被依赖**：`vllm/distributed/__init__.py` re-export 访问器给模型层与 `layers/linear.py`（TP all-reduce 的来源）；EPLB、elastic_ep、kv_transfer、`v1/worker` 均消费。
+- **与 Ray 无关**：Ray 只是 executor backend 的一种；仅 `cleanup_dist_env_and_memory(shutdown_ray=True)`（:2551）顺手 `ray.shutdown()`。
+
+## ④ 数据流（初始化 → 建组 → 运行期 PP 通道）
 
 ```
-init_distributed_environment(world_size, rank, ...):
-  多节点/DP>1 时 rank 偏移 dp_rank*world_size，改用 master_addr:port
-  torch.distributed.init_process_group(nccl)   （或 split_group 新路径:
-    backend="cpu:gloo,cuda:nccl" + device_id 急切绑定）
-  _WORLD = init_world_group(全 ranks)   # elastic EP 走 StatelessGroupCoordinator
-  _NODE_COUNT 探测（共享内存握手 in_the_same_node_as）
+init_distributed_environment @:1839
+  多节点/DP>1: rank 偏移 dp_rank*world_size @:1872
+  world group TCPStore 端口经 coord_store 发布/领取 @:1884-1920
+  split_group 路径: backend="cpu:gloo,cuda:nccl"+device_id
+    急切绑定 @:1741；external_launcher 下校验父组 @:1778
+  _WORLD @:2013；elastic EP 改走 StatelessGroupCoordinator
+    @:1804（多节点 TP/PP 直接拒绝 :1994）
 
-initialize_model_parallel(tp, pp, pcp, dcp):
-  布局序 ExternalDP × DP × PP × PCP × TP 的 5 维 rank 张量
-  每个维度: transpose 到末维 → reshape(-1, size) → unbind → group_ranks
-  _TP/PP/DP/EP/... = init_model_parallel_group(group_ranks, ...)
-  例: 8 卡 TP=2 PP=4 → TP 组 [g0,g1][g2,g3]...，PP 组 [g0,g2,g4,g6][g1,g3,g5,g7]
+initialize_model_parallel @:2081
+  布局序 ExternalDP×DP×PP×PCP×TP @:2151，5 维 rank 张量 @:2160
+  每维: transpose 到末维 → reshape(-1,size) → unbind
+  _TP @:2177（mq_broadcaster=True）
+  _ETP @:2185（尺寸同 TP 则直接复用 _TP @:2192）
+  _ENGRAM_DP @:2208（仅 DeepseekV41ForCausalLM @:2215）
+  _DCP @:2250（transpose(-1,-2)，先跨 PCP 再跨 TP）
+  _PCP @:2268 / _PP @:2287 / _DP @:2305
+  _EP @:2326（dense 模型不建 :2328；use_all2all 可选）
+  _EPLB @:2361（同 EP ranks 但独立 PG，隔离死锁）
 ```
 
-EP 组仅 MoE 模型创建（跨度=DP×PCP×TP，即 PP 各 stage 共享专家划分），EPLB 与 EP 同 ranks 但**独立 ProcessGroup**——注释言明是为隔离 EPLB 重均衡通信与 MoE 前向 collective 的死锁风险。decode/prefill context parallel（DCP/PCP）是序列维并行的两个新维度。
+运行期热路径是 PP 边界传 `IntermediateTensors`：`isend_tensor_dict`（vllm/distributed/parallel_state.py:1164）经 `_split_tensor_dict`（:116）拆 metadata+tensors，metadata 走 gloo、张量走 device backend；**2026-10 起主路径已异步化**——句柄连同源张量自保留进 `_pending_isends` FIFO（:589），`_reap_completed_isends`（:1127）在下一次发送前惰性回收（完成判据用 device backend 的 tensor handles，gloo 的 `is_completed()` 不可靠，注释 :1131-1140 写明）。`_RetainedHandle.wait()` 幂等（:85），因 worker 顶部 drain 与 reap 可能对同一 entry 二次 wait，而 gloo 点对点二次 wait 会永久阻塞（实测坑，:91-96）。
 
-## 关键设计决策
+## ⑤ 设计决策
 
-1. **rank 布局即一切**：5 维 reshape+transpose 生成各组 ranks，保证相邻 rank 落同节点（DGX 内 NVLink 互通）是**调用方约定**——TP 走 NVLink、PP 走网卡的性能前提。
-2. **CPU/设备双 PG + 消息队列广播**：TP 组独享 `MessageQueue`（共享内存）广播对象，比 gloo broadcast_object 快一个量级，供 TP rank 间广播调度元数据。
-3. **弹性扩展路径**：elastic EP 用 `StatelessGroupCoordinator`（不依赖全局 init 的 TCP-store 协调）支持 DP worker 动态伸缩；`_replace_active_groups` 原子换组（先换后毁，顺序 DP→EP→WORLD→EPLB）。
-4. **`ensure_model_parallel_initialized`**：幂等入口，已初始化则断言尺寸匹配——external_launcher（torchrun）下防止重复建组。
-5. **split_group 实验路径**（`VLLM_DISTRIBUTED_USE_SPLIT_GROUP`）：用 PyTorch 新 split_group API 替代 N 次 new_group（legacy 路径每组建一次全体 collective，组多时初始化 O(N²) 慢）。
+1. **组按"语义"而非"ranks"分裂**：EPLB 与 EP 同 ranks 却独立建组（:2361 注释），隔离 EPLB 重均衡通信与 MoE 前向 collective 的死锁；`make_sibling_device_group`（:591）同理为需并行的 op 流开"同成员、不同通信器"的兄弟组。
+2. **MessageQueue 广播不再 TP 独享**：旧版只有 TP 组带 `mq_broadcaster`；现在 `_TP`（:2181）、`_DCP`（:2264）、`_INNER_DP_WORLD`（:2036）三组各建，并新增 `create_single_reader_mq_broadcasters`（:627）支持单读者拓扑——DCP 的 decode 调度元数据同步是新增消费者。
+3. **Engram 专属组族**：ETP 让嵌入表 TP 尺寸独立于主干（:2187 从 engram_config 取），ENGRAM_DP 只在 DeepseekV41 且 GPU 表跨 DP 直读对端 HBM（NVLink 域，注释 :2222-2224）或按节点边界 gcd 对齐（`_engram_dp_shard_size`，:2058）时创建——维度爆炸换的是"每种通信模式一个精确组"。
+4. **elastic EP 的世界替换是原子手术**：`_replace_active_groups`（:1567）先整体换出 DP→EP→WORLD→EPLB 四单例、旧组交调用方按序销毁；joining worker 在 ROCm 上经 `_elastic_join_warmup_ctx`（:2044）推迟通信器 warmup，等 commit 时新旧 ranks 一起暖机。
+5. **split_group 从"实验"走向完整**：legacy 路径每组建组都发起全体 collective（组多时 O(N²) 慢）；split_group 路径（env `VLLM_DISTRIBUTED_USE_SPLIT_GROUP`，:489）父组一次 eager 绑定后按 `split_ranks` 切子组（:329），并配 `_validate_default_pg_for_split_group`（:1778）对 torchrun 等外部启动器给出"该给 init_process_group 传什么"的精确报错。
+6. **CUDA graph 与通信器协同**：模块级 `graph_capture`（:1694）同时进 tp/pp/dp 三组各自的 capture 上下文（ca_comm/fi_pcie_ipc/aiter 各自注册 buffer），ROCm+aiter 时叠加 `non_expandable_allocations`（:1717）防捕获 buffer 被 realloc。
 
-## 新人提示
+## ⑥ 新人提示
 
-- 阅读顺序：类 docstring 的工作流 → `GroupCoordinator` 注释的 rank 表 → `initialize_model_parallel` 的 reshape 代码。
-- 最易混淆：`rank` vs `rank_in_group` vs `local_rank`；`broadcast/gather` 的 `src/dst` 参数是**组内局部 rank**。
-- TP 下模型代码里 all-reduce 的来源：column parallel（QKV/gate_up，输出维切）后接 row parallel（o_proj/down_proj，尾部 reduce）——组就来自 `get_tp_group()`，详见 `layers/linear.py`。
-- 集合通信不要绕过 GroupCoordinator 直用 torch.distributed——custom all-reduce/graph capture/custom op 的分流逻辑都在这里。
+- 读法：:8 工作流 → :440 rank 表 → :2081 建组 reshape 代码，一条线即可；2780 行里大半是 docstring 与防御性 assert。
+- 最易混淆仍是 `rank` vs `rank_in_group` vs `local_rank`；所有 `src/dst` 参数都是**组内局部 rank**（:831/:843 注释）。
+- `barrier` 故意走 cpu_group（:1372 注释：NCCL barrier 内部是偷偷建 GPU tensor 的 broadcast，容易搞乱当前 device）。
+- 集合通信别绕过 GroupCoordinator 直用 torch.distributed——custom all-reduce 分流、graph capture、custom op 分发全在这里；报 "expert parallel group is not initialized"（:1661）先查是不是 dense 模型误触 EP 路径。
+- 排查建组慢/卡：先看 split_group 开关（:489），再看 elastic EP 是否误开（它把 world 换成 Stateless 协调，拓扑假设完全不同）。

@@ -1,0 +1,40 @@
+# DeepWiki 索引 — NVIDIA/nemoclaw-community
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 29 页 · 全文 300688 字符
+
+- [1 NemoClaw Community — Overview](1-nemoclaw-community-overview.md)
+  - [1.1 Core Concepts and Architecture](1.1-core-concepts-and-architecture.md)
+  - [1.2 Example Catalog and Taxonomy](1.2-example-catalog-and-taxonomy.md)
+  - [1.3 Getting Started and Prerequisites](1.3-getting-started-and-prerequisites.md)
+- [2 NVIDIA Recipes](2-nvidia-recipes.md)
+  - [2.1 Developer Community Chief of Staff](2.1-developer-community-chief-of-staff.md)
+  - [2.2 PR Review Advisor](2.2-pr-review-advisor.md)
+  - [2.3 Payment Operations Hermes Assistant (FinGuard)](2.3-payment-operations-hermes-assistant-finguard.md)
+  - [2.4 NV Tech Assistant](2.4-nv-tech-assistant.md)
+  - [2.5 Memory-Driven Chief of Staff](2.5-memory-driven-chief-of-staff.md)
+  - [2.6 Kubernetes GPU Autoscaling](2.6-kubernetes-gpu-autoscaling.md)
+- [3 Partner Recipes](3-partner-recipes.md)
+  - [3.1 BlueTier x402 Payment Gate](3.1-bluetier-x402-payment-gate.md)
+  - [3.2 Shrike Security Action Governance](3.2-shrike-security-action-governance.md)
+  - [3.3 HPE Retail Assistant and Tavily Watchtower](3.3-hpe-retail-assistant-and-tavily-watchtower.md)
+- [4 Community Recipes and Developer Tools](4-community-recipes-and-developer-tools.md)
+  - [4.1 Deep Research Worker](4.1-deep-research-worker.md)
+  - [4.2 Harness Engineering Playground (hep)](4.2-harness-engineering-playground-hep.md)
+  - [4.3 Field Demos and Launchables](4.3-field-demos-and-launchables.md)
+- [5 Security, Observability, and Cross-Cutting Concerns](5-security-observability-and-cross-cutting-concerns.md)
+  - [5.1 OpenShell Policy and Network Security](5.1-openshell-policy-and-network-security.md)
+  - [5.2 ATIF Trajectory Export and Observability](5.2-atif-trajectory-export-and-observability.md)
+  - [5.3 Inference Preflight and Provider Validation](5.3-inference-preflight-and-provider-validation.md)
+  - [5.4 Microsoft Graph OAuth2 and Outlook Integration](5.4-microsoft-graph-oauth2-and-outlook-integration.md)
+- [6 Contributing and Repository Governance](6-contributing-and-repository-governance.md)
+  - [6.1 Contribution Workflow and Standards](6.1-contribution-workflow-and-standards.md)
+  - [6.2 CI/CD Automation and GitHub Workflows](6.2-ci-cd-automation-and-github-workflows.md)
+  - [6.3 Coding Agent Skills for Repository Maintenance](6.3-coding-agent-skills-for-repository-maintenance.md)
+- [7 Glossary](7-glossary.md)
+
+## 附：结构清单外的页
+- [Deployment Scripts and Provider Configuration](x1-deployment-scripts-and-provider-configuration.md)
+- [Hermes Agent Sandbox](x2-hermes-agent-sandbox.md)
+- [Host Services and Data Infrastructure](x3-host-services-and-data-infrastructure.md)
+- [NVTeam Skills and Agent Persona System](x4-nvteam-skills-and-agent-persona-system.md)

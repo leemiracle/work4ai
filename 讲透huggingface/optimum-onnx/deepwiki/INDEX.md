@@ -1,0 +1,33 @@
+# DeepWiki 索引 — huggingface/optimum-onnx
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 229800 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation and Setup](1.1-installation-and-setup.md)
+  - [1.2 Quick Start Guide](1.2-quick-start-guide.md)
+- [2 ONNX Model Export](2-onnx-model-export.md)
+  - [2.1 Export Command Line Interface](2.1-export-command-line-interface.md)
+  - [2.2 Export Configuration System](2.2-export-configuration-system.md)
+  - [2.3 Model-Specific Export Configurations](2.3-model-specific-export-configurations.md)
+  - [2.4 Advanced Export Topics](2.4-advanced-export-topics.md)
+- [3 ONNX Runtime Inference](3-onnx-runtime-inference.md)
+  - [3.1 ORTModel Classes Overview](3.1-ortmodel-classes-overview.md)
+  - [3.2 Loading and Using Models](3.2-loading-and-using-models.md)
+  - [3.3 Text Generation Models](3.3-text-generation-models.md)
+  - [3.4 Diffusion Pipelines](3.4-diffusion-pipelines.md)
+  - [3.5 Encoder-Decoder and Speech Models](3.5-encoder-decoder-and-speech-models.md)
+- [4 Model Optimization and Quantization](4-model-optimization-and-quantization.md)
+  - [4.1 ORTOptimizer](4.1-ortoptimizer.md)
+  - [4.2 Model Quantization](4.2-model-quantization.md)
+  - [4.3 Optimization Command Line Tools](4.3-optimization-command-line-tools.md)
+  - [4.4 Optimization and Quantization Examples](4.4-optimization-and-quantization-examples.md)
+- [5 Advanced Topics](5-advanced-topics.md)
+  - [5.1 External Data Handling](5.1-external-data-handling.md)
+  - [5.2 Graph Transformations](5.2-graph-transformations.md)
+  - [5.3 Preprocessors and Passes](5.3-preprocessors-and-passes.md)
+- [6 Testing and Development](6-testing-and-development.md)
+  - [6.1 Testing Framework](6.1-testing-framework.md)
+  - [6.2 Code Quality and CI/CD](6.2-code-quality-and-ci-cd.md)
+  - [6.3 Documentation Build System](6.3-documentation-build-system.md)
+- [7 Glossary](7-glossary.md)

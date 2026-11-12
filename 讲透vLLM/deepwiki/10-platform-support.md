@@ -1,138 +1,158 @@
+<!-- source: DeepWiki mcp.deepwiki.com · repo vllm-project/vllm · page 10 Platform Support · fetched 2026-10-28 -->
+
 # Platform Support
 
-> 来源: https://deepwiki.com/vllm-project/vllm/10-platform-support 抓取日期: 2026-09-02
-> 章节: 第 10 章 平台支持
+<details>
+<summary>Relevant source files</summary>
 
----
+The following files were used as context for generating this wiki page:
 
-Relevant source files
+- [.buildkite/hardware_tests/cpu.yaml](.buildkite/hardware_tests/cpu.yaml)
+- [.buildkite/scripts/hardware_ci/run-cpu-distributed-smoke-test.sh](.buildkite/scripts/hardware_ci/run-cpu-distributed-smoke-test.sh)
+- [.buildkite/scripts/hardware_ci/run-cpu-test-arm.sh](.buildkite/scripts/hardware_ci/run-cpu-test-arm.sh)
+- [csrc/cpu/sgl-kernels/conv.cpp](csrc/cpu/sgl-kernels/conv.cpp)
+- [csrc/cpu/sgl-kernels/fla.cpp](csrc/cpu/sgl-kernels/fla.cpp)
+- [csrc/cpu/sgl-kernels/gemm.cpp](csrc/cpu/sgl-kernels/gemm.cpp)
+- [csrc/cpu/utils.cpp](csrc/cpu/utils.cpp)
+- [tests/kernels/mamba/cpu/test_cpu_gdn_ops.py](tests/kernels/mamba/cpu/test_cpu_gdn_ops.py)
+- [tests/kernels/mamba/test_cpu_short_conv.py](tests/kernels/mamba/test_cpu_short_conv.py)
+- [tests/platforms/test_cpu.py](tests/platforms/test_cpu.py)
+- [tests/utils_/test_cpu_resource_utils.py](tests/utils_/test_cpu_resource_utils.py)
+- [tests/v1/attention/test_mamba_metadata_builder.py](tests/v1/attention/test_mamba_metadata_builder.py)
+- [tests/v1/e2e/test_cpu_linear_attn_chunked_prefix.py](tests/v1/e2e/test_cpu_linear_attn_chunked_prefix.py)
+- [tests/v1/worker/test_cpu_worker_kv_budget.py](tests/v1/worker/test_cpu_worker_kv_budget.py)
+- [vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py](vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py)
+- [vllm/platforms/cpu.py](vllm/platforms/cpu.py)
+- [vllm/platforms/cuda.py](vllm/platforms/cuda.py)
+- [vllm/platforms/interface.py](vllm/platforms/interface.py)
+- [vllm/platforms/rocm.py](vllm/platforms/rocm.py)
+- [vllm/platforms/xpu.py](vllm/platforms/xpu.py)
+- [vllm/utils/cpu_resource_utils.py](vllm/utils/cpu_resource_utils.py)
+- [vllm/utils/ompmultiprocessing.py](vllm/utils/ompmultiprocessing.py)
+- [vllm/v1/worker/cpu_worker.py](vllm/v1/worker/cpu_worker.py)
 
-  * [.buildkite/hardware_tests/cpu.yaml](https://github.com/vllm-project/vllm/blob/185cada3/.buildkite/hardware_tests/cpu.yaml)
-  * [.buildkite/hardware_tests/intel.yaml](https://github.com/vllm-project/vllm/blob/185cada3/.buildkite/hardware_tests/intel.yaml)
-  * [.buildkite/scripts/hardware_ci/run-cpu-distributed-smoke-test.sh](https://github.com/vllm-project/vllm/blob/185cada3/.buildkite/scripts/hardware_ci/run-cpu-distributed-smoke-test.sh)
-  * [.buildkite/scripts/hardware_ci/run-cpu-test-arm.sh](https://github.com/vllm-project/vllm/blob/185cada3/.buildkite/scripts/hardware_ci/run-cpu-test-arm.sh)
-  * [.buildkite/scripts/hardware_ci/run-cpu-test.sh](https://github.com/vllm-project/vllm/blob/185cada3/.buildkite/scripts/hardware_ci/run-cpu-test.sh)
-  * [csrc/cpu/utils.cpp](https://github.com/vllm-project/vllm/blob/185cada3/csrc/cpu/utils.cpp)
-  * [docs/configuration/conserving_memory.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/configuration/conserving_memory.md?plain=1)
-  * [docs/design/endpoint_plugins.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/design/endpoint_plugins.md?plain=1)
-  * [docs/design/plugin_system.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/design/plugin_system.md?plain=1)
-  * [docs/usage/reproducibility.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/usage/reproducibility.md?plain=1)
-  * [docs/usage/v1_guide.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/usage/v1_guide.md?plain=1)
-  * [tests/kernels/mamba/test_cpu_short_conv.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/kernels/mamba/test_cpu_short_conv.py)
-  * [tests/model_executor/test_cpu_unquantized_gemm_dispatch.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/model_executor/test_cpu_unquantized_gemm_dispatch.py)
-  * [tests/plugins/vllm_add_dummy_endpoint_plugin/setup.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/plugins/vllm_add_dummy_endpoint_plugin/setup.py)
-  * [tests/plugins/vllm_add_dummy_endpoint_plugin/vllm_add_dummy_endpoint_plugin/__init__.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/plugins/vllm_add_dummy_endpoint_plugin/vllm_add_dummy_endpoint_plugin/__init__.py)
-  * [tests/plugins_tests/test_endpoint_plugins.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/plugins_tests/test_endpoint_plugins.py)
-  * [tests/test_fxgraphcache_pickle_patch.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/test_fxgraphcache_pickle_patch.py)
-  * [tests/test_zen_cpu_platform_detection.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/test_zen_cpu_platform_detection.py)
-  * [tests/v1/attention/test_kv_head_stride_canonicalization.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/attention/test_kv_head_stride_canonicalization.py)
-  * [tests/v1/worker/test_xpu_model_runner.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/worker/test_xpu_model_runner.py)
-  * [vllm/platforms/__init__.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/__init__.py)
-  * [vllm/platforms/cpu.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cpu.py)
-  * [vllm/platforms/cuda.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cuda.py)
-  * [vllm/platforms/interface.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/interface.py)
-  * [vllm/platforms/rocm.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/rocm.py)
-  * [vllm/platforms/tpu.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/tpu.py)
-  * [vllm/platforms/xpu.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/xpu.py)
-  * [vllm/platforms/zen_cpu.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/zen_cpu.py)
-  * [vllm/plugins/__init__.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/plugins/__init__.py)
-  * [vllm/plugins/endpoint_plugins/__init__.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/plugins/endpoint_plugins/__init__.py)
-  * [vllm/plugins/endpoint_plugins/interface.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/plugins/endpoint_plugins/interface.py)
-  * [vllm/plugins/io_processors/__init__.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/plugins/io_processors/__init__.py)
-  * [vllm/utils/cpu_resource_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/utils/cpu_resource_utils.py)
-  * [vllm/utils/ompmultiprocessing.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/utils/ompmultiprocessing.py)
-  * [vllm/v1/worker/cpu_worker.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/cpu_worker.py)
-  * [vllm/v1/worker/xpu_model_runner.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/xpu_model_runner.py)
-  * [vllm/v1/worker/xpu_worker.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/xpu_worker.py)
+</details>
+
+
 
 ## Purpose and Scope
 
-This document describes vLLM's platform abstraction layer, which enables cross-platform execution on NVIDIA GPUs (CUDA), AMD GPUs (ROCm), Intel GPUs (XPU), CPUs, and TPUs. The platform layer provides a unified interface for hardware detection, device capability queries, attention backend selection, and platform-specific configuration adjustments.
+vLLM’s platform layer provides a shared `Platform` interface alongside hardware-specific implementations. The interface represents platform identity and common runtime properties, including device type, dispatch key, device-control environment variable, distributed backend, supported data types, and supported quantization methods [vllm/platforms/interface.py:138-180](). Platform implementations specialize behavior such as device queries and attention-backend selection [vllm/platforms/cuda.py:57-92]()[vllm/platforms/xpu.py:103-149]()[vllm/platforms/cpu.py:103-179]().
 
-For attention backend implementations, see [Attention Backends](../../../../vllm-project/vllm/8-attention-backends). For distributed execution and communication backends, see [Distributed Execution](../../../../vllm-project/vllm/9-distributed-execution).
+This page summarizes how the abstraction relates to the hardware implementations. For details, see [Platform Abstraction Layer](#10.1), [CUDA Platform](#10.2), [ROCm Platform](#10.3), and [XPU, CPU, and TPU Platforms](#10.4).
 
-* * *
+Sources: [vllm/platforms/interface.py:138-180](), [vllm/platforms/cuda.py:57-92](), [vllm/platforms/xpu.py:103-149](), [vllm/platforms/cpu.py:103-179]()
+
+---
 
 ## Platform Abstraction Architecture
 
-### Platform Detection and Initialization
+`PlatformEnum` names the platform categories represented in the abstraction, while `CpuArchEnum` distinguishes CPU architecture families. `DeviceCapability` provides an ordered major/minor capability value; platform-specific code can use such hardware information when making implementation choices [vllm/platforms/interface.py:72-136](). The shared interface is complemented by concrete platform classes, which supply platform-specific values and behavior [vllm/platforms/interface.py:138-180]().
 
-vLLM detects the hardware platform at module load time by examining environment variables and library availability. The detection follows a priority order and initializes the corresponding platform singleton.
+### Platform Categories and Code Entities
 
-**Platform Discovery and Entity Mapping**
+**Hardware names mapped to platform symbols**
 
-**Sources:** [vllm/platforms/interface.py67-76](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/interface.py#L67-L76) [vllm/platforms/rocm.py127-156](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/rocm.py#L127-L156) [vllm/platforms/rocm.py199-214](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/rocm.py#L199-L214) [vllm/platforms/xpu.py103-112](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/xpu.py#L103-L112) [vllm/platforms/cpu.py43-49](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cpu.py#L43-L49) [vllm/platforms/tpu.py9-20](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/tpu.py#L9-L20) [vllm/platforms/cuda.py22-26](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cuda.py#L22-L26) [vllm/platforms/__init__.py35-203](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/__init__.py#L35-L203)
+```mermaid
+flowchart LR
+    CUDA["CUDA"] --> CUDAFile["vllm/platforms/cuda.py"]
+    ROCM["ROCm"] --> ROCMFile["vllm/platforms/rocm.py"]
+    XPU["Intel XPU"] --> XPUClass["XPUPlatform"]
+    XPUClass --> XPUFile["vllm/platforms/xpu.py"]
+    CPU["CPU"] --> CPUClass["CpuPlatform"]
+    CPUClass --> CPUFile["vllm/platforms/cpu.py"]
+    TPU["TPU"] --> TPUEnum["PlatformEnum.TPU"]
+    Shared["Shared platform contract"] --> Platform["Platform"]
+    Shared --> PlatformEnum["PlatformEnum"]
+    Shared --> DeviceCapability["DeviceCapability"]
+```
 
-* * *
+The platform names above map to the platform enum and implementation files visible in this source set. The shared `Platform` contract is the common point of reference; hardware-specific behavior remains in the corresponding implementations [vllm/platforms/interface.py:72-180]()[vllm/platforms/cuda.py:33-45]()[vllm/platforms/rocm.py:20-33]()[vllm/platforms/xpu.py:19-28]()[vllm/platforms/cpu.py:24-36]().
 
-### Platform Interface
+Sources: [vllm/platforms/interface.py:72-180](), [vllm/platforms/cuda.py:33-45](), [vllm/platforms/rocm.py:20-33](), [vllm/platforms/xpu.py:19-28](), [vllm/platforms/cpu.py:24-36]()
 
-The `Platform` base class defined in `vllm/platforms/interface.py` defines the interface that all platform implementations must provide. Key responsibilities include device management, configuration validation, and backend selection.
+### Shared Interface and Specializations
 
-**Platform Class Hierarchy**
+The following diagram connects shared interface concepts to representative platform-specific symbols. It is an overview, not a complete inheritance or initialization sequence [vllm/platforms/interface.py:138-180]()[vllm/platforms/xpu.py:103-131]()[vllm/platforms/cpu.py:103-110]().
 
-**Sources:** [vllm/platforms/interface.py134-210](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/interface.py#L134-L210) [vllm/platforms/cuda.py11-29](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cuda.py#L11-L29) [vllm/platforms/rocm.py66-82](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/rocm.py#L66-L82) [vllm/platforms/xpu.py103-112](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/xpu.py#L103-L112) [vllm/platforms/cpu.py43-49](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cpu.py#L43-L49) [vllm/utils/cpu_resource_utils.py15-16](https://github.com/vllm-project/vllm/blob/185cada3/vllm/utils/cpu_resource_utils.py#L15-L16)
+**Shared interface mapped to platform implementations**
 
-* * *
+```mermaid
+flowchart TD
+    Platform["Platform"] --> Enum["PlatformEnum"]
+    Platform --> Capability["DeviceCapability"]
+    Platform --> DeviceControl["device_control_env_var"]
+    Platform --> Distributed["dist_backend"]
+    Platform --> Attention["get_attn_backend_cls"]
+    CUDA["CUDA implementation"] --> CUDAFile["vllm/platforms/cuda.py"]
+    ROCM["ROCm implementation"] --> ROCMFile["vllm/platforms/rocm.py"]
+    XPU["XPUPlatform"] --> XPUFile["vllm/platforms/xpu.py"]
+    CPU["CpuPlatform"] --> CPUFile["vllm/platforms/cpu.py"]
+    CUDAFile --> Platform
+    ROCMFile --> Platform
+    XPUFile --> Platform
+    CPUFile --> Platform
+```
 
-### Device Capability Detection
+Platform-specific implementations set or specialize shared properties. For example, `XPUPlatform` identifies its device type and dispatch key and specifies `xccl` as its distributed backend; `CpuPlatform` identifies CPU and uses `gloo` [vllm/platforms/xpu.py:103-112]()[vllm/platforms/cpu.py:103-110]().
 
-Each platform provides methods to query hardware capabilities, which inform backend selection and configuration validation. Capabilities are often represented as a `DeviceCapability` named tuple containing `major` and `minor` versions.
+Sources: [vllm/platforms/interface.py:138-180](), [vllm/platforms/xpu.py:103-112](), [vllm/platforms/cpu.py:103-110]()
 
-Platform| Capability Representation| Detection Method| Key Attributes  
----|---|---|---  
-**CUDA**| `DeviceCapability(major, minor)`| NVML API via `import_pynvml` [vllm/platforms/cuda.py49-50](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cuda.py#L49-L50)| SM version (e.g., 8.0, 9.0, 10.0)  
-**ROCm**| `DeviceCapability(major, minor)`| GCN arch parsing: `_get_gcn_arch` [vllm/platforms/rocm.py199-214](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/rocm.py#L199-L214)| GCN family (gfx942, gfx11, etc.)  
-**XPU**| `None`| `get_device_capability` returns `None`| Device name queries via `torch.xpu`  
-**CPU**| `None`| `get_cpu_architecture` [vllm/platforms/cpu.py51-71](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cpu.py#L51-L71)| `CpuArchEnum` (X86, ARM, POWERPC, RISC-V, etc.)  
-**TPU**|  Not defined| External package| TPU version from `tpu_inference` [vllm/platforms/tpu.py9-20](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/tpu.py#L9-L20)  
-  
-**Sources:** [vllm/platforms/interface.py89-132](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/interface.py#L89-L132) [vllm/platforms/cuda.py25-50](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cuda.py#L25-L50) [vllm/platforms/rocm.py199-214](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/rocm.py#L199-L214) [vllm/platforms/cpu.py51-71](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cpu.py#L51-L71) [vllm/platforms/tpu.py9-20](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/tpu.py#L9-L20)
+---
 
-* * *
-
-## Platform-Specific Implementations
-
-### Platform Abstraction Layer
-
-For details, see [Platform Abstraction Layer](../../../../vllm-project/vllm/10.1-platform-abstraction-layer). The `Platform` interface provides the blueprint for hardware-specific logic, ensuring that components like the `AttentionSelector` or `Worker` can interact with different accelerators through a common API. vLLM also supports a plugin system for registering out-of-tree (OOT) platforms via the `vllm.platform_plugins` entry point [docs/design/plugin_system.md50-51](https://github.com/vllm-project/vllm/blob/185cada3/docs/design/plugin_system.md?plain=1#L50-L51)
+## Hardware-Specific Implementations Overview
 
 ### CUDA Platform
 
-For details, see [CUDA Platform](../../../../vllm-project/vllm/10.2-cuda-platform). The CUDA platform supports NVIDIA GPUs. It utilizes `pynvml` for hardware discovery without initializing the CUDA context prematurely [vllm/platforms/cuda.py3-5](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cuda.py#L3-L5) It handles backend priorities via `_get_backend_priorities`, favoring `FLASHINFER` or `FLASHMLA` on Blackwell (SM 10.0) and `FLASH_ATTN` on older architectures [vllm/platforms/cuda.py83-163](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cuda.py#L83-L163)
+The CUDA module is intended for CUDA-specific code and explicitly notes that importing it should not initialize a CUDA context [vllm/platforms/cuda.py:3-5](). It imports NVML utilities and contains device-count and attention-backend priority logic; backend priorities can depend on inputs including device capability and attention configuration [vllm/platforms/cuda.py:22-31]()[vllm/platforms/cuda.py:50-92](). For details, see [CUDA Platform](#10.2).
+
+Sources: [vllm/platforms/cuda.py:3-5](), [vllm/platforms/cuda.py:22-31](), [vllm/platforms/cuda.py:50-92]()
 
 ### ROCm Platform
 
-For details, see [ROCm Platform](../../../../vllm-project/vllm/10.3-rocm-platform). The ROCm platform supports AMD GPUs. It parses GCN architecture strings (e.g., `gfx942` for MI300X) using `amdsmi` to determine capabilities [vllm/platforms/rocm.py178-189](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/rocm.py#L178-L189) It handles environment variable synchronization between `HIP_VISIBLE_DEVICES` and `CUDA_VISIBLE_DEVICES` [vllm/platforms/rocm.py127-156](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/rocm.py#L127-L156)
+The ROCm implementation uses AMD SMI (`amdsmi`) for hardware queries, including a helper that reads the GPU ASIC’s `target_graphics_version` as its GCN architecture identifier [vllm/platforms/rocm.py:39-53]()[vllm/platforms/rocm.py:166-189](). It also checks consistency between `HIP_VISIBLE_DEVICES` and `CUDA_VISIBLE_DEVICES` at import time [vllm/platforms/rocm.py:138-157](). For details on ROCm capabilities and AMD-specific features, see [ROCm Platform](#10.3).
+
+Sources: [vllm/platforms/rocm.py:39-53](), [vllm/platforms/rocm.py:138-157](), [vllm/platforms/rocm.py:166-189]()
 
 ### XPU, CPU, and TPU Platforms
 
-For details, see [XPU, CPU, and TPU Platforms](../../../../vllm-project/vllm/10.4-xpu-cpu-and-tpu-platforms).
+`XPUPlatform` defines XPU device properties, uses `xccl` for distributed communication, and includes platform-specific attention selection logic [vllm/platforms/xpu.py:103-112]()[vllm/platforms/xpu.py:143-188](). `CpuPlatform` defines CPU device properties and chooses CPU attention backends, including handling for MLA and sparse attention [vllm/platforms/cpu.py:103-110]()[vllm/platforms/cpu.py:143-179]().
 
-  * **XPU** : Supports Intel GPUs. It routes attention backends based on `AttentionSelectorConfig` [vllm/platforms/xpu.py142-194](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/xpu.py#L142-L194) and provides memory information via `get_mem_info_wrapper` which wraps the underlying C++ implementation `torch.ops._C_cache_ops.getMemoryInfo` [vllm/platforms/xpu.py31-97](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/xpu.py#L31-L97)
-  * **CPU** : Supports multiple architectures (x86, ARM, PowerPC, RISC-V, S390X). It implements NUMA-aware memory allocation via `get_memory_node_info` [vllm/platforms/cpu.py123-125](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cpu.py#L123-L125) and `init_cpu_memory_env` in C++ [vllm/v1/worker/cpu_worker.py71](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/cpu_worker.py#L71-L71) It utilizes the `Gloo` distributed backend [vllm/platforms/cpu.py48](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cpu.py#L48-L48)
-  * **TPU** : Integrates with the `tpu_inference` library for execution on Google TPUs [vllm/platforms/tpu.py9-20](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/tpu.py#L9-L20)
+The CPU worker initializes CPU memory and distributed execution and constructs a CPU model runner [vllm/v1/worker/cpu_worker.py:32-40]()[vllm/v1/worker/cpu_worker.py:70-103]()[vllm/v1/worker/cpu_worker.py:147-178](). CPU support and limitations vary across kernels and configurations; for example, CPU attention selection explicitly rejects sparse attention [vllm/platforms/cpu.py:143-151](). The shared enum includes TPU, but TPU implementation details are covered by the child page [vllm/platforms/interface.py:72-82](). For details, see [XPU, CPU, and TPU Platforms](#10.4).
 
-* * *
+Sources: [vllm/platforms/interface.py:72-82](), [vllm/platforms/xpu.py:103-112](), [vllm/platforms/xpu.py:143-188](), [vllm/platforms/cpu.py:103-110](), [vllm/platforms/cpu.py:143-179](), [vllm/v1/worker/cpu_worker.py:32-40](), [vllm/v1/worker/cpu_worker.py:70-103](), [vllm/v1/worker/cpu_worker.py:147-178]()
 
-## Attention Backend Selection
+---
 
-The platform layer is central to selecting the optimal attention backend. Each platform implementation provides `get_attn_backend_cls` or defines priorities in `_get_backend_priorities`.
+## Attention Backend Selection and Routing
 
-**Attention Backend Selection Logic**
+Platform-specific attention selection connects the common attention configuration to implementations suitable for a given device. CUDA defines backend priorities using hardware and attention parameters [vllm/platforms/cuda.py:83-92](). XPU and CPU provide their own `get_attn_backend_cls` implementations, with distinct branches for configurations such as sparse attention and MLA [vllm/platforms/xpu.py:143-188]()[vllm/platforms/cpu.py:143-179]().
 
-**Sources:** [vllm/platforms/cuda.py83-163](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cuda.py#L83-L163) [vllm/platforms/cpu.py83-119](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cpu.py#L83-L119) [vllm/platforms/xpu.py142-194](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/xpu.py#L142-L194)
+**Platform methods mapped to attention backend symbols**
 
-* * *
+```mermaid
+flowchart LR
+    Config["AttentionSelectorConfig"] --> CUDASelection["_get_backend_priorities"]
+    Config --> XPUSelection["XPUPlatform.get_attn_backend_cls"]
+    Config --> CPUSelection["CpuPlatform.get_attn_backend_cls"]
+    CUDASelection --> CUDAEnums["AttentionBackendEnum"]
+    XPUSelection --> XPUEnums["TRITON_MLA / XPU_MLA_SPARSE / TURBOQUANT"]
+    CPUSelection --> CPUEnums["CPU_ATTN / CPU_MLA / AMX_MLA"]
+```
 
-## CPU Performance and Resource Management
+This diagram shows representative code entities rather than a universal backend-selection sequence. The platform methods and their conditions are implemented separately; consult the platform child pages for the detailed selection rules [vllm/platforms/cuda.py:83-176]()[vllm/platforms/xpu.py:143-188]()[vllm/platforms/cpu.py:143-179]().
 
-The CPU platform includes specialized logic for managing CPU core affinity and memory locality across various architectures including x86_64, aarch64, and riscv64.
+Sources: [vllm/platforms/cuda.py:83-176](), [vllm/platforms/xpu.py:143-188](), [vllm/platforms/cpu.py:143-179]()
 
-  * **Architecture Support** : Supported dtypes vary by architecture. BF16 on ARM requires `hw.optional.arm.FEAT_BF16` [vllm/platforms/cpu.py60-68](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cpu.py#L60-L68)
-  * **Config Validation** : The CPU platform adjusts `VllmConfig` at runtime, such as setting `block_size=16` for MLA kernels [vllm/platforms/cpu.py167-174](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cpu.py#L167-L174)
-  * **OMP and NUMA** : Memory is strictly bound or interleaved across NUMA nodes using `init_cpu_memory_env` [vllm/v1/worker/cpu_worker.py71](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/cpu_worker.py#L71-L71) On Linux, vLLM checks for `libtcmalloc` and `libiomp` (for x86) in `LD_PRELOAD` to ensure performance [vllm/v1/worker/cpu_worker.py138-151](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/cpu_worker.py#L138-L151)
-  * **Worker Initialization** : `CPUWorker` binds to memory nodes based on the allowed CPU list and calculates requested memory based on `gpu_memory_utilization` [vllm/v1/worker/cpu_worker.py45-77](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/cpu_worker.py#L45-L77)
-  * **CI and Hardware Testing** : Hardware-specific tests for CPU are defined in Buildkite configurations, covering kernel tests, distributed tests (PP+TP, DP+TP), and multimodal model tests [ .buildkite/hardware_tests/cpu.yaml4-140](https://github.com/vllm-project/vllm/blob/185cada3/ .buildkite/hardware_tests/cpu.yaml#L4-L140)
+---
 
-**Sources:** [vllm/platforms/cpu.py51-71](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cpu.py#L51-L71) [vllm/platforms/cpu.py143-189](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/cpu.py#L143-L189) [vllm/v1/worker/cpu_worker.py33-97](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/cpu_worker.py#L33-L97) [.buildkite/hardware_tests/cpu.yaml1-140](https://github.com/vllm-project/vllm/blob/185cada3/.buildkite/hardware_tests/cpu.yaml#L1-L140) [.buildkite/scripts/hardware_ci/run-cpu-test-arm.sh1-102](https://github.com/vllm-project/vllm/blob/185cada3/.buildkite/scripts/hardware_ci/run-cpu-test-arm.sh#L1-L102)
+## Summary
+
+The platform layer separates shared hardware-facing concepts from platform-specific implementation choices. `Platform`, `PlatformEnum`, and `DeviceCapability` provide common vocabulary, while CUDA, ROCm, XPU, and CPU modules supply their own device handling and backend behavior [vllm/platforms/interface.py:72-180]()[vllm/platforms/cuda.py:57-92]()[vllm/platforms/rocm.py:138-189]()[vllm/platforms/xpu.py:103-188]()[vllm/platforms/cpu.py:103-179]().
+
+For code-level details, see [Platform Abstraction Layer](#10.1), [CUDA Platform](#10.2), [ROCm Platform](#10.3), and [XPU, CPU, and TPU Platforms](#10.4).
+
+Sources: [vllm/platforms/interface.py:72-180](), [vllm/platforms/cuda.py:57-92](), [vllm/platforms/rocm.py:138-189](), [vllm/platforms/xpu.py:103-188](), [vllm/platforms/cpu.py:103-179]()
+
+---
+

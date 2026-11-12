@@ -1,0 +1,31 @@
+# DeepWiki 索引 — huggingface/optimum-executorch
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 257626 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation and Setup](1.1-installation-and-setup.md)
+  - [1.2 Quick Start Guide](1.2-quick-start-guide.md)
+- [2 Model Export System](2-model-export-system.md)
+  - [2.1 Export Process Overview](2.1-export-process-overview.md)
+  - [2.2 Task-Specific Model Loading](2.2-task-specific-model-loading.md)
+  - [2.3 ExportableModule System](2.3-exportablemodule-system.md)
+  - [2.4 Recipes and Backend Delegation](2.4-recipes-and-backend-delegation.md)
+- [3 Runtime and Inference](3-runtime-and-inference.md)
+  - [3.1 Model Loading and Configuration](3.1-model-loading-and-configuration.md)
+  - [3.2 Text Generation](3.2-text-generation.md)
+  - [3.3 Vision and Audio Models](3.3-vision-and-audio-models.md)
+- [4 Optimization Features](4-optimization-features.md)
+  - [4.1 Custom Attention Mechanisms](4.1-custom-attention-mechanisms.md)
+  - [4.2 KV Cache Optimization](4.2-kv-cache-optimization.md)
+  - [4.3 Quantization](4.3-quantization.md)
+- [5 Supported Models](5-supported-models.md)
+  - [5.1 Large Language Models](5.1-large-language-models.md)
+  - [5.2 Specialized Models](5.2-specialized-models.md)
+  - [5.3 Vision and Multimodal Models](5.3-vision-and-multimodal-models.md)
+- [6 Command Line Interface](6-command-line-interface.md)
+  - [6.1 Export Command Reference](6.1-export-command-reference.md)
+- [7 Development and Contributing](7-development-and-contributing.md)
+  - [7.1 Development Environment](7.1-development-environment.md)
+  - [7.2 Testing Framework](7.2-testing-framework.md)
+  - [7.3 Documentation System](7.3-documentation-system.md)

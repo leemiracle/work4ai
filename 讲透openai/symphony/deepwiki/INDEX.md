@@ -1,0 +1,32 @@
+# DeepWiki 索引 — openai/symphony
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 273768 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+- [3 Architecture](3-architecture.md)
+  - [3.1 Issue Lifecycle](3.1-issue-lifecycle.md)
+  - [3.2 Configuration System](3.2-configuration-system.md)
+  - [3.3 Worker Deployment Models](3.3-worker-deployment-models.md)
+- [4 Core Components](4-core-components.md)
+  - [4.1 Orchestrator](4.1-orchestrator.md)
+  - [4.2 Agent Runner](4.2-agent-runner.md)
+  - [4.3 Workspace Management](4.3-workspace-management.md)
+  - [4.4 Tracker Integration](4.4-tracker-integration.md)
+- [5 Codex Integration](5-codex-integration.md)
+  - [5.1 AppServer Protocol](5.1-appserver-protocol.md)
+  - [5.2 Session and Turn Management](5.2-session-and-turn-management.md)
+  - [5.3 Dynamic Tools](5.3-dynamic-tools.md)
+  - [5.4 Approval and Sandbox Policies](5.4-approval-and-sandbox-policies.md)
+- [6 Observability](6-observability.md)
+  - [6.1 Phoenix LiveView Dashboard](6.1-phoenix-liveview-dashboard.md)
+  - [6.2 REST API](6.2-rest-api.md)
+  - [6.3 Token Tracking and Rate Limits](6.3-token-tracking-and-rate-limits.md)
+- [7 Development Guide](7-development-guide.md)
+  - [7.1 Local Development Setup](7.1-local-development-setup.md)
+  - [7.2 Testing Strategy](7.2-testing-strategy.md)
+  - [7.3 CI/CD Pipeline](7.3-ci-cd-pipeline.md)
+  - [7.4 End-to-End Testing](7.4-end-to-end-testing.md)
+  - [7.5 Codex Skills](7.5-codex-skills.md)
+- [8 Glossary](8-glossary.md)

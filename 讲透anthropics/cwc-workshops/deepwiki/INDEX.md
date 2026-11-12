@@ -1,0 +1,33 @@
+# DeepWiki 索引 — anthropics/cwc-workshops
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 185388 字符
+
+- [1 Repository Overview](1-repository-overview.md)
+- [2 Agent Battle Workshop](2-agent-battle-workshop.md)
+  - [2.1 Agent Battle: Setup and Infrastructure](2.1-agent-battle-setup-and-infrastructure.md)
+  - [2.2 Agent Battle: Bot and Agent Architecture](2.2-agent-battle-bot-and-agent-architecture.md)
+  - [2.3 Agent Battle: Scoring, Leaderboard, and Harness](2.3-agent-battle-scoring-leaderboard-and-harness.md)
+- [3 Agent Decomposition Workshop (StockPilot)](3-agent-decomposition-workshop-stockpilot.md)
+  - [3.1 StockPilot: Architecture and Decomposition Strategy](3.1-stockpilot-architecture-and-decomposition-strategy.md)
+  - [3.2 StockPilot: CMA Deployment and Session Management](3.2-stockpilot-cma-deployment-and-session-management.md)
+  - [3.3 StockPilot: CLI, Evaluation Harness, and Metrics](3.3-stockpilot-cli-evaluation-harness-and-metrics.md)
+- [4 Production-Ready Agent Workshop (Deal Desk)](4-production-ready-agent-workshop-deal-desk.md)
+  - [4.1 Deal Desk: API Routes and Event Streaming](4.1-deal-desk-api-routes-and-event-streaming.md)
+  - [4.2 Deal Desk: UI, Seed Data, and Provisioning](4.2-deal-desk-ui-seed-data-and-provisioning.md)
+- [5 Eval-Driven Agent Development Workshop](5-eval-driven-agent-development-workshop.md)
+  - [5.1 PPTX Workshop: Grader System](5.1-pptx-workshop-grader-system.md)
+  - [5.2 PPTX Workshop: Agent Pipeline and Tooling](5.2-pptx-workshop-agent-pipeline-and-tooling.md)
+- [6 Ship Your First Managed Agent Workshop](6-ship-your-first-managed-agent-workshop.md)
+  - [6.1 SRE Agent: Implementation Guide](6.1-sre-agent-implementation-guide.md)
+  - [6.2 SRE Agent: Dashboard UI and Data Layer](6.2-sre-agent-dashboard-ui-and-data-layer.md)
+- [7 Agents That Remember Workshop](7-agents-that-remember-workshop.md)
+  - [7.1 Memory Stores: Cross-Session Persistence](7.1-memory-stores-cross-session-persistence.md)
+  - [7.2 Dreaming Service: Transcript Consolidation](7.2-dreaming-service-transcript-consolidation.md)
+- [8 How We Claude Code Workshop](8-how-we-claude-code-workshop.md)
+  - [8.1 Verifiable React: Component Architecture](8.1-verifiable-react-component-architecture.md)
+  - [8.2 Verifiable React: Verifier System and Testing](8.2-verifiable-react-verifier-system-and-testing.md)
+- [9 Picking the Right Model Workshop](9-picking-the-right-model-workshop.md)
+  - [9.1 Eval Audit and Sweep Skill](9.1-eval-audit-and-sweep-skill.md)
+  - [9.2 Tau2-Bench Setup and Sweep Execution](9.2-tau2-bench-setup-and-sweep-execution.md)
+- [10 Glossary](10-glossary.md)

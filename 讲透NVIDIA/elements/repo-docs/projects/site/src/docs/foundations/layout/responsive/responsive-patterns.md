@@ -1,0 +1,24 @@
+---
+{
+  title: 'Responsive Patterns',
+  description: 'Responsive Tabs and Responsive Toolbar built with NVIDIA Elements layout primitives.',
+  layout: 'docs.11ty.js',
+  permalink: 'docs/labs/layout/responsive/patterns/index.html'
+}
+---
+
+<nve-alert-group status="warning">
+  <nve-alert>
+    <nve-icon name="beaker" slot="icon" style="--color:inherit"></nve-icon> Labs projects are experimental packages available for early feedback.
+  </nve-alert>
+</nve-alert-group>
+
+# {{ title }}
+
+## Responsive Tabs
+
+{% example '@nvidia-elements/styles/responsive-patterns.examples.json', 'ResponsiveTabs', '{ "inline": true, "resizable": false, "height": "240px" }' %}
+
+## Responsive Toolbar
+
+{% example '@nvidia-elements/styles/responsive-patterns.examples.json', 'ResponsiveToolbar', '{ "inline": true, "resizable": false, "height": "240px" }' %}

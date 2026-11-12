@@ -1,0 +1,42 @@
+# DeepWiki 索引 — anthropics/anthropic-sdk-typescript
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 30 页 · 全文 328094 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation & Setup](1.1-installation-setup.md)
+  - [1.2 Package Structure](1.2-package-structure.md)
+- [2 Core Client Architecture](2-core-client-architecture.md)
+  - [2.1 Client Configuration](2.1-client-configuration.md)
+  - [2.2 Authentication](2.2-authentication.md)
+  - [2.3 Request Lifecycle](2.3-request-lifecycle.md)
+  - [2.4 Error Handling](2.4-error-handling.md)
+- [3 API Resources](3-api-resources.md)
+  - [3.1 Models API](3.1-models-api.md)
+  - [3.2 Messages API](3.2-messages-api.md)
+  - [3.3 Completions API (Legacy)](3.3-completions-api-legacy.md)
+- [4 Beta Features](4-beta-features.md)
+  - [4.1 Beta Messages API](4.1-beta-messages-api.md)
+  - [4.2 Beta Tools & ToolRunner](4.2-beta-tools-toolrunner.md)
+  - [4.3 Files API](4.3-files-api.md)
+  - [4.4 Skills API](4.4-skills-api.md)
+  - [4.5 Context Management](4.5-context-management.md)
+- [5 Cloud Provider SDKs](5-cloud-provider-sdks.md)
+  - [5.1 Vertex AI SDK](5.1-vertex-ai-sdk.md)
+  - [5.2 Bedrock SDK](5.2-bedrock-sdk.md)
+  - [5.3 Foundry SDK](5.3-foundry-sdk.md)
+- [6 Development Guide](6-development-guide.md)
+  - [6.1 Environment Setup](6.1-environment-setup.md)
+  - [6.2 Build System](6.2-build-system.md)
+  - [6.3 Testing](6.3-testing.md)
+  - [6.4 CI/CD Pipeline](6.4-ci-cd-pipeline.md)
+  - [6.5 Release Process](6.5-release-process.md)
+- [7 Migration Guide](7-migration-guide.md)
+- [8 Glossary](8-glossary.md)
+
+## 附：结构清单外的页
+- [Content Blocks & Tools](x1-content-blocks-tools.md)
+- [Creating Messages](x2-creating-messages.md)
+- [Message Batches](x3-message-batches.md)
+- [Streaming Responses](x4-streaming-responses.md)
+- [Structured Outputs](x5-structured-outputs.md)

@@ -1,0 +1,31 @@
+# DeepWiki 索引 — microsoft/LLMLingua
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 192651 字符
+
+- [1 Overview](1-overview.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 PromptCompressor Class](2.1-promptcompressor-class.md)
+  - [2.2 Compression Techniques](2.2-compression-techniques.md)
+- [3 LLMLingua Versions](3-llmlingua-versions.md)
+  - [3.1 Original LLMLingua](3.1-original-llmlingua.md)
+  - [3.2 LongLLMLingua](3.2-longllmlingua.md)
+  - [3.3 LLMLingua-2](3.3-llmlingua-2.md)
+  - [3.4 SecurityLingua](3.4-securitylingua.md)
+- [4 Usage Guide](4-usage-guide.md)
+  - [4.1 Installation](4.1-installation.md)
+  - [4.2 Basic Usage](4.2-basic-usage.md)
+  - [4.3 Structured Prompt Compression](4.3-structured-prompt-compression.md)
+  - [4.4 JSON Compression](4.4-json-compression.md)
+- [5 Integrations](5-integrations.md)
+  - [5.1 LangChain Integration](5.1-langchain-integration.md)
+  - [5.2 LlamaIndex Integration](5.2-llamaindex-integration.md)
+- [6 Example Applications](6-example-applications.md)
+  - [6.1 RAG Systems](6.1-rag-systems.md)
+  - [6.2 Online Meeting Summarization](6.2-online-meeting-summarization.md)
+  - [6.3 Chain-of-Thought Reasoning](6.3-chain-of-thought-reasoning.md)
+  - [6.4 Code Processing](6.4-code-processing.md)
+- [7 Development](7-development.md)
+  - [7.1 Training LLMLingua-2 Models](7.1-training-llmlingua-2-models.md)
+  - [7.2 Contributing Guidelines](7.2-contributing-guidelines.md)
+- [8 Glossary](8-glossary.md)

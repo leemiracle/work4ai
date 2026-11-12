@@ -1,0 +1,1490 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/parser/minicpmv.py",
+   "type": "file",
+   "name": "minicpmv.py",
+   "filePath": "vllm/parser/minicpmv.py",
+   "summary": "MiniCPM-V 解析器（406 行）：转义换行恢复（EscapedNewlineNormalizer 逐字符扫描）+ 输出规范化 + thinking/非 thinking 双模解析。",
+   "tags": [
+    "minicpmv",
+    "escaped-newlines",
+    "normalizer",
+    "vision"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/parser/minimax_m3.py",
+   "type": "file",
+   "name": "minimax_m3.py",
+   "filePath": "vllm/parser/minimax_m3.py",
+   "summary": "MiniMax M3 解析器（声明式引擎 + XML 风格 <invoke> 元素解析器：element/params 解析与对象转换）。",
+   "tags": [
+    "minimax",
+    "xml-invoke",
+    "declarative"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/parser/parser_manager.py",
+   "type": "file",
+   "name": "parser_manager.py",
+   "filePath": "vllm/parser/parser_manager.py",
+   "summary": "ParserManager：组合 reasoning 与 tool parser 适配器为统一 Parser。",
+   "tags": [
+    "parser-manager",
+    "composition",
+    "registry"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/parser/plamo3.py",
+   "type": "file",
+   "name": "plamo3.py",
+   "filePath": "vllm/parser/plamo3.py",
+   "summary": "PLaMo3 解析器：ParserEngine 后端的推理与工具调用解析。",
+   "tags": [
+    "plamo3",
+    "parser-engine",
+    "tool-calls"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/parser/response_template.py",
+   "type": "file",
+   "name": "response_template.py",
+   "filePath": "vllm/parser/response_template.py",
+   "summary": "response_template 框架（780 行）：模板校验/流式模板/reasoning 终止检测（token 级 _ends_within）与统一 ResponseTemplateParser（reasoning+content+tool 一次解析）。",
+   "tags": [
+    "response-template",
+    "streaming",
+    "tool-calls",
+    "token-ids"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/parser/response_template_grammar.py",
+   "type": "file",
+   "name": "response_template_grammar.py",
+   "filePath": "vllm/parser/response_template_grammar.py",
+   "summary": "response_template 语法推导（1001 行，41 函数）：从模板+JSON schema 推导 structural_tag（regex 组拆分/字面量/开闭锚/closer 拼写检查/XML 参数格式化）。",
+   "tags": [
+    "grammar",
+    "structural-tag",
+    "regex",
+    "derivation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/parser/step3p5.py",
+   "type": "file",
+   "name": "step3p5.py",
+   "filePath": "vllm/parser/step3p5.py",
+   "summary": "Step3.5 解析器（Qwen3 格式薄壳）。",
+   "tags": [
+    "step3p5",
+    "qwen3-format",
+    "thin"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/parser/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/parser/utils.py",
+   "summary": "parser 工具：工具调用计数（chat/response 历史各计数）与 JSON 对象结束扫描/成员提取。",
+   "tags": [
+    "utils",
+    "counting",
+    "json-scanning"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/parser/minicpmv.py:EscapedNewlineNormalizer",
+   "type": "class",
+   "name": "EscapedNewlineNormalizer",
+   "filePath": "vllm/parser/minicpmv.py",
+   "summary": "逐字符扫描恢复模型写出的字面转义序列。",
+   "tags": [
+    "escaped-newlines",
+    "normalizer",
+    "scan"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    90,
+    197
+   ]
+  },
+  {
+   "id": "class:vllm/parser/minicpmv.py:MiniCPMVOutputNormalizer",
+   "type": "class",
+   "name": "MiniCPMVOutputNormalizer",
+   "filePath": "vllm/parser/minicpmv.py",
+   "summary": "整流的 MiniCPM-V 输出规范化（reasoning/content 分离跟踪）。",
+   "tags": [
+    "output-normalizer",
+    "stream",
+    "minicpmv"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    206,
+    258
+   ]
+  },
+  {
+   "id": "class:vllm/parser/minicpmv.py:MiniCPMVParser",
+   "type": "class",
+   "name": "MiniCPMVParser",
+   "filePath": "vllm/parser/minicpmv.py",
+   "summary": "MiniCPM-V thinking/非 thinking 双模解析（5 方法）。",
+   "tags": [
+    "minicpmv",
+    "thinking-modes",
+    "parser"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    261,
+    346
+   ]
+  },
+  {
+   "id": "class:vllm/parser/minicpmv.py:MiniCPMVUnifiedParser",
+   "type": "class",
+   "name": "MiniCPMVUnifiedParser",
+   "filePath": "vllm/parser/minicpmv.py",
+   "summary": "serving 解析器：适配器+换行恢复（3 方法）。",
+   "tags": [
+    "minicpmv",
+    "unified",
+    "recovery"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    349,
+    405
+   ]
+  },
+  {
+   "id": "class:vllm/parser/minimax_m3.py:MinimaxM3Parser",
+   "type": "class",
+   "name": "MinimaxM3Parser",
+   "filePath": "vllm/parser/minimax_m3.py",
+   "summary": "声明式引擎后端的 M3 工具调用解析器（3 方法）。",
+   "tags": [
+    "minimax",
+    "declarative",
+    "invoke"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    268,
+    293
+   ]
+  },
+  {
+   "id": "class:vllm/parser/parser_manager.py:ParserManager",
+   "type": "class",
+   "name": "ParserManager",
+   "filePath": "vllm/parser/parser_manager.py",
+   "summary": "组合 reasoning/tool 适配器为统一 Parser（5 方法）。",
+   "tags": [
+    "manager",
+    "composition",
+    "registry"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    20,
+    274
+   ]
+  },
+  {
+   "id": "class:vllm/parser/plamo3.py:Plamo3Parser",
+   "type": "class",
+   "name": "Plamo3Parser",
+   "filePath": "vllm/parser/plamo3.py",
+   "summary": "PLaMo3 ParserEngine 解析器（9 方法）。",
+   "tags": [
+    "plamo3",
+    "parser-engine",
+    "tool-calls"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    159,
+    318
+   ]
+  },
+  {
+   "id": "class:vllm/parser/response_template.py:ResponseTemplateReasoningParser",
+   "type": "class",
+   "name": "ResponseTemplateReasoningParser",
+   "filePath": "vllm/parser/response_template.py",
+   "summary": "response-template 的推理终止检测（9 方法）。",
+   "tags": [
+    "reasoning",
+    "end-detection",
+    "template"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    334,
+    417
+   ]
+  },
+  {
+   "id": "class:vllm/parser/response_template.py:ResponseTemplateToolParser",
+   "type": "class",
+   "name": "ResponseTemplateToolParser",
+   "filePath": "vllm/parser/response_template.py",
+   "summary": "选 response-template 解析器为工具解析器。",
+   "tags": [
+    "tool",
+    "selector",
+    "template"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    420,
+    427
+   ]
+  },
+  {
+   "id": "class:vllm/parser/response_template.py:_ResponseStream",
+   "type": "class",
+   "name": "_ResponseStream",
+   "filePath": "vllm/parser/response_template.py",
+   "summary": "一路生成经 ResponseParser 路由为消息 delta（6 方法）。",
+   "tags": [
+    "response-stream",
+    "routing",
+    "deltas"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    462,
+    562
+   ]
+  },
+  {
+   "id": "class:vllm/parser/response_template.py:_ReasoningTokenCounter",
+   "type": "class",
+   "name": "_ReasoningTokenCounter",
+   "filePath": "vllm/parser/response_template.py",
+   "summary": "一次增长的生成的推理 token 计数（4 方法）。",
+   "tags": [
+    "token-counter",
+    "reasoning",
+    "counting"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    565,
+    610
+   ]
+  },
+  {
+   "id": "class:vllm/parser/response_template.py:ResponseTemplateParser",
+   "type": "class",
+   "name": "ResponseTemplateParser",
+   "filePath": "vllm/parser/response_template.py",
+   "summary": "一个 response template 解析 reasoning/content/tool（10 方法）。",
+   "tags": [
+    "response-template",
+    "unified",
+    "parser"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    613,
+    779
+   ]
+  },
+  {
+   "id": "class:vllm/parser/step3p5.py:Step3p5Parser",
+   "type": "class",
+   "name": "Step3p5Parser",
+   "filePath": "vllm/parser/step3p5.py",
+   "summary": "Step3.5：Qwen3 格式薄壳。",
+   "tags": [
+    "step3p5",
+    "qwen3",
+    "thin"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    40,
+    49
+   ]
+  },
+  {
+   "id": "function:vllm/parser/minicpmv.py:minicpmv_config",
+   "type": "function",
+   "name": "minicpmv_config",
+   "filePath": "vllm/parser/minicpmv.py",
+   "summary": "MiniCPM-V 语法：qwen3 语法+MiniCPM-V 特有。",
+   "tags": [
+    "config",
+    "qwen3",
+    "grammar"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    46,
+    87
+   ]
+  },
+  {
+   "id": "function:vllm/parser/minicpmv.py:recover_newlines",
+   "type": "function",
+   "name": "recover_newlines",
+   "filePath": "vllm/parser/minicpmv.py",
+   "summary": "换行恢复入口。",
+   "tags": [
+    "newlines",
+    "recovery",
+    "entry"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    200,
+    203
+   ]
+  },
+  {
+   "id": "function:vllm/parser/minimax_m3.py:_parse_element",
+   "type": "function",
+   "name": "_parse_element",
+   "filePath": "vllm/parser/minimax_m3.py",
+   "summary": "解析 pos 处的 <invoke> 元素。",
+   "tags": [
+    "element",
+    "invoke",
+    "parsing"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    69,
+    110
+   ]
+  },
+  {
+   "id": "function:vllm/parser/minimax_m3.py:_convert_object",
+   "type": "function",
+   "name": "_convert_object",
+   "filePath": "vllm/parser/minimax_m3.py",
+   "summary": "命名元素转对象（重复合并为列表）。",
+   "tags": [
+    "object",
+    "conversion",
+    "merge"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    171,
+    188
+   ]
+  },
+  {
+   "id": "function:vllm/parser/minimax_m3.py:minimax_m3_config",
+   "type": "function",
+   "name": "minimax_m3_config",
+   "filePath": "vllm/parser/minimax_m3.py",
+   "summary": "M3 的声明式引擎配置（63 行）。",
+   "tags": [
+    "config",
+    "declarative",
+    "minimax"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    202,
+    265
+   ]
+  },
+  {
+   "id": "function:vllm/parser/plamo3.py:plamo3_config",
+   "type": "function",
+   "name": "plamo3_config",
+   "filePath": "vllm/parser/plamo3.py",
+   "summary": "PLaMo3 引擎配置（96 行）。",
+   "tags": [
+    "config",
+    "plamo3",
+    "engine"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    60,
+    156
+   ]
+  },
+  {
+   "id": "function:vllm/parser/response_template.py:resolve_response_template",
+   "type": "function",
+   "name": "resolve_response_template",
+   "filePath": "vllm/parser/response_template.py",
+   "summary": "显式 template 或 tokenizer 推导。",
+   "tags": [
+    "resolve",
+    "template",
+    "tokenizer"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    93,
+    104
+   ]
+  },
+  {
+   "id": "function:vllm/parser/response_template.py:validate_tokenizer_response_template",
+   "type": "function",
+   "name": "validate_tokenizer_response_template",
+   "filePath": "vllm/parser/response_template.py",
+   "summary": "tokenizer 不能服务该模板则启动失败。",
+   "tags": [
+    "validate",
+    "tokenizer",
+    "startup"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    137,
+    172
+   ]
+  },
+  {
+   "id": "function:vllm/parser/response_template.py:_reasoning_has_ended",
+   "type": "function",
+   "name": "_reasoning_has_ended",
+   "filePath": "vllm/parser/response_template.py",
+   "summary": "推理是否已结束。",
+   "tags": [
+    "reasoning",
+    "ended",
+    "predicate"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    222,
+    264
+   ]
+  },
+  {
+   "id": "function:vllm/parser/response_template.py:_reasoning_end_ids",
+   "type": "function",
+   "name": "_reasoning_end_ids",
+   "filePath": "vllm/parser/response_template.py",
+   "summary": "各 thinking closer 的 token id。",
+   "tags": [
+    "reasoning-end",
+    "token-ids",
+    "closers"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    280,
+    288
+   ]
+  },
+  {
+   "id": "function:vllm/parser/response_template.py:_ends_within",
+   "type": "function",
+   "name": "_ends_within",
+   "filePath": "vllm/parser/response_template.py",
+   "summary": "end_ids 是否在最后 num_new token 内完成。",
+   "tags": [
+    "ends-within",
+    "tokens",
+    "window"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    291,
+    297
+   ]
+  },
+  {
+   "id": "function:vllm/parser/response_template.py:_to_tool_calls",
+   "type": "function",
+   "name": "_to_tool_calls",
+   "filePath": "vllm/parser/response_template.py",
+   "summary": "工具区域中每次调用的 (name, arguments)。",
+   "tags": [
+    "tool-calls",
+    "extraction",
+    "template"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    315,
+    331
+   ]
+  },
+  {
+   "id": "function:vllm/parser/response_template.py:response_template_parser_cls",
+   "type": "function",
+   "name": "response_template_parser_cls",
+   "filePath": "vllm/parser/response_template.py",
+   "summary": "注册的推理模板对应的 response-template 解析器类。",
+   "tags": [
+    "parser-cls",
+    "registry",
+    "lookup"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    430,
+    440
+   ]
+  },
+  {
+   "id": "function:vllm/parser/response_template_grammar.py:_split_group",
+   "type": "function",
+   "name": "_split_group",
+   "filePath": "vllm/parser/response_template_grammar.py",
+   "summary": "具名 regex 组拆为 prefix/body/suffix。",
+   "tags": [
+    "regex",
+    "split",
+    "group"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    113,
+    139
+   ]
+  },
+  {
+   "id": "function:vllm/parser/response_template_grammar.py:_openers",
+   "type": "function",
+   "name": "_openers",
+   "filePath": "vllm/parser/response_template_grammar.py",
+   "summary": "字段 opener 推导（含多行连续）。",
+   "tags": [
+    "openers",
+    "fields",
+    "continuation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    212,
+    222
+   ]
+  },
+  {
+   "id": "function:vllm/parser/response_template_grammar.py:_continuing",
+   "type": "function",
+   "name": "_continuing",
+   "filePath": "vllm/parser/response_template_grammar.py",
+   "summary": "仅保留解析器可续的锚连续。",
+   "tags": [
+    "anchors",
+    "continuing",
+    "filter"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    225,
+    242
+   ]
+  },
+  {
+   "id": "function:vllm/parser/response_template_grammar.py:_spells_closer",
+   "type": "function",
+   "name": "_spells_closer",
+   "filePath": "vllm/parser/response_template_grammar.py",
+   "summary": "参数框架是否可能拼出调用 closer。",
+   "tags": [
+    "closer",
+    "spelling",
+    "ambiguity"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    367,
+    390
+   ]
+  },
+  {
+   "id": "function:vllm/parser/response_template_grammar.py:_text_format",
+   "type": "function",
+   "name": "_text_format",
+   "filePath": "vllm/parser/response_template_grammar.py",
+   "summary": "excludes 结尾的原始文本约束。",
+   "tags": [
+    "text-format",
+    "excludes",
+    "constraint"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    443,
+    467
+   ]
+  },
+  {
+   "id": "function:vllm/parser/response_template_grammar.py:_may_write",
+   "type": "function",
+   "name": "_may_write",
+   "filePath": "vllm/parser/response_template_grammar.py",
+   "summary": "pattern 匹配是否可能含 chars。",
+   "tags": [
+    "pattern",
+    "chars",
+    "predicate"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    496,
+    529
+   ]
+  },
+  {
+   "id": "function:vllm/parser/response_template_grammar.py:_xml_arguments_format",
+   "type": "function",
+   "name": "_xml_arguments_format",
+   "filePath": "vllm/parser/response_template_grammar.py",
+   "summary": "XML 参数格式推导（200 行）。",
+   "tags": [
+    "xml",
+    "arguments",
+    "format"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    594,
+    794
+   ]
+  },
+  {
+   "id": "function:vllm/parser/response_template_grammar.py:_arguments_format",
+   "type": "function",
+   "name": "_arguments_format",
+   "filePath": "vllm/parser/response_template_grammar.py",
+   "summary": "参数格式推导。",
+   "tags": [
+    "arguments",
+    "format",
+    "derivation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    797,
+    818
+   ]
+  },
+  {
+   "id": "function:vllm/parser/response_template_grammar.py:tool_call_structural_tag",
+   "type": "function",
+   "name": "tool_call_structural_tag",
+   "filePath": "vllm/parser/response_template_grammar.py",
+   "summary": "从 functions 推导原生调用的 structural tag。",
+   "tags": [
+    "structural-tag",
+    "tool-calls",
+    "derivation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    865,
+    968
+   ]
+  },
+  {
+   "id": "function:vllm/parser/response_template_grammar.py:_structural_tag",
+   "type": "function",
+   "name": "_structural_tag",
+   "filePath": "vllm/parser/response_template_grammar.py",
+   "summary": "推理后首 token 起的输出框架。",
+   "tags": [
+    "structural-tag",
+    "framing",
+    "reasoning"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    971,
+    1000
+   ]
+  },
+  {
+   "id": "function:vllm/parser/utils.py:count_chat_history_tool_calls",
+   "type": "function",
+   "name": "count_chat_history_tool_calls",
+   "filePath": "vllm/parser/utils.py",
+   "summary": "chat 历史工具调用计数。",
+   "tags": [
+    "counting",
+    "chat-history",
+    "tools"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    26,
+    33
+   ]
+  },
+  {
+   "id": "function:vllm/parser/utils.py:scan_json_object_end",
+   "type": "function",
+   "name": "scan_json_object_end",
+   "filePath": "vllm/parser/utils.py",
+   "summary": "JSON 对象的结束下标（扫描）。",
+   "tags": [
+    "json",
+    "scan",
+    "end-index"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    71,
+    98
+   ]
+  },
+  {
+   "id": "function:vllm/parser/utils.py:extract_json_member_object",
+   "type": "function",
+   "name": "extract_json_member_object",
+   "filePath": "vllm/parser/utils.py",
+   "summary": "顶层 member 对象的原文跨度提取。",
+   "tags": [
+    "json",
+    "member",
+    "span"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    101,
+    150
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/parser/minicpmv.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/minicpmv.py",
+   "target": "file:vllm/parser/abstract_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/minicpmv.py",
+   "target": "file:vllm/parser/engine/parser_engine.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/minicpmv.py",
+   "target": "file:vllm/parser/engine/parser_engine_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/minicpmv.py",
+   "target": "file:vllm/parser/qwen3.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/minimax_m3.py",
+   "target": "file:vllm/parser/engine/events.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/minimax_m3.py",
+   "target": "file:vllm/parser/engine/parser_engine.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/minimax_m3.py",
+   "target": "file:vllm/parser/engine/parser_engine_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/minimax_m3.py",
+   "target": "file:vllm/tool_parsers/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/parser_manager.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/parser_manager.py",
+   "target": "file:vllm/tool_parsers/tool_strict_level.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/plamo3.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/plamo3.py",
+   "target": "file:vllm/parser/engine/events.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/plamo3.py",
+   "target": "file:vllm/parser/engine/parser_engine.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/plamo3.py",
+   "target": "file:vllm/parser/engine/parser_engine_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "file:vllm/parser/abstract_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "file:vllm/parser/chat_parsing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "file:vllm/parser/chat_parsing/response_templates.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "file:vllm/parser/response_template_grammar.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "file:vllm/reasoning/abs_reasoning_parsers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "file:vllm/tool_parsers/abstract_tool_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "file:vllm/tool_parsers/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/response_template_grammar.py",
+   "target": "file:vllm/parser/chat_parsing/content_parsers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/response_template_grammar.py",
+   "target": "file:vllm/parser/chat_parsing/response_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/response_template_grammar.py",
+   "target": "file:vllm/parser/chat_parsing/response_templates.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/step3p5.py",
+   "target": "file:vllm/parser/engine/parser_engine_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/step3p5.py",
+   "target": "file:vllm/parser/qwen3.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/utils.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/utils.py",
+   "target": "file:vllm/entrypoints/openai/responses/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/utils.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/minicpmv.py",
+   "target": "class:vllm/parser/minicpmv.py:EscapedNewlineNormalizer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/minicpmv.py",
+   "target": "class:vllm/parser/minicpmv.py:MiniCPMVOutputNormalizer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/minicpmv.py",
+   "target": "class:vllm/parser/minicpmv.py:MiniCPMVParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/minicpmv.py",
+   "target": "class:vllm/parser/minicpmv.py:MiniCPMVUnifiedParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/minicpmv.py",
+   "target": "function:vllm/parser/minicpmv.py:minicpmv_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/minicpmv.py",
+   "target": "function:vllm/parser/minicpmv.py:recover_newlines",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/minimax_m3.py",
+   "target": "class:vllm/parser/minimax_m3.py:MinimaxM3Parser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/minimax_m3.py",
+   "target": "function:vllm/parser/minimax_m3.py:_parse_element",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/minimax_m3.py",
+   "target": "function:vllm/parser/minimax_m3.py:_convert_object",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/minimax_m3.py",
+   "target": "function:vllm/parser/minimax_m3.py:minimax_m3_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/parser_manager.py",
+   "target": "class:vllm/parser/parser_manager.py:ParserManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/plamo3.py",
+   "target": "class:vllm/parser/plamo3.py:Plamo3Parser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/plamo3.py",
+   "target": "function:vllm/parser/plamo3.py:plamo3_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "class:vllm/parser/response_template.py:ResponseTemplateReasoningParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "class:vllm/parser/response_template.py:ResponseTemplateToolParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "class:vllm/parser/response_template.py:_ResponseStream",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "class:vllm/parser/response_template.py:_ReasoningTokenCounter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "class:vllm/parser/response_template.py:ResponseTemplateParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "function:vllm/parser/response_template.py:resolve_response_template",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "function:vllm/parser/response_template.py:validate_tokenizer_response_template",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "function:vllm/parser/response_template.py:_reasoning_has_ended",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "function:vllm/parser/response_template.py:_reasoning_end_ids",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "function:vllm/parser/response_template.py:_ends_within",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "function:vllm/parser/response_template.py:_to_tool_calls",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "function:vllm/parser/response_template.py:response_template_parser_cls",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/step3p5.py",
+   "target": "class:vllm/parser/step3p5.py:Step3p5Parser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template_grammar.py",
+   "target": "function:vllm/parser/response_template_grammar.py:_split_group",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template_grammar.py",
+   "target": "function:vllm/parser/response_template_grammar.py:_openers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template_grammar.py",
+   "target": "function:vllm/parser/response_template_grammar.py:_continuing",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template_grammar.py",
+   "target": "function:vllm/parser/response_template_grammar.py:_spells_closer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template_grammar.py",
+   "target": "function:vllm/parser/response_template_grammar.py:_text_format",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template_grammar.py",
+   "target": "function:vllm/parser/response_template_grammar.py:_may_write",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template_grammar.py",
+   "target": "function:vllm/parser/response_template_grammar.py:_xml_arguments_format",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template_grammar.py",
+   "target": "function:vllm/parser/response_template_grammar.py:_arguments_format",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template_grammar.py",
+   "target": "function:vllm/parser/response_template_grammar.py:tool_call_structural_tag",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/response_template_grammar.py",
+   "target": "function:vllm/parser/response_template_grammar.py:_structural_tag",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/utils.py",
+   "target": "function:vllm/parser/utils.py:count_chat_history_tool_calls",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/utils.py",
+   "target": "function:vllm/parser/utils.py:scan_json_object_end",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/utils.py",
+   "target": "function:vllm/parser/utils.py:extract_json_member_object",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/minicpmv.py",
+   "target": "class:vllm/parser/minicpmv.py:EscapedNewlineNormalizer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/minicpmv.py",
+   "target": "class:vllm/parser/minicpmv.py:MiniCPMVOutputNormalizer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/minicpmv.py",
+   "target": "class:vllm/parser/minicpmv.py:MiniCPMVParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/minicpmv.py",
+   "target": "class:vllm/parser/minicpmv.py:MiniCPMVUnifiedParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/minicpmv.py",
+   "target": "function:vllm/parser/minicpmv.py:minicpmv_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/minicpmv.py",
+   "target": "function:vllm/parser/minicpmv.py:recover_newlines",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/minimax_m3.py",
+   "target": "class:vllm/parser/minimax_m3.py:MinimaxM3Parser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/minimax_m3.py",
+   "target": "function:vllm/parser/minimax_m3.py:minimax_m3_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/parser_manager.py",
+   "target": "class:vllm/parser/parser_manager.py:ParserManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/plamo3.py",
+   "target": "class:vllm/parser/plamo3.py:Plamo3Parser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/plamo3.py",
+   "target": "function:vllm/parser/plamo3.py:plamo3_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "class:vllm/parser/response_template.py:ResponseTemplateReasoningParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "class:vllm/parser/response_template.py:ResponseTemplateToolParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "class:vllm/parser/response_template.py:ResponseTemplateParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "function:vllm/parser/response_template.py:resolve_response_template",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "function:vllm/parser/response_template.py:validate_tokenizer_response_template",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/response_template.py",
+   "target": "function:vllm/parser/response_template.py:response_template_parser_cls",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/step3p5.py",
+   "target": "class:vllm/parser/step3p5.py:Step3p5Parser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/response_template_grammar.py",
+   "target": "function:vllm/parser/response_template_grammar.py:tool_call_structural_tag",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/utils.py",
+   "target": "function:vllm/parser/utils.py:count_chat_history_tool_calls",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/utils.py",
+   "target": "function:vllm/parser/utils.py:scan_json_object_end",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/utils.py",
+   "target": "function:vllm/parser/utils.py:extract_json_member_object",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/parser/minicpmv.py:MiniCPMVUnifiedParser",
+   "target": "class:vllm/parser/abstract_parser.py:DelegatingParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/parser/response_template.py:ResponseTemplateParser",
+   "target": "class:vllm/parser/abstract_parser.py:Parser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/parser/response_template.py:ResponseTemplateReasoningParser",
+   "target": "class:vllm/reasoning/abs_reasoning_parsers.py:ReasoningParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/parser/parser_manager.py:ParserManager",
+   "target": "class:vllm/parser/abstract_parser.py:DelegatingParser",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/parser/minicpmv.py:MiniCPMVUnifiedParser",
+   "target": "class:vllm/parser/minicpmv.py:MiniCPMVParser",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/parser/response_template_grammar.py:tool_call_structural_tag",
+   "target": "function:vllm/parser/response_template_grammar.py:_xml_arguments_format",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

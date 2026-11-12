@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Multi-process Resource Loading</title>
+  <link rel="stylesheet" href="/_stylesheets/@docsearch/style.css">
+  <link rel="stylesheet" href="/_stylesheets/default.css">
+  <link rel="stylesheet" href="/_stylesheets/highlight.js/github.min.css">
+</head>
+
+<header id="site-header">
+  <button id="mobile-nav-toggle" class="mobile-nav-toggle" type="button" aria-label="Open navigation menu" aria-controls="sidebar-left" aria-expanded="false">
+    <span class="mobile-nav-toggle-bars" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+  </button>
+  <a class="header-brand" href="/">
+    <img alt="the Chromium logo" src="/_assets/icon-chromium-96.png" width="48" height="48">
+    <h2>The Chromium Projects</h2>
+  </a>
+  <div id="search"></div>
+</header>
+<div id="mobile-header-spacer" aria-hidden="true"></div>
+
+<div id="mobile-nav-backdrop" aria-hidden="true"></div>
+
+<div id="main-wrapper">
+  <nav id="sidebar-left" class="sidebar-nav" aria-label="Site navigation">
+    <div class="mobile-nav-header">
+      <h3>Menu</h3>
+      <button id="mobile-nav-close" class="mobile-nav-close" type="button" aria-label="Close navigation menu">&times;</button>
+    </div>
+    <section class="sidebar-primary">
+      <a href="/chromium-projects">Home</a>
+      <a href="/Home">Chromium</a>
+      <a href="/chromium-os">ChromiumOS</a>
+    </section>
+    <section class="sidebar-quick-links">
+      <h4>Quick links</h4>
+      <a href="/for-testers/bug-reporting-guidelines">Report bugs</a>
+      <a href="/developers/discussion-groups">Discuss</a>
+    </section>
+    <section class="sidebar-other-sites">
+      <h4>Other sites</h4>
+      <a href="https://blog.chromium.org/">Chromium Blog</a>
+      <a href="https://developer.chrome.com/extensions">Google Chrome Extensions</a>
+    </section>
+    <section class="sidebar-license" role="complementary">
+      Except as otherwise
+      <a href="https://developers.google.com/site-policies.html#restrictions">noted</a>,
+      the content of this page is licensed under a
+      <a href="https://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 license</a>,
+      and examples are licensed under the
+      <a href="https://chromium.googlesource.com/chromium/src/+/HEAD/LICENSE">BSD License</a>.
+    </section>
+    <section class="sidebar-privacy" role="complementary">
+      <a href="https://policies.google.com/privacy">Privacy</a>
+    </section>
+    <a class="edit-this-page" href="https://edit.chromium.org/edit?repo=chromium/website/main&file=site/developers/design-documents/multi-process-resource-loading/index.md&cloneRepo=chromium/website:refs/heads/main&fullPath=chromium/site/developers/design-documents/multi-process-resource-loading/index.md">Edit</a>
+  </nav>
+  <main>
+    <div class="breadcrumbs">
+      <a href="/developers">For Developers</a> &gt;
+      <a href="/developers/design-documents">Design Documents</a> &gt;
+    </div>
+    <h1>Multi-process Resource Loading</h1>
+  <nav class="table-of-contents"><ol><li><a href="#this-design-doc-needs-update-some-figures-contains-stale-information">This design doc needs update. Some figures contains stale information.</a></li><li><a href="#background">Background</a></li><li><a href="#overview">Overview</a></li><li><a href="#blink">Blink</a></li><li><a href="#renderer">Renderer</a></li><li><a href="#browser">Browser</a></li><li><a href="#cookies">Cookies</a></li></ol></nav><h2 id="this-design-doc-needs-update-some-figures-contains-stale-information" tabindex="-1"><a class="header-anchor" href="#this-design-doc-needs-update-some-figures-contains-stale-information">This design doc needs update. Some figures contains stale information.</a></h2>
+<h2 id="background" tabindex="-1"><a class="header-anchor" href="#background">Background</a></h2>
+<p>All network communication is handled by the main browser process. This is done
+not only so that the browser process can control each renderer's access to the
+network, but also so that we can maintain consistent session state across
+processes like cookies and cached data. It is also important because as a
+HTTP/<wbr>1.1 user-agent, the browser as a whole should not open too many connections
+per host.</p>
+<h2 id="overview" tabindex="-1"><a class="header-anchor" href="#overview">Overview</a></h2>
+<p>Our <a href="/developers/design-documents/multi-process-architecture">multi-process</a>
+application can be viewed in three layers. At the lowest layer is the Blink
+engine which renders pages. Above that are the renderer process (simplistically,
+one-per-tab), each of which contains one Blink instance. Managing all the
+renderers is the browser process, which controls all network accesses.</p>
+<p><a href="/developers/design-documents/multi-process-resource-loading/Resource-loading.png"><img alt="image"
+src="/developers/design-documents/multi-process-resource-loading/Resource-loading.png"></a></p>
+<h2 id="blink" tabindex="-1"><a class="header-anchor" href="#blink">Blink</a></h2>
+<p>Blink has a <code>ResourceLoader</code> object which is responsible for fetching data. Each
+loader has a <code>WebURLLoader</code> for performing the actual requests. The header file
+for this interface is inside the Blink repo.</p>
+<p><code>ResourceLoader</code> implements the interface <code>WebURLLoaderClient</code>. This is the
+callback interface used by the renderer to dispatch data and other events to
+Blink.</p>
+<p>The test shell uses a different resource loader, so provides a different
+implementation, non-IPC version <s>of <code>ResourceLoaderBridge</code>, located in
+<code>webkit/tools/test_shell/simple_resource_loader_bridge</code></s>.</p>
+<h2 id="renderer" tabindex="-1"><a class="header-anchor" href="#renderer">Renderer</a></h2>
+<p>The renderer's implementation of <code>WebURLLoader</code>, called <code>WebURLLoaderImpl</code>, is
+located in <code>content/child/</code>. It uses the global <code>ResourceDispatcher</code> singleton
+object (one for each renderer process) to create a unique request ID and forward
+the request to the browser via IPC. Responses from the browser will reference
+this request ID, which can then be converted back to the <code>RequestPeer</code> object
+(WebURLRequestImpl) by the resource dispatcher.</p>
+<h2 id="browser" tabindex="-1"><a class="header-anchor" href="#browser">Browser</a></h2>
+<p>The <code>RenderProcessHost</code> objects inside the browser receive the IPC requests from
+each renderer. It forwards these requests to the global
+<code>ResourceDispatcherHost</code>, using a pointer to the render process host
+(specifically, an implementation of <code>ResourceDispatcherHost::Receiver</code>) and the
+request ID generated by the renderer to uniquely identify the request.</p>
+<p>Each request is then converted into a <code>URLRequest</code> object, which in turn
+forwards it to its internal <code>URLRequestJob</code> that implements the specific
+protocol desired. When the <code>URLRequest</code> generates notifications, its
+<code>ResourceDispatcherHost::Receiver</code> and request ID are used to send the
+notification to the correct <code>RenderProcessHost</code> for sending back to the
+renderer. Since the ID generated by the renderer is preserved, it is able to
+correlate all responses with a specific request first generated by Blink.</p>
+<h2 id="cookies" tabindex="-1"><a class="header-anchor" href="#cookies">Cookies</a></h2>
+<p>All cookies are handled by our <code>CookieMonster</code> object in <code>/net/base</code>. We do not
+share cookies with other browsers' network stacks (e.g. WinINET or Necko). The
+cookie monster lives in the browser process which handles all network requests
+because cookies need to be the same across all tabs.</p>
+<p>Pages can request cookies for a document via <code>document.cookie</code>. When this
+occurs, we send a synchronous message from the renderer to the browser
+requesting the cookie. While the browser is processing the cookie, the thread
+that Blink works on is suspended. When the renderer's I/<wbr>O thread receives the
+response from the browser, it un-suspends the thread and passes the result back
+to the JavaScript engine.</p>
+
+  </main>
+</div>
+<script>
+// Configure Algolia search.
+let s = document.createElement('script');
+s.src = '/_scripts/@docsearch/index.js';
+document.head.append(s);
+
+window.addEventListener('load', () => {
+  // Add the Algolia search widget.
+  docsearch({
+    container: '#search',
+    appId: 'RZDQYCCABX',
+    apiKey: '98b0eabafeb13fe3e1af693d5713d8b4',
+    indexName: 'chromium'
+  });
+});
+
+// Configure Google Analytics v4
+s = document.createElement('script');
+s.src = 'https://www.googletagmanager.com/gtag/js?id=G-24XP4PG02H'
+s.async = true;
+document.head.append(s)
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-24XP4PG02H');
+
+// Configure consent bar.
+s = document.createElement('script');
+s.src = 'https://www.gstatic.com/brandstudio/kato/cookie_choice_component/cookie_consent_bar.v3.js'
+s.dataset.autoloadCookieConsentBar = true;
+s.dataset.autoloadCookieContentBarIntlCode = '';
+document.head.append(s);
+
+// Configure the mobile navigation drawer.
+// Keep in sync with $mobile-nav-breakpoint in default.scss.
+const mobileNavBreakpoint = 768;
+const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+const mobileNav = document.getElementById('sidebar-left');
+const mobileNavClose = document.getElementById('mobile-nav-close');
+const mobileNavBackdrop = document.getElementById('mobile-nav-backdrop');
+const siteHeader = document.getElementById('site-header');
+
+if (mobileNavToggle && mobileNav && mobileNavClose && mobileNavBackdrop) {
+  const setMobileNavState = (isOpen) => {
+    mobileNavToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    document.body.classList.toggle('mobile-nav-open', isOpen);
+    if (isOpen && siteHeader) {
+      siteHeader.classList.remove('mobile-header-hidden');
+    }
+  };
+
+  const closeMobileNav = (returnFocus = false) => {
+    setMobileNavState(false);
+    if (returnFocus) {
+      mobileNavToggle.focus();
+    }
+  };
+
+  const openMobileNav = () => {
+    setMobileNavState(true);
+    mobileNav.scrollTop = 0;
+    mobileNavClose.focus();
+  };
+
+  mobileNavToggle.addEventListener('click', () => {
+    if (document.body.classList.contains('mobile-nav-open')) {
+      closeMobileNav();
+    } else {
+      openMobileNav();
+    }
+  });
+
+  mobileNavClose.addEventListener('click', () => closeMobileNav(true));
+  mobileNavBackdrop.addEventListener('click', () => closeMobileNav(true));
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeMobileNav(true);
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > mobileNavBreakpoint) {
+      closeMobileNav();
+    }
+  });
+
+  mobileNav.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', closeMobileNav);
+  });
+}
+
+if (siteHeader) {
+  // Ignore small changes in direction so touch scrolling does not make the
+  // header flicker in and out of view.
+  const mobileHeaderScrollThresholdPx = 10;
+
+  // Ignore elastic overscroll beyond the top or bottom of the page.
+  const getClampedScrollY = () => {
+    const maxScrollY = Math.max(
+        document.documentElement.scrollHeight - window.innerHeight, 0);
+    return Math.min(Math.max(window.scrollY, 0), maxScrollY);
+  };
+
+  let accumulatedHeaderScroll = 0;
+  let lastHeaderScrollY = getClampedScrollY();
+  let headerScrollUpdatePending = false;
+
+  const showMobileHeader = () => {
+    siteHeader.classList.remove('mobile-header-hidden');
+  };
+
+  const updateMobileHeader = () => {
+    const currentScrollY = getClampedScrollY();
+    const scrollDelta = currentScrollY - lastHeaderScrollY;
+    lastHeaderScrollY = currentScrollY;
+    headerScrollUpdatePending = false;
+
+    if (window.innerWidth > mobileNavBreakpoint ||
+        currentScrollY <= siteHeader.offsetHeight ||
+        document.body.classList.contains('mobile-nav-open')) {
+      accumulatedHeaderScroll = 0;
+      showMobileHeader();
+      return;
+    }
+
+    if (scrollDelta === 0) {
+      return;
+    }
+
+    if ((scrollDelta > 0 && accumulatedHeaderScroll < 0) ||
+        (scrollDelta < 0 && accumulatedHeaderScroll > 0)) {
+      accumulatedHeaderScroll = 0;
+    }
+    accumulatedHeaderScroll += scrollDelta;
+
+    if (Math.abs(accumulatedHeaderScroll) < mobileHeaderScrollThresholdPx) {
+      return;
+    }
+
+    siteHeader.classList.toggle(
+        'mobile-header-hidden', accumulatedHeaderScroll > 0);
+    accumulatedHeaderScroll = 0;
+  };
+
+  window.addEventListener('scroll', () => {
+    if (!headerScrollUpdatePending) {
+      window.requestAnimationFrame(updateMobileHeader);
+      headerScrollUpdatePending = true;
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    accumulatedHeaderScroll = 0;
+    lastHeaderScrollY = getClampedScrollY();
+    if (window.innerWidth > mobileNavBreakpoint) {
+      showMobileHeader();
+    }
+  });
+}</script>

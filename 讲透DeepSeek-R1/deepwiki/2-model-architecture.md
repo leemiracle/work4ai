@@ -1,165 +1,204 @@
-> 来源: [https://deepwiki.com/deepseek-ai/DeepSeek-R1/2-model-architecture](https://deepwiki.com/deepseek-ai/DeepSeek-R1/2-model-architecture)
-> DeepWiki deepseek-ai/DeepSeek-R1
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/DeepSeek-R1 · page 2 Model Architecture · fetched 2026-10-30 -->
 
 # Model Architecture
 
-  Relevant source files 
- - [README.md](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1)
- - [paper.pdf](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/paper.pdf)
- 
-  This document provides a technical overview of the DeepSeek-Coder-V2 model architecture. It covers the Mixture-of-Experts (MoE) design, model variants, and key architectural features that enable the model's performance in code-related tasks.
+<details>
+<summary>Relevant source files</summary>
 
- For specific information about different model sizes and implementations, see [Model Variants](https://deepwiki.com/deepseek-ai/DeepSeek-Coder-V2/2.1-model-variants). For details about the extended context window implementation, see [Context Length Capabilities](https://deepwiki.com/deepseek-ai/DeepSeek-Coder-V2/2.2-context-length-capabilities).
+The following files were used as context for generating this wiki page:
 
- 
-## Core Architecture
+- [DeepSeek_R1.pdf](DeepSeek_R1.pdf)
+- [README.md](README.md)
 
- DeepSeek-Coder-V2 is built on the DeepSeekMoE framework, implementing a sparse Mixture-of-Experts architecture. This design allows the model to maintain a large number of total parameters while only activating a fraction of those parameters during inference.
+</details>
 
- 
-### Mixture-of-Experts Architecture
 
- 
+
+This document provides a technical overview of the DeepSeek-R1 model architecture, explaining its fundamental design, key components, and architectural characteristics. It covers the base architecture that underpins both DeepSeek-R1-Zero and DeepSeek-R1, as well as their architectural similarities and differences. For specific details about individual models, see [DeepSeek-R1-Zero](#2.1) and [DeepSeek-R1](#2.2). For information about the distilled models derived from DeepSeek-R1, see [Distilled Models](#2.3).
+
+## Base Architecture Overview
+
+DeepSeek-R1 and DeepSeek-R1-Zero are built upon the DeepSeek-V3-Base architecture, which utilizes a Mixture of Experts (MoE) design. This architecture enables these models to have a massive parameter count while maintaining computational efficiency during inference.
+
+**Key Architectural Specifications:**
+- **Total Parameters**: 671 billion
+- **Activated Parameters**: 37 billion (per forward pass)
+- **Context Length**: 128K tokens
+- **Architecture Type**: Sparse Mixture of Experts (MoE)
+
+The following diagram illustrates the high-level architecture of the DeepSeek-R1 model family:
+
+```mermaid
+flowchart TD
+    subgraph Architecture["DeepSeek-R1 Architecture"]
+        Base["DeepSeek-V3-Base\nMoE Architecture"]
+        
+        Base --> R1Zero["DeepSeek-R1-Zero\n671B total / 37B activated params\nPure RL training"]
+        Base --> R1["DeepSeek-R1\n671B total / 37B activated params\nCold-start + RL training"]
+    end
+    
+    subgraph Components["Key Architectural Components"]
+        TokenEmbed["Token Embeddings"]
+        PositionEmbed["Positional Encodings"]
+        
+        subgraph TransformerBlock["Transformer Block"]
+            Attention["Attention Layer"]
+            MoE["MoE FFN Layer"]
+            Router["Router Network"]
+            Experts["Multiple Expert FFNs"]
+            
+            Router --> |"Routes tokens to"| Experts
+            Attention --> MoE
+            MoE --> |"Contains"| Router
+            MoE --> |"Contains"| Experts
+        end
+        
+        LayerNorm["Layer Normalization"]
+        OutputProj["Output Projection"]
+    end
+    
+    Architecture --- Components
 ```
 
+Sources: [README.md:78-79]()
+
+## Mixture of Experts Architecture
+
+The core innovation in the DeepSeek-R1 models is the Mixture of Experts (MoE) architecture, which allows the model to have a large total parameter count (671B) while only activating a small portion (37B) during each forward pass.
+
+```mermaid
+flowchart LR
+    subgraph MoELayer["MoE Layer Structure"]
+        Input["Input Tokens"] --> Router["Router Network"]
+        Router --> |"Token 1"| Expert1["Expert 1"]
+        Router --> |"Token 2"| Expert2["Expert 2"]
+        Router --> |"Token N"| ExpertN["Expert N"]
+        
+        Expert1 --> Combine["Combine Outputs"]
+        Expert2 --> Combine
+        ExpertN --> Combine
+        Combine --> Output["Output Tokens"]
+    end
 ```
 
- In this architecture:
+The MoE architecture works as follows:
 
- 
- - Input tokens are embedded into continuous vector representations
- - These embeddings pass through multiple transformer layers
- - Within each transformer layer, after self-attention, a router network selectively activates only specific experts in the MoE feed-forward blocks
- - The outputs from activated experts are combined and processed through a language modeling head to produce the final output
- 
- Sources: [README.md57-59](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L57-L59) [README.md70](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L70-L70)
+1. A router network determines which expert should process each token
+2. Each token is sent to only a subset of the available experts
+3. The outputs from the selected experts are combined to produce the final output
+4. This approach enables the model to have specialized expert networks that can focus on specific types of tokens or tasks
 
- 
-### Parameter Efficiency
+This architecture offers several advantages:
+- Significantly increased model capacity without proportional increase in computation
+- Ability to develop specialized experts for different tasks or domains
+- Improved reasoning capabilities through specialized expert networks
 
- The key innovation of the MoE architecture is parameter efficiency. For example:
+Sources: [README.md:71-79]()
 
- 
- - The 16B parameter model activates only 2.4B parameters for each token
- - The 236B parameter model activates only 21B parameters for each token
- 
- This sparse activation pattern enables DeepSeek-Coder-V2 to achieve better computational and memory efficiency than comparable dense models, making it possible to train and deploy larger models effectively.
+## Training Approach Impact on Architecture
 
- 
-## Model Variants
+The architectural differences between DeepSeek-R1-Zero and DeepSeek-R1 are primarily in their training methodologies rather than their fundamental architecture. Both models share the same DeepSeek-V3-Base MoE architecture but differ in how they were trained, which affects their behavior and capabilities.
 
- DeepSeek-Coder-V2 encompasses four primary model variants:
-
- 
+```mermaid
+flowchart LR
+    subgraph ArchitecturalCommonality["Common Architecture"]
+        Base["DeepSeek-V3-Base\nMoE Architecture\n671B total parameters\n37B activated parameters\n128K context length"]
+    end
+    
+    subgraph TrainingDifferences["Training Approaches"]
+        direction TB
+        
+        RLOnly["Pure Reinforcement Learning\n(No SFT)\nDeepSeek-R1-Zero"]
+        
+        ColdStart["Cold-start + RL\nDeepSeek-R1"]
+        SFT1["SFT Stage 1\n(Seed for reasoning)"]
+        SFT2["SFT Stage 2\n(Non-reasoning capabilities)"]
+        RL1["RL Stage 1\n(Discover improved reasoning)"]
+        RL2["RL Stage 2\n(Align with human preferences)"]
+        
+        SFT1 --> SFT2
+        SFT2 --> RL1
+        RL1 --> RL2
+        
+        ColdStart --> |"Includes"| SFT1
+    end
+    
+    ArchitecturalCommonality --- TrainingDifferences
 ```
 
+Sources: [README.md:31-38](), [README.md:52-56]()
+
+## Distillation Process Architecture
+
+The distilled models are derived from DeepSeek-R1 but are based on different architectural families (Qwen and Llama). The distillation process transfers the reasoning capabilities of DeepSeek-R1 to smaller, more efficient models.
+
+```mermaid
+flowchart TD
+    R1["DeepSeek-R1\n671B total / 37B activated params"]
+    
+    R1 --> |"Generate reasoning data\n(800k samples)"| Dataset["Distillation Dataset"]
+    
+    Dataset --> |"Fine-tune"| QwenModels["Qwen-based Models"]
+    Dataset --> |"Fine-tune"| LlamaModels["Llama-based Models"]
+    
+    QwenModels --> Qwen15B["DeepSeek-R1-Distill-Qwen-1.5B"]
+    QwenModels --> Qwen7B["DeepSeek-R1-Distill-Qwen-7B"]
+    QwenModels --> Qwen14B["DeepSeek-R1-Distill-Qwen-14B"]
+    QwenModels --> Qwen32B["DeepSeek-R1-Distill-Qwen-32B"]
+    
+    LlamaModels --> Llama8B["DeepSeek-R1-Distill-Llama-8B"]
+    LlamaModels --> Llama70B["DeepSeek-R1-Distill-Llama-70B"]
 ```
 
- 
-### Model Specifications
+Sources: [README.md:60-63](), [README.md:82-97]()
 
- 
-| Model | Total Parameters | Active Parameters | Context Length | Type |
-|---|---|---|---|---|
-| DeepSeek-Coder-V2-Lite-Base | 16B | 2.4B | 128K | Base |
-| DeepSeek-Coder-V2-Lite-Instruct | 16B | 2.4B | 128K | Instruct |
-| DeepSeek-Coder-V2-Base | 236B | 21B | 128K | Base |
-| DeepSeek-Coder-V2-Instruct | 236B | 21B | 128K | Instruct |
+## Model Architecture Comparison
 
- Sources: [README.md69-80](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L69-L80)
+The following table provides a comparative overview of the model architectures in the DeepSeek-R1 family:
 
- 
-### Base vs. Instruct Models
+| Model | Base Architecture | Total Parameters | Activated Parameters | Context Length | Training Approach |
+|-------|------------------|-----------------|---------------------|---------------|------------------|
+| DeepSeek-R1-Zero | DeepSeek-V3 MoE | 671B | 37B | 128K | Pure RL (No SFT) |
+| DeepSeek-R1 | DeepSeek-V3 MoE | 671B | 37B | 128K | Cold-start + RL |
+| DeepSeek-R1-Distill-Qwen-1.5B | Qwen2.5-Math-1.5B | 1.5B | 1.5B | - | Distillation from DeepSeek-R1 |
+| DeepSeek-R1-Distill-Qwen-7B | Qwen2.5-Math-7B | 7B | 7B | - | Distillation from DeepSeek-R1 |
+| DeepSeek-R1-Distill-Llama-8B | Llama-3.1-8B | 8B | 8B | - | Distillation from DeepSeek-R1 |
+| DeepSeek-R1-Distill-Qwen-14B | Qwen2.5-14B | 14B | 14B | - | Distillation from DeepSeek-R1 |
+| DeepSeek-R1-Distill-Qwen-32B | Qwen2.5-32B | 32B | 32B | - | Distillation from DeepSeek-R1 |
+| DeepSeek-R1-Distill-Llama-70B | Llama-3.3-70B-Instruct | 70B | 70B | - | Distillation from DeepSeek-R1 |
 
- The model family includes two types of variants:
+Sources: [README.md:67-96]()
 
- 
- - **Base Models**: Foundation models trained primarily for code completion and generation tasks
- - **Instruct Models**: Fine-tuned versions of the base models optimized for following instructions and engaging in dialogue interactions
- 
- The Instruct models are better suited for chat-based interactions and following complex instructions, while the Base models may perform better for pure code completion tasks.
+## Architectural Implications for Deployment
 
- 
-## Development Process
+The MoE architecture of DeepSeek-R1 and DeepSeek-R1-Zero has specific implications for deployment:
 
- DeepSeek-Coder-V2 was developed through a systematic multi-stage process:
+1. **Specialized Deployment**: Due to the MoE architecture, these models require specialized deployment methods as noted in the documentation, which directs users to the DeepSeek-V3 repository for deployment instructions.
 
- 
+2. **Distilled Model Efficiency**: The distilled models, being based on dense architectures like Qwen and Llama, can be deployed using standard frameworks such as vLLM and SGLang.
+
+```mermaid
+flowchart LR
+    subgraph DeploymentPaths["Deployment Paths"]
+        R1Models["DeepSeek-R1 & R1-Zero\n(MoE Architecture)"] --> |"Requires"| SpecializedDeploy["Specialized Deployment\nvia DeepSeek-V3 Repository"]
+        
+        DistilledModels["Distilled Models\n(Dense Architecture)"] --> |"Supports"| StandardDeploy["Standard Deployment\nvia vLLM, SGLang"]
+    end
 ```
 
-```
+Sources: [README.md:164-168](), [README.md:170-184]()
 
- The development process included:
+## Usage Considerations Related to Architecture
 
- 
- - Starting from an intermediate checkpoint of the DeepSeek-V2 model
- - Additional pre-training with 6 trillion tokens of code-focused data
- - Creating base models optimized for code-related tasks
- - Fine-tuning with instruction data to create the instruct variants
- 
- This process enhanced the model's coding and mathematical reasoning capabilities while maintaining its general language understanding.
+The architectural design of DeepSeek-R1 models influences several usage considerations:
 
- Sources: [README.md58-59](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L58-L59)
+1. **Temperature Settings**: Due to the MoE architecture, a temperature range of 0.5-0.7 (0.6 recommended) is suggested to prevent endless repetitions or incoherent outputs.
 
- 
-## Technical Implementation
+2. **Prompt Format**: The architecture is optimized for user prompts without system prompts, affecting how instructions should be provided.
 
- 
-### Programming Language Coverage
+3. **Thinking Pattern**: The models are designed to utilize a thinking pattern approach using `` tags, which is an architectural consideration for achieving optimal reasoning performance.
 
- The model architecture is designed to support a wide range of programming languages - 338 in total, a significant expansion from the 86 languages supported in previous DeepSeek models. This comprehensive language coverage required architectural considerations to handle the diverse syntax and patterns across different programming languages.
+Sources: [README.md:186-197]()
 
- 
-### Memory and Computation Design
+---
 
- The MoE architecture is specifically designed to optimize memory usage and computational efficiency:
-
- 
-```
-
-```
-
- This selective activation approach allows the model to maintain strong performance while reducing the computational requirements for both training and inference.
-
- 
-### Inference Optimizations
-
- The architecture supports several inference optimization techniques:
-
- 
- - **Tensor Parallelism**: Distributing the model across multiple GPUs
- - **FP8 Support**: Reduced precision for more efficient computation
- - **FP8 KV Cache**: Memory-efficient key-value caching
- - **MLA Optimizations**: Multi-layer attention optimizations
- 
- Sources: [README.md280-291](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L280-L291)
-
- 
-## Hardware Requirements
-
- The hardware requirements for DeepSeek-Coder-V2 reflect its architecture:
-
- 
- - **DeepSeek-Coder-V2-Lite models**: Can run on consumer hardware with appropriate optimizations
- - **DeepSeek-Coder-V2 (full 236B models)**: Require 80GB*8 GPUs for inference when using BF16 format
- 
- These requirements stem directly from the model's architectural design and parameter count.
-
- Sources: [README.md188-190](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L188-L190)
-
- 
-## Model Input and Output Processing
-
- 
-```
-
-```
-
- The model architecture includes specialized tokenization designed to handle code-specific constructs effectively, including:
-
- 
- - Special tokens for code-specific elements
- - Support for FIM (Fill-In-Middle) operations with dedicated tokens (`<｜fim▁begin｜>`, `<｜fim▁hole｜>`, `<｜fim▁end｜>`)
- - Chat template format with role-based tokens for dialogue interactions
- 
- Sources: [README.md205-227](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L205-L227) [README.md229-274](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L229-L274)

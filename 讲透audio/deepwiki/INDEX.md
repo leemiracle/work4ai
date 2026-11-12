@@ -1,0 +1,32 @@
+# DeepWiki 索引 — pytorch/audio
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-21
+> 结构 27 页 · 全文 460191 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation and Getting Started](1.1-installation-and-getting-started.md)
+  - [1.2 Maintenance Phase and TorchCodec Migration](1.2-maintenance-phase-and-torchcodec-migration.md)
+- [2 Core Audio Processing](2-core-audio-processing.md)
+  - [2.1 Functional API](2.1-functional-api.md)
+  - [2.2 Transforms](2.2-transforms.md)
+  - [2.3 Feature Extraction](2.3-feature-extraction.md)
+  - [2.4 Filtering and DSP](2.4-filtering-and-dsp.md)
+  - [2.5 Native C++ and CUDA Implementations](2.5-native-c-and-cuda-implementations.md)
+- [3 I/O and Data](3-i-o-and-data.md)
+  - [3.1 Audio I/O and TorchCodec Migration](3.1-audio-i-o-and-torchcodec-migration.md)
+  - [3.2 Datasets](3.2-datasets.md)
+- [4 Models and Pipelines](4-models-and-pipelines.md)
+  - [4.1 Speech Recognition Models](4.1-speech-recognition-models.md)
+  - [4.2 ASR Pipelines](4.2-asr-pipelines.md)
+  - [4.3 CTC Decoder and Forced Alignment](4.3-ctc-decoder-and-forced-alignment.md)
+  - [4.4 Other Pipelines](4.4-other-pipelines.md)
+  - [4.5 Model Integration with External Frameworks](4.5-model-integration-with-external-frameworks.md)
+- [5 Build System and Deployment](5-build-system-and-deployment.md)
+  - [5.1 Build Configuration](5.1-build-configuration.md)
+  - [5.2 CMake Build System](5.2-cmake-build-system.md)
+  - [5.3 CI/CD Pipeline](5.3-ci-cd-pipeline.md)
+  - [5.4 Packaging and Distribution](5.4-packaging-and-distribution.md)
+- [6 Development Guide](6-development-guide.md)
+  - [6.1 Contributing Guidelines](6.1-contributing-guidelines.md)
+  - [6.2 Testing Framework](6.2-testing-framework.md)
+  - [6.3 Documentation System](6.3-documentation-system.md)

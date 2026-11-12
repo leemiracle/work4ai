@@ -1,0 +1,33 @@
+# DeepWiki 索引 — NVIDIA/DCGM
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 484441 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Architecture](1.1-architecture.md)
+  - [1.2 Installation](1.2-installation.md)
+  - [1.3 Security](1.3-security.md)
+- [2 Core Components](2-core-components.md)
+  - [2.1 Cache Manager](2.1-cache-manager.md)
+  - [2.2 API Reference](2.2-api-reference.md)
+- [3 Modules](3-modules.md)
+  - [3.1 System Monitoring Module](3.1-system-monitoring-module.md)
+  - [3.2 NVSwitch Module](3.2-nvswitch-module.md)
+  - [3.3 Diagnostic Module](3.3-diagnostic-module.md)
+- [4 NVVS (NVIDIA Validation Suite)](4-nvvs-nvidia-validation-suite.md)
+  - [4.1 Diagnostic SKUs Configuration](4.1-diagnostic-skus-configuration.md)
+  - [4.2 Plugin System](4.2-plugin-system.md)
+  - [4.3 Test Plugins](4.3-test-plugins.md)
+  - [4.4 Bandwidth Testing](4.4-bandwidth-testing.md)
+- [5 Building and Development](5-building-and-development.md)
+  - [5.1 Build System](5.1-build-system.md)
+  - [5.2 Multi-CUDA Support](5.2-multi-cuda-support.md)
+  - [5.3 Building with Docker](5.3-building-with-docker.md)
+  - [5.4 Packaging](5.4-packaging.md)
+- [6 Testing](6-testing.md)
+  - [6.1 Test Framework](6.1-test-framework.md)
+  - [6.2 dcgmproftester](6.2-dcgmproftester.md)
+  - [6.3 CUBLAS Proxy](6.3-cublas-proxy.md)
+- [7 Integration](7-integration.md)
+  - [7.1 Kubernetes Integration](7.1-kubernetes-integration.md)
+  - [7.2 Collectd Plugin](7.2-collectd-plugin.md)

@@ -1,0 +1,1765 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/lora/ops/torch_ops/lora_ops.py",
+   "type": "file",
+   "name": "lora_ops.py",
+   "filePath": "vllm/lora/ops/torch_ops/lora_ops.py",
+   "summary": "torch 原生 BGMV/SGMV 算子（vLLM 编译的 punica C++ 库绑定）：expand/shrink/expand_slice 六入口。",
+   "tags": [
+    "torch",
+    "punica",
+    "bgmv",
+    "sgmv"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/lora/ops/triton_ops/fp8_kernel_utils.py",
+   "type": "file",
+   "name": "fp8_kernel_utils.py",
+   "filePath": "vllm/lora/ops/triton_ops/fp8_kernel_utils.py",
+   "summary": "Punica Triton kernel 构造件（FP8）：_accumulate_mm/fp8_mm_k/do_shrink/do_expand 内联件。",
+   "tags": [
+    "triton",
+    "fp8",
+    "punica"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py",
+   "type": "file",
+   "name": "fused_moe_lora_fp8_op.py",
+   "filePath": "vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py",
+   "summary": "融合 MoE-LoRA FP8（895 行）：shrink/expand/整kernel 三路 Triton，PDL 支持与 LORA_PTR 预收集。",
+   "tags": [
+    "triton",
+    "moe",
+    "fp8"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "type": "file",
+   "name": "fused_moe_lora_op.py",
+   "filePath": "vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "summary": "融合 MoE-LoRA（1706 行）：one-shot（shrink+expand 单launch快路径）/small-batch 持久 GEMV/标准三路，chunk 选取按占用优先。",
+   "tags": [
+    "triton",
+    "moe",
+    "one-shot"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/lora/ops/triton_ops/kernel_utils.py",
+   "type": "file",
+   "name": "kernel_utils.py",
+   "filePath": "vllm/lora/ops/triton_ops/kernel_utils.py",
+   "summary": "Punica Triton kernel 构造件（BF16）：mm_k/do_expand/do_shrink。",
+   "tags": [
+    "triton",
+    "punica",
+    "bf16"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/lora/ops/triton_ops/lora_expand_fp8_op.py",
+   "type": "file",
+   "name": "lora_expand_fp8_op.py",
+   "filePath": "vllm/lora/ops/triton_ops/lora_expand_fp8_op.py",
+   "summary": "Punica expand FP8（基于 Punica 论文）：scale 指针预收集与 kernel。",
+   "tags": [
+    "triton",
+    "expand",
+    "fp8"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/lora/ops/triton_ops/lora_expand_op.py",
+   "type": "file",
+   "name": "lora_expand_op.py",
+   "filePath": "vllm/lora/ops/triton_ops/lora_expand_op.py",
+   "summary": "Punica expand（BF16）：多 adapter 路由 GEMM。",
+   "tags": [
+    "triton",
+    "expand"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/lora/ops/triton_ops/lora_kernel_metadata.py",
+   "type": "file",
+   "name": "lora_kernel_metadata.py",
+   "filePath": "vllm/lora/ops/triton_ops/lora_kernel_metadata.py",
+   "summary": "LoRA kernel metadata 准备（LoRAKernelMeta 4 方法）。",
+   "tags": [
+    "metadata"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py",
+   "type": "file",
+   "name": "lora_shrink_fp8_op.py",
+   "filePath": "vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py",
+   "summary": "Punica shrink FP8：A@B 路线（含 scale 预收集）。",
+   "tags": [
+    "triton",
+    "shrink",
+    "fp8"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/lora/ops/triton_ops/lora_shrink_op.py",
+   "type": "file",
+   "name": "lora_shrink_op.py",
+   "filePath": "vllm/lora/ops/triton_ops/lora_shrink_op.py",
+   "summary": "Punica shrink（BF16）：reduce kernel+主 kernel。",
+   "tags": [
+    "triton",
+    "shrink"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/lora/ops/triton_ops/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/lora/ops/triton_ops/utils.py",
+   "summary": "LoRA Triton 配置与指针工具：A/B 指针 profile_run 预收集、get_lora_op_configs 调优表、PDL/TMA 支持探测。",
+   "tags": [
+    "utils",
+    "configs",
+    "pointers"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/lora/ops/xpu_ops/lora_ops.py",
+   "type": "file",
+   "name": "lora_ops.py",
+   "filePath": "vllm/lora/ops/xpu_ops/lora_ops.py",
+   "summary": "XPU 版 BGMV 算子（shrink/expand/expand_slice impl 分离）。",
+   "tags": [
+    "xpu",
+    "bgmv"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/lora/ops/torch_ops/lora_ops.py:sgmv_expand",
+   "type": "function",
+   "name": "sgmv_expand",
+   "filePath": "vllm/lora/ops/torch_ops/lora_ops.py",
+   "summary": "SGMV expand（分组多 adapter）",
+   "tags": [
+    "sgmv",
+    "expand"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    7,
+    21
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/torch_ops/lora_ops.py:bgmv_expand",
+   "type": "function",
+   "name": "bgmv_expand",
+   "filePath": "vllm/lora/ops/torch_ops/lora_ops.py",
+   "summary": "BGMV expand（单 batch 多 adapter）",
+   "tags": [
+    "bgmv",
+    "expand"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    24,
+    57
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/torch_ops/lora_ops.py:sgmv_shrink",
+   "type": "function",
+   "name": "sgmv_shrink",
+   "filePath": "vllm/lora/ops/torch_ops/lora_ops.py",
+   "summary": "SGMV shrink。",
+   "tags": [
+    "sgmv",
+    "shrink"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    60,
+    74
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/torch_ops/lora_ops.py:bgmv_shrink",
+   "type": "function",
+   "name": "bgmv_shrink",
+   "filePath": "vllm/lora/ops/torch_ops/lora_ops.py",
+   "summary": "BGMV shrink。",
+   "tags": [
+    "bgmv",
+    "shrink"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    77,
+    94
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/torch_ops/lora_ops.py:sgmv_expand_slice",
+   "type": "function",
+   "name": "sgmv_expand_slice",
+   "filePath": "vllm/lora/ops/torch_ops/lora_ops.py",
+   "summary": "SGMV expand 切片（部分输出列）",
+   "tags": [
+    "sgmv",
+    "slice"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    97,
+    121
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/torch_ops/lora_ops.py:bgmv_expand_slice",
+   "type": "function",
+   "name": "bgmv_expand_slice",
+   "filePath": "vllm/lora/ops/torch_ops/lora_ops.py",
+   "summary": "BGMV expand 切片。",
+   "tags": [
+    "bgmv",
+    "slice"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    124,
+    150
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/fp8_kernel_utils.py:_accumulate_mm",
+   "type": "function",
+   "name": "_accumulate_mm",
+   "filePath": "vllm/lora/ops/triton_ops/fp8_kernel_utils.py",
+   "summary": "核心 MM+累加件（量化感知）",
+   "tags": [
+    "triton",
+    "mm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    9,
+    56
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/fp8_kernel_utils.py:fp8_mm_k",
+   "type": "function",
+   "name": "fp8_mm_k",
+   "filePath": "vllm/lora/ops/triton_ops/fp8_kernel_utils.py",
+   "summary": "FP8 兼容 MM kernel 件。",
+   "tags": [
+    "triton",
+    "fp8",
+    "mm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    60,
+    188
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/fp8_kernel_utils.py:do_shrink_kernel_fp8",
+   "type": "function",
+   "name": "do_shrink_kernel_fp8",
+   "filePath": "vllm/lora/ops/triton_ops/fp8_kernel_utils.py",
+   "summary": "FP8 shrink 内联件。",
+   "tags": [
+    "triton",
+    "fp8",
+    "shrink"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    192,
+    379
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/fp8_kernel_utils.py:do_expand_kernel_fp8",
+   "type": "function",
+   "name": "do_expand_kernel_fp8",
+   "filePath": "vllm/lora/ops/triton_ops/fp8_kernel_utils.py",
+   "summary": "FP8 expand 内联件。",
+   "tags": [
+    "triton",
+    "fp8",
+    "expand"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    383,
+    596
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py:_fused_moe_lora_kernel_fp8",
+   "type": "function",
+   "name": "_fused_moe_lora_kernel_fp8",
+   "filePath": "vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py",
+   "summary": "FP8 融合主 kernel（212 行）",
+   "tags": [
+    "triton",
+    "moe",
+    "fp8"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    125,
+    336
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py:_fused_moe_lora_shrink_fp8",
+   "type": "function",
+   "name": "_fused_moe_lora_shrink_fp8",
+   "filePath": "vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py",
+   "summary": "FP8 shrink 分路。",
+   "tags": [
+    "triton",
+    "moe",
+    "fp8",
+    "shrink"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    340,
+    501
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py:_fused_moe_lora_expand_fp8",
+   "type": "function",
+   "name": "_fused_moe_lora_expand_fp8",
+   "filePath": "vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py",
+   "summary": "FP8 expand 分路。",
+   "tags": [
+    "triton",
+    "moe",
+    "fp8",
+    "expand"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    505,
+    678
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py:_fused_moe_lora_fp8",
+   "type": "function",
+   "name": "_fused_moe_lora_fp8",
+   "filePath": "vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py",
+   "summary": "FP8 融合 MoE-LoRA 总入口（含 PDL）",
+   "tags": [
+    "triton",
+    "moe",
+    "fp8",
+    "entry"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    682,
+    866
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_fused_moe_lora_one_shot_kernel",
+   "type": "function",
+   "name": "_fused_moe_lora_one_shot_kernel",
+   "filePath": "vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "summary": "one-shot 融合 kernel（shrink+expand 单launch）",
+   "tags": [
+    "triton",
+    "one-shot"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    126,
+    308
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_run_fused_moe_lora_one_shot",
+   "type": "function",
+   "name": "_run_fused_moe_lora_one_shot",
+   "filePath": "vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "summary": "one-shot 快路径包装。",
+   "tags": [
+    "triton",
+    "one-shot"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    311,
+    514
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_fused_moe_lora_small_batch_kernel",
+   "type": "function",
+   "name": "_fused_moe_lora_small_batch_kernel",
+   "filePath": "vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "summary": "小批持久 GEMV kernel（每 program 一 pair×slice）",
+   "tags": [
+    "triton",
+    "small-batch",
+    "persistent"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    525,
+    710
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_pick_small_batch_chunk",
+   "type": "function",
+   "name": "_pick_small_batch_chunk",
+   "filePath": "vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "summary": "chunk 选取（grid≈2×SM_count，占用优先）",
+   "tags": [
+    "chunking"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    713,
+    728
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_run_fused_moe_lora_small_batch",
+   "type": "function",
+   "name": "_run_fused_moe_lora_small_batch",
+   "filePath": "vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "summary": "小批 GEMV 包装（naive-block 输入）",
+   "tags": [
+    "triton",
+    "small-batch"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    731,
+    860
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_fused_moe_lora_kernel",
+   "type": "function",
+   "name": "_fused_moe_lora_kernel",
+   "filePath": "vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "summary": "标准融合主 kernel（265 行）",
+   "tags": [
+    "triton",
+    "moe"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    910,
+    1174
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_fused_moe_lora_shrink",
+   "type": "function",
+   "name": "_fused_moe_lora_shrink",
+   "filePath": "vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "summary": "标准 shrink 分路。",
+   "tags": [
+    "triton",
+    "shrink"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1178,
+    1292
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_fused_moe_lora_expand",
+   "type": "function",
+   "name": "_fused_moe_lora_expand",
+   "filePath": "vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "summary": "标准 expand 分路。",
+   "tags": [
+    "triton",
+    "expand"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1296,
+    1430
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_fused_moe_lora",
+   "type": "function",
+   "name": "_fused_moe_lora",
+   "filePath": "vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "summary": "融合 MoE-LoRA 总入口（按批分派 one-shot/small-batch/标准）",
+   "tags": [
+    "triton",
+    "moe",
+    "entry"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1434,
+    1677
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/kernel_utils.py:mm_k",
+   "type": "function",
+   "name": "mm_k",
+   "filePath": "vllm/lora/ops/triton_ops/kernel_utils.py",
+   "summary": "BF16 MM kernel 件（A 行×B 列迭代）",
+   "tags": [
+    "triton",
+    "mm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    9,
+    107
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/kernel_utils.py:do_expand_kernel",
+   "type": "function",
+   "name": "do_expand_kernel",
+   "filePath": "vllm/lora/ops/triton_ops/kernel_utils.py",
+   "summary": "BF16 expand 内联件。",
+   "tags": [
+    "triton",
+    "expand"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    111,
+    233
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/kernel_utils.py:do_shrink_kernel",
+   "type": "function",
+   "name": "do_shrink_kernel",
+   "filePath": "vllm/lora/ops/triton_ops/kernel_utils.py",
+   "summary": "BF16 shrink 内联件。",
+   "tags": [
+    "triton",
+    "shrink"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    237,
+    356
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/lora_expand_fp8_op.py:_get_expand_lora_scale_ptr",
+   "type": "function",
+   "name": "_get_expand_lora_scale_ptr",
+   "filePath": "vllm/lora/ops/triton_ops/lora_expand_fp8_op.py",
+   "summary": "expand scale 指针 profile_run 预收集。",
+   "tags": [
+    "fp8",
+    "pointers"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    22,
+    45
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/lora_expand_fp8_op.py:_lora_expand_kernel_fp8",
+   "type": "function",
+   "name": "_lora_expand_kernel_fp8",
+   "filePath": "vllm/lora/ops/triton_ops/lora_expand_fp8_op.py",
+   "summary": "FP8 expand kernel 包装。",
+   "tags": [
+    "triton",
+    "fp8",
+    "expand"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    49,
+    167
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/lora_expand_fp8_op.py:_lora_expand_fp8",
+   "type": "function",
+   "name": "_lora_expand_fp8",
+   "filePath": "vllm/lora/ops/triton_ops/lora_expand_fp8_op.py",
+   "summary": "FP8 expand 入口。",
+   "tags": [
+    "triton",
+    "fp8",
+    "expand"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    171,
+    365
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/lora_expand_op.py:_lora_expand_kernel",
+   "type": "function",
+   "name": "_lora_expand_kernel",
+   "filePath": "vllm/lora/ops/triton_ops/lora_expand_op.py",
+   "summary": "BF16 expand kernel。",
+   "tags": [
+    "triton",
+    "expand"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    24,
+    132
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/lora_expand_op.py:_lora_expand",
+   "type": "function",
+   "name": "_lora_expand",
+   "filePath": "vllm/lora/ops/triton_ops/lora_expand_op.py",
+   "summary": "BF16 expand 入口。",
+   "tags": [
+    "triton",
+    "expand"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    136,
+    287
+   ]
+  },
+  {
+   "id": "class:vllm/lora/ops/triton_ops/lora_kernel_metadata.py:LoRAKernelMeta",
+   "type": "class",
+   "name": "LoRAKernelMeta",
+   "filePath": "vllm/lora/ops/triton_ops/lora_kernel_metadata.py",
+   "summary": "LoRA kernel metadata 准备（4 个方法）",
+   "tags": [
+    "metadata"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    12,
+    205
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py:_get_shrink_lora_scale_ptr",
+   "type": "function",
+   "name": "_get_shrink_lora_scale_ptr",
+   "filePath": "vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py",
+   "summary": "shrink scale 指针预收集。",
+   "tags": [
+    "fp8",
+    "pointers"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    19,
+    82
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py:_lora_shrink_kernel_fp8",
+   "type": "function",
+   "name": "_lora_shrink_kernel_fp8",
+   "filePath": "vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py",
+   "summary": "FP8 shrink kernel。",
+   "tags": [
+    "triton",
+    "fp8",
+    "shrink"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    86,
+    217
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py:_lora_shrink_fp8",
+   "type": "function",
+   "name": "_lora_shrink_fp8",
+   "filePath": "vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py",
+   "summary": "FP8 shrink 入口。",
+   "tags": [
+    "triton",
+    "fp8",
+    "shrink"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    221,
+    392
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/lora_shrink_op.py:_lora_shrink_reduce_kernel",
+   "type": "function",
+   "name": "_lora_shrink_reduce_kernel",
+   "filePath": "vllm/lora/ops/triton_ops/lora_shrink_op.py",
+   "summary": "shrink 归约 kernel。",
+   "tags": [
+    "triton",
+    "reduce"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    27,
+    98
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/lora_shrink_op.py:_lora_shrink_kernel",
+   "type": "function",
+   "name": "_lora_shrink_kernel",
+   "filePath": "vllm/lora/ops/triton_ops/lora_shrink_op.py",
+   "summary": "BF16 shrink kernel。",
+   "tags": [
+    "triton",
+    "shrink"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    102,
+    216
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/lora_shrink_op.py:_lora_shrink",
+   "type": "function",
+   "name": "_lora_shrink",
+   "filePath": "vllm/lora/ops/triton_ops/lora_shrink_op.py",
+   "summary": "BF16 shrink 入口。",
+   "tags": [
+    "triton",
+    "shrink"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    220,
+    408
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/utils.py:_get_lora_a_ptr",
+   "type": "function",
+   "name": "_get_lora_a_ptr",
+   "filePath": "vllm/lora/ops/triton_ops/utils.py",
+   "summary": "A 指针 profile_run 预收集（CUDA graph 安全）",
+   "tags": [
+    "pointers"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    25,
+    71
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/utils.py:_get_lora_b_ptr",
+   "type": "function",
+   "name": "_get_lora_b_ptr",
+   "filePath": "vllm/lora/ops/triton_ops/utils.py",
+   "summary": "B 指针预收集。",
+   "tags": [
+    "pointers"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    74,
+    158
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/utils.py:load_lora_op_config",
+   "type": "function",
+   "name": "load_lora_op_config",
+   "filePath": "vllm/lora/ops/triton_ops/utils.py",
+   "summary": "加载调优配置。",
+   "tags": [
+    "config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    162,
+    191
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/utils.py:get_lora_op_configs",
+   "type": "function",
+   "name": "get_lora_op_configs",
+   "filePath": "vllm/lora/ops/triton_ops/utils.py",
+   "summary": "取当前设备调优表（118 行）",
+   "tags": [
+    "config",
+    "tuning"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    195,
+    312
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/utils.py:supports_pdl",
+   "type": "function",
+   "name": "supports_pdl",
+   "filePath": "vllm/lora/ops/triton_ops/utils.py",
+   "summary": "PDL 支持探测（triton 3.5 教程参考）",
+   "tags": [
+    "pdl"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    316,
+    324
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/triton_ops/utils.py:supports_tma",
+   "type": "function",
+   "name": "supports_tma",
+   "filePath": "vllm/lora/ops/triton_ops/utils.py",
+   "summary": "TMA 支持探测。",
+   "tags": [
+    "tma"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    328,
+    330
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/xpu_ops/lora_ops.py:_bgmv_shrink_impl",
+   "type": "function",
+   "name": "_bgmv_shrink_impl",
+   "filePath": "vllm/lora/ops/xpu_ops/lora_ops.py",
+   "summary": "XPU shrink impl。",
+   "tags": [
+    "xpu",
+    "shrink"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    9,
+    18
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/xpu_ops/lora_ops.py:_bgmv_expand_impl",
+   "type": "function",
+   "name": "_bgmv_expand_impl",
+   "filePath": "vllm/lora/ops/xpu_ops/lora_ops.py",
+   "summary": "XPU expand impl。",
+   "tags": [
+    "xpu",
+    "expand"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    21,
+    63
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/xpu_ops/lora_ops.py:_bgmv_expand_slice_impl",
+   "type": "function",
+   "name": "_bgmv_expand_slice_impl",
+   "filePath": "vllm/lora/ops/xpu_ops/lora_ops.py",
+   "summary": "XPU expand_slice impl。",
+   "tags": [
+    "xpu",
+    "slice"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    66,
+    85
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/xpu_ops/lora_ops.py:bgmv_shrink",
+   "type": "function",
+   "name": "bgmv_shrink",
+   "filePath": "vllm/lora/ops/xpu_ops/lora_ops.py",
+   "summary": "XPU BGMV shrink 入口。",
+   "tags": [
+    "xpu",
+    "bgmv"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    107,
+    116
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/xpu_ops/lora_ops.py:bgmv_expand",
+   "type": "function",
+   "name": "bgmv_expand",
+   "filePath": "vllm/lora/ops/xpu_ops/lora_ops.py",
+   "summary": "XPU BGMV expand 入口。",
+   "tags": [
+    "xpu",
+    "bgmv"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    119,
+    128
+   ]
+  },
+  {
+   "id": "function:vllm/lora/ops/xpu_ops/lora_ops.py:bgmv_expand_slice",
+   "type": "function",
+   "name": "bgmv_expand_slice",
+   "filePath": "vllm/lora/ops/xpu_ops/lora_ops.py",
+   "summary": "XPU BGMV expand_slice 入口。",
+   "tags": [
+    "xpu",
+    "bgmv"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    131,
+    148
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/lora/ops/torch_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/torch_ops/lora_ops.py:sgmv_expand",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/torch_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/torch_ops/lora_ops.py:sgmv_expand",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/torch_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/torch_ops/lora_ops.py:bgmv_expand",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/torch_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/torch_ops/lora_ops.py:bgmv_expand",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/torch_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/torch_ops/lora_ops.py:sgmv_shrink",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/torch_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/torch_ops/lora_ops.py:sgmv_shrink",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/torch_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/torch_ops/lora_ops.py:bgmv_shrink",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/torch_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/torch_ops/lora_ops.py:bgmv_shrink",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/torch_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/torch_ops/lora_ops.py:sgmv_expand_slice",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/torch_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/torch_ops/lora_ops.py:sgmv_expand_slice",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/torch_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/torch_ops/lora_ops.py:bgmv_expand_slice",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/torch_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/torch_ops/lora_ops.py:bgmv_expand_slice",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fp8_kernel_utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/fp8_kernel_utils.py:_accumulate_mm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fp8_kernel_utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/fp8_kernel_utils.py:fp8_mm_k",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fp8_kernel_utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/fp8_kernel_utils.py:fp8_mm_k",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fp8_kernel_utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/fp8_kernel_utils.py:do_shrink_kernel_fp8",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fp8_kernel_utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/fp8_kernel_utils.py:do_shrink_kernel_fp8",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fp8_kernel_utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/fp8_kernel_utils.py:do_expand_kernel_fp8",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fp8_kernel_utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/fp8_kernel_utils.py:do_expand_kernel_fp8",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py:_fused_moe_lora_kernel_fp8",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py:_fused_moe_lora_shrink_fp8",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py:_fused_moe_lora_expand_fp8",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py:_fused_moe_lora_fp8",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_fused_moe_lora_one_shot_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_run_fused_moe_lora_one_shot",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_fused_moe_lora_small_batch_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_pick_small_batch_chunk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_run_fused_moe_lora_small_batch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_fused_moe_lora_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_fused_moe_lora_shrink",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_fused_moe_lora_expand",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_fused_moe_lora",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/kernel_utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/kernel_utils.py:mm_k",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/kernel_utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/kernel_utils.py:mm_k",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/kernel_utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/kernel_utils.py:do_expand_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/kernel_utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/kernel_utils.py:do_expand_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/kernel_utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/kernel_utils.py:do_shrink_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/kernel_utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/kernel_utils.py:do_shrink_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_expand_fp8_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/lora_expand_fp8_op.py:_get_expand_lora_scale_ptr",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_expand_fp8_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/lora_expand_fp8_op.py:_lora_expand_kernel_fp8",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_expand_fp8_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/lora_expand_fp8_op.py:_lora_expand_fp8",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_expand_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/lora_expand_op.py:_lora_expand_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_expand_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/lora_expand_op.py:_lora_expand",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_kernel_metadata.py",
+   "target": "class:vllm/lora/ops/triton_ops/lora_kernel_metadata.py:LoRAKernelMeta",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_kernel_metadata.py",
+   "target": "class:vllm/lora/ops/triton_ops/lora_kernel_metadata.py:LoRAKernelMeta",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py:_get_shrink_lora_scale_ptr",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py:_lora_shrink_kernel_fp8",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py:_lora_shrink_fp8",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_shrink_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/lora_shrink_op.py:_lora_shrink_reduce_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_shrink_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/lora_shrink_op.py:_lora_shrink_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_shrink_op.py",
+   "target": "function:vllm/lora/ops/triton_ops/lora_shrink_op.py:_lora_shrink",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/utils.py:_get_lora_a_ptr",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/utils.py:_get_lora_b_ptr",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/utils.py:load_lora_op_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/utils.py:load_lora_op_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/utils.py:get_lora_op_configs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/utils.py:get_lora_op_configs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/utils.py:supports_pdl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/utils.py:supports_pdl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/utils.py:supports_tma",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/utils.py",
+   "target": "function:vllm/lora/ops/triton_ops/utils.py:supports_tma",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/xpu_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/xpu_ops/lora_ops.py:_bgmv_shrink_impl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/xpu_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/xpu_ops/lora_ops.py:_bgmv_expand_impl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/xpu_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/xpu_ops/lora_ops.py:_bgmv_expand_slice_impl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/xpu_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/xpu_ops/lora_ops.py:bgmv_shrink",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/xpu_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/xpu_ops/lora_ops.py:bgmv_shrink",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/xpu_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/xpu_ops/lora_ops.py:bgmv_expand",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/xpu_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/xpu_ops/lora_ops.py:bgmv_expand",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/xpu_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/xpu_ops/lora_ops.py:bgmv_expand_slice",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/lora/ops/xpu_ops/lora_ops.py",
+   "target": "function:vllm/lora/ops/xpu_ops/lora_ops.py:bgmv_expand_slice",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fp8_kernel_utils.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py",
+   "target": "file:vllm/lora/ops/triton_ops/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_fp8_op.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "target": "file:vllm/lora/ops/triton_ops/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "target": "file:vllm/triton_utils/allocation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "target": "file:vllm/utils/mem_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/fused_moe_lora_op.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/kernel_utils.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_expand_fp8_op.py",
+   "target": "file:vllm/lora/ops/triton_ops/fp8_kernel_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_expand_fp8_op.py",
+   "target": "file:vllm/lora/ops/triton_ops/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_expand_fp8_op.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_expand_fp8_op.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_expand_op.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_expand_op.py",
+   "target": "file:vllm/lora/ops/triton_ops/kernel_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_expand_op.py",
+   "target": "file:vllm/lora/ops/triton_ops/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_expand_op.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_expand_op.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_expand_op.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py",
+   "target": "file:vllm/lora/ops/triton_ops/fp8_kernel_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py",
+   "target": "file:vllm/lora/ops/triton_ops/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_shrink_op.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_shrink_op.py",
+   "target": "file:vllm/lora/ops/triton_ops/kernel_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_shrink_op.py",
+   "target": "file:vllm/lora/ops/triton_ops/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_shrink_op.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/lora_shrink_op.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/utils.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/triton_ops/utils.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/lora/ops/xpu_ops/lora_ops.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "function:vllm/lora/ops/triton_ops/lora_expand_fp8_op.py:_lora_expand_fp8",
+   "target": "function:vllm/lora/ops/triton_ops/lora_expand_fp8_op.py:_lora_expand_kernel_fp8",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py:_lora_shrink_fp8",
+   "target": "function:vllm/lora/ops/triton_ops/lora_shrink_fp8_op.py:_lora_shrink_kernel_fp8",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/lora/ops/triton_ops/lora_shrink_op.py:_lora_shrink",
+   "target": "function:vllm/lora/ops/triton_ops/lora_shrink_op.py:_lora_shrink_kernel",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/lora/ops/triton_ops/lora_expand_op.py:_lora_expand",
+   "target": "function:vllm/lora/ops/triton_ops/lora_expand_op.py:_lora_expand_kernel",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_fused_moe_lora",
+   "target": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_run_fused_moe_lora_one_shot",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_fused_moe_lora",
+   "target": "function:vllm/lora/ops/triton_ops/fused_moe_lora_op.py:_run_fused_moe_lora_small_batch",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

@@ -1,0 +1,690 @@
+{
+ "nodes": [
+  {
+   "id": "document:packages/preset/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/preset/README.md",
+   "summary": "preset 包组总览：通过普通 Cordis 配置声明 Agent 能力并管理选择与运行时 revision，Host 共享 Agent loop 而每个 Agent 只见所选 revision 的工具/提示词/skills；列出 agent-preset-registry、agent-preset、persona 三包分工。",
+   "tags": [
+    "documentation",
+    "package-group",
+    "preset",
+    "overview"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/preset/agent-preset/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/preset/agent-preset/README.md",
+   "summary": "dsh-agent-preset 包文档：在普通 Cordis YAML 中声明 Agent 的子插件，多个 preset 供会话选择；定义即刻加载，编辑只影响后续创建的 Agent。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "preset",
+    "cordis-yaml"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/preset/agent-preset/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/preset/agent-preset/package.json",
+   "summary": "@deepseek-ai/dsh-agent-preset 0.2.2-alpha.3 清单：peer 依赖 cordis/loader/registry，附 skills 目录随包发布（agent-experience 等 4 个 SKILL）。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "preset"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/preset/agent-preset/skills/agent-experience/SKILL.md",
+   "type": "document",
+   "name": "SKILL.md",
+   "filePath": "packages/preset/agent-preset/skills/agent-experience/SKILL.md",
+   "summary": "agent-experience skill：写模型可见工具定义（名称/描述/参数 schema/系统提示词节）时的行为规范——最小上下文起步、显式可发现、关键约束前置、有界输出、就近局部性、总量评估。",
+   "tags": [
+    "skill",
+    "prompt-engineering",
+    "tool-schema",
+    "model-experience"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "document:packages/preset/agent-preset/skills/cordis-composition-reference/SKILL.md",
+   "type": "document",
+   "name": "SKILL.md",
+   "filePath": "packages/preset/agent-preset/skills/cordis-composition-reference/SKILL.md",
+   "summary": "Cordis 组合参考：Loader YAML 方言（insert、按 id override、group、disabled、isolate、!!js）与可安装 Harness 插件包清单的参考材料，操作流程在另两个 skill。",
+   "tags": [
+    "skill",
+    "reference",
+    "loader-yaml",
+    "composition"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "document:packages/preset/agent-preset/skills/cordis-composition-reference/references/packages.md",
+   "type": "document",
+   "name": "packages.md",
+   "filePath": "packages/preset/agent-preset/skills/cordis-composition-reference/references/packages.md",
+   "summary": "可加载 Harness 插件包清单（生成物：scripts/gen-plugin-packages.ts 从 workspace manifests 生成，verify-plugin-packages 校验），按组列出每个包是否接受 config 与一句话能力描述；禁止手改。",
+   "tags": [
+    "generated",
+    "reference",
+    "plugin-catalog",
+    "documentation"
+   ],
+   "complexity": "moderate",
+   "languageNotes": "CI 生成目录类文档：按模板只建综述节点，不逐条提取包条目。"
+  },
+  {
+   "id": "document:packages/preset/agent-preset/skills/cordis-plugin-development/SKILL.md",
+   "type": "document",
+   "name": "SKILL.md",
+   "filePath": "packages/preset/agent-preset/skills/cordis-plugin-development/SKILL.md",
+   "summary": "Harness 插件开发主 skill：设计/评审/启用/安装/调试插件、bundle、页面、工具与 MCP 连接的工作流；install_bundle 是唯一落盘通道，禁止手写 profile 的 package.json 或 cordis.patch.yml。",
+   "tags": [
+    "skill",
+    "plugin-development",
+    "workflow",
+    "bundle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "document:packages/preset/agent-preset/skills/cordis-plugin-development/references/host-plugin.md",
+   "type": "document",
+   "name": "host-plugin.md",
+   "filePath": "packages/preset/agent-preset/skills/cordis-plugin-development/references/host-plugin.md",
+   "summary": "Host 插件与 bundle 参考：bundle 即 package.json 声明 dsh.bundle.patch 的包，patch 插入插件条目；override 按 id 整体替换 config 不深合并。",
+   "tags": [
+    "reference",
+    "host-plugin",
+    "bundle",
+    "manifest"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "document:packages/preset/agent-preset/skills/cordis-plugin-development/references/mcp-bundle.md",
+   "type": "document",
+   "name": "mcp-bundle.md",
+   "filePath": "packages/preset/agent-preset/skills/cordis-plugin-development/references/mcp-bundle.md",
+   "summary": "MCP 服务器接入参考：复制 templates/mcp 写纯配置 bundle，插入已安装的 @deepseek-ai/dsh-mcp-client 行（streamable-http 或 stdio transport）；ambient 凭据会被清洗，应经 Loader !!js 引用而非复制秘密。",
+   "tags": [
+    "reference",
+    "mcp",
+    "bundle",
+    "configuration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/preset/agent-preset/skills/cordis-plugin-development/references/practices.md",
+   "type": "document",
+   "name": "practices.md",
+   "filePath": "packages/preset/agent-preset/skills/cordis-plugin-development/references/practices.md",
+   "summary": "插件实践原则：session log 是唯一事实源（插件内存只是派生缓存）、注册是 context 拥有的 effect、以及其余从 Harness 机制推出的规则；要求用 cordis_inspect_query 核实 Service/Event 名后再依赖。",
+   "tags": [
+    "reference",
+    "best-practices",
+    "session-log",
+    "cordis"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "document:packages/preset/agent-preset/skills/cordis-plugin-development/references/ui-plugin.md",
+   "type": "document",
+   "name": "ui-plugin.md",
+   "filePath": "packages/preset/agent-preset/skills/cordis-plugin-development/references/ui-plugin.md",
+   "summary": "Web 页面 UI 插件参考：复制 templates/decoration，package.json 加 dsh.client 节（platform/immediately/inject）与 ./client 导出；首版约束在分配空间的 slot（如 conversation.composer.dock）内。",
+   "tags": [
+    "reference",
+    "ui-plugin",
+    "web-client",
+    "slots"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "document:packages/preset/agent-preset/skills/cordis-plugin-development/references/user-actions.md",
+   "type": "document",
+   "name": "user-actions.md",
+   "filePath": "packages/preset/agent-preset/skills/cordis-plugin-development/references/user-actions.md",
+   "summary": "用户操作与 agent 工具参考：一个操作两个调用方——先实现为 Host service 方法，UI 经 Client 可调入口（如 ctx.remote.commands.execute() 的会话命令）调用并展示失败原因；纯视图交互不必成工具。",
+   "tags": [
+    "reference",
+    "user-actions",
+    "service-method",
+    "client-call"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/preset/agent-preset/skills/cordis-plugin-development/references/verification.md",
+   "type": "document",
+   "name": "verification.md",
+   "filePath": "packages/preset/agent-preset/skills/cordis-plugin-development/references/verification.md",
+   "summary": "验证边界参考：优先用已连接 Harness 的已认证页面，禁止另起浏览器/改 HOME/搜认证 token/自造渲染器补偿截图缺失；视觉不可得时退化为语法、manifest 与 live Client slot 校验并如实报告。",
+   "tags": [
+    "reference",
+    "verification",
+    "sandbox",
+    "limits"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/preset/agent-preset/skills/cordis-plugin-development/templates/decoration/client.js",
+   "type": "file",
+   "name": "client.js",
+   "filePath": "packages/preset/agent-preset/skills/cordis-plugin-development/templates/decoration/client.js",
+   "summary": "UI 插件模板的 Client 半边：经 window.__ModuleLoader__.load 注册 @local/my-decoration，注入 slots 并在 conversation.composer.dock 渲染一个 SVG 圆形装饰。",
+   "tags": [
+    "template",
+    "client-module",
+    "ui-plugin",
+    "example"
+   ],
+   "complexity": "simple",
+   "languageNotes": "Client 模块不走 ESM import，由页面 ModuleLoader 工厂加载。"
+  },
+  {
+   "id": "function:packages/preset/agent-preset/skills/cordis-plugin-development/templates/decoration/client.js:Decoration",
+   "type": "function",
+   "name": "Decoration",
+   "filePath": "packages/preset/agent-preset/skills/cordis-plugin-development/templates/decoration/client.js",
+   "lineRange": [
+    5,
+    13
+   ],
+   "summary": "模板渲染组件：用 React.createElement 画一个 aria-hidden 的蓝色圆形 SVG，注入 composer dock slot 作最小可用示例。",
+   "tags": [
+    "component",
+    "svg",
+    "example",
+    "slot"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/preset/agent-preset/skills/cordis-plugin-development/templates/decoration/cordis.patch.yml",
+   "type": "config",
+   "name": "cordis.patch.yml",
+   "filePath": "packages/preset/agent-preset/skills/cordis-plugin-development/templates/decoration/cordis.patch.yml",
+   "summary": "decoration 模板的 Loader patch：insert 一行 id=my-decoration、name=@local/my-decoration 的插件条目。",
+   "tags": [
+    "configuration",
+    "loader-patch",
+    "template"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/preset/agent-preset/skills/cordis-plugin-development/templates/decoration/index.js",
+   "type": "file",
+   "name": "index.js",
+   "filePath": "packages/preset/agent-preset/skills/cordis-plugin-development/templates/decoration/index.js",
+   "summary": "decoration 模板的 Host 半边：仅导出空 apply() 占位，渲染归 Client 模块。",
+   "tags": [
+    "template",
+    "host-module",
+    "placeholder"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/preset/agent-preset/skills/cordis-plugin-development/templates/decoration/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/preset/agent-preset/skills/cordis-plugin-development/templates/decoration/package.json",
+   "summary": "decoration 模板清单：@local/my-decoration 私有包，dsh.bundle.patch 指 cordis.patch.yml，dsh.client 声明 web 平台、immediately 加载并注入 dsh-client-ui-conversation。",
+   "tags": [
+    "configuration",
+    "template",
+    "bundle-manifest",
+    "dsh-client"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/preset/agent-preset/skills/cordis-plugin-development/templates/mcp/cordis.patch.yml",
+   "type": "config",
+   "name": "cordis.patch.yml",
+   "filePath": "packages/preset/agent-preset/skills/cordis-plugin-development/templates/mcp/cordis.patch.yml",
+   "summary": "MCP 模板的 Loader patch：插入已安装的 @deepseek-ai/dsh-mcp-client 行，streamable-http 指向 127.0.0.1:3000/mcp 且 failOnStartupError=true。",
+   "tags": [
+    "configuration",
+    "loader-patch",
+    "mcp",
+    "template"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/preset/agent-preset/skills/cordis-plugin-development/templates/mcp/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/preset/agent-preset/skills/cordis-plugin-development/templates/mcp/package.json",
+   "summary": "MCP 模板清单：@local/demo-mcp 纯配置 bundle，只有 dsh.bundle.patch 与 locale/icon 导出，无 Host/Client 入口文件。",
+   "tags": [
+    "configuration",
+    "template",
+    "config-only-bundle"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/preset/agent-preset/skills/editing-cordis-compositions/SKILL.md",
+   "type": "document",
+   "name": "SKILL.md",
+   "filePath": "packages/preset/agent-preset/skills/editing-cordis-compositions/SKILL.md",
+   "summary": "编辑 Cordis 组合 skill：agent preset 是 bundle patch 携带的普通声明，不改原地——创建或变更都靠安装一个声明/覆盖它的 bundle；规定 config 字段（id/plugins/name/description/order）与 Loader 行 id 约定 preset-<id>。",
+   "tags": [
+    "skill",
+    "composition",
+    "preset-editing",
+    "bundle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/preset/agent-preset/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/preset/agent-preset/src/index.ts",
+   "summary": "dsh-agent-preset 入口：default export 的 AgentPreset 插件类，以普通 Cordis 行声明一组子插件，Service.init 时向 agentPresets 注册 PresetDefinition；Config 仅验结构（子 schema 归 Cordis）。",
+   "tags": [
+    "entry-point",
+    "plugin",
+    "preset",
+    "service-init"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/preset/agent-preset/src/index.ts:AgentPreset",
+   "type": "class",
+   "name": "AgentPreset",
+   "filePath": "packages/preset/agent-preset/src/index.ts",
+   "lineRange": [
+    12,
+    30
+   ],
+   "summary": "声明式 preset 插件类（Service Definition 的 Consumer 角色）：static inject ['agentPresets']，EntryGroup.key 保持子表达式延后到各自插件激活，Service.init generator yield register() 的 disposer 实现 HMR 安全注册。",
+   "tags": [
+    "plugin-class",
+    "service-consumer",
+    "preset",
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/preset/agent-preset/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/preset/agent-preset/tsconfig.json",
+   "summary": "包 tsconfig：extends tsconfig.base.json，rootDir src/outDir lib/types，references 指向 vendor cordis/loader/schemastery 与 agent-preset-registry。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/preset/agent-preset-registry/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/preset/agent-preset-registry/README.md",
+   "summary": "dsh-agent-preset-registry 包文档：经声明式 preset 选择 Agent 的工具/提示词节/skills，单进程可跑多组合；失败定义保持可见，已存在 Agent 保留其在用组合。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "registry",
+    "preset"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/preset/agent-preset-registry/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/preset/agent-preset-registry/package.json",
+   "summary": "@deepseek-ai/dsh-agent-preset-registry 0.2.2-alpha.3 清单：peer 依赖 cordis 全家（loader/include）与 agent/scope/session/session-projection/settings/tools/typert-protocol，运行时依赖 app-boot/schemastery/zod/js-yaml。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "registry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/preset/agent-preset-registry/src/composition-inventory.ts",
+   "type": "file",
+   "name": "composition-inventory.ts",
+   "filePath": "packages/preset/agent-preset-registry/src/composition-inventory.ts",
+   "summary": "组合清单模块：从声明配置或活动 revision 读出 preset 的插件行——声明侧 flattenRows 展平 group/disabled/!!js 条件（求值器拒绝则记 conditional 交给真实 mount 裁决），活动侧 mountedCompositionRows 按 Loader entry 顺序带 fiber 状态输出。",
+   "tags": [
+    "inventory",
+    "composition",
+    "loader-tree",
+    "enablement"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/preset/agent-preset-registry/src/composition-inventory.ts:activeCompositionModules",
+   "type": "function",
+   "name": "activeCompositionModules",
+   "filePath": "packages/preset/agent-preset-registry/src/composition-inventory.ts",
+   "lineRange": [
+    72,
+    85
+   ],
+   "summary": "遍历保留 revision 的 EntryTree，筛出非 group、未 disabled 且 fiber ACTIVE 的条目，返回带 baseUrl 与 useHostBase 的模块引用（诊断泄漏用，不暴露 Loader entry）。",
+   "tags": [
+    "inspection",
+    "modules",
+    "entry-tree"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/preset/agent-preset-registry/src/composition-inventory.ts:disabledContribution",
+   "type": "function",
+   "name": "disabledContribution",
+   "filePath": "packages/preset/agent-preset-registry/src/composition-inventory.ts",
+   "lineRange": [
+    96,
+    110
+   ],
+   "summary": "计算单个 disabled 节点对有效启用态的贡献：!!js 表达式交给 Loader 语境求值器，抛错即拒答返回 conditional，其余按 Boolean 取值。",
+   "tags": [
+    "enablement",
+    "js-expr",
+    "tri-state"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/preset/agent-preset-registry/src/composition-inventory.ts:flattenRows",
+   "type": "function",
+   "name": "flattenRows",
+   "filePath": "packages/preset/agent-preset-registry/src/composition-inventory.ts",
+   "lineRange": [
+    147,
+    167
+   ],
+   "summary": "递归展平声明行列表：group 行是结构性的只递归子项并继承其 disabled 贡献，叶子行产出 entryId/moduleName/enabled/condition。",
+   "tags": [
+    "flatten",
+    "recursive",
+    "composition-rows"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/preset/agent-preset-registry/src/composition-inventory.ts:definitionComposition",
+   "type": "function",
+   "name": "definitionComposition",
+   "filePath": "packages/preset/agent-preset-registry/src/composition-inventory.ts",
+   "lineRange": [
+    174,
+    183
+   ],
+   "summary": "激活前诊断入口：先 entryListProblem 验行列表形状，坏则返回 broken 文案，好则 flattenRows 输出展平行集。",
+   "tags": [
+    "diagnostics",
+    "validation",
+    "declaration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/preset/agent-preset-registry/src/composition-inventory.ts:mountedCompositionRows",
+   "type": "function",
+   "name": "mountedCompositionRows",
+   "filePath": "packages/preset/agent-preset-registry/src/composition-inventory.ts",
+   "lineRange": [
+    190,
+    205
+   ],
+   "summary": "读活动 mount 的 EntryTree 生成组合行：剥掉 owner fiber 前缀得到相对 entryId，携带 Loader 已求值的 enabled、条件表达式与 root-fiber 状态。",
+   "tags": [
+    "mounted",
+    "entry-tree",
+    "projection"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/preset/agent-preset/src/index.ts",
+   "target": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/composition-inventory.ts",
+   "target": "file:packages/preset/agent-preset-registry/src/definition.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset/src/index.ts",
+   "target": "class:packages/preset/agent-preset/src/index.ts:AgentPreset",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/composition-inventory.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/composition-inventory.ts:activeCompositionModules",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/composition-inventory.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/composition-inventory.ts:disabledContribution",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/composition-inventory.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/composition-inventory.ts:flattenRows",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/composition-inventory.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/composition-inventory.ts:definitionComposition",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/composition-inventory.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/composition-inventory.ts:mountedCompositionRows",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/preset/agent-preset/skills/cordis-plugin-development/templates/decoration/client.js",
+   "target": "function:packages/preset/agent-preset/skills/cordis-plugin-development/templates/decoration/client.js:Decoration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/preset/agent-preset/src/index.ts",
+   "target": "class:packages/preset/agent-preset/src/index.ts:AgentPreset",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/composition-inventory.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/composition-inventory.ts:activeCompositionModules",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/composition-inventory.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/composition-inventory.ts:definitionComposition",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/composition-inventory.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/composition-inventory.ts:mountedCompositionRows",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "config:packages/preset/agent-preset/package.json",
+   "target": "file:packages/preset/agent-preset/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/preset/agent-preset/tsconfig.json",
+   "target": "file:packages/preset/agent-preset/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/preset/agent-preset-registry/package.json",
+   "target": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/preset/agent-preset/skills/cordis-plugin-development/templates/decoration/package.json",
+   "target": "config:packages/preset/agent-preset/skills/cordis-plugin-development/templates/decoration/cordis.patch.yml",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/preset/agent-preset/skills/cordis-plugin-development/templates/mcp/package.json",
+   "target": "config:packages/preset/agent-preset/skills/cordis-plugin-development/templates/mcp/cordis.patch.yml",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "document:packages/preset/agent-preset/README.md",
+   "target": "file:packages/preset/agent-preset/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/preset/agent-preset-registry/README.md",
+   "target": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/preset/agent-preset/skills/cordis-plugin-development/SKILL.md",
+   "target": "document:packages/preset/agent-preset/skills/cordis-plugin-development/references/host-plugin.md",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/preset/agent-preset/skills/cordis-plugin-development/SKILL.md",
+   "target": "document:packages/preset/agent-preset/skills/cordis-plugin-development/references/mcp-bundle.md",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/preset/agent-preset/skills/cordis-plugin-development/SKILL.md",
+   "target": "document:packages/preset/agent-preset/skills/cordis-plugin-development/references/practices.md",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/preset/agent-preset/skills/cordis-plugin-development/SKILL.md",
+   "target": "document:packages/preset/agent-preset/skills/cordis-plugin-development/references/ui-plugin.md",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/preset/agent-preset/skills/cordis-plugin-development/SKILL.md",
+   "target": "document:packages/preset/agent-preset/skills/cordis-plugin-development/references/user-actions.md",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/preset/agent-preset/skills/cordis-plugin-development/SKILL.md",
+   "target": "document:packages/preset/agent-preset/skills/cordis-plugin-development/references/verification.md",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/preset/agent-preset/skills/cordis-composition-reference/SKILL.md",
+   "target": "document:packages/preset/agent-preset/skills/cordis-composition-reference/references/packages.md",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/preset/README.md",
+   "target": "document:packages/preset/agent-preset/README.md",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/preset/README.md",
+   "target": "document:packages/preset/agent-preset-registry/README.md",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/preset/agent-preset/skills/cordis-plugin-development/templates/decoration/cordis.patch.yml",
+   "target": "file:packages/preset/agent-preset/skills/cordis-plugin-development/templates/decoration/client.js",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/preset/agent-preset/skills/cordis-plugin-development/templates/mcp/cordis.patch.yml",
+   "target": "file:packages/mcp/mcp-client/src/index.ts",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  }
+ ]
+}

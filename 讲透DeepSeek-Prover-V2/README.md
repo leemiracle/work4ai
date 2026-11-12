@@ -7,7 +7,7 @@
 | 产物 | 规模 / 说明 |
 |---|---|
 | DeepWiki | 9 页（deepwiki/） |
-| 论文精读 | 无本地篇：V2 要点从 [讲透DeepSeek-Prover-V1.5/paper/](../讲透DeepSeek-Prover-V1.5/paper/PAPER-DEEPREAD.md) **展望节**提取，论文《Advancing Formal Mathematical Reasoning via RL for Subgoal Decomposition》（arXiv:2504.21801，已核实） |
+| 论文精读 | ✅ [paper/PAPER-DEEPREAD.md](paper/PAPER-DEEPREAD.md)（2026-11-03 新增，arXiv:2504.21801 独立精读；含 reward hacking 实录 + oprover-math skill 蒸馏交叉引用） |
 | 知识图谱 | 4 节点 / 0 边 / 3 层 / 5 步导览（发布仓，源码薄，重点在论文） |
 
 ## 论文精读要点（摘自 V1.5 篇展望节）

@@ -1,0 +1,32 @@
+# DeepWiki 索引 — HKUDS/VideoRAG
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-11-09
+> 结构 27 页 · 全文 257036 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Repository Layout](1.1-repository-layout.md)
+  - [1.2 System Architecture at a Glance](1.2-system-architecture-at-a-glance.md)
+- [2 Vimo Desktop Application](2-vimo-desktop-application.md)
+  - [2.1 Installation and Setup](2.1-installation-and-setup.md)
+  - [2.2 User Interface and Features](2.2-user-interface-and-features.md)
+  - [2.3 Configuration Management](2.3-configuration-management.md)
+  - [2.4 Electron Main Process and IPC](2.4-electron-main-process-and-ipc.md)
+  - [2.5 Python Backend Bridge](2.5-python-backend-bridge.md)
+- [3 VideoRAG Framework](3-videorag-framework.md)
+  - [3.1 Dual-Channel Architecture](3.1-dual-channel-architecture.md)
+  - [3.2 Video Processing Pipeline](3.2-video-processing-pipeline.md)
+  - [3.3 Knowledge Graph Construction](3.3-knowledge-graph-construction.md)
+  - [3.4 Query Processing](3.4-query-processing.md)
+  - [3.5 Storage Subsystem](3.5-storage-subsystem.md)
+- [4 Core API Reference](4-core-api-reference.md)
+  - [4.1 VideoRAG Class](4.1-videorag-class.md)
+  - [4.2 Query Methods and Parameters](4.2-query-methods-and-parameters.md)
+- [5 LLM Integration](5-llm-integration.md)
+  - [5.1 LLM Configuration Options](5.1-llm-configuration-options.md)
+  - [5.2 Caching and Retry Mechanisms](5.2-caching-and-retry-mechanisms.md)
+- [6 Usage Examples](6-usage-examples.md)
+  - [6.1 Basic Video Processing](6.1-basic-video-processing.md)
+  - [6.2 Using Alternative LLM Providers](6.2-using-alternative-llm-providers.md)
+  - [6.3 Benchmark Evaluation](6.3-benchmark-evaluation.md)
+- [7 Licensing](7-licensing.md)
+- [8 Glossary](8-glossary.md)

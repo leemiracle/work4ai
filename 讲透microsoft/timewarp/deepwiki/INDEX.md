@@ -1,0 +1,42 @@
+# DeepWiki 索引 — microsoft/timewarp
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 29 页 · 全文 564369 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Project Structure](1.1-project-structure.md)
+  - [1.2 Contributing and Community](1.2-contributing-and-community.md)
+  - [1.3 Continuous Integration](1.3-continuous-integration.md)
+- [2 Getting Started](2-getting-started.md)
+- [3 Data Pipeline](3-data-pipeline.md)
+  - [3.1 Data Loaders](3.1-data-loaders.md)
+  - [3.2 Dataset Implementations](3.2-dataset-implementations.md)
+  - [3.3 Distributed Sampling](3.3-distributed-sampling.md)
+- [4 Model Architectures](4-model-architectures.md)
+  - [4.1 Configuration System](4.1-configuration-system.md)
+  - [4.2 Transformer NVP Models](4.2-transformer-nvp-models.md)
+  - [4.3 Equivariant NVP](4.3-equivariant-nvp.md)
+  - [4.4 Transformer CVAE](4.4-transformer-cvae.md)
+  - [4.5 Gaussian Density Transformer](4.5-gaussian-density-transformer.md)
+  - [4.6 Baseline Models](4.6-baseline-models.md)
+- [5 Training](5-training.md)
+  - [5.1 Training Configuration](5.1-training-configuration.md)
+  - [5.2 Single-GPU Training](5.2-single-gpu-training.md)
+  - [5.3 Multi-GPU Training with DeepSpeed](5.3-multi-gpu-training-with-deepspeed.md)
+- [6 Equivariance System](6-equivariance-system.md)
+  - [6.1 Equivariance Transformations](6.1-equivariance-transformations.md)
+  - [6.2 Equivariance Utilities](6.2-equivariance-utilities.md)
+- [7 Evaluation and Analysis](7-evaluation-and-analysis.md)
+  - [7.1 Sampling Script](7.1-sampling-script.md)
+  - [7.2 Peptide Evaluation](7.2-peptide-evaluation.md)
+  - [7.3 O2 Molecule Evaluation](7.3-o2-molecule-evaluation.md)
+  - [7.4 Trajectory Exploration](7.4-trajectory-exploration.md)
+  - [7.5 Visualization and Metrics](7.5-visualization-and-metrics.md)
+
+## 附：结构清单外的页
+- [Iterable Datasets](x1-iterable-datasets.md)
+- [Kernel Attention Variants](x2-kernel-attention-variants.md)
+- [LMDB Datasets](x3-lmdb-datasets.md)
+- [Local Attention NVP](x4-local-attention-nvp.md)
+- [Positional Encoding](x5-positional-encoding.md)
+- [Standard Transformer NVP](x6-standard-transformer-nvp.md)

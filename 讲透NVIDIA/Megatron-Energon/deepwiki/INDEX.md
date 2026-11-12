@@ -1,0 +1,32 @@
+# DeepWiki 索引 — NVIDIA/Megatron-Energon
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 507875 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation and Setup](1.1-installation-and-setup.md)
+- [2 Core Concepts](2-core-concepts.md)
+- [3 Dataset Preparation](3-dataset-preparation.md)
+  - [3.1 energon prepare Command](3.1-energon-prepare-command.md)
+  - [3.2 Indexing and Metadata System](3.2-indexing-and-metadata-system.md)
+- [4 Data Loading System](4-data-loading-system.md)
+  - [4.1 Metadataset Composition](4.1-metadataset-composition.md)
+  - [4.2 WebDataset Access & ITarReader](4.2-webdataset-access-itarreader.md)
+  - [4.3 SavableDataLoader](4.3-savabledataloader.md)
+- [5 Task Encoders & Data Processing](5-task-encoders-data-processing.md)
+  - [5.1 TaskEncoder Pipeline](5.1-taskencoder-pipeline.md)
+  - [5.2 Dataset Wrappers](5.2-dataset-wrappers.md)
+  - [5.3 Sample Decoding](5.3-sample-decoding.md)
+- [6 Audio/Video Processing](6-audio-video-processing.md)
+  - [6.1 AVDecoder](6.1-avdecoder.md)
+  - [6.2 Fastseek Optimization](6.2-fastseek-optimization.md)
+- [7 Storage Access with EPath](7-storage-access-with-epath.md)
+  - [7.1 EPath Abstraction](7.1-epath-abstraction.md)
+  - [7.2 Remote Datasets](7.2-remote-datasets.md)
+- [8 CLI Tools and Utilities](8-cli-tools-and-utilities.md)
+  - [8.1 energon prepare](8.1-energon-prepare.md)
+  - [8.2 energon mount](8.2-energon-mount.md)
+- [9 Advanced Topics](9-advanced-topics.md)
+  - [9.1 Checkpointing and State Management](9.1-checkpointing-and-state-management.md)
+  - [9.2 Distributed Training](9.2-distributed-training.md)
+  - [9.3 Custom TaskEncoders](9.3-custom-taskencoders.md)

@@ -1,0 +1,5884 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/model_executor/model_loader/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/model_executor/model_loader/__init__.py",
+   "summary": "model_loader 入口：加载器注册表（register/get）+get_model 总入口。",
+   "tags": [
+    "registry",
+    "entry-point"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/base_loader.py",
+   "type": "file",
+   "name": "base_loader.py",
+   "filePath": "vllm/model_executor/model_loader/base_loader.py",
+   "summary": "BaseModelLoader ABC：load_model 抽象+模型检查日志与在线量化上下文助手。",
+   "tags": [
+    "base",
+    "abc"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/checkpoint_weight_patch.py",
+   "type": "file",
+   "name": "checkpoint_weight_patch.py",
+   "filePath": "vllm/model_executor/model_loader/checkpoint_weight_patch.py",
+   "summary": "checkpoint 坐标系的稠密/稀疏权重补丁：NaN mask 载入、结构校验与 load_checkpoint_weight_patches（模型 load_weights 仍管名字映射/TP 切片）。",
+   "tags": [
+    "weight-patch",
+    "sparse-update"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/default_loader.py",
+   "type": "file",
+   "name": "default_loader.py",
+   "filePath": "vllm/model_executor/model_loader/default_loader.py",
+   "summary": "DefaultModelLoader：多文件类型磁盘加载器（9 个方法），EP 权重过滤与在线量化集成。",
+   "tags": [
+    "default",
+    "loader"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/dummy_loader.py",
+   "type": "file",
+   "name": "dummy_loader.py",
+   "filePath": "vllm/model_executor/model_loader/dummy_loader.py",
+   "summary": "DummyModelLoader：随机权重加载（profiling/测试），配合 layerwise reload 管线。",
+   "tags": [
+    "dummy",
+    "loader"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/ep_weight_filter.py",
+   "type": "file",
+   "name": "ep_weight_filter.py",
+   "filePath": "vllm/model_executor/model_loader/ep_weight_filter.py",
+   "summary": "EP 权重过滤：DP+EP 部署只读本 rank 专家分片，跳过非本地权重省 I/O。",
+   "tags": [
+    "ep",
+    "filter"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/reload/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/model_executor/model_loader/reload/__init__.py",
+   "summary": "reload 子包 barrel：逐层权重重载工具（weight update 场景）。",
+   "tags": [
+    "barrel",
+    "reload"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/reload/inplace.py",
+   "type": "file",
+   "name": "inplace.py",
+   "filePath": "vllm/model_executor/model_loader/reload/inplace.py",
+   "summary": "就地重载：get_parameter_for_reload+reload_weights（含 LoRA 层处理）。",
+   "tags": [
+    "inplace",
+    "reload"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "type": "file",
+   "name": "layerwise.py",
+   "filePath": "vllm/model_executor/model_loader/reload/layerwise.py",
+   "summary": "逐层重载管线（446 行）：initialize/finalize、在线处理 loader、attention scale 重载与 kernel tensor 恢复/落位。",
+   "tags": [
+    "layerwise",
+    "reload",
+    "pipeline"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "type": "file",
+   "name": "meta.py",
+   "filePath": "vllm/model_executor/model_loader/reload/meta.py",
+   "summary": "meta 设备重载：capture_layer_to_meta/restore_layer_on_meta/materialize_layer 三段与 CopyCounter（TorchDispatchMode 计数）。",
+   "tags": [
+    "meta",
+    "reload"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/reload/sanitize.py",
+   "type": "file",
+   "name": "sanitize.py",
+   "filePath": "vllm/model_executor/model_loader/reload/sanitize.py",
+   "summary": "层引用清洗：sanitize/restore_layer_refs（重载期间解除再恢复引用）。",
+   "tags": [
+    "sanitize",
+    "refs"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/reload/torchao_decorator.py",
+   "type": "file",
+   "name": "torchao_decorator.py",
+   "filePath": "vllm/model_executor/model_loader/reload/torchao_decorator.py",
+   "summary": "torchao 量化模型的高精度权重重载支持装饰。",
+   "tags": [
+    "torchao",
+    "reload"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/reload/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/model_executor/model_loader/reload/utils.py",
+   "summary": "reload 工具：层张量/参数枚举、尺寸与设备张量判定。",
+   "tags": [
+    "reload",
+    "utils"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/runai_streamer_loader.py",
+   "type": "file",
+   "name": "runai_streamer_loader.py",
+   "filePath": "vllm/model_executor/model_loader/runai_streamer_loader.py",
+   "summary": "RunaiModelStreamerLoader：本地/S3/GCS/Azure 流式加载 safetensors（含远端权重过滤）。",
+   "tags": [
+    "runai",
+    "streamer",
+    "loader"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/sharded_state_loader.py",
+   "type": "file",
+   "name": "sharded_state_loader.py",
+   "filePath": "vllm/model_executor/model_loader/sharded_state_loader.py",
+   "summary": "ShardedStateLoader：直读各 worker 的 state dict（免重组的快路径）。",
+   "tags": [
+    "sharded-state",
+    "loader"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "type": "file",
+   "name": "tensorizer.py",
+   "filePath": "vllm/model_executor/model_loader/tensorizer.py",
+   "summary": "CoreWeave tensorizer 序列化/反序列化（728 行）：TensorizerConfig/Args、MetaTensorMode（meta 设备反序列化）与 serialize/tensorize API。",
+   "tags": [
+    "tensorizer",
+    "serialization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/tensorizer_loader.py",
+   "type": "file",
+   "name": "tensorizer_loader.py",
+   "filePath": "vllm/model_executor/model_loader/tensorizer_loader.py",
+   "summary": "TensorizerLoader：经 tensorizer 反序列化的模型加载器。",
+   "tags": [
+    "tensorizer",
+    "loader"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/model_executor/model_loader/utils.py",
+   "summary": "加载工具：get_model_architecture、initialize_model、process_weights_after_loading、draft load config 与设备/在线量化上下文。",
+   "tags": [
+    "utils",
+    "model-init"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/weight_cache/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/__init__.py",
+   "summary": "weight_cache 子包 barrel。",
+   "tags": [
+    "package"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "type": "file",
+   "name": "daemon.py",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "summary": "WeightCacheDaemon（671 行）：每 GPU 一进程持后量化/TP 分片权重于显存，向引擎 serve CUDA IPC 句柄实现快速重启；含 rank 规划与不支持并行度的拒绝。",
+   "tags": [
+    "daemon",
+    "ipc",
+    "restart"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "type": "file",
+   "name": "ipc_loader.py",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "summary": "IpcModelLoader（627 行）：经 CUDA IPC 映射 weight cache daemon 的后量化权重而非读盘（22 个方法）。",
+   "tags": [
+    "ipc",
+    "loader",
+    "mapping"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "type": "file",
+   "name": "protocol.py",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "summary": "weight cache 协议（514 行）：WeightCacheKey 指纹（checkpoint/quant/rope 哈希）、socket 路径/属主校验、TensorEntry 与 JSON 收发。",
+   "tags": [
+    "protocol",
+    "fingerprint",
+    "socket"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/weight_cache/seed.py",
+   "type": "file",
+   "name": "seed.py",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/seed.py",
+   "summary": "daemon 间 D2D seeding：Seedable 协议、SeedConfig 与 SeedTransport（认证 JSON 通道互传 warmup/权重态）。",
+   "tags": [
+    "seeding",
+    "d2d",
+    "transport"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/weight_cache/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/utils.py",
+   "summary": "weight cache 共享助手：模型属性导出、draft 可缓存判定与 warmup runner 构建。",
+   "tags": [
+    "utils",
+    "warmup"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/weight_cache/warmup_cache.py",
+   "type": "file",
+   "name": "warmup_cache.py",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/warmup_cache.py",
+   "summary": "daemon warmup 缓存（daemon 间 seed）：WarmupCache 协议与 FlashInferWarmupCache（per-rank autotune 表 JSON）。",
+   "tags": [
+    "warmup",
+    "autotune"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/weight_checksum.py",
+   "type": "file",
+   "name": "weight_checksum.py",
+   "filePath": "vllm/model_executor/model_loader/weight_checksum.py",
+   "summary": "权重摘要与复位：per-parameter digest（验证权重更新用）与 zero_weights。",
+   "tags": [
+    "checksum",
+    "digest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "file",
+   "name": "weight_utils.py",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "权重工具大杂烩（1936 行）：下载（HF/ModelScope/xet）、量化/稀疏配置解析、safetensors/pt 多线程迭代器、各 weight loader（default/sharded/composed/attention sink）、MoE 专家名 remap 与 KV scale 重映射。",
+   "tags": [
+    "weights",
+    "download",
+    "iterators"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/__init__.py:register_model_loader",
+   "type": "function",
+   "name": "register_model_loader",
+   "filePath": "vllm/model_executor/model_loader/__init__.py",
+   "summary": "注册模型加载器。",
+   "tags": [
+    "registry"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    69,
+    120
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/__init__.py:get_model_loader",
+   "type": "function",
+   "name": "get_model_loader",
+   "filePath": "vllm/model_executor/model_loader/__init__.py",
+   "summary": "按名取加载器。",
+   "tags": [
+    "registry"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    123,
+    128
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/__init__.py:get_model",
+   "type": "function",
+   "name": "get_model",
+   "filePath": "vllm/model_executor/model_loader/__init__.py",
+   "summary": "取模型总入口（架构解析+初始化+加载）",
+   "tags": [
+    "entry"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    131,
+    143
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/base_loader.py:BaseModelLoader",
+   "type": "class",
+   "name": "BaseModelLoader",
+   "filePath": "vllm/model_executor/model_loader/base_loader.py",
+   "summary": "加载器 ABC（6 个方法）",
+   "tags": [
+    "abc",
+    "base"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    27,
+    115
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/base_loader.py:log_model_inspection",
+   "type": "function",
+   "name": "log_model_inspection",
+   "filePath": "vllm/model_executor/model_loader/base_loader.py",
+   "summary": "模型检查日志。",
+   "tags": [
+    "logging"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    118,
+    125
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/base_loader.py:_get_online_quantization_config",
+   "type": "function",
+   "name": "_get_online_quantization_config",
+   "filePath": "vllm/model_executor/model_loader/base_loader.py",
+   "summary": "在线量化配置获取。",
+   "tags": [
+    "online-quant"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    128,
+    142
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/base_loader.py:log_online_quantization",
+   "type": "function",
+   "name": "log_online_quantization",
+   "filePath": "vllm/model_executor/model_loader/base_loader.py",
+   "summary": "在线量化日志。",
+   "tags": [
+    "logging"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    145,
+    155
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/base_loader.py:log_online_quantization_time",
+   "type": "function",
+   "name": "log_online_quantization_time",
+   "filePath": "vllm/model_executor/model_loader/base_loader.py",
+   "summary": "量化耗时日志。",
+   "tags": [
+    "logging"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    158,
+    167
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/checkpoint_weight_patch.py:CheckpointWeightPatch",
+   "type": "class",
+   "name": "CheckpointWeightPatch",
+   "filePath": "vllm/model_executor/model_loader/checkpoint_weight_patch.py",
+   "summary": "单个 checkpoint 坐标更新描述（NamedTuple）",
+   "tags": [
+    "patch",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    28,
+    46
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/checkpoint_weight_patch.py:_load_nan_masked_weights",
+   "type": "function",
+   "name": "_load_nan_masked_weights",
+   "filePath": "vllm/model_executor/model_loader/checkpoint_weight_patch.py",
+   "summary": "NaN mask 权重载入。",
+   "tags": [
+    "nan-mask"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    49,
+    85
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/checkpoint_weight_patch.py:_validate_patch_structure",
+   "type": "function",
+   "name": "_validate_patch_structure",
+   "filePath": "vllm/model_executor/model_loader/checkpoint_weight_patch.py",
+   "summary": "补丁结构校验。",
+   "tags": [
+    "validation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    88,
+    121
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/checkpoint_weight_patch.py:_load_weight_chunk",
+   "type": "function",
+   "name": "_load_weight_chunk",
+   "filePath": "vllm/model_executor/model_loader/checkpoint_weight_patch.py",
+   "summary": "权重块载入。",
+   "tags": [
+    "chunk"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    124,
+    136
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/checkpoint_weight_patch.py:load_checkpoint_weight_patches",
+   "type": "function",
+   "name": "load_checkpoint_weight_patches",
+   "filePath": "vllm/model_executor/model_loader/checkpoint_weight_patch.py",
+   "summary": "稠密/稀疏补丁应用主入口（135 行）",
+   "tags": [
+    "patch",
+    "entry"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    140,
+    274
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/default_loader.py:DefaultModelLoader",
+   "type": "class",
+   "name": "DefaultModelLoader",
+   "filePath": "vllm/model_executor/model_loader/default_loader.py",
+   "summary": "默认磁盘加载器（9 个方法）",
+   "tags": [
+    "default",
+    "loader"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    55,
+    572
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/dummy_loader.py:DummyModelLoader",
+   "type": "class",
+   "name": "DummyModelLoader",
+   "filePath": "vllm/model_executor/model_loader/dummy_loader.py",
+   "summary": "随机权重加载器（4 个方法）",
+   "tags": [
+    "dummy"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    21,
+    68
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/ep_weight_filter.py:parse_expert_id",
+   "type": "function",
+   "name": "parse_expert_id",
+   "filePath": "vllm/model_executor/model_loader/ep_weight_filter.py",
+   "summary": "解析权重名中的专家 id。",
+   "tags": [
+    "parsing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    20,
+    28
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/ep_weight_filter.py:compute_local_expert_ids",
+   "type": "function",
+   "name": "compute_local_expert_ids",
+   "filePath": "vllm/model_executor/model_loader/ep_weight_filter.py",
+   "summary": "计算本 rank 本地专家集合。",
+   "tags": [
+    "ep"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    31,
+    65
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/ep_weight_filter.py:should_skip_weight",
+   "type": "function",
+   "name": "should_skip_weight",
+   "filePath": "vllm/model_executor/model_loader/ep_weight_filter.py",
+   "summary": "非本地专家权重跳过判定。",
+   "tags": [
+    "ep",
+    "filter"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    68,
+    85
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/inplace.py:get_parameter_for_reload",
+   "type": "function",
+   "name": "get_parameter_for_reload",
+   "filePath": "vllm/model_executor/model_loader/reload/inplace.py",
+   "summary": "取待重载参数。",
+   "tags": [
+    "inplace"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    21,
+    29
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/inplace.py:reload_weights",
+   "type": "function",
+   "name": "reload_weights",
+   "filePath": "vllm/model_executor/model_loader/reload/inplace.py",
+   "summary": "就地重载权重（LoRA 感知）",
+   "tags": [
+    "inplace",
+    "reload"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    32,
+    123
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/layerwise.py:get_layerwise_info",
+   "type": "function",
+   "name": "get_layerwise_info",
+   "filePath": "vllm/model_executor/model_loader/reload/layerwise.py",
+   "summary": "逐层信息收集。",
+   "tags": [
+    "layerwise"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    57,
+    67
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/layerwise.py:record_metadata_for_reloading",
+   "type": "function",
+   "name": "record_metadata_for_reloading",
+   "filePath": "vllm/model_executor/model_loader/reload/layerwise.py",
+   "summary": "重载 metadata 记录。",
+   "tags": [
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    70,
+    79
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/layerwise.py:initialize_layerwise_reload",
+   "type": "function",
+   "name": "initialize_layerwise_reload",
+   "filePath": "vllm/model_executor/model_loader/reload/layerwise.py",
+   "summary": "初始化逐层重载。",
+   "tags": [
+    "layerwise",
+    "init"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    83,
+    117
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/layerwise.py:initialize_online_processing",
+   "type": "function",
+   "name": "initialize_online_processing",
+   "filePath": "vllm/model_executor/model_loader/reload/layerwise.py",
+   "summary": "初始化在线处理。",
+   "tags": [
+    "online-quant"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    120,
+    134
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/layerwise.py:_wrap_parameters_weight_loader",
+   "type": "function",
+   "name": "_wrap_parameters_weight_loader",
+   "filePath": "vllm/model_executor/model_loader/reload/layerwise.py",
+   "summary": "参数 loader 包装。",
+   "tags": [
+    "wrapping"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    137,
+    144
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/layerwise.py:make_online_process_loader",
+   "type": "function",
+   "name": "make_online_process_loader",
+   "filePath": "vllm/model_executor/model_loader/reload/layerwise.py",
+   "summary": "在线处理 loader 构造。",
+   "tags": [
+    "online-quant"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    147,
+    223
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/layerwise.py:finalize_layerwise_processing",
+   "type": "function",
+   "name": "finalize_layerwise_processing",
+   "filePath": "vllm/model_executor/model_loader/reload/layerwise.py",
+   "summary": "完成在线处理。",
+   "tags": [
+    "finalize"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    226,
+    284
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/layerwise.py:finalize_layerwise_reload",
+   "type": "function",
+   "name": "finalize_layerwise_reload",
+   "filePath": "vllm/model_executor/model_loader/reload/layerwise.py",
+   "summary": "完成逐层重载。",
+   "tags": [
+    "finalize"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    287,
+    288
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/layerwise.py:_finalize_attention_layer",
+   "type": "function",
+   "name": "_finalize_attention_layer",
+   "filePath": "vllm/model_executor/model_loader/reload/layerwise.py",
+   "summary": "attention 层收尾。",
+   "tags": [
+    "attention"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    291,
+    303
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/layerwise.py:_reload_attention_scales",
+   "type": "function",
+   "name": "_reload_attention_scales",
+   "filePath": "vllm/model_executor/model_loader/reload/layerwise.py",
+   "summary": "attention scale 重载。",
+   "tags": [
+    "attention",
+    "scales"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    306,
+    341
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/layerwise.py:_layerwise_process",
+   "type": "function",
+   "name": "_layerwise_process",
+   "filePath": "vllm/model_executor/model_loader/reload/layerwise.py",
+   "summary": "逐层处理循环。",
+   "tags": [
+    "layerwise"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    344,
+    401
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/layerwise.py:_get_original_loader",
+   "type": "function",
+   "name": "_get_original_loader",
+   "filePath": "vllm/model_executor/model_loader/reload/layerwise.py",
+   "summary": "取原始 loader。",
+   "tags": [
+    "loader"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    404,
+    410
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/layerwise.py:_copy_and_restore_kernel_tensors",
+   "type": "function",
+   "name": "_copy_and_restore_kernel_tensors",
+   "filePath": "vllm/model_executor/model_loader/reload/layerwise.py",
+   "summary": "kernel tensor 拷贝恢复。",
+   "tags": [
+    "kernel-tensors"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    417,
+    433
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/layerwise.py:_place_kernel_tensors",
+   "type": "function",
+   "name": "_place_kernel_tensors",
+   "filePath": "vllm/model_executor/model_loader/reload/layerwise.py",
+   "summary": "kernel tensor 落位。",
+   "tags": [
+    "kernel-tensors"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    436,
+    446
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/meta.py:to_meta_tensor",
+   "type": "function",
+   "name": "to_meta_tensor",
+   "filePath": "vllm/model_executor/model_loader/reload/meta.py",
+   "summary": "转 meta 设备。",
+   "tags": [
+    "meta"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    41,
+    46
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/meta.py:materialize_meta_tensor",
+   "type": "function",
+   "name": "materialize_meta_tensor",
+   "filePath": "vllm/model_executor/model_loader/reload/meta.py",
+   "summary": "物化 meta 张量。",
+   "tags": [
+    "meta"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    49,
+    61
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/meta.py:_parameter_storage_ptrs",
+   "type": "function",
+   "name": "_parameter_storage_ptrs",
+   "filePath": "vllm/model_executor/model_loader/reload/meta.py",
+   "summary": "参数存储指针集。",
+   "tags": [
+    "storage"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    89,
+    94
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/meta.py:capture_layer_to_meta",
+   "type": "function",
+   "name": "capture_layer_to_meta",
+   "filePath": "vllm/model_executor/model_loader/reload/meta.py",
+   "summary": "层转 meta 捕获。",
+   "tags": [
+    "meta",
+    "capture"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    97,
+    117
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/meta.py:restore_layer_on_meta",
+   "type": "function",
+   "name": "restore_layer_on_meta",
+   "filePath": "vllm/model_executor/model_loader/reload/meta.py",
+   "summary": "meta 上恢复层。",
+   "tags": [
+    "meta",
+    "restore"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    120,
+    142
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/meta.py:materialize_layer",
+   "type": "function",
+   "name": "materialize_layer",
+   "filePath": "vllm/model_executor/model_loader/reload/meta.py",
+   "summary": "层物化。",
+   "tags": [
+    "meta"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    145,
+    153
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/meta.py:get_numel_loaded",
+   "type": "function",
+   "name": "get_numel_loaded",
+   "filePath": "vllm/model_executor/model_loader/reload/meta.py",
+   "summary": "已载元素计数。",
+   "tags": [
+    "numel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    180,
+    210
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/reload/meta.py:CopyCounter",
+   "type": "class",
+   "name": "CopyCounter",
+   "filePath": "vllm/model_executor/model_loader/reload/meta.py",
+   "summary": "copy_ 元素计数（TorchDispatchMode）",
+   "tags": [
+    "counter",
+    "dispatch-mode"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    156,
+    177
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/sanitize.py:sanitize_layer_refs",
+   "type": "function",
+   "name": "sanitize_layer_refs",
+   "filePath": "vllm/model_executor/model_loader/reload/sanitize.py",
+   "summary": "解除层引用。",
+   "tags": [
+    "sanitize"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    13,
+    34
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/sanitize.py:restore_layer_refs",
+   "type": "function",
+   "name": "restore_layer_refs",
+   "filePath": "vllm/model_executor/model_loader/reload/sanitize.py",
+   "summary": "恢复层引用。",
+   "tags": [
+    "restore"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    37,
+    55
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/torchao_decorator.py:set_torchao_reload_attrs",
+   "type": "function",
+   "name": "set_torchao_reload_attrs",
+   "filePath": "vllm/model_executor/model_loader/reload/torchao_decorator.py",
+   "summary": "设置重载属性。",
+   "tags": [
+    "torchao"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    26,
+    28
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/torchao_decorator.py:support_quantized_model_reload_from_hp_weights",
+   "type": "function",
+   "name": "support_quantized_model_reload_from_hp_weights",
+   "filePath": "vllm/model_executor/model_loader/reload/torchao_decorator.py",
+   "summary": "HP 权重重载支持装饰。",
+   "tags": [
+    "torchao",
+    "decorator"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    31,
+    60
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/utils.py:get_layer_tensors",
+   "type": "function",
+   "name": "get_layer_tensors",
+   "filePath": "vllm/model_executor/model_loader/reload/utils.py",
+   "summary": "取层张量集。",
+   "tags": [
+    "utils"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    20,
+    23
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/utils.py:get_layer_params_buffers",
+   "type": "function",
+   "name": "get_layer_params_buffers",
+   "filePath": "vllm/model_executor/model_loader/reload/utils.py",
+   "summary": "取层参数/缓冲。",
+   "tags": [
+    "utils"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    26,
+    31
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/utils.py:get_layer_size",
+   "type": "function",
+   "name": "get_layer_size",
+   "filePath": "vllm/model_executor/model_loader/reload/utils.py",
+   "summary": "层尺寸。",
+   "tags": [
+    "utils"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    39,
+    51
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/utils.py:has_device_tensors",
+   "type": "function",
+   "name": "has_device_tensors",
+   "filePath": "vllm/model_executor/model_loader/reload/utils.py",
+   "summary": "是否有设备张量。",
+   "tags": [
+    "utils"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    54,
+    67
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/reload/utils.py:get_info_size",
+   "type": "function",
+   "name": "get_info_size",
+   "filePath": "vllm/model_executor/model_loader/reload/utils.py",
+   "summary": "info 尺寸。",
+   "tags": [
+    "utils"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    70,
+    85
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/runai_streamer_loader.py:_get_remote_checkpoint_keys",
+   "type": "function",
+   "name": "_get_remote_checkpoint_keys",
+   "filePath": "vllm/model_executor/model_loader/runai_streamer_loader.py",
+   "summary": "远端 checkpoint 键获取。",
+   "tags": [
+    "runai"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    36,
+    45
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/runai_streamer_loader.py:_filter_remote_weights",
+   "type": "function",
+   "name": "_filter_remote_weights",
+   "filePath": "vllm/model_executor/model_loader/runai_streamer_loader.py",
+   "summary": "远端权重过滤。",
+   "tags": [
+    "runai",
+    "filter"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    48,
+    120
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/runai_streamer_loader.py:RunaiModelStreamerLoader",
+   "type": "class",
+   "name": "RunaiModelStreamerLoader",
+   "filePath": "vllm/model_executor/model_loader/runai_streamer_loader.py",
+   "summary": "RunAI 流式加载器（6 个方法）",
+   "tags": [
+    "runai",
+    "streamer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    123,
+    285
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/sharded_state_loader.py:ShardedStateLoader",
+   "type": "class",
+   "name": "ShardedStateLoader",
+   "filePath": "vllm/model_executor/model_loader/sharded_state_loader.py",
+   "summary": "分片 state 直读加载器（9 个方法）",
+   "tags": [
+    "sharded-state"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    30,
+    303
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/tensorizer.py:MetaTensorMode",
+   "type": "class",
+   "name": "MetaTensorMode",
+   "filePath": "vllm/model_executor/model_loader/tensorizer.py",
+   "summary": "meta 设备反序列化模式（TorchDispatchMode）",
+   "tags": [
+    "meta",
+    "dispatch-mode"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    89,
+    96
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/tensorizer.py:_NoInitOrTensorImpl",
+   "type": "class",
+   "name": "_NoInitOrTensorImpl",
+   "filePath": "vllm/model_executor/model_loader/tensorizer.py",
+   "summary": "免初始化 tensor impl。",
+   "tags": [
+    "meta"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    115,
+    155
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/tensorizer.py:TensorizerConfig",
+   "type": "class",
+   "name": "TensorizerConfig",
+   "filePath": "vllm/model_executor/model_loader/tensorizer.py",
+   "summary": "tensorizer 配置（MutableMapping，12 个方法）",
+   "tags": [
+    "config"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    159,
+    333
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/tensorizer.py:TensorizerArgs",
+   "type": "class",
+   "name": "TensorizerArgs",
+   "filePath": "vllm/model_executor/model_loader/tensorizer.py",
+   "summary": "tensorizer 参数集（3 个方法）",
+   "tags": [
+    "args"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    341,
+    460
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/tensorizer.py:meta_tensor_mode",
+   "type": "function",
+   "name": "meta_tensor_mode",
+   "filePath": "vllm/model_executor/model_loader/tensorizer.py",
+   "summary": "meta 模式上下文。",
+   "tags": [
+    "meta"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    99,
+    112
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/tensorizer.py:init_tensorizer_model",
+   "type": "function",
+   "name": "init_tensorizer_model",
+   "filePath": "vllm/model_executor/model_loader/tensorizer.py",
+   "summary": "tensorizer 模型初始化。",
+   "tags": [
+    "init"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    475,
+    484
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/tensorizer.py:deserialize_tensorizer_model",
+   "type": "function",
+   "name": "deserialize_tensorizer_model",
+   "filePath": "vllm/model_executor/model_loader/tensorizer.py",
+   "summary": "反序列化。",
+   "tags": [
+    "deserialize"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    487,
+    528
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/tensorizer.py:tensorizer_weights_iterator",
+   "type": "function",
+   "name": "tensorizer_weights_iterator",
+   "filePath": "vllm/model_executor/model_loader/tensorizer.py",
+   "summary": "权重迭代器。",
+   "tags": [
+    "iterator"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    531,
+    548
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/tensorizer.py:is_vllm_tensorized",
+   "type": "function",
+   "name": "is_vllm_tensorized",
+   "filePath": "vllm/model_executor/model_loader/tensorizer.py",
+   "summary": "是否 vLLM tensorized。",
+   "tags": [
+    "check"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    551,
+    576
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/tensorizer.py:serialize_extra_artifacts",
+   "type": "function",
+   "name": "serialize_extra_artifacts",
+   "filePath": "vllm/model_executor/model_loader/tensorizer.py",
+   "summary": "附属产物序列化。",
+   "tags": [
+    "serialize"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    579,
+    616
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/tensorizer.py:serialize_vllm_model",
+   "type": "function",
+   "name": "serialize_vllm_model",
+   "filePath": "vllm/model_executor/model_loader/tensorizer.py",
+   "summary": "vLLM 模型序列化。",
+   "tags": [
+    "serialize"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    619,
+    662
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/tensorizer.py:tensorize_vllm_model",
+   "type": "function",
+   "name": "tensorize_vllm_model",
+   "filePath": "vllm/model_executor/model_loader/tensorizer.py",
+   "summary": "tensorize 入口。",
+   "tags": [
+    "serialize"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    665,
+    728
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/tensorizer_loader.py:validate_config",
+   "type": "function",
+   "name": "validate_config",
+   "filePath": "vllm/model_executor/model_loader/tensorizer_loader.py",
+   "summary": "配置校验。",
+   "tags": [
+    "validation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    37,
+    40
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/tensorizer_loader.py:TensorizerLoader",
+   "type": "class",
+   "name": "TensorizerLoader",
+   "filePath": "vllm/model_executor/model_loader/tensorizer_loader.py",
+   "summary": "tensorizer 加载器（9 个方法）",
+   "tags": [
+    "tensorizer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    43,
+    155
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/utils.py:get_draft_load_config",
+   "type": "function",
+   "name": "get_draft_load_config",
+   "filePath": "vllm/model_executor/model_loader/utils.py",
+   "summary": "draft 加载配置。",
+   "tags": [
+    "draft"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    46,
+    70
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/utils.py:initialize_model",
+   "type": "function",
+   "name": "initialize_model",
+   "filePath": "vllm/model_executor/model_loader/utils.py",
+   "summary": "模型初始化（架构解析+构造+device 放置）",
+   "tags": [
+    "init"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    74,
+    136
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/utils.py:process_weights_after_loading",
+   "type": "function",
+   "name": "process_weights_after_loading",
+   "filePath": "vllm/model_executor/model_loader/utils.py",
+   "summary": "载后权重处理。",
+   "tags": [
+    "post-load"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    139,
+    215
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/utils.py:device_loading_context",
+   "type": "function",
+   "name": "device_loading_context",
+   "filePath": "vllm/model_executor/model_loader/utils.py",
+   "summary": "设备加载上下文。",
+   "tags": [
+    "context"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    219,
+    261
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/utils.py:online_quantization_timing_context",
+   "type": "function",
+   "name": "online_quantization_timing_context",
+   "filePath": "vllm/model_executor/model_loader/utils.py",
+   "summary": "在线量化计时上下文。",
+   "tags": [
+    "timing"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    265,
+    298
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/utils.py:_get_model_architecture",
+   "type": "function",
+   "name": "_get_model_architecture",
+   "filePath": "vllm/model_executor/model_loader/utils.py",
+   "summary": "架构对象获取。",
+   "tags": [
+    "architecture"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    305,
+    337
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/utils.py:get_model_architecture",
+   "type": "function",
+   "name": "get_model_architecture",
+   "filePath": "vllm/model_executor/model_loader/utils.py",
+   "summary": "架构获取入口。",
+   "tags": [
+    "architecture"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    340,
+    356
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/utils.py:configure_quant_config",
+   "type": "function",
+   "name": "configure_quant_config",
+   "filePath": "vllm/model_executor/model_loader/utils.py",
+   "summary": "量化配置装配。",
+   "tags": [
+    "quant-config"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    367,
+    387
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/daemon.py:export_entries",
+   "type": "function",
+   "name": "export_entries",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "summary": "导出张量条目。",
+   "tags": [
+    "export"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    143,
+    185
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/daemon.py:exported_weight_bytes",
+   "type": "function",
+   "name": "exported_weight_bytes",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "summary": "导出权重字节数。",
+   "tags": [
+    "export"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    188,
+    204
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/weight_cache/daemon.py:WeightCacheDaemon",
+   "type": "class",
+   "name": "WeightCacheDaemon",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "summary": "每 GPU 权重缓存守护进程（13 个方法：加载分片+serve IPC 句柄）",
+   "tags": [
+    "daemon",
+    "ipc"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    207,
+    561
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/daemon.py:_run_daemon",
+   "type": "function",
+   "name": "_run_daemon",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "summary": "daemon 主循环。",
+   "tags": [
+    "daemon"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    564,
+    595
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/daemon.py:plan_local_ranks",
+   "type": "function",
+   "name": "plan_local_ranks",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "summary": "本节点 rank 规划。",
+   "tags": [
+    "ranks"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    598,
+    625
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/daemon.py:_reject_unsupported_parallelism",
+   "type": "function",
+   "name": "_reject_unsupported_parallelism",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "summary": "不支持并行度拒绝。",
+   "tags": [
+    "validation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    647,
+    671
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/weight_cache/ipc_loader.py:IpcModelLoader",
+   "type": "class",
+   "name": "IpcModelLoader",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "summary": "IPC 映射加载器（22 个方法：句柄导入+meta 物化+校验）",
+   "tags": [
+    "ipc",
+    "loader"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    71,
+    604
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/ipc_loader.py:_materialize_remaining_meta_tensors",
+   "type": "function",
+   "name": "_materialize_remaining_meta_tensors",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "summary": "残余 meta 张量物化。",
+   "tags": [
+    "meta"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    607,
+    627
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:WeightCacheUnavailableError",
+   "type": "class",
+   "name": "WeightCacheUnavailableError",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "summary": "daemon 不可达/不可用。",
+   "tags": [
+    "exception"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    60,
+    61
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:CacheConfigMismatchError",
+   "type": "class",
+   "name": "CacheConfigMismatchError",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "summary": "缓存与引擎不匹配。",
+   "tags": [
+    "exception"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    64,
+    65
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:UnsupportedQuantForIPCError",
+   "type": "class",
+   "name": "UnsupportedQuantForIPCError",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "summary": "量化方法未验证可 IPC。",
+   "tags": [
+    "exception"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    68,
+    69
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:UnsupportedPlatformForIPCError",
+   "type": "class",
+   "name": "UnsupportedPlatformForIPCError",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "summary": "平台不能共享 CUDA IPC。",
+   "tags": [
+    "exception"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    72,
+    73
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:check_ipc_platform_support",
+   "type": "function",
+   "name": "check_ipc_platform_support",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "summary": "IPC 平台支持检查。",
+   "tags": [
+    "support-check"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    76,
+    93
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:check_ipc_quant_support",
+   "type": "function",
+   "name": "check_ipc_quant_support",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "summary": "IPC 量化支持检查。",
+   "tags": [
+    "support-check"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    97,
+    117
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:get_socket_path",
+   "type": "function",
+   "name": "get_socket_path",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "summary": "socket 路径构造。",
+   "tags": [
+    "socket"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    139,
+    155
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:verify_private_dir",
+   "type": "function",
+   "name": "verify_private_dir",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "summary": "私有目录校验。",
+   "tags": [
+    "security"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    171,
+    194
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:verify_socket_owner",
+   "type": "function",
+   "name": "verify_socket_owner",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "summary": "socket 属主校验。",
+   "tags": [
+    "security"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    197,
+    213
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:verify_peer_is_owner",
+   "type": "function",
+   "name": "verify_peer_is_owner",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "summary": "peer 属主校验。",
+   "tags": [
+    "security"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    216,
+    232
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:hash_rope_parameters",
+   "type": "function",
+   "name": "hash_rope_parameters",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "summary": "RoPE 参数哈希。",
+   "tags": [
+    "fingerprint"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    249,
+    268
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:hash_checkpoint",
+   "type": "function",
+   "name": "hash_checkpoint",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "summary": "checkpoint 哈希（safetensors 头级）",
+   "tags": [
+    "fingerprint"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    283,
+    304
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:WeightCacheKey",
+   "type": "class",
+   "name": "WeightCacheKey",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "summary": "缓存权重指纹（2 个方法：任何不匹配即失效）",
+   "tags": [
+    "fingerprint"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    308,
+    411
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:TensorEntry",
+   "type": "class",
+   "name": "TensorEntry",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "summary": "单个缓存张量（IPC reduction+设备信息）",
+   "tags": [
+    "entry"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    415,
+    444
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:WeightCacheState",
+   "type": "class",
+   "name": "WeightCacheState",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "summary": "daemon get_state 响应解码（NamedTuple）",
+   "tags": [
+    "state"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    447,
+    455
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:recv_json",
+   "type": "function",
+   "name": "recv_json",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "summary": "JSON 接收。",
+   "tags": [
+    "socket"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    479,
+    497
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:_recv_exact",
+   "type": "function",
+   "name": "_recv_exact",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "summary": "精确字节接收。",
+   "tags": [
+    "socket"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    500,
+    514
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/weight_cache/seed.py:Seedable",
+   "type": "class",
+   "name": "Seedable",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/seed.py",
+   "summary": "可 seed 状态协议（4 个方法）",
+   "tags": [
+    "seeding"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    49,
+    74
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/weight_cache/seed.py:SeedConfig",
+   "type": "class",
+   "name": "SeedConfig",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/seed.py",
+   "summary": "D2D seeding 配置（listener/源副本/sha）",
+   "tags": [
+    "seeding"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    77,
+    83
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/weight_cache/seed.py:SeedTransport",
+   "type": "class",
+   "name": "SeedTransport",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/seed.py",
+   "summary": "D2D seeding 端点（7 个方法：serve/fetch）",
+   "tags": [
+    "seeding",
+    "transport"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    86,
+    232
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/utils.py:export_model_attrs",
+   "type": "function",
+   "name": "export_model_attrs",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/utils.py",
+   "summary": "导出模型属性。",
+   "tags": [
+    "export"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    31,
+    36
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/utils.py:is_draft_model_cacheable",
+   "type": "function",
+   "name": "is_draft_model_cacheable",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/utils.py",
+   "summary": "draft 可缓存判定。",
+   "tags": [
+    "draft"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    39,
+    45
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/utils.py:format_daemon_role",
+   "type": "function",
+   "name": "format_daemon_role",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/utils.py",
+   "summary": "daemon 角色格式化。",
+   "tags": [
+    "formatting"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    48,
+    50
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_cache/utils.py:build_warmup_runner",
+   "type": "function",
+   "name": "build_warmup_runner",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/utils.py",
+   "summary": "warmup runner 构建。",
+   "tags": [
+    "warmup"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    58,
+    79
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/weight_cache/warmup_cache.py:WarmupCache",
+   "type": "class",
+   "name": "WarmupCache",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/warmup_cache.py",
+   "summary": "daemon warmup 缓存协议。",
+   "tags": [
+    "warmup"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    53,
+    61
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/weight_cache/warmup_cache.py:FlashInferWarmupCache",
+   "type": "class",
+   "name": "FlashInferWarmupCache",
+   "filePath": "vllm/model_executor/model_loader/weight_cache/warmup_cache.py",
+   "summary": "FlashInfer per-rank autotune 表缓存（5 个方法）",
+   "tags": [
+    "warmup",
+    "autotune"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    64,
+    183
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_checksum.py:compute_tensor_digests",
+   "type": "function",
+   "name": "compute_tensor_digests",
+   "filePath": "vllm/model_executor/model_loader/weight_checksum.py",
+   "summary": "张量摘要计算。",
+   "tags": [
+    "digest"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    32,
+    38
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_checksum.py:zero_weights",
+   "type": "function",
+   "name": "zero_weights",
+   "filePath": "vllm/model_executor/model_loader/weight_checksum.py",
+   "summary": "权重清零。",
+   "tags": [
+    "reset"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    41,
+    43
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/model_loader/weight_utils.py:DisabledTqdm",
+   "type": "class",
+   "name": "DisabledTqdm",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "静默 tqdm。",
+   "tags": [
+    "tqdm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    90,
+    93
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:get_lock",
+   "type": "function",
+   "name": "get_lock",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "下载锁。",
+   "tags": [
+    "lock"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    96,
+    106
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:atomic_writer",
+   "type": "function",
+   "name": "atomic_writer",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "原子写入。",
+   "tags": [
+    "atomic"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    110,
+    149
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:maybe_download_from_modelscope",
+   "type": "function",
+   "name": "maybe_download_from_modelscope",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "ModelScope 下载。",
+   "tags": [
+    "modelscope"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    161,
+    193
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:get_quant_config",
+   "type": "function",
+   "name": "get_quant_config",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "量化配置解析（200 行）",
+   "tags": [
+    "quant-config"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    197,
+    400
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:get_sparse_attention_config",
+   "type": "function",
+   "name": "get_sparse_attention_config",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "稀疏注意力配置解析。",
+   "tags": [
+    "sparse-config"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    403,
+    433
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:download_weights_from_hf",
+   "type": "function",
+   "name": "download_weights_from_hf",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "HF 权重下载。",
+   "tags": [
+    "download",
+    "hf"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    437,
+    542
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:download_safetensors_index_file_from_hf",
+   "type": "function",
+   "name": "download_safetensors_index_file_from_hf",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "HF 索引文件下载。",
+   "tags": [
+    "download"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    545,
+    582
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:filter_duplicate_safetensors_files",
+   "type": "function",
+   "name": "filter_duplicate_safetensors_files",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "去重 safetensors 文件。",
+   "tags": [
+    "filter"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    590,
+    616
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:filter_files_not_needed_for_inference",
+   "type": "function",
+   "name": "filter_files_not_needed_for_inference",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "滤掉推理不需要的文件。",
+   "tags": [
+    "filter"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    619,
+    634
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:resolve_mm_encoder_only_lm_prefixes",
+   "type": "function",
+   "name": "resolve_mm_encoder_only_lm_prefixes",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "多模态 encoder-only 前缀解析。",
+   "tags": [
+    "mm",
+    "prefixes"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    693,
+    724
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:filter_mm_encoder_only_safetensors_files",
+   "type": "function",
+   "name": "filter_mm_encoder_only_safetensors_files",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "多模态文件过滤。",
+   "tags": [
+    "mm",
+    "filter"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    727,
+    799
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:filter_safetensors_files_by_weight_name",
+   "type": "function",
+   "name": "filter_safetensors_files_by_weight_name",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "按权重名过滤。",
+   "tags": [
+    "filter"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    802,
+    835
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:np_cache_weights_iterator",
+   "type": "function",
+   "name": "np_cache_weights_iterator",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "np 缓存权重迭代器。",
+   "tags": [
+    "iterator"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    851,
+    894
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:drop_checkpoint_cache",
+   "type": "function",
+   "name": "drop_checkpoint_cache",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "丢弃 checkpoint 页缓存。",
+   "tags": [
+    "cache"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    913,
+    959
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:_prefetch_checkpoint",
+   "type": "function",
+   "name": "_prefetch_checkpoint",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "单 checkpoint 预取。",
+   "tags": [
+    "prefetch"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1023,
+    1037
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:_prefetch_all_checkpoints",
+   "type": "function",
+   "name": "_prefetch_all_checkpoints",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "全量预取（RAM 预算内）",
+   "tags": [
+    "prefetch"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1040,
+    1112
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:safetensors_weights_iterator",
+   "type": "function",
+   "name": "safetensors_weights_iterator",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "safetensors 权重迭代器（135 行）",
+   "tags": [
+    "iterator",
+    "safetensors"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1115,
+    1249
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:multi_thread_safetensors_weights_iterator",
+   "type": "function",
+   "name": "multi_thread_safetensors_weights_iterator",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "多线程 safetensors 迭代器。",
+   "tags": [
+    "iterator",
+    "threads"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1252,
+    1279
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:runai_safetensors_weights_iterator",
+   "type": "function",
+   "name": "runai_safetensors_weights_iterator",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "RunAI 流式迭代器。",
+   "tags": [
+    "iterator",
+    "runai"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1282,
+    1316
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:fastsafetensors_weights_iterator",
+   "type": "function",
+   "name": "fastsafetensors_weights_iterator",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "fastsafetensors 迭代器。",
+   "tags": [
+    "iterator"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1319,
+    1385
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:instanttensor_weights_iterator",
+   "type": "function",
+   "name": "instanttensor_weights_iterator",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "instanttensor 迭代器。",
+   "tags": [
+    "iterator"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1394,
+    1476
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:pt_weights_iterator",
+   "type": "function",
+   "name": "pt_weights_iterator",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "pt 迭代器。",
+   "tags": [
+    "iterator"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1479,
+    1495
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:multi_thread_pt_weights_iterator",
+   "type": "function",
+   "name": "multi_thread_pt_weights_iterator",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "多线程 pt 迭代器。",
+   "tags": [
+    "iterator",
+    "threads"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1498,
+    1526
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:default_weight_loader",
+   "type": "function",
+   "name": "default_weight_loader",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "默认 weight loader。",
+   "tags": [
+    "loader"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1529,
+    1547
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:row_parallel_weight_loader",
+   "type": "function",
+   "name": "row_parallel_weight_loader",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "行并行 loader。",
+   "tags": [
+    "loader",
+    "row-parallel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1550,
+    1562
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:load_attention_sink",
+   "type": "function",
+   "name": "load_attention_sink",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "attention sink 载入。",
+   "tags": [
+    "attention-sink"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1568,
+    1581
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:make_attention_sink",
+   "type": "function",
+   "name": "make_attention_sink",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "attention sink 构造。",
+   "tags": [
+    "attention-sink"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1584,
+    1592
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:sharded_weight_loader",
+   "type": "function",
+   "name": "sharded_weight_loader",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "分片 loader。",
+   "tags": [
+    "loader",
+    "sharded"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1595,
+    1607
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:composed_weight_loader",
+   "type": "function",
+   "name": "composed_weight_loader",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "组合 loader。",
+   "tags": [
+    "loader",
+    "composed"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1610,
+    1620
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:initialize_single_dummy_weight",
+   "type": "function",
+   "name": "initialize_single_dummy_weight",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "单 dummy 权重初始化。",
+   "tags": [
+    "dummy"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1632,
+    1719
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:maybe_remap_kv_scale_name",
+   "type": "function",
+   "name": "maybe_remap_kv_scale_name",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "KV scale 名重映射（110 行规则表）",
+   "tags": [
+    "kv-scale",
+    "remap"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1722,
+    1831
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:maybe_remap_moe_expert_param_name",
+   "type": "function",
+   "name": "maybe_remap_moe_expert_param_name",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "MoE 专家参数名重映射。",
+   "tags": [
+    "moe",
+    "remap"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1834,
+    1907
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/model_loader/weight_utils.py:remap_moe_expert_weights",
+   "type": "function",
+   "name": "remap_moe_expert_weights",
+   "filePath": "vllm/model_executor/model_loader/weight_utils.py",
+   "summary": "MoE 专家权重重映射。",
+   "tags": [
+    "moe",
+    "remap"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1910,
+    1936
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/model_executor/model_loader/__init__.py",
+   "target": "function:vllm/model_executor/model_loader/__init__.py:register_model_loader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/__init__.py",
+   "target": "function:vllm/model_executor/model_loader/__init__.py:register_model_loader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/__init__.py",
+   "target": "function:vllm/model_executor/model_loader/__init__.py:get_model_loader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/__init__.py",
+   "target": "function:vllm/model_executor/model_loader/__init__.py:get_model_loader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/__init__.py",
+   "target": "function:vllm/model_executor/model_loader/__init__.py:get_model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/__init__.py",
+   "target": "function:vllm/model_executor/model_loader/__init__.py:get_model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "class:vllm/model_executor/model_loader/base_loader.py:BaseModelLoader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "class:vllm/model_executor/model_loader/base_loader.py:BaseModelLoader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "function:vllm/model_executor/model_loader/base_loader.py:log_model_inspection",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "function:vllm/model_executor/model_loader/base_loader.py:log_model_inspection",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "function:vllm/model_executor/model_loader/base_loader.py:_get_online_quantization_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "function:vllm/model_executor/model_loader/base_loader.py:log_online_quantization",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "function:vllm/model_executor/model_loader/base_loader.py:log_online_quantization",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "function:vllm/model_executor/model_loader/base_loader.py:log_online_quantization_time",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "function:vllm/model_executor/model_loader/base_loader.py:log_online_quantization_time",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/checkpoint_weight_patch.py",
+   "target": "class:vllm/model_executor/model_loader/checkpoint_weight_patch.py:CheckpointWeightPatch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/checkpoint_weight_patch.py",
+   "target": "class:vllm/model_executor/model_loader/checkpoint_weight_patch.py:CheckpointWeightPatch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/checkpoint_weight_patch.py",
+   "target": "function:vllm/model_executor/model_loader/checkpoint_weight_patch.py:_load_nan_masked_weights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/checkpoint_weight_patch.py",
+   "target": "function:vllm/model_executor/model_loader/checkpoint_weight_patch.py:_validate_patch_structure",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/checkpoint_weight_patch.py",
+   "target": "function:vllm/model_executor/model_loader/checkpoint_weight_patch.py:_load_weight_chunk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/checkpoint_weight_patch.py",
+   "target": "function:vllm/model_executor/model_loader/checkpoint_weight_patch.py:load_checkpoint_weight_patches",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/checkpoint_weight_patch.py",
+   "target": "function:vllm/model_executor/model_loader/checkpoint_weight_patch.py:load_checkpoint_weight_patches",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/default_loader.py",
+   "target": "class:vllm/model_executor/model_loader/default_loader.py:DefaultModelLoader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/default_loader.py",
+   "target": "class:vllm/model_executor/model_loader/default_loader.py:DefaultModelLoader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/dummy_loader.py",
+   "target": "class:vllm/model_executor/model_loader/dummy_loader.py:DummyModelLoader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/dummy_loader.py",
+   "target": "class:vllm/model_executor/model_loader/dummy_loader.py:DummyModelLoader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/ep_weight_filter.py",
+   "target": "function:vllm/model_executor/model_loader/ep_weight_filter.py:parse_expert_id",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/ep_weight_filter.py",
+   "target": "function:vllm/model_executor/model_loader/ep_weight_filter.py:parse_expert_id",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/ep_weight_filter.py",
+   "target": "function:vllm/model_executor/model_loader/ep_weight_filter.py:compute_local_expert_ids",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/ep_weight_filter.py",
+   "target": "function:vllm/model_executor/model_loader/ep_weight_filter.py:compute_local_expert_ids",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/ep_weight_filter.py",
+   "target": "function:vllm/model_executor/model_loader/ep_weight_filter.py:should_skip_weight",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/ep_weight_filter.py",
+   "target": "function:vllm/model_executor/model_loader/ep_weight_filter.py:should_skip_weight",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/inplace.py",
+   "target": "function:vllm/model_executor/model_loader/reload/inplace.py:get_parameter_for_reload",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/inplace.py",
+   "target": "function:vllm/model_executor/model_loader/reload/inplace.py:get_parameter_for_reload",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/inplace.py",
+   "target": "function:vllm/model_executor/model_loader/reload/inplace.py:reload_weights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/inplace.py",
+   "target": "function:vllm/model_executor/model_loader/reload/inplace.py:reload_weights",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:get_layerwise_info",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:get_layerwise_info",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:record_metadata_for_reloading",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:record_metadata_for_reloading",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:initialize_layerwise_reload",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:initialize_layerwise_reload",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:initialize_online_processing",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:initialize_online_processing",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:_wrap_parameters_weight_loader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:make_online_process_loader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:make_online_process_loader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:finalize_layerwise_processing",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:finalize_layerwise_processing",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:finalize_layerwise_reload",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:finalize_layerwise_reload",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:_finalize_attention_layer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:_reload_attention_scales",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:_layerwise_process",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:_get_original_loader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:_copy_and_restore_kernel_tensors",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "function:vllm/model_executor/model_loader/reload/layerwise.py:_place_kernel_tensors",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "target": "function:vllm/model_executor/model_loader/reload/meta.py:to_meta_tensor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "target": "function:vllm/model_executor/model_loader/reload/meta.py:to_meta_tensor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "target": "function:vllm/model_executor/model_loader/reload/meta.py:materialize_meta_tensor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "target": "function:vllm/model_executor/model_loader/reload/meta.py:materialize_meta_tensor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "target": "function:vllm/model_executor/model_loader/reload/meta.py:_parameter_storage_ptrs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "target": "function:vllm/model_executor/model_loader/reload/meta.py:capture_layer_to_meta",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "target": "function:vllm/model_executor/model_loader/reload/meta.py:capture_layer_to_meta",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "target": "function:vllm/model_executor/model_loader/reload/meta.py:restore_layer_on_meta",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "target": "function:vllm/model_executor/model_loader/reload/meta.py:restore_layer_on_meta",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "target": "function:vllm/model_executor/model_loader/reload/meta.py:materialize_layer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "target": "function:vllm/model_executor/model_loader/reload/meta.py:materialize_layer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "target": "function:vllm/model_executor/model_loader/reload/meta.py:get_numel_loaded",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "target": "function:vllm/model_executor/model_loader/reload/meta.py:get_numel_loaded",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "target": "class:vllm/model_executor/model_loader/reload/meta.py:CopyCounter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "target": "class:vllm/model_executor/model_loader/reload/meta.py:CopyCounter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/sanitize.py",
+   "target": "function:vllm/model_executor/model_loader/reload/sanitize.py:sanitize_layer_refs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/sanitize.py",
+   "target": "function:vllm/model_executor/model_loader/reload/sanitize.py:sanitize_layer_refs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/sanitize.py",
+   "target": "function:vllm/model_executor/model_loader/reload/sanitize.py:restore_layer_refs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/sanitize.py",
+   "target": "function:vllm/model_executor/model_loader/reload/sanitize.py:restore_layer_refs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/torchao_decorator.py",
+   "target": "function:vllm/model_executor/model_loader/reload/torchao_decorator.py:set_torchao_reload_attrs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/torchao_decorator.py",
+   "target": "function:vllm/model_executor/model_loader/reload/torchao_decorator.py:set_torchao_reload_attrs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/torchao_decorator.py",
+   "target": "function:vllm/model_executor/model_loader/reload/torchao_decorator.py:support_quantized_model_reload_from_hp_weights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/torchao_decorator.py",
+   "target": "function:vllm/model_executor/model_loader/reload/torchao_decorator.py:support_quantized_model_reload_from_hp_weights",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/utils.py",
+   "target": "function:vllm/model_executor/model_loader/reload/utils.py:get_layer_tensors",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/utils.py",
+   "target": "function:vllm/model_executor/model_loader/reload/utils.py:get_layer_tensors",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/utils.py",
+   "target": "function:vllm/model_executor/model_loader/reload/utils.py:get_layer_params_buffers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/utils.py",
+   "target": "function:vllm/model_executor/model_loader/reload/utils.py:get_layer_params_buffers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/utils.py",
+   "target": "function:vllm/model_executor/model_loader/reload/utils.py:get_layer_size",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/utils.py",
+   "target": "function:vllm/model_executor/model_loader/reload/utils.py:get_layer_size",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/utils.py",
+   "target": "function:vllm/model_executor/model_loader/reload/utils.py:has_device_tensors",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/utils.py",
+   "target": "function:vllm/model_executor/model_loader/reload/utils.py:has_device_tensors",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/utils.py",
+   "target": "function:vllm/model_executor/model_loader/reload/utils.py:get_info_size",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/utils.py",
+   "target": "function:vllm/model_executor/model_loader/reload/utils.py:get_info_size",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/runai_streamer_loader.py",
+   "target": "function:vllm/model_executor/model_loader/runai_streamer_loader.py:_get_remote_checkpoint_keys",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/runai_streamer_loader.py",
+   "target": "function:vllm/model_executor/model_loader/runai_streamer_loader.py:_filter_remote_weights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/runai_streamer_loader.py",
+   "target": "class:vllm/model_executor/model_loader/runai_streamer_loader.py:RunaiModelStreamerLoader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/runai_streamer_loader.py",
+   "target": "class:vllm/model_executor/model_loader/runai_streamer_loader.py:RunaiModelStreamerLoader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/sharded_state_loader.py",
+   "target": "class:vllm/model_executor/model_loader/sharded_state_loader.py:ShardedStateLoader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/sharded_state_loader.py",
+   "target": "class:vllm/model_executor/model_loader/sharded_state_loader.py:ShardedStateLoader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "class:vllm/model_executor/model_loader/tensorizer.py:MetaTensorMode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "class:vllm/model_executor/model_loader/tensorizer.py:MetaTensorMode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "class:vllm/model_executor/model_loader/tensorizer.py:_NoInitOrTensorImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "class:vllm/model_executor/model_loader/tensorizer.py:TensorizerConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "class:vllm/model_executor/model_loader/tensorizer.py:TensorizerConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "class:vllm/model_executor/model_loader/tensorizer.py:TensorizerArgs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "class:vllm/model_executor/model_loader/tensorizer.py:TensorizerArgs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "function:vllm/model_executor/model_loader/tensorizer.py:meta_tensor_mode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "function:vllm/model_executor/model_loader/tensorizer.py:meta_tensor_mode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "function:vllm/model_executor/model_loader/tensorizer.py:init_tensorizer_model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "function:vllm/model_executor/model_loader/tensorizer.py:init_tensorizer_model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "function:vllm/model_executor/model_loader/tensorizer.py:deserialize_tensorizer_model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "function:vllm/model_executor/model_loader/tensorizer.py:deserialize_tensorizer_model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "function:vllm/model_executor/model_loader/tensorizer.py:tensorizer_weights_iterator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "function:vllm/model_executor/model_loader/tensorizer.py:tensorizer_weights_iterator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "function:vllm/model_executor/model_loader/tensorizer.py:is_vllm_tensorized",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "function:vllm/model_executor/model_loader/tensorizer.py:is_vllm_tensorized",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "function:vllm/model_executor/model_loader/tensorizer.py:serialize_extra_artifacts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "function:vllm/model_executor/model_loader/tensorizer.py:serialize_extra_artifacts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "function:vllm/model_executor/model_loader/tensorizer.py:serialize_vllm_model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "function:vllm/model_executor/model_loader/tensorizer.py:serialize_vllm_model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "function:vllm/model_executor/model_loader/tensorizer.py:tensorize_vllm_model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "function:vllm/model_executor/model_loader/tensorizer.py:tensorize_vllm_model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer_loader.py",
+   "target": "function:vllm/model_executor/model_loader/tensorizer_loader.py:validate_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer_loader.py",
+   "target": "function:vllm/model_executor/model_loader/tensorizer_loader.py:validate_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer_loader.py",
+   "target": "class:vllm/model_executor/model_loader/tensorizer_loader.py:TensorizerLoader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer_loader.py",
+   "target": "class:vllm/model_executor/model_loader/tensorizer_loader.py:TensorizerLoader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "function:vllm/model_executor/model_loader/utils.py:get_draft_load_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "function:vllm/model_executor/model_loader/utils.py:get_draft_load_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "function:vllm/model_executor/model_loader/utils.py:initialize_model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "function:vllm/model_executor/model_loader/utils.py:initialize_model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "function:vllm/model_executor/model_loader/utils.py:process_weights_after_loading",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "function:vllm/model_executor/model_loader/utils.py:process_weights_after_loading",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "function:vllm/model_executor/model_loader/utils.py:device_loading_context",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "function:vllm/model_executor/model_loader/utils.py:device_loading_context",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "function:vllm/model_executor/model_loader/utils.py:online_quantization_timing_context",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "function:vllm/model_executor/model_loader/utils.py:online_quantization_timing_context",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "function:vllm/model_executor/model_loader/utils.py:_get_model_architecture",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "function:vllm/model_executor/model_loader/utils.py:get_model_architecture",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "function:vllm/model_executor/model_loader/utils.py:get_model_architecture",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "function:vllm/model_executor/model_loader/utils.py:configure_quant_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "function:vllm/model_executor/model_loader/utils.py:configure_quant_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/daemon.py:export_entries",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/daemon.py:export_entries",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/daemon.py:exported_weight_bytes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/daemon.py:exported_weight_bytes",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/daemon.py:WeightCacheDaemon",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/daemon.py:WeightCacheDaemon",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/daemon.py:_run_daemon",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/daemon.py:plan_local_ranks",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/daemon.py:plan_local_ranks",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/daemon.py:_reject_unsupported_parallelism",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/ipc_loader.py:IpcModelLoader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/ipc_loader.py:IpcModelLoader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/ipc_loader.py:_materialize_remaining_meta_tensors",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:WeightCacheUnavailableError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:WeightCacheUnavailableError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:CacheConfigMismatchError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:CacheConfigMismatchError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:UnsupportedQuantForIPCError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:UnsupportedQuantForIPCError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:UnsupportedPlatformForIPCError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:UnsupportedPlatformForIPCError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:check_ipc_platform_support",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:check_ipc_platform_support",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:check_ipc_quant_support",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:check_ipc_quant_support",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:get_socket_path",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:get_socket_path",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:verify_private_dir",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:verify_private_dir",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:verify_socket_owner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:verify_socket_owner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:verify_peer_is_owner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:verify_peer_is_owner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:hash_rope_parameters",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:hash_rope_parameters",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:hash_checkpoint",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:hash_checkpoint",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:WeightCacheKey",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:WeightCacheKey",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:TensorEntry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:TensorEntry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:WeightCacheState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/protocol.py:WeightCacheState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:recv_json",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:recv_json",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/protocol.py:_recv_exact",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/seed.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/seed.py:Seedable",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/seed.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/seed.py:Seedable",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/seed.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/seed.py:SeedConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/seed.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/seed.py:SeedConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/seed.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/seed.py:SeedTransport",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/seed.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/seed.py:SeedTransport",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/utils.py:export_model_attrs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/utils.py:export_model_attrs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/utils.py:is_draft_model_cacheable",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/utils.py:is_draft_model_cacheable",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/utils.py:format_daemon_role",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/utils.py:format_daemon_role",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/utils.py:build_warmup_runner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_cache/utils.py:build_warmup_runner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/warmup_cache.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/warmup_cache.py:WarmupCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/warmup_cache.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/warmup_cache.py:WarmupCache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/warmup_cache.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/warmup_cache.py:FlashInferWarmupCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/warmup_cache.py",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/warmup_cache.py:FlashInferWarmupCache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_checksum.py",
+   "target": "function:vllm/model_executor/model_loader/weight_checksum.py:compute_tensor_digests",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_checksum.py",
+   "target": "function:vllm/model_executor/model_loader/weight_checksum.py:compute_tensor_digests",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_checksum.py",
+   "target": "function:vllm/model_executor/model_loader/weight_checksum.py:zero_weights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_checksum.py",
+   "target": "function:vllm/model_executor/model_loader/weight_checksum.py:zero_weights",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "class:vllm/model_executor/model_loader/weight_utils.py:DisabledTqdm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "class:vllm/model_executor/model_loader/weight_utils.py:DisabledTqdm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:get_lock",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:get_lock",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:atomic_writer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:atomic_writer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:maybe_download_from_modelscope",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:maybe_download_from_modelscope",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:get_quant_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:get_quant_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:get_sparse_attention_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:get_sparse_attention_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:download_weights_from_hf",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:download_weights_from_hf",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:download_safetensors_index_file_from_hf",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:download_safetensors_index_file_from_hf",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:filter_duplicate_safetensors_files",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:filter_duplicate_safetensors_files",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:filter_files_not_needed_for_inference",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:filter_files_not_needed_for_inference",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:resolve_mm_encoder_only_lm_prefixes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:resolve_mm_encoder_only_lm_prefixes",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:filter_mm_encoder_only_safetensors_files",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:filter_mm_encoder_only_safetensors_files",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:filter_safetensors_files_by_weight_name",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:filter_safetensors_files_by_weight_name",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:np_cache_weights_iterator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:np_cache_weights_iterator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:drop_checkpoint_cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:drop_checkpoint_cache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:_prefetch_checkpoint",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:_prefetch_all_checkpoints",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:safetensors_weights_iterator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:safetensors_weights_iterator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:multi_thread_safetensors_weights_iterator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:multi_thread_safetensors_weights_iterator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:runai_safetensors_weights_iterator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:runai_safetensors_weights_iterator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:fastsafetensors_weights_iterator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:fastsafetensors_weights_iterator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:instanttensor_weights_iterator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:instanttensor_weights_iterator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:pt_weights_iterator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:pt_weights_iterator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:multi_thread_pt_weights_iterator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:multi_thread_pt_weights_iterator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:default_weight_loader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:default_weight_loader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:row_parallel_weight_loader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:row_parallel_weight_loader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:load_attention_sink",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:load_attention_sink",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:make_attention_sink",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:make_attention_sink",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:sharded_weight_loader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:sharded_weight_loader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:composed_weight_loader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:composed_weight_loader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:initialize_single_dummy_weight",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:initialize_single_dummy_weight",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:maybe_remap_kv_scale_name",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:maybe_remap_kv_scale_name",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:maybe_remap_moe_expert_param_name",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:maybe_remap_moe_expert_param_name",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:remap_moe_expert_weights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "function:vllm/model_executor/model_loader/weight_utils.py:remap_moe_expert_weights",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/__init__.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/__init__.py",
+   "target": "file:vllm/config/load.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/__init__.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/__init__.py",
+   "target": "file:vllm/model_executor/model_loader/base_loader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/__init__.py",
+   "target": "file:vllm/model_executor/model_loader/default_loader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/__init__.py",
+   "target": "file:vllm/model_executor/model_loader/dummy_loader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/__init__.py",
+   "target": "file:vllm/model_executor/model_loader/modelexpress_loader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/__init__.py",
+   "target": "file:vllm/model_executor/model_loader/runai_streamer_loader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/__init__.py",
+   "target": "file:vllm/model_executor/model_loader/sharded_state_loader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/__init__.py",
+   "target": "file:vllm/model_executor/model_loader/tensorizer_loader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/__init__.py",
+   "target": "file:vllm/model_executor/model_loader/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/__init__.py",
+   "target": "file:vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "file:vllm/config/load.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "file:vllm/model_executor/layers/quantization/online/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "file:vllm/model_executor/model_loader/reload/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "file:vllm/model_executor/model_loader/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "file:vllm/model_inspection.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "file:vllm/tracing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "file:vllm/utils/mem_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/base_loader.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/default_loader.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/default_loader.py",
+   "target": "file:vllm/config/load.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/default_loader.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/default_loader.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/default_loader.py",
+   "target": "file:vllm/model_executor/layers/quantization/kv_cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/default_loader.py",
+   "target": "file:vllm/model_executor/layers/quantization/torchao.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/default_loader.py",
+   "target": "file:vllm/model_executor/model_loader/base_loader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/default_loader.py",
+   "target": "file:vllm/model_executor/model_loader/ep_weight_filter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/default_loader.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/default_loader.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/default_loader.py",
+   "target": "file:vllm/tracing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/default_loader.py",
+   "target": "file:vllm/transformers_utils/repo_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/dummy_loader.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/dummy_loader.py",
+   "target": "file:vllm/config/load.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/dummy_loader.py",
+   "target": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/dummy_loader.py",
+   "target": "file:vllm/model_executor/model_loader/base_loader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/dummy_loader.py",
+   "target": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/dummy_loader.py",
+   "target": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/dummy_loader.py",
+   "target": "file:vllm/model_executor/model_loader/reload/types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/dummy_loader.py",
+   "target": "file:vllm/model_executor/model_loader/reload/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/dummy_loader.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/__init__.py",
+   "target": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/__init__.py",
+   "target": "file:vllm/model_executor/model_loader/reload/torchao_decorator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/inplace.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/inplace.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/inplace.py",
+   "target": "file:vllm/lora/layers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/inplace.py",
+   "target": "file:vllm/model_executor/model_loader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/inplace.py",
+   "target": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "file:vllm/model_executor/layers/quantization/online/fp8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "file:vllm/model_executor/layers/quantization/online/moe_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "file:vllm/model_executor/model_loader/reload/types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "file:vllm/model_executor/model_loader/reload/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "file:vllm/model_executor/model_loader/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "target": "file:vllm/model_executor/model_loader/reload/sanitize.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "target": "file:vllm/model_executor/model_loader/reload/types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "target": "file:vllm/model_executor/model_loader/reload/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/torchao_decorator.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/torchao_decorator.py",
+   "target": "file:vllm/model_executor/model_loader/reload/layerwise.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/torchao_decorator.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/utils.py",
+   "target": "file:vllm/model_executor/model_loader/reload/meta.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/reload/utils.py",
+   "target": "file:vllm/model_executor/model_loader/reload/types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/runai_streamer_loader.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/runai_streamer_loader.py",
+   "target": "file:vllm/config/load.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/runai_streamer_loader.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/runai_streamer_loader.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/runai_streamer_loader.py",
+   "target": "file:vllm/model_executor/model_loader/base_loader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/runai_streamer_loader.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/runai_streamer_loader.py",
+   "target": "file:vllm/transformers_utils/repo_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/runai_streamer_loader.py",
+   "target": "file:vllm/transformers_utils/runai_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/sharded_state_loader.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/sharded_state_loader.py",
+   "target": "file:vllm/config/load.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/sharded_state_loader.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/sharded_state_loader.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/sharded_state_loader.py",
+   "target": "file:vllm/model_executor/model_loader/base_loader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/sharded_state_loader.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/sharded_state_loader.py",
+   "target": "file:vllm/transformers_utils/s3_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/sharded_state_loader.py",
+   "target": "file:vllm/transformers_utils/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "file:vllm/engine/arg_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "file:vllm/transformers_utils/repo_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "file:vllm/utils/argparse_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "target": "file:vllm/v1/engine/llm_engine.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer_loader.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer_loader.py",
+   "target": "file:vllm/config/load.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer_loader.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer_loader.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer_loader.py",
+   "target": "file:vllm/model_executor/model_loader/base_loader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer_loader.py",
+   "target": "file:vllm/model_executor/model_loader/tensorizer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer_loader.py",
+   "target": "file:vllm/model_executor/model_loader/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/tensorizer_loader.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/online/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/online/fp8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/online/moe_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "file:vllm/model_executor/model_loader/reload/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "file:vllm/model_executor/model_loader/weight_cache/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "file:vllm/model_executor/model_loader/weight_tying.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "file:vllm/model_executor/models/adapters.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "file:vllm/model_executor/models/expert_substitution.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "file:vllm/tracing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "file:vllm/utils/mem_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "file:vllm/utils/platform_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/utils.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "file:vllm/model_executor/model_loader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "file:vllm/model_executor/model_loader/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "file:vllm/model_executor/model_loader/weight_cache/seed.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "file:vllm/model_executor/model_loader/weight_cache/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "file:vllm/model_executor/model_loader/weight_cache/warmup_cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "file:vllm/utils/mem_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "target": "file:vllm/config/load.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "target": "file:vllm/model_executor/model_loader/base_loader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "target": "file:vllm/model_executor/model_loader/default_loader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "target": "file:vllm/model_executor/model_loader/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "target": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "target": "file:vllm/model_executor/model_loader/weight_cache/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "target": "file:vllm/tracing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/ipc_loader.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "file:vllm/model_executor/model_loader/weight_cache/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "file:vllm/utils/hashing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "target": "file:vllm/version.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/seed.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/seed.py",
+   "target": "file:vllm/model_executor/model_loader/weight_cache/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/utils.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/utils.py",
+   "target": "file:vllm/v1/worker/gpu/model_runner.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/utils.py",
+   "target": "file:vllm/v1/worker/gpu_model_runner.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/warmup_cache.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/warmup_cache.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/warmup_cache.py",
+   "target": "file:vllm/model_executor/model_loader/weight_cache/daemon.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/warmup_cache.py",
+   "target": "file:vllm/model_executor/model_loader/weight_cache/seed.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/warmup_cache.py",
+   "target": "file:vllm/model_executor/model_loader/weight_cache/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/warmup_cache.py",
+   "target": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/warmup_cache.py",
+   "target": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/warmup_cache.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/warmup_cache.py",
+   "target": "file:vllm/utils/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_cache/warmup_cache.py",
+   "target": "file:vllm/v1/worker/gpu_model_runner.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_checksum.py",
+   "target": "file:vllm/model_executor/parameter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "file:vllm/config/load.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "file:vllm/config/quantization.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/modelopt.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/online/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "file:vllm/model_executor/layers/quantization/torchao.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "file:vllm/model_executor/model_loader/ep_weight_filter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "file:vllm/tracing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "file:vllm/transformers_utils/repo_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "file:vllm/utils/cpu_resource_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/model_executor/model_loader/default_loader.py:DefaultModelLoader",
+   "target": "class:vllm/model_executor/model_loader/base_loader.py:BaseModelLoader",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/model_loader/dummy_loader.py:DummyModelLoader",
+   "target": "class:vllm/model_executor/model_loader/base_loader.py:BaseModelLoader",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/model_loader/runai_streamer_loader.py:RunaiModelStreamerLoader",
+   "target": "class:vllm/model_executor/model_loader/base_loader.py:BaseModelLoader",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/model_loader/sharded_state_loader.py:ShardedStateLoader",
+   "target": "class:vllm/model_executor/model_loader/base_loader.py:BaseModelLoader",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/model_loader/tensorizer_loader.py:TensorizerLoader",
+   "target": "class:vllm/model_executor/model_loader/base_loader.py:BaseModelLoader",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/model_loader/weight_cache/ipc_loader.py:IpcModelLoader",
+   "target": "class:vllm/model_executor/model_loader/base_loader.py:BaseModelLoader",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/model_loader/weight_cache/warmup_cache.py:FlashInferWarmupCache",
+   "target": "class:vllm/model_executor/model_loader/weight_cache/warmup_cache.py:WarmupCache",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "function:vllm/model_executor/model_loader/utils.py:initialize_model",
+   "target": "function:vllm/model_executor/model_loader/utils.py:get_model_architecture",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

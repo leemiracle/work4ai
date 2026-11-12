@@ -1,0 +1,40 @@
+# DeepWiki 索引 — huggingface/finepdfs
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 534034 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Quick Start](1.1-quick-start.md)
+  - [1.2 Repository Structure](1.2-repository-structure.md)
+- [2 Main Processing Pipeline](2-main-processing-pipeline.md)
+  - [2.1 PDF Extraction System](2.1-pdf-extraction-system.md)
+  - [2.2 Classification and Filtering](2.2-classification-and-filtering.md)
+  - [2.3 Tokenization Pipeline](2.3-tokenization-pipeline.md)
+  - [2.4 Deduplication](2.4-deduplication.md)
+- [3 Training Infrastructure](3-training-infrastructure.md)
+  - [3.1 Training Script and Configuration](3.1-training-script-and-configuration.md)
+  - [3.2 Nanotron Framework Integration](3.2-nanotron-framework-integration.md)
+- [4 Evaluation Infrastructure](4-evaluation-infrastructure.md)
+  - [4.1 Evaluation Orchestration](4.1-evaluation-orchestration.md)
+  - [4.2 Task Definitions](4.2-task-definitions.md)
+  - [4.3 Multi-Language Evaluation Tasks](4.3-multi-language-evaluation-tasks.md)
+- [5 Model Artifacts and Storage](5-model-artifacts-and-storage.md)
+  - [5.1 Git LFS Configuration](5.1-git-lfs-configuration.md)
+  - [5.2 Published Datasets and Models](5.2-published-datasets-and-models.md)
+- [6 Utilities and Supporting Code](6-utilities-and-supporting-code.md)
+  - [6.1 Base Extractor Framework](6.1-base-extractor-framework.md)
+  - [6.2 Logging and Debugging](6.2-logging-and-debugging.md)
+  - [6.3 Data Filtering Utilities](6.3-data-filtering-utilities.md)
+- [7 SLURM Integration](7-slurm-integration.md)
+- [8 Third-Party Dependencies](8-third-party-dependencies.md)
+- [9 API Reference](9-api-reference.md)
+- [10 Development and Contributing](10-development-and-contributing.md)
+
+## 附：结构清单外的页
+- [Batched Inference API](x1-batched-inference-api.md)
+- [Corrupted PDF Detection](x2-corrupted-pdf-detection.md)
+- [Docling Integration](x3-docling-integration.md)
+- [Language Filtering](x4-language-filtering.md)
+- [Multi-Head ModernBERT Architecture](x5-multi-head-modernbert-architecture.md)
+- [OCR Routing Classifier](x6-ocr-routing-classifier.md)
+- [Quality Classifiers](x7-quality-classifiers.md)

@@ -1,0 +1,1043 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/engine/arg_utils.py",
+   "type": "file",
+   "name": "arg_utils.py",
+   "filePath": "vllm/engine/arg_utils.py",
+   "summary": "引擎参数（3286 行）：EngineArgs 数据类（20 方法）聚合全部 vLLM 启动参数，从类型注解自动生成 argparse kwargs（Literal→choices、人类可读数字展开、文档 URL）；AsyncEngineArgs 继承补充异步参数。",
+   "tags": [
+    "engine-args",
+    "config",
+    "argparse",
+    "dataclass"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/engine/protocol.py",
+   "type": "file",
+   "name": "protocol.py",
+   "filePath": "vllm/engine/protocol.py",
+   "summary": "EngineClient 协议类（46 抽象方法）：前端到引擎的统一接口（generate/abort/encoder/LoRA/FT/checkpoint/暂停等），StreamingInput 支持多轮流式会话输入。",
+   "tags": [
+    "engine-client",
+    "protocol",
+    "interface"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/entrypoints/grpc_server.py",
+   "type": "file",
+   "name": "grpc_server.py",
+   "filePath": "vllm/entrypoints/grpc_server.py",
+   "summary": "弃用 shim：转发到 vllm.entrypoints.launchers.grpc_server 并发 DeprecationWarning。",
+   "tags": [
+    "deprecated",
+    "shim",
+    "grpc"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/llm.py",
+   "type": "file",
+   "name": "llm.py",
+   "filePath": "vllm/entrypoints/llm.py",
+   "summary": "离线推理入口 LLM：混入 BeamSearch/Pooling/RL/通用离线四个 mixin，封装 tokenizer+分布式模型+KV cache 的批量生成、chat/render 与 metrics 读取。",
+   "tags": [
+    "llm",
+    "offline-inference",
+    "entry-point",
+    "batching"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/engine/arg_utils.py:DeprecatedLogConfigFileAction",
+   "type": "class",
+   "name": "DeprecatedLogConfigFileAction",
+   "filePath": "vllm/engine/arg_utils.py",
+   "summary": "旧 --log-config-file 选项的 argparse 警告 Action。",
+   "tags": [
+    "engine-args",
+    "deprecated",
+    "argparse"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    480,
+    485
+   ]
+  },
+  {
+   "id": "class:vllm/engine/arg_utils.py:EngineArgs",
+   "type": "class",
+   "name": "EngineArgs",
+   "filePath": "vllm/engine/arg_utils.py",
+   "summary": "vLLM 引擎参数数据类（20 方法）：全部启动参数 + 从 config 创建引擎的方法族。",
+   "tags": [
+    "engine-args",
+    "config",
+    "dataclass"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    489,
+    3246
+   ]
+  },
+  {
+   "id": "class:vllm/engine/arg_utils.py:AsyncEngineArgs",
+   "type": "class",
+   "name": "AsyncEngineArgs",
+   "filePath": "vllm/engine/arg_utils.py",
+   "summary": "异步引擎参数（EngineArgs 继承补充）。",
+   "tags": [
+    "engine-args",
+    "async",
+    "config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    3250,
+    3277
+   ]
+  },
+  {
+   "id": "class:vllm/engine/protocol.py:StreamingInput",
+   "type": "class",
+   "name": "StreamingInput",
+   "filePath": "vllm/engine/protocol.py",
+   "summary": "流式生成请求输入（配合 generate() 支持多轮流式会话）。",
+   "tags": [
+    "engine-client",
+    "streaming",
+    "input"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    32,
+    40
+   ]
+  },
+  {
+   "id": "class:vllm/engine/protocol.py:EngineClient",
+   "type": "class",
+   "name": "EngineClient",
+   "filePath": "vllm/engine/protocol.py",
+   "summary": "前端到引擎的协议类（46 抽象方法）：generate/abort/encoder/LoRA/FT/checkpoint/暂停。",
+   "tags": [
+    "engine-client",
+    "protocol",
+    "abc"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    43,
+    352
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/llm.py:LLM",
+   "type": "class",
+   "name": "LLM",
+   "filePath": "vllm/entrypoints/llm.py",
+   "summary": "离线推理 LLM（23 方法）：tokenizer+分布式模型+KV cache 批量生成、chat/render 与 metrics。",
+   "tags": [
+    "llm",
+    "offline",
+    "entry-point"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    62,
+    914
+   ]
+  },
+  {
+   "id": "function:vllm/engine/arg_utils.py:parse_type",
+   "type": "function",
+   "name": "parse_type",
+   "filePath": "vllm/engine/arg_utils.py",
+   "summary": "解析类型注解为 argparse type。",
+   "tags": [
+    "argparse",
+    "types",
+    "parsing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    161,
+    170
+   ]
+  },
+  {
+   "id": "function:vllm/engine/arg_utils.py:is_dict_subclass",
+   "type": "function",
+   "name": "is_dict_subclass",
+   "filePath": "vllm/engine/arg_utils.py",
+   "summary": "类型注解是否 dict 子类（排除 TypedDict）。",
+   "tags": [
+    "argparse",
+    "types",
+    "reflection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    198,
+    207
+   ]
+  },
+  {
+   "id": "function:vllm/engine/arg_utils.py:literal_to_kwargs",
+   "type": "function",
+   "name": "literal_to_kwargs",
+   "filePath": "vllm/engine/arg_utils.py",
+   "summary": "Literal 类型注解→argparse choices。",
+   "tags": [
+    "argparse",
+    "literal",
+    "codegen"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    220,
+    234
+   ]
+  },
+  {
+   "id": "function:vllm/engine/arg_utils.py:collection_to_kwargs",
+   "type": "function",
+   "name": "collection_to_kwargs",
+   "filePath": "vllm/engine/arg_utils.py",
+   "summary": "集合类型注解→argparse nargs 配置。",
+   "tags": [
+    "argparse",
+    "collections",
+    "codegen"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    237,
+    259
+   ]
+  },
+  {
+   "id": "function:vllm/engine/arg_utils.py:get_type_hints",
+   "type": "function",
+   "name": "get_type_hints",
+   "filePath": "vllm/engine/arg_utils.py",
+   "summary": "从 Annotated/Union 提取类型提示。",
+   "tags": [
+    "argparse",
+    "type-hints",
+    "reflection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    267,
+    282
+   ]
+  },
+  {
+   "id": "function:vllm/engine/arg_utils.py:_maybe_add_docs_url",
+   "type": "function",
+   "name": "_maybe_add_docs_url",
+   "filePath": "vllm/engine/arg_utils.py",
+   "summary": "为 config 类生成 API 文档 URL。",
+   "tags": [
+    "argparse",
+    "docs",
+    "url"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    291,
+    299
+   ]
+  },
+  {
+   "id": "function:vllm/engine/arg_utils.py:_expand_json_human_readable_numbers",
+   "type": "function",
+   "name": "_expand_json_human_readable_numbers",
+   "filePath": "vllm/engine/arg_utils.py",
+   "summary": "展开 JSON 中的人类可读数字后缀（1K/2M 等）。",
+   "tags": [
+    "json",
+    "numbers",
+    "parsing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    302,
+    321
+   ]
+  },
+  {
+   "id": "function:vllm/engine/arg_utils.py:_compute_kwargs",
+   "type": "function",
+   "name": "_compute_kwargs",
+   "filePath": "vllm/engine/arg_utils.py",
+   "summary": "从 config 数据类字段计算 argparse kwargs（含嵌套/环境变量/弃用处理）。",
+   "tags": [
+    "argparse",
+    "kwargs",
+    "generation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    325,
+    440
+   ]
+  },
+  {
+   "id": "function:vllm/engine/arg_utils.py:get_kwargs",
+   "type": "function",
+   "name": "get_kwargs",
+   "filePath": "vllm/engine/arg_utils.py",
+   "summary": "返回 config 数据类的 argparse kwargs（--help/mkdocs 时快速路径）。",
+   "tags": [
+    "argparse",
+    "kwargs",
+    "entry"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    443,
+    453
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/config/device.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/config/kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/config/load.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/config/logging.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/config/lora.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/config/mamba.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/config/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/config/observability.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/config/parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/config/scheduler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/config/vllm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/config/watermarking.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/plugins/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/ray/lazy_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/transformers_utils/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/transformers_utils/repo_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/transformers_utils/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/utils/argparse_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/utils/mem_constants.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/utils/network_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "file:vllm/version.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/protocol.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/protocol.py",
+   "target": "file:vllm/config/kv_events.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/protocol.py",
+   "target": "file:vllm/distributed/weight_transfer/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/protocol.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/protocol.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/protocol.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/protocol.py",
+   "target": "file:vllm/pooling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/protocol.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/protocol.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/protocol.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/protocol.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/protocol.py",
+   "target": "file:vllm/v1/engine/input_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/protocol.py",
+   "target": "file:vllm/v1/fault_tolerance/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/protocol.py",
+   "target": "file:vllm/v1/kv_hints/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/grpc_server.py",
+   "target": "file:vllm/entrypoints/launchers/grpc_server.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/config/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/config/quantization.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/engine/arg_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/entrypoints/common/offline.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/entrypoints/common/startup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/entrypoints/generate/beam_search/offline.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/entrypoints/pooling/offline.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/entrypoints/rl/offline.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/usage/usage_lib.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/utils/counter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/v1/engine/llm_engine.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "class:vllm/engine/arg_utils.py:DeprecatedLogConfigFileAction",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "class:vllm/engine/arg_utils.py:EngineArgs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "class:vllm/engine/arg_utils.py:AsyncEngineArgs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "function:vllm/engine/arg_utils.py:parse_type",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "function:vllm/engine/arg_utils.py:is_dict_subclass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "function:vllm/engine/arg_utils.py:literal_to_kwargs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "function:vllm/engine/arg_utils.py:collection_to_kwargs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "function:vllm/engine/arg_utils.py:get_type_hints",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "function:vllm/engine/arg_utils.py:_maybe_add_docs_url",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "function:vllm/engine/arg_utils.py:_expand_json_human_readable_numbers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "function:vllm/engine/arg_utils.py:_compute_kwargs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "function:vllm/engine/arg_utils.py:get_kwargs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/engine/protocol.py",
+   "target": "class:vllm/engine/protocol.py:StreamingInput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/engine/protocol.py",
+   "target": "class:vllm/engine/protocol.py:EngineClient",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "class:vllm/entrypoints/llm.py:LLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "class:vllm/engine/arg_utils.py:DeprecatedLogConfigFileAction",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "class:vllm/engine/arg_utils.py:EngineArgs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "class:vllm/engine/arg_utils.py:AsyncEngineArgs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "function:vllm/engine/arg_utils.py:parse_type",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "function:vllm/engine/arg_utils.py:is_dict_subclass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "function:vllm/engine/arg_utils.py:literal_to_kwargs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "function:vllm/engine/arg_utils.py:collection_to_kwargs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "function:vllm/engine/arg_utils.py:get_type_hints",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/engine/arg_utils.py",
+   "target": "function:vllm/engine/arg_utils.py:get_kwargs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/engine/protocol.py",
+   "target": "class:vllm/engine/protocol.py:StreamingInput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/engine/protocol.py",
+   "target": "class:vllm/engine/protocol.py:EngineClient",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/llm.py",
+   "target": "class:vllm/entrypoints/llm.py:LLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/engine/arg_utils.py:AsyncEngineArgs",
+   "target": "class:vllm/engine/arg_utils.py:EngineArgs",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/llm.py:LLM",
+   "target": "class:vllm/entrypoints/generate/beam_search/offline.py:BeamSearchOfflineMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/llm.py:LLM",
+   "target": "class:vllm/entrypoints/pooling/offline.py:PoolingOfflineMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/llm.py:LLM",
+   "target": "class:vllm/entrypoints/rl/offline.py:RLOfflineMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/llm.py:LLM",
+   "target": "class:vllm/entrypoints/common/offline.py:OfflineInferenceMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

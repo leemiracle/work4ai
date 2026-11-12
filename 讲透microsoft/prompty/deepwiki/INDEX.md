@@ -1,0 +1,31 @@
+# DeepWiki 索引 — microsoft/prompty
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 269018 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Architecture](1.1-architecture.md)
+- [2 Prompty File Format](2-prompty-file-format.md)
+  - [2.1 YAML Frontmatter](2.1-yaml-frontmatter.md)
+  - [2.2 Templates and Rendering](2.2-templates-and-rendering.md)
+- [3 Python Runtime](3-python-runtime.md)
+  - [3.1 Python API Reference](3.1-python-api-reference.md)
+  - [3.2 Python Invoker System](3.2-python-invoker-system.md)
+- [4 C# Runtime](4-c-runtime.md)
+  - [4.1 C# API Reference](4.1-c-api-reference.md)
+- [5 JavaScript Runtime](5-javascript-runtime.md)
+- [6 LLM Integration](6-llm-integration.md)
+  - [6.1 Azure OpenAI Integration](6.1-azure-openai-integration.md)
+  - [6.2 OpenAI Integration](6.2-openai-integration.md)
+  - [6.3 Serverless Integration](6.3-serverless-integration.md)
+- [7 Tracing and Observability](7-tracing-and-observability.md)
+  - [7.1 Tracer Implementation](7.1-tracer-implementation.md)
+- [8 Framework Integrations](8-framework-integrations.md)
+  - [8.1 LangChain Integration](8.1-langchain-integration.md)
+  - [8.2 Semantic Kernel Integration](8.2-semantic-kernel-integration.md)
+- [9 Tools and Extensions](9-tools-and-extensions.md)
+  - [9.1 VS Code Extension](9.1-vs-code-extension.md)
+  - [9.2 Command Line Interface](9.2-command-line-interface.md)
+- [10 Development and Contribution](10-development-and-contribution.md)
+  - [10.1 CI/CD and Testing](10.1-ci-cd-and-testing.md)
+  - [10.2 Documentation Website](10.2-documentation-website.md)

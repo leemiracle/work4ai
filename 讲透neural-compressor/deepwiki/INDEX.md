@@ -1,0 +1,40 @@
+# DeepWiki 索引 — intel/neural-compressor
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-21
+> 结构 28 页 · 全文 848758 字符
+
+- [1 Overview](1-overview.md)
+- [2 Installation and Setup](2-installation-and-setup.md)
+- [3 API Guide](3-api-guide.md)
+  - [3.1 2.x API (Unified)](3.1-2.x-api-unified.md)
+  - [3.2 3.x API (PyTorch)](3.2-3.x-api-pytorch.md)
+- [4 Architecture](4-architecture.md)
+  - [4.1 System Overview](4.1-system-overview.md)
+  - [4.2 Configuration System](4.2-configuration-system.md)
+  - [4.3 Strategy and Tuning System](4.3-strategy-and-tuning-system.md)
+- [5 Framework Adaptors](5-framework-adaptors.md)
+  - [5.1 PyTorch Adaptor](5.1-pytorch-adaptor.md)
+  - [5.2 TensorFlow Adaptor](5.2-tensorflow-adaptor.md)
+  - [5.3 ONNX Runtime Adaptor](5.3-onnx-runtime-adaptor.md)
+- [6 Quantization Techniques](6-quantization-techniques.md)
+  - [6.1 Post-Training Quantization](6.1-post-training-quantization.md)
+  - [6.2 Quantization-Aware Training](6.2-quantization-aware-training.md)
+  - [6.3 Weight-Only Quantization](6.3-weight-only-quantization.md)
+  - [6.4 FP8 Quantization](6.4-fp8-quantization.md)
+  - [6.5 Mixed Precision](6.5-mixed-precision.md)
+- [7 Advanced Techniques](7-advanced-techniques.md)
+  - [7.1 SmoothQuant](7.1-smoothquant.md)
+  - [7.2 Pruning and Distillation](7.2-pruning-and-distillation.md)
+- [8 Transformers and LLMs](8-transformers-and-llms.md)
+  - [8.1 HuggingFace Integration](8.1-huggingface-integration.md)
+  - [8.2 Model Save and Load](8.2-model-save-and-load.md)
+- [9 Benchmarking](9-benchmarking.md)
+  - [9.1 Performance Testing](9.1-performance-testing.md)
+- [10 Development and Contribution](10-development-and-contribution.md)
+
+## 附：结构清单外的页
+- [AWQ Algorithm](x1-awq-algorithm.md)
+- [AutoRound Algorithm](x2-autoround-algorithm.md)
+- [GPTQ Algorithm](x3-gptq-algorithm.md)
+- [RTN Algorithm](x4-rtn-algorithm.md)
+- [TEQ Algorithm](x5-teq-algorithm.md)

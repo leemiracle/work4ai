@@ -1,0 +1,3155 @@
+---
+schema_version: v1
+slug: huggingface/harbor-hf
+repository: https://github.com/huggingface/harbor-hf
+default_branch: main
+---
+
+# Harbor-HF
+
+## Current authorization
+
+Status: approved
+
+### Local-evidence combined-result browsing — implementation and release
+
+Approved at: 2026-09-24T12:24:10Z
+
+- The user directly requested implementing local-evidence result browsing and
+  deploying it. The timestamp records the environment clock at approval capture.
+- Reuse the existing disposable projection's complete native trial results and
+  native aggregate cache for browsing. Establish completeness, freshness and
+  invalidation; keep fresh strict checks for execution/replacement submission.
+  Retain Harbor aggregation and expose unavailable/pending evidence truthfully.
+- Scope includes source/history review, local implementation, regression tests,
+  real-path read-only profiling, documentation, commits, current-main integration,
+  PR publication, exact-green-head merge and deployment to the existing private
+  control Space after fresh idle inventory and provenance/readiness checks.
+- No new resource, persisted aggregate, projection table, native metric engine,
+  credential transfer, inference, paid test, benchmark mutation or history rewrite.
+  Preserve existing hardware, Bucket, secrets and immutable worker images when
+  worker inputs are unchanged. Stop for changed worker inputs or active execution.
+- Keep coverage and safety gates. Preserve other work; use the primary checkout.
+  Disable writes for cutover and restore only after validation. Verify actual
+  hosted responsiveness, not just a synthetic benchmark. Keep run evidence private.
+
+### Combined-result responsiveness — release follow-through
+
+Approved at: 2026-09-23T16:43:54Z
+
+- The user explicitly confirmed the consolidated release plan: integrate current
+  main, prepare and publish a reviewed PR, merge its exact green head, and deploy
+  to the existing control Space only after fresh idle checks. This supersedes
+  the earlier exclusion of publication, merge and main integration for this fix.
+- The user requested deferring the coverage requirement. The governing requirement
+  remains in force; do not lower thresholds, narrow coverage scope or waive a
+  failing gate. Reassess the integrated baseline and address test coverage within
+  release preparation, reporting any unresolved blocker before deployment.
+- Retain existing Bucket, hardware, settings, secrets and immutable worker images
+  when their inputs are unchanged. Disable writes during cutover, verify exact
+  provenance and authenticated readiness, then restore writes after validation.
+  Stop for changed worker inputs, revision conflicts or active execution.
+- No new resources, credential transfers, inference, paid tests, run mutations,
+  force pushes or history rewrites. Use the primary checkout and preserve other
+  branches, stashes and worktrees. No wider product behavior changes are included.
+- Run privacy checks and inspect full diffs and metadata before public mutations.
+  Record validation and release evidence without operator-specific identifiers.
+
+### Combined-result responsiveness — deployment approval, held
+
+Approved at: 2026-09-23T16:35:49Z
+
+- The user directly requested deploying the local responsiveness fix in
+  `0cf2eae` to the existing control Space. The timestamp records approval capture.
+- Deployment remains held on the documented global coverage gate. This request
+  does not waive validation, permit lowering thresholds, or authorize reverting
+  unrelated changes already present in the live service or current main.
+- Preserve the existing Bucket, hardware, secrets and immutable worker images.
+  No new resources, credential transfers, inference, paid tests or run mutations
+  are authorized. Require fresh idle inventory before any cutover.
+- PR publication and merge, wider coverage remediation and integration of newer
+  main changes have not yet been explicitly approved for this release. Prepare
+  one consolidated amendment before those actions; no remote mutation yet.
+
+### Combined-result responsiveness — local implementation
+
+Approved at: 2026-09-23T16:22:04Z
+
+- The user directly approved investigating and implementing a local fix with
+  tests after a read-only combined-result request exceeded the deployed browser
+  timeout. The timestamp records approval capture.
+- Scope: read-only diagnostics, offline profiling, Harbor-native API and history
+  review, local responsiveness improvements, regression tests, documentation and
+  local commits. Preserve native aggregate authority, source identity validation,
+  replacement selection, truthful freshness and unknown-cost semantics.
+- No push, PR, merge, deployment, image publication, resource creation, run
+  mutation, inference, paid compute or credential transfer. Deployment requires
+  separate approval. Preserve existing work and do not create worktrees.
+- Keep live diagnostic evidence and operator identifiers outside public files;
+  use synthetic fixtures. This approval does not reopen prior release scopes.
+
+### Results browsing deployment approval
+
+Approved at: 2026-09-12T00:00:00Z
+
+- The user explicitly confirmed the proposed consolidated deployment plan.
+  Approved cutover scope: deploy exact merged
+  revision `1499be727f999faef6a10babf1465749d81be15e` to the existing private
+  control Space, retaining its Bucket, hardware, settings and secrets.
+- Reuse existing verified immutable parent and Workbench image digests only if
+  their package, lockfile and Dockerfile inputs are unchanged. Otherwise stop
+  for separate image-publication approval.
+- Require fresh idle inventory before cutover; do not interrupt or cancel active
+  runs or setup Jobs. Temporarily disable writes, rebuild the control Space,
+  verify provenance and authenticated readiness, then restore writes only after
+  validation. No new resources, credential transfers, inference or paid tests.
+- The user reports no active runs; verify fresh inventory rather than treating
+  that observation as enduring cutover evidence. This approval does not reopen
+  the completed implementation/merge scope. Exact approval time not recorded.
+
+### Built-in inference review fix and exact-green-head PR merge
+
+Approved at: 2026-09-12T00:00:00Z
+
+- The user explicitly requested fixing the misleading built-in HF-route
+  inference-review message in the existing results-browsing PR, making it merge
+  ready, and merging once CI passes. This extends the earlier publication scope
+  and supersedes its exclusion of this narrow fix and PR merge.
+- Implement native-recorded inference-review presentation using the existing
+  authoritative binding policy. Built-in inference must not be forced through
+  a named-key approval. Preserve all named-key ownership, scope, presence,
+  revision, image, CSRF and write-mode gates. Do not grant credentials or infer
+  provider authentication from configuration or presence.
+- Authorized: local changes, generated API contracts if necessary, tests,
+  documentation, independent review, commits, branch push, PR updates, CI
+  inspection and squash merge of this PR only at the exact reviewed green head.
+  Resolve CI regressions without weakening checks or expanding functionality.
+- No deployment, image publication, new resource, run mutation, live inference,
+  credential movement or grant, paid compute, force push or history rewrite.
+  Stop for changed-head/revision conflicts or unexpected scope expansion.
+- Keep public metadata free of operator-specific evidence and identifiers;
+  inspect the complete diff and run privacy checks before each public mutation.
+- Approval date uses the session date; exact decision time was not recorded.
+
+### Results browsing publication and deployment preparation
+
+Approved at: 2026-09-12T00:00:00Z
+
+- The user directly requested preparing a PR with the recent changes and getting
+  ready to deploy, following the proposed main-integration/publication scope.
+  Integrate current upstream main into the existing feature branch, resolve
+  integration conflicts without expanding behavior, revalidate, push the
+  reviewed branch and open a public PR against the canonical repository.
+- Main integration means merging main into the feature branch, not merging the
+  resulting PR into main. Preserve the existing local rollup work. Inspect CI
+  and prepare release steps/readiness evidence; report remaining gates.
+- No deployment, PR merge, image publication, force push, history rewrite, run
+  mutation, inference, paid compute, credential transfer or private accounting
+  publication. Live cutover needs separate explicit approval and idle checks.
+- The newly investigated HF-route inference-review message is not implemented
+  in this scope. No new inference approval behavior or credential grants.
+- Run privacy checks and inspect the complete diff and public metadata before
+  every public mutation. Further behavior changes require separate approval.
+- Approval date uses the session date; the exact decision time was not recorded.
+
+#### CI follow-through — 2026-09-12
+
+- The user requested walking the failed PR CI through. Within the current
+  publication/revalidation scope, repair the omitted browser-test API fixture,
+  strengthen navigation readiness/error assertions, validate and push the narrow
+  regression fix. No production behavior expansion, retry/timeout weakening,
+  deployment or benchmark execution is included.
+- Read-only reproduction established that the navigation fixture returned an
+  invalid empty object for the newly automatic replacements read. Waiting for
+  detail rendering exposes an undefined-length browser error before Back;
+  fast local navigation could previously outrun it. Hosted CI artifacts were
+  unavailable; the reproduction used a private local copy of the test.
+- Reused the existing typed no-replacements fixture and waited for detail
+  rendering before Back. Added empty browser-error assertions; navigation and
+  no-write assertions remain intact. No production code, timeouts or retries
+  changed. Independent narrow review: GO, no blockers.
+- Local validation: 20 repeated navigation checks with two workers, all 76
+  browser tests with two workers, 1,632 unit tests, formatting, lint, types,
+  build, generated checks and dependency audit pass. Push the reviewed fix and
+  inspect hosted CI at that exact head; earlier failure is not waived.
+
+### Results browsing follow-up — local implementation
+
+Approved at: 2026-09-12T00:00:00Z
+
+- The user directly approved the proposed local follow-up and clarified that
+  browsing should show valid post-replacement combined scores and token counts,
+  and cost displays should state how many items lack cost data.
+- Implement clear recorded reasoning intent versus native kwargs on run detail;
+  use the existing native combined-result path for Runs browsing; preserve
+  explicit pending, unavailable, failed-replacement and stale-evidence states.
+  Preserve original evidence and distinguish selected-cohort from all-incurred
+  cost. Unknown coverage must remain unknown, not zero.
+- Scope includes local implementation, offline profiling of polling and multi-run
+  loading, bounded evidence-preserving performance improvements if justified,
+  tests, documentation and local commits. Preserve the existing unpublished
+  rollup work and all other branches, stashes and worktrees; create no worktrees.
+- Harbor native aggregation remains authoritative through the existing approved
+  bridge. No new metric engine, persisted aggregate, projection table, resource,
+  native configuration alias or execution state is authorized.
+- No push, PR creation, publication, merge, deployment, credential transfer,
+  inference, paid compute, replacement submission or run-control action.
+- Approval date uses the session date; the exact decision time was not recorded.
+
+#### Completion — 2026-09-12
+
+- Implemented locally after the committed approval. Runs now show valid native
+  Combined scores, tokens and selected reported costs together, with explicit
+  Original/subset, pending, unavailable and expired-evidence presentation.
+  Native costs show missing trial-result counts when evidence is present;
+  historical summaries without trial evidence explicitly show unknown coverage.
+  All-incurred coverage remains separate. No alternative metric was calculated.
+- Recorded reasoning intent is visible beside native kwargs on run detail;
+  neither metadata nor a model query is claimed as effective provider reasoning.
+- Only rendered parent rows inspect combined evidence. Shared 30-second browser
+  queries, a two-request concurrency bound and started-request coalescing avoid
+  duplicate inspections. No backend source cache was added. Relationship changes
+  fence ancestors, including hidden descendants. Original execution status and
+  Original shared/scenario estimates remain labeled separately.
+- Native fields/APIs and relevant Harbor history were checked. No durable field,
+  schema, API, projection table, resource, provider rule or execution behavior
+  changed. See `docs/2026-09-12-results-browsing-ui.md` for evidence and limits.
+- Independent review identified two medium freshness/deduplication issues; both
+  were fixed and re-reviewed with GO and no blocking finding. Final Node checks
+  pass: formatting, lint, types, 1,632 unit tests, build, generated contracts,
+  audit and 76 browser tests. Changed modules have 100% line/function coverage,
+  98.18% branches and 98.83% statements across 92 focused tests.
+- Root Ruff/format/ty, 102 tests at 89.10% coverage and audit pass. Agent
+  Ruff/format/ty and 598 tests pass. Both Dockerfiles build for linux/amd64;
+  Slophammer baseline/DRY and privacy checks pass. Initial automatic browser
+  server startup stalled and was stopped; all browser tests passed on an
+  isolated explicitly started local server with unchanged layout assertions.
+- No publication, deployment, worktree, paid execution, credential movement or
+  run mutation. Ready for separate release approval; no earlier release scope
+  is renewed. These are offline results, not a hosted performance guarantee.
+
+
+### Combined score rollup and loading — local implementation
+
+Status: completed
+
+Approved at: 2026-09-12T16:51:25Z
+
+- The user directly approved local implementation: “yes -- the rollup view
+  should show the \"corrected\" score if possible”. Improve slow combined-view
+  loading and show prominent Original versus Combined native scores, with
+  explicit pending and unavailable states rather than persistent Refreshing.
+- Scope is local implementation, offline profiling, tests, documentation and
+  commits in the primary checkout. Preserve branches, stashes and existing
+  worktrees; create no worktrees. Commit this additive authorization first.
+- Harbor's pinned native `JobPlan.aggregate` remains score authority through
+  the already approved replacement bridge. Preserve failed replacements,
+  provenance, native execution counts and reported costs. No manual metric
+  engine, persisted aggregate, projection table or new resource is authorized.
+- Read-only diagnostics may use existing private evidence and configured SDK
+  authentication in place. Never publish operator identifiers, raw private
+  responses, signed URLs or authentication material. No credential movement.
+- No publication, push, pull request, merge, deployment, execution, run control,
+  inference approval, paid compute or remote mutation is authorized. Stop at
+  local commits for independent review and separate release approval. Earlier
+  release scopes are not renewed. Report unresolved integrity or performance
+  blockers rather than weakening validation or claiming an unverified score.
+
+#### Local investigation — implementation held
+
+- Fresh main matched the requested base. The authorization was committed before
+  implementation; only the primary checkout is used. No behavior patch has been
+  made. This scope remains approved and incomplete, not release-ready.
+- A disposable offline diagnostic exercised the actual `Replacements.view` and
+  `ReplacementEvidence` with filesystem-backed synthetic evidence: 445 original
+  and five replacement trial artifacts. A storage wrapper added 10 ms latency
+  per read/list operation and counted operations. Native aggregation and source
+  completion were stand-ins, so this measures evidence loading only; it neither
+  validates native provenance nor establishes any benchmark score.
+- Cold: 2,846 ms, 910 reads, 907 directory listings. Warm: 2,810 ms, the same
+  reads and listings. The aggregate stand-in was called only once across both
+  requests. Peak concurrent storage operations was 13 because the eight-worker
+  evidence pools are nested, not a global eight-operation limit. These are
+  synthetic local timings, not measurements of the hosted service.
+- `packages/control-core/src/replacements.ts` reads incurred trial costs before
+  independently loading assembly evidence; it consults the aggregate cache only
+  after that evidence is loaded. `replacement-evidence.ts` requests fresh bytes.
+  The warm aggregate cache therefore does not eliminate these storage operations.
+- `apps/control-api/src/trial-progress-reader.ts` is not a drop-in native evidence
+  cache: it projects trial results and retains completed observations under a
+  separate reconciliation window (default five minutes). Its exposed snapshot
+  does not provide the original complete native evidence required by the bridge.
+  `packages/hf-adapters/src/bucket-store.ts` serializes writes, not reads; its
+  download path has no explicit timeout signal, unlike directory listing.
+- Inspected pinned Harbor `src/harbor/job_plan.py` native `aggregate` and
+  `aggregate_stats`, their references to native trial results, and relevant
+  planning/result history including the JobPlan extraction. The existing bridge
+  in `packages/harbor-hf-agents/src/harbor_hf_agents/replacements.py` delegates
+  metrics to Harbor. No new general Harbor capability has been shown necessary.
+- The RunPage summary and Runs table currently use original native results;
+  replacement querying starts inside the opened replacement panel. The existing
+  scalar parser deliberately requires exactly one evaluation and one mean metric.
+  No UI changes were made, and no alternate score or favorable fallback was added.
+- Held before a speculative cache redesign: a safe optimization must preserve
+  complete native bytes, fresh relationship discovery, provider-identity fencing,
+  failure invalidation and bounded total in-flight work without borrowing weaker
+  display freshness. Cold-loading improvement is still unproven. No actual native
+  Combined score was obtained. The full contract review, implementation, regression
+  matrix, validation gates and independent review remain outstanding.
+- Only authorization, read-only source inspection and disposable offline profiling
+  occurred. No live diagnostic request, remote run control, inference, credential
+  movement, resource creation, publication or deployment occurred. Privacy and diff
+  checks cover the local documentation commits; historical full test results are
+  not claimed as fresh validation for this scope.
+
+#### Local implementation completion — 2026-09-12
+
+- Completed the approved local implementation in the primary checkout, following
+  the committed authorization. Ready for independent review, not publication or
+  deployment. The earlier profiling hold remains historical evidence, superseded
+  by this implementation and its fresh validation.
+- Original versus Combined native scores now appear above the collapsed operator
+  panel through one shared query. Loading, pending, unavailable, failed refresh,
+  expired saved evidence and explicit Retry are visible. A bounded browser request
+  reports timeout rather than remaining indefinitely in Refreshing. Full native
+  JSON remains inspectable/downloadable; arbitrary metrics are not averaged.
+- One request-scoped native evidence reader now coalesces exact fresh reads and
+  shallow listings for incurred costs and assembly. Nested storage I/O is capped
+  at eight. Every new request rediscovers relationships and reads fresh evidence;
+  completion checks and the existing aggregate cache remain intact. All retained
+  receipts, unknown costs and failed replacements preserve existing semantics.
+- The same offline synthetic profile improved from about 2.85 seconds to 1.43
+  seconds: 910 to 458 reads, 907 to 455 listings, peak concurrency 13 to eight.
+  This is not a hosted latency guarantee or a verified private Combined score.
+  Warm requests still read native evidence, and this patch does not claim one
+  recursive metadata listing per run or cancellation of server inspection when
+  the browser times out.
+- Pinned Harbor aggregation, native result fields and relevant planning history
+  were checked; the ownership and unchanged-schema comparison is documented in
+  `docs/2026-09-11-replacement-backend.md`. No native behavior, persisted field,
+  alternate cost/result format, provider rule, resource or API schema was added.
+- Validation passed: root Ruff/format/ty, 102 tests at 89.10% and dependency audit;
+  agent Ruff/format/ty and 598 tests at 87.33% (coverage used an ephemeral
+  pytest-cov dependency, not a manifest or lockfile change). Node 22.22.0 format,
+  lint, types, 1,585 unit tests, build, generated checks and dependency audit pass.
+  Changed rollup/evidence module coverage is 98.12% lines and 92.53% branches.
+  All 76 browser tests pass. Both Dockerfiles build locally for linux/amd64.
+  Slophammer baseline and DRY pass with zero findings. No threshold was weakened.
+- Initial test failures were corrected: immediate querying required existing
+  browser fixtures to supply the normal no-replacements response; query-state
+  tests await rendering and restore mocks. The first browser server startup
+  stalled and was stopped; the full suite passed against an isolated local web
+  server. The optional coverage plugin was supplied only for the coverage check.
+- No worktree, remote mutation, publication, merge, deployment, run control,
+  inference, paid compute, credential movement or live private-source diagnostic
+  occurred. Independent review and separate release authorization remain required.
+
+### Replacement evidence and parent failure containment
+
+Status: approved
+
+Approved at: 2026-09-12T11:29:13.370662+00:00
+
+- The user explicitly approved: “yep, those are 2 clear fixes” and “fix both
+  issues, PR and deploy”, preferring the primary checkout over worktrees.
+- Implement numeric-equivalent replacement evidence fingerprinting and generic
+  containment of failed HF parent startup relaunches, with offline regression
+  tests and documentation. Preserve native Harbor execution, immutable source
+  artifacts, stored review fingerprints, and existing schema ownership.
+- Commit this authorization before implementation. Preserve existing branches,
+  stashes and operations completion history; create no worktrees.
+- Release approval covers PR publication, exact green reviewed-head merge,
+  matched immutable worker image publication and deployment to the existing
+  private <control-space>, retaining <artifact-bucket> and existing resources.
+  This implementation phase MUST stop at local commits for independent review
+  before any publication or deployment; a separate release phase follows review.
+- No run launch, resume, replacement submission, paid compute, inference grant,
+  credential change/transfer, permission change or new resource is authorized.
+  Preserve the paused replacement and all unrelated execution. No remote
+  mutation during this implementation phase. Stop for provenance mismatch,
+  exposure, immutable conflict, duplicate execution or unapproved cost.
+
+#### Local implementation completion — 2026-09-12
+
+- Completed the two local fixes, tests and documentation after the dedicated
+  authorization commit. Fresh fetch still matches the reviewed main base. Primary
+  checkout only; existing operations history, branches and stashes are preserved.
+- Numeric equivalence is applied once before native evidence validation, not to
+  the final native hash. Saved-source offline replay matches the already stored
+  source fingerprint and immutable child configuration, and real parent preflight
+  succeeds without artifact or run-record rewrites. The regression now exercises
+  real TS evidence loading, subprocess stdin, native inspection and parent reads.
+- HF parent errors now persist desired pause. This is deliberately generic for
+  all typed parent errors, not a log-based deterministic classifier or a Harbor
+  trial retry policy. Explicit resume records observed error acknowledgments in
+  one optional control-owned state field; new errors pause again. The existing
+  actor only explains the stop in the UI, never authorizes restart. Native result
+  and cost-stop priority, live-parent handling and run-lock fencing are retained.
+- Native ownership, checked pinned source/history, the new operator-decision
+  field, compatibility limits and release boundary are documented in
+  `docs/replacement-evidence-parent-containment.md` for independent review.
+- Validation passed: root Ruff/format/ty, 102 Python tests at 89.10% coverage and
+  dependency audit; agent Ruff/format/ty and 501 tests. Changed evidence-module
+  combined coverage is 96.54%; controller line coverage is 92.08% (90% branches).
+  Node 22.22.0 formatting, lint, types, 1,575 unit tests, build, generated checks
+  and dependency audit passed. All 76 browser tests passed. Both Dockerfiles
+  built locally for linux/amd64; no image was published.
+- Disclosed gates: the prescribed Slophammer baseline check still cannot run
+  because the pre-existing baseline file is absent. Normal Slophammer and DRY
+  pass. Whole-agent coverage is 76.87%, below 85%, despite all tests passing;
+  the pre-existing package-wide coverage gap is not waived or hidden. The initial
+  browser startup probe stalled and was stopped; the full suite passed using an
+  isolated local test server. Initial lint and documentation-link failures were
+  corrected and their gates passed again. No tests or thresholds were weakened.
+- Stop here for independent review. No push, PR, merge, image publication,
+  deployment, remote run control, live inference approval, credential movement,
+  paid compute or new remote resource occurred. Release approval remains subject
+  to independent review and fresh safety checks; it never authorizes run resume.
+
+#### Local validation follow-up — gate closure
+
+- Continued inside the approved offline tests/documentation scope after independent
+  code GO and release HOLD. Added 97 meaningful cases in three agent test files;
+  no production behavior, schema, persisted field, API/UI value, admission rule,
+  exclusion or threshold changed. Native ownership therefore remains unchanged.
+- Whole-agent coverage now passes at 87.33%: 598 tests, 2,304 statements and 292
+  missed. Root coverage is 89.10% with 102 passing tests. Root and agent Ruff,
+  format and ty checks pass; root dependency audit passes. Existing native numeric
+  transport and controller regressions remain passing. Existing native checksum
+  deprecation warnings remain; no new Ruff warnings were introduced.
+- Generated the previously absent baseline using the installed official
+  `uv run slophammer-py check . --baseline-write` after an ordinary zero-finding
+  check. The version-1 empty findings snapshot suppresses nothing, contains no
+  paths, and regenerates identically. Prescribed baseline and DRY checks pass.
+- Fresh Node formatting, lint, types, 1,575 unit tests, build, generated checks,
+  dependency audit and all 76 browser tests pass. Both Dockerfiles build locally
+  for linux/amd64. Full privacy and diff review precede the local commit.
+- Historical gate failures above are retained. Follow-up test/baseline changes
+  still require review before release; neither closing these gates nor the earlier
+  code GO authorizes automatic publication or deployment. No push, deployment,
+  inference, run control, remote integration, credential movement or new remote
+  resource occurred. The paused run was not touched.
+
+### Replacement pause and read-only startup investigation
+
+Status: completed
+
+Approved at: 2026-09-12T10:29:15Z
+
+- The user explicitly approved: “yes pause it and investigate the logs”.
+  Scope is only the exact replacement run identified in the private operator
+  request, represented here as `<replacement-run>`, on `<control-space>` with
+  existing `<artifact-bucket>` storage. Persist desired pause through the normal
+  authenticated control-service CSRF route and verify reconciliation leaves no
+  active owned parent or child Jobs, even if parents are already terminal.
+- Read-only investigation may inspect bounded sanitized parent logs, allowlisted
+  Job/image provenance, native artifact evidence, deployed source and pinned
+  Harbor source/history. Do not expose credentials, signed URLs, private IDs,
+  operator aliases, full configurations or authentication/session headers.
+  Use configured credentials in place and keep session material in memory only.
+- Preserve the original and all other runs, images, bindings, budgets, credentials,
+  resources, branches and stashes. No resume, retry, launch, direct Job kill,
+  deployment, credential change/transfer, implementation or remote publication.
+  Stop and report revision mismatch, exposure, deterministic shared defects or
+  owned Jobs that cannot be stopped. Remediation requires separate approval.
+- Use an operations branch in the primary checkout, no new worktrees. Commit
+  this additive authorization locally before mutation; do not push. Record actual
+  completion additively without renewing earlier scopes.
+
+#### Completion — 2026-09-12T10:33:20Z
+
+- Authorization commit preceded the sole external mutation: the normal pause
+  endpoint returned success at 10:30:33Z. Normal session GET confirmed operator
+  access using the existing supported bearer transport; that transport does not
+  require cookie-session CSRF. No authentication material was persisted.
+- Desired state and projection both remained paused after reconciliation and at
+  final verification. Eight owned parent Jobs were terminal ERROR; no owned child
+  Jobs or active owned execution were found. No aggregate result or projected
+  native trial results were present. Native spend remains unknown, not zero;
+  infrastructure charges are not established by native result absence.
+- All eight inspected parent images matched the expected immutable worker image.
+  The live service source and Harbor revision matched the reviewed expectations.
+  All eight bounded parent log tails had the same sanitized failure chain:
+  `parent_worker.py:350` -> `replacement_preflight.py:120` ->
+  `replacement_preflight.py:105`, raising
+  `ValueError: Replacement source fingerprint mismatch` before `Job.create()`.
+- Stopped operational investigation at the deterministic shared-defect boundary.
+  Local source proves the stored source fingerprint differs from the parent's
+  freshly computed evidence fingerprint; it does not identify the differing
+  input or prove whether source drift or transport normalization caused it.
+  No immutable configuration or credential failure was observed in these tails.
+- Inspected local fingerprint creation/comparison and existing cross-language
+  preflight tests, plus pinned Harbor `JobConfig`, `Job.create()` and relevant
+  configuration/lock/result history. Any separately approved follow-up should
+  isolate the first differing canonical input through the real review-to-parent
+  transport, retaining native models and the fail-closed provenance check.
+  Do not bypass fingerprint validation, rewrite source evidence or infer a fix.
+- No resume, retry, launch, direct remote Job kill, source implementation,
+  deployment, credential change or remote publication occurred. Original and
+  unrelated runs were not controlled. Local documentation commits only, in the
+  primary checkout with no new worktree; existing branches and stashes preserved.
+  Patch, PR, deployment and any later execution require separate approval.
+
+### Run-recorded inference review release (2026-09-11)
+
+Status: approved
+
+Approved at: 2026-09-12T09:26:58+00:00
+
+- The user directly approved: “perfect -- yes, please publish merge and deploy”.
+  Publish the reviewed local run-inference feature through a pull request, merge
+  only its exact green reviewed head, publish the matched existing worker image
+  workflow, and deploy exact merged source to the existing private control Space.
+- This is a new release approval; previous completed scopes remain completed.
+  Preserve the primary checkout, existing branches, stashes and worktrees. Do not
+  create worktrees or discard work. Return the primary checkout to clean main at
+  the exact merged and deployed revision; completion may remain on the feature
+  branch without changing the released source snapshot.
+- Verify fresh expected main and feature revisions, the complete public diff and
+  metadata, privacy checks and relevant validation before publication. Disclose
+  existing baseline and agent coverage gaps without weakening gates. Stop for
+  unexpected source, image, provenance, CI or safety failures.
+- Use the existing image workflow and immutable linux/amd64 image. Preserve the
+  existing private Space, Bucket, visibility, hardware and credentials. No new
+  resources, credential movement or permission change is authorized.
+- Recheck all runs, owned Jobs and Workbench setup Jobs before cutover. Require
+  no active setup Jobs or execution and no restart-eligible work. Disable writes
+  during matched image/source staging; restore only the prior mode after fresh
+  eligibility checks and verify reconciliation leaves execution unchanged.
+- No live inference grants, replacement submission, run launch, paid canary,
+  inference, pause, resume, cancellation or other benchmark control is approved.
+  Stop for exposure, duplicate execution, immutable conflict, deterministic shared
+  defects, unapproved cost or a labeled Job that cannot be stopped.
+
+### Run-recorded inference access review — local implementation
+
+Status: completed
+
+Approved at: 2026-09-12T08:58:50Z
+
+- The user directly requested implementation in the primary checkout and stated:
+  “yes -- it should just use the recipe that was used for the run, without
+  needing too much ceremony; it's already been approved for the main run”.
+- Implement a narrowly scoped run-page inference access review using the
+  immutable original native configuration and existing inference binding. Reuse
+  valid exact approvals; explicitly review the current worker image and exact
+  existing credential scope when renewed approval is necessary. Preserve all
+  policy, revision, actor, operator, CSRF and write-mode checks.
+- Local implementation, offline tests, documentation and commits only. Do not
+  create worktrees; preserve existing stashes, archives and other worktrees.
+- No publication, pull request, merge, deployment, live grant change, credential
+  transfer, remote execution, paid run or new resource is authorized. Report
+  readiness for separate publication approval. This is not blanket trust for
+  future images or actors, nor permission to broaden credential scope.
+- Earlier release scopes are completed, not renewed by this authorization.
+
+### Native replacement evidence name correction (2026-09-12)
+
+Status: approved
+
+Approved at: 2026-09-12T07:18:59Z
+
+- The user explicitly approved the narrow fix, tests, PR publication and merge,
+  matched worker image publication, and deployment to the existing private
+  control Space so replacements can subsequently be scheduled.
+- Correct replacement evidence validation to honor native Task.name metadata
+  overrides and native task-ID names in locks, retaining unchanged result names,
+  native identities, sources, configuration, digests, checksums, UUIDs and repeat
+  multiplicity. Inspect pinned Harbor source and history before implementation.
+- Preserve the unrelated dirty checkout and previous release completion record;
+  use a clean worktree from fresh main. Run required validation and public
+  privacy checks, review the complete diff, and merge only the exact green head.
+- Publish the existing worker workflow at the exact merged revision, verify
+  immutable linux/amd64 image provenance, and deploy matched source and images
+  to the existing private control Space. Preserve resources, hardware and
+  credentials; no credential transfer or new resources is authorized.
+- Disable writes during staging; restore the prior mode only after execution,
+  setup-Job and reconciliation eligibility checks. Stop on active setup Jobs,
+  unexpected eligibility, revision mismatch, exposure, immutable conflicts,
+  duplicate execution, shared deterministic defects or unapproved cost.
+- No replacement submission, benchmark controls, paid canary, inference or
+  actual replacement execution is authorized. Offline source-evidence checks
+  are permitted without persisting or rewriting benchmark artifacts.
+
+#### Recovered completion evidence — prior release
+
+- The prior release authorization is completed. The following completion record
+  is recovered additively from retained local Git history.
+
+#### Completion evidence — 2026-09-12T07:51:02.428718+00:00
+
+- PR #221 passed complete CI at exact reviewed head
+  `5f812c3863f8052be8106a60776ac41dff763785` and was squash-merged as
+  `cfa88dfa2cbc98de808fd208dc1f482b70c58657`. Merged-source CI also passed.
+- The existing publication workflow succeeded at that exact merged revision.
+  Registry verification matched its source tag and immutable image, with
+  `linux/amd64` platform:
+  `ghcr.io/huggingface/harbor-hf-trial-worker@sha256:2f101b6f6081b6fbdc07ac26e8882fc436b41aa14b21df3d4ce20840ecb68f07`.
+- Deployed the clean exact merged source to the existing private control Space
+  with writes disabled during staging. Verified the release manifest and hashes,
+  exact patched file bytes, matching Space/runtime revision, liveness/readiness,
+  authentication, presets, projection, console and read-only replacements view.
+  Both worker image settings match the verified immutable image.
+- Restored the prior enabled write mode after fresh eligibility checks. A further
+  30-second reconciliation wait preserved Job identities and observations, all
+  immutable run records and execution states, and the absence of active Jobs or
+  setup Jobs. Hardware, visibility, unrelated variables and credentials remained
+  unchanged. No replacement submission, benchmark controls, inference, new
+  resource or paid benchmark canary occurred.
+- Image staging briefly raced the automatic restart; read-only waiting and a
+  fresh complete gate passed without repeating the variable mutations. Final
+  runtime logs had no error candidates; the build-log candidate was a dependency
+  name, not a build failure.
+- Validation: root Ruff/format/ty and 102 tests at 89.10% coverage passed; agent
+  Ruff/format/ty and 481 tests passed. Replacement modules achieved 98.02%
+  coverage, each above 85%. Node 22.22.0 checks, 1,523 unit tests, 75 browser tests,
+  generated contracts, dependency audits and both linux/amd64 Docker builds
+  passed. Privacy, normal Slophammer and DRY checks passed.
+- Disclosures retained: the required Slophammer baseline file is absent, and
+  the pre-existing agent whole-package coverage gap remains. No threshold was
+  weakened. The browser startup probe stalled before the successful isolated
+  full-suite run; tests were unchanged. Native checksum deprecations and existing
+  lint warnings remain.
+- The original dirty workspace and prior completion history were preserved.
+  Actual replacement selection and paid execution still need separate approval.
+
+### Infrastructure replacement workflow and combined release (2026-09-11)
+
+Status: completed
+
+Approved at: 2026-09-11T21:51:25Z
+
+- The user directly approved implementation, tests, documentation, PR publication
+  and merge, required image builds/publication, and deployment to the existing
+  privately identified control Space. Include the already-merged PR #219 in the
+  release baseline; preserve concurrent work and existing resources.
+- Scope: operator selection of infrastructure-failed native trial attempts from
+  a completed run, normal reviewed replacement execution, and an original /
+  replacement / assembled result presentation with replacement-aware leaderboard
+  selection and transparent incurred versus selected-cohort cost reporting.
+- Preserve original runs and artifacts. Replace exact attempts one-for-one,
+  preserve repeat multiplicity, and retain unsuccessful replacement evidence.
+  Do not select outcomes by reward or count original and replacement twice.
+- Use pinned Harbor native planning, execution, identities, results, accounting,
+  and public JobPlan.aggregate. Do not create another scheduler, metric engine,
+  result format, or reconstructed trial identity.
+- Separately approved temporary bridge: operator-reviewed cross-run selection,
+  provenance and coverage validation absent from the checked local aggregation
+  contract at Harbor dcd0a7ac74b7bd417780d9cb27cd819c7ec82e4e. Inspect native
+  source_jobs/source_trial derivation before adding any persisted relationship;
+  their current regrade-only action is not replacement authority.
+- Remove this bridge at the first reviewed Harbor revision providing equivalent
+  storage-neutral replacement selection/provenance/coverage validation. No such
+  revision has yet been identified; do not invent a removal SHA. Stop if the
+  approved scope requires duplicating other Harbor behavior or expanding the gap.
+- Deployment may stage writes disabled and restore the previous mode after
+  provenance, readiness, projection and active-execution checks. Do not stop,
+  replace or resume existing benchmark Jobs or cancel active setup Jobs.
+- No actual replacement launch is authorized by this project approval: obtain
+  separate approval for the exact trial selection and paid execution budget.
+  No credential movement, new persistent resources, or upstream publication.
+
+
+
+#### Completion evidence — 2026-09-12T00:44:46Z
+
+- PR #220 passed fresh complete CI at exact reviewed head
+  `71bde2cd4dcd759f010499171804921c4cb32ff3` and was squash-merged as
+  `dafc6a3c0a98f806d23f26cd5438ceb8367390ec`, including the PR #219 baseline.
+- The existing publication workflow succeeded at that exact merged revision.
+  Published parent and Workbench image:
+  `ghcr.io/huggingface/harbor-hf-trial-worker@sha256:c24c55dc0c8da19afd498de104aa92157415c950430cb64a11f81c8d1e6d9e41`.
+  Registry manifest/config verification confirmed `linux/amd64`.
+- Deployed the clean exact merged source to the existing private control Space,
+  with writes disabled during staging. Verified the release manifest and hashes,
+  matching Space/runtime revision, readiness, authenticated session, presets,
+  projection, console bundle and read-only replacements endpoint. Restored the
+  prior enabled write mode only after eligibility checks; reverified after a
+  30-second reconciliation wait. Existing parent and child identities and parent
+  observations were unchanged; no duplicate execution or active setup Jobs.
+- Build and runtime logs had no detected error candidates. Existing hardware,
+  private visibility, unrelated variables, resources and credentials were
+  preserved. No benchmark controls, replacement execution or paid canary ran.
+- Final evidence retains the absent Slophammer baseline and pre-existing agent
+  whole-package coverage gap; no threshold was weakened. Actual replacement
+  execution still requires separate exact-selection and budget approval.
+
+### Active-run matched control release (2026-09-11)
+
+Status: completed
+
+Approved at: 2026-09-11T16:52:33Z
+
+- The user explicitly approved proceeding with the existing control Space
+  deployment/restart while benchmark execution remains in flight. This amends
+  the idle-cutover gate recorded with the combined PR release authorization.
+- Deploy reviewed merged source `ec1020c77cd3c159c91b7d1d68639317fb133c32`
+  and its published, verified immutable parent-worker image to the previously
+  approved existing private control Space; preserve the existing Bucket,
+  hardware, secrets, and benchmark task images.
+- Temporarily disable controller writes to prevent mixed-version admission,
+  stage the matched configuration and source, verify the rebuilt projection and
+  unchanged running Job identities, then restore the existing write mode after
+  checking reconciliation eligibility. Existing parents remain independent.
+- Do not stop, replace, retry, or resume benchmark Jobs, cancel setup Jobs,
+  change cost limits, move credentials, or add resources. Stop for unexpected
+  reconciliation eligibility, provenance conflicts, or execution disruption.
+- Keep the release checkout at its reviewed revision. This authorization-only
+  record does not require rebuilding unchanged application code.
+
+### Combined PR merge and matched release (2026-09-11)
+
+Approved at: 2026-09-11T16:12:15Z
+
+- The user explicitly approved adding the other six local commits to PR #218,
+  after previously requesting merge and deployment to the exact existing
+  control Space identified in the private operational context.
+- Include committed refresh feedback and cancellation-test cleanup with their
+  authorization history. Do not silently include concurrent uncommitted work.
+- Approved operations: reviewed local integration, validation, commit/push, PR
+  update and merge after required CI succeeds, and rebuild/publication of the
+  matching parent-worker image through the existing release workflow.
+- Deploy the merged revision and matched immutable worker image to the existing
+  control Space. Preserve its visibility, hardware, Bucket, credentials, and
+  operator configuration; do not publish the private destination in this file.
+- Benchmark task images are unchanged. No new resources, credential movement,
+  benchmark launch/retry/resume, or interruption of running Jobs is approved.
+  Defer cutover if live execution or unresolved release gates require a further
+  operational decision. Existing validation limitations remain disclosed.
+
+### Native scrubber ordering integration (2026-09-11)
+
+Approved at: 2026-09-11T15:16:23Z
+
+- The user explicitly approved a narrow private integration at Harbor revision
+  `dcd0a7ac74b7bd417780d9cb27cd819c7ec82e4e` which calls Harbor's existing
+  scrubber on the actual trial before END callbacks, preserving the normal
+  final scrub as a backstop. Do not copy the scrubber or reconstruct trials.
+- This supersedes the interim end-of-run-only direction: preserve live native
+  metadata, attempt receipts, and scrubbed per-trial uploads, with a final copy.
+- Test ordering on success, failure, cancellation, retry, and unsupported
+  revisions. Fail explicitly on integration or upload failures.
+- Removal boundary: the first reviewed Harbor pin providing a supported
+  post-sanitization upload hook, or sanitization before END, replaces this
+  adapter. No such revision exists in the inspected history through
+  `e1be9bd39c368f88a27fee4cbd26655e9994ee5a`; do not invent a future SHA.
+- The existing local implementation and PR authorization applies. No upstream
+  publication, merge, deployment, paid run, or credential movement is approved.
+
+### Local parent storage PR preparation (2026-09-11)
+
+Approved at: 2026-09-11T15:01:08Z
+
+- The user explicitly requested implementing the approved local-parent storage
+  change and preparing its pull request. This extends the local-only approval
+  below to implementation commits, branch push, and one reviewed pull request.
+- No merge, deployment, paid execution, new resource, credential movement, or
+  upstream issue or pull request is authorized. Public privacy checks and full
+  diff review remain required before publication.
+
+### Local parent storage and durable artifact copies (2026-09-11)
+
+Approved at: 2026-09-11T14:58:47Z
+
+- The user explicitly approved local implementation, tests, documentation, and
+  this authorization-record commit for moving Harbor parent execution to local
+  disk with per-trial and final durable artifact uploads to the existing Bucket.
+- Preserve Harbor-native artifacts, lifecycle hooks, reward interpretation, and
+  resume authority. Surface upload failures explicitly; do not add a second
+  trial scheduler or result format. Inspect native persistence APIs and relevant
+  history before implementation.
+- Accepted risks: abrupt termination can lose work since the last successful
+  copy, reporting reflects saved snapshots, local disk must fit working data,
+  and forced cancellation cannot guarantee a final copy.
+- No deployment, paid canary, new resources, credential movement, upstream
+  publication, or implementation publication is authorized by this amendment.
+
+### Current main redeployment (2026-09-09)
+
+Approved at: 2026-09-09T07:49:21Z
+
+- The user approved redeploying the current clean `main` revision to the
+  existing control Space and rebuilding the parent worker image when worker
+  source has advanced.
+- Do not launch or retry a run, change write mode, move credentials, create
+  resources, or change benchmark, model, or campaign limits.
+
+### Combined Workbench execution and UX pull request
+
+Approved at: 2026-09-08T23:35:00.428453+00:00
+
+- The user explicitly approved updating the generic command-agent to use Harbor's default task user and raising a pull request together with the completed Workbench improvements.
+- Include stable environment-row identity and deferred draft persistence, plus Fast-Agent 0.10.20 native routing, inference-key mapping, and verified CA-bundle defaults. Preserve saved recipes and existing runs.
+- Audit the task/parent boundary before changing execution permissions; retain explicit environment bindings, scoped credential delivery, native Harbor execution and cleanup, and evidence handling. Do not introduce benchmark/model/harness-specific control branches.
+- Approved operations: local implementation and tests, public privacy review, commit, branch push, and one pull request against main. No merge, deployment, new remote execution, credential movement, or upstream issue/pull request is authorized.
+- Earlier local improvements were implemented in commits 7607316 and abf3f07; this combined authorization supersedes their local-only publication limits for the reviewed combined diff.
+
+Implementation and validation recorded on 2026-09-08:
+
+- Combined all three repairs without changing model routing restrictions, timeout settings, saved recipes, existing runs, or deployment configuration.
+- Command-agent execution now uses Harbor's public task-user API and clean explicit bindings. Root staging follows ACP's ownership pattern; benchmark data ownership is no longer rewritten. A contract test verifies no parent credential forwarding or parent mounts in task Sandbox creation. The separate parent-worker credential/storage defect remains unchanged.
+- Reviewed Harbor installed/base.py, installed/acp.py, installed/acp_runner.py, environments/base.py, and environments/hf_sandbox.py at dcd0a7ac74b7bd417780d9cb27cd819c7ec82e4e, plus upstream history through 90e28af3. No upstream change or pin update is required for this adapter correction.
+- Passed 455 unit tests, 17 browser tests, 111 agent-package tests, and 46 root tests with 87.98% CLI coverage. Formatting, lint, type checks, generated contracts, both Docker builds, Slophammer check/DRY, Python dependency audit, and privacy checks passed.
+- Draft PR is required until the existing js-yaml audit failure is resolved. Existing global TypeScript and supplementary agent-package coverage gaps are disclosed in the PR; no gate is weakened. The mutation script and optional Slophammer baseline file are absent; normal Slophammer checks pass.
+- No merge, deployment, new remote run, credential transfer, or upstream publication has been performed.
+
+Completed on 2026-09-08: opened draft PR #190 at https://github.com/huggingface/harbor-hf/pull/190 with the combined repairs and disclosed validation blockers. Merge, deployment, and further execution remain unapproved.
+
+Workbench model-field PR approved at: 2026-09-08T20:55:35+00:00
+Approved at: 2026-08-17T06:48:55Z
+Amended at: 2026-09-01T18:11:42Z
+Session-retention amendment approved at: 2026-09-08T07:27:00Z
+Concurrency-control amendment approved at: 2026-09-08T07:31:00Z
+Inference-token amendment approved at: 2026-08-17T15:37:46Z
+Sandbox-lifecycle amendment approved at: 2026-08-17T18:39:15Z
+Finalization amendment approved at: 2026-08-18T00:25:01Z
+Terminal-Bench 2.1 amendment approved at: 2026-08-18T10:40:26Z
+Terminal-Bench 2.1 USD 300 campaign-ceiling amendment approved at: 2026-08-18T17:20:36Z
+Canonical-Bucket amendment approved at: 2026-08-20T13:53:14Z
+Canonical-Space replacement amendment approved at: 2026-08-20T14:01:49Z
+Terminal-Bench 2.1 single-trial diagnostic amendment approved at: 2026-08-20T19:21:55Z
+Production-writes amendment approved at: 2026-08-21T10:31:00Z
+README authentication amendment approved at: 2026-08-19T20:34:26Z
+Installer amendment approved at: 2026-08-19T21:19:35Z
+Installer diagnostic-apply amendment approved at: 2026-08-20T14:07:53Z
+Installer autonomous-diagnostic amendment approved at: 2026-08-20T14:25:07Z
+Installer phase-two recovery amendment approved at: 2026-08-20T15:26:21Z
+Installer empty-bootstrap reset amendment approved at: 2026-08-20T15:37:03Z
+Installer source-staged retry amendment approved at: 2026-08-20T17:29:22Z
+Installer bounded-completion amendment approved at: 2026-08-20T17:38:24Z
+Installer activation-command amendment approved at: 2026-08-20T19:07:58Z
+Installer runbook amendment approved: 2026-08-19
+Installer lifecycle simplification approved: 2026-08-19
+Upstream merge amendment approved: 2026-08-19
+Local upstream conflict-resolution amendment approved: 2026-08-19
+Installer credential-and-lock hardening approved: 2026-08-19
+Installer scope-and-source hardening approved: 2026-08-19
+Installer subprocess-and-phase hardening approved: 2026-08-19
+Installer inference-scope hardening approved: 2026-08-19
+Installer probe-and-state-path hardening approved: 2026-08-19
+Installer redundant-confirmation removal approved: 2026-08-19
+Installer bearer-variable simplification approved: 2026-08-19
+Upstream safe-integration amendment approved: 2026-08-19
+Second local upstream integration amendment approved: 2026-08-19
+Third local upstream integration amendment approved: 2026-08-19
+CI cadence-test repair-and-push amendment approved: 2026-08-19
+Leaderboard-snapshot amendment approved at: 2026-08-21T20:06:00Z
+Harness-integration amendment approved at: 2026-08-21T23:01:07Z
+Installer control-scope warning amendment approved at: 2026-08-21T23:56:40Z
+Terminal-Bench 2.1 clean-rerun amendment approved at: 2026-08-22T07:33:41Z
+Public-leaderboard amendment approved at: 2026-08-22T12:09:50Z
+Infrastructure-retry amendment approved at: 2026-08-22T21:19:00Z
+Harness 89-task diagnostic amendment approved at: 2026-08-22T23:31:00Z
+Diagnostic-recovery amendment approved at: 2026-08-23T04:30:39+08:00
+Harbor-from-source amendment approved at: 2026-08-23T07:20:00Z
+FX harness amendment approved at: 2026-08-23T07:40:00Z
+Harness full-run repair amendment approved at: 2026-08-23T08:21:00Z
+Sandbox-parallelism amendment approved at: 2026-08-23T09:01:00Z
+Run-native reset amendment approved at: 2026-08-24T09:08:00Z
+Upstream integration-and-push amendment approved at: 2026-08-24T09:14:01Z
+Installer clean-start inspection amendment approved at: 2026-08-24T14:05:13Z
+Installer clean-reset amendment approved at: 2026-08-24T14:45:53Z
+Installer exact configure-retry amendment approved at: 2026-08-24T15:14:43Z
+Installer replacement configure-retry amendment approved at: 2026-08-24T15:23:28Z
+Installer readiness-polling amendment approved at: 2026-08-24T15:31:07Z
+Slophammer mutation-declaration amendment approved at: 2026-08-24T18:24:12Z
+Failed-Run replacement amendment approved at: 2026-08-25T22:29:22Z
+Admission-integrity repair amendment approved at: 2026-08-26T12:06:30Z
+GLM-5.3-Flash full-run amendment approved at: 2026-09-01T11:12:25Z
+GLM-5.3-Flash streaming-replacement amendment approved at: 2026-09-01T14:07:05Z
+Historical-Run continuation amendment approved at: 2026-09-01T18:11:42Z
+Historical-Run continuation worker-repair amendment approved at: 2026-09-01T22:13:57Z
+Historical-Run continuation successor-repair amendment approved at: 2026-09-02T07:03:36Z
+
+### OAuth callback repair and pull request (2026-09-08)
+
+Approved at: 2026-09-08T10:15:32.647433+00:00
+
+- The user approved repairing hosted OAuth callback diagnostics, removing sensitive
+  callback data from request logs, and correcting duplicate session responses.
+- Implement and test on a separate branch based on current upstream main; commit,
+  push that branch, and open a pull request against main after privacy checks.
+- Preserve the existing local checkout and its uncommitted changes. No merge,
+  deployment, credential transfer, resource change, or paid execution is approved.
+
+### Tactical fast-agent Workbench HF routing (2026-09-08)
+
+Approved at: 2026-09-08T15:06:25.990859+00:00
+
+- The user approved a tactical model-resolution repair and a separate pull request
+  against current main so Workbench can use fast-agent's native HF adapter.
+- Limit the change to reviewed recipe configuration, regression tests, and usage
+  documentation. Preserve shared run contracts, other harnesses, and cost controls.
+- The recipe may bind the already-injected inference credential to fast-agent's
+  process-local HF credential environment; never use or transfer the control token.
+- Local commits, branch publication, and a pull request are approved. No merge,
+  deployment, live credential movement, paid run, or infrastructure change is approved.
+- Arbitrary model-string inputs, aliases, and non-HF credential provisioning remain
+  separate work; this patch retains the existing Model/Provider form.
+
+### Fast-agent default pin update (2026-09-08)
+
+Approved at: 2026-09-08T16:26:50+01:00
+
+- The user approved updating the default Workbench fast-agent package to 0.10.20
+  in the existing tactical routing pull request, including tests and documentation.
+- Preserve the prior limits: no merge, deployment, credential transfer, or paid run.
+
+### Scope
+
+- Add the project-authorization skill and this repository-indexed project file through the normal contribution workflow.
+- Finish deployment and hard cutover of the hosted TypeScript control service described by the approved control-service plan.
+- Change hosted OAuth browser sessions to persist for 30 days, add regression coverage and documentation, and deploy the reviewed control-service revision.
+- Expose Harbor's native `n_concurrent_trials` in the overview preset form, use 64 as the default for all-task benchmark presets, bound the form to Harbor's supported range, and deploy the tested revision.
+- Install the retained purpose-scoped service credential as the control Space's `HF_TOKEN` control secret.
+- Run the hosted no-inference recovery and cutover canaries, plus only bounded paid canaries required by the approved plan.
+- Promote the verified historical migration and enable production writes only after every required gate passes.
+- Audit legacy consumers and unique objects before proposing any resource retirement.
+- Make the existing control Space publicly reachable only after adding and verifying application-layer protection for operator, browser, and worker routes.
+- Admit workers with short-lived, signed, campaign-scoped control capabilities.
+- Install a separate, regularly rotated, inference-only Hugging Face credential in the existing control Space and pass it only to reviewed benchmark workers as `HF_INFERENCE_TOKEN`.
+- Extend signed worker capabilities to exact Hugging Face Sandbox lifecycle operations performed by the control Space for an immutable campaign task.
+- Prepare and run the requested Terminal-Bench 3 campaign for the locked model in low adaptive-thinking mode after the bounded paid canary and launch-review gates pass.
+- Prepare and run Terminal-Bench 2.1 at revision `d49e28f1e4ddd13d289e85a5f312a66750951932` with `deepseek-ai/DeepSeek-V4-Flash-0731` at revision `7872f01b1d1fe23eabc4c98b48bffcef5a386062`, the reviewed Pi 0.84.2 worker, and high reasoning. The current approved campaign is a single-trial diagnostic run with one trial for each of the 89 tasks. The official five-trial protocol is outside the current run and needs a separate later decision.
+- Migrate the remaining active ShellBench result catalog, verify parity, replace the legacy results viewer, and perform the hard cutover without deleting legacy resources.
+- Create one private canonical `<artifact-bucket>` in the selected namespace because no existing canonical Bucket is available, then deploy the exact reviewed control-service revision to the existing canonical `<control-space>`.
+- Create one private canonical replacement `<control-space>` in the selected namespace because the previous Space no longer exists, then deploy the exact reviewed control-service revision with writes disabled.
+- Enable production writes on the hosted control Space so operators can submit any promoted-profile campaign, not only the built-in control-smoke canary.
+- Restart the failed no-inference control-smoke as an infrastructure replacement after protected public ingress.
+- Research the minimum permissions required by the local CLI control bearer token and update the README to describe the explicit `HARBOR_HF_CONTROL_BEARER_TOKEN` authentication flow accurately.
+- Add deterministic plan, apply, and verify npm commands for provisioning and adopting the canonical control Space and artifact Bucket, uploading an exact control release, configuring disabled-write deployment variables and required secrets safely, and verifying the hosted installation.
+- Run one controlled phase-one installer apply against the operator-selected existing bootstrap to capture the sanitized provider failure category or complete creation of its canonical private Bucket and local ownership receipt.
+- Diagnose and complete phase one for the operator-selected installer test bootstrap autonomously, using the active local write-capable Hugging Face credential for bounded plan/apply retries and direct Bucket probes.
+- Complete one bounded phase-two recovery for the operator-selected installer test bootstrap using its exact prior private plan and existing remote credential names.
+- Reset the operator-selected test bootstrap after confirming that its marked Space is absent and its remaining private Bucket is empty, then recreate phase one.
+- Complete one bounded source-staged retry after the operator installed both expected credential names interactively.
+- Diagnose and complete the operator-selected installer test bootstrap autonomously within its existing two-resource, free-hardware boundary.
+- Add guarded installer commands for canary activation, production promotion, and emergency write disablement.
+- Expand the README with an agent-oriented hosted-installation runbook and execution model that distinguishes the local npm installer, local Python operator CLI, hosted control service, reconciler, and remote workers.
+- Replace the implicit two-pass apply and installer canary workflow with explicit provision, configure, verify, activate, and emergency-disable commands. Activation enables the inspected installation without changing hardware, transferring credentials, or embedding benchmark, model, or harness names in runtime policy.
+- Fetch the canonical upstream default branch, preview and merge it into the current local topic branch, resolve any conflicts without discarding either side's intended behavior, and verify the integrated tree.
+- Fetch the latest canonical upstream default branch and merge it into local `tweaks`, preserving local commits, installer behavior, and reviewed security behavior. Resolve mechanical conflicts, run relevant and full validation plus the public-privacy check, and commit the verified merge locally.
+- Fetch the latest canonical upstream default branch for a third local integration cycle and merge it into `tweaks`, preserving local commits, installer behavior, and reviewed security hardening. Resolve mechanical conflicts, run relevant and full validation plus the public-privacy check, and commit the verified merge locally.
+- Repair the pull-request CI cadence test so it isolates scheduled Bucket synchronization from terminal worker-receipt safety synchronization. Run focused and full validation, commit the verified test repair locally, and push the resulting commits only to the tracked public `tweaks` branch.
+- Harden installer credential acceptance with a fresh exact-Bucket create/read-back probe before storing a proposed control credential, and make owner-only installer operation locks safely reclaimable after confirmed process death or host reboot.
+- Require exact non-mutating fine-grained scope attestation before storing a proposed control credential, make source-staged recovery stop on receipt/Space SHA drift without overwriting attested source, and remove credential checks that enumerate durable control records.
+- Remove installer credentials from advisory-lock subprocesses, make resources-only provisioning reject any bootstrap where configuration has started, and serialize verification with all per-target installer operations.
+- Require the existing non-mutating inference-only scope attestation before the installer persists an initial or replacement inference credential.
+- Bound installer Bucket probe HTTP exchanges by inactivity and streamed bytes, and reject state roots that resolve inside the source checkout before creating lock or state files.
+- Remove the redundant `--confirm-space` argument from installer activation and disablement while preserving exact target-bound plans and all existing preflight, verification, and rollback protections.
+- Use `HARBOR_HF_CONTROL_BEARER_TOKEN` directly for installer authenticated verification and activation instead of requiring the redundant `HARBOR_HF_INSTALL_VERIFY_BEARER` alias.
+- Merge the canonical upstream default branch locally while preserving the hardened installer, replace benchmark-specific web launch-policy routing with promoted-profile selection, and bound and redact streamed Harbor output before provider logs and evidence.
+- Accept the Endpoint-inference permission that the provider necessarily couples to Endpoint management on the fine-grained control credential. Report additional fine-grained grants as prominent installer warnings instead of blocking installation, and make credential failures distinguish missing required permissions from the fresh Bucket write/read-back proof.
+- Merge the latest canonical upstream default branch into the local `tweaks` branch, preserve the production installer and reviewed security boundaries while resolving conflicts, run the complete validation and public-privacy gates, and push the verified result only to the tracked public `origin/tweaks` branch.
+- Inspect the privately supplied exact installer-test `<control-space>`, its default-derived `<artifact-bucket>`, and matching owner-only local installer state. If both remote resources are absent, quarantine stale matching local state and create a fresh non-mutating plan using only the Space ID.
+- Delete the exact installer-test `<control-space>` only after revalidating that it is the private, paused, secret-free, `source_staged` Space bound to the matching owner-only receipt and that its default-derived Bucket is absent. Verify deletion, quarantine the matching local state, and create a fresh non-mutating default-Bucket plan using only the Space ID.
+- Run one exact `install:configure` retry for the existing installer-test `<control-space>` and `<artifact-bucket>` using the unchanged private plan, receipt, uploaded source, and existing credential names.
+- Run one replacement exact `install:configure` retry for the existing installer-test resources from the plan's sealed source revision, with the project uv environment selecting the sealed Hugging Face CLI version.
+- Add visible bounded Space-start and application-readiness polling to installer configuration, with exact retry conditions, sanitized progress, and fail-closed timeout rollback.
+- Disable Slophammer's Python mutation-declaration rule with a documented reason and remove its obsolete baseline finding while retaining optional manual mutation tooling.
+- Add a leaderboard snapshot in the existing canonical `<artifact-bucket>`: a configuration digest, mechanical eligibility, and a derived SQLite file of the rows shown on the board. Keep one Space and one Bucket.
+- Make the official leaderboard the Space default route and allow anonymous `GET /api/v1/leaderboard`. The current operator dashboard moves to `/overview` behind a "Run benchmark" button and Hugging Face login.
+- Integrate the requested dashboard harnesses as Harbor agent plugins behind the existing campaign path: OpenCode, Qwen Code, mini-swe-agent, Pi, Kimi Code, Hermes, Codex, OpenHands, OpenClaw, and Claude Code. Prove each with one Terminal-Bench 2.1 two-task canary. Reject a harness that needs a native API the locked Hugging Face router route cannot preserve.
+- Fix zero-token selection, fail-closed task exhaustion, campaign completion, publication commit safety, cooperative pause and resume, and append-only publication supersession. After the reviewed implementation is merged and deployed, run one fresh full 89-task Terminal-Bench 2.1 single-trial diagnostic campaign with worker concurrency eight to validate the rolling scheduler and produce a clean replacement publication.
+- Finish the active diagnostic campaign. Fix and deploy terminal Job reservation settlement, recover only unresolved tasks through isolated one-task Jobs, publish the complete result, and append the required supersession record.
+- Treat Harbor environment-setup failures as infrastructure, retry transient evidence-upload HTTP 500 responses, and keep an execution Job running after one task fails to upload evidence. Deploy that reviewed revision, then retry only eligible infrastructure failures on the existing gpt-oss OpenCode Terminal-Bench 2.1 single-trial campaign. Add a run-page control and CLI `--all-eligible` that call the existing per-task infrastructure retry path.
+- After the gpt-oss OpenCode 89-task single-trial diagnostic exists, run the same Terminal-Bench 2.1 one-trial diagnostic for the other Chat Completions harnesses that already have a two-task canary: Qwen Code, mini-swe-agent, Pi, Kimi Code, Hermes, OpenHands, and OpenClaw. Use `openai/gpt-oss-20b` on Together, reasoning off, publication role diagnostic, and the existing promoted profiles. Do not add a campaign for OpenCode. Reject Codex and Claude Code on this route because they need a native API the locked Chat Completions router cannot preserve.
+- Install Harbor from a pinned `harbor-framework/harbor` git commit instead of a PyPI release so new campaigns can evaluate harnesses as they land upstream. Remove the Harbor 0.21.0 empty-metrics sitecustomize workaround after that pin includes PR 2681. Deploy the reviewed revision. Existing campaign locks keep their Harbor pin.
+- Add FX as a Harbor agent plugin and promoted harness plus gpt-oss Together deployment so it appears in the launch list. Deploy the reviewed revision. Do not launch a campaign.
+- Finish one successful full Terminal-Bench 2.1 single-trial diagnostic for each existing gpt-oss Chat Completions 89-task run by inspecting that run and its Jobs, fixing the shared defects those Jobs expose, deploying the reviewed revision, and retrying only eligible infrastructure failures or unresolved tasks on those same campaigns. The existing FX 89-task row may be finished. Do not add a second 89-task campaign for a harness that already has one. Do not launch Codex or Claude Code.
+- Make the namespace Sandbox cap an operator setting with default 16, then set the live service to 128 so the existing 89-task diagnostics can start more Sandboxes at once. Campaign ceilings stay unchanged. Existing campaign locks keep their per-run `max_sandboxes` and worker concurrency.
+- Replace the Campaign concept with Run throughout source, contracts, durable records, API routes, CLI, web UI, tests, profiles, and documentation. Do not retain Campaign aliases or a compatibility API.
+- Replace nested Sandboxes with one Hugging Face Job per physical trial attempt. A trial records the ordered list of Jobs that attempted it and selects a result only from a valid attempt receipt. A failed Job may create a replacement only for an eligible infrastructure failure within the locked attempt and budget limits.
+- Remove logical-task pagination from the run detail and fix general control-Space responsiveness as part of the Run-native redesign.
+- Delete every run-derived object from the canonical Bucket, including run locks, actions, tasks, attempts, evidence, publications, normalized results, catalogs, and leaderboard snapshots. Preserve ACLs, profiles, promotions, capacity policy, canonical resources, and credentials.
+- After the redesigned service passes an unpaid control canary and a bounded paid task canary, launch fresh Terminal-Bench 2.1 single-trial runs for the Chat Completions harnesses with explicit launch authorization.
+- Harden worker retries across control-service projection rebuilds, delete only the seven fresh Runs whose final preparation Jobs failed on `control_not_ready`, and launch one replacement Run for each same authorized harness after the hardened path passes its canaries.
+- Repair the single detected Job admission-chain fork by deleting only its orphaned admission object, which has no dispatch, receipt, capacity release, advancement, or remote Job. Preserve its action intent and every other Run record. Add startup projection catch-up, deploy the reviewed revision, and restart the existing control Space.
+- Run one final Terminal-Bench 2.1 full evaluation with all 89 tasks and one trial per task, using the existing promoted GLM-5.3-Flash Together deployment and Pi 0.84.2 with reasoning off.
+- Cancel only the GLM-5.3-Flash plus Pi full Run invalidated by the pre-streaming inference bridge after its admitted Jobs reach evidence boundaries, then launch exactly one clean 89-task replacement using the fixed streaming worker.
+- Add one append-only execution-continuation attachment to each of the seven approved historical gpt-oss 89-task Runs so the current TypeScript control service can finish only their unresolved tasks without changing Run IDs or rerunning selected outcomes.
+- Add one immutable worker-repair attachment to each of those seven continuation records. Bind each repair to its original continuation and permit only the digest-pinned worker image and source revision to change. Preserve Run IDs, ceilings, prepared inputs, harness, model, provider and inference settings, evidence, and selected outcomes. Prove the repair with one unresolved OpenHands task before admitting the remaining work.
+- Add one immutable successor worker-repair attachment to each of those seven existing repairs after the first repair-aware worker exposed a cross-language continuation-digest defect. Bind each successor to the original continuation and prior repair digests, and permit only the digest-pinned worker image and source revision to change. Preserve every existing record, Run ID, ceiling, prepared input, harness, model, provider and inference setting, evidence item, and selected outcome. Prove the successor with the same unresolved OpenHands task before admitting the remaining work.
+
+### Limits
+
+- Deploy an exact merged source revision with writes disabled first.
+- Limit session retention to 30 days. Do not change OAuth providers, credentials, authorization roles, or persistent resources.
+- Limit concurrency work to the existing Harbor control path and Space. Do not launch a run, change benchmark or model identities, add resources, move credentials, or increase the approved campaign ceilings.
+- Use `cpu-upgrade` at USD 0.03 per active hour for the always-on control service.
+- Keep total project spend within USD 300. This includes campaign, recovery, provider and endpoint costs plus the control service.
+- For the next Terminal-Bench 2.1 production campaign, use the later explicitly approved USD 300 hard campaign ceiling. This campaign-specific amendment supersedes the preceding cumulative limit for that campaign only. Preserve and report all earlier spend separately.
+- Do not create another persistent Space, Bucket, repository, Dataset, schedule, credential beyond the approved inference credential, lease store, status store, backup store, or result store.
+- The 2026-08-20 amendment permits exactly one new private canonical `<artifact-bucket>` in the selected namespace. It does not permit another Space, Bucket, repository, Dataset, schedule, credential, or result store.
+- The later 2026-08-20 replacement amendment permits exactly one new private canonical `<control-space>` in the selected namespace. It does not permit an additional Space or any other persistent resource.
+- Do not rerun valid logical tasks or use inference during migration and publication recovery. The 2026-08-22 amendment permits one separate fresh 89-task diagnostic campaign after the validity fixes deploy; it does not reopen or retry the old campaign.
+- Keep credential values, private resource identifiers, operator paths, and private topology out of Git and browsers. Do not expose credentials in logs or evidence; the approved inference credential may appear only in the trusted worker or root-owned inference bridge environment.
+- Do not delete or retire a legacy resource without its completed private audit and a separate explicit approval for that resource.
+- Anonymous callers may reach static application assets, login initiation, OAuth return handling, health checks, and `GET /api/v1/leaderboard`. That leaderboard response is the official snapshot only: ranked rows and Pareto flags, no `sqlite_key`, no diagnostic catalogs, and no campaign internals. Campaigns, results, system, events, Jobs, profiles, audit, and all mutations remain deny-by-default.
+- Add bounded request-body and anonymous request-rate controls before changing Space visibility. If hosted denial, capability, or abuse-control verification fails, restore private visibility, disable writes, and stop.
+- Keep exactly two operator-managed Space secrets: the control credential `HF_TOKEN` and the inference-only `HF_INFERENCE_TOKEN`.
+- Workers must never receive `HF_TOKEN`. They may receive only `HF_INFERENCE_TOKEN`, whose permissions are limited to serverless and Endpoint inference calls.
+- Pin each worker image and command, enforce the locked model, route, token, request, concurrency, timeout, and cost limits in the worker bridge, and rotate the inference credential regularly. Revoke the prior credential only after every Job using it is terminal.
+- Bind every Sandbox operation to the immutable campaign lock, launch action, task, expiration, approved image, hardware, paths, transfer limits, timeouts, and budget. Record fenced lifecycle receipts and do not expose a general Hugging Face API proxy.
+- Keep `HF_TOKEN` in the control Space. Never pass it to a worker or Sandbox. The control Space may derive and use a per-Sandbox credential only inside its trusted process while handling an authorized lifecycle operation.
+- Keep the first Terminal-Bench canary below USD 5. Treat the full campaign as substantial paid compute: measure throughput and cost first, preserve durable partial evidence, prove pause and resume, and obtain explicit approval for the exact trial count, concurrency, hardware, and hard cost ceiling before launch.
+- For the approved Terminal-Bench 2.1 campaign, use one bounded representative canary and then continue without another conversational prompt only when the hosted control plane admits the measured worst-case cost for 89 tasks and five trials under the existing USD 300 total project limit. Count setup, canaries, retries, recovery, and cleanup. Allow only infrastructure replacements; never rerun a terminal semantic outcome.
+- Production writes admit any promoted-profile campaign through the existing control path. They do not raise the spend ceiling, add persistent resources, or authorize rerunning a terminal semantic outcome.
+- Limit the README authentication amendment to documentation and its authorization metadata. Do not push, open a pull request, deploy, spend, transfer or expose credentials, or change runtime behavior.
+- Limit the installer amendment to implementation, tests, and terse README pointers. Do not execute a remote apply, create or alter remote resources, move credentials, incur cost, push, or open a pull request. Preserve unrelated worktree and index changes.
+- Limit installer scope-and-source hardening to local implementation, tests, documentation, and commits. Do not use real credentials, run hosted probes or installer remote commands, mutate resources, activate writes, incur cost, push, or open a pull request.
+- Limit installer subprocess-and-phase hardening to local implementation, tests, documentation, and commits. Do not use real credentials, run installer remote commands, mutate hosted resources, activate writes, incur cost, push, or open a pull request.
+- Limit installer inference-scope hardening to local implementation, tests, documentation, and commits. Do not use real credentials, call hosted APIs, run installer remote commands, mutate resources, activate writes, incur cost, push, or open a pull request.
+- Limit installer probe-and-state-path hardening to local implementation, tests, documentation, and commits. Do not use real credentials, call hosted APIs, run installer remote commands, mutate resources, activate writes, incur cost, push, or open a pull request.
+- Limit installer redundant-confirmation removal to local implementation, tests, documentation, and commits. Do not use real credentials, call hosted APIs, run installer remote commands, mutate resources, activate or disable writes, incur cost, push, or open a pull request.
+- Limit installer bearer-variable simplification to local implementation, tests, documentation, and commits. Do not use real credentials, call hosted APIs, run installer remote commands, mutate resources, activate writes, incur cost, push, or open a pull request.
+- Limit the upstream safe integration to local merge resolution, bounded implementation fixes, generated artifacts, tests, documentation, and commits. Preserve both sides' intended general behavior, use no real credentials, call no hosted APIs, run no installer remote commands, mutate no resources, incur no cost, and do not push or open a pull request.
+- Limit the installer diagnostic apply to the existing protected, free-hardware bootstrap and its canonical private Bucket. Do not upload application source, prompt for or move service credentials, activate writes, create any other resource, incur paid compute, push, or open a pull request. Stop after the phase-one result or first failure.
+- Limit autonomous installer diagnosis to the selected protected, free-hardware test Space and its one empty private test Bucket. Direct probes may create and, when required for deterministic recovery, delete only that empty test Bucket. Do not upload application source, read or move service credentials, activate writes, use paid hardware, mutate unrelated resources, push, or open a pull request. Stop after phase one succeeds or a concrete provider defect is isolated.
+- Limit the phase-two recovery to re-uploading the exact previously planned source, adopting only the already-present expected secret names without reading or rewriting credential values, setting the installed phase, restarting on free hardware, and running verification with writes disabled. Create no resources, use no paid hardware, pause on failure, and do not push or open a pull request. This one recovery supersedes the earlier source-upload prohibition only for these exact actions.
+- Limit the empty-bootstrap reset to deleting the one verified-empty private test Bucket after rechecking that the marked Space remains absent, quarantining rather than deleting its stale owner-only local installer state, and running fresh plan plus phase-one apply for the same protected `cpu-basic` Space and private Bucket. Do not upload source, prompt for or move credentials, use paid hardware, push, or open a pull request. Stop after phase one succeeds or the first failure.
+- Limit the source-staged retry to adopting the already-present expected credential names without reading or rewriting values, re-uploading the exact saved source, setting the installed phase, restarting on free hardware, and running verification with writes disabled. Record only redacted command stages, pause on failure, create no resources, use no paid hardware, and do not push or open a pull request. Stop after success or the first failure.
+- Limit autonomous completion to the selected test Space and its existing private Bucket on `cpu-basic`, using the active local write-capable credential and the two already-installed expected secret names. Allow bounded status and log probes, exact-source uploads, managed-variable transitions, restarts, pauses, verification, and implementation fixes required to reach a verified installed state with writes disabled. Do not read, copy, replace, or expose credential values; create no additional resources; use no paid hardware; mutate no unrelated resource; and do not push or open a pull request.
+- Limit the activation-command amendment to implementation, tests, and documentation. Require exact installed bindings, authenticated system verification, explicit target confirmation, disabled-to-canary staging, evidence-gated canary-to-enabled promotion, explicit paid-hardware approval, fail-closed rollback, and emergency return to disabled writes. Do not activate or promote a hosted Space, change remote hardware, incur cost, move credentials, push, or open a pull request while implementing it.
+- Limit the installer-runbook amendment to public documentation and documentation checks. Use only placeholders, include explicit agent stop conditions, and do not run installer or hosted commands, handle credentials, mutate resources, spend, push, or open a pull request.
+- Limit the installer-lifecycle simplification to local implementation, tests, and documentation. Preserve fail-closed recovery and exact source/resource verification. Do not run installer commands against hosted resources, transfer credentials, change hardware, spend, push, or open a pull request.
+- Limit the upstream-merge amendment to local Git integration and verification. Inspect the complete merge diff and public metadata, preserve public privacy, and do not push, open a pull request, merge into the upstream default branch, mutate hosted resources, handle credentials, or incur cost.
+- Limit the second local upstream integration amendment to fetch, merge, mechanical conflict resolution, validation, privacy review, and local commits. Do not push, open a pull request, deploy, mutate hosted resources, move credentials, run inference, spend, force, reset, or rebase. Stop if integration requires a non-mechanical product or architecture decision.
+- Limit the third local upstream integration amendment to fetch, merge, mechanical conflict resolution, validation, privacy review, and local commits. Do not push, open a pull request, deploy, mutate hosted resources, move credentials, run inference, spend, force, reset, or rebase. Stop if integration requires a non-mechanical product or architecture decision.
+- Limit the CI cadence-test repair-and-push amendment to the diagnosed test isolation fix, validation, privacy review, local commits, and one normal push to the tracked public `tweaks` branch. Do not force-push, update the canonical upstream default branch, create or merge a pull request, rerun workflows through an API, deploy, mutate hosted resources, move credentials, run inference, or spend.
+- Limit the installer credential-and-lock hardening to local implementation, tests, and documentation. Probe objects must contain no credential-derived or operator-specific data and use one stable installer prefix. Lock records remain owner-only and local. Do not run hosted probes, installer commands, credential operations, push, or a pull request.
+- The configuration digest hashes benchmark identity, model identity, harness identity, trial count, reasoning effort, inference provider, and Harbor version from the campaign lock. It excludes worker revision, Job IDs, and cost.
+- Only `publication_role=final`, quality `clean`, fully scored campaigns enter the leaderboard snapshot. Diagnostic, cancelled, mixed, and policy-failed catalogs stay private candidate material.
+- Store each snapshot as an immutable SQLite object under the existing results prefix. Do not create another Bucket, Dataset, Space, or result service. Anonymous `GET /api/v1/leaderboard` is allowed and rate-limited separately from other anonymous API traffic. Result detail and publication click-through stay authenticated.
+- Keep the control credential fine-grained, owned by the selected user or organization namespace, and capable of the exact Bucket, Job, Endpoint-management, and provider-implied Endpoint-inference operations. Missing required permissions, the wrong namespace, a non-fine-grained credential, or a failed fresh Bucket write/read-back proof remain hard failures. Gated access, global grants, unrelated scoped entities, and additional permissions produce conspicuous non-blocking warnings. Never pass the control credential to a worker or use it for inference.
+- Limit the installer control-scope warning amendment to local implementation, tests, documentation, and commits. Do not inspect or transfer a real credential, run a hosted installer command or probe, mutate a hosted resource, activate writes, spend, push, or open a pull request.
+- Limit the upstream integration-and-push amendment to the fetched canonical upstream tip and the tracked public `origin/tweaks` branch. Inspect the complete diff and public metadata, preserve placeholders, and run the public privacy checker before every commit and the push. Do not push to the canonical upstream default branch, open or merge a pull request, handle credentials, run hosted installer or campaign commands, mutate hosted resources, or incur cost.
+- Limit the installer clean-start inspection to read-only metadata for the exact privately supplied target and its default-derived Bucket. Do not read credential values. If the Space exists or the Bucket is non-empty, stop without mutation. If only an empty Bucket remains, stop and request separate deletion approval. Quarantine matching local state only after both remote resources are proven absent, then run a fresh read-only plan. Do not provision, configure, transfer credentials, activate writes, spend, push, or open a pull request.
+- Limit the installer clean reset to deleting only the revalidated receipt-bound test Space; do not touch another Space, Bucket, or hosted resource. Require the default-derived Bucket to remain absent before and after deletion. Quarantine rather than delete the matching owner-only local state, then stop after reporting the fresh read-only plan. Do not provision, configure, transfer credentials, activate writes, use paid hardware, push, or open a pull request.
+- Limit the installer exact configure retry to one invocation against the existing receipt-bound test resources, using the unchanged private plan, source upload, and existing credential names. Do not replace or transfer credentials, create resources, change hardware, activate writes, spend, push, or open a pull request. Stop after sanitized success verification or the next sanitized failure.
+- Limit the installer replacement configure retry to one invocation from the exact plan-bound source revision with the project uv environment's exact sealed Hugging Face CLI version. Restore the authorization branch afterward. Keep all preceding no-replacement, no-transfer, no-new-resource, free-hardware, no-activation, no-push, and stop-after-result limits.
+- Limit the installer readiness-polling amendment to local implementation, tests, documentation, and commits. Do not inspect credentials, run hosted installer commands, mutate or deploy hosted resources, activate writes, spend, push, or open a pull request.
+- Limit the Slophammer mutation-declaration amendment to local configuration, baseline cleanup, validation, and commits. Keep the manual mutation workflow, dependency, tool configuration, and check script available on demand. Do not push, open a pull request, mutate hosted resources, or spend.
+- The harness-integration series uses `terminal-bench-2-1-canary`, `openai/gpt-oss-20b` on Together, reasoning off, and publication role diagnostic. Hard ceiling USD 80 for the whole series, including retries. This does not authorize the 89-task diagnostic or the official five-trial protocol.
+- Keep real observed cost for the active diagnostic campaign at or below USD 100 during this recovery. Preserve its locked worker, model, benchmark, provider, hardware, task inputs, timeouts, concurrency, trial count, and attempt limit. Use no new persistent resource or credential.
+- The 2026-08-22 infrastructure-retry amendment does not raise any campaign ceiling. Retries stay inside the locked ceiling of that existing campaign. Do not reopen `complete`, agent, verifier, policy, refusal, semantic, cancelled, or benchmark-timeout outcomes. Do not rerun a scored miss.
+- The 2026-08-22 harness 89-task diagnostic amendment authorizes seven new campaigns. Each campaign uses the same hard ceiling as the existing gpt-oss OpenCode 89-task run: USD 10.60 (`10600000` micro-USD), which is twice the diagnostic reservation. Combined hard cap for those seven campaigns is USD 74.20, including infrastructure retries. This does not reopen the OpenCode 89-task campaign, does not authorize Codex or Claude Code, and does not authorize the official five-trial protocol.
+- The 2026-08-23 Harbor-from-source amendment pins an exact Harbor git commit. It does not float on a branch, add a persistent resource or credential, relaunch a campaign, or raise any spend ceiling. `harbor_version` stays the version that commit reports so preparation admission still matches.
+- The 2026-08-23 FX harness amendment does not authorize a canary, 89-task diagnostic, official five-trial run, new persistent resource, or credential. It only adds the harness to the existing campaign path and deploys the reviewed revision.
+- The later 2026-08-23 harness full-run repair amendment does not raise any campaign ceiling and does not add a persistent resource or credential. Retries stay inside each existing campaign's locked ceiling. The seven-campaign combined cap remains USD 74.20. The existing FX 89-task row stays inside its locked ceiling. Do not reopen sealed semantic, agent, verifier, policy, refusal, cancelled, or benchmark-timeout outcomes. Do not launch a second 89-task campaign for a harness that already has one.
+- The 2026-08-23 Sandbox-parallelism amendment raises only the shared namespace Sandbox cap from 16 to 128. It does not raise a campaign ceiling, add a persistent resource, or change a locked campaign. Sandbox hardware cost still counts against each campaign's existing ceiling.
+- The 2026-08-24 Run-native reset amendment authorizes irreversible deletion only for run-derived objects under a reviewed exact-prefix allowlist. It does not authorize deleting ACLs, profiles, promotions, capacity policy, the canonical Space or Bucket, credentials, or unrelated objects.
+- The Run-native path has no Sandbox lifecycle and no Campaign compatibility writer, reader, route, field, alias, or UI label. Existing run data is deleted instead of migrated.
+- Replacement Jobs remain limited to explicit infrastructure failures, the locked physical-attempt count, the run ceiling, and the previously approved aggregate ceilings. Semantic, agent, verifier, policy, refusal, cancelled, benchmark-timeout, and scored outcomes remain terminal.
+- Fresh runs start only after the exact deployed revision passes the unpaid control canary and bounded paid task canary. FX, Codex, and Claude Code remain excluded from fresh launch without a separate amendment.
+- The 2026-08-25 failed-Run replacement amendment permits targeted deletion and replacement only for the seven fresh Runs invalidated by `control_not_ready` during the control deployment. Preserve every unrelated Run and retained control object. Keep the same profiles, USD 10.60 per-Run ceiling, USD 74.20 aggregate ceiling, and excluded harnesses. Do not rerun any scored or semantic outcome.
+- The 2026-08-26 admission-integrity repair amendment permits deletion of exactly one orphaned Job admission object and no other object. It adds no compatibility path, persistent resource, credential, Run, retry, or ceiling increase.
+- The 2026-09-01 GLM-5.3-Flash amendment permits exactly one new full Run with a USD 18 hard ceiling, at most 16 active trial Jobs, and at most two physical attempts per task. These bounds come from the checked-in `tb21-full-glm-standard` launch policy. The measured estimate is USD 2.052029 from its published two-task canary, as recorded in the full-matrix plan. Do not launch another matrix cell, create a persistent resource or credential, or rerun a valid logical task.
+- The 2026-09-01 streaming-replacement amendment classifies every outcome from the first GLM-5.3-Flash plus Pi full Run as invalid because its immutable worker buffered streaming provider responses until completion. It permits cancelling only that paused Run and launching one clean full replacement with a new USD 18 hard ceiling, at most 16 active trial Jobs, and at most two physical attempts per task. It explicitly permits the replacement to rerun those invalidated tasks. Do not resume the invalidated Run, launch another matrix cell, create a persistent resource or credential, or alter any other Run.
+- The 2026-09-01 historical-Run continuation amendment permits one immutable attachment per approved historical Run. The attachment must preserve the original lock, Run ID, task IDs, selected outcomes, attempt and evidence history, observed cost, ceiling, model, benchmark, harness, provider, and trial identity. It may bind only a reviewed current deployment and worker contract that matches those identities. It may admit only tasks without a valid selected receipt. It creates no replacement Run, persistent resource, credential, budget reset, selected-task retry, deletion, or compatibility writer outside the TypeScript control service. The seven USD 10.60 per-Run ceilings and USD 74.20 aggregate ceiling remain unchanged.
+- The 2026-09-02 successor-repair amendment permits exactly one append-only successor for each of the seven existing continuation worker repairs. Each successor must bind to the original continuation and prior repair digests and may change only the digest-pinned worker image and worker source revision. It does not permit another successor, replacement Run, persistent resource, credential, ceiling increase, prepared-input change, configuration change, evidence mutation, selected-outcome retry, deletion, or overwrite.
+
+### Remaining gates
+
+No project-scope amendment remains pending. Operational gates still apply:
+
+- Do not retire the legacy results viewer or stores until catalog parity is verified. No deletion is authorized.
+- Keep each substantial paid campaign behind its measured launch review and exact enforced cost ceiling.
+- Keep the harness-integration canary series inside the USD 80 hard ceiling. Reject a harness that needs a native API the locked router route cannot preserve.
+- Keep the seven gpt-oss 89-task harness diagnostics inside USD 10.60 each and USD 74.20 combined.
+- Finish those existing 89-task rows, plus the existing OpenCode and FX 89-task rows, without a second campaign for the same harness.
+- Attach and resume a historical Run only after deterministic replay and selection-preservation tests pass and that harness's reviewed worker passes its bounded canary.
+- Admit remaining historical work only after the successor repair passes the same unresolved OpenHands task with valid evidence and nonzero provider token usage.
+- Keep the approved GLM-5.3-Flash Together plus Pi replacement inside its USD 18 immutable ceiling and the rollout plan's 16-Job physical concurrency limit. Do not resume the invalidated first Run.
+
+## Approval history
+
+### 2026-09-12 — Built-in inference review and merge amendment
+
+- Approved directly: fix the misleading built-in inference-review message in
+  the existing PR, validate and review it, push updates, and merge the exact
+  reviewed head only after CI passes. No deployment or live credential action.
+
+
+### 2026-09-12 — Results browsing publication request
+
+- Pending clarification/approval: integrate main into the feature branch,
+  revalidate, push and open a PR; no PR merge, deployment or run execution.
+- Subsequently approved directly: prepare the recent changes as a PR and get
+  ready to deploy. Main integration, branch publication, PR and read-only
+  deployment preparation are approved; actual PR merge/cutover remains gated.
+
+
+### 2026-09-12 — Results browsing follow-up
+
+- Approved directly: local reasoning display, combined score/token browsing,
+  missing-cost item counts, evidence-preserving performance investigation,
+  validation, documentation and local commits. No remote mutation or release.
+- Completed locally with independent review, full validation and documented
+  evidence/freshness limits. No release, run mutation or paid work performed.
+
+
+### 2026-09-11 — Active control release verified
+
+Completed at: 2026-09-11T17:00:33Z
+
+- Deployed reviewed source `ec1020c77cd3c159c91b7d1d68639317fb133c32`
+  with its verified immutable worker image to the existing private control
+  Space. Restored the prior enabled write mode after disabled-mode verification.
+- Verified release manifest and runtime provenance, readiness and liveness,
+  operator authentication, presets, rebuilt projection, current console assets,
+  live progress, and build/runtime logs. The existing parent was adopted after
+  reconciliation without replacement; benchmark progress continued.
+- No benchmark control action, credential movement, new persistent resource,
+  task-image rebuild, or concurrent Workbench implementation publication occurred.
+- This release scope is complete. Separate approved local Workbench work remains
+  open and its working edits are preserved.
+
+
+### 2026-09-11 — Active execution cutover approval
+
+- Approved proceeding with the matched control release while existing
+  benchmark Jobs remain in flight, without stopping or replacing them.
+  Scope and operational limits are recorded above.
+
+
+
+### 2026-09-11 — Combined PR and deployment approval
+
+- Approved including the six other local commits in PR #218 and rebuilding the
+  parent worker; the earlier direct request also approved merge and deployment
+  to the privately identified existing control Space. Scope and limits above
+  supersede the earlier no-merge/no-deployment limits for this release only.
+
+
+### 2026-09-11 — Local storage PR prepared
+
+- Completed this branch's approved implementation and PR-preparation scope in
+  draft PR #218: https://github.com/huggingface/harbor-hf/pull/218.
+- Disclosed validation limitations and runtime risks in the PR. Publication
+  excludes unrelated dashboard edits. No merge, deployment, paid Job, remote
+  canary, credential movement, or upstream publication was performed.
+
+
+### 2026-09-11 — Local storage implementation and PR validation
+
+- Implemented the approved local parent filesystem, acknowledged Bucket copies,
+  pinned pre-END native scrub invocation, live native metadata and receipts,
+  and final result-last publication. No remote benchmark or deployment ran.
+- Snapshot reads share Harbor's native completion lock. Failed retry-enabled
+  trial results are withheld until the settled final copy; no retry loop or
+  completion schema was added. The unsanitized global job log is not uploaded.
+- Isolated validation passed root Ruff/format/ty, 102 CLI tests at 89.10%
+  coverage, 321 agent tests, changed agent modules at 91.44% coverage, 1,450
+  TypeScript tests, 73 browser tests, generated-contract checks, dependency
+  audits, both linux/amd64 Docker builds, and an offline Python 3.12 binding
+  smoke check. Normal Slophammer and DRY checks passed.
+- Prepare a draft PR: package-wide agent coverage is 71.84%, below the 85%
+  target, and the requested Slophammer baseline file is absent. No validation
+  threshold was reduced and no baseline file was generated to hide findings.
+- Unrelated concurrent dashboard work was excluded from the isolated change.
+
+### 2026-09-11 — Native sanitization ordering
+
+- Approved invoking the pinned native scrubber before END callbacks, retaining
+  Harbor's final scrub, and preserving per-trial monitoring and persistence.
+- This replaces the interim end-of-run-only simplification. The exact revision,
+  tests, removal condition, and publication limits are recorded above.
+
+### 2026-09-11 — Local parent storage PR
+
+- Approved implementing and preparing one pull request for the local-parent
+  storage change, including commits and branch push after privacy review.
+
+### 2026-09-11 — Local parent storage
+
+- Approved local implementation, tests, documentation, and the authorization
+  commit for local Harbor execution with per-trial and final Bucket uploads.
+- Accepted the risks and limits recorded in the current authorization above.
+
+### 2026-08-17
+
+- Approved the current scope and limits before the remaining project work starts.
+- Directed the project to keep one authorization file indexed by canonical repository slug and to record approvals here.
+- At 2026-08-17T09:13:49Z, approved protected public ingress for the existing control Space so workers can use short-lived capabilities without receiving a persistent Hugging Face credential.
+- At 2026-08-17T13:30:03Z, requested an additional decision on capability-scoped inference and sandbox lifecycle operations plus the remaining legacy result-catalog migration.
+- At 2026-08-17T15:37:46Z, approved replacing the proposed inference gateway with a separate inference-only credential passed to reviewed workers and rotated regularly. The broader control credential remains confined to the control Space. Sandbox lifecycle operations and remaining result-catalog migration remained pending.
+- At 2026-08-17T18:39:15Z, authorized finalizing the project, including capability-scoped Sandbox lifecycle operations and the requested Terminal-Bench 3 low-thinking campaign. The full paid campaign remains subject to the mandatory measured-cost launch approval. Remaining result-catalog migration was still pending.
+
+### 2026-08-18
+
+- At 2026-08-18T00:25:01Z, approved all remaining project work needed for autonomous finalization, including result-catalog migration and viewer replacement. This did not authorize deleting legacy resources or bypassing the measured substantial paid-compute gate.
+- At 2026-08-18T10:40:26Z, directed the project to run DeepSeek V4 Flash on Terminal-Bench 2.1 autonomously while separate web UI work proceeds. The campaign uses the existing enforced total project limit and does not authorize a new credential, persistent store, or unreviewed runtime.
+- At 2026-08-18T17:20:36Z, set a USD 300 hard ceiling for the next Terminal-Bench 2.1 production campaign. This later campaign-specific limit supersedes the earlier cumulative USD 300 limit for that campaign only; earlier spend remains part of the reported project cost.
+
+### 2026-08-19
+
+- At 2026-08-19T20:34:26Z, approved creating a local `<topic-branch>`, researching the permissions required by the local CLI control bearer token, correcting the README authentication instructions, and committing the authorization and documentation changes. No push, pull request, deployment, credential handling, paid resource, or runtime change is authorized.
+- At 2026-08-19T21:19:35Z, approved implementing deterministic npm plan, apply, and verify commands for a canonical protected control Space and private artifact Bucket, with exact release upload, disabled initial writes, safe secret handling, fail-closed adoption, focused tests, and terse README pointers. Running remote apply, creating or changing remote resources, handling real credentials, spending, pushing, and opening a pull request remain unauthorized.
+- Approved expanding the terse installer pointers into an agent-oriented high-level installation and execution-model runbook. This amendment is documentation-only and does not authorize running installer commands, hosted mutations, credentials, spending, push, or a pull request.
+- Approved replacing implicit two-pass apply with explicit provision and configure phases, replacing installer canary activation with direct operator-confirmed activation of the inspected installation, adding a separate emergency disable command, and removing name-based canary policy. Activation must not change hardware or incur cost. No hosted mutation, credential handling, push, or pull request is authorized.
+- Approved fetching and locally merging the canonical upstream default branch into the current topic branch, including bounded conflict resolution and verification. No push, pull request, hosted mutation, credential handling, or spend is authorized.
+- Approved fetching and locally merging the configured canonical upstream default branch into `tweaks`, resolving conflicts without discarding existing local commits or reviewed security behavior, running relevant validation and the public-privacy check, and committing the verified integration locally. No push, pull request, deployment, hosted mutation, credential movement, force operation, rebase, reset, inference, or spend is authorized; stop for a product or architecture decision that cannot be resolved mechanically.
+- Approved a new fetch and local merge of the latest configured canonical upstream default branch into `tweaks`, preserving local commits, installer behavior, and reviewed security behavior. Run relevant and full validation and the public-privacy check, then commit locally. No push, pull request, deployment, hosted mutation, credential movement, inference, spend, force operation, reset, or rebase is authorized; stop for a non-mechanical product or architecture decision.
+- Approved a third fetch and local merge of the latest configured canonical upstream default branch into `tweaks`, preserving local commits, installer behavior, and reviewed security hardening. Run relevant and full validation and the public-privacy check, then commit locally. No push, pull request, deployment, hosted mutation, credential movement, inference, spend, force operation, reset, or rebase is authorized; stop for a non-mechanical product or architecture decision.
+- Approved repairing the diagnosed pull-request CI cadence test so it observes only scheduled Bucket synchronization, running focused and full validation plus the public-privacy check, committing the verified repair, and pushing the resulting commits only to the tracked public `tweaks` branch. No force-push, canonical-upstream update, pull-request mutation, workflow-rerun API call, deployment, hosted resource mutation, credential movement, inference, or spend is authorized.
+- Approved requiring a fresh Bucket create/read-back capability probe before accepting a proposed control credential and safely reclaiming valid owner-only installer locks after confirmed process death or reboot. This is local implementation and test authorization only; no real credential or hosted probe is authorized.
+- Approved strict non-mutating fine-grained control-credential scope attestation, fail-closed receipt/Space source-SHA recovery, removal of recursive durable-record listing during credential checks, focused tests, documentation, and local commits. No real credential, hosted probe, installer remote command, resource mutation, activation, spend, push, or pull request is authorized.
+- Approved sanitizing advisory-lock subprocess environments, exact resources-only phase-one revalidation, per-target verification locking, focused tests, documentation, and local commits. No real credential, installer remote command, hosted mutation, activation, spend, push, or pull request is authorized.
+- Approved reusing the existing bounded inference-only token-scope attestation before initial or replacement installer secret persistence, with focused tests, documentation, and local commits. No real credential, hosted API call, installer remote command, resource mutation, activation, spend, push, or pull request is authorized.
+- Approved progress-resetting inactivity and streamed-byte bounds for Bucket probe requests plus realpath-aware preflight rejection of checkout-contained state roots before file creation, with focused tests, documentation, and local commits. No real credential, hosted API call, installer remote command, resource mutation, activation, spend, push, or pull request is authorized.
+- Approved removing the redundant `--confirm-space` argument from both activation and disablement, leaving the exact target-bound `--space` argument and all substantive safety checks intact. This is local implementation, tests, documentation, and commit authorization only; no hosted command, credential handling, resource mutation, activation, disablement, spend, push, or pull request is authorized.
+- Approved replacing the installer-only `HARBOR_HF_INSTALL_VERIFY_BEARER` alias with direct use of `HARBOR_HF_CONTROL_BEARER_TOKEN` for authenticated verification and activation. Keep authenticated activation verification mandatory. This is local implementation, tests, documentation, and commit authorization only; no real credential, hosted command, resource mutation, activation, spend, push, or pull request is authorized.
+- Approved locally merging the canonical upstream default branch with bounded fixes required for safe integration: keep the short web launcher but select launch policies from promoted profile data, preserve the hardened installer in the Space build, and redact and bound streamed Harbor output before logging or evidence capture. Resolve authorization history additively, regenerate contracts, run full validation, and commit locally only. No hosted mutation, credential handling, spend, push, or pull request is authorized.
+
+### 2026-08-20
+
+- At 2026-08-20T13:53:14Z, approved creating one private canonical `<artifact-bucket>` in the selected namespace and connecting the existing canonical `<control-space>` to it. No additional persistent resource or paid campaign was approved.
+- At 2026-08-20T14:01:49Z, approved creating one private canonical replacement `<control-space>` in the selected namespace because the previous Space no longer exists, then deploying the reviewed control service with writes disabled. No additional persistent resource or paid campaign was approved.
+- At 2026-08-20T14:07:53Z, explicitly directed the agent to run one controlled installer apply against the existing operator-selected phase-one bootstrap. This authorizes only reasserting its protected, stopped, free-hardware state and attempting creation of its canonical private Bucket and local proof receipt. Source upload, service-secret handling, activation, paid resources, additional resources, push, and pull request remain unauthorized.
+- At 2026-08-20T14:25:07Z, directed the agent to run installer commands and iterate on diagnostics autonomously using the active local write-capable Hugging Face credential. This authorizes bounded plan/apply retries and direct probes against only the selected test bootstrap, including creation and cleanup of its empty private test Bucket when required. Source upload, service-secret handling, activation, paid resources, unrelated mutations, push, and pull request remain unauthorized.
+- At 2026-08-20T15:26:21Z, authorized one bounded phase-two recovery against the operator-selected test bootstrap using the active local write-capable credential. The recovery may re-upload the exact prior source, adopt the existing expected secret names without reading or rewriting values, set the installed phase, restart on free hardware, and verify with writes disabled. It may not create resources, use paid hardware, push, or open a pull request, and must pause on failure.
+- At 2026-08-20T15:37:03Z, authorized deleting the verified-empty private test Bucket, quarantining its stale local installer state, and running fresh plan plus phase-one apply to recreate the same protected free-hardware test Space and private Bucket. Source upload, credential prompting or movement, paid hardware, push, and pull request remain unauthorized.
+- At 2026-08-20T17:29:22Z, directed the agent to continue after the operator's interactive phase-two apply left the bootstrap safely source-staged with both expected credential names. This authorizes one bounded retry that adopts those names without reading or rewriting values, re-uploads the exact saved source, sets the installed phase, restarts on free hardware, verifies with writes disabled, and pauses on failure. No resource creation, paid hardware, push, or pull request is authorized.
+- At 2026-08-20T17:38:24Z, authorized the agent to take the bounded actions needed to get the selected test bootstrap running. This authorizes autonomous diagnosis, implementation fixes, and remote retries only for its existing protected `cpu-basic` Space and private Bucket, with exact source, disabled writes, and existing secret names. Credential values must not be read, copied, replaced, or exposed; no additional or paid resource, unrelated mutation, push, or pull request is authorized.
+- At 2026-08-20T19:07:58Z, requested guarded activation support. This authorizes implementing and testing explicit disabled-to-canary activation, evidence-gated canary-to-enabled production promotion with separately approved paid hardware, and emergency write disablement. It does not authorize applying those transitions remotely, changing hosted hardware, spending, moving credentials, pushing, or opening a pull request.
+
+- At 2026-08-20T19:21:55Z, replaced the current five-trial campaign request with a single-trial diagnostic run of all 89 Terminal-Bench 2.1 tasks. The exact benchmark, model, revisions, Pi version, high reasoning, provider route, hardware class, authorization boundaries, and USD 300 hard ceiling remain unchanged. The result must be labeled diagnostic and must not be used as an official five-trial result.
+
+### 2026-08-21
+
+- At 2026-08-21T10:31:00Z, approved enabling production writes on the hosted control Space and launching campaigns beyond the built-in control-smoke canary. This does not authorize a new persistent resource, credential, or bypass of the measured substantial paid-compute gate. Existing cost, inventory, credential, and semantic-outcome limits remain.
+- At 2026-08-21T20:06:00Z, approved a derived leaderboard SQLite snapshot in the canonical `<artifact-bucket>`. The configuration digest includes trial count, reasoning, provider, and Harbor version. Only final, clean, fully scored campaigns appear. No second persistent resource and no anonymous leaderboard API in this amendment.
+- At 2026-08-21T23:56:40Z, approved allowing the provider-implied Endpoint-inference permission on the fine-grained control credential and changing additional fine-grained grants from blockers into prominent installer warnings. Missing required permissions, wrong ownership, non-fine-grained credentials, and failed Bucket write proof remain blockers. This amendment authorizes local implementation, tests, documentation, and commits only.
+
+### 2026-08-22
+
+- At 2026-08-21T23:01:07Z, approved integrating the requested dashboard harnesses as Harbor agent plugins and proving each with one Terminal-Bench 2.1 two-task canary. Requested harnesses: OpenCode, Qwen Code, mini-swe-agent, Pi, Kimi Code, Hermes, Codex, OpenHands, OpenClaw, Claude Code. Use the existing `terminal-bench-2-1-canary` task pair, `openai/gpt-oss-20b` on Together through Inference Providers, reasoning off, publication role diagnostic. Keep one Space and one Bucket. Do not add a credential. Reject a harness that needs a native API the locked HF router route cannot preserve. Hard ceiling USD 80 for the whole canary series, including retries. This does not authorize the 89-task diagnostic or the official five-trial protocol.
+- At 2026-08-22T07:33:41Z, approved merging the Sandbox admission work, implementing and merging the valid-result and pause-resume fixes, deploying the reviewed control service, and running one new full 89-task Terminal-Bench 2.1 single-trial diagnostic campaign from scratch with worker concurrency eight. The existing USD 300 hard campaign ceiling applies only after the updated launch review and control admission gates pass. The old campaign and publication remain immutable; append-only supersession may occur only after the new publication validates. No new persistent resource, credential, model promotion, or official five-trial claim is authorized.
+- At 2026-08-22T12:09:50Z, approved making the official leaderboard the Space default route and allowing anonymous `GET /api/v1/leaderboard`. The operator dashboard moves to `/overview` behind a "Run benchmark" button and login. Campaigns, results, system, events, and mutations stay authenticated. Result click-through requires login. No new Space, Bucket, Dataset, or credential.
+- At 2026-08-22T21:19:00Z, approved classifying Harbor environment-setup failures as infrastructure, retrying evidence-upload HTTP 500 responses, keeping an execution Job running after one upload failure, adding a run-page and CLI batch of existing infrastructure retries, deploying the reviewed revision, and retrying only eligible infrastructure tasks on the existing gpt-oss OpenCode 89-task campaign. Spend stays inside that campaign's locked ceiling. Sealed semantic, agent, verifier, policy, refusal, cancelled, and timeout outcomes stay sealed.
+- At 2026-08-22T23:31:00Z, approved one new 89-task Terminal-Bench 2.1 single-trial diagnostic for each remaining Chat Completions harness that already has a two-task canary: Qwen Code, mini-swe-agent, Pi, Kimi Code, Hermes, OpenHands, and OpenClaw. Same model, provider, reasoning, publication role, and USD 10.60 campaign ceiling as the existing gpt-oss OpenCode 89-task run. Combined cap USD 74.20. OpenCode is not relaunched. Codex and Claude Code stay rejected on this route.
+
+### 2026-08-23
+
+- At 2026-08-23T04:30:39+08:00, approved all work needed to finish the active diagnostic campaign without a workflow. This includes fixing, testing, reviewing, committing, pushing, merging, and deploying terminal Job reservation settlement; using the fixed control revision for the campaign; recovering unresolved tasks through isolated one-task Jobs; publishing the complete result; and appending its supersession record. Keep real observed recovery cost at or below USD 100 and preserve the locked execution contract.
+- At 2026-08-23T07:20:00Z, approved installing Harbor from a pinned `harbor-framework/harbor` git commit instead of PyPI, removing the empty-metrics sitecustomize workaround when that pin includes PR 2681, and deploying the reviewed revision. Existing campaign locks stay on their locked Harbor pin. No new persistent resource, credential, or campaign launch.
+- At 2026-08-23T07:40:00Z, approved adding FX to the available harness list as a Harbor agent plugin with a gpt-oss Together deployment, then committing and deploying the reviewed revision. No campaign launch, persistent resource, or credential.
+- At 2026-08-23T08:21:00Z, approved inspecting each existing gpt-oss 89-task diagnostic, fixing the defects those Jobs expose, deploying the reviewed revision, and retrying eligible infrastructure failures or unresolved tasks on those same campaigns so each of those harnesses can finish one full run. The already-started FX 89-task row may be finished. No second campaign for a harness that already has an 89-task row. No Codex or Claude Code. No ceiling increase.
+- At 2026-08-23T09:01:00Z, approved making the namespace Sandbox cap configurable with default 16 and setting the live service to 128 so the existing 89-task diagnostics can evaluate faster. Campaign ceilings, inventory, and locked per-run Sandbox and worker limits stay unchanged.
+
+### 2026-08-24
+
+- At 2026-08-24T09:08:00Z, approved replacing Campaign with Run everywhere without compatibility aliases, replacing nested Sandboxes with one Hugging Face Job per physical trial attempt, removing logical-task pagination, and improving control-Space responsiveness.
+- Approved deleting all run-derived Bucket data and starting over while preserving ACLs, profiles, promotions, capacity policy, canonical resources, and credentials.
+- Approved bounded infrastructure-only replacement Jobs. After the new path passes its unpaid and bounded paid canaries, approved fresh single-trial runs for explicitly authorized Chat Completions harnesses. FX, Codex, and Claude Code remain excluded.
+- At 2026-08-24T09:14:01Z, approved merging the fetched canonical upstream default branch into `tweaks`, resolving conflicts without discarding the installer or reviewed security behavior, running full validation and privacy checks, and pushing only the verified result to the tracked public `origin/tweaks` branch. No pull request, upstream-default-branch update, hosted mutation, credential handling, inference, or spend is authorized.
+- At 2026-08-24T14:05:13Z, approved a clean-start inspection for the exact installer-test Space supplied privately, its default-derived Bucket, and matching local installer state. If both remote resources are absent, stale local state may be quarantined before a fresh non-mutating plan. An existing Space, non-empty Bucket, or lone empty Bucket remains a stop condition pending review or separate deletion approval. No credential-value access, provisioning, configuration, activation, spend, push, or pull request is authorized.
+- At 2026-08-24T14:45:53Z, approved deleting the exact private, paused, secret-free, `source_staged` installer-test Space after its receipt binding and absent default Bucket are revalidated, touching no other remote resource. After verified deletion, quarantine the matching owner-only local state and run a fresh non-mutating plan using only the Space ID. Stop after reporting the plan; do not provision, configure, transfer credentials, activate writes, spend, push, or open a pull request.
+- At 2026-08-24T15:14:43Z, approved one exact `install:configure` retry against the existing installer-test `<control-space>` and `<artifact-bucket>` using the unchanged private plan, receipt, source upload, and existing credential names. Do not replace or transfer credentials, create resources, use paid hardware, activate writes, push, or open a pull request. Stop after sanitized success verification or the next sanitized failure.
+- At 2026-08-24T15:23:28Z, approved one replacement exact `install:configure` retry against the same existing installer-test resources, using the unchanged private plan, receipt, source upload, and credential names, with the plan's sealed source revision and the project uv environment's exact sealed Hugging Face CLI version. Do not replace or transfer credentials, create resources, use paid hardware, activate writes, push, or open a pull request. Restore the authorization branch and stop after sanitized success verification or the next sanitized failure.
+- At 2026-08-24T15:31:07Z, approved local implementation, tests, documentation, and commits for visible bounded Space-start and application-readiness polling during installer configuration. Retry only exact reviewed startup states, report sanitized progress, and preserve fail-closed rollback. Do not run hosted installer commands, deploy, activate, spend, push, or open a pull request.
+- At 2026-08-24T18:24:12Z, approved disabling Slophammer's Python mutation-declaration rule with a documented reason and removing its obsolete baseline finding. Keep the manual mutation workflow and local mutation tooling available on demand. Limit work to local configuration, validation, and commits; do not push, deploy, mutate hosted resources, or spend.
+
+### 2026-08-25
+
+- At 2026-08-25T22:29:22Z, approved hardening worker retries across control-service rebuilds, deleting only the seven fresh Run-derived prefixes invalidated when their final preparation Jobs received `control_not_ready`, and launching one replacement Run for each same authorized harness. Existing profiles and ceilings remain unchanged. OpenCode, FX, Codex, and Claude Code remain excluded.
+
+### 2026-08-26
+
+- At 2026-08-26T12:06:30Z, approved removing the old orphaned admission behind the single detected integrity fork, fixing startup replay without backward compatibility, and restarting the existing control Space. The repair deletes only the admission object that never dispatched or created a remote Job and preserves every other durable record.
+
+### 2026-09-01
+
+- At 2026-09-01T11:12:25Z, approved one full 89-task, single-trial Terminal-Bench 2.1 Run with GLM-5.3-Flash through Together and Pi 0.84.2 reasoning off. The selected launch option fixes the hard ceiling at USD 18 and uses the existing profile limits of 16 active trial Jobs and two physical attempts per task.
+- At 2026-09-01T14:07:05Z, approved cancelling only the paused GLM-5.3-Flash plus Pi Run invalidated by the pre-streaming inference bridge and launching one clean 89-task replacement on the fixed streaming worker. The replacement has a new USD 18 hard ceiling, at most 16 active trial Jobs, and at most two physical attempts per task. Outcomes from the invalidated Run may be rerun only in this replacement.
+- At 2026-09-01T18:11:42Z, approved a narrow continuation mechanism for the seven historical gpt-oss full Runs that the current service cannot resume. Each Run may receive one append-only current execution attachment after local verification and its harness canary. The same Run then schedules only unresolved tasks, retains all selected outcomes and costs, and remains inside its existing ceiling. No replacement Run, selected-task retry, deletion, resource, credential, or budget increase is authorized.
+
+### 2026-09-02
+
+- At 2026-09-02T07:03:36Z, approved one immutable successor worker-repair attachment for each of the seven existing continuation repairs after the first repair-aware worker exposed a cross-language continuation-digest defect. Each successor binds to the original continuation and prior repair digests and may change only the worker image digest and source revision. Existing records, Run IDs, ceilings, prepared inputs, settings, evidence, and selected outcomes remain unchanged. The same unresolved OpenHands task must prove the corrected image before other historical work is admitted.
+
+### 2026-09-08
+
+- At 2026-09-08T07:27:00Z, approved changing hosted OAuth browser session persistence from 12 hours to 30 days, with focused tests, documentation, deployment, and no credential, authorization-role, resource, or paid-Job changes.
+- At 2026-09-08T07:31:00Z, approved exposing Harbor's native `n_concurrent_trials` in the overview preset form, defaulting all-task benchmark presets to 64 within Harbor's supported range, adding tests and documentation, and deploying without launching a run or changing resources, credentials, benchmark identities, model identities, or campaign ceilings.
+
+### 2026-09-08 — Workbench model fields and deployment instructions
+
+Approved at: 2026-09-08T20:55:35+00:00
+
+- The user requested a branch and pull request for separate **Recorded model**
+  and **Harness model string** fields, with simple deployment instructions for
+  the existing Space supplied in the conversation. Base this bounded change on
+  current upstream main and preserve the guided Workbench architecture.
+- Keep recorded identity separate from Harbor's native `AgentConfig.model_name`.
+  Explain existing environment bindings and credential restrictions; do not add
+  secret types, move credentials, or treat literal configuration as a secret store.
+- Approved local implementation, tests, commits, topic-branch push, and one
+  public pull request. Keep the deployment target and other operator-specific
+  identifiers out of public repository content and metadata.
+- Provide deployment instructions only. No merge, actual deployment, resource
+  creation, image publication, credential handling, Job launch/cancellation,
+  inference, or spending is approved by this amendment. Existing unrelated
+  work and Jobs must remain untouched.
+
+### 2026-09-08 — Shared Workbench concurrency follow-up
+
+Approved at: 2026-09-08T21:29:10+00:00
+
+- The user approved exposing Workbench concurrency through the same native
+  setting as Overview, reusing code where practical, and rejected 64 as a
+  normal default in favor of typical values such as 8, 10, 12, and 16.
+- Implement the shared form control, existing native submission override,
+  preset-default selection, browser draft persistence, confirmation reset,
+  tests, and documentation. Use 8 for new multi-task preset submissions and
+  retain 1 for the one-task preset; retain explicit higher values within the
+  existing supported range. Do not rewrite existing runs or explicit drafts.
+- Continue the approved topic-branch/PR #188 workflow for this bounded
+  follow-up. No deployment, merge, credential change, resource mutation,
+  benchmark or setup launch, unrelated Job action, or spend is authorized.
+- Unrestricted model-string passthrough, provider credential delivery, and
+  separately recorded reasoning remain distinct follow-up work; this amendment
+  does not claim they are implemented.
+
+### Run diagnostics and completion/profile investigation
+
+Approved at: 2026-09-09T08:48:52Z
+
+- The user explicitly requested further completion-handling investigation, verification of the recorded Fast-Agent profile/default reasoning, and deterministic diagnostic reporting on the Runs page for completed trials.
+- Implement and test read-only presentation of native Harbor exception evidence and completion semantics, with links to trial details and clear unknown-classification coverage. Distinguish configured options from unverified provider-effective settings. Preserve native results, scores, status, retries, and immutable run configuration.
+- Read pinned Harbor source and subsequent upstream history first. Do not infer infrastructure categories from task names, traceback patterns, or verifier-log heuristics. Harbor currently lacks typed verifier-bootstrap/scoring-validity evidence; report that gap and propose upstream structured evidence before implementing any classifier.
+- Local authorization and implementation commits are approved. Preserve unrelated work and the existing Sandbox idle-timeout stopgap. No new benchmark/inference Jobs, historical-result edits, credential movement, resource changes, public push/pull request/merge, worker-image publication, deployment, or upstream source mutation is included in this bounded implementation.
+- Investigate Fast-Agent completion and reasoning behavior read-only. Any required change in a separate repository must receive its own explicit approval and authorization record.
+
+### Dependency repair, merge, and deployment
+
+Approved at: 2026-09-08T23:50:36.203970+00:00
+
+- The user explicitly approved resolving the dependency audit failure, merging PR #190 after validation, and deploying the combined improvements.
+- Update only the affected dependency resolution as needed; preserve audit and test gates. Publish the parent image through the existing workflow and registry; deploy merged source to the previously selected shared control Space and update its parent/setup image references to verified immutable digests.
+- Preserve execution mode, hardware, visibility, namespace, Bucket configuration, and persistent secrets. Do not create resources, copy credentials, or launch benchmark/inference Jobs. Existing control credential and writable-parent-storage defects are not repaired by this deployment.
+- Verify release provenance, image contents, runtime health, and configured image references. Stop for unexpected active-run compatibility issues or any required credential movement.
+
+### Waffle-view diagnostics integration and pull request
+
+Status: completed
+
+Approved at: 2026-09-09T09:35:47.579013+00:00
+
+- The user explicitly approved integrating the local native run diagnostics with the waffle viewer merged into main, resolving compatibility issues, and raising a pull request.
+- Approved scope: update against current main, implement read-only historical and future trial exception presentation in the existing viewer, add tests and documentation, review privacy, commit, push the topic branch, and open one pull request. Preserve native results and existing viewer behavior.
+- Continue to distinguish recorded exception types from unknown root-cause and verifier-bootstrap classifications. Do not add a log classifier or rewrite historical evidence.
+- No merge, deployment, worker image publication, new run, retry, credential transfer, upstream source mutation, or infrastructure change is authorized.
+
+### Nine-trial canary preset and native waffle (2026-09-09)
+
+Approved at: 2026-09-09T08:12:42.901890+00:00
+
+- Direct approval: after verification of the deployed main revision and a proposal
+  to add the nine-trial preset and port/test the native waffle, the user asked
+  to perform that work.
+- Add a non-leaderboard benchmark preset selecting code-from-image,
+  log-summary-date-ranges, and openssl-selfsigned-cert with three Harbor
+  repetitions per task. Expose it through the existing shared preset selector.
+- Review and adapt a copy of the existing artifact-observed native waffle work
+  on current main, preserving nine distinct trial identities and honest observed
+  versus authoritative states. Preserve all original dirty worktrees.
+- Implement and test locally, with local authorization and implementation commits.
+  Prepare deployment to the existing user-selected control Space only; preserve
+  resources, secrets, hardware, execution settings, and existing run records.
+- Do not launch setup or benchmark Jobs, call inference, increase spending limits,
+  move credentials, create resources, publish results, merge, or push main.
+  Public branch/PR publication and any deployment mechanism requiring image
+  publication require their own scope confirmation before proceeding.
+
+### Nine-trial canary branch publication (2026-09-09)
+
+Approved at: 2026-09-09T09:07:40.659178+00:00
+
+- Direct approval: the user requested pushing the completed feature branch and
+  stated that they will perform the merge, acknowledging the reported coverage
+  shortfall.
+- Publish the reviewed nine-trial preset and observational waffle commits on
+  `feat/nine-trial-canary` to the canonical repository after privacy review.
+- Preserve coverage thresholds and report validation honestly: 502 unit tests
+  and 23 browser tests passed; global line coverage is 78.83%, below 85%.
+  The mutation-check script and Slophammer baseline are missing. Publication
+  does not claim these checks pass.
+- No merge, default-branch push, deployment, benchmark launch, resource change,
+  credential movement, or result publication is authorized by this amendment.
+
+Completed on 2026-09-09: integrated native diagnostics with the current-main waffle viewer and opened draft PR #193 (https://github.com/huggingface/harbor-hf/pull/193). Unit and browser tests passed; existing global coverage and missing baseline/mutation-tooling blockers are disclosed. No merge, deployment, or remote execution was performed.
+
+### Per-run detail waffle placement (2026-09-09)
+
+Approved at: 2026-09-09T10:22:49.101525+00:00
+
+- Direct approval: the user requested correcting the waffle placement in a new
+  pull request after clarifying that it should show the contents of one run.
+- Keep the Runs overview as its existing list with compact summary counts.
+  Move the waffle to the individual run detail page beneath summary cards,
+  grouped by task with a separate square per repetition. Preserve native
+  identities, diagnostics, honest observed-state labels, and trial navigation.
+- Implement on current main in an isolated worktree, test, document, commit,
+  publish a feature branch, and open one pull request after privacy review.
+- No merge, default-branch push, deployment, setup or benchmark launch, inference,
+  credential movement, resource mutation, or result publication. Preserve
+  unrelated work and existing validation thresholds; disclose check failures.
+
+### Scannable results, repetition matrix, and pricing scenarios (2026-09-09)
+
+Approved at: 2026-09-09T11:15:09.705718+00:00
+
+- Direct approval: the user requested a new PR improving run overview/detail
+  summaries, rounded reward and unavailable placeholders, million-scale token
+  counts, affected-trial and infrastructure-failure summaries, editable token
+  rates including long context, and tasks across columns with repeats as rows.
+- Implement and test on current main in an isolated worktree. Keep the overview
+  a list and the matrix inside individual run details. Preserve native outcomes
+  and identities, and label display repetition slots honestly.
+- Pricing controls are presentation-only USD-per-million input, output, cached,
+  and long-context scenarios. Do not alter recorded spend, billing, JobConfig,
+  cost guards, or run behavior. Where native request-tier usage is unavailable,
+  report the limitation rather than derive it from cumulative usage.
+- Categorize only exact reviewed native exception types for display, retaining
+  unknown/partial evidence and distinguishing verifier outcomes from exceptions;
+  do not infer root cause or retry eligibility. No trajectory/log parsing.
+- Local commits, privacy-reviewed topic-branch push, and one new PR are approved.
+  No deployment, merge, benchmark or setup launch, inference, credential movement,
+  resource change, upstream publication, or lowering validation thresholds.
+
+### Synthetic results demo and fast-agent starter refresh (2026-09-09)
+
+Approved at: 2026-09-09T12:05:26.714588+00:00
+
+- Direct approval: the user requested an interactive demo of the new results
+  feature, the default fast-agent install version 0.10.21, their supplied exact
+  execution script, and committing and pushing those changes.
+- Serve the current feature frontend on loopback only with synthetic run, usage,
+  exception, and repeat data. Keep preview helpers outside tracked source, reject
+  mutations, and do not contact the hosted control service or load credentials.
+- Update the reviewed fast-agent starter setup and execution templates consistently
+  across browser/server copies; preserve existing saved recipes and immutable
+  records. Test the requested script with local command stubs, not inference.
+- Commit and push on the existing scannable-results PR branch after privacy
+  review. Keep validation thresholds and known limitations explicit.
+- No merge, deployment, live setup/benchmark launch, inference, credential transfer,
+  public listener, resource creation, or unrelated configuration change.
+
+### Concise results tooltips (2026-09-09)
+
+Approved at: 2026-09-09T12:22:20.211230+00:00
+
+- Direct approval: after reviewing the synthetic demo, the user requested
+  radically simpler tooltip text with main details only, then commit/push
+  and PR publication. Continue the existing open scannable-results PR.
+- Shorten trial and summary tooltips without changing outcome semantics. Keep
+  essential stale/unknown indicators; move explanatory caveats to existing
+  legend/help rather than repeating them on each square.
+- Test the presentation, rebuild the loopback-only synthetic demo, commit,
+  and privacy-review the push and PR update. Preserve known validation limits.
+- No merge, deployment, live runs, inference, credential movement, resource
+  creation, public demo listener, or changes to stored evidence.
+
+### Stable polling and measured agent timing (2026-09-09)
+
+Approved at: 2026-09-09T13:13:00.258660+00:00
+
+- Direct approval: the user requested removing disruptive refreshing text, agent
+  wall-time in trial tooltips and run-list summaries/status, and red affected-trial
+  counts after reviewing the deployed scannable-results interface.
+- Implement and test locally on current main; preserve the existing presentation
+  and native outcome semantics. Sum only recorded native agent execution intervals
+  for a display rollup, with partial/missing measurement coverage. Do not infer
+  active elapsed time or inflate sums using both top-level and step timings.
+- Reuse existing artifact/projection reads and generated response contracts; no
+  new durable native field, lifecycle authority, extra overview progress polling,
+  infrastructure diagnosis from generic errors, or change to retry behavior.
+- Local implementation, tests, documentation, and local commits are approved.
+  No deployment, merge, new remote PR/branch publication, live setup/benchmark
+  launch, inference, credential movement, or resource change is included.
+
+### Compact matrix and saved pricing preferences (2026-09-09)
+
+Approved at: 2026-09-09T13:54:52.918279+00:00
+
+- Direct approval: the user approved the preceding local work and requested
+  subtler stale feedback, better use of summary/grid space, cache-hit percentage,
+  saved pricing scenarios usable in the Runs list, compact non-question-mark
+  trial markers, and known task budgets in tooltips when available.
+- Continue local implementation and tests on the stable-timing branch. Keep
+  tasks as columns and repetition slots as rows, shrink visual markers and
+  column headers while preserving keyboard/focus/hover access and hit targets.
+- Persist explicitly saved named pricing preferences in browser-local storage,
+  validate untrusted records, and distinguish selected scenario estimates from
+  native reported cost. No server-side preference store, shared storage resource,
+  billing change, inference parameter, or execution-cost policy is authorized.
+- Display reported cached/input percentage only when meaningful. Preserve
+  missing/partial data, error states, and current-result timing semantics.
+- Native resolved time budgets are absent; do not reconstruct Harbor timeout
+  rules or read benchmark formats. Keep unavailable budgets unknown/omitted,
+  and unfinished observations distinct from proven running execution.
+- No remote publication, PR creation, deployment, merge, live runs, inference,
+  credential movement, public demo listener, or resource mutation.
+
+### Publish stable timing and compact results follow-up (2026-09-09)
+
+Approved at: 2026-09-09T15:18:35.910880+00:00
+
+- Direct approval: the user asked to see the changes, push the branch and open
+  the follow-up PR, noting that additional small tweaks would follow.
+- Publish the reviewed stable-timing and compact-results branch and open a PR
+  against the canonical repository. Include validation limitations and the
+  inspected Harbor source files. Privacy-review all commits, diff and metadata.
+- Prepare a loopback-only synthetic preview of this branch using the existing
+  read-only fixture server; no real control API, credentials or inference.
+- Additional unspecified tweaks await the user's concrete request.
+- No merge, deployment, live run, paid resource, public demo listener, credential
+  transfer, upstream Harbor publication or execution-policy change is authorized.
+
+### Run navigation, recipe identity and reasoning refinements (2026-09-09)
+
+Approved at: 2026-09-09T15:43:39.532868+00:00
+
+- Direct request: distinguish native agent execution timeouts from replacement
+  candidates, show Workbench recipe names in Runs, expose a working reasoning
+  selector, and filter recorded diagnostic/final run roles.
+- Implement and test these refinements locally for the existing follow-up.
+  Preserve raw native exception types and distinguish execution timeout from
+  environment/provider failures without claiming an unproven timeout origin.
+- Capture minimal immutable Workbench recipe display provenance for new runs;
+  retain historical fallbacks and native execution configuration in JobConfig.
+- Investigate and expose reasoning only through an existing reviewed native
+  agent/provider configuration path and declared recipe capability. Reject
+  unsupported behavior rather than silently ignoring a dropdown selection.
+  Preserve existing saved recipes and their execution semantics.
+- Add role filters using the existing final/diagnostic field, with useful
+  presentation-only search/navigation. Final role is not finished status.
+- Replacement eligibility, rerun actions, upstream issues/patches, new storage
+  resources, live execution, deployment, merge and credentials remain excluded.
+- Additional publication of these refinements follows review of the concrete
+  implementation; the existing PR remains open without merge or deployment.
+
+### Shared run archive presentation metadata (2026-09-09)
+
+Approved at: 2026-09-09T17:02:44.957655+00:00
+
+- Direct approval: the user confirmed that archive status should be shared
+  across users and browsers, following the proposed operator-only controls.
+- Implement and test shared mutable run-presentation metadata in the existing
+  canonical Bucket, separate from immutable run records and execution state.
+- Provide authenticated operator Archive/Restore actions with write-mode and
+  concurrency guards; default the Runs view to not archived and expose
+  Not archived / Archived / All, combined with recorded role and search.
+- Archive changes only Runs visibility. Execution, artifacts, costs, leaderboard
+  eligibility and direct detail access remain unchanged. No deletion or rerun.
+- Local implementation, tests, documentation and commits are approved. No live
+  metadata mutation, deployment, merge, credentials or additional infrastructure.
+- Browser-local pricing preferences and Workbench drafts are not migrated by
+  this approval. Reasoning support still awaits route/capability clarification.
+
+### Complete results follow-up CI, merge and deployment (2026-09-09)
+
+Approved at: 2026-09-09T18:04:01.857234+00:00
+
+- Direct approval: the user authorized pushing the remaining follow-up changes,
+  getting CI green, merging and completing deployment to the user-selected
+  existing control Space. The exact destination is retained privately.
+- Resolve relevant CI failures without weakening tests, coverage, security or
+  line-budget gates; review and publish changes to the existing PR. Merge only
+  the reviewed passing revision, then deploy that exact merged source revision.
+- Verify deployment provenance, readiness and unchanged canonical configuration.
+  Preserve existing resources, credentials, visibility, hardware and artifacts.
+- No benchmark/setup execution, inference, credential transfer, new resource,
+  archive mutation on live data, or unrelated feature migration is authorized.
+- Pricing sharing and the reasoning selector remain deferred. No operator
+  identifiers may be included in public repository content or metadata.
+
+### Sandbox SDK terminal-result integration
+
+Status: completed
+
+Approved at: 2026-09-09T17:44:31.882149+00:00
+
+- The user explicitly approved preparing a Harbor-HF pull request consuming the reviewed Sandbox SDK terminal-result fix, alongside its upstream issue and PR.
+- Implement a reproducible temporary dependency pin/build for the parent-worker SDK, with source/hash provenance, offline tests, documentation and explicit removal criteria. A local patched wheel build is approved. Preserve Harbor-owned execution, results, retry policy, task configuration and all unrelated work.
+- Local commits, topic branch push and one Harbor-HF pull request are approved after checks and privacy review. No merge, deployment, image publication, package-index release, new Jobs/inference, credential movement, or remote resource/configuration changes in this step.
+
+
+Implementation completed on 2026-09-09; branch/PR publication remains parent-owned:
+
+- Backported exactly the production diff of SDK PR #4851, commit
+  `f1c01f06919a5e57e57b6d78bc3d7e4de81534e0`, onto hash-verified 1.28.0.
+  Chose a locally versioned reproducible wheel rather than the unrelated 1.31
+  development upgrade. Source, patch, output hashes and removal criteria are in
+  `packages/harbor-hf-agents/sdk-backport/README.md`; no binary is tracked.
+- Both existing images build the wheel before frozen agents-lock installation.
+  Local amd64 builds and 40 offline terminal regressions in each actual final
+  image interpreter passed. Installed SDK source bytes and versions matched the
+  wheel. Harbor's native Sandbox boundary, retries and results are unchanged;
+  no task recipe or credential delivery changes were made.
+- Root tests: 46 passed, 87.98% coverage. Agents tests: 155 passed. New builder:
+  97.47% coverage. Ruff, formatting, ty, lock/source/dependency integrity, root
+  dependency audit, and normal Slophammer check/DRY passed.
+- Draft validation blockers: existing supplementary agent-runtime coverage is
+  61.72%; the Slophammer baseline and mutation script are absent. No thresholds
+  were relaxed. Separate npm/browser checks were not run for this Python/build
+  change; the control image's normal typecheck and web build passed.
+- No push, PR creation, deployment, image publication, remote Jobs, inference,
+  credential movement or resource mutation was performed by this integration.
+
+Completed on 2026-09-09: opened draft PR #198 (https://github.com/huggingface/harbor-hf/pull/198) after source, image and privacy review. It consumes the reviewed upstream SDK fix as a hash-locked release-wheel backport. Both local image environments passed 40 offline terminal regressions; existing coverage/tooling blockers are disclosed. No merge, deployment, image/package publication or remote workload was performed.
+
+
+### PR #198 upstream-main conflict resolution (2026-09-09)
+
+Status: completed
+
+Approved at: 2026-09-09T18:23:27.991611+00:00
+
+- Direct approval: the user asked to resolve the reported conflicts; the clarified scope is merging upstream main into the existing affected topic branch, not merging the PR into main.
+- Merge latest upstream main into the existing PR #198 branch without rebase or force push, resolve conflicts preserving unrelated upstream changes and the reviewed SDK backport, run local checks, commit and push to the existing PR.
+- Inspect SDK PR #4851 read-only; it is mergeable and no SDK branch modification is included.
+- No PR merge, deployment, image/package publication, new issue or PR, remote Jobs, inference, credential movement, resource changes, or weakened validation gates. Stop if upstream dependency changes supersede or conflict with the backport.
+
+
+Completed local integration on 2026-09-09; publishing this reviewed merge to the existing PR branch:
+
+- Merged upstream main `c3558b6` (previous common base `b23acb9`) into the topic branch. Only `projects/huggingface/harbor-hf.md` conflicted; preserved both additive authorization histories. Upstream application files are byte-identical to main and the SDK backport, locks, Harbor pin and image build steps are unchanged from the topic branch.
+- Root Ruff/format/ty, 46 tests with 87.98% coverage, dependency audit, normal Slophammer check/DRY and privacy checks passed. Agents Ruff/format/ty and all 155 tests passed; supplementary branch coverage remains 61.72%, below 85%. The baseline file and mutation script remain absent. No gate was weakened.
+- Node checks passed: formatting, lint (existing shell-template warnings), types, build, generated files, 846 unit tests and dependency audit. Initial parallel browser run passed 52/53 with a navigation assertion failure; unchanged full serial rerun passed 53/53.
+- Both local amd64 images rebuilt successfully; each actual final SDK interpreter passed 40 terminal regressions with networking disabled. The rebuilt wheel retained its recorded hash.
+- SDK PR #4851 was mergeable and left untouched. PR #198 remains draft with existing validation limitations. No PR merge, deployment, image/package publication, remote workload, credential movement or resource change.
+
+### PR #198 URL-filter race repair (2026-09-09)
+
+Status: completed
+
+Approved at: 2026-09-09T20:00:00Z
+
+- Direct user approval: repair the real frontend URL-filter lost-update race on existing PR #198, with deterministic regression tests, local commits and push to that PR after privacy review and validation.
+- Preserve query/history semantics, unrelated URL parameters, upstream frontend features and the SDK backport. Verify the original regression fails and the repair passes; run normal parallel browser checks and bounded read-only CI monitoring.
+- No merge, deployment, new PR, image publication, remote Jobs, inference, credential movement, live API writes or gate weakening. Local synthetic browser servers are permitted. This scope does not activate any other authorization above.
+
+
+Completed local repair and validation on 2026-09-09; publishing to existing PR #198:
+
+- Filter events merge against the synchronous BrowserRouter URL, while React Router remains the sole navigation writer. No pending-state mirror or global routing changes; search replaces and selectors push. Preserve unknown parameters, history navigation, existing rows and archive behavior.
+- Deterministic real-BrowserRouter/Suspense negative control: three regressions fail on the original handlers; all four tests pass with the fix, including deferred external navigation and POP edits. The existing browser sequence is unchanged except for an added final URL assertion.
+- Formatting, lint (six existing warnings), both TypeScript checks, 850 unit tests, build, generated contracts and dependency audit passed. The complete synthetic browser suite passed 53/53 with two workers; six focused repetitions also passed with two workers and no retries. Local IPv4 startup stalled and was stopped; these browser passes used an isolated IPv6 harness without repository configuration changes. Normal CI remains authoritative for its standard IPv4 path.
+- Supplementary global Node coverage remains below 85%: lines 80.92%, statements 78.87%, functions 80.41%, branches 73.15%. Normal Slophammer check and DRY passed; baseline and mutation commands remain blocked by their absent files. No gate was weakened.
+- Reviewed Harbor JobConfig/viewer models at the existing pin and history through `7d5285b4`; console URL navigation belongs to Harbor-HF. Documentation records the BrowserRouter-specific boundary. SDK patch/build/locks, Harbor configuration and image definitions are unchanged; their full CI checks must still finish after publication.
+- Main remains at `c3558b6`; no additional integration merge was needed. Self-review confirmed only filter navigation, tests and additive documentation/authorization changes. No merge, deployment, remote workload, credential movement or new publication destination. Remote CI monitoring is bounded to twenty minutes after push; no CI rerun is authorized to mask failure.
+
+### Compact status display and pricing investigation (2026-09-09)
+
+Approved at: 2026-09-09T18:28:46.784884+00:00
+
+- Direct request: start a new branch, repair the oversized wrapping status
+  bubble, and investigate recording a proper price for Workbench launches.
+- Implement and test a compact status badge separate from measured agent time
+  and coverage. Preserve visible partial/unavailable indicators and accessible
+  exact coverage counts; no timing arithmetic or execution changes.
+- Pricing is read-only investigation pending clarification of launch-time
+  estimated rates versus actual provider-reported or billed costs.
+- Local implementation, tests and commits only. No publication, merge,
+  deployment, live run, inference, credentials, rate-card schema, billing
+  integration or upstream issue/patch is authorized by this amendment.
+
+### Immutable launch pricing and leaderboard estimates (2026-09-09)
+
+Approved at: 2026-09-09T18:58:54.280302+00:00
+
+- Direct approval: the user confirmed supplying input/output/cache USD-per-million
+  rates at Workbench launch so estimated run cost can appear on the leaderboard.
+- Implement optional immutable launch pricing in the existing run record,
+  separate from native JobConfig, recipe/setup identity and provider-reported
+  cost. Preserve old records and existing browser-local scenario preferences.
+- Derive shared estimates from each run's own rates and reported native usage.
+  Preserve missing data and explicitly label estimates and partial group subtotals.
+  Do not claim billed cost or complete usage coverage, infer request tiers from
+  aggregate tokens, or alter leaderboard grouping or reported-cost charts.
+- Include rates in immutable submission conflict checks, not recipe compilation
+  or setup attestation. Keep pricing disabled unless explicitly supplied.
+- Local implementation, tests, documentation and commits are approved. No push,
+  PR, merge, deployment, inference, live runs, new resources, billing integration,
+  credential transfer, execution cost-policy change or upstream publication.
+
+### Synchronize launch-pricing branch and validate CI (2026-09-09)
+
+Approved at: 2026-09-09T19:31:11.563099+00:00
+
+- Direct request: merge main and make sure CI passes, interpreted as merging
+  current main into the compact-status/launch-pricing feature branch.
+- Merge the latest main locally, preserve upstream fixes, resolve conflicts,
+  and repair relevant CI failures without weakening validation gates.
+- Privacy-review and push the feature branch. Open a PR to run the configured
+  pull-request CI workflow; feature-branch pushes alone do not trigger it.
+- No feature merge into main, deployment, live execution, inference, credential
+  transfer, resource changes or unrelated feature work is included.
+
+### Run inspection consistency and benchmark profile preparation (2026-09-09)
+
+Approved at: 2026-09-09T21:06:42.168215+00:00
+
+- Direct user confirmation approves local implementation and tests for aligned
+  run-panel polling, clearly labelled running-Job elapsed time, Workbench
+  reasoning selection and recorded intent, configured timeout hover details,
+  launch-pricing visibility in the inference-cost KPI, and removing help cursors.
+- Inspect the recent local benchmark configuration read-only and prepare a
+  profile for the requested 50-task subset with three trials per task. Preserve
+  exact task selection and provenance privately; do not copy operator-specific
+  identifiers, credentials, logs or unrelated source artifacts into this repo.
+- Local implementation, tests and commits only. No push, PR, merge, deployment,
+  profile publication, live API writes, runs, inference, credential transfer,
+  resource creation, upstream patch or upstream publication.
+- Harbor retains timeout resolution and execution authority. Display configured
+  settings accurately; do not invent resolved budgets or provider-effective
+  reasoning. Preserve existing recipes and immutable run records.
+
+Local implementation checkpoint (2026-09-09):
+
+- Aligned run-panel polling at ten seconds; shared clock preserves waffle
+  freshness and running-Job elapsed age during pending requests. Completed
+  durations remain fixed. Removed help cursors while retaining tooltips.
+- Inference-cost KPI now includes the existing immutable launch estimate when
+  pricing was recorded, without replacing native reported cost or treating
+  absent token usage as zero. Hover exposes only explicitly configured native
+  timeout fields, never a locally resolved effective budget.
+- Passed 905 unit tests and 60 synthetic browser tests, formatting, lint,
+  types, build, generated checks, dependency audit and normal DRY checks.
+  Existing supplemental global coverage remains below 85%; the baseline file
+  and mutation script are absent. No gate was weakened.
+- Checked Harbor models/job/config.py, models/trial/config.py,
+  trial/trial.py and models/job/result.py at pinned revision
+  dcd0a7ac74b7bd417780d9cb27cd819c7ec82e4e and cached subsequent history.
+  No Harbor execution behavior is reimplemented. History freshness was not
+  independently established through a new upstream fetch.
+- Independent review found elapsed clocks froze during hanging queries; fixed
+  with shared clock and negative-control browser tests on both affected pages.
+- Reasoning remains blocked: native model-query parsing does not establish
+  support when capability metadata is absent. No fake selector or changed
+  starter recipe was introduced; upstream capability discovery is proposed.
+- Exact recent 50-task union was identified privately, but its pinned registry
+  source cannot be represented by the current Git-only benchmark preset.
+  No substitute revision, public task artifact or live profile was created.
+- No publication, deployment, live run, inference or credential movement.
+  Authorization remains active for the unfinished local scope only.
+
+### Native registry benchmark presets (2026-09-09)
+
+Approved at: 2026-09-09T21:49:14.221952+00:00
+
+- Direct user approval: extend benchmark preset schema and generic compilation
+  to preserve native Harbor registry dataset references, allowing the exact
+  previously identified 50-task subset with three trials per task. Generate
+  contracts and add regression tests; prepare the exact profile privately.
+- Preserve existing Git datasets and let Harbor resolve registry sources and
+  task selection. No benchmark-specific parser or execution behavior.
+- Investigate launch-rate correction options and the requested task read-only;
+  no existing run metadata edits, task execution, repair or retry authorized.
+- Local implementation, tests and commits only. No profile publication, push,
+  PR, merge, deployment, upstream changes, live runs or credential transfer.
+
+### Audited pricing corrections and combined pull request (2026-09-09)
+
+Approved at: 2026-09-09T22:32:56.258274+00:00
+
+- Direct user approval: implement an audited shared pricing correction that
+  preserves immutable launch rates, without rerunning or changing execution.
+- Include operator UI, validated durable correction history, concurrent-edit
+  protection, shared estimate and leaderboard integration, and regression tests.
+  Keep native reported cost, spend policy and browser scenarios independent.
+- Commit, privacy-review, push the combined completed run-inspection and
+  registry-preset changes with this feature, and open one pull request to main.
+  Read-only CI monitoring is approved; disclose existing validation gaps.
+- Supersedes local-only publication restrictions solely for this combined diff.
+  No merge, deployment, live pricing correction, profile publication, run,
+  inference, credential transfer, new infrastructure or upstream publication.
+- Keep exact private task subset and provenance outside the public contribution.
+  Reasoning selection remains blocked and is excluded from implemented scope.
+
+Combined implementation ready for pull request (2026-09-09):
+
+- Added separate bounded pricing audit history, operator-only revision-checked
+  correction UI/API, fail-closed cached effective estimates and leaderboard
+  integration. Original rates, native costs and execution remain unchanged.
+- Independent review corrected failed-rebuild uncertainty and corrupt pricing
+  cache isolation; regression negative controls fail against the original code.
+- Completed registry-preset support preserves native pinned name/ref values;
+  the exact requested private profile remains outside the public contribution.
+- Passed 983 unit tests and 63 browser tests, formatting, lint, type checks,
+  build, dependency audit, normal Slophammer and privacy review. Both Docker
+  builds passed before the final projection-only review fixes. Prior Python
+  verification passed 46 CLI tests with 87.98% coverage and 155 agent tests;
+  no Python or worker source changes followed.
+- Supplemental global TypeScript coverage remains below 85% (81.96% lines,
+  74.50% branches). Baseline and mutation files remain absent. No gates or
+  package line budgets were weakened. Generated outputs are deterministic;
+  the normal generated-diff check is rerun after staging the candidate outputs.
+- Full combined diff, all untracked contribution files and public metadata were
+  independently privacy-reviewed. No private profile or operator data included.
+- Harbor source evidence is documented in the pricing-correction and native
+  registry preset documents. No upstream behavior or execution patch added.
+- Publishing this combined branch and opening its PR only; no merge, deployment,
+  profile publication, live pricing edit, run or credential transfer.
+
+### Full benchmark preparation and metadata-only reasoning (2026-09-09)
+
+Approved at: 2026-09-10T07:21:57.441003+00:00
+
+- Direct user request approves local implementation and tests for full
+  Terminal-Bench 2.1 preparation: all 89 tasks, five attempts each (445 trials),
+  no task filter, with six hours of agent execution per trial replacing
+  task-specific agent budgets. This is not a whole-run, setup or verifier limit.
+- Use native JobConfig agent override_timeout_sec of 21600 and agent timeout
+  multiplier 1; inspect native cap precedence and ensure no cap shortens it.
+  Preserve minimal safe native agent settings through native and Workbench
+  compilation; reviewed agent identity, environment and kwargs retain authority.
+  No duplicate timeout fields or local timeout resolver. Stop for upstream gaps.
+- Workbench reasoning is free text recorded verbatim in existing submission
+  metadata, including numeric-looking and arbitrary model values. Define blank
+  semantics, bound length and reject controls and credentials. Preserve old off
+  submissions and recipes. No fixed dropdown, provider-effect claims, model
+  query additions, environment binding or execution side effects. Recipe remains
+  execution authority; show exact recorded intent in run detail.
+- Prepare the full profile privately only after read-only native source evidence
+  proves 89 tasks from the immutable registry source. Preserve resource defaults;
+  CPU and concurrency approval are separate and no launch is authorized.
+- Commit this authorization only before implementation. Leave implementation
+  changes local and uncommitted. Run required validation without weakening gates.
+  Preserve the original dirty checkout and private source artifacts.
+- No push, pull-request update, merge, deployment, live profile publication,
+  execution, inference, resource creation, credential movement, or upstream
+  publication is approved. Earlier publication approval does not cover this scope.
+
+### Publish reasoning metadata and six-hour budgets; update starter (2026-09-10)
+
+Approved at: 2026-09-10T08:03:19.569001+00:00
+
+- Direct user approval: add completed metadata-only reasoning and native six-hour
+  agent-budget support to existing PR #200, commit and push the changes.
+- Update the default Fast-Agent setup recipe to fast-agent-mcp==0.10.23.
+  Preserve saved/custom recipes and existing run records; update matching
+  default source, tests and documentation, and verify native compatibility.
+- Run relevant validation, inspect the complete diff and public metadata, update
+  PR description and monitor CI read-only. Exact private benchmark profiles
+  and provenance remain outside public source; include only generic support.
+- Supersedes prior local-only restriction for this reviewed combined scope. No
+  merge, deployment, live profile publication, runs, inference, credential
+  movement, new resources or upstream publication.
+
+PR additions validation checkpoint (2026-09-10):
+
+- Completed metadata-only reasoning and native per-trial six-hour agent-budget
+  support. Safe reasoning text persists verbatim; credential-bearing draft text
+  is removed at storage/load boundaries. Native override, multiplier and cap
+  semantics are tested through both compilers, with other phase budgets intact.
+- Updated matching default setup recipes to fast-agent-mcp==0.10.23; regression
+  tests preserve previously saved versions and exact browser/server parity.
+- Passed 1051 unit tests, 64 browser tests, 51 CLI tests with 88.35% coverage,
+  155 agent tests, formatting, lint, types, builds, dependency audits and both
+  Docker builds. Generated files are deterministic. Normal Slophammer DRY and
+  privacy checks pass; baseline/mutation files and global coverage gaps remain.
+- Independent review passed 254 targeted TypeScript and 22 CLI tests and cleared
+  the complete addition diff and metadata for privacy and static correctness.
+- Fast-Agent public v0.10.23 source tag exists and reviewed CLI/routing/output
+  paths remain compatible. PyPI version endpoint returned 404 during review;
+  default package installation is not verified and blocks deployment readiness.
+- Updated main has a CLI conflict; no integration merge performed under this
+  scope. Reconciliation must retain upstream cost validation without restoring
+  the old Workbench reasoning-off restriction. Disclose both holds in PR #200.
+- Publishing approved source additions only. No merge, deployment, live profile
+  publication, rate correction, run, inference or credential movement.
+
+### Integrate current main into PR #200 (2026-09-10)
+
+Approved at: 2026-09-10T08:33:41.114483+00:00
+
+- Direct request: merge main into the existing feature branch and walk through
+  conflicts. Integrate current main, resolve textual and semantic conflicts,
+  retain upstream campaign spend validation and organization authentication
+  fixes together with metadata-only reasoning and existing feature behavior.
+- Carry forward approval to commit and push this PR branch; update PR conflict
+  status and monitor CI after full relevant validation and privacy review.
+- This authorizes branch integration only, not merging PR #200 into main. No
+  deployment, live profile publication, pricing edits, jobs, inference, new
+  resources or credential transfers. Preserve all unrelated worktrees.
+
+Main integration validation completed (2026-09-10):
+
+- Integrated main at 43232ca. Only textual conflict was CLI reasoning admission
+  beside campaign-cost validation; preserved validation and removed the obsolete
+  off-only restriction. Migrated six active feature fixture locations to the
+  campaign field while retaining deliberate historical compatibility tests.
+- Organization authentication/configuration and parent worker behavior/tests
+  remain byte-identical to main. Native six-hour settings, metadata-only
+  reasoning, pricing corrections and saved-recipe preservation remain intact.
+- Combined CLI regressions exposed acceptance of NaN; reused the existing
+  ceiling validator to reject nonfinite/nonpositive/out-of-range explicit costs
+  before HTTP, independently of optional local policy bounds.
+- Passed 1059 unit tests, 64 browser tests, 100 CLI tests at 89.10% coverage,
+  155 agent tests, formatting, lint, types, build, generated checks, dependency
+  audits, normal Slophammer/DRY and both Docker builds. Independent complete
+  staged/feature diff review and privacy review found no integration blockers.
+- Supplemental global coverage remains below 85% (82.32% lines, 74.77% branches);
+  missing baseline/mutation files remain disclosed. Existing starter package
+  availability hold is unchanged; build success does not prove installation.
+- Publishing this branch integration to PR #200 only. No merge into main,
+  deployment, live profile publication, cost correction, jobs or inference.
+
+### Explicit provider credential bindings: approved design (2026-09-10)
+
+Approved at: 2026-09-10T10:54:54.904945+00:00
+
+- Direct user approval: operator-managed provider inference credentials may be
+  supplied by Space secrets. The app selects reviewed credential references
+  and availability, never accepts or stores secret values. Recipes contain
+  explicit environment bindings; only selected reviewed execution receives the
+  provider credential. No automatic forwarding of Space environment variables.
+- Locally design, implement and test generic reference/binding support and an
+  opt-in native model route, preserving saved recipes and existing HF behavior.
+  No provider/model/harness-specific core branches or second credential store.
+- The user added the sentence permitting non-HF secrets from the Space
+  environment in the older checkout's control-service document. Carry only
+  that approved credential intent into current architecture; leave unrelated
+  older edits and all existing worktrees untouched.
+- Current session operating instructions still prescribe exactly two
+  persistent control-Space secrets. This approval records the future design,
+  not permission to violate that live boundary: do not add a third secret or
+  move any credential. Reconcile operating instructions before live adoption.
+- Local work and authorization commits only; no push, PR, merge, deployment,
+  secret writes/transfers, remote jobs, inference, credential inspection, new
+  resources or live configuration changes. Source/destination approval for
+  any future credential transfer must be explicit and separate.
+
+### Complete provider credential production wiring (2026-09-10)
+
+Approved at: 2026-09-10T13:37:44.914817+00:00
+
+- Direct request: complete the approved provider-key feature and identify any
+  actual decision needed. Finish local production configuration and selected
+  ephemeral delivery wiring, fail-closed grant/source checks, and end-to-end
+  mocked adapter tests instead of leaving disconnected extension points.
+- Preserve reviewed recipe/model grants, explicit bindings, no secret entry in
+  the app, existing HF behavior, native Harbor env resolution and empty default
+  policy. No provider-name branches or expansion of control-token delivery.
+- Implementation and tests do not authorize live secret inventory changes.
+  The operating-instruction two-secret constraint still blocks live adoption;
+  do not add/read/copy a credential, launch work or deploy.
+- Local work only; preserve unrelated dirty worktrees and the separate refresh
+  PR. No publication, merge, jobs, inference or remote configuration mutations.
+
+Provider implementation completed locally (2026-09-10):
+
+- Connected approved manifest configuration, runtime policy and selected-only
+  ephemeral provider delivery in the Jobs adapter; default configuration remains
+  empty. Provider requests do not also deliver the unrelated HF inference key.
+  No expansion of the existing control-token delivery implementation.
+- Added a bounded private canonical-Bucket source-identity registry. Startup
+  validates it before readiness/provider access; removed references stay reserved
+  and cannot silently bind a new source. Value rotation does not alter identity.
+- Preserved exact recipe/model/route grants at submission and restart, per-run
+  fail-closed denials, standalone secret-free setup, native env templates and
+  legacy connection requirements. Native key-only connections are explicit.
+- Independent reviews corrected conventional source-alias disclosure paths and
+  an unintended legacy protocol relaxation. Source/destination name equality is
+  permitted only in the exact reviewed destination binding key, not public
+  labels, commands, model names, values or templates. No secret-value matching.
+- Passed 1147 unit tests, 66 browser tests, 164 agent tests, 100 CLI tests with
+  89.10% coverage, formatting, lint, types, build, deterministic generation,
+  dependency audits and normal Slophammer/DRY. Final independent review passed
+  166 targeted TypeScript and 37 Python tests and found no remaining reviewed
+  blockers. All tracked/untracked text and metadata privacy checks passed.
+- Global TypeScript coverage remains below 85% (83.65% lines, 76.23% branches);
+  missing mutation/baseline tooling and intentional generated working-tree diffs
+  remain disclosed. No threshold lowered. Tests use synthetic secret values and
+  mocked transport; no hosted delivery or provider inference was exercised.
+- Operator runbook documents exact configuration/review workflow and native
+  model syntax without claiming live activation. No further product-design
+  decision is outstanding. Publication, deployed worker review, deployment and
+  live secret adoption remain separate approvals/operating-instruction gates.
+- Implementation left local and uncommitted. No credentials read, added or
+  transferred; no PR, deployment, benchmark run or inference performed here.
+
+### App-managed provider secret references (2026-09-10)
+
+Approved at: 2026-09-10T16:06:54.460079+00:00
+
+- Direct user approval: replace manual manifest file configuration with an
+  operator-only app workflow. Register a Space secret name (never its value),
+  select it as an explicit Workbench Secret source, review/approve use of the
+  exact recipe/model/worker, then launch through existing reviewed delivery.
+- Accept ordinary valid environment names including MY_SECRET_KEY while
+  excluding control, session, OAuth and infrastructure authority sources and
+  destinations. Never enumerate/forward the whole environment or accept keys.
+- Store nonsecret references, immutable source identity and audited revisioned
+  approvals in the existing canonical Bucket. Derive hashes and worker/model
+  identity server-side. Remove manual manifest-path and hash-calculation steps;
+  do not retain a parallel legacy configuration authority for undeployed code.
+- Preserve previous HF recipes, grants checked at dispatch/restart, isolated
+  blocked runs, secret-free standalone setup and native Harbor env resolution.
+- Local implementation and tests only. No push, PR, merge, deployment, live
+  secret registration/transfer, inference or benchmark execution. Existing
+  live credential operating-instruction conflicts still require alignment.
+
+App-managed reference workflow completed locally (2026-09-10):
+
+- Replaced the manual manifest file and offline grant hashing with operator-only
+  name registration, explicit Workbench selection, server-derived review and
+  confirmation. No key-value input, environment enumeration or new secret store.
+- One canonical private registry owns immutable source identities, revisions and
+  audited grants. Registration, review, approval and status routes enforce actor
+  ownership, write mode, CSRF and revision checks; grants rechecked at dispatch.
+- Ordinary environment names are accepted while authority names remain blocked.
+  Own-property and nonempty-string checks protect presence and selected delivery.
+  Native key-only is explicit; other protocols require reviewed URL and binding.
+- Passed 1195 unit tests, 68 browser tests on full rerun, 100 root Python tests
+  with 89.10% coverage, 164 agent tests, formatting, types, builds, audits and
+  normal Slophammer/DRY. An initial browser run had one pricing polling timeout;
+  the unchanged two-worker full rerun passed. Lint passes with warnings.
+- Final independent focused review passed 311 tests and cleared all tracked and
+  untracked text for privacy. No new reviewed local blockers remain. Global
+  TypeScript coverage still fails 85% (84.01% lines, 76.69% branches); baseline
+  and mutation tooling absent; generated outputs deterministic despite dirty
+  generated-vs-HEAD check. No gates weakened.
+- Exclusive single write authority remains required; cross-controller CAS and
+  overlapping rollout are not supported. Existing live control-token/two-secret
+  instruction conflicts are not repaired or broadened by this feature.
+- Source remains local/uncommitted. No publication, deployment, real secret
+  registration/inspection/transfer, hosted delivery, benchmark run or inference.
+
+### Publish app-managed provider references and prepare deployment (2026-09-10)
+
+Approved at: 2026-09-10T17:14:44.513776+00:00
+
+- Direct user request: explain Space setup, push the provider-reference feature
+  and prepare it for merge and deployment. Integrate current main into the
+  isolated feature branch, preserve upstream changes, resolve conflicts and
+  run full relevant validation and independent privacy/correctness review.
+- Commit, push and open one PR for the reviewed implementation; monitor CI and
+  update its description honestly with readiness limits and a clear runbook.
+  This supersedes prior local-only publication limits for the approved scope.
+- Preparation is not deployment authorization. Do not merge into main, publish
+  worker images, deploy, add/register/read/copy live secrets, change live policy,
+  launch benchmarks or infer. Provider activation also requires operating
+  instructions to align with the approved future credential design.
+- Preserve all unrelated worktrees and changes, including the separate refresh
+  and prominent-cost PR. No new infrastructure or upstream modifications.
+
+### QEMU-fixed source and preset publication (2026-09-09)
+
+Status: completed
+Approved at: 2026-09-09T00:00:00Z
+
+- Direct user YES: reuse or create the PUBLIC fork
+  https://github.com/evalstate/terminal-bench-2-1 and publish only `qemu-fixed`,
+  based on d49e28f1e4ddd13d289e85a5f312a66750951932 plus the reviewed two-task
+  repair and immutable image references. Never overwrite a conflicting branch.
+- Publish diagnostic, non-leaderboard-eligible `-qemu-fixed` variants of all
+  relevant current Terminal-Bench 2.1 presets and a two-task, two-native-attempt
+  smoke (four logical trials, concurrency two, retries zero). Preserve originals.
+  Push only `feat/qemu-fixed-presets` to the canonical Harbor-HF repository;
+  no PR, default-branch push, merge, deployment, run or model inference.
+- Explicit public privacy exception: the exact GitHub fork above and
+  `ghcr.io/evalstate/harbor-hf-trial-worker` image references may appear in
+  public source, Harbor-HF presets and their authorization/provenance records.
+  No other operator identifiers, credential values, aliases or local paths.
+- Inventory exception: one approved public Git fork is needed because canonical
+  benchmark write access is unavailable and native Harbor needs published task
+  definitions. The canonical control Space and Bucket are unchanged; the
+  existing GHCR package is retained. No additional repository, package, service,
+  paid compute or recurring resource is authorized. Retain pinned source/images
+  until upstream is fixed AND historical retention is satisfied; deletion needs
+  explicit approval. Existing fork identity and parent must match before reuse.
+- Verify image indexes/configs anonymously, source fetchability and native Harbor
+  metadata only. Reuse prior reference-validation evidence without rebuilding
+  or executing containers. No image push, visibility change, credentials sent to
+  a runtime, upstream issue/PR or contact. Preserve unrelated worktrees.
+- Approval is recorded before source implementation or publication. Date denotes
+  this session's direct approval; exact approval time was not supplied.
+
+QEMU-fixed implementation and validation checkpoint (2026-09-09):
+
+- Reused the verified public fork and published only `qemu-fixed` at
+  75f5a2e66b2dfd9d7eba3065a9d919c1f9da5c5e. Baseline and reviewed dependency
+  repair were retained; only the two task image pins and README provenance were
+  added. Anonymous linux/amd64 index/manifest/config checks passed.
+- Native metadata resolved 89, 445 and four trials for the three diagnostic
+  presets. Exactly two effective image/fingerprint changes; 87 peers and native
+  order unchanged. No smoke, container, model, deployment or upstream PR.
+- Passed 1,063 unit and 64 isolated browser tests, formatting, lint, types, build,
+  generated checks, dependency audit, normal Slophammer and DRY. Default-port
+  browser reuse was discarded; absent baseline/mutation tooling is disclosed in
+  docs/terminal-bench-2-1-qemu-fixed.md. Topic publication remains the final step.
+
+QEMU-fixed publication completed (2026-09-09):
+
+- Verified public source branch at 75f5a2e66b2dfd9d7eba3065a9d919c1f9da5c5e
+  and public Harbor-HF `feat/qemu-fixed-presets` at implementation commit
+  258cedf8a9b041ace3f3bc9087a3f990ed9bc12c. This completion record is the final
+  additive documentation-only commit on that same approved topic branch.
+- Three diagnostic presets are published, not deployed. Native metadata counts,
+  exact image pins, fingerprints and validation limitations are documented in
+  docs/terminal-bench-2-1-qemu-fixed.md. No smoke or other benchmark was launched.
+- No PR, merge, default-branch update, deployment, model inference, new compute,
+  credential transfer, image upload or unrelated worktree change occurred.
+  All managed validation processes ended; the discarded browser process stopped.
+
+### Held-50 QEMU-fixed preset amendment (2026-09-09)
+
+Status: completed
+Approved at: 2026-09-09T00:00:00Z
+
+- Direct user request: implement and push the held-50 fixed variant on the
+  existing `feat/qemu-fixed-presets` branch. Record approval before implementation.
+- Add one diagnostic `held-50-1-trial-qemu-fixed` native preset, documentation
+  and focused tests. Verify the exact historical basic-48 plus upgrade-2 union
+  against the held-50 list, not an inferred first-50 selection. Preserve that
+  task set with current HF preset execution defaults, not historical hardware
+  partitioning or provider settings.
+- Local configuration, tests, metadata-only native resolution, commits and push
+  to that existing branch are approved. Retain the already approved public fork
+  and exact image/source references, pinned at
+  75f5a2e66b2dfd9d7eba3065a9d919c1f9da5c5e. Existing privacy exceptions apply
+  only to the previously specified public destinations and values.
+- No PR, merge, deployment, Jobs, inference, source-fork changes, image builds
+  or publication, upstream changes, credential transfers or new resources.
+  Preserve original presets and unrelated worktrees. Keep private selection
+  paths and source hashes outside tracked records. Approval time is unspecified;
+  the timestamp records this session date only.
+
+Held-50 implementation checkpoint (2026-09-09):
+
+- Added only the single-attempt diagnostic preset, exact-membership regression
+  and documentation. Both historical partition unions match the 50-task held
+  list; source hashes remain private. Original presets and source fork unchanged.
+- Pinned native metadata inspection resolved 50 tasks and 50 trials; both QEMU
+  image references match the existing repair, and all 48 other task trees are
+  byte-identical to baseline. No execution or inference occurred.
+- Reviewed native DatasetConfig and Git dataset resolution at the existing Harbor
+  pin and upstream history through 191d1b98; no runtime logic or pin change needed.
+- Passed 1,064 unit tests, 64 isolated browser tests, formatting, lint, types,
+  build, generated checks, dependency audit and normal Slophammer/DRY. Missing
+  baseline and mutation-script limitations persist; no gate was weakened.
+- Publishing only this reviewed amendment on the already approved topic branch.
+  No PR, merge, deployment, Job, upstream change or credential movement.
+
+Held-50 publication completed (2026-09-09):
+
+- Remote topic branch verified at implementation commit
+  ef78513a42d862d7bdd78ee409b3cc774e19a393 after a normal, non-force push.
+  The authorization was committed separately before implementation.
+- Published one held-50 diagnostic preset, not deployed or executed. Fork pin,
+  original presets and unrelated worktrees remain unchanged. No PR was created.
+- All managed validation processes completed. This additive completion record
+  is the final documentation-only commit on the same approved topic branch.
+
+### Simplify viewer freshness and publish focused fix (2026-09-10)
+
+Approved at: 2026-09-10T12:47:48.980153+00:00
+
+- Direct user request: simplify refresh behavior and stale warnings, improve
+  the viewer, push the fix and prepare the PR for merge. Keep ten-second
+  frontend polling and honest exceptional stale/error states. No false fresh
+  observations or execution-state inference. Add regression tests.
+- PR #200 is already merged and there is no open PR for this refresh scope;
+  create one focused PR from current main after implementation, validation,
+  independent privacy/correctness review, commit and push. Monitor CI read-only.
+- Preserve unrelated local provider-credential work; do not fold disabled,
+  incomplete delivery scaffolding into a merge-ready refresh fix. Investigate
+  and explain exact remaining provider setup prerequisites without claiming
+  live support or performing secret transfers.
+- No merge into main, deployment, secret configuration, credentials, live
+  profile publication, benchmark launch, retries, inference or new resources.
+
+Viewer freshness implementation checkpoint (2026-09-10):
+
+- Replaced sampled wall-clock state with render-time measurement; one cleaned-up
+  interval and focus/visibility listeners still expire evidence during hung
+  requests. No new polling loop, backend scan or execution authority added.
+- Recent cached observations survive a transient transport error with a quiet
+  Retry/Retrying action. The existing 60-second age threshold is unchanged;
+  invalid timestamps and genuinely old successful responses remain stale.
+- Corrected obsolete UI/documentation claims: visible browser polling is ten
+  seconds, artifact cache is ten seconds/on demand, reconciler defaults to
+  fifteen seconds with no overlap. None guarantees end-to-end delivery latency.
+- Passed 1076 unit tests and 65 browser tests, formatting, lint, types, build,
+  generated checks, dependency audit, normal Slophammer/DRY and privacy checks.
+  Original clock fails all four deterministic between-tick regressions. Missing
+  baseline/mutation files remain disclosed; no thresholds or budgets changed.
+- Reviewed pinned Harbor job/trial result models and viewer route plus history
+  through 191d1b98. No native execution behavior or pin change required.
+- Independent complete diff review found no implementation/privacy issue;
+  identified stale timing text was corrected and covered by regression tests.
+- Integrate the latest main's independent worker Job-name fix before publication
+  and let PR CI verify the exact combined head; preserve upstream worker behavior.
+- Provider-credential work remains private/local and unconnected to production
+  delivery; do not claim a ready direct-provider benchmark launch path.
+
+### Digest-pinned image Job-name repair
+
+Status: completed
+
+Approved at: 2026-09-10T11:54:20.135423+00:00
+
+- Direct user approval: make a minimal patch and pull request and deploy this low-risk change. Remove the image digest from the readable automatically generated Job name while preserving the actual immutable image reference and invocation hash.
+- Approved: SDK implementation and offline tests, upstream topic-branch publication and matching PR; Harbor-HF temporary SDK backport, tests, topic-branch publication and PR; publish the reviewed existing worker image through the existing workflow and deploy the reviewed revision to the existing user-selected control Space.
+- Preserve explicit names, ownership labels, task inputs, image digests, concurrency, costs, hardware, visibility, Bucket, persistent secrets, run records and unrelated work. Only the deployment source/image references may change as required for this fix.
+- No repository default-branch merge, new resource, benchmark/setup/inference Job, retry, credential movement or historical-result mutation is authorized. Deploy the reviewed topic revision if not merged; do not infer upstream merge permission from deployment approval.
+
+Completed on 2026-09-10:
+
+- SDK PR: https://github.com/huggingface/huggingface_hub/pull/4859,
+  immutable fix `3493b0d86bee92db7c10511c534cec455aa84df6`; 24 offline
+  Jobs tests and SDK quality checks pass. Existing terminal-result PR unchanged.
+- Harbor-HF draft PR: https://github.com/huggingface/harbor-hf/pull/205.
+  CI passed at `4b83cebf95ac52617479a79f67b8d11f8479b2ad`; that exact
+  unmerged topic source was deployed through the existing deployment script.
+- The existing worker workflow published digest
+  `sha256:8bc1364f1d91575d4895af0ead8153689a3d6713556dc3588791fd18fc466388`.
+  The pulled image passed all 46 offline SDK regressions and exact wheel audits.
+- The existing control service is RUNNING with JSON live/ready HTTP 200;
+  release and runtime revisions match. Build logs confirm the locked SDK version
+  and wheel hash. Parent/workbench image references match the published digest;
+  other variables, hardware, visibility and persistent-secret metadata remain
+  unchanged. No Jobs were launched and no active Jobs were observed.
+- Root: 100 tests, 89.10% coverage. Agents: 161 tests; npm: 1,064 tests;
+  browser: 64 tests. Both amd64 images pass offline installed-SDK tests.
+  Existing supplementary agent coverage debt (67.12%) and absent baseline/
+  mutation tooling remain disclosed; no gates were weakened.
+- Neither PR was merged. This local completion record is not part of the
+  deployed source; the PR/deployment source remains the exact commit above.
+
+### Explicit Sandbox Job-name simplification
+
+Status: completed
+Approved at: 2026-09-09T00:00:00Z
+
+- Direct user instruction: replace the SDK naming backport with a simple explicit
+  short name in the existing Harbor-HF Sandbox wrapper, updating existing PR #205.
+  The timestamp records the session date, not the time of the original decision.
+- Approved: local adapter implementation, offline regression tests and image
+  builds, commits, normal push to the existing topic branch, and PR description
+  updates after privacy review. Preserve the separate exact terminal-result SDK
+  backport, native Harbor trial identity, immutable image payload and ownership
+  labels. Do not change unrelated work or merge main into the branch unnecessarily.
+- No SDK repository changes or publication, reopening the closed SDK naming PR,
+  merge, deployment, remote image publication, Jobs, retries, inference, credential
+  movement or new resources in this implementation stage. Parent review precedes
+  any later deployment decision; earlier deployment approval is not exercised here.
+
+Wrapper-only implementation checkpoint:
+
+- Replaced the naming backport with seven lines in the existing Sandbox adapter:
+  an explicit, deterministic display name from Harbor's public environment name,
+  capped at 90 characters. Explicit names/name labels and SDK conflict handling
+  remain unchanged; ownership labels, namespace and full image/command payloads
+  are preserved. No persisted field, identity, scheduler or new binding is added.
+- Restored the terminal-only SDK builder, dependency pin, lock and source-audit
+  tests to main exactly. Wheel SHA-256 is
+  `922641bbf132546da041086e73d6cdfca7f13f4e63609580575699396a5a8df1`;
+  only the existing exact terminal-result production patch remains.
+- Checked Harbor environments/base.py and environments/hf_sandbox.py at
+  dcd0a7ac74b7bd417780d9cb27cd819c7ec82e4e and history through 191d1b98.
+  This uses public environment_name and HfApi.run_job(name=...), not a Harbor
+  behavior backport. No relevant naming implementation has landed upstream.
+- Root: 100 tests, 89.10% coverage. Agents: 178 tests. Both linux/amd64 images
+  built locally and passed 63 offline cases each (40 terminal, 23 wrapper).
+  All 183 installed SDK Python files match the terminal-only wheel, and each
+  installed wrapper matches reviewed source. Ruff, formatting, ty, root dependency
+  audit, normal Slophammer and DRY passed. The control image typecheck/build passed.
+- Supplementary agent-wide coverage remains below 85% (62.13%; changed adapter
+  87%). The baseline file and mutation script remain absent. No gate was weakened.
+  No TypeScript changed; standalone npm/browser checks were not rerun locally.
+- Ready for publication to existing PR #205 and parent review. This stage did not
+  touch the SDK repository or its PRs, publish an image, deploy, merge, launch Jobs,
+  retry work or move credentials. The earlier deployed source remains unchanged.
+  Historical SDK naming approval/completion entries above are superseded for
+  future work by the wrapper-only authorization, not permission to reopen that PR.
+
+Wrapper-only publication completed (2026-09-09 session):
+
+- Normal push verified implementation `9452bd3d62a4597e6587e9437495379e3376343b`
+  on the existing topic branch. Updated PR #205 title/body to describe only the
+  wrapper naming approach and unchanged terminal backport; draft status and
+  existing empty label set preserved. CI is pending at this checkpoint.
+- This completion record changes no runtime source. No SDK repository/PR change,
+  deployment, image publication, merge, Job, retry or credential movement occurred.
+  Local image and test processes finished. Parent review remains the next action.
+
+### Prominent estimated inference cost (2026-09-10)
+
+Approved at: 2026-09-10T13:37:44.914817+00:00
+
+- Direct user approval: make the shared estimated inference cost prominent when
+  native reported cost is unavailable. Keep explicit Estimated versus Reported
+  labels and original/corrected rates provenance; do not relabel estimates as
+  agent reports, change native costs or alter spend policies.
+- Implement and test the focused display fix on the open refresh PR. Existing
+  approval to commit, push, update PR and prepare it for merge covers this UI
+  refinement. No merge into main, deployment, price mutation or live workload.
+
+Prominent estimate validation checkpoint (2026-09-10):
+
+- Valid shared estimates now headline the inference-cost card when native
+  reported cost is absent, explicitly labelled Estimated with launch/corrected
+  rate provenance. Reported zero remains authoritative; unknown, malformed or
+  unavailable correction histories never fall back to old prices or scenarios.
+- Passed 1093 unit tests, 65 browser tests, 178 agent tests, formatting, lint,
+  types, build, generated checks, dependency audit and both image builds.
+  Independent review passed 28 focused tests and privacy/diff checks.
+- Cost arithmetic, execution policy, rates and original native costs unchanged.
+  Existing global coverage and absent baseline/mutation tooling remain disclosed.
+- Publishing the reviewed display refinement to PR #207 only. No merge,
+  deployment, live pricing edit, provider secret, benchmark run or inference.
+
+### Six-hour fixed preset suite (2026-09-09)
+
+Status: completed
+Approved at: 2026-09-09T00:00:00Z
+
+- Direct user request: add explicit six-hour per-trial agent execution variants
+  for the fixed 89-task one-attempt and five-attempt presets (89/445 trials),
+  and a fixed held-50 three-attempt preset (150 trials). Use the same six-hour
+  agent budget for the held-50 addition and clearly document that choice for
+  pre-publication review. Preserve every existing preset and default selection.
+- Approves isolated local configuration, tests, documentation and commits on
+  `feat/six-hour-fixed-presets`, followed by one canonical Harbor-HF push and PR
+  only after parent review. Stop at local commits and a private PR draft until
+  that review; this record does not bypass the publication hold.
+- Inspect pinned native Harbor timeout precedence and subsequent history first.
+  Use existing native configuration and compilation, with no duplicated timeout
+  resolver. Verify effective 21600-second agent limits through both submission
+  paths; preserve setup/verifier limits, concurrency eight, zero retries, source
+  and image pins, held-50 membership and diagnostic/non-leaderboard status.
+- Reuse only the previously approved public source and image references at
+  75f5a2e66b2dfd9d7eba3065a9d919c1f9da5c5e, within their existing exact public
+  destinations. No source-fork mutation or new privacy exception.
+- No whole-run cap, launch, retry, inference, Jobs, merge, deployment, credential
+  handling, resource creation, image publication or upstream mutation. Preserve
+  unrelated worktrees. Run required local validation and privacy review without
+  weakening gates. Timestamp denotes session date; exact approval time unknown.
+
+Six-hour suite local preparation checkpoint (2026-09-09 session):
+
+- Added 89/445-trial `with-6h-qemu-fixed` full variants and the 150-trial
+  `held-50-3-trials-qemu-fixed` preset. Held-50 uses the same explicit six-hour
+  agent budget; that choice is documented for parent review before publication.
+- Native override 21600, null max cap and multiplier one survive both compilers
+  and all expanded public JobPlan trials. Inspected pinned Harbor timeout source
+  and history through 191d1b98; existing native support needs no runtime change.
+- All eight old presets are byte-identical; catalog-first default, source/image
+  pins, held-50 membership, diagnostic status and other phase limits preserved.
+- Passed 1,140 unit tests, 64 isolated browser tests, 100 Python tests (89.10%
+  coverage), formatting, lint, types, build, generated checks, dependency audits,
+  normal Slophammer/DRY and privacy checks. Existing lint warnings and supplemental
+  TypeScript coverage below 85% remain; baseline/mutation files are still absent.
+- Local commits and private draft only. No push or PR yet; parent review remains
+  required. No launches, retries, inference, Jobs, merge, deployment, credential
+  transfer, source-fork mutation, new resource or image publication occurred.
+
+Completed after review: published the three-preset suite in draft PR #206 (https://github.com/huggingface/harbor-hf/pull/206), with the shared six-hour held-50 budget and existing validation limitations explicitly documented. No merge, deployment or execution occurred.
+
+### Command-agent effective workdir correction (2026-09-09)
+
+Status: approved
+Approved at: 2026-09-09T00:00:00Z
+
+- Direct user approval: a small local CommandAgent adapter fix and offline
+  regressions using Harbor's public execution API to honor explicit task workdir
+  and image defaults consistently for setup, run and workspace bindings.
+- Local code, tests, documentation and commits on `fix/command-agent-workdir`
+  are approved. Branch push and one PR require parent review first; prepare a
+  private draft and stop before publication. Timestamp denotes the session date.
+- No merge, deployment, image publication, Jobs, retries, reruns, inference,
+  credential movement, upstream changes or unrelated modifications. Preserve
+  existing worktrees, Harbor ownership and validation/privacy gates.
+
+Local preparation checkpoint (2026-09-09 session):
+
+- Replaced the adapter's fixed workspace with one native `pwd` probe before
+  install, cached for run and workspace bindings; direct run also discovers it.
+  Preserve task-user selection, whitespace/Unicode paths and clean bindings;
+  invalid or failed probes raise a fixed error without logging their output.
+- Reviewed Harbor `src/harbor/models/task/config.py`, `environments/base.py`,
+  `environments/hf_sandbox.py` and `agents/installed/base.py` at pin
+  `dcd0a7ac74b7bd417780d9cb27cd819c7ec82e4e`, plus history through `191d1b98`.
+  Existing public execution supports this adapter correction; no pin change,
+  upstream resolver, durable configuration, image or retry change is needed.
+- Eight new regressions failed against original production code and passed
+  after the fix. Root: 100 tests, 89.10% coverage. Agents: 186 tests; changed
+  agent file 94.02% branch-inclusive coverage. Ruff, format, ty, normal
+  Slophammer, DRY and privacy checks passed. Agent-wide coverage remains 62.46%;
+  baseline and mutation files are absent. No gate was weakened. No TypeScript
+  changed, so npm/browser checks were not rerun.
+- Local commits and private PR draft only; parent review and publication remain
+  pending. No push, PR creation, deployment, image publication, Jobs, retries,
+  inference, credentials or upstream mutation occurred.
+
+### CommandAgent workdir PR completion
+
+Status: completed
+
+Published draft PR #208 (https://github.com/huggingface/harbor-hf/pull/208) after implementation review and privacy checks. The task-directory fix passed 100 root tests and 186 agent tests; changed-file coverage is 94.02%. Existing agent-wide coverage and missing-tooling limitations are disclosed. No merge, deployment, image publication, remote execution or retries were performed.
+
+### Two-task workdir diagnostic preset amendment (2026-09-09)
+
+Status: completed
+Approved at: 2026-09-09T00:00:00Z
+
+- Direct user approval: add `prove-plus-comm` and `openssl-selfsigned-cert`
+  as a diagnostic preset in existing PR #208, one attempt per task, concurrency
+  two, with native task inputs and existing smoke timeout defaults unchanged.
+- Approved: additive JSON, focused tests and documentation, local commits,
+  privacy-reviewed push to the existing PR branch and PR body update.
+- No merge, deployment, image/source publication, Jobs, reruns, inference,
+  credential movement or changes to existing presets. Timestamp is session date.
+
+Completion checkpoint (2026-09-09 session):
+
+- Added the schema-loaded two-task preset, one contract regression and selector
+  documentation; existing presets, agent recipe selection and task inputs remain
+  unchanged. Pinned source Dockerfiles declare `/workspace` and `/app`, with no
+  task workdir override. Deployment of the agent fix remains a prerequisite.
+- Reviewed native filtering/repetitions in Harbor `src/harbor/models/job/config.py`
+  and `src/harbor/job.py` at the existing pin and history through `191d1b98`.
+  Pinned CLI `--print-config` accepts the configuration; metadata-only dry-run is
+  newer than the pin, so no native task resolution/execution is claimed.
+- Passed 1,141 unit tests and 64 isolated browser tests, formatting, lint (existing
+  warnings), root/Space types, build, generated contracts, dependency audit (zero
+  vulnerabilities), normal Slophammer and DRY. Baseline and mutation script remain
+  absent; no gate was weakened. No Python production or test files changed.
+- Local validation completed; existing PR branch publication follows privacy
+  review. No run, deployment, image publication, inference or credentials used.
+
+Completed on 2026-09-09: pushed the addition to existing draft PR #208 and
+updated its body with validation and deployment prerequisites. No launch or
+deployment occurred; existing validation limitations remain disclosed.
+
+### PR 208 merge, worker publication and control deployment (2026-09-09)
+
+Status: approved
+Approved at: 2026-09-09T00:00:00Z
+
+- Direct user instruction: execute the merge of existing PR #208, rebuild and
+  publish the worker image, and deploy the control service; the user will run
+  the smoke test afterward. Timestamp denotes session date, not exact time.
+- Record this authorization on the existing PR branch, then wait for green CI
+  on its exact reviewed head. Mark the draft ready and squash-merge only that
+  PR, with a head-SHA guard and no administrator bypass or weakened gate.
+  The user accepts the already disclosed supplementary agent coverage and
+  missing baseline/mutation-tool limitations; existing CI must still pass.
+- Use the existing parent-worker GitHub Actions publication workflow and
+  canonical registry package. Build from the exact merged revision and verify
+  the published immutable digest and installed agent source with offline tests.
+- Deploy a clean bundle of that same merged revision to the existing
+  <control-space>. Update only its parent and hosted setup image references
+  to the verified digest, preserving any distinct setup configuration unless
+  confirmed to use the same reviewed worker. Verify release, runtime revision,
+  liveness, readiness and image references; retain private operational evidence.
+- Preserve write mode, hardware, visibility, secrets, other variables, existing
+  Runs, task inputs/images, concurrency, timeouts and cost limits. No new HF
+  Jobs, smoke/setup execution, inference, retries, credential movement, resource
+  creation, upstream changes, other PR merge or unrelated worktree changes.
+  Existing local API authentication stays local; never forward it to a runtime.
+- Public authorization records use placeholders for operational identifiers.
+  The exact user-selected deployment destination is retained privately.
+
+Provider-reference integration ready for PR (2026-09-10):
+
+- Local implementation commit 2441eda reviewed; integrated main at 53331be.
+  Resolved the CommandAgent overlap preserving main's task working directory
+  and native key-only/legacy connection requirements. Retained additive
+  authorization histories and upstream preset/Sandbox-name changes.
+- Passed 1277 TypeScript tests, 68 browser tests, 100 CLI tests at 89.10%
+  coverage, 197 agent tests, formatting, lint, types, generated contracts,
+  build, dependency audits, privacy and both actual Docker builds.
+- Independent complete integration/feature review passed 294 targeted
+  TypeScript and 96 Python tests; no new source/privacy regression blockers.
+  Native working-directory semantics remain task-derived, not a literal
+  directory approved by a credential grant. No provider routing inference.
+- Supplemental coverage remains below 85% (TypeScript lines 84.01%, branches
+  76.69%; agents 66.26%). Baseline/mutation tooling remains absent. No gates
+  or package line budgets weakened. Configured CI must verify published head.
+- Publish the reviewed source and open its PR only. Provider activation remains
+  subject to separate operating-instruction alignment, reviewed worker image
+  publication and deployment approval. No real key or remote execution used.
+
+Provider PR freshness-main integration (2026-09-10):
+
+- Integrated main d77ad22 after PR #207 merged. The only textual conflict was
+  competing appended browser tests; retained both complete credential-workflow
+  and delayed-refresh tests. Documentation and authorization histories preserve
+  both branches. No changes to provider execution or saved starter recipes.
+- Passed 1306 unit tests, 69 browser tests, 100 CLI tests at 89.10% coverage,
+  197 agent tests, formatting, lint, types, generated checks, build, dependency
+  audits, privacy, normal Slophammer/DRY and both Docker builds. The browser
+  suite used an isolated server after automatic startup stalled. Existing lint,
+  supplemental coverage and absent baseline/mutation limitations remain.
+- Publish this reviewed integration to existing PR #209 only; no merge into
+  main, deployment, image publication, live key or benchmark execution.
+
+### Jobs pagination and parent-observation repair (2026-09-10)
+
+Approved at: 2026-09-11T06:50:58.810625+00:00
+
+- The user explicitly approved local implementation of direct, paginated HF
+  Jobs reads, defensive verification of recorded parents before destructive
+  recovery, and mocked regression tests exceeding one response page.
+- Investigate and explain independent updates of the waffle and summary
+  indicators; frontend behavior changes are outside this repair.
+- Work in the existing checkout. Local authorization and implementation commits
+  are permitted. No deployment, push, upstream issue, pull request, merge, paid
+  Job, retry, cancellation, credential movement or resource change is approved
+  by this amendment. Preserve native Harbor execution and result ownership.
+
+Local implementation completed:
+
+- Replaced single-page Job reads with validated direct REST pagination and
+  same-origin next-link checks. Added recorded-parent inspection before orphan
+  recovery and parent-first stop handling. Uncertain inspections block recovery
+  and further launches without suppressing unrelated safety cleanup.
+- Checked Harbor `src/harbor/job.py` at
+  `dcd0a7ac74b7bd417780d9cb27cd819c7ec82e4e` and cached upstream history through
+  `7d5285b4`. This is an HF observation/control adapter correction; native
+  execution, resume, results, and the Harbor pin remain unchanged.
+- Passed 1,388 unit tests, 69 browser tests, formatting, lint, type checks,
+  build, generated-contract checks, dependency audit, normal Slophammer and
+  DRY checks. Regression tests use mocked HTTP only, not remote Jobs.
+- The optional Slophammer baseline and mutation-check script are absent, so
+  those gates could not run. Repository-wide supplementary TypeScript coverage
+  remains below 85%; no threshold was weakened.
+- Confirmed that summary, trials, Jobs and waffle requests poll independently;
+  the waffle also has a separate artifact cache. No UI behavior was changed.
+- No deployment, publication, upstream issue, inference, or remote mutation was
+  performed. This amendment is complete for local implementation only.
+
+### Incremental operational dashboard (2026-09-10)
+
+Approved at: 2026-09-11T07:38:17.624767+00:00
+
+- The user approved local incremental, identity-keyed trial-progress caching,
+  30-second dashboard polling, inference cost per trial, and moving pricing
+  scenarios and shared rates below trial progress. Include regression tests.
+- Preserve Harbor's ownership of native trial identities, execution, aggregate
+  metrics, and results. Keep derived caches disposable, periodically reconcile
+  completed records, and distinguish unknown costs from zero.
+- Local implementation, validation and commits in the existing checkout only.
+  No deployment, push, upstream issue, PR, merge, credential movement, resource
+  change, paid computation or run mutation is authorized by this amendment.
+
+Local implementation completed:
+
+- Added disposable native-trial-name-keyed observations with shallow directory
+  discovery, 30-second refresh, and five-minute on-demand reconciliation of
+  completed records. Removed directories are noticed at discovery; retained
+  completed contents can remain unchanged until their reconciliation check.
+- Added per-trial observation timestamps to the generated read-only API contract.
+  Discovery and per-trial freshness are distinct. This does not introduce a
+  pre-cutover Bucket compatibility reader or migrate native records.
+- Dashboard polling is 30 seconds; the visual age clock remains 10 seconds and
+  the control reconciler is unchanged. Cost per completed trial uses the same
+  reported/estimated headline total and native completed-trial denominator,
+  including errors, with explicit unknown/partial-cost and non-billing caveats.
+- Moved shared rates and pricing scenarios below trial progress. Preserved native
+  trial identities and existing display-slot semantics; browser assignments are
+  still mount-local rather than durable Harbor repeat ordinals.
+- Checked Harbor job, trial, trial paths/config/result and job lock/result sources
+  at `dcd0a7ac74b7bd417780d9cb27cd819c7ec82e4e`, plus available upstream history.
+  No change to Harbor execution, aggregation, resume or its pin was needed.
+- Passed 1,418 unit tests and 71 browser tests, formatting, lint, types, build,
+  dependency audit, normal Slophammer and DRY. Generated contracts were rebuilt.
+  Focused reader/inference-cost coverage is 98.87% lines and 96.85% branches.
+  Added HTTP-mocked directory pagination and partial-page retry regressions,
+  plus same-length Xet replacement checks for both root and trial artifacts.
+- The Slophammer baseline and mutation script remain absent; those commands
+  cannot pass. Existing repository-wide supplemental coverage gaps remain; no
+  thresholds were weakened. No remote Jobs or inference were used for tests.
+- No deployment, publication, upstream issue, credential movement or run mutation
+  occurred. This amendment is complete for local implementation only.
+
+### Operational dashboard pull request publication
+
+Approved at: 2026-09-11T08:33:05.689364+00:00
+
+- The user explicitly approved raising one pull request for the completed Jobs
+  pagination/parent-observation repair and incremental operational dashboard.
+- Prepare a focused branch against current main in the existing checkout,
+  excluding unrelated earlier deployment patches. Preserve their existing branch.
+- Local branch preparation, tests, privacy-reviewed commits, branch push and one
+  pull request to main are approved. Disclose unavailable checks and coverage gaps.
+- No merge, deployment, default-branch update, upstream-library issue, credential
+  movement, infrastructure change, paid execution or run mutation is authorized.
+
+Focused publication validation:
+
+- Prepared the approved repair/dashboard changes against current main without
+  including older launch-form or sandbox-naming patches. The prior branch and
+  its deployment history remain intact.
+- The focused branch passes 1,390 TypeScript tests, 71 browser tests, and 100
+  root Python tests with 89.10% coverage, plus format/lint/type/build/generated
+  checks, npm audit, normal Slophammer and DRY. The lower TypeScript count
+  reflects exclusion of unrelated earlier frontend changes.
+- PR notes explicitly retain the unavailable baseline/mutation checks,
+  repository-wide supplemental coverage gaps, independent dashboard requests,
+  mount-local display slots, periodic reconciliation and partial cost semantics.
+
+### Workbench simplification on the current branch
+
+Status: completed
+
+Approved at: 2026-09-11T09:07:55.466762+00:00
+
+- The user approved local archive-persistence investigation, Workbench starter
+  and connection-choice simplification, simpler secret-binding UX without a
+  separate reauthorization screen, and two visual review passes on this branch.
+- Consolidate explicit binding consent into a normal save/use action while
+  retaining server-side source/destination, operator, recipe/model/image checks,
+  stale-response protection, and the separation of control and inference secrets.
+  Do not silently authorize credential delivery on render or background refresh.
+- Preserve existing saved recipes, archive semantics, native Harbor ownership,
+  and unrelated branch changes. Add tests and use local mocked browser previews.
+- Work only in the existing checkout and current branch. Local implementation,
+  validation and commits are approved; no new worktree, branch, push, PR update,
+  deployment, live secret/approval mutation, paid run or infrastructure change
+  is authorized by this amendment.
+
+Local completion recorded (2026-09-10; prior approval timestamp preserved):
+
+- Confirmed archive is shared Bucket-backed presentation state, not browser-local;
+  it does not stop Jobs or remove results. Added this explanation beside Archive.
+- Consolidated Fast-Agent starters into one connection selector and explicit Apply
+  action. Changing the selector alone preserves edits; saved custom recipes remain
+  intact. Advanced recipe and compiled details are collapsed by default.
+- Simplified secret registration and binding consent to explicit Preview binding
+  scope followed by Save binding, without a separate checkbox or mandatory reason.
+  Server-normalized scope remains visible before saving; exact server grants,
+  click-time expiry, stale-response protection and conflict recovery are retained.
+  Rendering, typing and registry polling allocate no review tickets or approvals.
+- Completed two mocked desktop/mobile visual passes and a final expanded binding
+  scope review. Fixed mobile overflow and action spacing, with browser regression
+  assertions checking panel bounds rather than only clipped document width.
+- Passed 1,425 unit tests and 71 browser tests, formatting, lint, type checks,
+  build, generated-contract checks, dependency audit, privacy and Slophammer DRY.
+  Focused secret/selector tests reported 96.37% statement coverage. Existing
+  repository-wide supplemental coverage gaps remain; no threshold was weakened.
+  The required mutation-check script is absent. No structure or CI changes were
+  made; no baseline gate was required. Docker is unavailable in this environment;
+  browser checks used local mocked APIs, not remote execution.
+- Previously inspected Harbor installed agent and environment sources at
+  `dcd0a7ac74b7bd417780d9cb27cd819c7ec82e4e` and available upstream history.
+  These presentation changes require no Harbor execution change or local patch.
+- Completed only this local amendment. No push, PR update, deployment, live grant
+  mutation, credential movement, paid run or infrastructure change was performed.
+
+### Workbench publication, merge and control deployment
+
+Status: approved
+
+Approved at: 2026-09-10T00:00:00Z (date-only approval recorded at UTC midnight)
+
+- The user explicitly approved pushing the current branch, clearing CI, merging
+  the existing pull request, and deploying the merged revision to the existing
+  canonical `<control-space>` so they can test and launch a benchmark themselves.
+- Update the existing pull request with the Workbench scope and validation;
+  diagnose and fix CI failures without weakening checks. Merge only with green CI.
+- Work in the existing checkout; no new branch or worktree. Reuse the existing
+  deployment tooling and configured credentials in place. Preserve current image
+  digests when worker inputs are unchanged, and preserve service settings.
+- No benchmark launch, retry, paid test execution, credential transfer, live grant
+  mutation, new infrastructure, or unrelated change is authorized. Do not publish
+  the private deployment identifier in repository content or public metadata.
+- Verify the merged source revision, build/runtime health, readiness and existing
+  service capabilities without submitting a run. Stop and report any deployment
+  blocker rather than broadening credential or infrastructure scope.
+
+### Worker compatibility and deployment completion
+
+Status: approved
+
+Approved at: 2026-09-10T00:00:00Z (date-only approval recorded at UTC midnight)
+
+- The user explicitly approved clearing CI and merging PR #212, rebuilding and
+  publishing the parent worker with the Sandbox-name and private-dataset fixes,
+  then deploying the updated control service to the existing `<control-space>`.
+- Reconciled the existing worker image to publication source `a7b6a67`; it contains
+  name sanitation but not the private-dataset support now merged to main.
+- Use existing checkout, registry, publication workflow and configured credentials
+  in place. No new branch or worktree. Update only the existing parent/Workbench
+  immutable image references needed for this release; preserve other settings.
+- Verify image provenance and offline behavior, green CI and merged source, then
+  deployment health/readiness and revision. No benchmark, remote setup test,
+  inference, credential transfer, live grant mutation, or new infrastructure.
+- Keep deployment identifiers, image references and private session evidence out
+  of public repository content and release metadata. Record only safe source
+  revisions and verification outcomes publicly.
+
+### Queued-run reconciliation performance investigation
+
+Status: completed
+
+Approved at: 2026-09-10T00:00:00Z (date-only approval recorded at UTC midnight)
+
+- The user approved investigating whether control reconciliation is the queued
+  smoke run's performance bottleneck and implementing a targeted local fix.
+- Measure phase latency and operation counts with read-only observations and
+  mocked local tests. Distinguish confirmed findings from hypotheses; add
+  regression tests for any behavior change and preserve parent verification,
+  complete Jobs-list validation, cost enforcement and orphan cleanup safety.
+- Preserve the existing queued run. No launch, retry, resume, cancellation,
+  credential transfer, infrastructure change, deployment, push or PR is included.
+  Local implementation, validation and commits in this checkout are approved;
+  no new branch or worktree. Do not run a second live reconciler.
+- Keep Harbor execution and native trial identity unchanged. Check pinned Harbor
+  source and upstream history before designing any execution-adjacent change.
+  Keep private operational timings and identifiers out of public fixtures/logs.
+
+Local implementation completed (2026-09-10):
+
+- Confirmed repeated global projection rebuilds and Jobs listings in the deployed
+  reconciliation loop. Read-only observations support a performance bottleneck;
+  exact phase dominance inside the live service remains unmeasured.
+- Added scoped per-run projection replacement under the existing run lock.
+  Full opening/closing rebuilds remain; global observation timestamps advance
+  only with a full rebuild. Preserve unrelated projection rows and metadata.
+- Inactive histories with no live Jobs in the complete snapshot can authorize
+  only inaction after a locked state-revision recheck. Mutation paths retain
+  complete fresh Jobs listings, recorded-parent inspection, capacity checks,
+  fresh costs/results and parent-first cleanup. Late Jobs may wait until a later
+  successful pass; provider failures impose no guaranteed wall-clock bound.
+- Synthetic regressions establish linear projection I/O and three complete Jobs
+  listings for inactive history plus one queued run, independent of history size.
+  Active runs retain per-run listings. No synthetic latency is a production SLA.
+- Passed 1,445 unit tests, 71 browser tests, 235 worker tests, both amd64 Docker
+  builds, formatting/lint/types, generated contracts, dependency audit, privacy,
+  normal Slophammer and DRY checks. Both changed source files exceed 85% across
+  coverage metrics; repository-wide supplemental coverage still misses the
+  unchanged threshold. Baseline data and the mutation script are unavailable;
+  manually restoring the projection regression fails the performance tests.
+- Reviewed Harbor at `dcd0a7ac74b7bd417780d9cb27cd819c7ec82e4e` and history through
+  `e1be9bd3`, including `src/harbor/job.py`, `src/harbor/models/job/config.py`,
+  `src/harbor/models/job/result.py`, and `src/harbor/environments/hf_sandbox.py`.
+  No Harbor execution, configuration contract, pin, or internal imports changed.
+- Independent complete-diff safety/privacy review found no blockers. Local work
+  only: no run mutation, deployment, push, credential movement or new resource.
+
+### Run detail loading feedback
+
+Status: completed
+
+Approved at: 2026-09-10T00:00:00Z (date-only approval recorded at UTC midnight)
+
+- The user requested clear loading feedback while Run detail data is pending.
+  Implement section-specific initial loading and background refresh indicators,
+  preserving previously loaded data and distinguishing errors from empty results.
+- Local frontend changes, mocked tests, visual review and commits are approved.
+  No new branch/worktree, push, PR, deployment, live run mutation, credential
+  movement, polling-frequency change or backend architecture change is included.
+- Preserve independent query freshness, native Harbor trial identities and prior
+  local reconciliation changes. No live inference or benchmark execution.
+
+Local implementation completed (2026-09-10):
+
+- Added section-specific Loading feedback before data arrives and Refreshing
+  feedback while retaining cached run details, trials, progress and parent Jobs.
+  Initial errors remain explicit; failed refreshes retain saved data with Retry.
+  Missing responses no longer appear as confirmed zero trials or empty progress.
+- Preserved polling intervals, evidence freshness, backend behavior and Harbor
+  identities. The previously reviewed pinned Harbor files above require no
+  execution change for this frontend-only presentation behavior.
+- Passed 1,448 unit tests, 73 browser tests, formatting, lint (existing warnings),
+  types, build, generated-contract checks, dependency audit and normal Slophammer
+  and DRY checks. Reviewed initial, refreshing and error states at desktop and
+  mobile widths. Global supplemental coverage remains below the unchanged 85%
+  threshold; no gate was weakened. The mutation script and baseline file are
+  absent, so those checks could not complete.
+- Completed only this local amendment. No push, PR, deployment, live run mutation,
+  credential movement, new resource or polling-frequency change was performed.
+  Loading feedback does not itself reduce backend latency.
+
+### Loading feedback and reconciliation release
+
+Status: approved
+
+Approved at: 2026-09-11T12:34:26Z
+
+- The user explicitly requested a pull request, green CI, merge and deployment
+  of the completed Run detail loading feedback and preceding reconciliation
+  performance fixes. This supersedes their local-only publication limits.
+- Reuse a suitable existing branch/ref in this checkout without force pushing,
+  resetting diverged main, discarding unrelated commits or creating a branch or
+  worktree. Preserve the existing worker-release authorization commit.
+- Publish only after full diff and public metadata review and the public privacy
+  scan. Clear CI without weakening checks; merge only with green CI.
+- Deploy the exact merged source to the existing canonical `<control-space>` and
+  `<artifact-bucket>` configuration. This release is frontend/control TypeScript
+  only: preserve exact existing immutable worker image references and all other
+  settings and secrets. Use configured credentials in place; no transfer.
+- Verify source, liveness, readiness and existing capabilities. No benchmark
+  launch, retry, resume, cancellation, paid test, endpoint change, credential
+  workaround or new resource is authorized. Stop for permission or revision
+  mismatches. Do not restore the previously removed QR functionality.
+
+Release blocked during read-only preflight (2026-09-11):
+
+- Upstream main advanced from `f14f6d8` to `65c74b6` through PR #213. That change
+  modifies both Dockerfiles and the worker launch module for Git LFS support.
+- The existing live service is running and ready at `f14f6d8`; both configured
+  immutable worker images still match that preceding verified release.
+- Deploying new merged main is no longer a frontend/control-only release with
+  unchanged worker inputs. The exact-image preservation limit prevents silently
+  publishing replacement workers. Stop pending an explicit scope decision.
+- No public push, pull request, merge, deployment, configuration change or run
+  mutation occurred. Existing branches and implementation commits are preserved.
+
+### Loading and reconciliation integration amendment (2026-09-11)
+
+Status: approved
+
+Approved at: 2026-09-11T12:45:55Z
+
+- The user directly approved integrating current main, publishing a pull request,
+  waiting for green CI, merging the exact tested commit, and deploying the merged
+  source through the existing control Space's normal rebuild.
+- This additively supersedes the preceding exact-old-image preservation limit:
+  verify and reuse the already published immutable parent worker image for main
+  `65c74b69bf9a8e869e54da0c29184370bc9b652e`, including registry/source provenance
+  and applicable offline tests, for both parent and Workbench settings. Do not
+  dispatch or perform an additional worker image build. A successful existing
+  publication was found; the earlier preflight did not establish a rebuild need.
+- Reuse an existing branch/ref, preserving the worker-release authorization and
+  unrelated commits. No new branch/worktree, force push, reset, or restoration of
+  removed QR functionality. Inspect intervening upstream changes before adoption.
+- Preserve unrelated service settings and secrets, existing resources, and all
+  benchmark runs. No run launch, retry, resume, cancellation, paid integration
+  test, credential transfer, grant mutation, or permission workaround is approved.
+- Review deployment interruption safety before mutation; minimize interruption.
+  Verify merged source, image references, liveness, readiness and capabilities.
+  Stop on permission errors or unresolved provenance/safety conflicts.
+- Repeated scans are confirmed in the deployed reconciliation implementation;
+  attribution of the additional slow-starting run remains unmeasured. Do not
+  present synthetic operation-count improvements as a measured production SLA.
+
+### Private structured benchmark run amendment (2026-09-11)
+
+Status: approved
+
+Approved at: 2026-09-11T13:08:50Z
+
+- The user directly approved a cumulative maximum of USD 200 for the already
+  requested private structured benchmark campaign. This is an outer maximum,
+  not a spending target.
+- First finish the existing one-task source healthcheck. Then run one fresh
+  three-task pause-resume canary. Start one 89-task full run only after both
+  checks preserve durable Harbor results without credential, source, runtime,
+  backend, or resume defects.
+- Use the reviewed Pi 0.84.4 agent, approved DeepSeek Flash route, private pinned
+  Dataset source, immutable runtime and parent images, CPU Basic trial hardware,
+  CPU Upgrade parent hardware, one attempt per task, no automatic retries, and
+  at most eight concurrent trials. Do not change these inputs during recovery.
+- The service-required USD 100 campaign ceiling is allowed for each logical run.
+  Immutable per-task output-token limits keep the full run's maximum model cost
+  below USD 69.10. Count all related observed cost and unsettled exposure against
+  the cumulative USD 200 approval.
+- Use the existing private control Space, Bucket, Dataset, and configured
+  credentials in place. Do not create a resource, edit Dataset content, move a
+  credential, change permissions, publish private evidence, or launch unrelated
+  work. Do not repeat a logical submission after an uncertain response.
+- Preserve durable partial outputs and verify a real pause and resume before the
+  full run. Stop for a shared deterministic defect, lost durable state, duplicate
+  execution, provenance or backend mismatch, or possible cumulative overspend.
+
+### Workbench cancellation CI test amendment (2026-09-11)
+
+Status: approved
+
+- The user directly approved adding the proposed explicit five-second polling
+  timeout to the local Workbench cancellation test on the current branch and
+  committing it with a relevant message.
+- Scope is the test-only timing fix and offline validation. Preserve unrelated
+  working changes. No push, pull request, merge, deployment, paid compute,
+  credential movement, or live run mutation is authorized by this amendment.
+
+### Consolidated Run detail refresh feedback (2026-09-11)
+
+Status: approved
+
+- The user requested a small top-of-page refresh status area to prevent scattered
+  loading and refreshing labels from causing layout movement, with refresh age
+  or timing feedback.
+- Implement and validate this local UI-only change using existing query state.
+  Preserve polling frequency, Harbor evidence freshness, errors and retry access.
+  Preserve unrelated work. No push, deployment, paid compute, live run mutation,
+  credential transfer, or backend behavior change is included.
+
+### Workbench recorded provider display (2026-09-11)
+
+Status: approved
+
+- The user requested investigation and correction of the Runs list showing an
+  unspecified provider for Workbench runs with a specified recorded provider.
+- Use the existing immutable submission provider for Workbench display when
+  explicitly supplied. Preserve native per-agent configuration, non-Workbench
+  display behavior, execution routing, and unspecified values when not recorded.
+- This is local UI and offline test work only. Preserve unrelated edits. No push,
+  deployment, live run mutation, paid compute, or credential transfer is included.
+
+### Fast-agent Workbench starter version update (2026-09-11)
+
+Status: approved
+
+- The user requested changing the fast-agent Workbench recipe pin to 0.10.24.
+- Update the existing UI and control-core starter definitions and matching tests.
+  Preserve saved/custom recipes, immutable runs, and unrelated working changes.
+- Local source changes and offline validation only. No publication, deployment,
+  live setup or benchmark launch, paid compute, or credential movement is included.
+
+### Workbench provider and starter release (2026-09-11)
+
+Status: approved
+
+Approved at: 2026-09-11T17:20:40.872135+00:00
+
+- The user explicitly requested a PR, green-CI merge, and deployment of the two
+  completed Workbench tweaks: recorded-provider display and fast-agent 0.10.24.
+- Commit and publish only these changes, their tests/documentation, and this
+  authorization. Base the PR on reviewed current main; preserve unrelated local
+  storage edits and prior commits. Use an isolated clean release checkout.
+- Deploy the exact merged source to the existing private control Space, retaining
+  its existing verified immutable worker images, Bucket, hardware, settings, and
+  secrets. No worker/task image rebuild, credential transfer, new resource, paid
+  test, or benchmark control action is included.
+- Check interruption safety and current execution before deployment. The earlier
+  active-run exception was revision-specific; stop for additional approval if
+  active execution prevents the normal idle cutover or another safety gate fails.
+- Review the full public diff and metadata and run the privacy scan before
+  publication. Merge only the exact reviewed commit after CI passes.
+
+### 2026-09-11 — Infrastructure replacement implementation approval
+
+- Approved the workflow and combined release scope above, including the narrow
+  temporary native-contract bridge, with PR #219 included in the baseline.
+  Benchmark execution approval remains separate.
+
+### 2026-09-12 — Native replacement evidence correction approval
+
+- The user directly approved the narrow correction and matched release above.
+  Actual replacement selection and paid execution remain separately gated.
+
+### 2026-09-11 — Local run inference review approval
+
+- Direct approval recorded above; prior PR #221 release and local checkout
+  synchronization are completed. No earlier mutation scope carries forward.
+
+### 2026-09-12 — Local run inference review completion
+
+- Completed only the local scope above, in the primary checkout. Authorization
+  was committed before implementation. Preserved the existing stash, retained
+  branches and other worktrees; no worktree was created.
+- Reused immutable native configuration and the existing inference policy matcher,
+  registry, revision checks, bounded review cache and approval endpoint. The
+  run-page action reuses a valid current-image grant or explicitly reviews the
+  same owned scope for the current image. No recipe reconstruction, durable
+  schema addition, credential source change or automatic launch was introduced.
+- Self-reviewed native ownership, complete source/test/docs and generated diffs,
+  including unchanged existing OpenAPI components. Evidence and API boundaries
+  are documented in `docs/run-inference-access-review.md`.
+- Validation: Node 22.22.0 formatting, lint, types, build, generated checks and
+  dependency audit passed; 1,568 unit tests and 75 browser tests passed. The
+  updated browser flow covers denial, preserved recorded configuration, explicit
+  inference approval and subsequent normal replacement creation with mocks only.
+- Changed modules have 97.59% combined line coverage and 91.11% branch coverage;
+  each of the three measured behavioral modules exceeds 85%. Root checks and
+  Ruff/format/ty passed, with 102 tests at
+  89.10% coverage and dependency audit passed. Agent Ruff/format/ty and all 481
+  tests passed. Both Dockerfiles built locally for linux/amd64.
+- Public privacy, normal Slophammer and DRY checks passed. The prescribed
+  Slophammer baseline invocation remains blocked by the pre-existing absent
+  baseline file. Agent whole-package coverage remains about 77%; no agent code
+  changed and no threshold was weakened. The first optional agent coverage
+  invocation lacked the plugin; the isolated plugin-enabled measurement passed.
+- The initial browser startup probe stalled and was stopped; the complete suite
+  passed against an isolated local test server. No browser test was weakened.
+- No publication, pull request, merge, deployment, remote grant change,
+  credential transfer, paid compute, model inference or remote resource creation
+  occurred. Ready for independent review and separate publication approval,
+  retaining the disclosed pre-existing validation gaps. Earlier release scopes
+  remain completed and do not authorize a new release.
+
+### 2026-09-11 — Run inference release approval
+
+- Direct user publication, exact green-head squash merge, matched worker image
+  publication and existing private Space deployment approval recorded above.
+  Live inference approval and all benchmark execution remain excluded.
+
+### 2026-09-11 — Replacement evidence and parent containment approval
+
+- Direct approval and the mandatory pre-publication independent-review stop are
+  recorded above. Earlier scopes are not renewed. Operations completion history
+  is preserved additively from the retained investigation branch.
+
+### 2026-09-12 — Replacement fixes local review handoff
+
+- Local implementation completion and disclosed validation gaps are recorded
+  above. Publication and deployment have not started; independent review is next.
+
+### 2026-09-12 — Built-in inference review validation and merge readiness
+
+- Implemented the approved narrow fix using `InferenceBindings.selected`: only
+  its explicit no-binding result returns the ephemeral `binding: none` review.
+  No approval, grant, credential-presence claim or authentication test is added.
+  Named-binding gates and normal replacement submission remain unchanged.
+- Independent security review: GO, no blockers; 168 focused tests independently
+  passed. Implementation coverage: 97.22% lines and 90.90% branches across the
+  changed review runtime. Native ownership and generated contract comparisons
+  found no duplicate Harbor configuration or durable field.
+- Full local checks pass: 1,641 Node unit tests, 77 browser tests, formatting,
+  lint, types, build, generated reproducibility and dependency audit. Root
+  checks pass with 102 tests and 89.10% coverage; agent checks pass with 598
+  tests. Both Dockerfiles build for linux/amd64. Slophammer and privacy pass.
+- Publish the reviewed fix and updated PR scope, then wait for hosted CI on the
+  exact latest head before the authorized squash merge. Merge remains pending
+  at this entry; deployment and image publication remain unauthorized.
+
+### 2026-09-12 — Results browsing and inference review merge completed
+
+- PR #224 was squash merged after successful hosted CI on exact independently
+  reviewed head `439ad51bf1099624e675f2da9f32625a37ed1c2e`.
+- Verified merged commit `1499be727f999faef6a10babf1465749d81be15e` has the
+  identical tree to that reviewed head and the PR is merged/closed.
+- The approved implementation/publication/merge scope is completed. This
+  completion record is local; no additional feature publication is required.
+  Branches and worktrees were preserved. No deployment, image publication,
+  credential transfer, grant, run mutation, inference or paid compute occurred.
+- Any deployment requires new explicit authorization and fresh release gates;
+  earlier private deployment preparation is not current-head readiness proof.
+
+### 2026-09-12 — Results browsing deployment scope pending
+
+- User requested deployment after the approved merge completed. The consolidated
+  existing-Space cutover scope above is pending explicit confirmation, including
+  a temporary write outage and verified immutable-image reuse. No external
+  mutation or deployment has started.
+
+### 2026-09-12 — Results browsing deployment approved
+
+- The user explicitly confirmed the consolidated existing-Space cutover plan
+  above. Record and commit approval before deployment work. No active-execution
+  exception, worker-image publication or credential transfer is included.
+
+### 2026-09-12 — Results browsing deployment completed
+
+- Deployed exact merged revision
+  `1499be727f999faef6a10babf1465749d81be15e` to the existing private control
+  Space. Successful CI, exact bundle contents, repository/runtime provenance,
+  Harbor pin and immutable worker-image provenance were verified. Worker inputs
+  were unchanged; both existing image references were retained.
+- Fresh provider inventory was terminal before and after cutover. Existing
+  paused runs remained paused. Writes were disabled during rebuilding and
+  restored only after authenticated liveness/readiness, session, presets,
+  projection, policy, run records and console-asset checks passed. Stable
+  enabled-mode verification also passed with no runtime errors.
+- Historical setup recovery briefly reports queued while replaying a terminal
+  Job's saved events and regenerates its observational completion timestamp.
+  Held upload, inspected the native service recovery path, and independently
+  reviewed bounded read-only recovery verification. Setup identity, outcome,
+  artifacts and exact terminal provider inventory remained unchanged; no setup
+  or benchmark execution occurred. No service behavior was changed for this.
+- Space privacy, hardware, Bucket, secrets, images and unrelated settings were
+  preserved. No credential transfer, inference grant, new resource, worker-image
+  publication, benchmark mutation or paid test was performed. Private evidence
+  remains outside the public repository; this completion record is local.
+
+### 2026-09-23 — Combined-result responsiveness approval
+
+- User approved local investigation, implementation and tests for combined-result
+  responsiveness. No deployment or external mutation is included; see the current
+  authorization for exact scope and limits.
+
+### 2026-09-23 — Local responsiveness implementation; validation hold
+
+- Removed per-trial listing round trips while preserving fresh native evidence,
+  missing-result semantics and the existing eight-operation reader bound.
+  Overlapping read-only views share inspection only after every caller freshly
+  discovers the same record graph; new descendants fence older work.
+- Offline synthetic 445-plus-four-trial evidence loading improved from 1,390 ms
+  to 716 ms, with 454 listings reduced to five. Four overlapping requests reduced
+  reads/listings from 1,828/1,816 to 463/eight. This is not hosted latency evidence.
+- Required Node checks, 1,645 unit tests, 77 browser tests, root Python checks,
+  102 tests at 89.10%, agent checks and 598 tests, both linux/amd64 Docker builds,
+  Slophammer and privacy checks pass. Changed modules exceed 97% line and 92%
+  branch coverage. No durable schema, API/UI value or native aggregation changed.
+- An additional full-repository coverage run fails the configured global 85%
+  threshold. A clean implementation/test baseline reproduces the shortfall
+  (83.39% lines, 77.31% branches); patched coverage is 83.40%/77.32%. Keep this
+  validation hold explicit; thresholds and coverage scope were not weakened.
+- Local implementation is available for review; global coverage remains a release
+  blocker. No publication, deployment, run mutation, paid work, new resource or
+  credential transfer occurred. See the responsiveness document for measurements
+  and exact validation evidence. Earlier release approvals remain completed.
+
+### 2026-09-23 — Deployment requested; release preparation amendment pending
+
+- User directly approved deployment of the responsiveness fix. Recorded above;
+  the existing coverage hold remains and no external mutation occurred.
+- Pending additional scope: integrate current main without removing newer work,
+  remediate the existing global coverage deficit without weakening thresholds,
+  publish a reviewed PR and merge its exact green head before the approved idle
+  cutover. No new resources, paid tests or credential transfers are proposed.
+
+### 2026-09-23 — Release follow-through approved
+
+- User confirmed the consolidated release plan. Publication, exact-green-head
+  merge and idle cutover are approved within the current release scope above.
+  The requested future coverage-rule change is not applied by this authorization.
+
+### 2026-09-23 — Responsiveness release preparation
+
+- Integrated current main; retained newer reviewed endpoint-connection and CI
+  changes. Resolved squash-history conflicts without changing the responsiveness
+  patch or losing existing authorization history.
+- Resolved the coverage hold without waiver: TypeScript source maps prevent
+  counting compiled workspace exports as separate untested implementations.
+  Added source-map, source-location and browser-pricing schema boundary tests.
+  No coverage source exclusion, threshold reduction or product expansion.
+- Full Node coverage passes at 91% lines, 85.08% branches, 88.31% functions and
+  89.31% statements with 1,667 tests. All 77 browser tests pass; fresh release
+  validation and exact-head CI remain required before merge and cutover.
+- Read-only inventory found no active owned provider Jobs and no active runs;
+  paused runs remain paused. Refresh this inventory at cutover. The live release
+  still matches the previously verified source; immutable worker references remain
+  configured. No remote mutation, inference or paid test occurred in preparation.
+
+### 2026-09-23 — Release deployed; live responsiveness remains unresolved
+
+- Published PR #229, verified exact reviewed head and green CI, and squash-merged
+  without bypassing checks. Merged revision
+  `66c9cbf0cf0f5a4d6869006e91208e48433502d7` also has successful hosted CI.
+- Deployed that exact merged revision to the existing private control Space after
+  fresh provider inventory covered both benchmark and Workbench ownership labels.
+  No owned Job was active. Existing paused runs remained paused.
+- Disabled writes before cutover, verified disabled-mode readiness and unchanged
+  run records/state, and uploaded the clean release bundle with an exact prior
+  Space commit guard. Verified release metadata and changed source bytes, Harbor
+  pin, authenticated readiness/session/presets, projection, console assets, build
+  logs and runtime logs. Restored writes only after these checks passed.
+- Stable enabled-mode verification passed with no structured runtime errors.
+  Space privacy, hardware, all unrelated variable values, Bucket and immutable
+  worker references are unchanged. No secret API, image publication, credential
+  transfer, inference, paid test, new resource or run-control action was used.
+- Crucially, hosted combined-result requests still exceeded the existing browser
+  deadline despite returning the same valid native result. Synthetic improvement
+  did not establish a hosted responsiveness fix. Do not mark that goal complete
+  or claim the browser issue is resolved. Detailed run evidence remains private.
+- A bounded read-only storage probe separated resolve and content requests;
+  conditional requests did not yield not-modified responses. No speculative
+  cache, alternate result, timeout extension or additional runtime patch was
+  deployed. Further bottleneck profiling and a reviewed follow-up are needed.
+
+### 2026-09-24 — Local-evidence browsing follow-up approved
+
+- Direct approval covers the local-evidence browsing change and its reviewed
+  release, within the exact current scope above. This follows the previous
+  deployment's unresolved hosted latency; no safety or coverage rule is waived.

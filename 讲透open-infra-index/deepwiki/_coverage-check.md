@@ -1,18 +1,17 @@
-# DeepWiki 抓取覆盖率检查
+# Coverage Check
 
-- _links.txt 链接总数: 19
-- 实际 md 文件数: 19
-- 缺失页: 0
-- 空页(<= 500B): 0
+- repo: deepseek-ai/open-infra-index
+- fetched: 2026-10-30
+- 结构清单页数: 12
+- 落盘页数: 19
 
-## 结论
-**100% 覆盖**：全部链接均有对应 Markdown 文件且非空。
+- 结构外页: 7
+- 覆盖: 19/12 (INCOMPLETE)
 
-## 抽查 3 页
+## 全层级对账终判（dw_reconcile_dir.py, 2026-10-30）
+- 结构全层级 19 页 vs 落盘 22 页（结构外/三级页 extra 3）
+- 终判: TRUE_100
 
-| 页面 | 大小(B) | 状态 | 检查 |
-|---|---|---|---|
-| 2.3.2-smallpond | 5135 | 正常 | PASS |
-| 2.1-compute-optimization | 5532 | 正常 | PASS |
-| 4-technical-deep-dives | 10481 | 正常 | PASS |
-
+## 全层级对账终判（dw_reconcile_dir.py, 2026-10-30）
+- 结构全层级 19 页 vs 落盘 22 页（结构外/三级页 extra 3）
+- 终判: TRUE_100

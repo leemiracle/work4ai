@@ -1,0 +1,32 @@
+# CLI Package Test
+
+## Purpose
+
+Validates all CLI package commands for inspecting and managing package state.
+
+## Test Scenario
+
+1. Reset state from previous runs
+2. Create a nodewright and wait for it to complete
+3. Test package status command:
+   - Run `nodewright package status <nodewright> <package>`
+   - Verify output shows package status across nodes
+4. Test package logs command:
+   - Run `nodewright package logs <nodewright> <package>`
+   - Verify logs are retrieved from package pods
+5. Test package rerun command:
+   - Run `nodewright package rerun <nodewright> <package>`
+   - Assert the package is re-run on the node
+
+## Key Features Tested
+
+- `nodewright package status` - Shows package status across nodes
+- `nodewright package logs` - Retrieves logs from package pods
+- `nodewright package rerun` - Forces a package to re-run
+
+## Files
+
+- `chainsaw-test.yaml` - Main test configuration
+- `nodewright.yaml` - Test nodewright
+- `assert-complete.yaml` - Initial completion assertion
+- `assert-package-rerun.yaml` - Rerun state assertion

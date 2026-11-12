@@ -1,0 +1,30 @@
+# DeepWiki 索引 — NVIDIA/go-dcgm
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 300531 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation and Setup](1.1-installation-and-setup.md)
+  - [1.2 Architecture Overview](1.2-architecture-overview.md)
+- [2 Core API Reference](2-core-api-reference.md)
+  - [2.1 Initialization and Shutdown](2.1-initialization-and-shutdown.md)
+  - [2.2 Device Information and Status](2.2-device-information-and-status.md)
+  - [2.3 Health Monitoring](2.3-health-monitoring.md)
+  - [2.4 Field Management](2.4-field-management.md)
+  - [2.5 Topology Management](2.5-topology-management.md)
+  - [2.6 Process Information](2.6-process-information.md)
+  - [2.7 Policy Monitoring](2.7-policy-monitoring.md)
+  - [2.8 GPU Group Management](2.8-gpu-group-management.md)
+  - [2.9 MIG and CPU Support](2.9-mig-and-cpu-support.md)
+- [3 Implementation Details](3-implementation-details.md)
+  - [3.1 Interaction with C Library](3.1-interaction-with-c-library.md)
+  - [3.2 Memory Management](3.2-memory-management.md)
+  - [3.3 Error Handling](3.3-error-handling.md)
+- [4 Building and Testing](4-building-and-testing.md)
+  - [4.1 Build System](4.1-build-system.md)
+  - [4.2 Testing Framework](4.2-testing-framework.md)
+  - [4.3 Continuous Integration](4.3-continuous-integration.md)
+- [5 Examples and Usage](5-examples-and-usage.md)
+  - [5.1 Sample Applications](5.1-sample-applications.md)
+  - [5.2 API Usage Patterns](5.2-api-usage-patterns.md)
+  - [5.3 Best Practices](5.3-best-practices.md)

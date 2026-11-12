@@ -1,0 +1,1304 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/model_executor/layers/fused_qk_norm_rope.py",
+   "type": "file",
+   "name": "fused_qk_norm_rope.py",
+   "filePath": "vllm/model_executor/layers/fused_qk_norm_rope.py",
+   "summary": "融合 split+QK-RMSNorm+（部分）RoPE+gate 拷贝 Triton kernel（单 query 路径）。",
+   "tags": [
+    "rope",
+    "rmsnorm",
+    "fusion",
+    "triton"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fusion/fused_act_quant.py",
+   "type": "file",
+   "name": "fused_act_quant.py",
+   "filePath": "vllm/model_executor/layers/fusion/fused_act_quant.py",
+   "summary": "激活×量化融合：SiluAndMul+FP8 静态/动态块/动态128/NVFP4 多变体与 ReLU2+FP8，maybe_fused_act_quant 按下游线性量化键选择。",
+   "tags": [
+    "fusion",
+    "activation",
+    "quantization",
+    "fp8"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "type": "file",
+   "name": "mm_input_norm.py",
+   "filePath": "vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "summary": "MM 输入归一化融合：per-channel 仿射（rescale/normalize/STD 归一化等价）Triton kernel + 恒等替身与参数解析工厂。",
+   "tags": [
+    "fusion",
+    "multimodal",
+    "normalization",
+    "triton"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fusion/quant_activation.py",
+   "type": "file",
+   "name": "quant_activation.py",
+   "filePath": "vllm/model_executor/layers/fusion/quant_activation.py",
+   "summary": "QuantizedActivation：预量化激活+scale+原元数据的包装，与 expose/get input quant key 协议（层间传递量化键）。",
+   "tags": [
+    "quantization",
+    "activation",
+    "metadata",
+    "protocol"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/fusion/relu2_fp8_quant.py",
+   "type": "file",
+   "name": "relu2_fp8_quant.py",
+   "filePath": "vllm/model_executor/layers/fusion/relu2_fp8_quant.py",
+   "summary": "ReLU²+静态 per-tensor FP8 量化融合 Triton kernel（ViT MLP 路径）。",
+   "tags": [
+    "relu2",
+    "fp8",
+    "fusion",
+    "triton"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/hpc/gated_mla.py",
+   "type": "file",
+   "name": "gated_mla.py",
+   "filePath": "vllm/model_executor/layers/hpc/gated_mla.py",
+   "summary": "HPC 门控 MLA 输出：融合 atten_output*sigmoid(x@W.T) 的 hpc.gated_mla GEMM 可用性 gate 与调用。",
+   "tags": [
+    "hpc",
+    "mla",
+    "gating",
+    "gemm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/hpc/hpc_ihc.py",
+   "type": "file",
+   "name": "hpc_ihc.py",
+   "filePath": "vllm/model_executor/layers/hpc/hpc_ihc.py",
+   "summary": "HPC iHC（DeepSeek V4 超连接）三块融合 kernel：pre（RMS 归一+comb 展开）、post（H_post 门控+多通道残差）、head（通道合并）。",
+   "tags": [
+    "hpc",
+    "ihc",
+    "hyper-connection",
+    "fused-kernel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/hpc/hpc_module.py",
+   "type": "file",
+   "name": "hpc_module.py",
+   "filePath": "vllm/model_executor/layers/hpc/hpc_module.py",
+   "summary": "HpcModule 基类：HPC kernel 子模块的公共骨架。",
+   "tags": [
+    "hpc",
+    "module",
+    "base-class"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/hpc/rope_norm.py",
+   "type": "file",
+   "name": "rope_norm.py",
+   "filePath": "vllm/model_executor/layers/hpc/rope_norm.py",
+   "summary": "HpcRopeNorm：HPC 融合 RoPE+QK-Norm+KV-Cache-Write（+可选 FP8 Q 量化）CustomOp，QkNormPolicy 定义 norm 与 RoPE 的相对顺序（HPC kernel ABI 的一部分）。",
+   "tags": [
+    "hpc",
+    "rope",
+    "rmsnorm",
+    "kv-cache-write"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/indexer_topk.py",
+   "type": "file",
+   "name": "indexer_topk.py",
+   "filePath": "vllm/model_executor/layers/indexer_topk.py",
+   "summary": "SparseIndexerTopk：稀疏索引器 decode top-k 阶段——多 kernel 选择（含 DeepSelect）与 stride 对齐/dtype 支持判定。",
+   "tags": [
+    "indexer",
+    "top-k",
+    "decode",
+    "kernel-selection"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fusion/mm_input_norm.py:NormParams",
+   "type": "class",
+   "name": "NormParams",
+   "filePath": "vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "summary": "解析后的 per-channel 仿射参数（flag 已折叠）。",
+   "tags": [
+    "norm-params",
+    "resolved",
+    "namedtuple"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    126,
+    142
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fusion/mm_input_norm.py:IdentityInputNorm",
+   "type": "class",
+   "name": "IdentityInputNorm",
+   "filePath": "vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "summary": "处理器无需重缩放/归一化时的替身（仍走数据并行拆分）。",
+   "tags": [
+    "identity",
+    "normalization",
+    "standin"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    182,
+    197
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fusion/mm_input_norm.py:FusedMMInputNorm",
+   "type": "class",
+   "name": "FusedMMInputNorm",
+   "filePath": "vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "summary": "MM 输入重缩放+归一化融合模块（CustomOp，9 方法）。",
+   "tags": [
+    "fused",
+    "mm-norm",
+    "custom-op"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    201,
+    336
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/fusion/quant_activation.py:QuantizedActivation",
+   "type": "class",
+   "name": "QuantizedActivation",
+   "filePath": "vllm/model_executor/layers/fusion/quant_activation.py",
+   "summary": "量化激活+scale+原元数据（quant_key 描述数据/尺度配对）。",
+   "tags": [
+    "quantized-activation",
+    "scale",
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    20,
+    46
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/hpc/hpc_ihc.py:HpcIHCPre",
+   "type": "class",
+   "name": "HpcIHCPre",
+   "filePath": "vllm/model_executor/layers/hpc/hpc_ihc.py",
+   "summary": "融合 iHC pre 块（RMS 归一+comb 展开，3 方法）。",
+   "tags": [
+    "ihc",
+    "pre",
+    "fused-kernel"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    102,
+    170
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/hpc/hpc_ihc.py:HpcIHCPost",
+   "type": "class",
+   "name": "HpcIHCPost",
+   "filePath": "vllm/model_executor/layers/hpc/hpc_ihc.py",
+   "summary": "融合 iHC post 块：H_post 门控+多通道残差（无 comb 矩阵）。",
+   "tags": [
+    "ihc",
+    "post",
+    "gating"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    173,
+    195
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/hpc/hpc_ihc.py:HpcIHCHead",
+   "type": "class",
+   "name": "HpcIHCHead",
+   "filePath": "vllm/model_executor/layers/hpc/hpc_ihc.py",
+   "summary": "融合 iHC head 块：hc 通道合并回单一隐藏态。",
+   "tags": [
+    "ihc",
+    "head",
+    "merge"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    198,
+    237
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/hpc/hpc_module.py:HpcModule",
+   "type": "class",
+   "name": "HpcModule",
+   "filePath": "vllm/model_executor/layers/hpc/hpc_module.py",
+   "summary": "HPC kernel 子模块公共基类。",
+   "tags": [
+    "hpc",
+    "module",
+    "base-class"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    6,
+    15
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/hpc/rope_norm.py:QkNormPolicy",
+   "type": "class",
+   "name": "QkNormPolicy",
+   "filePath": "vllm/model_executor/layers/hpc/rope_norm.py",
+   "summary": "融合 kernel 中 QK-RMSNorm 相对 RoPE 的顺序（HPC kernel ABI 一部分）。",
+   "tags": [
+    "qk-norm",
+    "policy",
+    "enum",
+    "abi"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    31,
+    43
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/hpc/rope_norm.py:HpcRopeNorm",
+   "type": "class",
+   "name": "HpcRopeNorm",
+   "filePath": "vllm/model_executor/layers/hpc/rope_norm.py",
+   "summary": "HPC 融合 RoPE+QK-Norm+KV 写入（+可选 FP8 Q 量化，9 方法）。",
+   "tags": [
+    "hpc",
+    "rope",
+    "kv-write",
+    "custom-op"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    89,
+    575
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/layers/indexer_topk.py:SparseIndexerTopk",
+   "type": "class",
+   "name": "SparseIndexerTopk",
+   "filePath": "vllm/model_executor/layers/indexer_topk.py",
+   "summary": "稀疏索引器 decode top-k 阶段（7 方法，多 kernel 选择）。",
+   "tags": [
+    "indexer",
+    "top-k",
+    "selection"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    141,
+    405
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fused_qk_norm_rope.py:fused_qk_rmsnorm_rope_gate",
+   "type": "function",
+   "name": "fused_qk_rmsnorm_rope_gate",
+   "filePath": "vllm/model_executor/layers/fused_qk_norm_rope.py",
+   "summary": "融合 split+QK-RMSNorm+（部分）RoPE+gate 拷贝入口。",
+   "tags": [
+    "fused",
+    "rope",
+    "norm",
+    "entry-point"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    138,
+    279
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fusion/fused_act_quant.py:_silu_and_mul_nvfp4_dynamic",
+   "type": "function",
+   "name": "_silu_and_mul_nvfp4_dynamic",
+   "filePath": "vllm/model_executor/layers/fusion/fused_act_quant.py",
+   "summary": "SiluAndMul+NVFP4 动态量化融合。",
+   "tags": [
+    "silu",
+    "nvfp4",
+    "fusion"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    101,
+    144
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fusion/fused_act_quant.py:maybe_fused_act_quant",
+   "type": "function",
+   "name": "maybe_fused_act_quant",
+   "filePath": "vllm/model_executor/layers/fusion/fused_act_quant.py",
+   "summary": "按下游线性量化键选择融合 act×quant。",
+   "tags": [
+    "dispatch",
+    "activation",
+    "quantization"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    196,
+    213
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fusion/mm_input_norm.py:fused_mm_input_norm_triton",
+   "type": "function",
+   "name": "fused_mm_input_norm_triton",
+   "filePath": "vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "summary": "per-channel 仿射融合 Triton kernel 封装。",
+   "tags": [
+    "triton",
+    "mm-norm",
+    "wrapper"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    69,
+    123
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fusion/mm_input_norm.py:_load_norm_params",
+   "type": "function",
+   "name": "_load_norm_params",
+   "filePath": "vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "summary": "解析 image_mean/std 归一化参数。",
+   "tags": [
+    "params",
+    "resolution",
+    "normalization"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    145,
+    179
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fusion/mm_input_norm.py:build_mm_input_norm",
+   "type": "function",
+   "name": "build_mm_input_norm",
+   "filePath": "vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "summary": "为模型构建输入归一化模块（含恒等替身）。",
+   "tags": [
+    "factory",
+    "mm-norm",
+    "builder"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    339,
+    364
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fusion/quant_activation.py:expose_input_quant_key",
+   "type": "function",
+   "name": "expose_input_quant_key",
+   "filePath": "vllm/model_executor/layers/fusion/quant_activation.py",
+   "summary": "把 kernel 的预量化输入键存到层属性。",
+   "tags": [
+    "quant-key",
+    "expose",
+    "protocol"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    49,
+    62
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fusion/quant_activation.py:as_quantized_activation",
+   "type": "function",
+   "name": "as_quantized_activation",
+   "filePath": "vllm/model_executor/layers/fusion/quant_activation.py",
+   "summary": "校验收窄预量化激活给消费层。",
+   "tags": [
+    "validate",
+    "narrow",
+    "quantized"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    72,
+    88
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/fusion/relu2_fp8_quant.py:relu_squared_static_fp8_quant",
+   "type": "function",
+   "name": "relu_squared_static_fp8_quant",
+   "filePath": "vllm/model_executor/layers/fusion/relu2_fp8_quant.py",
+   "summary": "BF16 ReLU²+静态 FP8 量化入口。",
+   "tags": [
+    "relu2",
+    "fp8",
+    "entry-point"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    43,
+    76
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/hpc/gated_mla.py:hpc_gated_mla_supported",
+   "type": "function",
+   "name": "hpc_gated_mla_supported",
+   "filePath": "vllm/model_executor/layers/hpc/gated_mla.py",
+   "summary": "hpc.gated_mla GEMM 可用性 gate。",
+   "tags": [
+    "gate",
+    "predicate",
+    "hpc"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    33,
+    92
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/hpc/gated_mla.py:hpc_gated_mla_gemm",
+   "type": "function",
+   "name": "hpc_gated_mla_gemm",
+   "filePath": "vllm/model_executor/layers/hpc/gated_mla.py",
+   "summary": "融合 atten_output*sigmoid(x@W.T)。",
+   "tags": [
+    "fused",
+    "gating",
+    "gemm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    95,
+    114
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/hpc/hpc_ihc.py:_ihc_supported",
+   "type": "function",
+   "name": "_ihc_supported",
+   "filePath": "vllm/model_executor/layers/hpc/hpc_ihc.py",
+   "summary": "三个 iHC op 的共享 gate。",
+   "tags": [
+    "gate",
+    "predicate",
+    "ihc"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    48,
+    99
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/hpc/rope_norm.py:hpc_rope_norm_forward",
+   "type": "function",
+   "name": "hpc_rope_norm_forward",
+   "filePath": "vllm/model_executor/layers/hpc/rope_norm.py",
+   "summary": "顶层 custom op：RoPE+QK-Norm+KV 写入(+FP8 Q)。",
+   "tags": [
+    "custom-op",
+    "forward",
+    "hpc"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    46,
+    78
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/indexer_topk.py:is_deep_select_supported",
+   "type": "function",
+   "name": "is_deep_select_supported",
+   "filePath": "vllm/model_executor/layers/indexer_topk.py",
+   "summary": "DeepSelect kernel 是否接受该输入（dtype/stride/topk）。",
+   "tags": [
+    "deepselect",
+    "predicate",
+    "support"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    44,
+    55
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/layers/indexer_topk.py:deep_select_topk",
+   "type": "function",
+   "name": "deep_select_topk",
+   "filePath": "vllm/model_executor/layers/indexer_topk.py",
+   "summary": "DeepSelect 逐行 top-k。",
+   "tags": [
+    "deepselect",
+    "top-k",
+    "kernel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    72,
+    128
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/model_executor/layers/fused_qk_norm_rope.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/fused_act_quant.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/fused_act_quant.py",
+   "target": "file:vllm/model_executor/layers/fusion/quant_activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/fused_act_quant.py",
+   "target": "file:vllm/model_executor/layers/fusion/relu2_fp8_quant.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/fused_act_quant.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/fused_act_quant.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/fused_act_quant.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/fused_act_quant.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "target": "file:vllm/transformers_utils/processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/quant_activation.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/relu2_fp8_quant.py",
+   "target": "file:vllm/model_executor/layers/fusion/quant_activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/relu2_fp8_quant.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/relu2_fp8_quant.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/relu2_fp8_quant.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/relu2_fp8_quant.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/gated_mla.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/gated_mla.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/gated_mla.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/gated_mla.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/gated_mla.py",
+   "target": "file:vllm/utils/hpc.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/hpc_ihc.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/hpc_ihc.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/hpc_ihc.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/hpc_ihc.py",
+   "target": "file:vllm/model_executor/layers/hpc/hpc_module.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/hpc_ihc.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/hpc_ihc.py",
+   "target": "file:vllm/utils/hpc.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/rope_norm.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/rope_norm.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/rope_norm.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/rope_norm.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/rope_norm.py",
+   "target": "file:vllm/model_executor/layers/hpc/hpc_module.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/rope_norm.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/rope_norm.py",
+   "target": "file:vllm/v1/attention/backends/hpc_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/rope_norm.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/rope_norm.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/indexer_topk.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/indexer_topk.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/indexer_topk.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/indexer_topk.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/indexer_topk.py",
+   "target": "file:vllm/utils/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/indexer_topk.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "target": "class:vllm/model_executor/layers/fusion/mm_input_norm.py:NormParams",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "target": "class:vllm/model_executor/layers/fusion/mm_input_norm.py:IdentityInputNorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "target": "class:vllm/model_executor/layers/fusion/mm_input_norm.py:FusedMMInputNorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "target": "function:vllm/model_executor/layers/fusion/mm_input_norm.py:fused_mm_input_norm_triton",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "target": "function:vllm/model_executor/layers/fusion/mm_input_norm.py:_load_norm_params",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "target": "function:vllm/model_executor/layers/fusion/mm_input_norm.py:build_mm_input_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/quant_activation.py",
+   "target": "class:vllm/model_executor/layers/fusion/quant_activation.py:QuantizedActivation",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/quant_activation.py",
+   "target": "function:vllm/model_executor/layers/fusion/quant_activation.py:expose_input_quant_key",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/quant_activation.py",
+   "target": "function:vllm/model_executor/layers/fusion/quant_activation.py:as_quantized_activation",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/hpc_ihc.py",
+   "target": "class:vllm/model_executor/layers/hpc/hpc_ihc.py:HpcIHCPre",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/hpc_ihc.py",
+   "target": "class:vllm/model_executor/layers/hpc/hpc_ihc.py:HpcIHCPost",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/hpc_ihc.py",
+   "target": "class:vllm/model_executor/layers/hpc/hpc_ihc.py:HpcIHCHead",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/hpc_ihc.py",
+   "target": "function:vllm/model_executor/layers/hpc/hpc_ihc.py:_ihc_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/hpc_module.py",
+   "target": "class:vllm/model_executor/layers/hpc/hpc_module.py:HpcModule",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/rope_norm.py",
+   "target": "class:vllm/model_executor/layers/hpc/rope_norm.py:QkNormPolicy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/rope_norm.py",
+   "target": "class:vllm/model_executor/layers/hpc/rope_norm.py:HpcRopeNorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/rope_norm.py",
+   "target": "function:vllm/model_executor/layers/hpc/rope_norm.py:hpc_rope_norm_forward",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/indexer_topk.py",
+   "target": "class:vllm/model_executor/layers/indexer_topk.py:SparseIndexerTopk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/indexer_topk.py",
+   "target": "function:vllm/model_executor/layers/indexer_topk.py:is_deep_select_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/indexer_topk.py",
+   "target": "function:vllm/model_executor/layers/indexer_topk.py:deep_select_topk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_qk_norm_rope.py",
+   "target": "function:vllm/model_executor/layers/fused_qk_norm_rope.py:fused_qk_rmsnorm_rope_gate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/fused_act_quant.py",
+   "target": "function:vllm/model_executor/layers/fusion/fused_act_quant.py:_silu_and_mul_nvfp4_dynamic",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/fused_act_quant.py",
+   "target": "function:vllm/model_executor/layers/fusion/fused_act_quant.py:maybe_fused_act_quant",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/relu2_fp8_quant.py",
+   "target": "function:vllm/model_executor/layers/fusion/relu2_fp8_quant.py:relu_squared_static_fp8_quant",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/gated_mla.py",
+   "target": "function:vllm/model_executor/layers/hpc/gated_mla.py:hpc_gated_mla_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/gated_mla.py",
+   "target": "function:vllm/model_executor/layers/hpc/gated_mla.py:hpc_gated_mla_gemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "target": "class:vllm/model_executor/layers/fusion/mm_input_norm.py:NormParams",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "target": "class:vllm/model_executor/layers/fusion/mm_input_norm.py:IdentityInputNorm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "target": "class:vllm/model_executor/layers/fusion/mm_input_norm.py:FusedMMInputNorm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "target": "function:vllm/model_executor/layers/fusion/mm_input_norm.py:fused_mm_input_norm_triton",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "target": "function:vllm/model_executor/layers/fusion/mm_input_norm.py:build_mm_input_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/quant_activation.py",
+   "target": "class:vllm/model_executor/layers/fusion/quant_activation.py:QuantizedActivation",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/quant_activation.py",
+   "target": "function:vllm/model_executor/layers/fusion/quant_activation.py:expose_input_quant_key",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/quant_activation.py",
+   "target": "function:vllm/model_executor/layers/fusion/quant_activation.py:as_quantized_activation",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/hpc_ihc.py",
+   "target": "class:vllm/model_executor/layers/hpc/hpc_ihc.py:HpcIHCPre",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/hpc_ihc.py",
+   "target": "class:vllm/model_executor/layers/hpc/hpc_ihc.py:HpcIHCPost",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/hpc_ihc.py",
+   "target": "class:vllm/model_executor/layers/hpc/hpc_ihc.py:HpcIHCHead",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/hpc_module.py",
+   "target": "class:vllm/model_executor/layers/hpc/hpc_module.py:HpcModule",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/rope_norm.py",
+   "target": "class:vllm/model_executor/layers/hpc/rope_norm.py:QkNormPolicy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/rope_norm.py",
+   "target": "class:vllm/model_executor/layers/hpc/rope_norm.py:HpcRopeNorm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/rope_norm.py",
+   "target": "function:vllm/model_executor/layers/hpc/rope_norm.py:hpc_rope_norm_forward",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/indexer_topk.py",
+   "target": "class:vllm/model_executor/layers/indexer_topk.py:SparseIndexerTopk",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/indexer_topk.py",
+   "target": "function:vllm/model_executor/layers/indexer_topk.py:is_deep_select_supported",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/indexer_topk.py",
+   "target": "function:vllm/model_executor/layers/indexer_topk.py:deep_select_topk",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fused_qk_norm_rope.py",
+   "target": "function:vllm/model_executor/layers/fused_qk_norm_rope.py:fused_qk_rmsnorm_rope_gate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/fused_act_quant.py",
+   "target": "function:vllm/model_executor/layers/fusion/fused_act_quant.py:maybe_fused_act_quant",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/fusion/relu2_fp8_quant.py",
+   "target": "function:vllm/model_executor/layers/fusion/relu2_fp8_quant.py:relu_squared_static_fp8_quant",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/gated_mla.py",
+   "target": "function:vllm/model_executor/layers/hpc/gated_mla.py:hpc_gated_mla_supported",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/hpc/gated_mla.py",
+   "target": "function:vllm/model_executor/layers/hpc/gated_mla.py:hpc_gated_mla_gemm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/layers/hpc/hpc_ihc.py:HpcIHCPre",
+   "target": "class:vllm/model_executor/layers/hpc/hpc_module.py:HpcModule",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/hpc/hpc_ihc.py:HpcIHCPost",
+   "target": "class:vllm/model_executor/layers/hpc/hpc_module.py:HpcModule",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/hpc/hpc_ihc.py:HpcIHCHead",
+   "target": "class:vllm/model_executor/layers/hpc/hpc_module.py:HpcModule",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/hpc/rope_norm.py:HpcRopeNorm",
+   "target": "class:vllm/model_executor/custom_op.py:CustomOp",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/fusion/mm_input_norm.py:FusedMMInputNorm",
+   "target": "function:vllm/model_executor/layers/fusion/mm_input_norm.py:fused_mm_input_norm_triton",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/layers/fusion/mm_input_norm.py:build_mm_input_norm",
+   "target": "class:vllm/model_executor/layers/fusion/mm_input_norm.py:FusedMMInputNorm",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/layers/fusion/mm_input_norm.py:build_mm_input_norm",
+   "target": "class:vllm/model_executor/layers/fusion/mm_input_norm.py:IdentityInputNorm",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/layers/hpc/rope_norm.py:HpcRopeNorm",
+   "target": "function:vllm/model_executor/layers/hpc/rope_norm.py:hpc_rope_norm_forward",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/layers/indexer_topk.py:SparseIndexerTopk",
+   "target": "function:vllm/model_executor/layers/indexer_topk.py:deep_select_topk",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

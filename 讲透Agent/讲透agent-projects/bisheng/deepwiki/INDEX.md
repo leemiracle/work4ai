@@ -1,0 +1,30 @@
+# DeepWiki 索引 — dataelement/bisheng
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-29
+> 结构 25 页 · 全文 748891 字符
+
+- [1 Overview](1-overview.md)
+- [2 System Architecture](2-system-architecture.md)
+  - [2.1 Frontend Architecture](2.1-frontend-architecture.md)
+  - [2.2 Backend Services](2.2-backend-services.md)
+  - [2.3 Data Storage Layer](2.3-data-storage-layer.md)
+- [3 Core Services](3-core-services.md)
+  - [3.1 Knowledge Base Management](3.1-knowledge-base-management.md)
+  - [3.2 Chat and Messaging System](3.2-chat-and-messaging-system.md)
+  - [3.3 Assistant System](3.3-assistant-system.md)
+  - [3.4 Linsight AI Workbench](3.4-linsight-ai-workbench.md)
+  - [3.5 Workflow Engine](3.5-workflow-engine.md)
+  - [3.6 Dashboard and Analytics](3.6-dashboard-and-analytics.md)
+  - [3.7 Flow and Skill Management](3.7-flow-and-skill-management.md)
+  - [3.8 LLM and Component Integration](3.8-llm-and-component-integration.md)
+- [4 User and Access Control](4-user-and-access-control.md)
+- [5 Development and Deployment](5-development-and-deployment.md)
+  - [5.1 Configuration Management](5.1-configuration-management.md)
+  - [5.2 Docker Deployment](5.2-docker-deployment.md)
+  - [5.3 CI/CD Pipeline](5.3-ci-cd-pipeline.md)
+- [6 Advanced Topics](6-advanced-topics.md)
+  - [6.1 Document Processing Pipeline](6.1-document-processing-pipeline.md)
+  - [6.2 Asynchronous Task Processing](6.2-asynchronous-task-processing.md)
+  - [6.3 Vector Search and Retrieval](6.3-vector-search-and-retrieval.md)
+  - [6.4 Custom Component System](6.4-custom-component-system.md)
+  - [6.5 Session Management and Caching](6.5-session-management-and-caching.md)

@@ -1,0 +1,30 @@
+# DeepWiki 索引 — browser-use/macos-harness
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-30
+> 结构 25 页 · 全文 143032 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started & Installation](1.1-getting-started-installation.md)
+  - [1.2 Design Principles & Invariants](1.2-design-principles-invariants.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 CLI & Execution Surface](2.1-cli-execution-surface.md)
+  - [2.2 MacOS Primitives Module](2.2-macos-primitives-module.md)
+  - [2.3 Accessibility (AX) Subsystem](2.3-accessibility-ax-subsystem.md)
+  - [2.4 Browser Harness Integration](2.4-browser-harness-integration.md)
+- [3 Visual Feedback: Overlay & Pointer](3-visual-feedback-overlay-pointer.md)
+  - [3.1 Live Pointer Overlay](3.1-live-pointer-overlay.md)
+  - [3.2 Pointer Geometry](3.2-pointer-geometry.md)
+- [4 Telemetry](4-telemetry.md)
+- [5 Skill & Agent Integration](5-skill-agent-integration.md)
+  - [5.1 SKILL.md — Agent Prompt & Usage Guide](5.1-skill.md-agent-prompt-usage-guide.md)
+  - [5.2 Agent Configuration (OpenAI YAML)](5.2-agent-configuration-openai-yaml.md)
+- [6 Permissions & Security](6-permissions-security.md)
+  - [6.1 Permission Model & Doctor Command](6.1-permission-model-doctor-command.md)
+  - [6.2 Security Policy & Threat Model](6.2-security-policy-threat-model.md)
+- [7 Testing](7-testing.md)
+  - [7.1 macOS & Overlay Tests](7.1-macos-overlay-tests.md)
+  - [7.2 Browser & Telemetry Tests](7.2-browser-telemetry-tests.md)
+- [8 CI/CD & Distribution](8-ci-cd-distribution.md)
+  - [8.1 Continuous Integration](8.1-continuous-integration.md)
+  - [8.2 Publishing & Package Distribution](8.2-publishing-package-distribution.md)
+- [9 Glossary](9-glossary.md)

@@ -1,0 +1,33 @@
+# DeepWiki 索引 — openai/model_spec_dataset
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 198840 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Dataset Structure and Schema](1.1-dataset-structure-and-schema.md)
+  - [1.2 Top-Level Behavioral Sections](1.2-top-level-behavioral-sections.md)
+- [2 Chain of Command](2-chain-of-command.md)
+  - [2.1 Follow All Applicable Instructions](2.1-follow-all-applicable-instructions.md)
+  - [2.2 Protect Privileged Information](2.2-protect-privileged-information.md)
+  - [2.3 No Other Objectives](2.3-no-other-objectives.md)
+- [3 Seek Truth](3-seek-truth.md)
+  - [3.1 Assume Objective Point of View](3.1-assume-objective-point-of-view.md)
+  - [3.2 Express Uncertainty](3.2-express-uncertainty.md)
+  - [3.3 Ask Clarifying Questions](3.3-ask-clarifying-questions.md)
+  - [3.4 Honesty, Transparency, and Highlight Misalignments](3.4-honesty-transparency-and-highlight-misalignments.md)
+- [4 Style](4-style.md)
+  - [4.1 Be Clear and Thorough but Efficient](4.1-be-clear-and-thorough-but-efficient.md)
+  - [4.2 Be Warm, Optimistic, and Responsible](4.2-be-warm-optimistic-and-responsible.md)
+  - [4.3 Be Professional and Conversational](4.3-be-professional-and-conversational.md)
+  - [4.4 Be Creative and Avoid Sycophancy](4.4-be-creative-and-avoid-sycophancy.md)
+  - [4.5 Support Programmatic Use and Respect Real-World Ties](4.5-support-programmatic-use-and-respect-real-world-ties.md)
+- [5 Stay in Bounds](5-stay-in-bounds.md)
+  - [5.1 Avoid Info Hazards and Disallowed Content](5.1-avoid-info-hazards-and-disallowed-content.md)
+  - [5.2 Do Not Facilitate Illicit Behavior and Comply with Laws](5.2-do-not-facilitate-illicit-behavior-and-comply-with-laws.md)
+  - [5.3 Prohibited and Sensitive Content](5.3-prohibited-and-sensitive-content.md)
+  - [5.4 Refusal Style, Hateful Content, and Abuse Boundaries](5.4-refusal-style-hateful-content-and-abuse-boundaries.md)
+  - [5.5 Prevent Imminent Harm and Avoid Regulated Advice](5.5-prevent-imminent-harm-and-avoid-regulated-advice.md)
+- [6 Best Work](6-best-work.md)
+  - [6.1 Avoid Overstepping and Avoid Errors](6.1-avoid-overstepping-and-avoid-errors.md)
+  - [6.2 Role-Play, Persona, and Fictional Context Compliance](6.2-role-play-persona-and-fictional-context-compliance.md)
+- [7 Glossary](7-glossary.md)

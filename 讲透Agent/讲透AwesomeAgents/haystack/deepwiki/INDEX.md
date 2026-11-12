@@ -1,0 +1,32 @@
+# DeepWiki 索引 — deepset-ai/haystack
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 405380 字符
+
+- [1 Haystack Overview](1-haystack-overview.md)
+- [2 Project Infrastructure](2-project-infrastructure.md)
+  - [2.1 Installation and Dependencies](2.1-installation-and-dependencies.md)
+  - [2.2 Testing and Contribution Workflow](2.2-testing-and-contribution-workflow.md)
+  - [2.3 CI/CD and Release Management](2.3-ci-cd-and-release-management.md)
+- [3 Core Architecture](3-core-architecture.md)
+  - [3.1 Component System](3.1-component-system.md)
+  - [3.2 Pipeline System](3.2-pipeline-system.md)
+  - [3.3 Core Module and Data Structures](3.3-core-module-and-data-structures.md)
+  - [3.4 Observability and Tracing](3.4-observability-and-tracing.md)
+- [4 LLM Integration](4-llm-integration.md)
+  - [4.1 OpenAI and Azure Integration](4.1-openai-and-azure-integration.md)
+  - [4.2 Hugging Face API Integration](4.2-hugging-face-api-integration.md)
+  - [4.3 Hugging Face Local Integration](4.3-hugging-face-local-integration.md)
+  - [4.4 Chat Messages and Prompt Building](4.4-chat-messages-and-prompt-building.md)
+- [5 Document Processing](5-document-processing.md)
+  - [5.1 Document Stores](5.1-document-stores.md)
+  - [5.2 Document Converters](5.2-document-converters.md)
+  - [5.3 Embedders and Rankers](5.3-embedders-and-rankers.md)
+  - [5.4 Document Preprocessing and Retrieval](5.4-document-preprocessing-and-retrieval.md)
+- [6 Advanced Features](6-advanced-features.md)
+  - [6.1 Agent System](6.1-agent-system.md)
+  - [6.2 Tool Invocation](6.2-tool-invocation.md)
+  - [6.3 Human-in-the-Loop and Context Management](6.3-human-in-the-loop-and-context-management.md)
+  - [6.4 Evaluation Components](6.4-evaluation-components.md)
+  - [6.5 Migration Guide (v2.x to v3.0)](6.5-migration-guide-v2.x-to-v3.0.md)
+- [7 Glossary](7-glossary.md)

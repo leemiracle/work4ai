@@ -1,0 +1,1514 @@
+{
+ "nodes": [
+  {
+   "id": "file:packages/client/ui-settings/src/client/config-form.ts",
+   "type": "file",
+   "name": "config-form.ts",
+   "filePath": "packages/client/ui-settings/src/client/config-form.ts",
+   "summary": "Host 配置镜像上的共享入口值与有序写（328 行）：ConfigFormController 单命名空间的派生视图+序列化写（携带最新 revision、应答折回镜像、teardown 等待在途操作）；ConfigForms 服务注册表。刻意经 api-remotes 的纯类型子路径避免 Host tsc 阶段死锁。",
+   "tags": [
+    "service",
+    "config-form",
+    "revision-fence",
+    "build-graph"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/client/ui-settings/src/client/config-form.ts:ConfigFormController",
+   "type": "class",
+   "name": "ConfigFormController",
+   "filePath": "packages/client/ui-settings/src/client/config-form.ts",
+   "lineRange": [
+    50,
+    221
+   ],
+   "summary": "实现 ConfigForm<T>：SnapshotStore 视图+tail 写队列+pendingRevision 栅栏（被取代的写在镜像前的 revision 传给后继）。",
+   "tags": [
+    "service-provider",
+    "write-queue"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/client/ui-settings/src/client/config-form.ts:ConfigForms",
+   "type": "class",
+   "name": "ConfigForms",
+   "filePath": "packages/client/ui-settings/src/client/config-form.ts",
+   "lineRange": [
+    236,
+    328
+   ],
+   "summary": "命名空间控制器的进程级注册表：get/describe 两入口，describe 供设置页共享已接受值。",
+   "tags": [
+    "registry",
+    "service-provider"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/client/ui-settings/src/client/developer-tools.ts",
+   "type": "file",
+   "name": "developer-tools.ts",
+   "filePath": "packages/client/ui-settings/src/client/developer-tools.ts",
+   "summary": "开发者工具偏好：单一 accepted 值驱动全部消费者（Host 背书特性在 accepted 前保持禁用），ObservableSnapshot enabled + 有序写 setEnabled。",
+   "tags": [
+    "preference",
+    "observable",
+    "settings"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/client/ui-settings/src/client/developer-tools.ts:DeveloperToolsPreference",
+   "type": "class",
+   "name": "DeveloperToolsPreference",
+   "filePath": "packages/client/ui-settings/src/client/developer-tools.ts",
+   "lineRange": [
+    7,
+    37
+   ],
+   "summary": "构造时包装 ConfigForm 为变化检测的 enabled 快照源。",
+   "tags": [
+    "preference",
+    "observable"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-settings/src/developer-tools-settings.ts",
+   "type": "file",
+   "name": "developer-tools-settings.ts",
+   "filePath": "packages/client/ui-settings/src/developer-tools-settings.ts",
+   "summary": "共享 Web/桌面开发者工具偏好的 Host 存储：namespace ui-settings、enabled 布尔（新装与缺失默认开启）、schemastery schema。",
+   "tags": [
+    "settings",
+    "schema",
+    "type-definition"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/client/ui-settings/tsconfig.client.json",
+   "type": "config",
+   "name": "tsconfig.client.json",
+   "filePath": "packages/client/ui-settings/tsconfig.client.json",
+   "summary": "client 编译面：extends base.client.json，references 指向 remotes/settings/locale/store/ui-slots 等依赖。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "client-face"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/client/ui-settings/tsconfig.host.json",
+   "type": "config",
+   "name": "tsconfig.host.json",
+   "filePath": "packages/client/ui-settings/tsconfig.host.json",
+   "summary": "host 编译面：extends base.json，references 指向 vendor/cordis、vendor/schemastery、settings、util/values。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "host-face"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/client/ui-settings/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/client/ui-settings/tsconfig.json",
+   "summary": "solution-only 根配置：仅 references host/client 两编译面。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "solution-root"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-settings-account/src/client/AccountAvatar.tsx",
+   "type": "file",
+   "name": "AccountAvatar.tsx",
+   "filePath": "packages/client/ui-settings-account/src/client/AccountAvatar.tsx",
+   "summary": "账户头像：共享图片装载快照的 img 渲染（失败回报经注入 avatarFailed，被取代的尝试忽略）。",
+   "tags": [
+    "component",
+    "avatar",
+    "image"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-settings-account/src/client/AccountAvatar.tsx:AccountAvatar",
+   "type": "function",
+   "name": "AccountAvatar",
+   "filePath": "packages/client/ui-settings-account/src/client/AccountAvatar.tsx",
+   "lineRange": [
+    11,
+    19
+   ],
+   "summary": "按快照渲染头像图。",
+   "tags": [
+    "component",
+    "avatar"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-settings-account/src/client/AccountMenu.tsx",
+   "type": "file",
+   "name": "AccountMenu.tsx",
+   "filePath": "packages/client/ui-settings-account/src/client/AccountMenu.tsx",
+   "summary": "侧栏账户启动器与本地权威登出动作：Settings 打开沿（假→真边沿只读一次）、凭据过期/模型登录要求通知、登出确认与登录对话框、奖励通知栈。",
+   "tags": [
+    "component",
+    "launcher",
+    "menu",
+    "account"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/client/ui-settings-account/src/client/AccountMenu.tsx:AccountMenu",
+   "type": "function",
+   "name": "AccountMenu",
+   "filePath": "packages/client/ui-settings-account/src/client/AccountMenu.tsx",
+   "lineRange": [
+    22,
+    94
+   ],
+   "summary": "settings.launcher 席位：头像+菜单（设置/充值/联系我们）+过期 toast+SignOut/SignIn 对话框接线。",
+   "tags": [
+    "component",
+    "launcher"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/client/ui-settings-account/src/client/AccountNotice.tsx",
+   "type": "file",
+   "name": "AccountNotice.tsx",
+   "filePath": "packages/client/ui-settings-account/src/client/AccountNotice.tsx",
+   "summary": "侧栏奖励通知：卡片有位置+文档可见+画过一帧即上报展示（不测遮挡）；关闭也算展示；已过期奖励不画。门户渲染+消退过渡。",
+   "tags": [
+    "component",
+    "notice",
+    "visibility-detection"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/client/ui-settings-account/src/client/AccountNotice.tsx:afterPaint",
+   "type": "function",
+   "name": "afterPaint",
+   "filePath": "packages/client/ui-settings-account/src/client/AccountNotice.tsx",
+   "lineRange": [
+    28,
+    47
+   ],
+   "summary": "一帧后再触发的 canceller（无 rAF 回退宏任务）。",
+   "tags": [
+    "paint-detection"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-settings-account/src/client/AccountNotice.tsx:AccountNoticeStack",
+   "type": "function",
+   "name": "AccountNoticeStack",
+   "filePath": "packages/client/ui-settings-account/src/client/AccountNotice.tsx",
+   "lineRange": [
+    52,
+    88
+   ],
+   "summary": "前到后顺序的通知栈（多卡片门户渲染）。",
+   "tags": [
+    "component",
+    "stack"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-settings-account/src/client/AccountNotice.tsx:NoticeCard",
+   "type": "function",
+   "name": "NoticeCard",
+   "filePath": "packages/client/ui-settings-account/src/client/AccountNotice.tsx",
+   "lineRange": [
+    91,
+    135
+   ],
+   "summary": "单卡：关闭钮+过期判定+展示上报。",
+   "tags": [
+    "component",
+    "card"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/client/ui-settings-account/src/client/AccountOnboarding.tsx",
+   "type": "file",
+   "name": "AccountOnboarding.tsx",
+   "filePath": "packages/client/ui-settings-account/src/client/AccountOnboarding.tsx",
+   "summary": "浏览器侧引导入口：shell.overlay 席位到 OnboardingSurface 的薄接线。",
+   "tags": [
+    "component",
+    "onboarding",
+    "overlay"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-settings-account/src/client/AccountOnboarding.tsx:AccountOnboarding",
+   "type": "function",
+   "name": "AccountOnboarding",
+   "filePath": "packages/client/ui-settings-account/src/client/AccountOnboarding.tsx",
+   "lineRange": [
+    9,
+    18
+   ],
+   "summary": "overlay 注入的引导壳。",
+   "tags": [
+    "component",
+    "onboarding"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-settings-account/src/client/AccountPlatformHost.tsx",
+   "type": "file",
+   "name": "AccountPlatformHost.tsx",
+   "filePath": "packages/client/ui-settings-account/src/client/AccountPlatformHost.tsx",
+   "summary": "账户特性的共享原生平台页宿主（桌面专用；普通浏览器无此通道）。",
+   "tags": [
+    "component",
+    "platform-host",
+    "desktop"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-settings-account/src/client/AccountQuotaNotice.tsx",
+   "type": "file",
+   "name": "AccountQuotaNotice.tsx",
+   "filePath": "packages/client/ui-settings-account/src/client/AccountQuotaNotice.tsx",
+   "summary": "账户余额接管框架级配额通知：已登录显示余额 Modal（可开桌面平台页），未登录回退通用 Toast。",
+   "tags": [
+    "component",
+    "quota-notice",
+    "fallback"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-settings-account/src/client/AccountQuotaNotice.tsx:AccountQuotaNotice",
+   "type": "function",
+   "name": "AccountQuotaNotice",
+   "filePath": "packages/client/ui-settings-account/src/client/AccountQuotaNotice.tsx",
+   "lineRange": [
+    29,
+    81
+   ],
+   "summary": "shell.quota-notice 认领渲染：三路分派（平台页等待/Modal/Toast）。",
+   "tags": [
+    "component",
+    "quota-notice"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/client/ui-settings-account/src/client/AccountSection.tsx",
+   "type": "file",
+   "name": "AccountSection.tsx",
+   "filePath": "packages/client/ui-settings-account/src/client/AccountSection.tsx",
+   "summary": "账户设置区（226 行）：渲染安全 Host 状态与显式登录动作——服务器通知、画像/余额查询、共享头像装载、主题化授权 URL、big.js 余额格式化。",
+   "tags": [
+    "component",
+    "settings-section",
+    "account"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/client/ui-settings-account/src/client/AccountSection.tsx:AccountSection",
+   "type": "function",
+   "name": "AccountSection",
+   "filePath": "packages/client/ui-settings-account/src/client/AccountSection.tsx",
+   "lineRange": [
+    93,
+    226
+   ],
+   "summary": "设置页账户节完整渲染：登录/登出/充值/通知栈+快照接线。",
+   "tags": [
+    "component",
+    "settings-section"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/client/ui-settings-account/src/client/DesktopOnboarding.tsx",
+   "type": "file",
+   "name": "DesktopOnboarding.tsx",
+   "filePath": "packages/client/ui-settings-account/src/client/DesktopOnboarding.tsx",
+   "summary": "桌面引导协调（125 行）：欢迎/充值/用途/流程四步导航与过渡、共享原生充值页通道（仅持自身请求）、完成/跳过确认对话框、产品分析埋点。",
+   "tags": [
+    "component",
+    "onboarding",
+    "navigation",
+    "desktop"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/client/ui-settings-account/src/client/DesktopOnboarding.tsx:DesktopOnboarding",
+   "type": "function",
+   "name": "DesktopOnboarding",
+   "filePath": "packages/client/ui-settings-account/src/client/DesktopOnboarding.tsx",
+   "lineRange": [
+    28,
+    125
+   ],
+   "summary": "步进状态机+确认对话框+充值页 claim/release。",
+   "tags": [
+    "component",
+    "onboarding"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/client/ui-settings-account/src/client/DesktopOnboardingEntry.tsx",
+   "type": "file",
+   "name": "DesktopOnboardingEntry.tsx",
+   "filePath": "packages/client/ui-settings-account/src/client/DesktopOnboardingEntry.tsx",
+   "summary": "框架 hook 投影到桌面引导纯视图：会话不控制激活；完成保留 180ms 退场（reduced-motion 除外），dshOnboarding 桥接原生壳。",
+   "tags": [
+    "component",
+    "entry-point",
+    "projection",
+    "desktop"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-settings-account/src/client/DesktopOnboardingEntry.tsx:DesktopOnboardingEntry",
+   "type": "function",
+   "name": "DesktopOnboardingEntry",
+   "filePath": "packages/client/ui-settings-account/src/client/DesktopOnboardingEntry.tsx",
+   "lineRange": [
+    25,
+    64
+   ],
+   "summary": "shell.overlay 席位：把 observable state/account 转为纯视图 props。",
+   "tags": [
+    "component",
+    "entry-point"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/client/ui-settings-account/src/client/LogoutIcon.tsx",
+   "type": "file",
+   "name": "LogoutIcon.tsx",
+   "filePath": "packages/client/ui-settings-account/src/client/LogoutIcon.tsx",
+   "summary": "登出图标：退出形 SVG（装饰性）。",
+   "tags": [
+    "component",
+    "icon",
+    "svg"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-settings-account/src/client/LogoutIcon.tsx:LogoutIcon",
+   "type": "function",
+   "name": "LogoutIcon",
+   "filePath": "packages/client/ui-settings-account/src/client/LogoutIcon.tsx",
+   "lineRange": [
+    4,
+    10
+   ],
+   "summary": "装饰图标。",
+   "tags": [
+    "component",
+    "icon"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-settings-account/src/client/OnboardingConfirmation.tsx",
+   "type": "file",
+   "name": "OnboardingConfirmation.tsx",
+   "filePath": "packages/client/ui-settings-account/src/client/OnboardingConfirmation.tsx",
+   "summary": "充值与跳过确认对话框（三种 kind：credit/credit-skip/skip），焦点受控的 Modal。",
+   "tags": [
+    "component",
+    "confirmation",
+    "dialog"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-settings-account/src/client/OnboardingConfirmation.tsx:OnboardingConfirmation",
+   "type": "function",
+   "name": "OnboardingConfirmation",
+   "filePath": "packages/client/ui-settings-account/src/client/OnboardingConfirmation.tsx",
+   "lineRange": [
+    10,
+    35
+   ],
+   "summary": "双按钮确认（继续设置/去充值或进入）。",
+   "tags": [
+    "component",
+    "confirmation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-settings-account/src/client/OnboardingCreditStep.tsx",
+   "type": "file",
+   "name": "OnboardingCreditStep.tsx",
+   "filePath": "packages/client/ui-settings-account/src/client/OnboardingCreditStep.tsx",
+   "summary": "充值步：余额插画（明暗+中英变体资产）与充值/跳过动作。",
+   "tags": [
+    "component",
+    "onboarding-step",
+    "recharge"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-settings-account/src/client/OnboardingCreditStep.tsx:OnboardingCreditStep",
+   "type": "function",
+   "name": "OnboardingCreditStep",
+   "filePath": "packages/client/ui-settings-account/src/client/OnboardingCreditStep.tsx",
+   "lineRange": [
+    13,
+    34
+   ],
+   "summary": "插画+动作的步页面。",
+   "tags": [
+    "component",
+    "onboarding-step"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-settings-account/src/client/OnboardingIllustration.tsx",
+   "type": "file",
+   "name": "OnboardingIllustration.tsx",
+   "filePath": "packages/client/ui-settings-account/src/client/OnboardingIllustration.tsx",
+   "summary": "引导插画占位渲染（主题配色）。",
+   "tags": [
+    "component",
+    "illustration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-settings-account/src/client/OnboardingIllustration.tsx:OnboardingIllustration",
+   "type": "function",
+   "name": "OnboardingIllustration",
+   "filePath": "packages/client/ui-settings-account/src/client/OnboardingIllustration.tsx",
+   "lineRange": [
+    5,
+    10
+   ],
+   "summary": "装饰插画。",
+   "tags": [
+    "component",
+    "illustration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-settings-account/src/client/OnboardingProcessStep.tsx",
+   "type": "file",
+   "name": "OnboardingProcessStep.tsx",
+   "filePath": "packages/client/ui-settings-account/src/client/OnboardingProcessStep.tsx",
+   "summary": "流程步：三档过程说明（紧凑/标准/详细插画变体）单选。",
+   "tags": [
+    "component",
+    "onboarding-step",
+    "selection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-settings-account/src/client/OnboardingProcessStep.tsx:OnboardingProcessStep",
+   "type": "function",
+   "name": "OnboardingProcessStep",
+   "filePath": "packages/client/ui-settings-account/src/client/OnboardingProcessStep.tsx",
+   "lineRange": [
+    18,
+    55
+   ],
+   "summary": "三选一卡片组。",
+   "tags": [
+    "component",
+    "selection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-settings-account/src/client/OnboardingPurposeStep.tsx",
+   "type": "file",
+   "name": "OnboardingPurposeStep.tsx",
+   "filePath": "packages/client/ui-settings-account/src/client/OnboardingPurposeStep.tsx",
+   "summary": "用途步：受控且可独立选择的用途卡（代码/办公插画变体）。",
+   "tags": [
+    "component",
+    "onboarding-step",
+    "selection"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-settings-account/src/client/OnboardingPurposeStep.tsx:OnboardingPurposeStep",
+   "type": "function",
+   "name": "OnboardingPurposeStep",
+   "filePath": "packages/client/ui-settings-account/src/client/OnboardingPurposeStep.tsx",
+   "lineRange": [
+    12,
+    36
+   ],
+   "summary": "用途选择步页面。",
+   "tags": [
+    "component",
+    "onboarding-step"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-settings-account/src/client/OnboardingPurposeStep.tsx:PurposeCard",
+   "type": "function",
+   "name": "PurposeCard",
+   "filePath": "packages/client/ui-settings-account/src/client/OnboardingPurposeStep.tsx",
+   "lineRange": [
+    38,
+    65
+   ],
+   "summary": "单用途卡（选中态+插画）。",
+   "tags": [
+    "component",
+    "card"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/client/ui-settings-account/src/client/OnboardingSurface.tsx",
+   "type": "file",
+   "name": "OnboardingSurface.tsx",
+   "filePath": "packages/client/ui-settings-account/src/client/OnboardingSurface.tsx",
+   "summary": "body 门户引导舞台：挂载期间应用根 inert+隐 opacity，完成经 180ms 淡出揭示；原生标题栏控件/对话框/账户页仍在舞台之上。",
+   "tags": [
+    "component",
+    "overlay",
+    "inert",
+    "portal"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-settings-account/src/client/OnboardingSurface.tsx:OnboardingSurface",
+   "type": "function",
+   "name": "OnboardingSurface",
+   "filePath": "packages/client/ui-settings-account/src/client/OnboardingSurface.tsx",
+   "lineRange": [
+    16,
+    42
+   ],
+   "summary": "acquireOverlayInert+双布局效应管理根透明度。",
+   "tags": [
+    "component",
+    "overlay"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/client/ui-settings-account/src/client/OnboardingWelcomeStep.tsx",
+   "type": "file",
+   "name": "OnboardingWelcomeStep.tsx",
+   "filePath": "packages/client/ui-settings-account/src/client/OnboardingWelcomeStep.tsx",
+   "summary": "欢迎步：欢迎插画（明暗+中英变体）与进入动作。",
+   "tags": [
+    "component",
+    "onboarding-step",
+    "welcome"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-settings-account/src/client/OnboardingWelcomeStep.tsx:OnboardingWelcomeStep",
+   "type": "function",
+   "name": "OnboardingWelcomeStep",
+   "filePath": "packages/client/ui-settings-account/src/client/OnboardingWelcomeStep.tsx",
+   "lineRange": [
+    13,
+    28
+   ],
+   "summary": "插画+动作的步页面。",
+   "tags": [
+    "component",
+    "onboarding-step"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/client/ui-settings/src/client/config-form.ts",
+   "target": "class:packages/client/ui-settings/src/client/config-form.ts:ConfigFormController",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings/src/client/config-form.ts",
+   "target": "class:packages/client/ui-settings/src/client/config-form.ts:ConfigFormController",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings/src/client/config-form.ts",
+   "target": "class:packages/client/ui-settings/src/client/config-form.ts:ConfigForms",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings/src/client/config-form.ts",
+   "target": "class:packages/client/ui-settings/src/client/config-form.ts:ConfigForms",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings/src/client/developer-tools.ts",
+   "target": "class:packages/client/ui-settings/src/client/developer-tools.ts:DeveloperToolsPreference",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings/src/client/developer-tools.ts",
+   "target": "class:packages/client/ui-settings/src/client/developer-tools.ts:DeveloperToolsPreference",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountAvatar.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/AccountAvatar.tsx:AccountAvatar",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountAvatar.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/AccountAvatar.tsx:AccountAvatar",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountMenu.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/AccountMenu.tsx:AccountMenu",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountMenu.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/AccountMenu.tsx:AccountMenu",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountNotice.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/AccountNotice.tsx:AccountNoticeStack",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountNotice.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/AccountNotice.tsx:AccountNoticeStack",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountNotice.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/AccountNotice.tsx:NoticeCard",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountNotice.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/AccountNotice.tsx:NoticeCard",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountOnboarding.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/AccountOnboarding.tsx:AccountOnboarding",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountOnboarding.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/AccountOnboarding.tsx:AccountOnboarding",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountQuotaNotice.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/AccountQuotaNotice.tsx:AccountQuotaNotice",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountQuotaNotice.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/AccountQuotaNotice.tsx:AccountQuotaNotice",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountSection.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/AccountSection.tsx:AccountSection",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountSection.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/AccountSection.tsx:AccountSection",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboarding.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/DesktopOnboarding.tsx:DesktopOnboarding",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboarding.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/DesktopOnboarding.tsx:DesktopOnboarding",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboardingEntry.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/DesktopOnboardingEntry.tsx:DesktopOnboardingEntry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboardingEntry.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/DesktopOnboardingEntry.tsx:DesktopOnboardingEntry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/LogoutIcon.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/LogoutIcon.tsx:LogoutIcon",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/LogoutIcon.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/LogoutIcon.tsx:LogoutIcon",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingConfirmation.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/OnboardingConfirmation.tsx:OnboardingConfirmation",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingConfirmation.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/OnboardingConfirmation.tsx:OnboardingConfirmation",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingCreditStep.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/OnboardingCreditStep.tsx:OnboardingCreditStep",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingCreditStep.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/OnboardingCreditStep.tsx:OnboardingCreditStep",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingIllustration.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/OnboardingIllustration.tsx:OnboardingIllustration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingIllustration.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/OnboardingIllustration.tsx:OnboardingIllustration",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingProcessStep.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/OnboardingProcessStep.tsx:OnboardingProcessStep",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingProcessStep.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/OnboardingProcessStep.tsx:OnboardingProcessStep",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingPurposeStep.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/OnboardingPurposeStep.tsx:OnboardingPurposeStep",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingPurposeStep.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/OnboardingPurposeStep.tsx:OnboardingPurposeStep",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingPurposeStep.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/OnboardingPurposeStep.tsx:PurposeCard",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingPurposeStep.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/OnboardingPurposeStep.tsx:PurposeCard",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingSurface.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/OnboardingSurface.tsx:OnboardingSurface",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingSurface.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/OnboardingSurface.tsx:OnboardingSurface",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingWelcomeStep.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/OnboardingWelcomeStep.tsx:OnboardingWelcomeStep",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingWelcomeStep.tsx",
+   "target": "function:packages/client/ui-settings-account/src/client/OnboardingWelcomeStep.tsx:OnboardingWelcomeStep",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-settings/src/client/config-form.ts",
+   "target": "file:packages/client/ui-settings/src/developer-tools-settings.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings/src/client/config-form.ts",
+   "target": "file:packages/client/ui-settings/src/client/config-form-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings/src/client/config-form.ts",
+   "target": "file:packages/client/ui-settings/src/client/developer-tools.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings/src/client/config-form.ts",
+   "target": "file:packages/client/ui-settings/src/client/schema.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings/src/client/config-form.ts",
+   "target": "file:packages/client/ui-settings/src/client/settings-mirror.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings/src/client/config-form.ts",
+   "target": "file:packages/api/remotes/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings/src/client/config-form.ts",
+   "target": "file:packages/api/remotes/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings/src/client/config-form.ts",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings/src/client/config-form.ts",
+   "target": "file:packages/settings/settings/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings/src/client/config-form.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings/src/client/developer-tools.ts",
+   "target": "file:packages/client/ui-settings/src/developer-tools-settings.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings/src/client/developer-tools.ts",
+   "target": "file:packages/client/ui-settings/src/client/config-form-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings/src/client/developer-tools.ts",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountAvatar.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/account-avatar.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountAvatar.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountMenu.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/AccountAvatar.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountMenu.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/AccountNotice.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountMenu.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/AccountSection.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountMenu.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/LogoutIcon.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountMenu.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/SignInDialog.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountMenu.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/SignOutDialog.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountMenu.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountMenu.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountNotice.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/bonus-notices.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountNotice.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/notice-transition.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountNotice.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountOnboarding.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/AccountSection.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountOnboarding.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/SignInDialog.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountOnboarding.tsx",
+   "target": "file:packages/client/ui-settings-models/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountOnboarding.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountPlatformHost.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/PlatformOverlay.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountPlatformHost.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/platform-pages.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountPlatformHost.tsx",
+   "target": "file:packages/client/ui-layout/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountPlatformHost.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountQuotaNotice.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/AccountSection.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountQuotaNotice.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/platform-pages.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountQuotaNotice.tsx",
+   "target": "file:packages/client/ui-chat/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountQuotaNotice.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountQuotaNotice.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountSection.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/AccountAvatar.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountSection.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/account-avatar.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountSection.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/authorize-url.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountSection.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/bonus-notices.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountSection.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/formatBalance.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountSection.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/platform-pages.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountSection.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountSection.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountSection.tsx",
+   "target": "file:packages/client/ui-theme/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/AccountSection.tsx",
+   "target": "file:packages/credentials/deepseek-account/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboarding.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/OnboardingConfirmation.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboarding.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/OnboardingCreditStep.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboarding.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/OnboardingProcessStep.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboarding.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/OnboardingPurposeStep.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboarding.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/OnboardingSurface.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboarding.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/OnboardingWelcomeStep.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboarding.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/onboarding-balance.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboarding.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/onboarding-contract.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboarding.tsx",
+   "target": "file:packages/client/product-analytics/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboarding.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboardingEntry.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/AccountSection.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboardingEntry.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/DesktopOnboarding.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboardingEntry.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/OnboardingSurface.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboardingEntry.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/onboarding-contract.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboardingEntry.tsx",
+   "target": "file:packages/client/ui-layout/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/DesktopOnboardingEntry.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingConfirmation.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/onboarding-contract.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingConfirmation.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingCreditStep.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/OnboardingIllustration.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingCreditStep.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/onboarding-contract.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingCreditStep.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingProcessStep.tsx",
+   "target": "file:packages/client/ui-settings-account/src/onboarding-settings.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingProcessStep.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/onboarding-contract.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingProcessStep.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingPurposeStep.tsx",
+   "target": "file:packages/client/ui-settings-account/src/onboarding-settings.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingPurposeStep.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/onboarding-contract.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingPurposeStep.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingSurface.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/overlay-inert.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingWelcomeStep.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/OnboardingIllustration.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingWelcomeStep.tsx",
+   "target": "file:packages/client/ui-settings-account/src/client/onboarding-contract.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-settings-account/src/client/OnboardingWelcomeStep.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

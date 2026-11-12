@@ -1,0 +1,32 @@
+# DeepWiki 索引 — microsoft/BitNet
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 425026 字符
+
+- [1 BitNet.cpp Overview](1-bitnet.cpp-overview.md)
+  - [1.1 Supported Models and Hardware](1.1-supported-models-and-hardware.md)
+  - [1.2 Performance Benchmarks](1.2-performance-benchmarks.md)
+- [2 Getting Started](2-getting-started.md)
+  - [2.1 Installation and Build](2.1-installation-and-build.md)
+  - [2.2 Model Preparation](2.2-model-preparation.md)
+  - [2.3 Running Your First Inference](2.3-running-your-first-inference.md)
+- [3 Running Inference](3-running-inference.md)
+  - [3.1 Interactive CLI Inference](3.1-interactive-cli-inference.md)
+  - [3.2 Server Deployment](3.2-server-deployment.md)
+  - [3.3 Benchmarking Performance](3.3-benchmarking-performance.md)
+  - [3.4 GPU Inference (Experimental)](3.4-gpu-inference-experimental.md)
+- [4 Technical Architecture](4-technical-architecture.md)
+  - [4.1 System Overview](4.1-system-overview.md)
+  - [4.2 llama.cpp Integration](4.2-llama.cpp-integration.md)
+  - [4.3 Quantization Schemes](4.3-quantization-schemes.md)
+  - [4.4 Kernel Architecture and Code Generation](4.4-kernel-architecture-and-code-generation.md)
+  - [4.5 CPU Optimizations](4.5-cpu-optimizations.md)
+  - [4.6 Model Conversion Pipeline](4.6-model-conversion-pipeline.md)
+- [5 Advanced Usage](5-advanced-usage.md)
+  - [5.1 Performance Tuning Guide](5.1-performance-tuning-guide.md)
+  - [5.2 Custom Kernel Configuration](5.2-custom-kernel-configuration.md)
+  - [5.3 Manual Model Conversion](5.3-manual-model-conversion.md)
+  - [5.4 Embedding Quantization](5.4-embedding-quantization.md)
+- [6 Development and Contributing](6-development-and-contributing.md)
+  - [6.1 Build System Details](6.1-build-system-details.md)
+  - [6.2 Adding Support for New Models](6.2-adding-support-for-new-models.md)

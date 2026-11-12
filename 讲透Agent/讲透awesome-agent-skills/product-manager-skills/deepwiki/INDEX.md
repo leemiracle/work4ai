@@ -1,0 +1,33 @@
+# DeepWiki 索引 — Digidai/product-manager-skills
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 576327 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+  - [2.1 Installation](2.1-installation.md)
+  - [2.2 Quick Start Guide](2.2-quick-start-guide.md)
+- [3 SKILL.md: The Core Engine](3-skill.md-the-core-engine.md)
+  - [3.1 Execution Workflow](3.1-execution-workflow.md)
+  - [3.2 Routing System](3.2-routing-system.md)
+  - [3.3 Interaction Protocols](3.3-interaction-protocols.md)
+  - [3.4 Quality Gates](3.4-quality-gates.md)
+  - [3.5 Operating Principles](3.5-operating-principles.md)
+- [4 Knowledge Domains](4-knowledge-domains.md)
+  - [4.1 Discovery & Research](4.1-discovery-research.md)
+  - [4.2 Strategy & Positioning](4.2-strategy-positioning.md)
+  - [4.3 Artifacts & Delivery](4.3-artifacts-delivery.md)
+  - [4.4 Finance & Metrics](4.4-finance-metrics.md)
+  - [4.5 Career & Leadership](4.5-career-leadership.md)
+  - [4.6 AI Product Craft](4.6-ai-product-craft.md)
+- [5 Templates & Artifacts](5-templates-artifacts.md)
+  - [5.1 Template Architecture](5.1-template-architecture.md)
+  - [5.2 Core Templates Reference](5.2-core-templates-reference.md)
+- [6 Usage Patterns](6-usage-patterns.md)
+  - [6.1 Weekly PM Workflows](6.1-weekly-pm-workflows.md)
+  - [6.2 Example Sessions](6.2-example-sessions.md)
+- [7 System Comparison](7-system-comparison.md)
+- [8 Contributing](8-contributing.md)
+- [9 Reference](9-reference.md)
+  - [9.1 Anti-Patterns Detected](9.1-anti-patterns-detected.md)
+  - [9.2 Terminology](9.2-terminology.md)

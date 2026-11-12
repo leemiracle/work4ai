@@ -1,0 +1,357 @@
+# hf-discover
+
+An Agent Resource Discovery (ARDs) compliant Client and Server.
+
+The CLI can be used by you - or your agent - to search, discover and navigate any ARDs compliant registry.
+
+Use the CLI with:
+
+```bash
+# Install HF CLI
+uv tool install -U huggingface_hub
+
+# Find skills 
+hf discover "help me train a model" --json
+```
+
+The Server provides semantic search to thousands of Skills and MCP Servers to connect to your agent.
+
+Search our Resource catalog via: 
+
+- The Rest API: https://huggingface-hf-discover.hf.space/search
+- An MCP Tool: https://huggingface-hf-discover.hf.space/mcp
+
+## Client Features
+
+The Client can **search** a catalog, or **navigate** a catalog - the main difference being that
+*navigate* queries federated catalogs and combines the results.
+
+By default the Client uses the Hugging Face AI catalog.
+
+### Search
+
+Search a catalog. Use `--registry-url` to specify the catalog to search.
+
+
+```bash
+hf discover search "generate image" --limit 5
+hf discover search "train a biomedical model" --kind skill --json
+hf discover search "transcribe some audio" --kind mcp --json
+hf discover search --registry-url https://registry.example "generate image" --kind skill --json
+```
+
+### Navigate
+
+Use navigate if you want automatic `.well-known/ai-catalog.json` discovery from a website, and to
+follow federated registries (control following and depth with `--follow-referrals` and `--max-depth` ).
+
+```bash
+hf discover navigate <website> "segment hockey players in an image"
+hf discover navigate https://huggingface.co "help me set up an RL environment"
+```
+
+## In Depth
+
+### Space Search and Skill Generation
+
+`hf-discover` exposes Hugging Face Spaces semantic search in the primary `/search` endpoint
+and as a targeted nested registry backend at `/registries/huggingface/spaces/search`.
+Search requests use the Hub's agent-oriented semantic search (`agents=true`) and return
+matching Spaces as ARD catalog entries. By default, results can include generated
+`application/ai-skill` artifacts, plus `application/mcp-server-card+json` entries for
+matching Spaces tagged `mcp-server`.
+
+Search responses strictly include only Spaces whose runtime stage is `RUNNING`, so returned
+entries are limited to Spaces that are currently ready to serve traffic. The runtime stage
+is also surfaced in result metadata as `runtimeStage`.
+
+The generated skill wraps the Space's `agents.md` instructions with the required skill
+frontmatter (`name` and `description`) plus source metadata such as the Space ID, Hub URL,
+app URL, and original `agents.md` URL. This lets clients discover a relevant Space, fetch
+the generated skill, and install or load it using their normal skill flow.
+
+For clients that want raw Space descriptors instead of skills, request
+`application/vnd.huggingface.space+json` from either the primary search endpoint or the
+nested Spaces search endpoint.
+
+Requests for `application/mcp-server-card+json` add `filter=mcp-server` to the downstream
+Hub search and return MCP server card catalog entries that point at this adapter's
+generated `server.json` descriptor route. The legacy `application/mcp-server+json` filter
+is accepted as a transition alias, but new responses use the `*-card+json` media type
+from the pinned ARD spec. Fetching that descriptor performs a direct Hugging Face Space
+info lookup, verifies the Space is tagged `mcp-server`, and synthesizes an MCP
+Registry-style document whose `remotes[]` contains the Space's Gradio `streamable-http`
+MCP endpoint. When Hub runtime metadata includes a Space domain, that domain is used for
+app and MCP URLs; otherwise the adapter falls back to the standard `.hf.space` slug
+convention.
+
+The CLI queries the hosted hf-discover deployment by default and can query any
+ARD-compatible registry by passing `--registry-url`. The value may be either a registry
+base URL or the `/search` endpoint. In this mode the CLI POSTs an ARD
+`SearchRequest` and renders the returned `SearchResponse` using the same JSON/table output
+paths as the Hugging Face Spaces adapter. Pass `--local` to search directly from the
+current process instead.
+
+### Client-side Catalog Navigation
+
+`hf-discover navigate [URL] QUERY` starts from a website and discovers ARD resources from
+the client. It fetches the site's `/.well-known/ai-catalog.json`, follows linked AI
+catalogs within a small depth limit, searches referenced AI registries, and returns a
+source-balanced set of results for inspection. You can also pass an `ai-catalog.json` URL
+directly; when URL is omitted, navigation starts from `https://huggingface.co/`.
+
+By default, navigation searches up to 3 registries and keeps up to 3 results from each
+discovered source before filling the final result list. This avoids assuming that scores
+from different registries are directly comparable. It can optionally follow registry
+referrals with `--follow-referrals`.
+
+Navigation is intentionally not exposed by the hosted server, because arbitrary URL
+fetching belongs first in a user-controlled client and would need additional SSRF controls
+before becoming a public HTTP feature.
+
+### Combined Skills and Spaces Registry
+
+The primary HTTP `POST /search` endpoint combines the Meilisearch-backed
+`huggingface/skills` index with Hugging Face Spaces search. For omitted media type or
+`application/ai-skill`, it can return both indexed `SKILL.md` artifacts and generated Space
+skills in one ranked response. Section-level Skills index hits are grouped into skill-level
+search results.
+
+Indexed Hugging Face Skills are directory-style skills, so their search result `url` points
+at the skill directory, not the contained `SKILL.md` file. Generated Space skills are
+single-file artifacts materialized by this adapter and continue to point at the generated
+`/skills/huggingface/{owner}/{space}/SKILL.md` URL.
+
+For `application/vnd.huggingface.space+json` and `application/mcp-server-card+json`,
+primary search routes directly to the Spaces backend because those media types are
+Space-specific.
+
+The registry uses the ARD v0.5 search envelope: artifact type constraints are
+expressed as `query.filter.type`, response entries use the catalog `type` field, and
+Hugging Face entries use domain-anchored `urn:air:huggingface.co:...` identifiers. Catalog entry
+models enforce the v0.5 strict value-or-reference rule, domain-anchored `urn:air:<fqdn>:...`
+identifiers, and integer 0-100 relevance scores. The legacy `urn:ai:` prefix from
+earlier drafts is still accepted during the transition and emits a `DeprecationWarning`
+when encountered; new publishers MUST use `urn:air:`.
+
+Structured filters use the ARD v0.5 field-path semantics for exact matching after
+retrieval: scalar filter values are treated like single-item arrays, values within one
+filter key are ORed, different filter keys are ANDed, arrays on entries match when any
+item matches, nested paths such as `metadata.sourceType` are supported, and `publisher`
+is derived from the entry identifier's publisher domain.
+
+The primary server exposes `GET /.well-known/ai-catalog.json` as an ARD discovery
+document. It advertises the primary Hugging Face Discover registry and the nested
+Spaces registry as `application/ai-registry+json` entries using v0.5 `type` fields,
+domain-anchored `urn:air:huggingface.co:...` identifiers, and registry service base URLs. Clients
+append `/search` to those base URLs for Search requests.
+
+By default, advertised registry base URLs, generated Space skill URLs, and generated MCP
+`server.json` URLs are derived from the incoming request base URL, because those URLs
+point at services and materialized artifacts served by this adapter. Set
+`DISCOVER_PUBLIC_BASE_URL` only when a reverse proxy, staging deployment, or self-hosted
+runtime reports an internal base URL but clients need a different public prefix.
+Space-owned URLs such as `agents.md`, app URLs, and MCP endpoints continue to point at
+Hugging Face Space URLs derived from Hub/runtime metadata.
+
+When clients request referrals with top-level `federation` set to `referrals` or `auto`, the
+primary registry can still include a referral to the nested Hugging Face Spaces registry.
+Simple clients can ignore referrals and use the combined results; traversal-capable clients
+can use the referral for a follow-up Spaces-only search.
+
+
+
+### Challenge Registry Server
+
+`hf-discover challenge serve` runs a deterministic local fixture registry for client
+development. It returns mixed ARD result types, including skills, MCP servers, A2A
+agents, ai-catalog bundles, registry entries, referrals, empty registries, and nested
+registries. Use it to test clients that need to follow registry trees and fetch referenced
+artifacts without relying on Hugging Face or Meilisearch services.
+
+`hf-discover challenge search` queries a running challenge registry and defaults to
+requesting referrals, making it a convenient CLI path for agents that need to practice
+ARD traversal. The generic `hf-discover search` command defaults to the hosted
+deployment and also accepts `--registry-url` and `--federation none|referrals|auto`. When
+registry-backed commands are run with `--json`, the CLI prints the registry's raw
+`SearchResponse` body so clients can inspect exact `results`, `referrals`, `type`,
+`url`, `data`, and `pageToken` fields returned by the server.
+
+The challenge registry uses the same catalog-entry model and field-path filtering helper
+as the primary server. Both registries expose `POST /explore` and return `501 Not
+Implemented`, matching the ARD v0.5 behavior for registries that do not implement the
+optional Explore facets API.
+
+### Specification References
+
+`spec/ard.md` remains the committed local ARD orientation snapshot. When a private pinned
+upstream spec checkout is available locally at `spec/ard-spec/`, use its `spec/ard.md`,
+ADRs, schemas, and conformance CLI as the authoritative artifacts for implementation
+review. That checkout is intentionally gitignored.
+
+The AI Catalog draft reference can be refreshed from the upstream `Agent-Card/ai-catalog`
+repository with
+`./scripts/update-ai-catalog-spec.sh`, which copies the latest Markdown and JSON assets
+from its `specification/` folder into `spec/ai-catalog/`.
+
+The vendored `spec/ai-catalog/` snapshot tracks the upstream `Agent-Card/ai-catalog`
+`specification/` folder at the commit recorded in `spec/ai-catalog/SOURCE.md`.
+
+### Roadmap
+
+The next `hf-discover` version is expected to expand the CLI surface for arbitrary ARD
+structured filters. Today the HTTP server accepts `query.filter` and applies exact-match
+field-path filters after retrieval; the CLI exposes only the common media-type path
+through `--kind`. Planned work includes improved server-side handling/pushdown for common
+fields such as tags and Space SDK.
+
+### Release Automation
+
+Releases are built through the same quality gates as CI: locked dependency sync, Ruff
+format/lint checks, `ty` type checking, and pytest. The package supports the same minimum
+Python version as `huggingface_hub` (`>=3.10.0`). The hosted Hugging Face Space deployment
+uses Python 3.14 for runtime performance.
+
+Run the release check with:
+
+```bash
+./scripts/check-release.sh
+```
+
+Optionally assert the expected project version:
+
+```bash
+./scripts/check-release.sh 0.1.0
+```
+
+Release from `main` after the intended code changes are merged. Run the **Release** GitHub
+Action from `main`, choose `patch`, `minor`, or `major` for the version bump, and enter
+confirmation value `release`. The workflow commits the `pyproject.toml` and `uv.lock`
+version bump directly to `main`, builds artifacts from that bumped commit, publishes them
+to PyPI using trusted publishing, attaches the artifacts to the GitHub Release, and
+restarts the Hugging Face Space when the `HF_TOKEN` secret is configured. Use bump value
+`none` only when retrying a failed release for the version already on `main`.
+
+For local preflight or manual version changes, use
+`python scripts/bump-version.py --bump patch|minor|major`, then `uv lock`, then
+`./scripts/check-release.sh`.
+
+PyPI trusted publishing must be configured for project `hf-discover` with owner
+`huggingface`, repository `hf-discover`, workflow `release.yml`, and environment `pypi`.
+The GitHub `pypi` environment does not need secrets for trusted publishing, but it must
+exist if the repository requires explicit environment configuration.
+
+### Hugging Face Space Deployment
+
+The default hosted deployment is
+`https://huggingface-hf-discover.hf.space/`, backed by the
+`huggingface/hf-discover` Space. The project includes a reproducible Docker Space
+definition in `deploy/huggingface-space/`.
+It uses the official uv Python image and runs the latest published `hf-discover` package
+with `uvx --refresh`, so restarting or rebuilding the Space resolves the newest PyPI
+release without committing generated application code to the Space repository. This keeps
+the hosted Space lightweight while letting PyPI releases drive runtime updates.
+
+The Space startup wrapper can optionally run a pinned Meilisearch binary from an attached
+Hugging Face bucket and ingest the generated Hugging Face Skills search index from the
+public `hf://buckets/huggingface/skills` bucket. The same bucket also exposes
+`distribution/latest/` artifacts; indexed repo-based directory skills are returned with
+bucket-hosted `.tar.gz` URLs when the mounted distribution index is available, while their
+source GitHub URLs remain in result metadata. When Meilisearch starts successfully, the
+wrapper exports the configured Meilisearch URL and index for the API process so
+`POST /search` includes loaded Skills results alongside Spaces results. Helper scripts in
+`scripts/` vendor the pinned Meilisearch binary to the configured
+`huggingface/meilisearch-binary` bucket, create configured writable buckets, attach bucket
+volumes, and configure runtime variables without running unsupervised installer scripts in
+the Space. `scripts/configure-space-runtime.py` also sets `DISCOVER_PUBLIC_BASE_URL` from
+`hf-discover.toml` so discovery documents, referrals, generated skill URLs, and generated
+MCP `server.json` URLs use the canonical `huggingface-hf-discover.hf.space` base.
+
+The documentation here is intentionally an orientation record: it states the deployment
+idea and points to the artifacts that contain the operational evidence. For details, read
+`hf-discover.toml`, `scripts/vendor-meilisearch.py`,
+`scripts/configure-space-runtime.py`, and
+`deploy/huggingface-space/start-discover.sh`.
+
+## Usage
+
+The examples below use the standalone `hf-discover` command form.
+
+`--kind skill` requests AI-skill results. In the combined registry this includes indexed,
+directory-style Hugging Face Skills from Meilisearch and generated single-file Space skill
+wrappers. `--kind space` requests raw Hugging Face Space descriptors. `--kind mcp` requests
+MCP server entries for Spaces tagged `mcp-server`. `--kind all` asks for the default mixed
+view.
+
+```bash
+> hf-discover --version
+> hf-discover search "generate image" --limit 5
+> hf-discover search "generate image" --kind skill --json
+> hf-discover search "generate image" --kind space --json
+> hf-discover search "generate image" --kind mcp --json
+> hf-discover mcp-server-json mcp-tools/FLUX.1-Kontext-Dev
+> hf-discover search --registry-url https://registry.example "generate image" --kind skill --json
+> hf-discover navigate "generate image" --kind skill
+> hf-discover navigate https://example.com "generate image" --kind skill
+> hf-discover navigate https://example.com "generate image" --follow-referrals --json
+> hf-discover search "generate image" --kind space --local
+> hf-discover serve --port 8080
+> hf-discover challenge serve --port 8090
+> hf-discover challenge search "find tools and registries" --federation referrals --json
+```
+
+### Recommended `hf` extension usage
+
+For Hugging Face CLI users, the recommended install path is as an `hf` extension:
+
+```bash
+> hf extensions install huggingface/hf-discover
+> hf discover --version
+> hf discover search "generate image" --kind space --limit 5
+```
+
+The project still documents examples as `hf-discover ...` because the same CLI is also
+available as a standalone Python console script. When installed as an extension, replace
+`hf-discover` with `hf discover`.
+
+```bash
+> curl -X POST http://localhost:8080/search \
+  -H 'content-type: application/json' \
+  -d '{"query":{"text":"upload files to a dataset repo","filter":{"type":["application/ai-skill"]}},"pageSize":5}'
+```
+
+Search the targeted nested Spaces registry:
+
+```bash
+> curl -X POST http://localhost:8080/registries/huggingface/spaces/search \
+  -H 'content-type: application/json' \
+  -d '{"query":{"text":"remove background from image","filter":{"type":["application/ai-skill"]}},"pageSize":5}'
+```
+
+Search the local challenge registry:
+
+```bash
+> curl -X POST http://localhost:8090/search \
+  -H 'content-type: application/json' \
+  -d '{"query":{"text":"find tools and registries"},"federation":"referrals","pageSize":10}'
+```
+
+Fetch a generated skill:
+
+```bash
+> curl http://localhost:8080/skills/huggingface/mcp-tools/FLUX.1-Kontext-Dev/SKILL.md
+```
+
+To get generic Hugging Face Space descriptors instead of skill wrappers, request:
+
+```json
+{"query":{"text":"remove background from image","filter":{"type":["application/vnd.huggingface.space+json"]}},"pageSize":5}
+```
+
+### HF_TOKEN handling
+
+Primary and nested Spaces registry search requests can forward a request-scoped Hugging
+Face token for the downstream Spaces search call. The server checks
+`X-HF-Authorization: Bearer ...`, then `Authorization: Bearer ...`, then `HF_TOKEN: ...`;
+a header token overrides any token configured when the server starts and is not stored
+beyond the request.

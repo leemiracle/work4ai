@@ -1,0 +1,256 @@
+<!--
+SPDX-FileCopyrightText: Copyright 2026 NVIDIA CORPORATION & AFFILIATES
+SPDX-License-Identifier: Apache-2.0
+-->
+
+# CLI Reference
+
+Run `l8k <command> --help` for the authoritative flag list. Run `l8k schema` for machine-readable capabilities.
+Config-backed flags include a `configPaths` list in schema output, derived
+from the same field tags that register the flags and apply explicit values.
+
+## Commands
+
+| Command | Purpose |
+| --- | --- |
+| `l8k [flags]` | Root pipeline: generate, optionally discover first with `--discover-cluster-config` and deploy with `--deploy`. Bare `l8k` prints help. |
+| `l8k discover` | Discover cluster network hardware and write `cluster-config.yaml`. |
+| `l8k generate` | Generate deployment manifests for a selected profile. |
+| `l8k deploy` | Apply previously generated manifests to a cluster. |
+| `l8k clean` | Delete Network Operator custom resources and optionally uninstall its Helm release. |
+| `l8k validate` | Verify Network Operator version, component versions, manifest state, and connectivity. |
+| `l8k preset list` | List local topology presets. |
+| `l8k preset update` | Download topology presets from GitHub. |
+| `l8k sosreport` | Collect diagnostic data from a cluster. |
+| `l8k schema` | Print JSON capabilities for automation. |
+| `l8k version` | Print version information. |
+
+Host generate, deploy, and validate check the complete flat artifact bundle.
+Malformed YAML, missing resource identities, duplicate declared resources,
+and noncanonical Helm values filenames are validation errors (exit code `2`)
+with a source filename and document number where applicable.
+
+## Target selection and flag ownership
+
+Omitting `--target` selects `host`; adding `--target host` follows the same
+code path. `dpf` is a recognized target name whose phases are unavailable in
+this build. Selecting it returns validation exit code `2`. This explicit
+capability error prevents DPF invocations from falling through to host logic.
+
+Host-only flags are rejected when they are explicitly supplied for another
+target. Defaults are ignored by this check, including explicit-value flags
+where `false` differs from omission. Run `l8k <command> --help` for target-aware
+flag groups and `l8k schema` for each flag's `targets` list.
+
+| Flag | Applies to | Target scope | Description |
+| --- | --- | --- | --- |
+| `--target` | discover, generate, deploy, validate, root pipeline | target-agnostic | Target name. Defaults to `host`. |
+| `--kubeconfig` | root, discover, generate with deploy, deploy, clean, validate, sosreport | host | Path to kubeconfig. Falls back to `$KUBECONFIG` and then `~/.kube/config`. It represents the host workload cluster, not a universal multi-context input. |
+| `--user-config` | root, discover, generate, deploy, clean, validate | host | Config file to merge, render, validate against, or use for cleanup namespace and Helm-ownership resolution. |
+| `--config-dir` | all | host | Directory containing optional `l8k-config.yaml` and `presets/` overrides. |
+| `--network-operator-release` | root, discover, generate | host | Catalogued release line such as `26.1`, `26.4`, `26.7`, or `26.10`. |
+| `--network-operator-namespace` | root, discover, generate, deploy, clean, validate | host | Override the Network Operator namespace. It is a no-op for discovery. |
+| `--skip-network-operator-helm` | generate, deploy, validate, root pipeline | host | Skip `values.yaml` generation, Network Operator chart installation, and Helm-specific validation. Custom-resource handling remains enabled. |
+| `--flavor` | root, discover, generate, deploy, validate, clean | host | `k8s` or `ocp`, overriding config. Clean accepts the flag to reject OpenShift cleanup explicitly. |
+| `--output json` | all (inherited) | target-agnostic | Command-specific output; validation emits a stream, preset/sosreport success remains text, and standalone deploy has no success envelope. See [Automation](../integrator/automation.md#json-mode). |
+| `--yes`, `-y` | root pipeline only | target-agnostic | Auto-confirm root prompts. Subcommands reject this flag; lifecycle JSON mode auto-confirms. |
+| `--quiet` | root pipeline | target-agnostic | Suppress informational output. |
+| `--log-level` | all | target-agnostic | Enable `trace`, `debug`, `info`, `warn`, or `error` logging. `debug` shows structured progress; `trace` also shows bounded command output. |
+| `--log-file` | all | target-agnostic | Write logs to a file instead of `stderr`. |
+
+The public host config remains the flat `cluster-config.yaml` schema. Generated
+manifests remain under `deployment/network-operator/`; the exact resolved
+configuration is stored separately at
+`deployment/.l8k/resolved-config.yaml`. Generation does not rewrite its input.
+
+## Lifecycle Flag Applicability
+
+Flags are not interchangeable between standalone commands and the root
+pipeline. The following matrix records the registered lifecycle flags; the
+command help remains authoritative. `yes` means accepted, and `—` means absent.
+Inherited `--config-dir`, `--output`, `--log-level`, and `--log-file` are
+available throughout the command tree.
+
+| Flags | Root | Discover | Generate | Deploy | Validate | Clean |
+| --- | --- | --- | --- | --- | --- | --- |
+| `--target` | yes | yes | yes | yes | yes | — |
+| `--kubeconfig`, `--user-config`, `--flavor`, `--network-operator-namespace` | yes | yes | yes | yes | yes | yes |
+| `--network-operator-release`, `--image-pull-secrets`, profile/Spectrum-X flags | yes | yes | yes | — | — | — |
+| `--enabled-plugins` | yes | yes | yes | — | — | — |
+| `--node-selector` | yes | yes | yes (`--for`) | — | — | — |
+| `--save-cluster-config`, `--collapse-nic-rails` | yes | yes | — | — | — | — |
+| `--keep-namespace` | — | yes | — | — | — | — |
+| `--discover-cluster-config` | yes | — | — | — | — | — |
+| `--groups`, `--gpu-type`, `--for` | yes | — | yes | — | — | — |
+| `--deploy-nic-configuration-template` | yes | yes | yes | — | — | — |
+| `--save-deployment-files`, `--network-namespaces`, `--workload-manifest`, `--enable-doca-driver` | yes | — | yes | — | — | — |
+| `--deploy` | yes | — | yes | — | — | — |
+| `--dry-run` | yes | — | yes | yes | — | — |
+| `--deploy-timeout` | yes | — | — | yes | — | — |
+| `--overwrite-existing` | — | — | yes | yes | — | — |
+| `--skip-network-operator-helm` | yes | — | yes | yes | yes | — |
+| `--deployment-files` | — | — | — | yes | yes | — |
+| `--yes`, `--quiet` | yes | — | — | — | — | — |
+| Validation flags below | — | — | — | — | yes | — |
+| `--keep-helm-chart` | — | — | — | — | — | yes |
+
+Root discovery still mutates bootstrap resources and node labels when
+`--dry-run` is supplied; that flag previews only deployment. Generate without
+`--deploy` renders locally. For a bounded generate/deploy workflow, use separate
+commands and pass `--deploy-timeout` to standalone deploy.
+
+## Discover Flags
+
+| Flag | Description |
+| --- | --- |
+| `--save-cluster-config` | Output path for the discovered configuration. Defaults to the `--user-config` path or `./cluster-config.yaml`. |
+| `--node-selector` | Selector persisted for generated resources. It does not filter discovery scheduling. |
+| `--keep-namespace` | Keep the temporary `nvidia-k8s-launch-kit` namespace and daemon workload for inspection. |
+| `--collapse-nic-rails` | Collapse eligible multi-port NICs into one rail. Enabled by default; known dual-port models retain a rail per port. |
+| `--image-pull-secrets` | Secret names used to pull the discovery daemon, propagated into generated policies and Helm values, and reused for authenticated Helm chart downloads when the registry host matches. |
+| `--enabled-plugins` | Comma-separated plugins. The supported deployment plugin is `network-operator`. |
+
+Discovery also accepts the profile and Spectrum-X flags below. A fresh run
+resolves missing values from hardware defaults. With `--user-config`, only
+`clusterConfig` is replaced and explicit flags are the only changes made to
+the rest of the supplied configuration.
+
+## Profile Flags
+
+| Flag | Description |
+| --- | --- |
+| `--fabric` | `ethernet` or `infiniband`. |
+| `--deployment-type` | `sriov`, `rdma_shared`, or `host_device`. |
+| `--multirail` | Override multirail deployment. Explicit `--multirail=false` is preserved. |
+| `--routing` | `destination-based` or `source-based`. |
+| `--deploy-nic-configuration-template` | Standard-profile NIC tuning is enabled by default; explicit `=false` opts out. Available on root, generate and discover; deploy/validate consume generated templates. Spectrum-X keeps its own required templates. |
+| `--ignore-arp` | Add tuning CNI sysctls to avoid ARP flux across pod rails. |
+| `--groups` | Render only named source groups. Mutually exclusive with `--gpu-type`. |
+| `--gpu-type` | Render all source groups whose GPU type matches. |
+| `--for` | Generate from a topology preset. Requires `--node-selector`. |
+
+`--groups`, `--gpu-type`, and `--for` apply to standalone generation and the
+root pipeline. The remaining profile flags also apply to discovery.
+
+## Spectrum-X Flags
+
+| Flag | Description |
+| --- | --- |
+| `--spectrum-x` | Enable Spectrum-X and select `RA2.1`, `RA2.2`, `RA2.3`, `RA2.4`, or `RA3.1`. RA2.3 requires 26.7; RA2.4 and RA3.1 require 26.10 or a newer catalogued release. |
+| `--multiplane-mode` | `none`, `swplb`, or `hwplb`. Defaults from GPU platform and east-west NIC: single-plane H100/H200/B200/GB200 use `none`; B300/GB300 use the GA `swplb` default. Select `hwplb` explicitly for B300/GB300; VR/CX9 defaults to `hwplb` on RA2.4/RA3.1. |
+| `--number-of-planes` | Plane count for Spectrum-X: 1, 2, 4, or 8. VR/CX9 HWPLB defaults to 8 on RA2.4/RA3.1; explicit `swplb` with no count retains the CX9 fallback of 4. Defaults to 1 for single-plane platforms and 2 for B300/GB300; pass 4 explicitly for quad-plane B300. |
+| `--topology-scheme` | `2-tier` or `3-tier` for topology-driven CIDRPool allocation. |
+| `--ip-version` | `ipv4` for per-node `/31` allocation or `ipv6` for per-node `/64` allocation. |
+| `--topology-file` | Path to spcx-gen/reference-generator or contract-compliant NVIDIA AIR topology JSON. The format is detected from its structure. |
+| `--spectrum-x-config` | Required for RA2.3, RA2.4, and RA3.1. RA2.3 accepts a legacy ConfigMap or raw `data.profile` YAML; RA2.4 and RA3.1 require a full doSPCX ConfigMap. |
+| `--spectrum-x-configmap-name` | ConfigMap name when `--spectrum-x-config` is raw profile YAML. |
+
+## Generate Flags
+
+| Flag | Description |
+| --- | --- |
+| `--save-deployment-files` | Output directory for generated manifests. |
+| `--network-namespaces` | Namespaces that receive secondary-network resources and example workloads. |
+| `--workload-manifest` | Replace the profile's example workload with a Pod or workload-controller manifest. |
+| `--enable-doca-driver` | Override `docaDriver.enable` and include the DOCA driver deployment. |
+| `--image-pull-secrets` | Secret names propagated into generated Network Operator policies and Helm values. Matching credentials already present in the operator namespace authenticate the Helm chart download. |
+| `--deploy` | Deploy immediately after generation. |
+| `--kubeconfig` | Kubeconfig used with `--deploy`. |
+| `--dry-run` | Preview the deploy stage used with `--deploy`. |
+| `--overwrite-existing` | Allow convergence when deploy preflight finds Helm or managed-resource drift. |
+| `--skip-network-operator-helm` | Omit `values.yaml`; with `--deploy`, also skip chart installation and Helm preflight checks. |
+
+## Deploy Flags
+
+| Flag | Description |
+| --- | --- |
+| `--deployment-files` | Directory containing generated manifests. Defaults to `./deployment`. |
+| `--dry-run` | Use server-side dry run. |
+| `--deploy-timeout` | End-to-end deploy timeout, accepted by standalone deploy and the root pipeline. `0` means unbounded. Not available on `generate --deploy`. |
+| `--overwrite-existing` | Upgrade conflicting Helm chart/values and delete reported stray CRs, including resources without l8k ownership annotations. See the [deletion boundary](../advanced/deployment.md#stray-resource-deletion-boundary). |
+| `--skip-network-operator-helm` | Skip chart installation and Helm chart-version/values preflight checks; still apply manifests and check component versions and strays. |
+
+## Clean Flags
+
+`l8k clean` discovers every namespaced custom-resource instance in the resolved
+Network Operator namespace and the known cluster-scoped Network Operator CRs.
+It sends deletion requests to the complete set before monitoring any CR for
+finalizer completion, then re-sweeps both scopes before uninstalling the
+`network-operator` Helm release. If the resolved config sets
+`networkOperator.skipHelmChart: true`, the release is externally owned and is
+retained instead. It preserves the namespace, CRDs, unrelated Secrets,
+generated files, and resources outside the namespace. When Helm is
+uninstalled, Helm release metadata and chart-managed resources are removed
+with the release.
+
+Namespace resolution uses the first available source: an explicit
+`--network-operator-namespace`, `networkOperator.namespace` from
+`--user-config`, `./cluster-config.yaml`, or an explicit
+`--config-dir/l8k-config.yaml`, then `nvidia-network-operator`. Custom
+installation namespaces must be explicit in a flag or config; untrusted
+in-cluster objects do not select a destructive cleanup target.
+
+| Flag | Description |
+| --- | --- |
+| `--keep-helm-chart` | Delete custom resources but leave the Network Operator Helm release and chart-managed resources installed regardless of config. |
+| `--kubeconfig` | Cluster to clean. Falls back to `$KUBECONFIG` and then `~/.kube/config`. |
+| `--user-config` | Optional config used only to read `networkOperator.namespace` and `networkOperator.skipHelmChart`; unrelated stale settings do not block cleanup. |
+| `--network-operator-namespace` | Explicit cleanup namespace; takes precedence over config and the standard default. |
+
+Cleanup is destructive and asks for confirmation in text mode. JSON mode is
+non-interactive and auto-confirms, so use `--output json` only after verifying
+the kubeconfig and resolved namespace. See [Cleanup](../user/cleanup.md) for the
+full deletion boundary.
+
+## Validate Flags
+
+When `--deployment-files` contains only user-provided `*example*.yaml` test
+DaemonSets, `validate` runs connectivity only. Adding `values.yaml` or any
+non-example YAML manifest selects the full validation pipeline. Connectivity
+requires a user-owned config with explicit `profile.routing` and
+`validation.gpuDirect.enabled`; no separate workload-manifest flag is used.
+
+| Flag | Description |
+| --- | --- |
+| `--connectivity` | Enable or disable data-plane connectivity checks. |
+| `--validation-mode` | `quick`, `full`, or `strict`. |
+| `--validation-checks` | Comma-separated list of `icmp`, `rping`, and `ib_write_bw`. Enabled GPUDirect DMA-BUF validation follows the `ib_write_bw` selection. |
+| `--connectivity-timeout` | Maximum connectivity workload setup and execution duration. `0` (default) calculates the total budget from the generated matrix plan; a positive duration is an explicit hard deadline. |
+| `--rdma-rping-iterations` | Override `validation.rdma.rpingIterations`. |
+| `--rdma-ib-write-size` | Override `validation.rdma.ibWriteSize`. |
+| `--rdma-ib-write-min-bandwidth-gbps` | Minimum `ib_write_bw` peak bandwidth. |
+| `--report-path` | HTML report path. Use `-` to disable. |
+| `--junit-path` | Optional JUnit XML file alongside text/JSON; connectivity requires a configured fabric. |
+| `--keep` | Keep the test DaemonSet after validation. |
+| `--wait` | Wait for in-progress manifests to reach a terminal state. |
+| `--skip-network-operator-helm` | Skip Helm release version and values checks; retain component, manifest, stray-resource, and connectivity checks. |
+
+Use `--log-level debug` with `validate` for structured check, endpoint, route,
+stage, batch, test, cleanup, and report timings. `--log-level trace` also emits
+bounded command stdout/stderr and RDMA server logs. Failed RDMA server logs are
+collected before the validation workload cleanup runs.
+
+## Preset Flags
+
+| Command and flag | Description |
+| --- | --- |
+| `preset list --config-dir` | List presets from a custom configuration directory instead of the embedded catalog. |
+| `preset update --dir` | Destination directory for downloaded presets. |
+| `preset update --repo` | Source GitHub repository. Defaults to `nvidia/k8s-launch-kit`. |
+| `preset update --branch` | Source branch. Defaults to `main`. |
+
+Set `GITHUB_TOKEN` for authenticated GitHub API requests when updating presets.
+
+## Sosreport Flags
+
+| Flag | Description |
+| --- | --- |
+| `--kubeconfig` | Cluster kubeconfig, with the same environment and home-directory fallback as other cluster commands. |
+| `--output-dir` | Diagnostic output directory. Defaults to `./sosreport`. |
+
+Release archives include the Network Operator sosreport helper. Supported
+installers place it at
+`<installation-prefix>/share/l8k/scripts/kubectl-netop_sosreport`; the command
+does not download executable code at runtime. If the helper is missing, the
+error reports its raw GitHub URL and exact expected path for manual
+installation.

@@ -1,0 +1,154 @@
+<!--
+SPDX-FileCopyrightText: Copyright 2026 NVIDIA CORPORATION & AFFILIATES
+SPDX-License-Identifier: Apache-2.0
+-->
+
+# Remove a Network Operator Deployment
+
+Use `l8k clean` to tear down the Network Operator deployment on one **Kubernetes**
+cluster. The command removes custom resources first so the installed
+controllers can process their finalizers, then uninstalls the Helm release
+unless the resolved config marks it externally owned.
+
+Before running it, confirm the current kubeconfig context, intended operator namespace, live custom-resource inventory, and whether the Helm release is externally owned. The deletion scope includes **every** custom resource in the operator namespace and the five listed cluster-scoped kinds across the cluster, including manual or other-cohort instances. There is no cleanup dry run. Record approved identities and preserve the generated bundle and validation evidence. For OpenShift, use the [reviewed identity procedure](openshift.md#remove-the-intended-resources); `l8k clean` rejects that flavor.
+
+```bash
+l8k clean --kubeconfig ~/.kube/config
+```
+
+The command is destructive and asks for confirmation before changing the
+cluster. Verify the kubeconfig and the displayed target namespace before
+confirming.
+
+The kubeconfig identity must be able to list CRDs cluster-wide, list, get, and
+delete the selected custom resources, and manage the Helm release in the target
+namespace. Cluster-administrator access normally satisfies this requirement.
+
+## Namespace Resolution
+
+The first available namespace source wins:
+
+1. `--network-operator-namespace <namespace>`
+2. `networkOperator.namespace` in `--user-config` or
+   `./cluster-config.yaml`
+3. `networkOperator.namespace` in an explicit
+   `--config-dir/l8k-config.yaml`
+4. `nvidia-network-operator`
+
+Custom installation namespaces must be supplied by flag or trusted local
+config. Cleanup deliberately does not infer a destructive target from
+user-creatable in-cluster objects such as Helm release Secrets. The config is
+read only for `networkOperator.namespace` and
+`networkOperator.skipHelmChart`; stale release settings elsewhere in the file
+do not block cleanup.
+
+```bash
+l8k clean --kubeconfig ~/.kube/config \
+  --network-operator-namespace operator-system
+```
+
+## Deletion Boundary
+
+Cleanup performs these operations in order:
+
+1. Discover every namespaced custom-resource instance in the resolved operator
+   namespace and every instance of the Network Operator's known cluster-scoped
+   kinds: `HostDeviceNetwork`, `IPoIBNetwork`, `MacvlanNetwork`,
+   `NicNodePolicy`, and `NicClusterPolicy`.
+2. Send a background deletion request to every discovered custom resource
+   before waiting on any one of them. The `NicClusterPolicy` request is sent
+   after the other known cluster-scoped kinds.
+3. Monitor the complete deletion set until every custom resource is gone,
+   including finalizer processing. Sending all requests first prevents one
+   CR's finalizer from blocking on another CR that has not entered deletion.
+4. Re-scan both scopes and repeat the delete-all-then-wait sequence for any
+   custom resources created or exposed during policy teardown.
+5. Unless `networkOperator.skipHelmChart: true` or `--keep-helm-chart` retains
+   it, uninstall the `network-operator` Helm release and wait for Helm-managed
+   resources to be removed.
+
+Because step 1 intentionally covers every custom-resource kind, do not keep
+unrelated custom resources in the Network Operator namespace. Cluster-scoped
+resources cannot be associated with a namespace, so every live instance of
+the five listed kinds is removed.
+
+The command preserves:
+
+- The resolved namespace
+- CustomResourceDefinitions
+- Secrets not owned by the Helm release, including unrelated registry
+  credentials
+- Custom resources outside the resolved namespace, except the five explicitly
+  listed cluster-scoped kinds
+- Generated configuration and deployment files on disk
+
+When Helm is uninstalled, Helm release metadata and any Secret rendered as a
+chart-managed resource are removed with the release.
+
+Missing CRDs, custom resources, or the Helm release are treated as successful
+no-ops, making the command safe to re-run after a partial cleanup.
+
+## External Multus and CNI plugins
+
+Component ownership does not expand cleanup: Launch Kit adds no deletion of
+external DaemonSets or CNI host files. Removing an NCP still allows the Network
+Operator to garbage-collect its own children, including managed Multus/plugins.
+Explicit external settings do not turn those children into external resources
+or make NCP deletion a safe ownership migration. The broad custom-resource
+cleanup boundary above remains in effect; it can include NAD custom resources
+in the selected namespace. Preserve platform networking outside that boundary
+and review exact resources before cleanup.
+
+## Keep the Helm Release
+
+When the resolved config sets `networkOperator.skipHelmChart: true`, cleanup
+treats the Network Operator Helm release as externally owned and retains it
+while still deleting the same custom resources:
+
+```yaml
+networkOperator:
+  skipHelmChart: true
+```
+
+Use `--keep-helm-chart` to request the same retention explicitly regardless of
+config:
+
+```bash
+l8k clean --kubeconfig ~/.kube/config --keep-helm-chart
+```
+
+This option does not narrow the custom-resource deletion boundary.
+
+## Automation
+
+JSON output is non-interactive and auto-confirms the cleanup. Use it only when
+the target has already been reviewed:
+
+```bash
+l8k clean --kubeconfig ~/.kube/config \
+  --output json >cleanup.json 2>cleanup.log &&
+  jq . cleanup.json
+```
+
+Check the cleanup process status before parsing and retain `cleanup.log`.
+The [automation capture pattern](../integrator/automation.md#gitops-pattern)
+shows how to propagate a failed command in a script.
+
+A successful result includes the resolved namespace, the number of deleted
+custom resources, whether Helm removed a release, and the effective Helm
+retention policy derived from config and `--keep-helm-chart`:
+
+```json
+{
+  "success": true,
+  "phase": "clean",
+  "deployed": false,
+  "cleanup": {
+    "namespace": "nvidia-network-operator",
+    "customResourcesDeleted": 12,
+    "helmReleaseRemoved": true,
+    "keepHelmChart": false
+  },
+  "messages": []
+}
+```

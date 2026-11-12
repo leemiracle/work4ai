@@ -1,0 +1,32 @@
+# DeepWiki 索引 — NVIDIA/nsmd
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 324612 字符
+
+- [1 NVIDIA System Management (NSM) Overview](1-nvidia-system-management-nsm-overview.md)
+  - [1.1 System Architecture](1.1-system-architecture.md)
+  - [1.2 Build System and Configuration](1.2-build-system-and-configuration.md)
+- [2 Core nsmd Daemon](2-core-nsmd-daemon.md)
+  - [2.1 SensorManager and Device Lifecycle](2.1-sensormanager-and-device-lifecycle.md)
+  - [2.2 DeviceManager and Discovery](2.2-devicemanager-and-discovery.md)
+  - [2.3 Asynchronous Operation Management](2.3-asynchronous-operation-management.md)
+- [3 Hardware Subsystems](3-hardware-subsystems.md)
+  - [3.1 Processor and GPU Management](3.1-processor-and-gpu-management.md)
+  - [3.2 Network Port Management](3.2-network-port-management.md)
+  - [3.3 Chassis and System Management](3.3-chassis-and-system-management.md)
+  - [3.4 Memory Management](3.4-memory-management.md)
+  - [3.5 Device Inventory and Control](3.5-device-inventory-and-control.md)
+- [4 NSM Protocol Layer](4-nsm-protocol-layer.md)
+  - [4.1 NSM Message Protocol](4.1-nsm-message-protocol.md)
+  - [4.2 Device Configuration Commands](4.2-device-configuration-commands.md)
+  - [4.3 Diagnostics and Debug Operations](4.3-diagnostics-and-debug-operations.md)
+  - [4.4 Firmware and Security Management](4.4-firmware-and-security-management.md)
+- [5 Communication Infrastructure](5-communication-infrastructure.md)
+  - [5.1 Request and Response Handling](5.1-request-and-response-handling.md)
+  - [5.2 MCTP Transport and Discovery](5.2-mctp-transport-and-discovery.md)
+  - [5.3 Raw Command Interface](5.3-raw-command-interface.md)
+- [6 Tools and Testing Infrastructure](6-tools-and-testing-infrastructure.md)
+  - [6.1 nsmtool Command Line Interface](6.1-nsmtool-command-line-interface.md)
+  - [6.2 MockupResponder Testing Framework](6.2-mockupresponder-testing-framework.md)
+  - [6.3 Entity Manager Configuration and Platform Examples](6.3-entity-manager-configuration-and-platform-examples.md)
+- [7 Glossary](7-glossary.md)

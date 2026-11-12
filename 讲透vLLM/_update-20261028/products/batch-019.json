@@ -1,0 +1,3746 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "type": "file",
+   "name": "io_processor.py",
+   "filePath": "vllm/entrypoints/pooling/base/io_processor.py",
+   "summary": "池化任务的通用 IO 处理器基类：PoolingIOProcessor 负责在线/离线两条路径的请求工厂构造（chat/completion 模板渲染、Mistral tokenizer 特判）、参数与 LoRA/优先级到序列提示的转换校验及输出后处理钩子。",
+   "tags": [
+    "io-processor",
+    "pooling",
+    "base-class",
+    "request-parsing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/base/io_processor.py:PoolingIOProcessor",
+   "type": "class",
+   "name": "PoolingIOProcessor",
+   "filePath": "vllm/entrypoints/pooling/base/io_processor.py",
+   "lineRange": [
+    40,
+    356
+   ],
+   "summary": "池化 IO 处理器抽象基类：create_pooling_params/get_request_factory_online/offline/post_process/render 五段式接口，附 _params_to_seq/_lora_request_to_seq/_priority_to_seq 三个校验辅助。",
+   "tags": [
+    "io-processor",
+    "base-class",
+    "abstract"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "type": "file",
+   "name": "protocol.py",
+   "filePath": "vllm/entrypoints/pooling/base/protocol.py",
+   "summary": "池化请求协议 mixin 库：按正交维度拆分请求字段——基础字段（truncate/cache_salt）、tokenize 参数（fixed-max-len 与 embedding 两种 padding 语义）、completion/chat/encoding/embed/classify 各任务专属字段，供具体任务协议组合继承。",
+   "tags": [
+    "protocol",
+    "mixin",
+    "request-model",
+    "pooling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/base/protocol.py:reject_removed_pooling_parameters",
+   "type": "function",
+   "name": "reject_removed_pooling_parameters",
+   "filePath": "vllm/entrypoints/pooling/base/protocol.py",
+   "lineRange": [
+    23,
+    32
+   ],
+   "summary": "拒绝已移除的历史池化参数（pydantic extra 校验钩子），给出迁移提示。",
+   "tags": [
+    "validation",
+    "protocol",
+    "deprecation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/base/protocol.py:PoolingBasicRequestMixin",
+   "type": "class",
+   "name": "PoolingBasicRequestMixin",
+   "filePath": "vllm/entrypoints/pooling/base/protocol.py",
+   "lineRange": [
+    35,
+    144
+   ],
+   "summary": "池化请求公共字段 mixin：model/truncate_prompt_tokens/padding/request_id/priority/cache_salt 等，含 cache_salt 支持检查与 TokenizeParams 构建。",
+   "tags": [
+    "mixin",
+    "request-model",
+    "common-fields"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/base/protocol.py:PoolingTokenizeParamsMixin",
+   "type": "class",
+   "name": "PoolingTokenizeParamsMixin",
+   "filePath": "vllm/entrypoints/pooling/base/protocol.py",
+   "lineRange": [
+    147,
+    160
+   ],
+   "summary": "tokenize 参数基础 mixin（add_special_tokens），供固定长度与 embedding 变体复用。",
+   "tags": [
+    "mixin",
+    "tokenization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/base/protocol.py:FixedMaxLenTokenizeParamsMixin",
+   "type": "class",
+   "name": "FixedMaxLenTokenizeParamsMixin",
+   "filePath": "vllm/entrypoints/pooling/base/protocol.py",
+   "lineRange": [
+    163,
+    170
+   ],
+   "summary": "固定 max_len 语义的 tokenize 参数 mixin（classify/score 类任务）。",
+   "tags": [
+    "mixin",
+    "tokenization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/base/protocol.py:EmbeddingTokenizeParamsMixin",
+   "type": "class",
+   "name": "EmbeddingTokenizeParamsMixin",
+   "filePath": "vllm/entrypoints/pooling/base/protocol.py",
+   "lineRange": [
+    173,
+    209
+   ],
+   "summary": "embedding 语义 tokenize 参数 mixin：按 padding 模式（True 固定/False 变长截断到最长）构建 TokenizeParams。",
+   "tags": [
+    "mixin",
+    "tokenization",
+    "embedding"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/base/protocol.py:ChatRequestOptionsMixin",
+   "type": "class",
+   "name": "ChatRequestOptionsMixin",
+   "filePath": "vllm/entrypoints/pooling/base/protocol.py",
+   "lineRange": [
+    228,
+    311
+   ],
+   "summary": "chat 请求选项 mixin：chat_template/kwargs/media_io_kwargs 与 generation_prompt 校验，build_chat_params 组装 ChatParams。",
+   "tags": [
+    "mixin",
+    "chat",
+    "request-model"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/base/serving.py",
+   "type": "file",
+   "name": "serving.py",
+   "filePath": "vllm/entrypoints/pooling/base/serving.py",
+   "summary": "池化服务基类：PoolingBaseServing(ABC) 定义 __call__ 五段式在线管线（init_ctx→preprocessing→prepare_generators→collect_batch→postprocessing），PoolingServing 进一步声明 io_processor 工厂接口，供 embed/classify/score/token_embed 各服务继承。",
+   "tags": [
+    "serving",
+    "base-class",
+    "async",
+    "pooling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/base/serving.py:PoolingBaseServing",
+   "type": "class",
+   "name": "PoolingBaseServing",
+   "filePath": "vllm/entrypoints/pooling/base/serving.py",
+   "lineRange": [
+    32,
+    254
+   ],
+   "summary": "池化在线服务 ABC：异步渲染请求、合并多路 engine encode 生成器、收集批结果并构建响应，含模型/LoRA 校验与 mm kwargs 校验。",
+   "tags": [
+    "serving",
+    "async",
+    "orchestrator",
+    "abstract"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/base/serving.py:PoolingServing",
+   "type": "class",
+   "name": "PoolingServing",
+   "filePath": "vllm/entrypoints/pooling/base/serving.py",
+   "lineRange": [
+    257,
+    277
+   ],
+   "summary": "带 io_processor 工厂方法的池化服务抽象层，子类实现 init_io_processor 决定具体 IO 处理器类型。",
+   "tags": [
+    "serving",
+    "abstract",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "type": "file",
+   "name": "io_processor.py",
+   "filePath": "vllm/entrypoints/pooling/embed/io_processor.py",
+   "summary": "embedding 任务 IO 处理器家族：EmbedIOProcessor 支持 chunked prompt（超长输入切块加权聚合）、Cohere v1/v2 兼容协议（task instruction 注入、truncate 策略、mixed text+image 输入）；TokenEmbedIOProcessor 支持 token 级输出与 late chunking；JinaRankingTokenEmbedIOProcessor 处理 Jina reranker 文档格式化。",
+   "tags": [
+    "io-processor",
+    "embedding",
+    "cohere",
+    "chunking"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/embed/io_processor.py:EmbedIOProcessor",
+   "type": "class",
+   "name": "EmbedIOProcessor",
+   "filePath": "vllm/entrypoints/pooling/embed/io_processor.py",
+   "lineRange": [
+    73,
+    672
+   ],
+   "summary": "embedding IO 处理器：加载 task instructions 与 sentence-transformers 提示、Cohere 协议双路径（chat 模板或 text completion）、chunked embedding 的切块预/后处理与加权平均归一。",
+   "tags": [
+    "io-processor",
+    "embedding",
+    "cohere",
+    "chunked-embedding"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/embed/io_processor.py:TokenEmbedIOProcessor",
+   "type": "class",
+   "name": "TokenEmbedIOProcessor",
+   "filePath": "vllm/entrypoints/pooling/embed/io_processor.py",
+   "lineRange": [
+    675,
+    752
+   ],
+   "summary": "token 级 embedding IO 处理器：在渲染期挂 late chunking 元数据（token 边界），输出期回附到每个 token embedding。",
+   "tags": [
+    "io-processor",
+    "token-embedding",
+    "late-chunking"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/embed/io_processor.py:JinaRankingTokenEmbedIOProcessor",
+   "type": "class",
+   "name": "JinaRankingTokenEmbedIOProcessor",
+   "filePath": "vllm/entrypoints/pooling/embed/io_processor.py",
+   "lineRange": [
+    755,
+    805
+   ],
+   "summary": "Jina reranker 的 token embed 处理器：将文档列表经 format_docs_prompts_func 格式化为 query-doc 对再走基类管线。",
+   "tags": [
+    "io-processor",
+    "jina",
+    "reranking"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "type": "file",
+   "name": "protocol.py",
+   "filePath": "vllm/entrypoints/pooling/embed/protocol.py",
+   "summary": "embedding 端点协议定义：OpenAI 风格 /v1/embeddings 请求（completion/chat/batch/chat-input 四型）与响应，Cohere /v1/embed 兼容协议（input_type/task instruction/embedding_types/binary 编码），含二进制/ubinary/base64 打包工具。",
+   "tags": [
+    "protocol",
+    "embedding",
+    "openai-api",
+    "cohere"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/embed/protocol.py:EmbeddingCompletionRequest",
+   "type": "class",
+   "name": "EmbeddingCompletionRequest",
+   "filePath": "vllm/entrypoints/pooling/embed/protocol.py",
+   "lineRange": [
+    35,
+    46
+   ],
+   "summary": "/v1/embeddings 文本补全型请求（input 字符串/列表），to_pooling_params 转 PoolingParams。",
+   "tags": [
+    "protocol",
+    "request-model",
+    "embedding"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/embed/protocol.py:EmbeddingChatRequest",
+   "type": "class",
+   "name": "EmbeddingChatRequest",
+   "filePath": "vllm/entrypoints/pooling/embed/protocol.py",
+   "lineRange": [
+    69,
+    82
+   ],
+   "summary": "/v1/embeddings messages 型请求（chat 输入），自动判定字符串/消息列表。",
+   "tags": [
+    "protocol",
+    "request-model",
+    "chat"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/embed/protocol.py:EmbeddingBatchChatRequest",
+   "type": "class",
+   "name": "EmbeddingBatchChatRequest",
+   "filePath": "vllm/entrypoints/pooling/embed/protocol.py",
+   "lineRange": [
+    85,
+    106
+   ],
+   "summary": "批 chat 请求：messages 为多轮对话列表的列表。",
+   "tags": [
+    "protocol",
+    "request-model",
+    "batch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/embed/protocol.py:EmbeddingChatInputRequest",
+   "type": "class",
+   "name": "EmbeddingChatInputRequest",
+   "filePath": "vllm/entrypoints/pooling/embed/protocol.py",
+   "lineRange": [
+    109,
+    131
+   ],
+   "summary": "input 字段混合形态请求：normalize_input_messages 把 str/list[str]/messages 统一为 chat 消息。",
+   "tags": [
+    "protocol",
+    "request-model",
+    "normalization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/embed/protocol.py:EmbeddingBatchChatInputRequest",
+   "type": "class",
+   "name": "EmbeddingBatchChatInputRequest",
+   "filePath": "vllm/entrypoints/pooling/embed/protocol.py",
+   "lineRange": [
+    134,
+    156
+   ],
+   "summary": "批 input 混合形态请求（input 为列表的列表时走批 chat 路径）。",
+   "tags": [
+    "protocol",
+    "request-model",
+    "batch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/embed/protocol.py:CohereEmbedContent",
+   "type": "class",
+   "name": "CohereEmbedContent",
+   "filePath": "vllm/entrypoints/pooling/embed/protocol.py",
+   "lineRange": [
+    208,
+    222
+   ],
+   "summary": "Cohere 内容块：type=text|image_url，校验 image 必须带 url。",
+   "tags": [
+    "protocol",
+    "cohere",
+    "multimodal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/embed/protocol.py:CohereEmbedRequest",
+   "type": "class",
+   "name": "CohereEmbedRequest",
+   "filePath": "vllm/entrypoints/pooling/embed/protocol.py",
+   "lineRange": [
+    229,
+    250
+   ],
+   "summary": "Cohere /v1/embed 请求：input_type(search_query/search_document)驱动 task instruction、texts/images 双通道、embedding_types(float/binary/ubinary/base64)与 truncate 策略。",
+   "tags": [
+    "protocol",
+    "cohere",
+    "request-model"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/embed/protocol.py:build_typed_embeddings",
+   "type": "function",
+   "name": "build_typed_embeddings",
+   "filePath": "vllm/entrypoints/pooling/embed/protocol.py",
+   "lineRange": [
+    337,
+    354
+   ],
+   "summary": "按 embedding_types 把 float 向量打包为 binary/ubinary（packbits 符号化）或 base64（struct 打包+f64 编码）。",
+   "tags": [
+    "encoding",
+    "binary",
+    "cohere"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/embed/serving.py",
+   "type": "file",
+   "name": "serving.py",
+   "filePath": "vllm/entrypoints/pooling/embed/serving.py",
+   "summary": "/v1/embeddings 服务实现：ServingEmbedding 组装 OpenAI JSON/二进制流式两种响应与 Cohere /v1/embed 兼容响应（billed units、typed embeddings），并接入 chunked embedding 预处理。",
+   "tags": [
+    "serving",
+    "embedding",
+    "openai-api",
+    "response-builder"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/embed/serving.py:ServingEmbedding",
+   "type": "class",
+   "name": "ServingEmbedding",
+   "filePath": "vllm/entrypoints/pooling/embed/serving.py",
+   "lineRange": [
+    42,
+    211
+   ],
+   "summary": "embedding 服务类：init EmbedIOProcessor，_build_response 按 ctx 分流 OpenAI JSON（按 encoding_format/dtype 选编码器）/bytes 流式/Cohere 响应。",
+   "tags": [
+    "serving",
+    "embedding",
+    "response-builder"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/factories.py",
+   "type": "file",
+   "name": "factories.py",
+   "filePath": "vllm/entrypoints/pooling/factories.py",
+   "summary": "池化子系统装配工厂：按模型支持的 pooling 任务构造各任务 IO processor、向 FastAPI app 注册对应 api_router（embed/classify/score/pool/token_embed）、初始化各 Serving 状态对象并推导 OpenAPI invocation types。",
+   "tags": [
+    "factory",
+    "wiring",
+    "api-router",
+    "pooling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/factories.py:init_pooling_io_processors",
+   "type": "function",
+   "name": "init_pooling_io_processors",
+   "filePath": "vllm/entrypoints/pooling/factories.py",
+   "lineRange": [
+    38,
+    107
+   ],
+   "summary": "按 supported_tasks 为每个任务实例化 IO processor（含插件 IOProcessor 注册表与 scoring 类型映射）。",
+   "tags": [
+    "factory",
+    "io-processor",
+    "initialization"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/factories.py:register_pooling_api_routers",
+   "type": "function",
+   "name": "register_pooling_api_routers",
+   "filePath": "vllm/entrypoints/pooling/factories.py",
+   "lineRange": [
+    110,
+    144
+   ],
+   "summary": "把各任务 api_router 挂到 FastAPI app：embed/classify 默认，pooling 按配置，scoring 按开关。",
+   "tags": [
+    "api-router",
+    "registration",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/factories.py:init_pooling_state",
+   "type": "function",
+   "name": "init_pooling_state",
+   "filePath": "vllm/entrypoints/pooling/factories.py",
+   "lineRange": [
+    147,
+    233
+   ],
+   "summary": "构造 ServingPooling/ServingEmbedding/ServingClassification/ServingScores 等服务对象并挂到 app.state。",
+   "tags": [
+    "factory",
+    "serving",
+    "state"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/factories.py:get_pooling_invocation_types",
+   "type": "function",
+   "name": "get_pooling_invocation_types",
+   "filePath": "vllm/entrypoints/pooling/factories.py",
+   "lineRange": [
+    236,
+    287
+   ],
+   "summary": "推导当前配置下池化端点的 OpenAPI invocation types（供 sagemaker 等启动器生成 schema）。",
+   "tags": [
+    "openapi",
+    "introspection",
+    "factory"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/offline.py",
+   "type": "file",
+   "name": "offline.py",
+   "filePath": "vllm/entrypoints/pooling/offline.py",
+   "summary": "离线 LLM 类池化混入：PoolingOfflineMixin 提供 encode/embed/classify/score 同步入口，内部走 IO processor 的 offline 工厂，并含 tiling engine 分块迭代执行超大批量、任务合法性校验与 EmbeddingRequestOutput 等类型化输出。",
+   "tags": [
+    "offline-api",
+    "llm-class",
+    "pooling",
+    "tiling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/offline.py:PoolingOfflineMixin",
+   "type": "class",
+   "name": "PoolingOfflineMixin",
+   "filePath": "vllm/entrypoints/pooling/offline.py",
+   "lineRange": [
+    39,
+    486
+   ],
+   "summary": "离线池化混入（用于 LLM 类）：encode 统一入口 + embed/classify/score 类型化封装，_run_tiling_engine 分块渲染-提交-步进循环处理超大批。",
+   "tags": [
+    "offline-api",
+    "mixin",
+    "tiling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/pooling/io_processor.py",
+   "type": "file",
+   "name": "io_processor.py",
+   "filePath": "vllm/entrypoints/pooling/pooling/io_processor.py",
+   "summary": "通用 /pooling 端点的 IO 处理器：组合任务不支持时用 UnsupportedCombinedTaskIOProcessor 报错；有插件 IOProcessor 注册时 PluginWithIOProcessorPlugins 委托插件处理请求工厂与后处理。",
+   "tags": [
+    "io-processor",
+    "plugin",
+    "pooling",
+    "fallback"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/pooling/io_processor.py:UnsupportedCombinedTaskIOProcessor",
+   "type": "class",
+   "name": "UnsupportedCombinedTaskIOProcessor",
+   "filePath": "vllm/entrypoints/pooling/pooling/io_processor.py",
+   "lineRange": [
+    24,
+    33
+   ],
+   "summary": "组合任务（如 embed&classify）不支持时的占位处理器：create_pooling_params 直接抛错。",
+   "tags": [
+    "fallback",
+    "error",
+    "io-processor"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/pooling/io_processor.py:PluginWithIOProcessorPlugins",
+   "type": "class",
+   "name": "PluginWithIOProcessorPlugins",
+   "filePath": "vllm/entrypoints/pooling/pooling/io_processor.py",
+   "lineRange": [
+    42,
+    187
+   ],
+   "summary": "带插件的通用池化处理器：按任务名把在线/离线请求工厂与后处理委托给注册的第三方 IOProcessor 插件。",
+   "tags": [
+    "plugin",
+    "delegation",
+    "io-processor"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/pooling/serving.py",
+   "type": "file",
+   "name": "serving.py",
+   "filePath": "vllm/entrypoints/pooling/pooling/serving.py",
+   "summary": "/pooling 端点服务实现：ServingPooling 直接继承 PoolingBaseServing，绑定通用（插件化）IO processor，输出原始 pooling 数据 JSON 响应。",
+   "tags": [
+    "serving",
+    "pooling",
+    "generic"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/pooling/serving.py:ServingPooling",
+   "type": "class",
+   "name": "ServingPooling",
+   "filePath": "vllm/entrypoints/pooling/pooling/serving.py",
+   "lineRange": [
+    35,
+    190
+   ],
+   "summary": "通用池化服务：init_io_processor 按 factory 映射选择（插件或任务特化处理器），构建 usage 与 JSON 响应。",
+   "tags": [
+    "serving",
+    "pooling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/scoring/api_router.py",
+   "type": "file",
+   "name": "api_router.py",
+   "filePath": "vllm/entrypoints/pooling/scoring/api_router.py",
+   "summary": "/score 与 /rerank 端点路由：score、/v1/score、rerank、/v1/rerank、/v2/rerank 多版本薄壳 handler，全部委托 ServingScores 处理。",
+   "tags": [
+    "api-router",
+    "scoring",
+    "rerank"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "type": "file",
+   "name": "io_processor.py",
+   "filePath": "vllm/entrypoints/pooling/scoring/io_processor.py",
+   "summary": "scoring/rerank 任务 IO 处理器家族（继承树五层）：ScoringIOProcessor 基类（tokenizer/pad/token limit 校验）；BiEncoderIOProcessor 双塔 query-doc 独立编码；LateInteractionIOProcessor（ColBERT 风格 token 级延迟交互，Flash 变体）；CrossEncoderIOProcessor 交叉编码拼接（含 truncate/token_type_ids 对齐）；JinaRankingIOProcessor 组合 Jina reranker 文档格式化 mixin。",
+   "tags": [
+    "io-processor",
+    "scoring",
+    "rerank",
+    "cross-encoder",
+    "late-interaction"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/scoring/io_processor.py:_apply_post_tokenization_to_token_type_ids",
+   "type": "function",
+   "name": "_apply_post_tokenization_to_token_type_ids",
+   "filePath": "vllm/entrypoints/pooling/scoring/io_processor.py",
+   "lineRange": [
+    61,
+    97
+   ],
+   "summary": "tokenize 后把截断/填充同步施加到 token_type_ids（必须与 TokenizeParams._validate_tokens 同序，否则 query/doc 边界错位）。",
+   "tags": [
+    "tokenization",
+    "alignment",
+    "cross-encoder"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/scoring/io_processor.py:ScoringIOProcessor",
+   "type": "class",
+   "name": "ScoringIOProcessor",
+   "filePath": "vllm/entrypoints/pooling/scoring/io_processor.py",
+   "lineRange": [
+    100,
+    218
+   ],
+   "summary": "scoring 处理器基类：持 tokenizer/pad_token/架构信息，提供 token 上限校验与 mm 合法性检查。",
+   "tags": [
+    "io-processor",
+    "base-class",
+    "scoring"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/scoring/io_processor.py:BiEncoderIOProcessor",
+   "type": "class",
+   "name": "BiEncoderIOProcessor",
+   "filePath": "vllm/entrypoints/pooling/scoring/io_processor.py",
+   "lineRange": [
+    221,
+    362
+   ],
+   "summary": "双塔处理器：query 与各 doc 分别独立成批编码，分数由 serving 层用相似度（余弦/点积）计算。",
+   "tags": [
+    "io-processor",
+    "bi-encoder",
+    "embedding"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/scoring/io_processor.py:LateInteractionIOProcessor",
+   "type": "class",
+   "name": "LateInteractionIOProcessor",
+   "filePath": "vllm/entrypoints/pooling/scoring/io_processor.py",
+   "lineRange": [
+    365,
+    407
+   ],
+   "summary": "ColBERT 风格延迟交互处理器：保留 token 级向量，MaxSim 分数在 serving 层计算。",
+   "tags": [
+    "io-processor",
+    "late-interaction",
+    "colbert"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/scoring/io_processor.py:FlashLateInteractionIOProcessor",
+   "type": "class",
+   "name": "FlashLateInteractionIOProcessor",
+   "filePath": "vllm/entrypoints/pooling/scoring/io_processor.py",
+   "lineRange": [
+    410,
+    444
+   ],
+   "summary": "延迟交互的 Flash 变体：走 v1/pool/late_interaction 的 fused 路径（分数在引擎内算）。",
+   "tags": [
+    "io-processor",
+    "late-interaction",
+    "fused"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/scoring/io_processor.py:CrossEncoderIOProcessor",
+   "type": "class",
+   "name": "CrossEncoderIOProcessor",
+   "filePath": "vllm/entrypoints/pooling/scoring/io_processor.py",
+   "lineRange": [
+    447,
+    833
+   ],
+   "summary": "交叉编码处理器：query+doc 拼接单序列编码（含 special tokens 对数推导、truncate 三策略与 token_type_ids 压缩），输出直接是相关性分。",
+   "tags": [
+    "io-processor",
+    "cross-encoder",
+    "rerank"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/scoring/io_processor.py:JinaRankingIOProcessorMixin",
+   "type": "class",
+   "name": "JinaRankingIOProcessorMixin",
+   "filePath": "vllm/entrypoints/pooling/scoring/io_processor.py",
+   "lineRange": [
+    836,
+    904
+   ],
+   "summary": "Jina reranker 输入格式化 mixin：把 doc 文本包装为 Jina 惯例的 query-doc 提示对。",
+   "tags": [
+    "mixin",
+    "jina",
+    "rerank"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/scoring/io_processor.py:JinaRankingIOProcessor",
+   "type": "class",
+   "name": "JinaRankingIOProcessor",
+   "filePath": "vllm/entrypoints/pooling/scoring/io_processor.py",
+   "lineRange": [
+    907,
+    1044
+   ],
+   "summary": "Jina rerank 处理器：LateInteractionIOProcessor + JinaRankingIOProcessorMixin 双继承，服务 /rerank 的 Jina 兼容输入。",
+   "tags": [
+    "io-processor",
+    "jina",
+    "late-interaction"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/scoring/serving.py",
+   "type": "file",
+   "name": "serving.py",
+   "filePath": "vllm/entrypoints/pooling/scoring/serving.py",
+   "summary": "/score 与 /rerank 服务实现：ServingScores 统一三种评分路径——bi-encoder（torch 相似度矩阵）、cross-encoder（模型直接出分）、late-interaction（MaxSim/引擎内 flash 路径），支持 return_tokens、多 doc 批排与 usage 统计。",
+   "tags": [
+    "serving",
+    "scoring",
+    "rerank",
+    "similarity"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/scoring/serving.py:ServingScores",
+   "type": "class",
+   "name": "ServingScores",
+   "filePath": "vllm/entrypoints/pooling/scoring/serving.py",
+   "lineRange": [
+    36,
+    315
+   ],
+   "summary": "评分服务类：按处理器类型分流双塔/交叉编码/延迟交互三条后处理路径，组装 ScoreResponse/RerankResponse。",
+   "tags": [
+    "serving",
+    "scoring",
+    "response-builder"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/scoring/typing.py",
+   "type": "file",
+   "name": "typing.py",
+   "filePath": "vllm/entrypoints/pooling/scoring/typing.py",
+   "summary": "scoring 输入类型定义：ScoreData（text pair / mm pair TypedDict 变体）与 ScoringData 聚合别名，供跨模块共享输入形态。",
+   "tags": [
+    "type-definition",
+    "scoring",
+    "data-model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/scoring/typing.py:ScoreMultiModalParam",
+   "type": "class",
+   "name": "ScoreMultiModalParam",
+   "filePath": "vllm/entrypoints/pooling/scoring/typing.py",
+   "lineRange": [
+    23,
+    33
+   ],
+   "summary": "多模态 score 输入 TypedDict：text 与可选 image/content 的组合形态。",
+   "tags": [
+    "type-definition",
+    "multimodal",
+    "scoring"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/scoring/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/entrypoints/pooling/scoring/utils.py",
+   "summary": "scoring 工具函数集：pair 特殊 token 数推导、按 token 截断文本、MaxSim 分数计算、输入合法性校验（长度/mm）、score data 到 prompt 的转换与解析、token_type_ids 游程压缩。",
+   "tags": [
+    "utility",
+    "scoring",
+    "tokenization",
+    "validation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/scoring/utils.py:get_num_special_tokens_for_pair",
+   "type": "function",
+   "name": "get_num_special_tokens_for_pair",
+   "filePath": "vllm/entrypoints/pooling/scoring/utils.py",
+   "lineRange": [
+    29,
+    39
+   ],
+   "summary": "推导 query-doc pair 拼接时的特殊 token 数（cls/sep 布局因模型而异）。",
+   "tags": [
+    "tokenization",
+    "cross-encoder",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/scoring/utils.py:truncate_text_to_tokens",
+   "type": "function",
+   "name": "truncate_text_to_tokens",
+   "filePath": "vllm/entrypoints/pooling/scoring/utils.py",
+   "lineRange": [
+    42,
+    71
+   ],
+   "summary": "用 tokenizer 把文本截断到指定 token 数（cross-encoder truncate 策略的基础操作）。",
+   "tags": [
+    "tokenization",
+    "truncation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/scoring/utils.py:compute_maxsim_score",
+   "type": "function",
+   "name": "compute_maxsim_score",
+   "filePath": "vllm/entrypoints/pooling/scoring/utils.py",
+   "lineRange": [
+    74,
+    89
+   ],
+   "summary": "ColBERT MaxSim：query 各 token 对 doc token 向量取最大相似度后求和。",
+   "tags": [
+    "maxsim",
+    "late-interaction",
+    "similarity"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/scoring/utils.py:validate_score_input",
+   "type": "function",
+   "name": "validate_score_input",
+   "filePath": "vllm/entrypoints/pooling/scoring/utils.py",
+   "lineRange": [
+    126,
+    141
+   ],
+   "summary": "校验 score 输入的形态与长度一致性（text_1/text_2 或 mm 扩展）。",
+   "tags": [
+    "validation",
+    "scoring"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/scoring/utils.py:score_data_to_prompts",
+   "type": "function",
+   "name": "score_data_to_prompts",
+   "filePath": "vllm/entrypoints/pooling/scoring/utils.py",
+   "lineRange": [
+    144,
+    171
+   ],
+   "summary": "把 ScoringData 展开为 (query, doc) prompt 序列（bi-encoder 双批 / cross-encoder 拼接前的中间态）。",
+   "tags": [
+    "data-transform",
+    "scoring"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/scoring/utils.py:_parse_score_content",
+   "type": "function",
+   "name": "_parse_score_content",
+   "filePath": "vllm/entrypoints/pooling/scoring/utils.py",
+   "lineRange": [
+    183,
+    216
+   ],
+   "summary": "解析单条 score 输入为结构化 text/image 内容（mm 输入归一化）。",
+   "tags": [
+    "parsing",
+    "multimodal"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/scoring/utils.py:parse_score_data",
+   "type": "function",
+   "name": "parse_score_data",
+   "filePath": "vllm/entrypoints/pooling/scoring/utils.py",
+   "lineRange": [
+    240,
+    262
+   ],
+   "summary": "批解析 score 输入为 ScoringData 列表（含交叉积展开）。",
+   "tags": [
+    "parsing",
+    "scoring",
+    "batch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/scoring/utils.py:compress_token_type_ids",
+   "type": "function",
+   "name": "compress_token_type_ids",
+   "filePath": "vllm/entrypoints/pooling/scoring/utils.py",
+   "lineRange": [
+    265,
+    291
+   ],
+   "summary": "把 0/1 token_type_ids 游程压缩为 (token_id, count) 对，缩小传输体积。",
+   "tags": [
+    "compression",
+    "tokenization"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/token_embed/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/entrypoints/pooling/token_embed/__init__.py",
+   "summary": "token_embed 子包入口（空 barrel，仅作包标识）。",
+   "tags": [
+    "barrel",
+    "package-init"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/token_embed/api_router.py",
+   "type": "file",
+   "name": "api_router.py",
+   "filePath": "vllm/entrypoints/pooling/token_embed/api_router.py",
+   "summary": "/tokenize/embeddings（token 级 embedding）端点路由：薄壳 handler 委托 ServingTokenEmbedding 处理。",
+   "tags": [
+    "api-router",
+    "token-embedding"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/token_embed/late_chunking.py",
+   "type": "file",
+   "name": "late_chunking.py",
+   "filePath": "vllm/entrypoints/pooling/token_embed/late_chunking.py",
+   "summary": "late chunking（后置分块）三件套：渲染期把 prompt 的 chunk 边界写进输入（prepare）、按 token 边界构建 LateChunkingMetadata（build）、输出期把元数据回附到 token embedding 输出（attach），支撑 Jina late-chunking 长文档检索。",
+   "tags": [
+    "late-chunking",
+    "tokenization",
+    "retrieval"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/token_embed/late_chunking.py:prepare_late_chunking_input",
+   "type": "function",
+   "name": "prepare_late_chunking_input",
+   "filePath": "vllm/entrypoints/pooling/token_embed/late_chunking.py",
+   "lineRange": [
+    16,
+    42
+   ],
+   "summary": "渲染前把分块文档拼接为单 prompt 并记录 chunk token 边界（元数据入渲染参数）。",
+   "tags": [
+    "late-chunking",
+    "preparation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/token_embed/late_chunking.py:build_late_chunking_metadata",
+   "type": "function",
+   "name": "build_late_chunking_metadata",
+   "filePath": "vllm/entrypoints/pooling/token_embed/late_chunking.py",
+   "lineRange": [
+    45,
+    76
+   ],
+   "summary": "按各 chunk 的 token span 构建 LateChunkingMetadata（起始/长度列表）。",
+   "tags": [
+    "late-chunking",
+    "metadata"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/token_embed/late_chunking.py:attach_late_chunking_metadata",
+   "type": "function",
+   "name": "attach_late_chunking_metadata",
+   "filePath": "vllm/entrypoints/pooling/token_embed/late_chunking.py",
+   "lineRange": [
+    79,
+    92
+   ],
+   "summary": "输出期把元数据写回 PoolingRequestOutput，供 pooler 做逐 chunk 平均池化。",
+   "tags": [
+    "late-chunking",
+    "post-processing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/token_embed/protocol.py",
+   "type": "file",
+   "name": "protocol.py",
+   "filePath": "vllm/entrypoints/pooling/token_embed/protocol.py",
+   "summary": "token 级 embedding 协议：TokenEmbeddingRequest（input + late_chunking 配置）与逐 token 输出响应模型。",
+   "tags": [
+    "protocol",
+    "token-embedding",
+    "request-model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/token_embed/protocol.py:TokenEmbeddingRequest",
+   "type": "class",
+   "name": "TokenEmbeddingRequest",
+   "filePath": "vllm/entrypoints/pooling/token_embed/protocol.py",
+   "lineRange": [
+    29,
+    55
+   ],
+   "summary": "token embedding 请求：input 文本与可选 LateChunkingConfig（chunk 边界声明），to_pooling_params 转 token 级池化参数。",
+   "tags": [
+    "protocol",
+    "request-model",
+    "late-chunking"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/token_embed/serving.py",
+   "type": "file",
+   "name": "serving.py",
+   "filePath": "vllm/entrypoints/pooling/token_embed/serving.py",
+   "summary": "token 级 embedding 服务：ServingTokenEmbedding 绑定 TokenEmbedIOProcessor，输出逐 token 向量（含 late chunking 元数据透传）。",
+   "tags": [
+    "serving",
+    "token-embedding"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/token_embed/serving.py:ServingTokenEmbedding",
+   "type": "class",
+   "name": "ServingTokenEmbedding",
+   "filePath": "vllm/entrypoints/pooling/token_embed/serving.py",
+   "lineRange": [
+    18,
+    49
+   ],
+   "summary": "token embedding 服务类：init_io_processor 选 TokenEmbedIOProcessor，构建逐 token 响应。",
+   "tags": [
+    "serving",
+    "token-embedding"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/typing.py",
+   "type": "file",
+   "name": "typing.py",
+   "filePath": "vllm/entrypoints/pooling/typing.py",
+   "summary": "池化子系统共享类型中枢：AnyPoolingRequest/Response 联合别名（聚合 embed/classify/pooling/scoring/token_embed 五任务协议）、泛型 PoolingServeContext（在线每步上下文）、Offline*InputsContext 系列（离线管线）与 RenderParams 三型（cmpl/chat/scoring 渲染参数）。",
+   "tags": [
+    "type-definition",
+    "context",
+    "pooling",
+    "shared"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/typing.py:PoolingServeContext",
+   "type": "class",
+   "name": "PoolingServeContext",
+   "filePath": "vllm/entrypoints/pooling/typing.py",
+   "lineRange": [
+    95,
+    130
+   ],
+   "summary": "泛型在线服务上下文：请求对象、pooling_params、LoRA、优先级、engine_inputs 与 late_chunking 槽位等每步贯穿字段。",
+   "tags": [
+    "context",
+    "generics",
+    "data-model"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/typing.py:OfflineInputsContext",
+   "type": "class",
+   "name": "OfflineInputsContext",
+   "filePath": "vllm/entrypoints/pooling/typing.py",
+   "lineRange": [
+    134,
+    141
+   ],
+   "summary": "离线输入上下文基类：io_processor 与输入数据的载体。",
+   "tags": [
+    "context",
+    "offline",
+    "data-model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/typing.py:RenderParams",
+   "type": "class",
+   "name": "RenderParams",
+   "filePath": "vllm/entrypoints/pooling/typing.py",
+   "lineRange": [
+    179,
+    187
+   ],
+   "summary": "渲染参数基 dataclass：prompt 携带的渲染上下文（cmpl/chat/scoring 三子型）。",
+   "tags": [
+    "rendering",
+    "data-model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/pooling/typing.py:PoolingEngineInput",
+   "type": "class",
+   "name": "PoolingEngineInput",
+   "filePath": "vllm/entrypoints/pooling/typing.py",
+   "lineRange": [
+    214,
+    218
+   ],
+   "summary": "引擎输入包装：prompt 数据与附加字段（chunked 元数据等）的最终形态。",
+   "tags": [
+    "engine-input",
+    "data-model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/pooling/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/entrypoints/pooling/utils.py",
+   "summary": "池化输出编码与共享工具：float/base64/二进制流式（pybase64+tensor2binary+元数据头）多种编码器、usage 统计构建、scoring API 开关判定与 token 预留（pair 特殊 token 让位）。",
+   "tags": [
+    "utility",
+    "encoding",
+    "streaming",
+    "pooling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/utils.py:build_metadata_items",
+   "type": "function",
+   "name": "build_metadata_items",
+   "filePath": "vllm/entrypoints/pooling/utils.py",
+   "lineRange": [
+    47,
+    66
+   ],
+   "summary": "为二进制流式输出构建逐请求元数据项（dtype/字节序/shape/偏移）。",
+   "tags": [
+    "encoding",
+    "binary",
+    "metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/utils.py:encode_pooling_output_base64",
+   "type": "function",
+   "name": "encode_pooling_output_base64",
+   "filePath": "vllm/entrypoints/pooling/utils.py",
+   "lineRange": [
+    86,
+    92
+   ],
+   "summary": "把池化输出编码为 base64 字符串（OpenAI encoding_format=base64）。",
+   "tags": [
+    "encoding",
+    "base64"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/utils.py:encode_pooling_bytes",
+   "type": "function",
+   "name": "encode_pooling_bytes",
+   "filePath": "vllm/entrypoints/pooling/utils.py",
+   "lineRange": [
+    95,
+    125
+   ],
+   "summary": "二进制编码：按 embed_dtype/字节序把张量序列化（tensor2binary）并附元数据头。",
+   "tags": [
+    "encoding",
+    "binary",
+    "serialization"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/utils.py:get_pooling_output_encoder",
+   "type": "function",
+   "name": "get_pooling_output_encoder",
+   "filePath": "vllm/entrypoints/pooling/utils.py",
+   "lineRange": [
+    128,
+    144
+   ],
+   "summary": "按 encoding_format/embed_dtype 选择输出编码器函数（float/ndarray/base64 分派）。",
+   "tags": [
+    "encoding",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/utils.py:build_pooling_bytes_streaming_response",
+   "type": "function",
+   "name": "build_pooling_bytes_streaming_response",
+   "filePath": "vllm/entrypoints/pooling/utils.py",
+   "lineRange": [
+    170,
+    205
+   ],
+   "summary": "构建二进制 StreamingResponse：元数据 JSON 头 + 逐请求二进制体块。",
+   "tags": [
+    "streaming",
+    "binary",
+    "response-builder"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/utils.py:enable_scoring_api",
+   "type": "function",
+   "name": "enable_scoring_api",
+   "filePath": "vllm/entrypoints/pooling/utils.py",
+   "lineRange": [
+    220,
+    238
+   ],
+   "summary": "判定是否暴露 /score API（任务支持 or 显式环境开关）。",
+   "tags": [
+    "feature-flag",
+    "scoring"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/pooling/utils.py:reserve_tokens",
+   "type": "function",
+   "name": "reserve_tokens",
+   "filePath": "vllm/entrypoints/pooling/utils.py",
+   "lineRange": [
+    241,
+    252
+   ],
+   "summary": "为 pair 特殊 token 预留 token 预算（max_input_tokens 减去 special tokens 数）。",
+   "tags": [
+    "tokenization",
+    "budget"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "target": "file:vllm/entrypoints/pooling/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "target": "file:vllm/renderers/inputs/preprocess.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "target": "file:vllm/utils/async_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "target": "file:vllm/utils/mistral.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/base/io_processor.py:PoolingIOProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/base/io_processor.py:PoolingIOProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "file:vllm/utils/serial_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "function:vllm/entrypoints/pooling/base/protocol.py:reject_removed_pooling_parameters",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/base/protocol.py:PoolingBasicRequestMixin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/base/protocol.py:PoolingTokenizeParamsMixin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/base/protocol.py:FixedMaxLenTokenizeParamsMixin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/base/protocol.py:EmbeddingTokenizeParamsMixin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/base/protocol.py:ChatRequestOptionsMixin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "function:vllm/entrypoints/pooling/base/protocol.py:reject_removed_pooling_parameters",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/base/protocol.py:PoolingBasicRequestMixin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/base/protocol.py:PoolingTokenizeParamsMixin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/base/protocol.py:FixedMaxLenTokenizeParamsMixin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/base/protocol.py:EmbeddingTokenizeParamsMixin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/base/protocol.py:ChatRequestOptionsMixin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/serving.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/serving.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/serving.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/serving.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/serving.py",
+   "target": "file:vllm/entrypoints/openai/models/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/serving.py",
+   "target": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/serving.py",
+   "target": "file:vllm/entrypoints/pooling/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/serving.py",
+   "target": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/serving.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/serving.py",
+   "target": "file:vllm/renderers/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/serving.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/serving.py",
+   "target": "file:vllm/utils/async_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/serving.py",
+   "target": "class:vllm/entrypoints/pooling/base/serving.py:PoolingBaseServing",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/serving.py",
+   "target": "class:vllm/entrypoints/pooling/base/serving.py:PoolingServing",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/serving.py",
+   "target": "class:vllm/entrypoints/pooling/base/serving.py:PoolingBaseServing",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/base/serving.py",
+   "target": "class:vllm/entrypoints/pooling/base/serving.py:PoolingServing",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/entrypoints/pooling/base/serving.py:PoolingBaseServing",
+   "target": "class:vllm/entrypoints/serve/engine/serving.py:BaseServing",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/pooling/base/serving.py:PoolingServing",
+   "target": "class:vllm/entrypoints/pooling/base/serving.py:PoolingBaseServing",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "file:vllm/entrypoints/pooling/token_embed/late_chunking.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "file:vllm/entrypoints/pooling/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "file:vllm/renderers/hf.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "file:vllm/transformers_utils/repo_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "file:vllm/utils/collection_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "file:vllm/utils/mistral.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/embed/io_processor.py:EmbedIOProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/embed/io_processor.py:TokenEmbedIOProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/embed/io_processor.py:JinaRankingTokenEmbedIOProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/embed/io_processor.py:EmbedIOProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/embed/io_processor.py:TokenEmbedIOProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/embed/io_processor.py:JinaRankingTokenEmbedIOProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/entrypoints/pooling/embed/io_processor.py:EmbedIOProcessor",
+   "target": "class:vllm/entrypoints/pooling/base/io_processor.py:PoolingIOProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/pooling/embed/io_processor.py:TokenEmbedIOProcessor",
+   "target": "class:vllm/entrypoints/pooling/base/io_processor.py:PoolingIOProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/pooling/embed/io_processor.py:JinaRankingTokenEmbedIOProcessor",
+   "target": "class:vllm/entrypoints/pooling/embed/io_processor.py:TokenEmbedIOProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/embed/protocol.py:EmbeddingCompletionRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/embed/protocol.py:EmbeddingChatRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/embed/protocol.py:EmbeddingBatchChatRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/embed/protocol.py:EmbeddingChatInputRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/embed/protocol.py:EmbeddingBatchChatInputRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/embed/protocol.py:CohereEmbedContent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/embed/protocol.py:CohereEmbedRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "function:vllm/entrypoints/pooling/embed/protocol.py:build_typed_embeddings",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/embed/protocol.py:EmbeddingCompletionRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/embed/protocol.py:EmbeddingChatRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/embed/protocol.py:EmbeddingBatchChatRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/embed/protocol.py:EmbeddingChatInputRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/embed/protocol.py:EmbeddingBatchChatInputRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/embed/protocol.py:CohereEmbedRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "target": "function:vllm/entrypoints/pooling/embed/protocol.py:build_typed_embeddings",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/serving.py",
+   "target": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/serving.py",
+   "target": "file:vllm/entrypoints/pooling/base/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/serving.py",
+   "target": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/serving.py",
+   "target": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/serving.py",
+   "target": "file:vllm/entrypoints/pooling/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/serving.py",
+   "target": "file:vllm/entrypoints/pooling/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/serving.py",
+   "target": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/serving.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/serving.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/serving.py",
+   "target": "file:vllm/utils/serial_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/serving.py",
+   "target": "class:vllm/entrypoints/pooling/embed/serving.py:ServingEmbedding",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/embed/serving.py",
+   "target": "class:vllm/entrypoints/pooling/embed/serving.py:ServingEmbedding",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/entrypoints/pooling/embed/serving.py:ServingEmbedding",
+   "target": "class:vllm/entrypoints/pooling/base/serving.py:PoolingServing",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/classify/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/classify/io_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/classify/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/classify/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/embed/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/embed/io_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/embed/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/pooling/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/pooling/io_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/pooling/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/pooling/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/scoring/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/scoring/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/scoring/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/token_embed/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/token_embed/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/pooling/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/serve/sagemaker/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/plugins/io_processors/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "function:vllm/entrypoints/pooling/factories.py:init_pooling_io_processors",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "function:vllm/entrypoints/pooling/factories.py:register_pooling_api_routers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "function:vllm/entrypoints/pooling/factories.py:init_pooling_state",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "function:vllm/entrypoints/pooling/factories.py:get_pooling_invocation_types",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "function:vllm/entrypoints/pooling/factories.py:init_pooling_io_processors",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "function:vllm/entrypoints/pooling/factories.py:register_pooling_api_routers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "function:vllm/entrypoints/pooling/factories.py:init_pooling_state",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/factories.py",
+   "target": "function:vllm/entrypoints/pooling/factories.py:get_pooling_invocation_types",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/offline.py",
+   "target": "file:vllm/entrypoints/common/offline.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/offline.py",
+   "target": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/offline.py",
+   "target": "file:vllm/entrypoints/pooling/factories.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/offline.py",
+   "target": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/offline.py",
+   "target": "file:vllm/entrypoints/pooling/scoring/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/offline.py",
+   "target": "file:vllm/entrypoints/pooling/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/offline.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/offline.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/offline.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/offline.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/offline.py",
+   "target": "file:vllm/pooling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/offline.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/offline.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/offline.py",
+   "target": "class:vllm/entrypoints/pooling/offline.py:PoolingOfflineMixin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/offline.py",
+   "target": "class:vllm/entrypoints/pooling/offline.py:PoolingOfflineMixin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/entrypoints/pooling/offline.py:PoolingOfflineMixin",
+   "target": "class:vllm/entrypoints/common/offline.py:OfflineInferenceMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/io_processor.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/io_processor.py",
+   "target": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/io_processor.py",
+   "target": "file:vllm/entrypoints/pooling/pooling/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/io_processor.py",
+   "target": "file:vllm/entrypoints/pooling/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/io_processor.py",
+   "target": "file:vllm/plugins/io_processors/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/io_processor.py",
+   "target": "file:vllm/renderers/inputs/preprocess.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/pooling/io_processor.py:UnsupportedCombinedTaskIOProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/pooling/io_processor.py:PluginWithIOProcessorPlugins",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/pooling/io_processor.py:UnsupportedCombinedTaskIOProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/pooling/io_processor.py:PluginWithIOProcessorPlugins",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/entrypoints/pooling/pooling/io_processor.py:UnsupportedCombinedTaskIOProcessor",
+   "target": "class:vllm/entrypoints/pooling/base/io_processor.py:PoolingIOProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/pooling/pooling/io_processor.py:PluginWithIOProcessorPlugins",
+   "target": "class:vllm/entrypoints/pooling/base/io_processor.py:PoolingIOProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/serving.py",
+   "target": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/serving.py",
+   "target": "file:vllm/entrypoints/pooling/base/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/serving.py",
+   "target": "file:vllm/entrypoints/pooling/factories.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/serving.py",
+   "target": "file:vllm/entrypoints/pooling/pooling/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/serving.py",
+   "target": "file:vllm/entrypoints/pooling/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/serving.py",
+   "target": "file:vllm/entrypoints/pooling/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/serving.py",
+   "target": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/serving.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/serving.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/serving.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/serving.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/serving.py",
+   "target": "file:vllm/utils/serial_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/serving.py",
+   "target": "class:vllm/entrypoints/pooling/pooling/serving.py:ServingPooling",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/pooling/serving.py",
+   "target": "class:vllm/entrypoints/pooling/pooling/serving.py:ServingPooling",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/entrypoints/pooling/pooling/serving.py:ServingPooling",
+   "target": "class:vllm/entrypoints/pooling/base/serving.py:PoolingBaseServing",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/api_router.py",
+   "target": "file:vllm/entrypoints/pooling/scoring/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/api_router.py",
+   "target": "file:vllm/entrypoints/pooling/scoring/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/api_router.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/api_router.py",
+   "target": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/api_router.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "file:vllm/entrypoints/pooling/pooling/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "file:vllm/entrypoints/pooling/scoring/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "file:vllm/entrypoints/pooling/scoring/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "file:vllm/entrypoints/pooling/scoring/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "file:vllm/entrypoints/pooling/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "file:vllm/entrypoints/pooling/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "file:vllm/model_executor/model_loader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "file:vllm/renderers/hf.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "file:vllm/renderers/inputs/preprocess.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "file:vllm/transformers_utils/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "file:vllm/utils/mistral.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "function:vllm/entrypoints/pooling/scoring/io_processor.py:_apply_post_tokenization_to_token_type_ids",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/scoring/io_processor.py:ScoringIOProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/scoring/io_processor.py:BiEncoderIOProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/scoring/io_processor.py:LateInteractionIOProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/scoring/io_processor.py:FlashLateInteractionIOProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/scoring/io_processor.py:CrossEncoderIOProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/scoring/io_processor.py:JinaRankingIOProcessorMixin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/scoring/io_processor.py:JinaRankingIOProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/scoring/io_processor.py:ScoringIOProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/scoring/io_processor.py:BiEncoderIOProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/scoring/io_processor.py:LateInteractionIOProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/scoring/io_processor.py:FlashLateInteractionIOProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/scoring/io_processor.py:CrossEncoderIOProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "target": "class:vllm/entrypoints/pooling/scoring/io_processor.py:JinaRankingIOProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/entrypoints/pooling/scoring/io_processor.py:ScoringIOProcessor",
+   "target": "class:vllm/entrypoints/pooling/base/io_processor.py:PoolingIOProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/pooling/scoring/io_processor.py:BiEncoderIOProcessor",
+   "target": "class:vllm/entrypoints/pooling/scoring/io_processor.py:ScoringIOProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/pooling/scoring/io_processor.py:LateInteractionIOProcessor",
+   "target": "class:vllm/entrypoints/pooling/scoring/io_processor.py:BiEncoderIOProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/pooling/scoring/io_processor.py:FlashLateInteractionIOProcessor",
+   "target": "class:vllm/entrypoints/pooling/scoring/io_processor.py:LateInteractionIOProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/pooling/scoring/io_processor.py:CrossEncoderIOProcessor",
+   "target": "class:vllm/entrypoints/pooling/scoring/io_processor.py:ScoringIOProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/pooling/scoring/io_processor.py:JinaRankingIOProcessor",
+   "target": "class:vllm/entrypoints/pooling/scoring/io_processor.py:LateInteractionIOProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/pooling/scoring/io_processor.py:JinaRankingIOProcessor",
+   "target": "class:vllm/entrypoints/pooling/scoring/io_processor.py:JinaRankingIOProcessorMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/serving.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/serving.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/serving.py",
+   "target": "file:vllm/entrypoints/pooling/base/io_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/serving.py",
+   "target": "file:vllm/entrypoints/pooling/base/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/serving.py",
+   "target": "file:vllm/entrypoints/pooling/scoring/io_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/serving.py",
+   "target": "file:vllm/entrypoints/pooling/scoring/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/serving.py",
+   "target": "file:vllm/entrypoints/pooling/scoring/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/serving.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/serving.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/serving.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/serving.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/serving.py",
+   "target": "file:vllm/v1/pool/late_interaction.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/serving.py",
+   "target": "class:vllm/entrypoints/pooling/scoring/serving.py:ServingScores",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/serving.py",
+   "target": "class:vllm/entrypoints/pooling/scoring/serving.py:ServingScores",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/entrypoints/pooling/scoring/serving.py:ServingScores",
+   "target": "class:vllm/entrypoints/pooling/base/serving.py:PoolingServing",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/typing.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/typing.py",
+   "target": "class:vllm/entrypoints/pooling/scoring/typing.py:ScoreMultiModalParam",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/typing.py",
+   "target": "class:vllm/entrypoints/pooling/scoring/typing.py:ScoreMultiModalParam",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/utils.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/utils.py",
+   "target": "file:vllm/entrypoints/pooling/scoring/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/utils.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/utils.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/utils.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/utils.py",
+   "target": "function:vllm/entrypoints/pooling/scoring/utils.py:get_num_special_tokens_for_pair",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/utils.py",
+   "target": "function:vllm/entrypoints/pooling/scoring/utils.py:truncate_text_to_tokens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/utils.py",
+   "target": "function:vllm/entrypoints/pooling/scoring/utils.py:compute_maxsim_score",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/utils.py",
+   "target": "function:vllm/entrypoints/pooling/scoring/utils.py:validate_score_input",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/utils.py",
+   "target": "function:vllm/entrypoints/pooling/scoring/utils.py:score_data_to_prompts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/utils.py",
+   "target": "function:vllm/entrypoints/pooling/scoring/utils.py:_parse_score_content",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/utils.py",
+   "target": "function:vllm/entrypoints/pooling/scoring/utils.py:parse_score_data",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/utils.py",
+   "target": "function:vllm/entrypoints/pooling/scoring/utils.py:compress_token_type_ids",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/utils.py",
+   "target": "function:vllm/entrypoints/pooling/scoring/utils.py:validate_score_input",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/utils.py",
+   "target": "function:vllm/entrypoints/pooling/scoring/utils.py:parse_score_data",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/scoring/utils.py",
+   "target": "function:vllm/entrypoints/pooling/scoring/utils.py:score_data_to_prompts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/api_router.py",
+   "target": "file:vllm/entrypoints/pooling/token_embed/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/api_router.py",
+   "target": "file:vllm/entrypoints/pooling/token_embed/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/api_router.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/api_router.py",
+   "target": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/late_chunking.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/late_chunking.py",
+   "target": "file:vllm/entrypoints/pooling/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/late_chunking.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/late_chunking.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/late_chunking.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/late_chunking.py",
+   "target": "function:vllm/entrypoints/pooling/token_embed/late_chunking.py:prepare_late_chunking_input",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/late_chunking.py",
+   "target": "function:vllm/entrypoints/pooling/token_embed/late_chunking.py:build_late_chunking_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/late_chunking.py",
+   "target": "function:vllm/entrypoints/pooling/token_embed/late_chunking.py:attach_late_chunking_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/late_chunking.py",
+   "target": "function:vllm/entrypoints/pooling/token_embed/late_chunking.py:prepare_late_chunking_input",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/late_chunking.py",
+   "target": "function:vllm/entrypoints/pooling/token_embed/late_chunking.py:build_late_chunking_metadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/late_chunking.py",
+   "target": "function:vllm/entrypoints/pooling/token_embed/late_chunking.py:attach_late_chunking_metadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/protocol.py",
+   "target": "file:vllm/entrypoints/pooling/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/protocol.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/protocol.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/protocol.py",
+   "target": "file:vllm/pooling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/protocol.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/token_embed/protocol.py:TokenEmbeddingRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/protocol.py",
+   "target": "class:vllm/entrypoints/pooling/token_embed/protocol.py:TokenEmbeddingRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/serving.py",
+   "target": "file:vllm/entrypoints/pooling/base/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/serving.py",
+   "target": "file:vllm/entrypoints/pooling/factories.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/serving.py",
+   "target": "file:vllm/entrypoints/pooling/token_embed/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/serving.py",
+   "target": "file:vllm/entrypoints/pooling/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/serving.py",
+   "target": "file:vllm/entrypoints/pooling/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/serving.py",
+   "target": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/serving.py",
+   "target": "class:vllm/entrypoints/pooling/token_embed/serving.py:ServingTokenEmbedding",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/token_embed/serving.py",
+   "target": "class:vllm/entrypoints/pooling/token_embed/serving.py:ServingTokenEmbedding",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/entrypoints/pooling/token_embed/serving.py:ServingTokenEmbedding",
+   "target": "class:vllm/entrypoints/pooling/base/serving.py:PoolingServing",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "file:vllm/entrypoints/pooling/classify/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "file:vllm/entrypoints/pooling/pooling/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "file:vllm/entrypoints/pooling/scoring/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "file:vllm/entrypoints/pooling/scoring/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "file:vllm/entrypoints/pooling/token_embed/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "file:vllm/renderers/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "class:vllm/entrypoints/pooling/typing.py:PoolingServeContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "class:vllm/entrypoints/pooling/typing.py:OfflineInputsContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "class:vllm/entrypoints/pooling/typing.py:RenderParams",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "class:vllm/entrypoints/pooling/typing.py:PoolingEngineInput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "class:vllm/entrypoints/pooling/typing.py:PoolingServeContext",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/typing.py",
+   "target": "class:vllm/entrypoints/pooling/typing.py:RenderParams",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/utils.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/utils.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/utils.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/utils.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/utils.py",
+   "target": "file:vllm/utils/serial_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/utils.py",
+   "target": "function:vllm/entrypoints/pooling/utils.py:build_metadata_items",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/utils.py",
+   "target": "function:vllm/entrypoints/pooling/utils.py:encode_pooling_output_base64",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/utils.py",
+   "target": "function:vllm/entrypoints/pooling/utils.py:encode_pooling_bytes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/utils.py",
+   "target": "function:vllm/entrypoints/pooling/utils.py:get_pooling_output_encoder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/utils.py",
+   "target": "function:vllm/entrypoints/pooling/utils.py:build_pooling_bytes_streaming_response",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/utils.py",
+   "target": "function:vllm/entrypoints/pooling/utils.py:enable_scoring_api",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/utils.py",
+   "target": "function:vllm/entrypoints/pooling/utils.py:reserve_tokens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/utils.py",
+   "target": "function:vllm/entrypoints/pooling/utils.py:encode_pooling_output_base64",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/utils.py",
+   "target": "function:vllm/entrypoints/pooling/utils.py:get_pooling_output_encoder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/utils.py",
+   "target": "function:vllm/entrypoints/pooling/utils.py:build_pooling_bytes_streaming_response",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/pooling/utils.py",
+   "target": "function:vllm/entrypoints/pooling/utils.py:enable_scoring_api",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

@@ -1,0 +1,33 @@
+# DeepWiki 索引 — OpenDCAI/One-Eval
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-11-02
+> 结构 28 页 · 全文 202823 字符
+
+- [1 One-Eval Overview](1-one-eval-overview.md)
+  - [1.1 Getting Started & Installation](1.1-getting-started-installation.md)
+  - [1.2 NL2Eval Concept & Evaluation Pipeline](1.2-nl2eval-concept-evaluation-pipeline.md)
+- [2 Backend Architecture](2-backend-architecture.md)
+  - [2.1 FastAPI Server & REST API](2.1-fastapi-server-rest-api.md)
+  - [2.2 Core State & Data Models](2.2-core-state-data-models.md)
+  - [2.3 Graph Engine & Workflow Orchestration](2.3-graph-engine-workflow-orchestration.md)
+  - [2.4 Agent Layer & LLM Calling](2.4-agent-layer-llm-calling.md)
+- [3 Evaluation Pipeline Nodes](3-evaluation-pipeline-nodes.md)
+  - [3.1 Discovery Phase: Query Understanding & Benchmark Search](3.1-discovery-phase-query-understanding-benchmark-search.md)
+  - [3.2 Preparation Phase: Dataset Download & Configuration](3.2-preparation-phase-dataset-download-configuration.md)
+  - [3.3 Execution Phase: DataFlow Evaluation](3.3-execution-phase-dataflow-evaluation.md)
+  - [3.4 Scoring & Reporting Phase](3.4-scoring-reporting-phase.md)
+- [4 Metrics System](4-metrics-system.md)
+  - [4.1 Metric Registry, Dispatcher & Runner](4.1-metric-registry-dispatcher-runner.md)
+  - [4.2 Built-in Metric Implementations](4.2-built-in-metric-implementations.md)
+- [5 Benchmark Registry & Gallery](5-benchmark-registry-gallery.md)
+  - [5.1 Local Bench Gallery & BenchRegistry](5.1-local-bench-gallery-benchregistry.md)
+  - [5.2 HuggingFace Integration](5.2-huggingface-integration.md)
+- [6 Frontend Web Application](6-frontend-web-application.md)
+  - [6.1 Eval Studio (Eval.tsx & EvalComponents.tsx)](6.1-eval-studio-eval.tsx-evalcomponents.tsx.md)
+  - [6.2 Settings, Gallery & Home Pages](6.2-settings-gallery-home-pages.md)
+  - [6.3 Report Visualization (ReportComponents.tsx)](6.3-report-visualization-reportcomponents.tsx.md)
+  - [6.4 Frontend Build System & Utilities](6.4-frontend-build-system-utilities.md)
+- [7 Testing](7-testing.md)
+  - [7.1 Workflow & Integration Tests](7.1-workflow-integration-tests.md)
+  - [7.2 Unit Tests: Metrics, HF Tools & Registry](7.2-unit-tests-metrics-hf-tools-registry.md)
+- [8 Glossary](8-glossary.md)

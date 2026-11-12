@@ -1,0 +1,42 @@
+# DeepWiki 索引 — microsoft/poml
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 32 页 · 全文 456743 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+- [3 Core Architecture](3-core-architecture.md)
+  - [3.1 Processing Pipeline](3.1-processing-pipeline.md)
+  - [3.2 Component System](3.2-component-system.md)
+  - [3.3 File Format and Parsing](3.3-file-format-and-parsing.md)
+  - [3.4 Writer System and Output Formats](3.4-writer-system-and-output-formats.md)
+- [4 Language Reference](4-language-reference.md)
+  - [4.1 Core Components](4.1-core-components.md)
+  - [4.2 Data Components](4.2-data-components.md)
+  - [4.3 Templating and Scripting](4.3-templating-and-scripting.md)
+  - [4.4 Meta Elements and Configuration](4.4-meta-elements-and-configuration.md)
+  - [4.5 Examples and Use Cases](4.5-examples-and-use-cases.md)
+- [5 Integrations](5-integrations.md)
+  - [5.1 Python API](5.1-python-api.md)
+  - [5.2 JavaScript/TypeScript API](5.2-javascript-typescript-api.md)
+  - [5.3 Framework Integrations](5.3-framework-integrations.md)
+  - [5.4 VS Code Extension](5.4-vs-code-extension.md)
+  - [5.5 Command Line Interface](5.5-command-line-interface.md)
+- [6 Language Model Integration](6-language-model-integration.md)
+  - [6.1 Provider Configuration](6.1-provider-configuration.md)
+  - [6.2 Response Schemas and Tools](6.2-response-schemas-and-tools.md)
+- [7 Advanced Topics](7-advanced-topics.md)
+  - [7.1 Tracing and Debugging](7.1-tracing-and-debugging.md)
+  - [7.2 Error Handling and Validation](7.2-error-handling-and-validation.md)
+  - [7.3 Token Counting and Optimization](7.3-token-counting-and-optimization.md)
+  - [7.4 Source Maps and Position Tracking](7.4-source-maps-and-position-tracking.md)
+- [8 Development and Contributing](8-development-and-contributing.md)
+  - [8.1 Building and Testing](8.1-building-and-testing.md)
+  - [8.2 Architecture for Contributors](8.2-architecture-for-contributors.md)
+  - [8.3 Release and Distribution](8.3-release-and-distribution.md)
+  - [8.4 Documentation System](8.4-documentation-system.md)
+
+## 附：结构清单外的页
+- [Language Server Features](x1-language-server-features.md)
+- [Preview and Testing](x2-preview-and-testing.md)
+- [Prompt Gallery and Chat](x3-prompt-gallery-and-chat.md)

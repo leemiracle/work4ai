@@ -1,0 +1,106 @@
+---
+{
+  title: 'API Design Guidelines',
+  description: 'API design guidelines for NVIDIA Elements: properties, slots, events, styling, and packaging conventions used across the component library.',
+  layout: 'docs.11ty.js'
+}
+---
+
+# {{ title }}
+
+## What this document is
+
+This document outlines the API best practices and guidelines for creating highly reusable UI components/elements that work in any framework or library. The best practices defined here target low level leaf components and may not apply to all use cases of an application or plugin.
+
+## What this document is not
+
+This document is not intended to define the best practices and API design of higher level UI components used at the micro-frontend/plugin/application level. While some of the recommendations and best practices outlined in this document are applicable, not all apply outside of the reusable UI element library use case.
+
+## Legend
+
+<div nve-layout="column gap:xs">
+  <nve-alert status="success">Do: a best practice to follow</nve-alert>
+  <nve-alert status="danger">Don't: a practice to avoid</nve-alert>
+  <nve-alert status="accent">Tip: helpful details on rationale for a given guideline</nve-alert>
+  <nve-alert status="warning">details on the risks of not following a guideline</nve-alert>
+  <nve-alert><nve-icon slot="icon" name="flag"></nve-icon> Performance: detail about how a guideline impacts performance</nve-alert>
+  <nve-alert><nve-icon slot="icon" name="academic-cap"></nve-icon> Learn: resource to learn more about a guideline topic</nve-alert>
+  <nve-alert><nve-icon slot="icon" name="traffic-cone"></nve-icon> WIP: details on any work in progress guidance</nve-alert>
+</div>
+
+## Terminology
+
+- Element: a Web Component defined within the public API of the library
+- Component: higher level UI web/framework components in plugins/apps
+- Pattern: combination of elements to create a UI rather than creating new extra elements
+- Pattern Library: packaged library of patterns/behaviors composed of low level elements
+- Plugin/Application: code that consumes or uses the elements
+- Consumers: developers/designers that use the UI elements within their products
+
+## Deprecation and removal
+
+Breaking removals are eligible for a major release only after the deprecation cycle is complete.
+
+- Add `@deprecated` JSDoc to the old API with the replacement and removal target.
+- Add lint coverage that flags consumer use of the deprecated API.
+- Add runtime diagnostics when the deprecated behavior is detectable at runtime.
+- Document the migration path and replacement API before removal.
+- Keep the old and new APIs side-by-side until downstream consumers have had a full deprecation window.
+- Remove the deprecated API only when release notes can point to the deprecation, lint rule, runtime diagnostic, and replacement.
+
+## Philosophy
+
+Web standards over frameworks
+
+- Stateless over Stateful
+- Composable Patterns over Custom Features
+- Common Design Language for developers and designers
+- Internationalizable by default
+- Accessible by default
+- Automated conventions and best practices
+
+Consistent element APIs provide consistent developer experience. The recommendations in this document provide a path of optimal compatibility with other framework integrations, including
+
+- routing/linking
+- native form controls / validation
+- key navigation
+- property/event binding/content projection
+- i18n/a11y
+
+```html
+<!-- HTML/JavaScript -->
+<nve-alert status="success">
+  <p nve-text="body">hello there!</p>
+</nve-alert>
+
+<script type="module">
+  import '@nvidia-elements/core/alert/define.js';
+  const alert = document.querySelector('nve-alert');
+  alert.closable = true;
+  alert.addEventListener('close', (e) => console.log(e))
+</script>
+
+<!-- Angular -->
+<nve-alert status="success" [closable]="boolProp" (close)="handle($event)">
+  <p nve-text="body">hello there!</p>
+</nve-alert>
+
+<!-- Lit -->
+<nve-alert status="success" ?closable=${boolProp} @close=${e => this.handle(e)}>
+  <p nve-text="body">hello there!</p>
+</nve-alert>
+
+<!-- Vue -->
+<nve-alert status="success" :closable="boolProp" @close="handle">
+  <p nve-text="body">hello there!</p>
+</nve-alert>
+
+<!-- React/Preact -->
+<nve-alert status="success" closable={this.state.boolProp} onClose={this.handle}>
+  <p nve-text="body">hello there!</p>
+</nve-alert>
+```
+
+<nve-alert status="accent">
+  See an example of how many <a href="{{ELEMENTS_PAGES_BASE_URL}}/starters/">frameworks</a> can use a Web Component based design system.
+</nve-alert>

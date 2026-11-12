@@ -1,0 +1,33 @@
+# DeepWiki 索引 — yikart/AiToEarn
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-30
+> 结构 28 页 · 全文 549824 字符
+
+- [1 Overview](1-overview.md)
+- [2 System Architecture](2-system-architecture.md)
+  - [2.1 Docker Compose Service Architecture](2.1-docker-compose-service-architecture.md)
+  - [2.2 Data Persistence Layer](2.2-data-persistence-layer.md)
+  - [2.3 Frontend Architecture](2.3-frontend-architecture.md)
+  - [2.4 Electron Desktop Application](2.4-electron-desktop-application.md)
+- [3 AI Integration System](3-ai-integration-system.md)
+  - [3.1 AI Service Architecture](3.1-ai-service-architecture.md)
+  - [3.2 Multi-Provider Configuration](3.2-multi-provider-configuration.md)
+  - [3.3 All In Agent](3.3-all-in-agent.md)
+- [4 Platform Integration System](4-platform-integration-system.md)
+  - [4.1 OAuth Authentication Flow](4.1-oauth-authentication-flow.md)
+  - [4.2 Supported Platforms](4.2-supported-platforms.md)
+  - [4.3 Multi-Platform Publishing](4.3-multi-platform-publishing.md)
+- [5 Content Management Features](5-content-management-features.md)
+  - [5.1 Content Creation and AI Generation](5.1-content-creation-and-ai-generation.md)
+  - [5.2 Calendar Timing and Scheduling](5.2-calendar-timing-and-scheduling.md)
+  - [5.3 Hotspot Analysis and Trending Content](5.3-hotspot-analysis-and-trending-content.md)
+- [6 Engagement and Analytics](6-engagement-and-analytics.md)
+  - [6.1 Engagement Engine](6.1-engagement-engine.md)
+  - [6.2 Analytics Dashboard](6.2-analytics-dashboard.md)
+- [7 Deployment and Configuration](7-deployment-and-configuration.md)
+  - [7.1 Docker Deployment Guide](7.1-docker-deployment-guide.md)
+  - [7.2 Environment Configuration](7.2-environment-configuration.md)
+  - [7.3 Storage and Database Setup](7.3-storage-and-database-setup.md)
+- [8 Development Guide](8-development-guide.md)
+  - [8.1 Development Mode Setup](8.1-development-mode-setup.md)
+  - [8.2 Project Structure and Conventions](8.2-project-structure-and-conventions.md)

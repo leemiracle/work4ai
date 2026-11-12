@@ -1,0 +1,30 @@
+# DeepWiki 索引 — NVIDIA/MatX
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 340977 字符
+
+- [1 MatX: Overview](1-matx-overview.md)
+- [2 Core Tensor System](2-core-tensor-system.md)
+  - [2.1 Dense Tensors](2.1-dense-tensors.md)
+  - [2.2 Sparse Tensors](2.2-sparse-tensors.md)
+  - [2.3 Memory Management](2.3-memory-management.md)
+- [3 Operators](3-operators.md)
+  - [3.1 View Operators](3.1-view-operators.md)
+  - [3.2 Scalar and Generator Operators](3.2-scalar-and-generator-operators.md)
+  - [3.3 Sparse Tensor Operators](3.3-sparse-tensor-operators.md)
+- [4 Transforms](4-transforms.md)
+  - [4.1 Matrix Multiplication](4.1-matrix-multiplication.md)
+  - [4.2 Reductions](4.2-reductions.md)
+  - [4.3 FFT and Signal Processing](4.3-fft-and-signal-processing.md)
+  - [4.4 Linear Algebra Solvers](4.4-linear-algebra-solvers.md)
+  - [4.5 Einstein Summation (einsum)](4.5-einstein-summation-einsum.md)
+- [5 Execution Model](5-execution-model.md)
+  - [5.1 CUDA Execution](5.1-cuda-execution.md)
+  - [5.2 Profiling and Performance](5.2-profiling-and-performance.md)
+- [6 Building and Integration](6-building-and-integration.md)
+  - [6.1 Building MatX](6.1-building-matx.md)
+  - [6.2 Python Integration](6.2-python-integration.md)
+- [7 Examples and Use Cases](7-examples-and-use-cases.md)
+  - [7.1 Signal Processing Examples](7.1-signal-processing-examples.md)
+  - [7.2 File I/O and Data Loading](7.2-file-i-o-and-data-loading.md)
+- [8 Testing and Benchmarking](8-testing-and-benchmarking.md)

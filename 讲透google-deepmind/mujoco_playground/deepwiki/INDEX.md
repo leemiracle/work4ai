@@ -1,0 +1,41 @@
+# DeepWiki 索引 — google-deepmind/mujoco_playground
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 30 页 · 全文 350150 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation and Setup](1.1-installation-and-setup.md)
+  - [1.2 Package Structure](1.2-package-structure.md)
+- [2 Core Environment System](2-core-environment-system.md)
+  - [2.1 MjxEnv Base Class](2.1-mjxenv-base-class.md)
+  - [2.2 Environment Registry](2.2-environment-registry.md)
+  - [2.3 Observations, Rewards, and State](2.3-observations-rewards-and-state.md)
+  - [2.4 Domain Randomization](2.4-domain-randomization.md)
+- [3 Environment Collections](3-environment-collections.md)
+  - [3.1 Locomotion Environments](3.1-locomotion-environments.md)
+  - [3.2 Manipulation Environments](3.2-manipulation-environments.md)
+  - [3.3 DM Control Suite](3.3-dm-control-suite.md)
+- [4 Training Infrastructure](4-training-infrastructure.md)
+  - [4.1 JAX/Brax Training Pipeline](4.1-jax-brax-training-pipeline.md)
+  - [4.2 PyTorch/RSL-RL Training Pipeline](4.2-pytorch-rsl-rl-training-pipeline.md)
+  - [4.3 Configuration System](4.3-configuration-system.md)
+  - [4.4 Environment Wrappers](4.4-environment-wrappers.md)
+  - [4.5 Vision-Based Training](4.5-vision-based-training.md)
+- [5 Examples and Tutorials](5-examples-and-tutorials.md)
+  - [5.1 Locomotion Training Examples](5.1-locomotion-training-examples.md)
+  - [5.2 Manipulation Training Examples](5.2-manipulation-training-examples.md)
+  - [5.3 Vision Training Workflow](5.3-vision-training-workflow.md)
+  - [5.4 Command-Line Training](5.4-command-line-training.md)
+- [6 Development and Advanced Topics](6-development-and-advanced-topics.md)
+  - [6.1 Creating Custom Environments](6.1-creating-custom-environments.md)
+  - [6.2 Testing and CI/CD](6.2-testing-and-ci-cd.md)
+  - [6.3 Batch Rendering and Benchmarking](6.3-batch-rendering-and-benchmarking.md)
+  - [6.4 Visualization and Debugging](6.4-visualization-and-debugging.md)
+  - [6.5 Sim-to-Sim and Policy Export](6.5-sim-to-sim-and-policy-export.md)
+- [7 Glossary](7-glossary.md)
+
+## 附：结构清单外的页
+- [Bipedal and Humanoid Environments](x1-bipedal-and-humanoid-environments.md)
+- [Dexterous Hand Manipulation](x2-dexterous-hand-manipulation.md)
+- [Quadruped Robot Environments](x3-quadruped-robot-environments.md)
+- [Robotic Arm Manipulation](x4-robotic-arm-manipulation.md)

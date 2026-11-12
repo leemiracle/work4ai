@@ -1,0 +1,928 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/hisparse/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/v1/hisparse/__init__.py",
+   "summary": "hisparse 包标记文件，仅含 SPDX 头。",
+   "tags": [
+    "package-marker",
+    "hisparse",
+    "kv-cache"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/hisparse/backend.py",
+   "type": "file",
+   "name": "backend.py",
+   "filePath": "vllm/v1/hisparse/backend.py",
+   "summary": "HiSparse 设备操作抽象层：定义 pin/unpin、缓存 ops、IPC 事件、驻留行 gather 与批量块交换接口；CUDAHiSparseBackend 基于编译进 _C_cache_ops 的 hisparse_* kernel 实现，平台经 current_platform 注入并缓存单例。",
+   "tags": [
+    "hisparse",
+    "backend",
+    "platform-injection",
+    "cuda-kernels"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/hisparse/binding.py",
+   "type": "file",
+   "name": "binding.py",
+   "filePath": "vllm/v1/hisparse/binding.py",
+   "summary": "worker 侧 HiSparse 接线：为 MLA spec 解析公共 kernel 块大小并派生 resident/hot spec，主机池与设备后备分开分配，把缓存视图绑定到注意力层并构建 HiSparseCacheHandle。",
+   "tags": [
+    "hisparse",
+    "binding",
+    "kv-cache",
+    "worker"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/hisparse/block_pool.py",
+   "type": "file",
+   "name": "block_pool.py",
+   "filePath": "vllm/v1/hisparse/block_pool.py",
+   "summary": "把 KV 事件发布到宿主 BlockPool 活动队列的块池子类：owner 每次 drain 时重绑队列，本类透过 owner 读写而非持有引用。",
+   "tags": [
+    "hisparse",
+    "block-pool",
+    "kv-events"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/hisparse/coordinator.py",
+   "type": "file",
+   "name": "coordinator.py",
+   "filePath": "vllm/v1/hisparse/coordinator.py",
+   "summary": "调度器侧 HiSparse 协调器：拥有主机层分配、host 发布、spill 与 GPU 驻留——GPU 驻留页是主机层的写回缓存，页干净后经 unpin_blocks 释放引用，驻留变化通过 take_residency_updates 而非块表（仅追加）送达 worker。",
+   "tags": [
+    "hisparse",
+    "coordinator",
+    "residency",
+    "write-back-cache"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/hisparse/layout.py",
+   "type": "file",
+   "name": "layout.py",
+   "filePath": "vllm/v1/hisparse/layout.py",
+   "summary": "HiSparse KV cache 组布局：从 MLA attention spec 派生 host source 组 + 共享同一设备池的 GPU 组，计算主机池字节与稳定态并发（请求改读 host 时的最大并发）。",
+   "tags": [
+    "hisparse",
+    "layout",
+    "kv-cache-groups"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/hisparse/backend.py:HiSparseBackend",
+   "type": "class",
+   "name": "HiSparseBackend",
+   "filePath": "vllm/v1/hisparse/backend.py",
+   "summary": "HiSparse 设备操作抽象基类：pin/unpin、缓存 ops 工厂、IPC 事件、驻留行 gather（dtype 视图转换）与批量块交换接口。",
+   "tags": [
+    "hisparse",
+    "backend",
+    "interface"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    20,
+    79
+   ]
+  },
+  {
+   "id": "class:vllm/v1/hisparse/backend.py:CUDAHiSparseBackend",
+   "type": "class",
+   "name": "CUDAHiSparseBackend",
+   "filePath": "vllm/v1/hisparse/backend.py",
+   "summary": "CUDA 实现：校验 hisparse_* 编译 kernel 存在、cudaHostRegister pin、IPC 事件句柄与 swap_blocks_batch。",
+   "tags": [
+    "hisparse",
+    "cuda",
+    "backend"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    82,
+    130
+   ]
+  },
+  {
+   "id": "class:vllm/v1/hisparse/block_pool.py:SharedEventQueueBlockPool",
+   "type": "class",
+   "name": "SharedEventQueueBlockPool",
+   "filePath": "vllm/v1/hisparse/block_pool.py",
+   "summary": "把 KV 事件发布到宿主池活动队列的 BlockPool 子类。",
+   "tags": [
+    "hisparse",
+    "block-pool",
+    "events"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    8,
+    27
+   ]
+  },
+  {
+   "id": "class:vllm/v1/hisparse/coordinator.py:_PendingPublication",
+   "type": "class",
+   "name": "_PendingPublication",
+   "filePath": "vllm/v1/hisparse/coordinator.py",
+   "summary": "待发布主机页的记账 dataclass（请求/已算 token/页数/保留区间/重放边界）。",
+   "tags": [
+    "hisparse",
+    "bookkeeping",
+    "publication"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    39,
+    46
+   ]
+  },
+  {
+   "id": "class:vllm/v1/hisparse/coordinator.py:_HiSparseRequestState",
+   "type": "class",
+   "name": "_HiSparseRequestState",
+   "filePath": "vllm/v1/hisparse/coordinator.py",
+   "summary": "单请求驻留记账：页三态（dirty/clean/unpinned）、pending 页计数、同步水位与陈旧页集合。",
+   "tags": [
+    "hisparse",
+    "residency",
+    "request-state"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    50,
+    72
+   ]
+  },
+  {
+   "id": "class:vllm/v1/hisparse/coordinator.py:_PendingSpill",
+   "type": "class",
+   "name": "_PendingSpill",
+   "filePath": "vllm/v1/hisparse/coordinator.py",
+   "summary": "进行中 spill 的记账（传输 id/页/宿主与驻留块/worker 完成计数）。",
+   "tags": [
+    "hisparse",
+    "spill",
+    "bookkeeping",
+    "transfer"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    76,
+    85
+   ]
+  },
+  {
+   "id": "class:vllm/v1/hisparse/coordinator.py:HiSparseCoordinator",
+   "type": "class",
+   "name": "HiSparseCoordinator",
+   "filePath": "vllm/v1/hisparse/coordinator.py",
+   "summary": "HiSparse 协调器主体（38 方法）：主机层分配、发布、spill、GPU 驻留写回缓存与转移水位（共享池低水位时请求转读 host）。",
+   "tags": [
+    "hisparse",
+    "coordinator",
+    "write-back"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    88,
+    897
+   ]
+  },
+  {
+   "id": "class:vllm/v1/hisparse/layout.py:HiSparseLayout",
+   "type": "class",
+   "name": "HiSparseLayout",
+   "filePath": "vllm/v1/hisparse/layout.py",
+   "summary": "布局结果 dataclass：source 组、设备组列表、主机块数/步长与是否共享主机池。",
+   "tags": [
+    "hisparse",
+    "layout",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    40,
+    45
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/binding.py:resolve_hisparse_specs",
+   "type": "function",
+   "name": "resolve_hisparse_specs",
+   "filePath": "vllm/v1/hisparse/binding.py",
+   "summary": "为 HiSparse MLA spec 解析公共 kernel 块大小（要求单一调度块大小且全部后端支持），并加入派生的 resident/hot spec。",
+   "tags": [
+    "hisparse",
+    "spec-resolution",
+    "block-size"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    43,
+    80
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/binding.py:allocate_hisparse_kv_caches",
+   "type": "function",
+   "name": "allocate_hisparse_kv_caches",
+   "filePath": "vllm/v1/hisparse/binding.py",
+   "summary": "主机池与共享设备后备分开分配：设备部分走通用 allocate_kv_cache，host_resident 张量从主机池切视图。",
+   "tags": [
+    "hisparse",
+    "allocation",
+    "kv-cache"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    83,
+    120
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/binding.py:init_hisparse_kv_cache",
+   "type": "function",
+   "name": "init_hisparse_kv_cache",
+   "filePath": "vllm/v1/hisparse/binding.py",
+   "summary": "在调用方分配上下文内分配并绑定 HiSparse 缓存（含运行时缓冲初始化）。",
+   "tags": [
+    "hisparse",
+    "initialization",
+    "kv-cache"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    123,
+    159
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/binding.py:release_hisparse_profiling_cache",
+   "type": "function",
+   "name": "release_hisparse_profiling_cache",
+   "filePath": "vllm/v1/hisparse/binding.py",
+   "summary": "profiling 缓存解绑但保留主机池供真实 KV cache 使用。",
+   "tags": [
+    "hisparse",
+    "profiling",
+    "cleanup"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    171,
+    179
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/binding.py:bind_hisparse_kv_caches",
+   "type": "function",
+   "name": "bind_hisparse_kv_caches",
+   "filePath": "vllm/v1/hisparse/binding.py",
+   "summary": "绑定既有缓存存储与块表，返回绑定句柄。",
+   "tags": [
+    "hisparse",
+    "binding",
+    "kv-cache"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    182,
+    299
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/coordinator.py:get_hisparse_coordinator",
+   "type": "function",
+   "name": "get_hisparse_coordinator",
+   "filePath": "vllm/v1/hisparse/coordinator.py",
+   "summary": "取 KV cache manager 的 HiSparse 组共享的协调器（首次调用构建并记忆化）。",
+   "tags": [
+    "hisparse",
+    "coordinator",
+    "factory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    900,
+    922
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/layout.py:get_hisparse_kv_cache_groups",
+   "type": "function",
+   "name": "get_hisparse_kv_cache_groups",
+   "filePath": "vllm/v1/hisparse/layout.py",
+   "summary": "HiSparse 分配的组：host source 组在前，然后共享一个设备池的 GPU 组。",
+   "tags": [
+    "hisparse",
+    "layout",
+    "groups"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    48,
+    82
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/layout.py:_partition_hisparse_specs",
+   "type": "function",
+   "name": "_partition_hisparse_specs",
+   "filePath": "vllm/v1/hisparse/layout.py",
+   "summary": "把 attention spec 划分为 resident/hot 派生 spec 的内部工具。",
+   "tags": [
+    "hisparse",
+    "partitioning",
+    "specs"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    92,
+    122
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/layout.py:_lay_out_hisparse_groups",
+   "type": "function",
+   "name": "_lay_out_hisparse_groups",
+   "filePath": "vllm/v1/hisparse/layout.py",
+   "summary": "组布局编排：块数/步长/张量规划。",
+   "tags": [
+    "hisparse",
+    "layout",
+    "planning"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    125,
+    234
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/layout.py:create_hisparse_layout",
+   "type": "function",
+   "name": "create_hisparse_layout",
+   "filePath": "vllm/v1/hisparse/layout.py",
+   "summary": "按布局组计算主机池尺寸。",
+   "tags": [
+    "hisparse",
+    "layout",
+    "sizing"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    237,
+    268
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/layout.py:_build_hisparse_kv_cache_tensors",
+   "type": "function",
+   "name": "_build_hisparse_kv_cache_tensors",
+   "filePath": "vllm/v1/hisparse/layout.py",
+   "summary": "构建 KV cache 张量规划（host/device 角色）。",
+   "tags": [
+    "hisparse",
+    "tensors",
+    "planning"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    271,
+    322
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/layout.py:get_hisparse_kv_cache_config",
+   "type": "function",
+   "name": "get_hisparse_kv_cache_config",
+   "filePath": "vllm/v1/hisparse/layout.py",
+   "summary": "产出完整 HiSparse KVCacheConfig。",
+   "tags": [
+    "hisparse",
+    "config",
+    "resolved"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    325,
+    381
+   ]
+  },
+  {
+   "id": "function:vllm/v1/hisparse/layout.py:get_hisparse_steady_state_concurrency",
+   "type": "function",
+   "name": "get_hisparse_steady_state_concurrency",
+   "filePath": "vllm/v1/hisparse/layout.py",
+   "summary": "请求改读 host 后 max_model_len 下的最大并发。",
+   "tags": [
+    "hisparse",
+    "concurrency",
+    "sizing"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    384,
+    412
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/hisparse/backend.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/backend.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/binding.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/binding.py",
+   "target": "file:vllm/v1/hisparse/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/binding.py",
+   "target": "file:vllm/v1/hisparse/layout.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/binding.py",
+   "target": "file:vllm/v1/hisparse/runtime.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/binding.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/binding.py",
+   "target": "file:vllm/v1/worker/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/block_pool.py",
+   "target": "file:vllm/distributed/kv_events.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/block_pool.py",
+   "target": "file:vllm/v1/core/block_pool.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/coordinator.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/coordinator.py",
+   "target": "file:vllm/v1/core/block_pool.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/coordinator.py",
+   "target": "file:vllm/v1/core/kv_cache_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/coordinator.py",
+   "target": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/coordinator.py",
+   "target": "file:vllm/v1/hisparse/types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/coordinator.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/coordinator.py",
+   "target": "file:vllm/v1/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "file:vllm/config/kv_transfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "file:vllm/v1/core/kv_cache_planning.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "file:vllm/v1/core/kv_cache_planning.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "file:vllm/v1/hisparse/runtime.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "file:vllm/v1/hisparse/types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "file:vllm/v1/kv_cache_layout.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/hisparse/backend.py",
+   "target": "class:vllm/v1/hisparse/backend.py:HiSparseBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/backend.py",
+   "target": "class:vllm/v1/hisparse/backend.py:CUDAHiSparseBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/block_pool.py",
+   "target": "class:vllm/v1/hisparse/block_pool.py:SharedEventQueueBlockPool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/coordinator.py",
+   "target": "class:vllm/v1/hisparse/coordinator.py:_PendingPublication",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/coordinator.py",
+   "target": "class:vllm/v1/hisparse/coordinator.py:_HiSparseRequestState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/coordinator.py",
+   "target": "class:vllm/v1/hisparse/coordinator.py:_PendingSpill",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/coordinator.py",
+   "target": "class:vllm/v1/hisparse/coordinator.py:HiSparseCoordinator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/coordinator.py",
+   "target": "function:vllm/v1/hisparse/coordinator.py:get_hisparse_coordinator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "class:vllm/v1/hisparse/layout.py:HiSparseLayout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "function:vllm/v1/hisparse/layout.py:get_hisparse_kv_cache_groups",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "function:vllm/v1/hisparse/layout.py:_partition_hisparse_specs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "function:vllm/v1/hisparse/layout.py:_lay_out_hisparse_groups",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "function:vllm/v1/hisparse/layout.py:create_hisparse_layout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "function:vllm/v1/hisparse/layout.py:_build_hisparse_kv_cache_tensors",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "function:vllm/v1/hisparse/layout.py:get_hisparse_kv_cache_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "function:vllm/v1/hisparse/layout.py:get_hisparse_steady_state_concurrency",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/binding.py",
+   "target": "function:vllm/v1/hisparse/binding.py:resolve_hisparse_specs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/binding.py",
+   "target": "function:vllm/v1/hisparse/binding.py:allocate_hisparse_kv_caches",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/binding.py",
+   "target": "function:vllm/v1/hisparse/binding.py:init_hisparse_kv_cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/binding.py",
+   "target": "function:vllm/v1/hisparse/binding.py:release_hisparse_profiling_cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/binding.py",
+   "target": "function:vllm/v1/hisparse/binding.py:bind_hisparse_kv_caches",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/hisparse/backend.py",
+   "target": "class:vllm/v1/hisparse/backend.py:HiSparseBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/backend.py",
+   "target": "class:vllm/v1/hisparse/backend.py:CUDAHiSparseBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/block_pool.py",
+   "target": "class:vllm/v1/hisparse/block_pool.py:SharedEventQueueBlockPool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/coordinator.py",
+   "target": "class:vllm/v1/hisparse/coordinator.py:HiSparseCoordinator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/coordinator.py",
+   "target": "function:vllm/v1/hisparse/coordinator.py:get_hisparse_coordinator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "class:vllm/v1/hisparse/layout.py:HiSparseLayout",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "function:vllm/v1/hisparse/layout.py:get_hisparse_kv_cache_groups",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "function:vllm/v1/hisparse/layout.py:create_hisparse_layout",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "function:vllm/v1/hisparse/layout.py:get_hisparse_kv_cache_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/layout.py",
+   "target": "function:vllm/v1/hisparse/layout.py:get_hisparse_steady_state_concurrency",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/binding.py",
+   "target": "function:vllm/v1/hisparse/binding.py:resolve_hisparse_specs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/binding.py",
+   "target": "function:vllm/v1/hisparse/binding.py:allocate_hisparse_kv_caches",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/binding.py",
+   "target": "function:vllm/v1/hisparse/binding.py:init_hisparse_kv_cache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/binding.py",
+   "target": "function:vllm/v1/hisparse/binding.py:release_hisparse_profiling_cache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/hisparse/binding.py",
+   "target": "function:vllm/v1/hisparse/binding.py:bind_hisparse_kv_caches",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/hisparse/backend.py:CUDAHiSparseBackend",
+   "target": "class:vllm/v1/hisparse/backend.py:HiSparseBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/hisparse/block_pool.py:SharedEventQueueBlockPool",
+   "target": "class:vllm/v1/core/block_pool.py:BlockPool",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "function:vllm/v1/hisparse/binding.py:resolve_hisparse_specs",
+   "target": "function:vllm/v1/hisparse/layout.py:get_hisparse_kv_cache_groups",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/v1/hisparse/binding.py:allocate_hisparse_kv_caches",
+   "target": "function:vllm/v1/worker/utils.py:allocate_kv_cache",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/v1/hisparse/backend.py:get_hisparse_backend",
+   "target": "function:vllm/v1/hisparse/backend.py:_get_hisparse_backend",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/hisparse/coordinator.py:HiSparseCoordinator",
+   "target": "class:vllm/v1/hisparse/types.py:SparseKVPageTransfer",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

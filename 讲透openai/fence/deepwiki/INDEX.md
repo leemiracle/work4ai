@@ -1,0 +1,30 @@
+# DeepWiki 索引 — openai/fence
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 293640 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started and Usage](1.1-getting-started-and-usage.md)
+  - [1.2 Project History and Documentation Map](1.2-project-history-and-documentation-map.md)
+- [2 Fence Core (Rust crate)](2-fence-core-rust-crate.md)
+  - [2.1 CLI, Configuration and Plan Building](2.1-cli-configuration-and-plan-building.md)
+  - [2.2 Network Enforcement: nftables, DNS, and NFLOG](2.2-network-enforcement-nftables-dns-and-nflog.md)
+  - [2.3 Runner Lockdown and Runtime Lifecycle](2.3-runner-lockdown-and-runtime-lifecycle.md)
+  - [2.4 Findings, Reporting and Errors](2.4-findings-reporting-and-errors.md)
+- [3 GitHub Action Wrapper](3-github-action-wrapper.md)
+  - [3.1 Main and Post Steps](3.1-main-and-post-steps.md)
+  - [3.2 Logging and Sanitization](3.2-logging-and-sanitization.md)
+  - [3.3 Action Bundle Assembly and Host Classification](3.3-action-bundle-assembly-and-host-classification.md)
+- [4 Build, Tooling and Vendoring](4-build-tooling-and-vendoring.md)
+  - [4.1 Pinned Toolchains and Lockfiles](4.1-pinned-toolchains-and-lockfiles.md)
+  - [4.2 Vendor Directory and Offline Builds](4.2-vendor-directory-and-offline-builds.md)
+  - [4.3 Developer Scripts](4.3-developer-scripts.md)
+- [5 Testing and CI](5-testing-and-ci.md)
+  - [5.1 Rust and Privileged Tests](5.1-rust-and-privileged-tests.md)
+  - [5.2 Action Acceptance and Tamper Tests](5.2-action-acceptance-and-tamper-tests.md)
+  - [5.3 GitHub Actions Workflows](5.3-github-actions-workflows.md)
+- [6 Security and Release Engineering](6-security-and-release-engineering.md)
+  - [6.1 Threat Model and Security Review](6.1-threat-model-and-security-review.md)
+  - [6.2 Dependency Policy and Audits](6.2-dependency-policy-and-audits.md)
+  - [6.3 Release Provenance and Evidence Observation](6.3-release-provenance-and-evidence-observation.md)
+- [7 Glossary](7-glossary.md)

@@ -1,0 +1,3124 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/attention/ops/triton_prefill_attention.py",
+   "type": "file",
+   "name": "triton_prefill_attention.py",
+   "filePath": "vllm/v1/attention/ops/triton_prefill_attention.py",
+   "summary": "显存高效 prefill 注意力 Triton 内核（页大小=1，改编自 LightLLM）：context_attention_fwd 调度与窄 KV tile 优化。",
+   "tags": [
+    "triton",
+    "prefill",
+    "kernel",
+    "context-attention"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_prefill_attention.py:_fwd_kernel",
+   "type": "function",
+   "name": "_fwd_kernel",
+   "filePath": "vllm/v1/attention/ops/triton_prefill_attention.py",
+   "lineRange": [
+    49,
+    215
+   ],
+   "summary": "prefill 注意力前向 Triton 内核。",
+   "tags": [
+    "triton",
+    "prefill",
+    "kernel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_prefill_attention.py:get_block_size",
+   "type": "function",
+   "name": "get_block_size",
+   "filePath": "vllm/v1/attention/ops/triton_prefill_attention.py",
+   "lineRange": [
+    218,
+    226
+   ],
+   "summary": "获取内核 block size。",
+   "tags": [
+    "block-size",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_prefill_attention.py:context_attention_fwd",
+   "type": "function",
+   "name": "context_attention_fwd",
+   "filePath": "vllm/v1/attention/ops/triton_prefill_attention.py",
+   "lineRange": [
+    238,
+    315
+   ],
+   "summary": "prefill 前向的公开调度入口。",
+   "tags": [
+    "prefill",
+    "entry",
+    "dispatch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "type": "file",
+   "name": "triton_reshape_and_cache_flash.py",
+   "filePath": "vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "summary": "KV cache 写入 Triton 内核族：reshape_and_cache_flash（含 per-token-head 量化与 DiffKV 变体）。",
+   "tags": [
+    "triton",
+    "kv-cache-write",
+    "reshape",
+    "quantization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py:_is_supported_kv_cache_dtype",
+   "type": "function",
+   "name": "_is_supported_kv_cache_dtype",
+   "filePath": "vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "lineRange": [
+    19,
+    29
+   ],
+   "summary": "探测 KV dtype 支持性。",
+   "tags": [
+    "kv-dtype",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py:reshape_and_cache_kernel_flash",
+   "type": "function",
+   "name": "reshape_and_cache_kernel_flash",
+   "filePath": "vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "lineRange": [
+    33,
+    154
+   ],
+   "summary": "KV 写入 cache 的主 Triton 内核（flash 布局）。",
+   "tags": [
+    "triton",
+    "kv-cache-write",
+    "kernel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py:_reshape_cache_per_token_head",
+   "type": "function",
+   "name": "_reshape_cache_per_token_head",
+   "filePath": "vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "lineRange": [
+    169,
+    275
+   ],
+   "summary": "per-token-head 量化模式的 cache 写入内核。",
+   "tags": [
+    "triton",
+    "per-token-head",
+    "kernel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py:triton_reshape_and_cache_flash_per_token_head_quant",
+   "type": "function",
+   "name": "triton_reshape_and_cache_flash_per_token_head_quant",
+   "filePath": "vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "lineRange": [
+    286,
+    374
+   ],
+   "summary": "per-token-head 量化写入公开入口。",
+   "tags": [
+    "per-token-head",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py:triton_reshape_and_cache_flash",
+   "type": "function",
+   "name": "triton_reshape_and_cache_flash",
+   "filePath": "vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "lineRange": [
+    377,
+    482
+   ],
+   "summary": "KV cache 写入公开入口。",
+   "tags": [
+    "kv-cache-write",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py:reshape_and_cache_kernel_flash_diffkv",
+   "type": "function",
+   "name": "reshape_and_cache_kernel_flash_diffkv",
+   "filePath": "vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "lineRange": [
+    486,
+    560
+   ],
+   "summary": "DiffKV 布局的 KV 写入内核。",
+   "tags": [
+    "triton",
+    "diffkv",
+    "kernel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py:triton_reshape_and_cache_flash_diffkv",
+   "type": "function",
+   "name": "triton_reshape_and_cache_flash_diffkv",
+   "filePath": "vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "lineRange": [
+    563,
+    635
+   ],
+   "summary": "DiffKV 写入公开入口。",
+   "tags": [
+    "diffkv",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "type": "file",
+   "name": "triton_unified_attention.py",
+   "filePath": "vllm/v1/attention/ops/triton_unified_attention.py",
+   "summary": "统一（prefill+decode）Triton 注意力内核 kernel_unified_attention：tile 调度、segment 归约与 autotune 入口。",
+   "tags": [
+    "triton",
+    "unified-attention",
+    "kernel",
+    "reduce"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_unified_attention.py:_cast_kv_tile",
+   "type": "function",
+   "name": "_cast_kv_tile",
+   "filePath": "vllm/v1/attention/ops/triton_unified_attention.py",
+   "lineRange": [
+    41,
+    57
+   ],
+   "summary": "KV tile 的 dtype 转换 helper。",
+   "tags": [
+    "kv-tile",
+    "cast"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_unified_attention.py:_load_q_td",
+   "type": "function",
+   "name": "_load_q_td",
+   "filePath": "vllm/v1/attention/ops/triton_unified_attention.py",
+   "lineRange": [
+    70,
+    109
+   ],
+   "summary": "加载 Q tile（tile-domain helper）。",
+   "tags": [
+    "q",
+    "tile",
+    "load"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_unified_attention.py:_load_kv_tile_td",
+   "type": "function",
+   "name": "_load_kv_tile_td",
+   "filePath": "vllm/v1/attention/ops/triton_unified_attention.py",
+   "lineRange": [
+    113,
+    144
+   ],
+   "summary": "加载 KV tile。",
+   "tags": [
+    "kv",
+    "tile",
+    "load"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_unified_attention.py:_store_output_td",
+   "type": "function",
+   "name": "_store_output_td",
+   "filePath": "vllm/v1/attention/ops/triton_unified_attention.py",
+   "lineRange": [
+    148,
+    177
+   ],
+   "summary": "存储输出 tile。",
+   "tags": [
+    "output",
+    "tile",
+    "store"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_unified_attention.py:kernel_unified_attention",
+   "type": "function",
+   "name": "kernel_unified_attention",
+   "filePath": "vllm/v1/attention/ops/triton_unified_attention.py",
+   "lineRange": [
+    181,
+    696
+   ],
+   "summary": "统一注意力主 Triton 内核（516 行，prefill+decode 共用循环体）。",
+   "tags": [
+    "triton",
+    "unified-attention",
+    "kernel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_unified_attention.py:reduce_segments",
+   "type": "function",
+   "name": "reduce_segments",
+   "filePath": "vllm/v1/attention/ops/triton_unified_attention.py",
+   "lineRange": [
+    700,
+    797
+   ],
+   "summary": "segment 部分和归约 Triton 内核。",
+   "tags": [
+    "triton",
+    "reduce",
+    "kernel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_unified_attention.py:_get_tile_size",
+   "type": "function",
+   "name": "_get_tile_size",
+   "filePath": "vllm/v1/attention/ops/triton_unified_attention.py",
+   "lineRange": [
+    810,
+    825
+   ],
+   "summary": "tile 大小选择。",
+   "tags": [
+    "tile",
+    "config"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_unified_attention.py:unified_attention",
+   "type": "function",
+   "name": "unified_attention",
+   "filePath": "vllm/v1/attention/ops/triton_unified_attention.py",
+   "lineRange": [
+    828,
+    1230
+   ],
+   "summary": "统一注意力公开入口（grid/tile/config 规划与内核启动）。",
+   "tags": [
+    "unified-attention",
+    "entry"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/attention/ops/triton_unified_attention_diffkv.py",
+   "type": "file",
+   "name": "triton_unified_attention_diffkv.py",
+   "filePath": "vllm/v1/attention/ops/triton_unified_attention_diffkv.py",
+   "summary": "统一注意力的 DiffKV 精简分支（K/V head dim 不同，面向 MiMo-V2.5 等 V 更小的模型）。",
+   "tags": [
+    "triton",
+    "diffkv",
+    "unified-attention",
+    "kernel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_unified_attention_diffkv.py:kernel_unified_attention_diffkv",
+   "type": "function",
+   "name": "kernel_unified_attention_diffkv",
+   "filePath": "vllm/v1/attention/ops/triton_unified_attention_diffkv.py",
+   "lineRange": [
+    58,
+    327
+   ],
+   "summary": "DiffKV 统一注意力主内核。",
+   "tags": [
+    "triton",
+    "diffkv",
+    "kernel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_unified_attention_diffkv.py:kernel_reduce_segments_diffkv",
+   "type": "function",
+   "name": "kernel_reduce_segments_diffkv",
+   "filePath": "vllm/v1/attention/ops/triton_unified_attention_diffkv.py",
+   "lineRange": [
+    331,
+    406
+   ],
+   "summary": "DiffKV 的 segment 归约内核。",
+   "tags": [
+    "triton",
+    "diffkv",
+    "reduce"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/triton_unified_attention_diffkv.py:unified_attention_diffkv",
+   "type": "function",
+   "name": "unified_attention_diffkv",
+   "filePath": "vllm/v1/attention/ops/triton_unified_attention_diffkv.py",
+   "lineRange": [
+    409,
+    589
+   ],
+   "summary": "DiffKV 统一注意力公开入口。",
+   "tags": [
+    "diffkv",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode_v2.py",
+   "type": "file",
+   "name": "triton_turboquant_decode_v2.py",
+   "filePath": "vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode_v2.py",
+   "summary": "TurboQuant decode v2 Triton 内核封装（FLUTE 论文优化：grouped Q heads grid、pair LUT）。",
+   "tags": [
+    "triton",
+    "turboquant",
+    "decode",
+    "flute"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode_v2.py:build_pair_lut",
+   "type": "function",
+   "name": "build_pair_lut",
+   "filePath": "vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode_v2.py",
+   "lineRange": [
+    46,
+    62
+   ],
+   "summary": "构建 pair LUT（FLUTE 优化）。",
+   "tags": [
+    "flute",
+    "lut"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode_v2.py:_get_layout",
+   "type": "function",
+   "name": "_get_layout",
+   "filePath": "vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode_v2.py",
+   "lineRange": [
+    72,
+    85
+   ],
+   "summary": "获取内核布局。",
+   "tags": [
+    "layout"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode_v2.py:_get_pair_lut",
+   "type": "function",
+   "name": "_get_pair_lut",
+   "filePath": "vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode_v2.py",
+   "lineRange": [
+    88,
+    97
+   ],
+   "summary": "获取 pair LUT（缓存）。",
+   "tags": [
+    "flute",
+    "lut",
+    "cached"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "type": "file",
+   "name": "triton_turboquant_unified_attention.py",
+   "filePath": "vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "summary": "TurboQuant 统一（prefill+decode）Triton 注意力内核（结构移植自 triton_unified_attention，SOA 布局 + Hadamard q 旋转）。",
+   "tags": [
+    "triton",
+    "turboquant",
+    "unified-attention",
+    "soa",
+    "hadamard"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:_find_seq_idx",
+   "type": "function",
+   "name": "_find_seq_idx",
+   "filePath": "vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "lineRange": [
+    53,
+    70
+   ],
+   "summary": "定位 token 所属序列。",
+   "tags": [
+    "jit-helper",
+    "seq-idx"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:_tq_fuse_q_rotation",
+   "type": "function",
+   "name": "_tq_fuse_q_rotation",
+   "filePath": "vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "lineRange": [
+    88,
+    113
+   ],
+   "summary": "TQ 融合 q Hadamard 旋转 helper。",
+   "tags": [
+    "jit-helper",
+    "hadamard",
+    "fusion"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:_tq_load_k_tile",
+   "type": "function",
+   "name": "_tq_load_k_tile",
+   "filePath": "vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "lineRange": [
+    127,
+    246
+   ],
+   "summary": "TQ K tile 加载 helper（4-bit 解包）。",
+   "tags": [
+    "jit-helper",
+    "k-tile"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:_tq_load_v_tile",
+   "type": "function",
+   "name": "_tq_load_v_tile",
+   "filePath": "vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "lineRange": [
+    256,
+    315
+   ],
+   "summary": "TQ V tile 加载 helper。",
+   "tags": [
+    "jit-helper",
+    "v-tile"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:kernel_tq_unified_attention_2d",
+   "type": "function",
+   "name": "kernel_tq_unified_attention_2d",
+   "filePath": "vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "lineRange": [
+    331,
+    573
+   ],
+   "summary": "TQ 统一注意力 2D 内核。",
+   "tags": [
+    "triton",
+    "turboquant",
+    "kernel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:kernel_tq_unified_attention_3d",
+   "type": "function",
+   "name": "kernel_tq_unified_attention_3d",
+   "filePath": "vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "lineRange": [
+    593,
+    842
+   ],
+   "summary": "TQ 统一注意力 3D 内核。",
+   "tags": [
+    "triton",
+    "turboquant",
+    "kernel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:_get_layout",
+   "type": "function",
+   "name": "_get_layout",
+   "filePath": "vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "lineRange": [
+    853,
+    863
+   ],
+   "summary": "获取内核布局。",
+   "tags": [
+    "layout"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:_get_pair_lut",
+   "type": "function",
+   "name": "_get_pair_lut",
+   "filePath": "vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "lineRange": [
+    866,
+    876
+   ],
+   "summary": "获取 pair LUT（缓存）。",
+   "tags": [
+    "flute",
+    "lut",
+    "cached"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:triton_turboquant_unified_attention",
+   "type": "function",
+   "name": "triton_turboquant_unified_attention",
+   "filePath": "vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "lineRange": [
+    879,
+    1267
+   ],
+   "summary": "TQ 统一注意力公开入口。",
+   "tags": [
+    "turboquant",
+    "unified-attention",
+    "entry"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:triton_turboquant_decode_attention_soa",
+   "type": "function",
+   "name": "triton_turboquant_decode_attention_soa",
+   "filePath": "vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "lineRange": [
+    1276,
+    1335
+   ],
+   "summary": "TQ decode（SOA）公开入口。",
+   "tags": [
+    "turboquant",
+    "decode",
+    "soa",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/attention/ops/ultraquant/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/v1/attention/ops/ultraquant/__init__.py",
+   "summary": "UltraQuant 4-bit KV cache 包入口：FlyDSL D=256 生产 decode + Triton unified 回退的惰性符号导出。",
+   "tags": [
+    "ultraquant",
+    "package-init",
+    "lazy-loading",
+    "fp4"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/attention/ops/ultraquant/format.py",
+   "type": "file",
+   "name": "format.py",
+   "filePath": "vllm/v1/attention/ops/ultraquant/format.py",
+   "summary": "UltraQuant 格式常量与 slot 布局：FP4 E2M1 码 + UE8M0 group-32 scale 的编解码与各字段字节偏移。",
+   "tags": [
+    "ultraquant",
+    "format",
+    "fp4",
+    "ue8m0",
+    "layout"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/format.py:ue8m0_encode",
+   "type": "function",
+   "name": "ue8m0_encode",
+   "filePath": "vllm/v1/attention/ops/ultraquant/format.py",
+   "lineRange": [
+    139,
+    149
+   ],
+   "summary": "把 scale 编码为 UE8M0 字节。",
+   "tags": [
+    "ue8m0",
+    "encode"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/format.py:ue8m0_decode",
+   "type": "function",
+   "name": "ue8m0_decode",
+   "filePath": "vllm/v1/attention/ops/ultraquant/format.py",
+   "lineRange": [
+    152,
+    156
+   ],
+   "summary": "解码 UE8M0 字节为 scale。",
+   "tags": [
+    "ue8m0",
+    "decode"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/format.py:k_codes_bytes",
+   "type": "function",
+   "name": "k_codes_bytes",
+   "filePath": "vllm/v1/attention/ops/ultraquant/format.py",
+   "lineRange": [
+    168,
+    172
+   ],
+   "summary": "K 码字字节数计算。",
+   "tags": [
+    "format",
+    "sizing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/format.py:n_groups",
+   "type": "function",
+   "name": "n_groups",
+   "filePath": "vllm/v1/attention/ops/ultraquant/format.py",
+   "lineRange": [
+    175,
+    179
+   ],
+   "summary": "group 数计算。",
+   "tags": [
+    "format",
+    "sizing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/format.py:slot_size",
+   "type": "function",
+   "name": "slot_size",
+   "filePath": "vllm/v1/attention/ops/ultraquant/format.py",
+   "lineRange": [
+    195,
+    202
+   ],
+   "summary": "单 slot 总字节数。",
+   "tags": [
+    "format",
+    "slot"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/attention/ops/ultraquant/reference.py",
+   "type": "file",
+   "name": "reference.py",
+   "filePath": "vllm/v1/attention/ops/ultraquant/reference.py",
+   "summary": "UltraQuant KV cache 格式的 PyTorch 参考实现（Hadamard 旋转、UE8M0 snap、nibble 打包与参考注意力）。",
+   "tags": [
+    "ultraquant",
+    "reference",
+    "quantization",
+    "testing"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/ops/ultraquant/reference.py:UltraQuantEncoded",
+   "type": "class",
+   "name": "UltraQuantEncoded",
+   "filePath": "vllm/v1/attention/ops/ultraquant/reference.py",
+   "lineRange": [
+    155,
+    178
+   ],
+   "summary": "编码结果 dataclass（码字与 scale 张量）。",
+   "tags": [
+    "dataclass",
+    "encoded"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/reference.py:hadamard_matrix",
+   "type": "function",
+   "name": "hadamard_matrix",
+   "filePath": "vllm/v1/attention/ops/ultraquant/reference.py",
+   "lineRange": [
+    64,
+    79
+   ],
+   "summary": "构造 Hadamard 矩阵。",
+   "tags": [
+    "hadamard",
+    "matrix"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/reference.py:_snap_to_sorted_idx",
+   "type": "function",
+   "name": "_snap_to_sorted_idx",
+   "filePath": "vllm/v1/attention/ops/ultraquant/reference.py",
+   "lineRange": [
+    83,
+    103
+   ],
+   "summary": "snap 到排序码字索引。",
+   "tags": [
+    "quantize",
+    "snap"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/reference.py:_unpack_nibbles_last_dim",
+   "type": "function",
+   "name": "_unpack_nibbles_last_dim",
+   "filePath": "vllm/v1/attention/ops/ultraquant/reference.py",
+   "lineRange": [
+    114,
+    127
+   ],
+   "summary": "末维 nibble 解包。",
+   "tags": [
+    "nibble",
+    "unpack"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/reference.py:_ue8m0_snap_tensor",
+   "type": "function",
+   "name": "_ue8m0_snap_tensor",
+   "filePath": "vllm/v1/attention/ops/ultraquant/reference.py",
+   "lineRange": [
+    130,
+    151
+   ],
+   "summary": "scale 张量 snap 到 2 的幂。",
+   "tags": [
+    "ue8m0",
+    "snap"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/reference.py:ultraquant_encode",
+   "type": "function",
+   "name": "ultraquant_encode",
+   "filePath": "vllm/v1/attention/ops/ultraquant/reference.py",
+   "lineRange": [
+    181,
+    237
+   ],
+   "summary": "UltraQuant 编码参考实现。",
+   "tags": [
+    "encode",
+    "reference"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/reference.py:ultraquant_dequant",
+   "type": "function",
+   "name": "ultraquant_dequant",
+   "filePath": "vllm/v1/attention/ops/ultraquant/reference.py",
+   "lineRange": [
+    240,
+    276
+   ],
+   "summary": "UltraQuant 反量化参考实现。",
+   "tags": [
+    "dequant",
+    "reference"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/reference.py:ultraquant_encode_decode",
+   "type": "function",
+   "name": "ultraquant_encode_decode",
+   "filePath": "vllm/v1/attention/ops/ultraquant/reference.py",
+   "lineRange": [
+    279,
+    291
+   ],
+   "summary": "编码+解码往返验证。",
+   "tags": [
+    "roundtrip",
+    "testing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/reference.py:reference_ultraquant_attention",
+   "type": "function",
+   "name": "reference_ultraquant_attention",
+   "filePath": "vllm/v1/attention/ops/ultraquant/reference.py",
+   "lineRange": [
+    295,
+    349
+   ],
+   "summary": "UltraQuant 参考注意力实现（正确性对拍）。",
+   "tags": [
+    "reference",
+    "attention",
+    "testing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/attention/ops/ultraquant/triton_dequant.py",
+   "type": "file",
+   "name": "triton_dequant.py",
+   "filePath": "vllm/v1/attention/ops/ultraquant/triton_dequant.py",
+   "summary": "UltraQuant 全量 KV 反量化 Triton 内核：continuation prefill 长 prefix 场景下整段反量化比逐块便宜。",
+   "tags": [
+    "ultraquant",
+    "dequant",
+    "triton",
+    "continuation-prefill"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/triton_dequant.py:_ultraquant_full_dequant_kv",
+   "type": "function",
+   "name": "_ultraquant_full_dequant_kv",
+   "filePath": "vllm/v1/attention/ops/ultraquant/triton_dequant.py",
+   "lineRange": [
+    43,
+    142
+   ],
+   "summary": "全量 KV 反量化 Triton 内核。",
+   "tags": [
+    "triton",
+    "dequant",
+    "kernel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/triton_dequant.py:ultraquant_full_dequant_kv",
+   "type": "function",
+   "name": "ultraquant_full_dequant_kv",
+   "filePath": "vllm/v1/attention/ops/ultraquant/triton_dequant.py",
+   "lineRange": [
+    145,
+    190
+   ],
+   "summary": "全量反量化公开入口（continuation prefill 用）。",
+   "tags": [
+    "dequant",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/attention/ops/ultraquant/triton_store.py",
+   "type": "file",
+   "name": "triton_store.py",
+   "filePath": "vllm/v1/attention/ops/ultraquant/triton_store.py",
+   "summary": "UltraQuant 量化存储 Triton 内核：逐 token/head/group 计算 UE8M0 scale、量化并打包写入 slot。",
+   "tags": [
+    "ultraquant",
+    "store",
+    "triton",
+    "quantization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/triton_store.py:_get_hadamard",
+   "type": "function",
+   "name": "_get_hadamard",
+   "filePath": "vllm/v1/attention/ops/ultraquant/triton_store.py",
+   "lineRange": [
+    84,
+    99
+   ],
+   "summary": "获取 Hadamard 常量。",
+   "tags": [
+    "hadamard",
+    "cached"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/triton_store.py:_ultraquant_store_kernel",
+   "type": "function",
+   "name": "_ultraquant_store_kernel",
+   "filePath": "vllm/v1/attention/ops/ultraquant/triton_store.py",
+   "lineRange": [
+    108,
+    257
+   ],
+   "summary": "UltraQuant 量化存储 Triton 内核。",
+   "tags": [
+    "triton",
+    "store",
+    "quantize",
+    "kernel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/triton_store.py:ultraquant_store",
+   "type": "function",
+   "name": "ultraquant_store",
+   "filePath": "vllm/v1/attention/ops/ultraquant/triton_store.py",
+   "lineRange": [
+    265,
+    351
+   ],
+   "summary": "量化存储公开入口。",
+   "tags": [
+    "store",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "type": "file",
+   "name": "triton_unified_attention.py",
+   "filePath": "vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "summary": "UltraQuant 4-bit 统一注意力 Triton 回退：native scaled FP4×E4M3 QK MFMA 与 in-kernel V 转换。",
+   "tags": [
+    "ultraquant",
+    "triton",
+    "unified-attention",
+    "fp4",
+    "fallback"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:_ultraquant_fp4_decode_arith",
+   "type": "function",
+   "name": "_ultraquant_fp4_decode_arith",
+   "filePath": "vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "lineRange": [
+    39,
+    50
+   ],
+   "summary": "FP4 解码算术 helper。",
+   "tags": [
+    "fp4",
+    "jit-helper"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:_ultraquant_load_k_packed",
+   "type": "function",
+   "name": "_ultraquant_load_k_packed",
+   "filePath": "vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "lineRange": [
+    54,
+    88
+   ],
+   "summary": "打包 K 加载 helper。",
+   "tags": [
+    "jit-helper",
+    "k-load"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:_ultraquant_load_v_tile",
+   "type": "function",
+   "name": "_ultraquant_load_v_tile",
+   "filePath": "vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "lineRange": [
+    92,
+    135
+   ],
+   "summary": "V tile 加载 helper。",
+   "tags": [
+    "jit-helper",
+    "v-load"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:_ultraquant_pv",
+   "type": "function",
+   "name": "_ultraquant_pv",
+   "filePath": "vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "lineRange": [
+    139,
+    173
+   ],
+   "summary": "P·V 计算 helper。",
+   "tags": [
+    "jit-helper",
+    "pv"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:_ultraquant_qk",
+   "type": "function",
+   "name": "_ultraquant_qk",
+   "filePath": "vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "lineRange": [
+    177,
+    214
+   ],
+   "summary": "Q·K 计算 helper（native FP4×E4M3 MFMA）。",
+   "tags": [
+    "jit-helper",
+    "qk",
+    "fp4"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:_ultraquant_slot_addrs",
+   "type": "function",
+   "name": "_ultraquant_slot_addrs",
+   "filePath": "vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "lineRange": [
+    218,
+    238
+   ],
+   "summary": "slot 地址计算 helper。",
+   "tags": [
+    "jit-helper",
+    "slot-addr"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:kernel_ultraquant_unified_attention_2d",
+   "type": "function",
+   "name": "kernel_ultraquant_unified_attention_2d",
+   "filePath": "vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "lineRange": [
+    247,
+    528
+   ],
+   "summary": "UltraQuant 统一注意力 2D 内核。",
+   "tags": [
+    "triton",
+    "ultraquant",
+    "kernel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:kernel_ultraquant_unified_attention_3d",
+   "type": "function",
+   "name": "kernel_ultraquant_unified_attention_3d",
+   "filePath": "vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "lineRange": [
+    537,
+    835
+   ],
+   "summary": "UltraQuant 统一注意力 3D 内核。",
+   "tags": [
+    "triton",
+    "ultraquant",
+    "kernel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:_get_pit",
+   "type": "function",
+   "name": "_get_pit",
+   "filePath": "vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "lineRange": [
+    846,
+    857
+   ],
+   "summary": "获取 pit（partition index table）。",
+   "tags": [
+    "pit",
+    "cached"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:ultraquant_unified_attention",
+   "type": "function",
+   "name": "ultraquant_unified_attention",
+   "filePath": "vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "lineRange": [
+    860,
+    1087
+   ],
+   "summary": "UltraQuant 统一注意力公开入口。",
+   "tags": [
+    "ultraquant",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "type": "file",
+   "name": "vit_attn_wrappers.py",
+   "filePath": "vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "summary": "ViT 注意力的 torch.compile 兼容 wrapper 集（flash_attn/aiter_fp8/triton/sdpa/flashinfer 各引擎 + fake 变体）。",
+   "tags": [
+    "vit",
+    "torch-compile",
+    "wrapper",
+    "fake-mode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:flash_attn_maxseqlen_wrapper",
+   "type": "function",
+   "name": "flash_attn_maxseqlen_wrapper",
+   "filePath": "vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "lineRange": [
+    26,
+    86
+   ],
+   "summary": "flash_attn maxseqlen 的 compile 兼容 wrapper。",
+   "tags": [
+    "wrapper",
+    "torch-compile",
+    "flash-attn"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:flash_attn_maxseqlen_wrapper_fake",
+   "type": "function",
+   "name": "flash_attn_maxseqlen_wrapper_fake",
+   "filePath": "vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "lineRange": [
+    89,
+    100
+   ],
+   "summary": "maxseqlen wrapper 的 fake 模式。",
+   "tags": [
+    "fake-mode",
+    "wrapper"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:vit_flash_attn_wrapper",
+   "type": "function",
+   "name": "vit_flash_attn_wrapper",
+   "filePath": "vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "lineRange": [
+    110,
+    131
+   ],
+   "summary": "ViT flash_attn 的 compile 兼容 wrapper。",
+   "tags": [
+    "wrapper",
+    "vit",
+    "flash-attn"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:vit_aiter_fp8_attn_wrapper",
+   "type": "function",
+   "name": "vit_aiter_fp8_attn_wrapper",
+   "filePath": "vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "lineRange": [
+    134,
+    159
+   ],
+   "summary": "ViT AITER FP8 注意力 wrapper。",
+   "tags": [
+    "wrapper",
+    "vit",
+    "aiter",
+    "fp8"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:triton_attn_wrapper",
+   "type": "function",
+   "name": "triton_attn_wrapper",
+   "filePath": "vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "lineRange": [
+    162,
+    202
+   ],
+   "summary": "Triton 注意力 compile 兼容 wrapper。",
+   "tags": [
+    "wrapper",
+    "triton"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:triton_attn_wrapper_fake",
+   "type": "function",
+   "name": "triton_attn_wrapper_fake",
+   "filePath": "vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "lineRange": [
+    205,
+    214
+   ],
+   "summary": "Triton wrapper 的 fake 模式。",
+   "tags": [
+    "fake-mode",
+    "wrapper"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:vit_triton_attn_wrapper",
+   "type": "function",
+   "name": "vit_triton_attn_wrapper",
+   "filePath": "vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "lineRange": [
+    224,
+    241
+   ],
+   "summary": "ViT Triton 注意力 wrapper。",
+   "tags": [
+    "wrapper",
+    "vit",
+    "triton"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:apply_sdpa",
+   "type": "function",
+   "name": "apply_sdpa",
+   "filePath": "vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "lineRange": [
+    244,
+    267
+   ],
+   "summary": "应用 SDPA 的通用封装。",
+   "tags": [
+    "sdpa",
+    "wrapper"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:torch_sdpa_wrapper",
+   "type": "function",
+   "name": "torch_sdpa_wrapper",
+   "filePath": "vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "lineRange": [
+    272,
+    302
+   ],
+   "summary": "Torch SDPA compile 兼容 wrapper。",
+   "tags": [
+    "wrapper",
+    "sdpa"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:torch_sdpa_wrapper_fake",
+   "type": "function",
+   "name": "torch_sdpa_wrapper_fake",
+   "filePath": "vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "lineRange": [
+    305,
+    313
+   ],
+   "summary": "Torch SDPA fake 模式。",
+   "tags": [
+    "fake-mode",
+    "wrapper"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:vit_torch_sdpa_wrapper",
+   "type": "function",
+   "name": "vit_torch_sdpa_wrapper",
+   "filePath": "vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "lineRange": [
+    323,
+    333
+   ],
+   "summary": "ViT Torch SDPA wrapper。",
+   "tags": [
+    "wrapper",
+    "vit",
+    "sdpa"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:flashinfer_wrapper",
+   "type": "function",
+   "name": "flashinfer_wrapper",
+   "filePath": "vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "lineRange": [
+    336,
+    406
+   ],
+   "summary": "FlashInfer compile 兼容 wrapper。",
+   "tags": [
+    "wrapper",
+    "flashinfer"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:vit_flashinfer_wrapper_fake",
+   "type": "function",
+   "name": "vit_flashinfer_wrapper_fake",
+   "filePath": "vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "lineRange": [
+    409,
+    427
+   ],
+   "summary": "FlashInfer fake 模式。",
+   "tags": [
+    "fake-mode",
+    "wrapper"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:vit_flashinfer_wrapper",
+   "type": "function",
+   "name": "vit_flashinfer_wrapper",
+   "filePath": "vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "lineRange": [
+    437,
+    464
+   ],
+   "summary": "ViT FlashInfer wrapper。",
+   "tags": [
+    "wrapper",
+    "vit",
+    "flashinfer"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/attention/ops/xpu_mla_sparse.py",
+   "type": "file",
+   "name": "xpu_mla_sparse.py",
+   "filePath": "vllm/v1/attention/ops/xpu_mla_sparse.py",
+   "summary": "Intel XPU 的 BF16 稀疏 MLA Triton 内核与公开接口。",
+   "tags": [
+    "xpu",
+    "sparse",
+    "mla",
+    "triton",
+    "bf16"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/xpu_mla_sparse.py:_bf16_mla_sparse_kernel",
+   "type": "function",
+   "name": "_bf16_mla_sparse_kernel",
+   "filePath": "vllm/v1/attention/ops/xpu_mla_sparse.py",
+   "lineRange": [
+    10,
+    176
+   ],
+   "summary": "XPU BF16 稀疏 MLA 的 Triton 内核本体。",
+   "tags": [
+    "triton",
+    "xpu",
+    "sparse",
+    "mla",
+    "kernel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/ops/xpu_mla_sparse.py:triton_bf16_mla_sparse_interface",
+   "type": "function",
+   "name": "triton_bf16_mla_sparse_interface",
+   "filePath": "vllm/v1/attention/ops/xpu_mla_sparse.py",
+   "lineRange": [
+    180,
+    279
+   ],
+   "summary": "XPU BF16 稀疏 MLA 的公开接口。",
+   "tags": [
+    "xpu",
+    "sparse",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/attention/selector.py",
+   "type": "file",
+   "name": "selector.py",
+   "filePath": "vllm/v1/attention/selector.py",
+   "summary": "注意力后端选择器：get_attn_backend 按平台/形状/dtype 惰性选择后端类（带缓存），get_attn_spec_kind 推导 KV cache 组类型。",
+   "tags": [
+    "selector",
+    "backend-selection",
+    "platform",
+    "cached"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/selector.py:AttentionSelectorConfig",
+   "type": "class",
+   "name": "AttentionSelectorConfig",
+   "filePath": "vllm/v1/attention/selector.py",
+   "lineRange": [
+    25,
+    65
+   ],
+   "summary": "可哈希的后端选择配置 NamedTuple（head size/dtype/kv dtype/sink/sparse 等）。",
+   "tags": [
+    "config",
+    "namedtuple",
+    "selection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/selector.py:get_attn_spec_kind",
+   "type": "function",
+   "name": "get_attn_spec_kind",
+   "filePath": "vllm/v1/attention/selector.py",
+   "lineRange": [
+    68,
+    106
+   ],
+   "summary": "从 use_mla/滑窗/attn_type 信号推导层的 KVCacheSpecKind。",
+   "tags": [
+    "kv-cache-spec",
+    "classification"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/selector.py:get_attn_backend",
+   "type": "function",
+   "name": "get_attn_backend",
+   "filePath": "vllm/v1/attention/selector.py",
+   "lineRange": [
+    109,
+    203
+   ],
+   "summary": "按平台/形状/dtype 选择注意力后端类（惰性导入，尊重用户指定）。",
+   "tags": [
+    "selector",
+    "backend-selection",
+    "lazy-import"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/selector.py:_cached_get_attn_backend",
+   "type": "function",
+   "name": "_cached_get_attn_backend",
+   "filePath": "vllm/v1/attention/selector.py",
+   "lineRange": [
+    207,
+    228
+   ],
+   "summary": "平台委托的后端类解析（带 lru_cache）。",
+   "tags": [
+    "selector",
+    "cached"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/selector.py:get_mamba_attn_backend",
+   "type": "function",
+   "name": "get_mamba_attn_backend",
+   "filePath": "vllm/v1/attention/selector.py",
+   "lineRange": [
+    231,
+    235
+   ],
+   "summary": "选择 Mamba 注意力后端类。",
+   "tags": [
+    "selector",
+    "mamba"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/selector.py:_cached_get_mamba_attn_backend",
+   "type": "function",
+   "name": "_cached_get_mamba_attn_backend",
+   "filePath": "vllm/v1/attention/selector.py",
+   "lineRange": [
+    239,
+    250
+   ],
+   "summary": "Mamba 后端解析（带缓存）。",
+   "tags": [
+    "selector",
+    "mamba",
+    "cached"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/attention/ops/triton_prefill_attention.py",
+   "target": "function:vllm/v1/attention/ops/triton_prefill_attention.py:_fwd_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_prefill_attention.py",
+   "target": "function:vllm/v1/attention/ops/triton_prefill_attention.py:get_block_size",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_prefill_attention.py",
+   "target": "function:vllm/v1/attention/ops/triton_prefill_attention.py:get_block_size",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_prefill_attention.py",
+   "target": "function:vllm/v1/attention/ops/triton_prefill_attention.py:context_attention_fwd",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_prefill_attention.py",
+   "target": "function:vllm/v1/attention/ops/triton_prefill_attention.py:context_attention_fwd",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "target": "function:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py:_is_supported_kv_cache_dtype",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "target": "function:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py:reshape_and_cache_kernel_flash",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "target": "function:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py:reshape_and_cache_kernel_flash",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "target": "function:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py:_reshape_cache_per_token_head",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "target": "function:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py:triton_reshape_and_cache_flash_per_token_head_quant",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "target": "function:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py:triton_reshape_and_cache_flash_per_token_head_quant",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "target": "function:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py:triton_reshape_and_cache_flash",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "target": "function:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py:triton_reshape_and_cache_flash",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "target": "function:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py:reshape_and_cache_kernel_flash_diffkv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "target": "function:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py:reshape_and_cache_kernel_flash_diffkv",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "target": "function:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py:triton_reshape_and_cache_flash_diffkv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "target": "function:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py:triton_reshape_and_cache_flash_diffkv",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/triton_unified_attention.py:_cast_kv_tile",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/triton_unified_attention.py:_load_q_td",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/triton_unified_attention.py:_load_kv_tile_td",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/triton_unified_attention.py:_store_output_td",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/triton_unified_attention.py:kernel_unified_attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/triton_unified_attention.py:kernel_unified_attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/triton_unified_attention.py:reduce_segments",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/triton_unified_attention.py:reduce_segments",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/triton_unified_attention.py:_get_tile_size",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/triton_unified_attention.py:unified_attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/triton_unified_attention.py:unified_attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention_diffkv.py",
+   "target": "function:vllm/v1/attention/ops/triton_unified_attention_diffkv.py:kernel_unified_attention_diffkv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention_diffkv.py",
+   "target": "function:vllm/v1/attention/ops/triton_unified_attention_diffkv.py:kernel_unified_attention_diffkv",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention_diffkv.py",
+   "target": "function:vllm/v1/attention/ops/triton_unified_attention_diffkv.py:kernel_reduce_segments_diffkv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention_diffkv.py",
+   "target": "function:vllm/v1/attention/ops/triton_unified_attention_diffkv.py:kernel_reduce_segments_diffkv",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention_diffkv.py",
+   "target": "function:vllm/v1/attention/ops/triton_unified_attention_diffkv.py:unified_attention_diffkv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention_diffkv.py",
+   "target": "function:vllm/v1/attention/ops/triton_unified_attention_diffkv.py:unified_attention_diffkv",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode_v2.py",
+   "target": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode_v2.py:build_pair_lut",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode_v2.py",
+   "target": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode_v2.py:build_pair_lut",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode_v2.py",
+   "target": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode_v2.py:_get_layout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode_v2.py",
+   "target": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode_v2.py:_get_pair_lut",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:_find_seq_idx",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:_tq_fuse_q_rotation",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:_tq_load_k_tile",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:_tq_load_v_tile",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:kernel_tq_unified_attention_2d",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:kernel_tq_unified_attention_2d",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:kernel_tq_unified_attention_3d",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:kernel_tq_unified_attention_3d",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:_get_layout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:_get_pair_lut",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:triton_turboquant_unified_attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:triton_turboquant_unified_attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:triton_turboquant_decode_attention_soa",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py:triton_turboquant_decode_attention_soa",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/format.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/format.py:ue8m0_encode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/format.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/format.py:ue8m0_encode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/format.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/format.py:ue8m0_decode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/format.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/format.py:ue8m0_decode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/format.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/format.py:k_codes_bytes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/format.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/format.py:k_codes_bytes",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/format.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/format.py:n_groups",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/format.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/format.py:n_groups",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/format.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/format.py:slot_size",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/format.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/format.py:slot_size",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/reference.py",
+   "target": "class:vllm/v1/attention/ops/ultraquant/reference.py:UltraQuantEncoded",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/reference.py",
+   "target": "class:vllm/v1/attention/ops/ultraquant/reference.py:UltraQuantEncoded",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/reference.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/reference.py:hadamard_matrix",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/reference.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/reference.py:hadamard_matrix",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/reference.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/reference.py:_snap_to_sorted_idx",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/reference.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/reference.py:_unpack_nibbles_last_dim",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/reference.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/reference.py:_ue8m0_snap_tensor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/reference.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/reference.py:ultraquant_encode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/reference.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/reference.py:ultraquant_encode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/reference.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/reference.py:ultraquant_dequant",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/reference.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/reference.py:ultraquant_dequant",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/reference.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/reference.py:ultraquant_encode_decode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/reference.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/reference.py:ultraquant_encode_decode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/reference.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/reference.py:reference_ultraquant_attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/reference.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/reference.py:reference_ultraquant_attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_dequant.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_dequant.py:_ultraquant_full_dequant_kv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_dequant.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_dequant.py:ultraquant_full_dequant_kv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_dequant.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_dequant.py:ultraquant_full_dequant_kv",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_store.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_store.py:_get_hadamard",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_store.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_store.py:_ultraquant_store_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_store.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_store.py:ultraquant_store",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_store.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_store.py:ultraquant_store",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:_ultraquant_fp4_decode_arith",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:_ultraquant_load_k_packed",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:_ultraquant_load_v_tile",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:_ultraquant_pv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:_ultraquant_qk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:_ultraquant_slot_addrs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:kernel_ultraquant_unified_attention_2d",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:kernel_ultraquant_unified_attention_2d",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:kernel_ultraquant_unified_attention_3d",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:kernel_ultraquant_unified_attention_3d",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:_get_pit",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:ultraquant_unified_attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "target": "function:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py:ultraquant_unified_attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:flash_attn_maxseqlen_wrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:flash_attn_maxseqlen_wrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:flash_attn_maxseqlen_wrapper_fake",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:flash_attn_maxseqlen_wrapper_fake",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:vit_flash_attn_wrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:vit_flash_attn_wrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:vit_aiter_fp8_attn_wrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:vit_aiter_fp8_attn_wrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:triton_attn_wrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:triton_attn_wrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:triton_attn_wrapper_fake",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:triton_attn_wrapper_fake",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:vit_triton_attn_wrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:vit_triton_attn_wrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:apply_sdpa",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:apply_sdpa",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:torch_sdpa_wrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:torch_sdpa_wrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:torch_sdpa_wrapper_fake",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:torch_sdpa_wrapper_fake",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:vit_torch_sdpa_wrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:vit_torch_sdpa_wrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:flashinfer_wrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:flashinfer_wrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:vit_flashinfer_wrapper_fake",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:vit_flashinfer_wrapper_fake",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:vit_flashinfer_wrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "function:vllm/v1/attention/ops/vit_attn_wrappers.py:vit_flashinfer_wrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/xpu_mla_sparse.py",
+   "target": "function:vllm/v1/attention/ops/xpu_mla_sparse.py:_bf16_mla_sparse_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/xpu_mla_sparse.py",
+   "target": "function:vllm/v1/attention/ops/xpu_mla_sparse.py:triton_bf16_mla_sparse_interface",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/xpu_mla_sparse.py",
+   "target": "function:vllm/v1/attention/ops/xpu_mla_sparse.py:triton_bf16_mla_sparse_interface",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "class:vllm/v1/attention/selector.py:AttentionSelectorConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "class:vllm/v1/attention/selector.py:AttentionSelectorConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "function:vllm/v1/attention/selector.py:get_attn_spec_kind",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "function:vllm/v1/attention/selector.py:get_attn_spec_kind",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "function:vllm/v1/attention/selector.py:get_attn_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "function:vllm/v1/attention/selector.py:get_attn_backend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "function:vllm/v1/attention/selector.py:_cached_get_attn_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "function:vllm/v1/attention/selector.py:get_mamba_attn_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "function:vllm/v1/attention/selector.py:get_mamba_attn_backend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "function:vllm/v1/attention/selector.py:_cached_get_mamba_attn_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_prefill_attention.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_prefill_attention.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_prefill_attention.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_prefill_attention.py",
+   "target": "file:vllm/utils/mem_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_prefill_attention.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "target": "file:vllm/v1/attention/ops/int4_per_token_head.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "target": "file:vllm/v1/attention/ops/triton_attention_helpers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "target": "file:vllm/v1/attention/ops/int4_per_token_head.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention_diffkv.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention_diffkv.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention_diffkv.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/triton_unified_attention_diffkv.py",
+   "target": "file:vllm/v1/attention/ops/triton_attention_helpers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode_v2.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode_v2.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "target": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "target": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "target": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_decode_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/__init__.py",
+   "target": "file:vllm/v1/attention/ops/ultraquant/triton_store.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/reference.py",
+   "target": "file:vllm/v1/attention/ops/ultraquant/format.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_dequant.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_dequant.py",
+   "target": "file:vllm/v1/attention/ops/ultraquant/format.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_dequant.py",
+   "target": "file:vllm/v1/attention/ops/ultraquant/triton_store.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_store.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_store.py",
+   "target": "file:vllm/v1/attention/ops/ultraquant/format.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "target": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "target": "file:vllm/v1/attention/ops/turboquant_soa/triton_turboquant_unified_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "target": "file:vllm/v1/attention/ops/ultraquant/format.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/ultraquant/triton_unified_attention.py",
+   "target": "file:vllm/v1/attention/ops/ultraquant/triton_store.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "file:vllm/utils/gpu_sync_debug.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "file:vllm/v1/attention/backends/fa_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/vit_attn_wrappers.py",
+   "target": "file:vllm/v1/attention/ops/triton_prefill_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/ops/xpu_mla_sparse.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/compilation/backends.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/flash_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/flash_attn_diffkv.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/triton_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/flashinfer.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/mla/flashinfer_mla.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/mla/flashmla.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/mla/flashmla_sparse.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/mla/cutlass_mla.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/mla/flashattn_mla.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/mla/cpu_mla.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/mla/amx_mla.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/cpu_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/gdn_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/selector.py",
+   "target": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  }
+ ]
+}

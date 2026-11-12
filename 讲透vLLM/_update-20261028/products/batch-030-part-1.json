@@ -1,0 +1,1168 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/compilation/backends.py",
+   "type": "file",
+   "name": "backends.py",
+   "filePath": "vllm/compilation/backends.py",
+   "summary": "vLLM 编译后端（1372 行）：CompilerManager 管理编译图缓存/加载/编译，VllmBackend 作为 torch.compile 后端按注意力边界切图（split_graph/空分配子图合并/size 节点分解），PiecewiseCompileInterpreter 解释执行切分图。",
+   "tags": [
+    "compilation",
+    "backend",
+    "graph-splitting",
+    "torch-compile"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/compilation/base_static_graph.py",
+   "type": "file",
+   "name": "base_static_graph.py",
+   "filePath": "vllm/compilation/base_static_graph.py",
+   "summary": "静态图包装器协议 AbstractStaticGraphWrapper：平台可用它把可调用对象捕获为静态图（供非 CUDA 平台实现）。",
+   "tags": [
+    "compilation",
+    "static-graph",
+    "protocol",
+    "platform"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "file",
+   "name": "breakable_cudagraph.py",
+   "filePath": "vllm/compilation/breakable_cudagraph.py",
+   "summary": "可断点 CUDA graph（灵感 sglang#19102）：不做 FX 预切分，单捕获上下文驱动整个前向，在 dispatcher 拦截注意力/KV-cache 自定义 op 处结束流捕获、eager 执行后恢复；产物是零参 callable 序列。",
+   "tags": [
+    "cudagraph",
+    "breakable",
+    "stream-capture",
+    "eager-breaks"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/compilation/caching.py",
+   "type": "file",
+   "name": "caching.py",
+   "filePath": "vllm/compilation/caching.py",
+   "summary": "编译产物缓存：StandaloneCompiledArtifacts 内容寻址去重（SHA256 两级间接），VllmSerializableFunction 包装编译函数支持 pickle 传输，inductor mega artifact 重建。",
+   "tags": [
+    "compilation",
+    "cache",
+    "serialization",
+    "dedup"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/compilation/codegen.py",
+   "type": "file",
+   "name": "codegen.py",
+   "filePath": "vllm/compilation/codegen.py",
+   "summary": "从切分图生成 Python 执行代码：generate_execution_code 遍历 stitching 图产出源码，compile_execution_fn 编译并绑定子模块可调用。",
+   "tags": [
+    "codegen",
+    "fx-graph",
+    "python-source"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/compilation/backends.py:CompilerManager",
+   "type": "class",
+   "name": "CompilerManager",
+   "filePath": "vllm/compilation/backends.py",
+   "summary": "编译过程管理器（8 方法）：编译图缓存、加载与编译编排。",
+   "tags": [
+    "compiler",
+    "manager",
+    "caching"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    129,
+    424
+   ]
+  },
+  {
+   "id": "class:vllm/compilation/backends.py:PiecewiseCompileInterpreter",
+   "type": "class",
+   "name": "PiecewiseCompileInterpreter",
+   "filePath": "vllm/compilation/backends.py",
+   "summary": "切分图解释器（改编自 ShapeProp）：逐子模块解释执行并记录切分图形状。",
+   "tags": [
+    "interpreter",
+    "fx",
+    "shape-prop"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    710,
+    799
+   ]
+  },
+  {
+   "id": "class:vllm/compilation/backends.py:VllmBackend",
+   "type": "class",
+   "name": "VllmBackend",
+   "filePath": "vllm/compilation/backends.py",
+   "summary": "vLLM 的 torch.compile 后端（VLLM_COMPILE 模式）：切图、分段编译与 CUDA graph 包装定制。",
+   "tags": [
+    "backend",
+    "torch-compile",
+    "vllm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    828,
+    1371
+   ]
+  },
+  {
+   "id": "class:vllm/compilation/base_static_graph.py:AbstractStaticGraphWrapper",
+   "type": "class",
+   "name": "AbstractStaticGraphWrapper",
+   "filePath": "vllm/compilation/base_static_graph.py",
+   "summary": "静态图包装器协议：平台可把可调用捕获为静态图。",
+   "tags": [
+    "static-graph",
+    "protocol",
+    "platform"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    10,
+    57
+   ]
+  },
+  {
+   "id": "class:vllm/compilation/breakable_cudagraph.py:BreakableCUDAGraphCapture",
+   "type": "class",
+   "name": "BreakableCUDAGraphCapture",
+   "filePath": "vllm/compilation/breakable_cudagraph.py",
+   "summary": "支持 add_eager 断点的流捕获上下文：eager 段与 graph 段共用静态缓冲。",
+   "tags": [
+    "cudagraph",
+    "capture",
+    "eager-breaks"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    126,
+    231
+   ]
+  },
+  {
+   "id": "class:vllm/compilation/breakable_cudagraph.py:BreakableCUDAGraphWrapper",
+   "type": "class",
+   "name": "BreakableCUDAGraphWrapper",
+   "filePath": "vllm/compilation/breakable_cudagraph.py",
+   "summary": "CUDAGraphWrapper 的可断点替代：重放零参 callable 序列（graph 段 replay + eager 段直呼）。",
+   "tags": [
+    "cudagraph",
+    "wrapper",
+    "replay"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    247,
+    433
+   ]
+  },
+  {
+   "id": "class:vllm/compilation/caching.py:StandaloneCompiledArtifacts",
+   "type": "class",
+   "name": "StandaloneCompiledArtifacts",
+   "filePath": "vllm/compilation/caching.py",
+   "summary": "独立编译产物存储：SHA256 两级间接做内容寻址去重。",
+   "tags": [
+    "cache",
+    "artifacts",
+    "dedup"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    38,
+    159
+   ]
+  },
+  {
+   "id": "class:vllm/compilation/caching.py:VllmSerializableFunction",
+   "type": "class",
+   "name": "VllmSerializableFunction",
+   "filePath": "vllm/compilation/caching.py",
+   "summary": "vLLM 编译函数的可序列化包装：转发张量输入并支持 pickle 重建。",
+   "tags": [
+    "serialization",
+    "compiled-fn",
+    "pickle"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    174,
+    413
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/backends.py:make_copy_and_call",
+   "type": "function",
+   "name": "make_copy_and_call",
+   "filePath": "vllm/compilation/backends.py",
+   "summary": "构造先把输入拷进静态缓冲再调用的包装（symbolic tensor 索引）。",
+   "tags": [
+    "static-buffers",
+    "copy",
+    "wrapper"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    59,
+    94
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/backends.py:make_compiler",
+   "type": "function",
+   "name": "make_compiler",
+   "filePath": "vllm/compilation/backends.py",
+   "summary": "构造编译器实例（按配置选择适配器）。",
+   "tags": [
+    "compiler",
+    "factory",
+    "adaptor-selection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    97,
+    126
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/backends.py:_is_empty_allocation_node",
+   "type": "function",
+   "name": "_is_empty_allocation_node",
+   "filePath": "vllm/compilation/backends.py",
+   "summary": "判定节点是否空分配 op。",
+   "tags": [
+    "fx",
+    "allocation",
+    "predicate"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    439,
+    459
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/backends.py:_merge_empty_only_subgraphs",
+   "type": "function",
+   "name": "_merge_empty_only_subgraphs",
+   "filePath": "vllm/compilation/backends.py",
+   "summary": "把只含空分配 op 的分区并入前一分区。",
+   "tags": [
+    "graph-splitting",
+    "merge",
+    "partitions"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    462,
+    499
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/backends.py:_decompose_size_nodes",
+   "type": "function",
+   "name": "_decompose_size_nodes",
+   "filePath": "vllm/compilation/backends.py",
+   "summary": "把 x.size() 分解为逐维 sym_size.int 调用（torch.Size 不能跨界）。",
+   "tags": [
+    "fx",
+    "decomposition",
+    "size-nodes"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    502,
+    573
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/backends.py:split_graph",
+   "type": "function",
+   "name": "split_graph",
+   "filePath": "vllm/compilation/backends.py",
+   "summary": "按切分规则把 FX 图切成多个子图。",
+   "tags": [
+    "graph-splitting",
+    "fx",
+    "split"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    576,
+    650
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/backends.py:wrap_with_cudagraph_if_needed",
+   "type": "function",
+   "name": "wrap_with_cudagraph_if_needed",
+   "filePath": "vllm/compilation/backends.py",
+   "summary": "按配置给分段后端包上 CUDA graph 包装。",
+   "tags": [
+    "cudagraph",
+    "wrapper",
+    "conditional"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    656,
+    707
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/backends.py:set_model_tag",
+   "type": "function",
+   "name": "set_model_tag",
+   "filePath": "vllm/compilation/backends.py",
+   "summary": "设置模型 tag 的上下文（区分 target/draft 等编译缓存键）。",
+   "tags": [
+    "model-tag",
+    "context",
+    "cache-key"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    809,
+    825
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/breakable_cudagraph.py:eager_break_during_capture",
+   "type": "function",
+   "name": "eager_break_during_capture",
+   "filePath": "vllm/compilation/breakable_cudagraph.py",
+   "summary": "把自定义 op Python kernel 变成可断 graph 捕获断点的装饰器。",
+   "tags": [
+    "cudagraph",
+    "decorator",
+    "eager-breaks"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    67,
+    118
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/caching.py:patch_pytree_map_over_slice",
+   "type": "function",
+   "name": "patch_pytree_map_over_slice",
+   "filePath": "vllm/compilation/caching.py",
+   "summary": "pytree map_over_slice 的兼容补丁。",
+   "tags": [
+    "pytree",
+    "patch",
+    "compat"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    163,
+    171
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/caching.py:reconstruct_serializable_fn_from_mega_artifact",
+   "type": "function",
+   "name": "reconstruct_serializable_fn_from_mega_artifact",
+   "filePath": "vllm/compilation/caching.py",
+   "summary": "从缓存 inductor mega artifact 重建可序列化函数。",
+   "tags": [
+    "inductor",
+    "reconstruct",
+    "artifact"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    416,
+    569
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/caching.py:aot_compile_hash_factors",
+   "type": "function",
+   "name": "aot_compile_hash_factors",
+   "filePath": "vllm/compilation/caching.py",
+   "summary": "AOT 编译的 hash 因子。",
+   "tags": [
+    "aot",
+    "hash",
+    "factors"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    572,
+    588
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/caching.py:_compute_code_hash_with_content",
+   "type": "function",
+   "name": "_compute_code_hash_with_content",
+   "filePath": "vllm/compilation/caching.py",
+   "summary": "带内容的代码 hash。",
+   "tags": [
+    "hash",
+    "code",
+    "content"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    591,
+    604
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/caching.py:_compute_code_hash",
+   "type": "function",
+   "name": "_compute_code_hash",
+   "filePath": "vllm/compilation/caching.py",
+   "summary": "代码 hash 计算。",
+   "tags": [
+    "hash",
+    "code",
+    "fingerprint"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    607,
+    619
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/codegen.py:generate_execution_code_with_name",
+   "type": "function",
+   "name": "generate_execution_code_with_name",
+   "filePath": "vllm/compilation/codegen.py",
+   "summary": "带函数名生成执行代码。",
+   "tags": [
+    "codegen",
+    "source",
+    "named"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    21,
+    127
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/codegen.py:generate_execution_code",
+   "type": "function",
+   "name": "generate_execution_code",
+   "filePath": "vllm/compilation/codegen.py",
+   "summary": "从切分图的 stitching 图生成 Python 源码。",
+   "tags": [
+    "codegen",
+    "fx",
+    "python-source"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    131,
+    162
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/codegen.py:compile_execution_fn",
+   "type": "function",
+   "name": "compile_execution_fn",
+   "filePath": "vllm/compilation/codegen.py",
+   "summary": "编译执行代码并绑定子模块可调用。",
+   "tags": [
+    "codegen",
+    "compile",
+    "bind"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    166,
+    206
+   ]
+  },
+  {
+   "id": "function:vllm/compilation/codegen.py:_node_ref",
+   "type": "function",
+   "name": "_node_ref",
+   "filePath": "vllm/compilation/codegen.py",
+   "summary": "FX 节点参数→源码引用。",
+   "tags": [
+    "codegen",
+    "fx",
+    "reference"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    209,
+    237
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "file:vllm/compilation/codegen.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "file:vllm/compilation/compiler_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "file:vllm/compilation/counter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "file:vllm/compilation/cuda_graph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "file:vllm/compilation/partition_rules.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "file:vllm/compilation/passes/inductor_pass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "file:vllm/compilation/passes/ir/inplace_functionalization.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "file:vllm/compilation/passes/pass_manager.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "file:vllm/logging_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "file:vllm/logging_utils/lazy.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "file:vllm/tracing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/base_static_graph.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/breakable_cudagraph.py",
+   "target": "file:vllm/compilation/cudagraph_pool.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/breakable_cudagraph.py",
+   "target": "file:vllm/compilation/monitor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/breakable_cudagraph.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/breakable_cudagraph.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/breakable_cudagraph.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/breakable_cudagraph.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/breakable_cudagraph.py",
+   "target": "file:vllm/model_executor/layers/fusion/quant_activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/breakable_cudagraph.py",
+   "target": "file:vllm/model_executor/offloader/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/breakable_cudagraph.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/breakable_cudagraph.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "file:vllm/compilation/backends.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "file:vllm/compilation/codegen.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "file:vllm/compilation/compiler_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "file:vllm/compilation/counter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "file:vllm/compilation/piecewise_backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "file:vllm/utils/hashing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "class:vllm/compilation/backends.py:CompilerManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "class:vllm/compilation/backends.py:PiecewiseCompileInterpreter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "class:vllm/compilation/backends.py:VllmBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "function:vllm/compilation/backends.py:make_copy_and_call",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "function:vllm/compilation/backends.py:make_compiler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "function:vllm/compilation/backends.py:_is_empty_allocation_node",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "function:vllm/compilation/backends.py:_merge_empty_only_subgraphs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "function:vllm/compilation/backends.py:_decompose_size_nodes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "function:vllm/compilation/backends.py:split_graph",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "function:vllm/compilation/backends.py:wrap_with_cudagraph_if_needed",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "function:vllm/compilation/backends.py:set_model_tag",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/base_static_graph.py",
+   "target": "class:vllm/compilation/base_static_graph.py:AbstractStaticGraphWrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/breakable_cudagraph.py",
+   "target": "class:vllm/compilation/breakable_cudagraph.py:BreakableCUDAGraphCapture",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/breakable_cudagraph.py",
+   "target": "class:vllm/compilation/breakable_cudagraph.py:BreakableCUDAGraphWrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/breakable_cudagraph.py",
+   "target": "function:vllm/compilation/breakable_cudagraph.py:eager_break_during_capture",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "class:vllm/compilation/caching.py:StandaloneCompiledArtifacts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "class:vllm/compilation/caching.py:VllmSerializableFunction",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "function:vllm/compilation/caching.py:patch_pytree_map_over_slice",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "function:vllm/compilation/caching.py:reconstruct_serializable_fn_from_mega_artifact",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "function:vllm/compilation/caching.py:aot_compile_hash_factors",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "function:vllm/compilation/caching.py:_compute_code_hash_with_content",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "function:vllm/compilation/caching.py:_compute_code_hash",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/codegen.py",
+   "target": "function:vllm/compilation/codegen.py:generate_execution_code_with_name",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/codegen.py",
+   "target": "function:vllm/compilation/codegen.py:generate_execution_code",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/codegen.py",
+   "target": "function:vllm/compilation/codegen.py:compile_execution_fn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/codegen.py",
+   "target": "function:vllm/compilation/codegen.py:_node_ref",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "class:vllm/compilation/backends.py:CompilerManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "class:vllm/compilation/backends.py:PiecewiseCompileInterpreter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "class:vllm/compilation/backends.py:VllmBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "function:vllm/compilation/backends.py:make_copy_and_call",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "function:vllm/compilation/backends.py:make_compiler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "function:vllm/compilation/backends.py:split_graph",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "function:vllm/compilation/backends.py:wrap_with_cudagraph_if_needed",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/backends.py",
+   "target": "function:vllm/compilation/backends.py:set_model_tag",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/base_static_graph.py",
+   "target": "class:vllm/compilation/base_static_graph.py:AbstractStaticGraphWrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/breakable_cudagraph.py",
+   "target": "class:vllm/compilation/breakable_cudagraph.py:BreakableCUDAGraphCapture",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/breakable_cudagraph.py",
+   "target": "class:vllm/compilation/breakable_cudagraph.py:BreakableCUDAGraphWrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/breakable_cudagraph.py",
+   "target": "function:vllm/compilation/breakable_cudagraph.py:eager_break_during_capture",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "class:vllm/compilation/caching.py:StandaloneCompiledArtifacts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "class:vllm/compilation/caching.py:VllmSerializableFunction",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "function:vllm/compilation/caching.py:patch_pytree_map_over_slice",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "function:vllm/compilation/caching.py:reconstruct_serializable_fn_from_mega_artifact",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/caching.py",
+   "target": "function:vllm/compilation/caching.py:aot_compile_hash_factors",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/codegen.py",
+   "target": "function:vllm/compilation/codegen.py:generate_execution_code_with_name",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/codegen.py",
+   "target": "function:vllm/compilation/codegen.py:generate_execution_code",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/compilation/codegen.py",
+   "target": "function:vllm/compilation/codegen.py:compile_execution_fn",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/backends.py:VllmBackend",
+   "target": "function:vllm/compilation/backends.py:split_graph",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/compilation/backends.py:wrap_with_cudagraph_if_needed",
+   "target": "class:vllm/compilation/cuda_graph.py:CUDAGraphWrapper",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/backends.py:VllmBackend",
+   "target": "function:vllm/compilation/codegen.py:generate_execution_code",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/compilation/caching.py:reconstruct_serializable_fn_from_mega_artifact",
+   "target": "function:vllm/compilation/codegen.py:compile_execution_fn",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/breakable_cudagraph.py:BreakableCUDAGraphWrapper",
+   "target": "class:vllm/compilation/breakable_cudagraph.py:BreakableCUDAGraphCapture",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/compilation/breakable_cudagraph.py:BreakableCUDAGraphCapture",
+   "target": "function:vllm/compilation/cudagraph_pool.py:capture_pool",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

@@ -1,148 +1,365 @@
-> 来源: [https://deepwiki.com/deepseek-ai/awesome-deepseek-integration/1-overview](https://deepwiki.com/deepseek-ai/awesome-deepseek-integration/1-overview)
-> DeepWiki deepseek-ai/awesome-deepseek-integration
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/awesome-deepseek-integration · page 1 Overview · fetched 2026-10-30 -->
 
 # Overview
 
-  Relevant source files 
- - [README.md](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1)
- - [deep_ep/__init__.py](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py)
- 
-  
-## Purpose and Scope
+<details>
+<summary>Relevant source files</summary>
 
- DeepEP (DeepEveryParallel) is a high-performance communication library tailored for modern machine learning training and inference, specifically optimized for **Mixture-of-Experts (MoE) expert parallelism**. It provides high-throughput and low-latency all-to-all GPU kernels for MoE dispatch and combine operations, supporting low-precision formats like FP8 [README.md1-5](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L1-L5)
+The following files were used as context for generating this wiki page:
 
- The library features a lightweight **Just-In-Time (JIT)** compilation system, allowing it to run without pre-compilation of CUDA kernels during installation [README.md3-5](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L3-L5) DeepEP V2 introduces a significant architectural shift from the NVSHMEM-based V1 to a more efficient **NCCL Gin backend**, achieving up to 1.3x peak performance while reducing SM occupancy by up to 4x [README.md9-57](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L9-L57)
+- [README.md](README.md)
+- [README_cn.md](README_cn.md)
+- [README_es.md](README_es.md)
+- [README_ja.md](README_ja.md)
+- [README_zh_tw.md](README_zh_tw.md)
+- [docs/4EVERChat/README.md](docs/4EVERChat/README.md)
+- [docs/4EVERChat/README_cn.md](docs/4EVERChat/README_cn.md)
+- [docs/4EVERChat/README_ja.md](docs/4EVERChat/README_ja.md)
+- [docs/DocKit/README.md](docs/DocKit/README.md)
+- [docs/DocKit/README_cn.md](docs/DocKit/README_cn.md)
+- [docs/DocKit/assets/client-ui.png](docs/DocKit/assets/client-ui.png)
+- [docs/DocKit/assets/dockit.png](docs/DocKit/assets/dockit.png)
+- [docs/DocKit/assets/wechat_official.png](docs/DocKit/assets/wechat_official.png)
+- [docs/DocKit/assets/wechat_ponsor.jpg](docs/DocKit/assets/wechat_ponsor.jpg)
+- [docs/OpenXLab/migo/logo.svg](docs/OpenXLab/migo/logo.svg)
 
- **Sources:** [README.md1-17](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L1-L17) [deep_ep/__init__.py71-84](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L71-L84)
+</details>
 
- 
----
 
- 
-## Architectural Evolution: V1 to V2
 
- DeepEP V2 represents a complete refactoring of the communication layer. The transition from V1 to V2 involves several major shifts in backend technology and resource management:
+This document provides a technical introduction to the DeepSeek integrations ecosystem, explaining how applications, frameworks, tools, and extensions utilize the DeepSeek API to incorporate AI capabilities. It summarizes the integration categories, architecture patterns, and implementation approaches for leveraging DeepSeek's language models across diverse software systems.
 
- 
-| Feature | V1 (Legacy) | V2 (Elastic) |
-|---|---|---|
-| Backend | NVSHMEM (IBGDA/Symmetric Heap) | NCCL Gin (Header-only, lightweight) |
-| Interface | Buffer class | ElasticBuffer & EPHandle |
-| Resource Allocation | Manual tuning (num_sms, Config) | Analytical calculation via formulas |
-| Domain Scale | Limited scale-out | Up to EP2048 |
-| SM Occupancy | High (e.g., 24 SMs) | Low (e.g., 4-6 SMs) |
-| JIT Pipeline | Partial / Pre-compiled | Fully JIT (NVRTC-based) |
+## Integration Ecosystem
 
- **Sources:** [README.md9-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L9-L25) [README.md115-116](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L116) [deep_ep/buffers/elastic.py16-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L30)
+The DeepSeek ecosystem spans numerous software integrations that connect to the DeepSeek API to access AI models including `deepseek-chat`, `deepseek-coder`, and `deepseek-reasoner`. These integrations are organized into four primary categories:
 
- 
----
-
- 
-## System Architecture and Code Entities
-
- The following diagram maps the high-level system components to their corresponding code entities and files, illustrating the bridge between the Python user space and the CUDA kernel implementations.
-
- 
+```mermaid
+graph TD
+    DeepSeek["DeepSeek API"] --> Apps["Applications"]
+    DeepSeek --> Frameworks["AI/Agent Frameworks"]
+    DeepSeek --> DevTools["Developer Tools"]
+    DeepSeek --> Extensions["Platform Extensions"]
+    
+    Apps --> ChatApps["Chat Applications"]
+    Apps --> TransTools["Translation Tools"]
+    Apps --> CodeAsst["Code Assistants"]
+    Apps --> KnowledgeBases["Knowledge Bases"]
+    Apps --> Productivity["Productivity Tools"]
+    
+    Frameworks --> AgentF["AI Agent Frameworks"]
+    Frameworks --> RAG["RAG Frameworks"]
+    Frameworks --> DataAI["Data AI Applications"]
+    Frameworks --> FHE["FHE Frameworks"]
+    
+    DevTools --> CodeEditors["Code Editor Integrations"]
+    DevTools --> SDKs["Language SDKs"]
+    DevTools --> CLITools["CLI Tools"]
+    
+    Extensions --> BrowserExt["Browser Extensions"]
+    Extensions --> MessagingExt["Messaging App Plugins"]
+    Extensions --> OfficeExt["Office Add-ins"]
 ```
 
+Sources: [README.md:16-42](), [README_cn.md:19-38]()
+
+### Applications
+
+DeepSeek-powered applications provide AI capabilities directly to end-users:
+
+| Type | Examples | Purpose |
+|-----------------|----------|---------|
+| Chat Applications | `eechat`, `4EVERChat`, `ChatGPT-Next-Web` | Conversational AI interfaces |
+| Translation Tools | `Immersive Translate`, `Bob`, `translate.js` | Text translation between languages |
+| Code Assistants | `Continue`, `avante.nvim`, `codecompanion.nvim` | Programming assistance |
+| Knowledge Bases | `SiYuan`, `DocKit`, `Refine Reader` | Knowledge management with AI |
+| Productivity Tools | `SwiftChat`, `ToMemo`, `DingTalk` | AI-enhanced productivity |
+
+Sources: [README.md:45-433](), [README_cn.md:42-358]()
+
+### AI Frameworks
+
+Frameworks that provide infrastructure for building AI applications using DeepSeek:
+
+| Type | Examples | Purpose |
+|----------------|----------|---------|
+| AI Agent Frameworks | `smolagents`, `SuperAgentX`, `Anda` | Building autonomous AI agents |
+| RAG Frameworks | `RAGFlow`, `Autoflow` | Retrieval-augmented generation systems |
+| Data AI Frameworks | `DB-GPT` | Data-centric AI applications |
+| FHE Frameworks | `Mind FHE SDK` | Homomorphic encryption for AI |
+
+Sources: [README.md:438-541](), [README_cn.md:362-408]()
+
+### Developer Tools
+
+Tools that facilitate DeepSeek integration during development:
+
+| Type | Examples | Purpose |
+|-----------|----------|---------|
+| Code Editor Extensions | `Continue` (VS Code), `avante.nvim` (Neovim) | IDE integration |
+| Language SDKs | `DeepSwiftSeek`, `PHP Client`, `Deepseek Go` | Language-specific APIs |
+| CLI Tools | `Cline` | Command-line access |
+
+Sources: [README.md:542-622](), [README_cn.md:409-473]()
+
+### Platform Extensions
+
+Extensions that integrate DeepSeek into existing platforms:
+
+| Type | Examples | Purpose |
+|----------------|----------|---------|
+| Browser Extensions | `Immersive Translate`, `Refine Reader` | Browser integration |
+| Messaging App Plugins | `Huixiangdou`, `LangBot` | Messaging platform integration |
+| Office Add-ins | `Office-AI` | Office application integration |
+
+Sources: [README.md:623-715](), [README_cn.md:474-546]()
+
+## Integration Flow Pattern
+
+Most DeepSeek integrations follow this common interaction pattern:
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant App as "Application/Extension"
+    participant Adapter as "DeepSeek Adapter"
+    participant API as "DeepSeek API"
+    participant Models as "DeepSeek Models"
+    
+    User->>App: User input/request
+    App->>Adapter: Process request
+    Adapter->>API: Send API request with auth
+    API->>Models: Process with appropriate model
+    Note right of Models: deepseek-chat<br>deepseek-coder<br>deepseek-reasoner
+    Models->>API: Generate response
+    API->>Adapter: Return response
+    Adapter->>App: Format/process response
+    App->>User: Display results to user
 ```
 
- **Diagram: DeepEP V2 Code Entity Mapping**
+Sources: [README.md:16-42](), [README_cn.md:19-38]()
 
- **Sources:** [deep_ep/__init__.py87-97](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L87-L97) [deep_ep/buffers/elastic.py16-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L30) [README.md13-17](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L13-L17) [csrc/python_api.cpp1-39](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/python_api.cpp#L1-L39)
+## Integration Methods Comparison
 
- 
----
+There are four primary approaches to integrating with the DeepSeek API:
 
- 
-## Core Abstractions: ElasticBuffer and EPHandle
-
- 
-### ElasticBuffer
-
- The `ElasticBuffer` is the primary interface in V2. It manages a single contiguous GPU buffer that serves as a symmetric memory window across the communication group [README.md115-116](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L116) It uses `NCCLSymmetricMemoryContext` to handle cross-GPU memory registration and RDMA window management [csrc/kernels/backend/nccl.cu10-50](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/kernels/backend/nccl.cu#L10-L50) It supports both standard EP operations and experimental features like PP and Engram.
-
- 
-### EPHandle
-
- The `EPHandle` is a metadata object produced during the dispatch phase. It caches critical routing information, including:
-
- 
- - **Expert Alignment**: Padding information for memory efficiency [deep_ep/buffers/elastic.py32-40](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L32-L40)
- - **Token Counts**: `psum_num_recv_tokens_per_expert` and `num_recv_tokens` [deep_ep/buffers/elastic.py45-55](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L45-L55)
- - **Routing Metadata**: `topk_idx` and `recv_src_metadata` for the combine phase [deep_ep/buffers/elastic.py42-50](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L42-L50)
- 
- This handle can be reused for subsequent `combine` operations or cached during inference decoding to eliminate redundant metadata calculation [README.md18-20](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L18-L20)
-
- **Sources:** [deep_ep/buffers/elastic.py16-110](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L110) [README.md115-130](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L130)
-
- 
----
-
- 
-## Supported Communication Modes
-
- DeepEP V2 provides a unified interface for several high-performance primitives, executed via the NCCL Gin backend:
-
- 
- - **EP Dispatch/Combine**: The core MoE all-to-all kernels. Supports `do_expand` for GEMM layout optimization and `expert_alignment` for memory efficiency [deep_ep/buffers/elastic.py134-210](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L134-L210)
- - **Engram (Remote Memory Access)**: Zero-SM RDMA-based remote memory fetching (e.g., for KV cache). Uses `engram_write` and `engram_fetch` (returning a hook) to access remote memory with minimal compute overhead [README.md23-31](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L23-L31)
- - **Pipeline Parallelism (PP)**: Experimental zero-SM RDMA primitives (`pp_send`, `pp_recv`) for point-to-point communication between pipeline stages [README.md24-100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L24-L100)
- - **All-Gather Reduce-Scatter (AGRS)**: Experimental primitives for data and tensor parallelism, including `all_gather` updates [README.md37-98](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L37-L98)
- 
- 
+```mermaid
+graph LR
+    subgraph "Integration Methods"
+        DirectAPI["Direct API Integration"]
+        SDKs["SDK-based Integration"]
+        Plugins["Plugin/Extension Based"]
+        Frameworks["Framework Integration"]
+    end
+    
+    DirectAPI --> |"Examples"| Dir1["eechat, ChatDOC"]
+    SDKs --> |"Examples"| SDK1["DeepSwiftSeek, PHP Client"]
+    SDKs --> |"Examples"| SDK2["Deepseek Go, ASP Client"]
+    Plugins --> |"Examples"| Plug1["Continue, Cline"]
+    Plugins --> |"Examples"| Plug2["avante.nvim, SiYuan"]
+    Frameworks --> |"Examples"| Frame1["DB-GPT, agentUniverse"]
+    Frameworks --> |"Examples"| Frame2["translate.js, ComfyUI-Copilot"]
+    
+    DirectAPI --> |"Characteristics"| DC1["Full Control"]
+    DirectAPI --> |"Characteristics"| DC2["Higher Development Effort"]
+    SDKs --> |"Characteristics"| SC1["Language-Specific"]
+    SDKs --> |"Characteristics"| SC2["Simplified Implementation"]
+    Plugins --> |"Characteristics"| PC1["Extend Existing Tools"]
+    Plugins --> |"Characteristics"| PC2["Platform-Dependent"]
+    Frameworks --> |"Characteristics"| FC1["Advanced Capabilities"]
+    Frameworks --> |"Characteristics"| FC2["Domain-Specific Optimization"]
 ```
 
+Sources: [README.md:16-42](), [README_cn.md:19-38]()
+
+| Method | Description | Best For |
+|--------|-------------|----------|
+| Direct API Integration | Directly calling DeepSeek API endpoints | Maximum control and customization |
+| SDK-based Integration | Using language-specific libraries | Faster development in specific languages |
+| Plugin/Extension Based | Building extensions for existing platforms | Enhancing existing tools |
+| Framework Integration | Using higher-level frameworks | Complex AI applications |
+
+## Application Architecture
+
+Most DeepSeek-integrated applications share these architectural components:
+
+```mermaid
+classDiagram
+    class DeepSeekClient {
+        +String apiKey
+        +String baseUrl
+        +completions(prompt, options) Response
+        +chat(messages, options) Response
+        +streamChat(messages, options, callback) void
+        +codeCompletion(code, options) Response
+    }
+    
+    class AppConfig {
+        +String apiKey
+        +ModelSettings modelSettings
+        +UISettings uiSettings
+        +load() Config
+        +save() void
+    }
+    
+    class ModelManager {
+        +List~Model~ availableModels
+        +Model currentModel
+        +setModel(modelId) void
+        +getModelParameters() ModelParams
+    }
+    
+    class UIController {
+        +renderChat(messages) void
+        +handleUserInput(input) void
+        +displayResponse(response) void
+        +showError(error) void
+    }
+    
+    class ChatHistory {
+        +List~Message~ messages
+        +addMessage(message) void
+        +getConversationContext() Context
+        +clearHistory() void
+    }
+    
+    UIController --> DeepSeekClient : uses
+    UIController --> ChatHistory : manages
+    DeepSeekClient --> AppConfig : configured by
+    ModelManager --> AppConfig : reads from
+    UIController --> ModelManager : uses
 ```
 
- **Diagram: V2 Dispatch Execution Flow**
+Sources: [README.md:45-433](), [README_cn.md:42-358]()
 
- **Sources:** [deep_ep/buffers/elastic.py113-400](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L113-L400) [README.md97-101](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L97-L101) [csrc/kernels/backend/nccl.cu60-100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/kernels/backend/nccl.cu#L60-L100)
+## Example Application: eechat
 
- 
+`eechat` provides a good example of a DeepSeek-integrated application architecture:
+
+```mermaid
+flowchart TD
+    subgraph "eechat Application"
+        UI["User Interface"]
+        ModelMgr["Model Manager"]
+        APIConn["API Connector"]
+        ConfigMgr["Configuration Manager"]
+        ChatHist["Chat History"]
+        LocalModelHandler["Local Model Handler"]
+    end
+    
+    subgraph "Remote APIs"
+        DeepSeekAPI["DeepSeek API"]
+        OtherAPIs["Other LLM APIs"]
+    end
+    
+    subgraph "Local Models"
+        LocalModels["Local LLM Models"]
+    end
+    
+    User["User"] <--> UI
+    UI --> ModelMgr
+    UI --> ChatHist
+    
+    ModelMgr --> APIConn
+    ModelMgr --> LocalModelHandler
+    
+    ConfigMgr --> APIConn
+    ConfigMgr --> LocalModelHandler
+    
+    APIConn --> DeepSeekAPI
+    APIConn --> OtherAPIs
+    
+    LocalModelHandler --> LocalModels
+    
+    DeepSeekAPI --> APIConn
+    OtherAPIs --> APIConn
+    LocalModels --> LocalModelHandler
+    
+    APIConn --> ChatHist
+    LocalModelHandler --> ChatHist
+    
+    ChatHist --> UI
+```
+
+Sources: [README.md:54-57](), [README_cn.md:51-53]()
+
+## API Request/Response Flow
+
+The following diagram illustrates the specific API interaction between an application and the DeepSeek API:
+
+```mermaid
+sequenceDiagram
+    participant App as "Application"
+    participant SDK as "DeepSeek SDK/Client"
+    participant API as "DeepSeek API"
+    
+    App->>SDK: createCompletion(prompt, options)
+    SDK->>SDK: validate parameters
+    SDK->>SDK: prepare API request
+    SDK->>API: HTTP POST /api/completions
+    Note right of API: Request Body:<br>{<br>  "model": "deepseek-chat",<br>  "prompt": "user question",<br>  "temperature": 0.7,<br>  "max_tokens": 1000<br>}
+    API->>SDK: HTTP 200 Response
+    Note left of API: Response Body:<br>{<br>  "id": "completion-123",<br>  "choices": [<br>    {<br>      "text": "response content",<br>      "finish_reason": "stop"<br>    }<br>  ]<br>}
+    SDK->>SDK: parse response
+    SDK->>App: return CompletionResult
+```
+
+Sources: [README.md:54-57](), [README_cn.md:51-53](), [README.md:438-541]()
+
+## API Configuration Patterns
+
+Most DeepSeek integrations implement similar configuration patterns:
+
+```mermaid
+graph TD
+    APIConfig["API Configuration"]
+    
+    APIConfig --> ApiKey["API Key Management"]
+    APIConfig --> ModelSelect["Model Selection"]
+    APIConfig --> EndpointConfig["Endpoint Configuration"]
+    APIConfig --> ParamConfig["Parameter Configuration"]
+    
+    ApiKey --> EnvVar["Environment Variables"]
+    ApiKey --> ConfigFile["Configuration Files"]
+    ApiKey --> UI["User Interface Input"]
+    
+    ModelSelect --> ModelVersion["Model Version Selection"]
+    ModelSelect --> ModelCapability["Capability Selection"]
+    
+    EndpointConfig --> BaseURL["Base URL Configuration"]
+    EndpointConfig --> CustomEndpoint["Custom Endpoint Setting"]
+    
+    ParamConfig --> Temperature["Temperature Control"]
+    ParamConfig --> MaxTokens["Max Tokens Setting"]
+    ParamConfig --> TopP["Top P Configuration"]
+    ParamConfig --> SystemPrompt["System Prompt Definition"]
+```
+
+Sources: [README.md:16-42](), [README_cn.md:19-38]()
+
+Common configuration elements include:
+
+| Configuration Area | Elements | Description |
+|-------------------|----------|-------------|
+| API Key Management | Environment variables, Config files, UI settings | Secure handling of API credentials |
+| Model Selection | Model variant, capabilities | Selection between different DeepSeek models |
+| Endpoint Configuration | Base URL, custom endpoints | API endpoint configuration |
+| Parameter Configuration | Temperature, max tokens, top-p, system prompts | Response generation parameters |
+
+## Next Steps
+
+For more detailed information about specific categories of DeepSeek integrations, refer to the following pages:
+
+- For more on integration categories, see [Integration Categories](#1.1)
+- For more on integration methods, see [Integration Methods](#1.2)
+- For more on API configuration, see [API Configuration](#1.3)
+- For details on chat applications, see [Chat Applications](#2)
+- For details on productivity tools, see [Productivity Tools](#3)
+- For details on document tools, see [Document Tools](#4)
+- For details on IDE integrations, see [IDE Integrations](#5)
+- For details on browser extensions, see [Browser Extensions](#6)
+- For details on AI frameworks, see [AI Frameworks](#7)
+- For details on creative tools, see [Creative Tools](#8)
+- For details on knowledge management, see [Knowledge Management](#9)
+
 ---
 
- 
-## Resource Allocation and Topology
-
- V2 eliminates the need for manual auto-tuning by using analytical formulas to determine optimal resource usage.
-
- 
-### Analytical SM Tuning
-
- The method `get_theoretical_num_sms` calculates the required SM count based on hardware performance characteristics:
-
- 
- - **Bandwidth Modeling**: Considers `sm_read_gbs`, `sm_write_gbs`, `rdma_gbs`, and `nvlink_gbs` [deep_ep/buffers/elastic.py441-450](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L441-L450)
- - **Overlap**: Adjusts counts based on the `prefer_overlap_with_compute` flag to allow communication to hide behind computation [deep_ep/buffers/elastic.py121-125](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L121-L125)
- 
- 
-### Topology Domains
-
- DeepEP models the cluster as a logical grid of ranks:
-
- 
- - **Scale-up Domain**: Communication via NVLink (Intra-node/Intra-LSA) [deep_ep/utils/envs.py10-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L10-L25)
- - **Scale-out Domain**: Communication via RDMA (Inter-node/Rail-only) [deep_ep/utils/envs.py10-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L10-L25)
- - **Hybrid Mode**: When `allow_hybrid_mode=True`, the library uses a hierarchical approach, combining NVLink and RDMA to maximize throughput in large clusters [deep_ep/buffers/elastic.py120-121](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L120-L121)
- 
- **Sources:** [deep_ep/buffers/elastic.py113-470](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L113-L470) [README.md18-22](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L18-L22) [deep_ep/utils/envs.py7-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L7-L30)
-
- 
----
-
- 
-## Hardware and Software Requirements
-
- To utilize DeepEP V2, the following environment is required:
-
- 
- - **GPU Architecture**: NVIDIA Hopper (SM90) or newer (e.g., Blackwell/SM100) [README.md63-65](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L63-L65)
- - **CUDA**: 12.3 or above for SM90 support [README.md67-68](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L67-L68)
- - **NCCL**: 2.30.4 or above (recommended via `nvidia-nccl-cu13` pip package) [README.md70-79](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L70-L79)
- - **Interconnect**: NVLink for intra-node; RDMA (InfiniBand/RoCE) for inter-node [README.md71-72](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L71-L72)
- - **Python**: 3.8+ with PyTorch 2.10+ [README.md66-69](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L66-L69)
- 
- **Sources:** [README.md63-72](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L63-L72) [deep_ep/__init__.py46-70](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L46-L70)

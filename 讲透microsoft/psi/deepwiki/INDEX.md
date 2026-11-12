@@ -1,0 +1,32 @@
+# DeepWiki 索引 — microsoft/psi
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 321040 字符
+
+- [1 Overview](1-overview.md)
+- [2 Core Framework](2-core-framework.md)
+  - [2.1 Pipeline and Message Processing](2.1-pipeline-and-message-processing.md)
+  - [2.2 Data Persistence and Storage](2.2-data-persistence-and-storage.md)
+  - [2.3 Serialization System](2.3-serialization-system.md)
+  - [2.4 Stream Processing Operators](2.4-stream-processing-operators.md)
+- [3 Mixed Reality and HoloLens](3-mixed-reality-and-hololens.md)
+  - [3.1 HoloLens Data Capture](3.1-hololens-data-capture.md)
+  - [3.2 Data Export and Format Conversion](3.2-data-export-and-format-conversion.md)
+  - [3.3 Sigma Task Assistance Application](3.3-sigma-task-assistance-application.md)
+  - [3.4 Mixed Reality Framework Components](3.4-mixed-reality-framework-components.md)
+- [4 Visualization and Analysis](4-visualization-and-analysis.md)
+  - [4.1 PsiStudio and Timeline Navigation](4.1-psistudio-and-timeline-navigation.md)
+  - [4.2 Visualization Components and UI](4.2-visualization-components-and-ui.md)
+  - [4.3 Data Models and Stream Tree](4.3-data-models-and-stream-tree.md)
+- [5 External Integrations](5-external-integrations.md)
+  - [5.1 AI and Machine Learning with ONNX](5.1-ai-and-machine-learning-with-onnx.md)
+  - [5.2 Robotics Integration with ROS](5.2-robotics-integration-with-ros.md)
+  - [5.3 Speech Recognition and Processing](5.3-speech-recognition-and-processing.md)
+  - [5.4 Data Interoperability and Transport](5.4-data-interoperability-and-transport.md)
+  - [5.5 AI Model Server Integration](5.5-ai-model-server-integration.md)
+- [6 Media Processing](6-media-processing.md)
+  - [6.1 Image Processing and Computer Vision](6.1-image-processing-and-computer-vision.md)
+- [7 Development and Testing](7-development-and-testing.md)
+  - [7.1 Testing Framework and Practices](7.1-testing-framework-and-practices.md)
+  - [7.2 Build System and Configuration](7.2-build-system-and-configuration.md)
+  - [7.3 Contributing to Psi](7.3-contributing-to-psi.md)

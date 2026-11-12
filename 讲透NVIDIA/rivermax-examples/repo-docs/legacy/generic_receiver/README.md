@@ -1,0 +1,75 @@
+# generic_receiver
+
+## Description
+
+`generic_receiver` is an RX demo application that demonstrates receiving _generic_ data using Rivermax API of the [Rivermax SDK](https://developer.nvidia.com/networking/rivermax).
+
+>The code is provided "As Is" and any express or implied warranties, including,
+but not limited to, the implied warranties of merchantability and fitness for a particular
+purpose are disclaimed.
+
+### Details
+
+* Release date: 14-Aug-2024
+* Update date: 14-Aug-2024
+* Version: 1.51.6
+
+### Tested on
+
+* Rivermax: 1.51.6
+* OFED: 24.07-0.6.1.0
+* WinOF2: 24.7.50000
+* OS: 
+  * Ubuntu 22.04
+  * Windows 10
+* CUDA: 12.5
+* Hardware:
+  * ConnectX-6 DX
+  * BlueField-2
+
+## Build Option
+
+The application can be used to demonstrate GPUDirect. Add `-DRMAX_CUDA=ON` to `cmake` command-line to build with [CUDA-Toolkit](https://docs.nvidia.com/cuda/) support.
+
+## How to Run / Examples
+
+### Synopsis
+
+```shell
+generic_receiver --interface-ip <local IP> --multicast-dst <multicast group IP>  --port <multicast group UDP port#> --multicast-src <sender IP> [optional parameters]
+```
+
+To see all command-line options please invoke `generic_receiver --help`.
+
+> `--checksum-header` command-line flag can be used to demonstrate simple GPU utilization. It can be utilized when incoming packets have a header containing a sequence number and a checksum of the data.
+
+### Example #1: _Receiving a simple stream using a specific core affinity_
+
+This example demonstrates receiving a simple stream sent from a sender with source address 192.168.1.3.
+The stream is received via the NIC which has local IP 192.168.1.2. The multicast address and UDP ports
+on which the stream is being received are 239.5.5.5:56789.
+The application is set to run on cores #2, #3 and #4.
+
+```shell
+sudo ./generic_receiver --interface-ip 192.168.1.2 --multicast-dst 239.5.5.5 --multicast-src 192.168.1.3 --port 56789 --cpu-affinity 2,3,4
+```
+
+### Example #2: _Receiving a simple stream using defined data sizes_
+
+This example demonstrates receiving a simple stream with the same flow parameters as in the previous example, and the incoming packets are of size 1460 bytes. The initial 40 bytes are stripped from the payload as application header and placed in buffers allocated on the CPU. The remaining 1420 bytes are placed in dedicated payload buffers. In this case, the payload buffers are also allocated on the CPU. 
+
+```shell
+sudo ./generic_receiver --interface-ip 192.168.1.2 --multicast-dst 239.5.5.5 --multicast-src 192.168.1.3 --port 56789 --header-size 40 --data-size 1460
+```
+
+### Example #3: _Receiving generic data with GPUDirect on Windows_
+This example demonstrates receiving a stream in buffers allocated on GPU memory using GPUDirect and CUDA. When using CUDA, the following environment variable must be set. The GPU selected to be used for this stream is GPU #0. 
+
+```shell
+set RIVERMAX_ENABLE_CUDA=1 
+generic_receiver.exe --interface-ip 192.168.1.2 --multicast-dst 224.2.3.44 --multicast-src 192.168.1.3 --port 39608 --gpu 0
+```
+
+## Known Issues / Limitations
+
+None identified so far 

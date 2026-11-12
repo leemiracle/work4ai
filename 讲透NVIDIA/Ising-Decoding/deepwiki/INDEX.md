@@ -1,0 +1,30 @@
+# DeepWiki 索引 — NVIDIA/Ising-Decoding
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 172093 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Configuration Reference](1.2-configuration-reference.md)
+- [2 System Architecture](2-system-architecture.md)
+  - [2.1 Workflow Orchestration](2.1-workflow-orchestration.md)
+  - [2.2 Neural Network Model](2.2-neural-network-model.md)
+  - [2.3 QEC Surface Code Layer](2.3-qec-surface-code-layer.md)
+  - [2.4 Noise Model](2.4-noise-model.md)
+- [3 Data Pipeline](3-data-pipeline.md)
+  - [3.1 On-the-Fly Data Generation](3.1-on-the-fly-data-generation.md)
+  - [3.2 Precomputed Frames](3.2-precomputed-frames.md)
+- [4 Training](4-training.md)
+  - [4.1 Training Loop and Optimization](4.1-training-loop-and-optimization.md)
+  - [4.2 Distributed Training](4.2-distributed-training.md)
+- [5 Inference and Evaluation](5-inference-and-evaluation.md)
+  - [5.1 Logical Error Rate Evaluation](5.1-logical-error-rate-evaluation.md)
+  - [5.2 Decoder Ablation Study](5.2-decoder-ablation-study.md)
+  - [5.3 Evaluation Metrics](5.3-evaluation-metrics.md)
+- [6 Model Export and Deployment](6-model-export-and-deployment.md)
+  - [6.1 ONNX and TensorRT Export](6.1-onnx-and-tensorrt-export.md)
+  - [6.2 SafeTensors Export and CUDA-Q QEC Integration](6.2-safetensors-export-and-cuda-q-qec-integration.md)
+- [7 Testing and CI](7-testing-and-ci.md)
+  - [7.1 Test Suite Organization](7.1-test-suite-organization.md)
+  - [7.2 CI Workflows](7.2-ci-workflows.md)
+- [8 Glossary](8-glossary.md)

@@ -1,0 +1,33 @@
+# DeepWiki 索引 — langchain-ai/deep-agents-ui
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 300155 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Quick Start Guide](1.1-quick-start-guide.md)
+  - [1.2 System Architecture](1.2-system-architecture.md)
+- [2 Configuration and Connection](2-configuration-and-connection.md)
+  - [2.1 Configuration Management](2.1-configuration-management.md)
+  - [2.2 LangGraph Integration](2.2-langgraph-integration.md)
+- [3 Application Layout](3-application-layout.md)
+  - [3.1 Main Application Shell](3.1-main-application-shell.md)
+  - [3.2 Thread Navigation](3.2-thread-navigation.md)
+- [4 Chat System](4-chat-system.md)
+  - [4.1 ChatInterface Component](4.1-chatinterface-component.md)
+  - [4.2 useChat Hook](4.2-usechat-hook.md)
+  - [4.3 Message Processing and Display](4.3-message-processing-and-display.md)
+- [5 Agent Tools and Execution](5-agent-tools-and-execution.md)
+  - [5.1 Tool Call Visualization](5.1-tool-call-visualization.md)
+  - [5.2 Tool Approval and Interrupts](5.2-tool-approval-and-interrupts.md)
+- [6 Files and Tasks](6-files-and-tasks.md)
+  - [6.1 File Management](6.1-file-management.md)
+  - [6.2 Task Sidebar](6.2-task-sidebar.md)
+- [7 User Interface Components](7-user-interface-components.md)
+  - [7.1 Styling System](7.1-styling-system.md)
+  - [7.2 UI Component Library](7.2-ui-component-library.md)
+  - [7.3 Specialized Components](7.3-specialized-components.md)
+- [8 Development Guide](8-development-guide.md)
+  - [8.1 Dependencies and Build Configuration](8.1-dependencies-and-build-configuration.md)
+  - [8.2 Type System](8.2-type-system.md)
+  - [8.3 Code Quality and CI](8.3-code-quality-and-ci.md)
+- [9 Glossary](9-glossary.md)

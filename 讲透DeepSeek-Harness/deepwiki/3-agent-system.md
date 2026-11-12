@@ -1,156 +1,211 @@
-> 来源: [https://deepwiki.com/deepseek-ai/deepseek-harness/3-agent-system](https://deepwiki.com/deepseek-ai/deepseek-harness/3-agent-system)
-> DeepWiki deepseek-ai/deepseek-harness
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/deepseek-harness · page 3 Agent System · fetched 2026-11-04 -->
 
 # Agent System
 
-  Relevant source files 
- - [docs/architecture.i18n.yaml](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/docs/architecture.i18n.yaml)
- - [docs/architecture.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/docs/architecture.md?plain=1)
- - [docs/architecture.zh.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/docs/architecture.zh.md?plain=1)
- - [docs/persistence-catalog.i18n.yaml](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/docs/persistence-catalog.i18n.yaml)
- - [docs/persistence-catalog.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/docs/persistence-catalog.md?plain=1)
- - [docs/persistence-catalog.zh.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/docs/persistence-catalog.zh.md?plain=1)
- - [docs/tool-catalog.i18n.yaml](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/docs/tool-catalog.i18n.yaml)
- - [docs/tool-catalog.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/docs/tool-catalog.md?plain=1)
- - [docs/tool-catalog.zh.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/docs/tool-catalog.zh.md?plain=1)
- - [packages/core/agent-loop/README.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/README.md?plain=1)
- - [packages/core/agent-loop/src/agent.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/src/agent.ts)
- - [packages/core/agent-loop/src/index.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/src/index.ts)
- - [packages/core/agent-loop/src/tool-calls.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/src/tool-calls.ts)
- - [packages/core/agent-loop/tests/agent.spec.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/tests/agent.spec.ts)
- - [packages/core/agent-loop/tests/cancel.spec.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/tests/cancel.spec.ts)
- - [packages/core/agent-loop/tests/config-session-id.spec.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/tests/config-session-id.spec.ts)
- - [packages/core/agent-loop/tests/contract-regressions.spec.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/tests/contract-regressions.spec.ts)
- - [packages/core/agent-loop/tests/coverage-edges.spec.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/tests/coverage-edges.spec.ts)
- - [packages/core/agent-loop/tests/interception.spec.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/tests/interception.spec.ts)
- - [packages/core/agent-loop/tests/loop.spec.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/tests/loop.spec.ts)
- - [packages/core/agent-loop/tests/resume.spec.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/tests/resume.spec.ts)
- - [packages/core/agent-loop/tests/tool-calls.spec.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/tests/tool-calls.spec.ts)
- - [packages/core/agent-tool-presentation/README.i18n.yaml](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-tool-presentation/README.i18n.yaml)
- - [packages/core/agent-tool-presentation/README.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-tool-presentation/README.md?plain=1)
- - [packages/core/agent-tool-presentation/README.zh.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-tool-presentation/README.zh.md?plain=1)
- - [packages/core/agent/README.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent/README.md?plain=1)
- - [packages/core/agent/src/index.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent/src/index.ts)
- - [packages/core/agent/src/types.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent/src/types.ts)
- - [packages/core/agent/tests/agent.spec.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent/tests/agent.spec.ts)
- - [packages/core/session/README.i18n.yaml](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/session/README.i18n.yaml)
- - [packages/core/session/README.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/session/README.md?plain=1)
- - [packages/core/session/README.zh.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/session/README.zh.md?plain=1)
- - [packages/core/session/src/index.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/session/src/index.ts)
- - [packages/core/session/src/surface.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/session/src/surface.ts)
- - [packages/core/session/src/types.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/session/src/types.ts)
- - [packages/core/session/tests/session.spec.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/session/tests/session.spec.ts)
- - [packages/core/session/tests/surface.spec.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/session/tests/surface.spec.ts)
- - [packages/core/tools/README.i18n.yaml](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/tools/README.i18n.yaml)
- - [packages/core/tools/README.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/tools/README.md?plain=1)
- - [packages/core/tools/README.zh.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/tools/README.zh.md?plain=1)
- - [packages/core/tools/src/index.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/tools/src/index.ts)
- - [packages/core/tools/src/py-types.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/tools/src/py-types.ts)
- - [packages/core/tools/src/ts-types.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/tools/src/ts-types.ts)
- - [packages/core/tools/tests/execution-mode.spec.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/tools/tests/execution-mode.spec.ts)
- - [packages/core/tools/tests/gen-tool-catalog.spec.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/tools/tests/gen-tool-catalog.spec.ts)
- - [packages/core/tools/tests/py-types.spec.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/tools/tests/py-types.spec.ts)
- - [packages/core/tools/tests/tools.spec.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/tools/tests/tools.spec.ts)
- - [packages/core/tools/tests/ts-types.spec.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/tools/tests/ts-types.spec.ts)
- - [scripts/gen-tool-catalog.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/scripts/gen-tool-catalog.ts)
- - [snapshots/session/both-mode-turn/system-prompt.expected.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/snapshots/session/both-mode-turn/system-prompt.expected.md?plain=1)
- - [snapshots/session/cordis-inspect-jsdoc/system-prompt.expected.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/snapshots/session/cordis-inspect-jsdoc/system-prompt.expected.md?plain=1)
- 
-  The Agent System is the core orchestration layer of DeepSeek Harness. It manages the lifecycle of autonomous agents, their interaction with LLMs, and the execution of tools. The system is built on a plugin-based architecture using the **Cordis** framework, where the agent loop itself is a replaceable service.
+<details>
+<summary>Relevant source files</summary>
 
- 
-## Architectural Overview
+The following files were used as context for generating this wiki page:
 
- Agents in `dsh` are driven by a turn-based state machine. A **Turn** represents a complete cycle of work, starting from a user input and ending when no further actions are required. Each turn consists of one or more **Steps**, where a step is defined as a single LLM request followed by the execution of any resulting tool calls [docs/architecture.md75-82](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/docs/architecture.md?plain=1#L75-L82)
+- [docs/architecture.i18n.yaml](docs/architecture.i18n.yaml)
+- [docs/architecture.md](docs/architecture.md)
+- [docs/architecture.zh.md](docs/architecture.zh.md)
+- [docs/subsystems/core.i18n.yaml](docs/subsystems/core.i18n.yaml)
+- [docs/subsystems/core.md](docs/subsystems/core.md)
+- [docs/subsystems/core.zh.md](docs/subsystems/core.zh.md)
+- [packages/core/agent-loop/README.i18n.yaml](packages/core/agent-loop/README.i18n.yaml)
+- [packages/core/agent-loop/README.md](packages/core/agent-loop/README.md)
+- [packages/core/agent-loop/README.zh.md](packages/core/agent-loop/README.zh.md)
+- [packages/core/agent-loop/src/agent.ts](packages/core/agent-loop/src/agent.ts)
+- [packages/core/agent-loop/src/index.ts](packages/core/agent-loop/src/index.ts)
+- [packages/core/agent-loop/tests/agent.spec.ts](packages/core/agent-loop/tests/agent.spec.ts)
+- [packages/core/agent-loop/tests/cancel.spec.ts](packages/core/agent-loop/tests/cancel.spec.ts)
+- [packages/core/agent-loop/tests/config-session-id.spec.ts](packages/core/agent-loop/tests/config-session-id.spec.ts)
+- [packages/core/agent-loop/tests/contract-regressions.spec.ts](packages/core/agent-loop/tests/contract-regressions.spec.ts)
+- [packages/core/agent-loop/tests/coverage-edges.spec.ts](packages/core/agent-loop/tests/coverage-edges.spec.ts)
+- [packages/core/agent-loop/tests/interception.spec.ts](packages/core/agent-loop/tests/interception.spec.ts)
+- [packages/core/agent-loop/tests/loop.spec.ts](packages/core/agent-loop/tests/loop.spec.ts)
+- [packages/core/agent-loop/tests/resume.spec.ts](packages/core/agent-loop/tests/resume.spec.ts)
+- [packages/core/agent-loop/tests/scope-lifecycle.spec.ts](packages/core/agent-loop/tests/scope-lifecycle.spec.ts)
+- [packages/core/agent/README.i18n.yaml](packages/core/agent/README.i18n.yaml)
+- [packages/core/agent/README.md](packages/core/agent/README.md)
+- [packages/core/agent/README.zh.md](packages/core/agent/README.zh.md)
+- [packages/core/agent/src/index.ts](packages/core/agent/src/index.ts)
+- [packages/core/agent/src/types.ts](packages/core/agent/src/types.ts)
+- [packages/core/agent/tests/agent.spec.ts](packages/core/agent/tests/agent.spec.ts)
 
- 
-### Core Components
+</details>
 
- 
-| Service | Context Key | Responsibility |
-|---|---|---|
-| AgentRegistry | ctx.agents | Tracks live agents and carries the initiating initiator scope packages/core/agent/README.md9-11 |
-| AgentLoop | ctx.agentLoop | The concrete implementation of the agent driver and factory packages/core/agent-loop/README.md9-10 |
-| ReactLoopAgent | N/A | The default internal implementation of the Agent interface packages/core/agent-loop/src/agent.ts69-76 |
 
- 
-### Entity Mapping: Natural Language to Code
 
- The following diagram maps high-level agent concepts to their corresponding classes and service keys in the codebase.
+The Agent System is the core orchestration layer of DeepSeek Harness (`dsh`) [packages/core/agent/src/types.ts:15-46](). It manages the lifecycle, creation, driving, conversation turn progression, and tool execution of autonomous agents within the modular, plugin-driven Cordis framework [packages/core/agent-loop/src/agent.ts:70-160](). This system operates by composing durable session logs, live agent handles, scoped contexts, and event-driven workflows [docs/architecture.md:74-87]().
 
- Agent System Entity Map
+This page provides a high-level overview of the key components and their relationships in the agent system. For detailed technical information, implementation specifics, and advanced features, see the linked child pages:
+- [Agent Loop & Lifecycle](#3.1) — Deep dive into `ReactLoopAgent`: turn/step state machine, inbox management, cancellation, epoch headers, maintenance mode, and publication transactions.
+- [Tool Registry & Execution Pipeline](#3.2) — Covers `ToolRuntime`: tool registration, pre/execute/post waterfall, Code Mode (`run_code` + SDK generation), scheduling, and SDK rendering.
+- [Session Log & Persistence](#3.3) — Explains the append-only `SessionEvent` log, Surface projection, `deriveMessages()`, forking/lineage, and persistence backends.
+- [Subagent Orchestration](#3.4) — How parent agents delegate to child agents: one-shot vs. continuable, in-process vs. out-of-process drivers (ACP, Codex, Claude Code, DSH SDK).
+- [LLM Adapters & Streaming](#3.5) — The `LlmRuntime` seam, adapter registration, streaming protocol, retry policies, and token metering.
 
- 
+---
+
+## Core Components & Entity Mapping
+
+At the heart of the agent system are agents modeled as turn-based state machines [packages/core/agent-loop/src/agent.ts:18-37](). A **Turn** may consist of zero or more **Steps**, where each step typically corresponds to an LLM request and tool-call execution [packages/core/agent-loop/README.md:11-94](). This flow is carefully recorded in the durable session log and projected live for UI, plugins, and orchestrators to consume [docs/architecture.md:59-64]().
+
+Key packages and services orchestrate the agent lifecycle and execution:
+
+| Service / Class | Context Key | Responsibility |
+|-----------------|-------------|----------------|
+| `AgentRegistry` (`@deepseek-ai/dsh-agent`) [packages/core/agent/src/types.ts:15-46]() | `ctx.agents` | Provides live agent handles and registry. Manages creation, resuming, cancellation, and event observability for agents. |
+| `AgentLoop` (`@deepseek-ai/dsh-agent-loop`) [packages/core/agent-loop/README.md:26-38]() | `ctx.agentLoop` | Implements the default agent driver—the event loop driving turns, steps, and requests. |
+| `ReactLoopAgent` (`@deepseek-ai/dsh-agent-loop/src/agent.ts`) [packages/core/agent-loop/src/agent.ts:98-138]() | N/A | Concrete `Agent` implementation driving turn/step state machine, inbox management, and interaction with system prompt and runtime context projections. |
+| `ReactLoopInbox` | N/A | Manages pending message queues (`next-turn` and `next-step`) for the agent [packages/core/agent-loop/src/agent.ts:132-132](). |
+| `Scope` (`@deepseek-ai/dsh-scope`) | Library, no key | Agent-scoped registrations and lifecycles supporting per-agent isolated registrations of tools, prompt sections, and listeners [docs/architecture.md:64-64](). |
+
+Diagram: Natural Language to Code Entity Mapping
+```mermaid
+graph TB
+    subgraph NaturalLanguageSpace["Natural Language Space"]
+        AgentInstance["Agent Instance"]
+        AgentLifecycle["Agent Lifecycle (Turn/Step)"]
+        AgentInbox["Agent Inbox (pending messages)"]
+        ExecutionScope["Execution Scope (Scoped Registrations)"]
+    end
+
+    subgraph CodeEntitySpace["Code Entity Space"]
+        ReactLoopAgent["ReactLoopAgent (class)"]
+        AgentRegistry["ctx.agents (AgentRegistry service)"]
+        AgentEventDispatch["agentEvents (dispatchers)"]
+        AgentHandle["AgentHandle (returned by ctx.agents)"]
+        ReactLoopInbox["ReactLoopInbox (message queue)"]
+        ScopeInstance["Scope (agent scoped registration)"]
+    end
+
+    AgentInstance --- ReactLoopAgent
+    AgentInstance --- AgentRegistry
+    AgentLifecycle --- AgentEventDispatch
+    AgentLifecycle --- AgentHandle
+    AgentInbox --- ReactLoopInbox
+    ExecutionScope --- ScopeInstance
 ```
+Sources: [packages/core/agent-loop/src/agent.ts:98-169](), [packages/core/agent/src/types.ts:15-46](), [packages/core/agent/README.md:28-67](), [docs/architecture.md:74-87]()
 
+---
+
+## 3.1 Agent Loop & Lifecycle
+
+The `@deepseek-ai/dsh-agent-loop` package implements the default agent lifecycle driver, realized primarily by the `ReactLoopAgent` class [packages/core/agent-loop/src/agent.ts:98-138](). This driver manages:
+
+- Creation and resumption of agent sessions bound to durable logs [packages/core/agent-loop/README.md:59-71]().
+- Driving the agent as a turn- and step-based state machine [packages/core/agent-loop/src/agent.ts:42-51]().
+- Managing pending inputs in per-agent inboxes (with separate queues for `next-turn` and `next-step`) [packages/core/agent/src/types.ts:38-45]().
+- Assembling prompt sections including user messages, system prompt, and tool schemas [packages/core/agent-loop/src/agent.ts:132-138]().
+- Executing the lifecycle workflow: dispatching model requests, streaming responses, executing tool calls, and appending new session events [packages/core/agent-loop/src/agent.ts:100-112]().
+
+For detailed implementation specifics, see [Agent Loop & Lifecycle](#3.1).
+
+Sources: [docs/architecture.md:74-101](), [packages/core/agent-loop/src/agent.ts:70-160](), [packages/core/agent-loop/README.md:11-94]()
+
+---
+
+## 3.2 Tool Registry & Execution Pipeline
+
+Central to agent capabilities is the tool execution pipeline managed by the `ToolRuntime` service (`ctx.tools`) [docs/architecture.md:61-61](). It provides:
+
+- Registration and scoping of tools to agents and contexts.
+- A guarded waterfall lifecycle for tool calls broken into `pre-execute`, `execute`, and `post-execute` hooks [packages/core/agent-loop/tests/contract-regressions.spec.ts:99-105]().
+- Support for parallel-safe concurrent tool calls with a configurable limit (`maxParallelToolCalls`), alongside exclusive calls [packages/core/agent-loop/README.md:46-57]().
+- A "Code Mode" combining tool execution with SDK code generation.
+
+For full functional and configuration details, see [Tool Registry & Execution Pipeline](#3.2).
+
+Sources: [docs/architecture.md:65-65](), [packages/core/agent-loop/README.md:73-74](), [packages/core/agent-loop/tests/contract-regressions.spec.ts:99-105]()
+
+---
+
+## 3.3 Session Log & Persistence
+
+The session log, managed by the `SessionStore` (`ctx.sessions`), is the single source of truth for conversation state and tool outcomes [docs/architecture.md:59-59]().
+
+- An append-only log of `SessionEvent` objects representing user, assistant, system messages, tool calls, and boundaries [packages/core/agent/src/types.ts:89-104]().
+- Session projections derive live in-memory views such as message chains (`deriveMessages()`), inbox states, and rich runtime context [packages/core/agent-loop/tests/contract-regressions.spec.ts:75-78]().
+- Persistence backends support JSONL and SQLite file formats.
+
+See [Session Log & Persistence](#3.3) for an extensive technical exposition.
+
+Sources: [docs/architecture.md:61-64](), [docs/architecture.md:68-71](), [packages/core/agent-loop/src/inbox.ts:10-40]()
+
+---
+
+## 3.4 Subagent Orchestration
+
+Complex agent scenarios require delegation and teamwork. The subagent orchestration subsystem enables agents to manage child agents with flexible lifecycles.
+
+- Subagents operate in one-shot mode (single turn) or as continuable multi-turn sessions [packages/core/agent/README.md:30-33]().
+- Drivers include in-process loops, or out-of-process agents connected via protocols such as ACP (Agent Client Protocol), Codex, Claude Code, or through the DSH SDK.
+- Policy inheritance mechanisms allow parent agents to control or restrict child agent capabilities.
+
+For a deeper understanding, see [Subagent Orchestration](#3.4).
+
+Sources: [packages/core/agent/README.md:28-35]()
+
+---
+
+## 3.5 LLM Adapters & Streaming
+
+The `LlmRuntime` seam, accessible via `ctx.llm`, abstracts the heterogeneity of LLM providers and streaming protocols [docs/architecture.md:65-65]().
+
+- Registers adapters that normalize prompt preparation, request routing, and streaming response consumption.
+- Supports advanced features like token metering, retry policies, and reasoning effort metadata [packages/core/agent-loop/README.md:50-52]().
+- Implements streaming chunk and block assembly facilitating continuous streaming of assistant responses [packages/core/agent-loop/tests/loop.spec.ts:103-111]().
+- Includes out-of-the-box adapter implementations for DeepSeek and Pi.ai services.
+
+Consult [LLM Adapters & Streaming](#3.5) for the detailed adapter lifecycle and streaming protocol.
+
+Sources: [docs/architecture.md:60-62](), [packages/core/agent-loop/src/agent.ts:19-28](), [packages/core/agent-loop/tests/loop.spec.ts:103-111]()
+
+---
+
+## Service Interaction Overview
+
+Diagram: Agent Step Subsystem Interaction
+```mermaid
+sequenceDiagram
+    participant Agent as "ReactLoopAgent"
+    participant SP as "SystemPromptProjection"
+    participant Sess as "SessionStore (ctx.sessions)"
+    participant LLM as "LlmRuntime (ctx.llm)"
+    participant Tools as "ToolRuntime (ctx.tools)"
+
+    Agent->>SP: "renderPrompt(agentCtx)"
+    SP-->>Agent: "PromptAssembly"
+    Agent->>Sess: "deriveMessages()"
+    Sess-->>Agent: "Message[]"
+    Agent->>LLM: "stream(preparedRequest)"
+    LLM-->>Agent: "StreamChunk*"
+    Agent->>Tools: "executeToolCalls(toolCalls)"
+    Tools-->>Agent: "ToolResult[]"
+    Agent->>Sess: "append(tool/results)"
 ```
+Sources: [packages/core/agent-loop/src/agent.ts:18-37](), [packages/core/agent-loop/README.md:11-76](), [docs/architecture.md:74-102]()
 
- Sources: [packages/core/agent-loop/src/agent.ts69-104](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/src/agent.ts#L69-L104) [packages/core/agent/README.md9-15](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent/README.md?plain=1#L9-L15) [packages/core/agent-loop/README.md44-45](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/README.md?plain=1#L44-L45)
+---
 
- 
-## Agent Lifecycle & The Loop
+# See Also
 
- The `AgentLoop` service (provided by `dsh-agent-loop`) manages the creation and resumption of agents. Agents are identified by a `SessionId`, which is shared with their durable session log [packages/core/agent-loop/README.md17-19](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/README.md?plain=1#L17-L19)
+- [Agent Loop & Lifecycle](#3.1)
+- [Tool Registry & Execution Pipeline](#3.2)
+- [Session Log & Persistence](#3.3)
+- [Subagent Orchestration](#3.4)
+- [LLM Adapters & Streaming](#3.5)
 
- The loop follows a `React` pattern managed by `ReactLoopAgent`:
+---
+Sources:
+- docs/architecture.md:3-102
+- packages/core/agent-loop/src/agent.ts:1-171
+- packages/core/agent-loop/README.md:1-94
+- packages/core/agent/src/types.ts:1-56
 
- 
- - **Claim**: Claim input from the `Inbox` [packages/core/agent-loop/src/agent.ts120-125](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/src/agent.ts#L120-L125)
- - **Assemble**: Gather system prompts and tool schemas via `assembleContextFor` [packages/core/agent/src/index.ts100](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent/src/index.ts#L100-L100)
- - **Request**: Call the LLM via `ctx.llm` using `agent/request` [docs/architecture.md86](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/docs/architecture.md?plain=1#L86-L86)
- - **Execute**: Run tools via `ctx.tools` [docs/architecture.md87](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/docs/architecture.md?plain=1#L87-L87)
- - **Repeat**: If tools owe another request, start a new step [docs/architecture.md89](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/docs/architecture.md?plain=1#L89-L89)
- 
- For a deep dive into the state machine, cancellation, and turn boundaries, see **[Agent Loop & Lifecycle](https://deepwiki.com/deepseek-ai/deepseek-harness/3.1-agent-loop-and-lifecycle)**.
+---
 
- Sources: [docs/architecture.md75-93](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/docs/architecture.md?plain=1#L75-L93) [packages/core/agent-loop/src/agent.ts120-125](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/src/agent.ts#L120-L125) [packages/core/agent-loop/README.md13-26](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/README.md?plain=1#L13-L26)
-
- 
-## Tool Registry & Execution
-
- Capabilities are exposed to agents as tools. The `ToolRuntime` service (`ctx.tools`) manages a scoped registry where tools can be registered globally or for specific agents [packages/core/tools/src/index.ts137-140](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/tools/src/index.ts#L137-L140) The execution pipeline is guarded by a waterfall of events: `tools/pre-execute`, `tools/execute`, and `tools/post-execute` [packages/core/tools/src/index.ts152-164](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/tools/src/index.ts#L152-L164)
-
- For details on tool registration, parallel execution, and "Code Mode," see **[Tool Registry & Execution Pipeline (#3.2)]**.
-
- Sources: [packages/core/tools/src/index.ts137-164](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/tools/src/index.ts#L137-L164) [packages/core/tools/README.md10-12](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/tools/README.md?plain=1#L10-L12)
-
- 
-## Session Log & Persistence
-
- Every action taken by an agent is recorded in an append-only `SessionEvent` log. This log is the "source of truth" for the agent's interaction history; the model's history is projected from this log using `deriveMessages()` [packages/core/session/src/index.ts19-20](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/session/src/index.ts#L19-L20) This ensures that any agent state can be reconstructed for resumption or forking [packages/core/session/src/index.ts17-18](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/session/src/index.ts#L17-L18)
-
- For information on the event schema, lineage, and persistence backends (JSONL/SQLite), see **[Session Log & Persistence (#3.3)]**.
-
- Sources: [packages/core/session/src/index.ts19-20](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/session/src/index.ts#L19-L20) [packages/core/session/src/index.ts17-18](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/session/src/index.ts#L17-L18) [docs/persistence-catalog.md10](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/docs/persistence-catalog.md?plain=1#L10-L10)
-
- 
-## Subagent Orchestration
-
- Agents can delegate tasks to subagents. This is handled via a capability seam (`ctx.subagents`), allowing for various implementations—from in-process child agents to out-of-process agents communicating via the **Agent Client Protocol (ACP)** [docs/tool-catalog.md19](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/docs/tool-catalog.md?plain=1#L19-L19) Runtime ownership is tracked via `ctx.agents.isOwnedBy()` [packages/core/agent/README.md32](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent/README.md?plain=1#L32-L32)
-
- For orchestration policies and delegation mechanisms, see **[Subagent Orchestration (#3.4)]**.
-
- Sources: [packages/core/agent/README.md32](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent/README.md?plain=1#L32-L32) [docs/tool-catalog.md19](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/docs/tool-catalog.md?plain=1#L19-L19)
-
- 
-## LLM Adapters
-
- The agent loop is decoupled from specific LLM providers through the `LlmRuntime` (`ctx.llm`). Adapters translate the internal `Message` and `StreamChunk` vocabulary into provider-specific formats [packages/core/agent-loop/src/agent.ts19-27](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/src/agent.ts#L19-L27)
-
- For details on streaming, block assembly, and adapter registration, see **[LLM Adapters & Streaming (#3.5)]**.
-
- Sources: [packages/core/agent-loop/src/agent.ts19-27](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/src/agent.ts#L19-L27) [docs/architecture.md61](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/docs/architecture.md?plain=1#L61-L61)
-
- 
-## Service Interactions
-
- The following diagram illustrates how the `AgentLoop` orchestrates various services during a single step.
-
- Agent Step Orchestration
-
- 
-```
-
-```
-
- Sources: [docs/architecture.md75-93](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/docs/architecture.md?plain=1#L75-L93) [packages/core/agent-loop/src/agent.ts18-37](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/src/agent.ts#L18-L37) [packages/core/agent-loop/src/tool-calls.ts36](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/agent-loop/src/tool-calls.ts#L36-L36) [packages/core/session/src/index.ts19-20](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/core/session/src/index.ts#L19-L20)

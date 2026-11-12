@@ -1,0 +1,33 @@
+# DeepWiki 索引 — huggingface/cookbook
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 385519 字符
+
+- [1 Open-Source AI Cookbook Overview](1-open-source-ai-cookbook-overview.md)
+  - [1.1 Repository Structure and Organization](1.1-repository-structure-and-organization.md)
+  - [1.2 Contributing to the Cookbook](1.2-contributing-to-the-cookbook.md)
+- [2 Retrieval-Augmented Generation (RAG) Systems](2-retrieval-augmented-generation-rag-systems.md)
+  - [2.1 Basic RAG Implementations](2.1-basic-rag-implementations.md)
+  - [2.2 Advanced RAG Techniques](2.2-advanced-rag-techniques.md)
+  - [2.3 Structured Generation for RAG](2.3-structured-generation-for-rag.md)
+  - [2.4 RAG with Different Vector Databases](2.4-rag-with-different-vector-databases.md)
+  - [2.5 Evaluating RAG Systems](2.5-evaluating-rag-systems.md)
+- [3 Agent Systems](3-agent-systems.md)
+  - [3.1 Tool-Based Agents](3.1-tool-based-agents.md)
+  - [3.2 Multi-Agent Architectures](3.2-multi-agent-architectures.md)
+  - [3.3 Agent Applications](3.3-agent-applications.md)
+  - [3.4 RAG with Agents](3.4-rag-with-agents.md)
+- [4 Model Fine-tuning Techniques](4-model-fine-tuning-techniques.md)
+  - [4.1 Fine-tuning Language Models](4.1-fine-tuning-language-models.md)
+  - [4.2 Fine-tuning Vision Models](4.2-fine-tuning-vision-models.md)
+  - [4.3 Fine-tuning Vision-Language Models](4.3-fine-tuning-vision-language-models.md)
+  - [4.4 Parameter-Efficient Fine-tuning](4.4-parameter-efficient-fine-tuning.md)
+- [5 Enterprise Hub and Deployment](5-enterprise-hub-and-deployment.md)
+  - [5.1 Inference Options](5.1-inference-options.md)
+  - [5.2 Automatic Embeddings with Inference Endpoints](5.2-automatic-embeddings-with-inference-endpoints.md)
+  - [5.3 Building ML Demos with Gradio and Spaces](5.3-building-ml-demos-with-gradio-and-spaces.md)
+  - [5.4 Interactive Development with JupyterLab Spaces](5.4-interactive-development-with-jupyterlab-spaces.md)
+  - [5.5 Data Annotation with Argilla](5.5-data-annotation-with-argilla.md)
+- [6 Evaluation and Testing](6-evaluation-and-testing.md)
+  - [6.1 LLM-as-a-Judge Evaluation](6.1-llm-as-a-judge-evaluation.md)
+  - [6.2 Structured Evaluation Approaches](6.2-structured-evaluation-approaches.md)

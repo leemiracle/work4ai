@@ -1,0 +1,43 @@
+# DeepWiki 索引 — openJiuwen-ai/agent-memory
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-11-02
+> 结构 30 页 · 全文 276634 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started and Configuration](1.1-getting-started-and-configuration.md)
+  - [1.2 Architecture Map](1.2-architecture-map.md)
+- [2 Memory Core Engine](2-memory-core-engine.md)
+  - [2.1 LongTermMemory API and Lifecycle](2.1-longtermmemory-api-and-lifecycle.md)
+  - [2.2 Memory Managers (Write and Search Paths)](2.2-memory-managers-write-and-search-paths.md)
+  - [2.3 Middle-Term Memory (MemoryTurbo)](2.3-middle-term-memory-memoryturbo.md)
+  - [2.4 Extraction and Generation Pipeline](2.4-extraction-and-generation-pipeline.md)
+  - [2.5 Dreaming and Ebbinghaus Forgetting](2.5-dreaming-and-ebbinghaus-forgetting.md)
+  - [2.6 Graph Memory](2.6-graph-memory.md)
+  - [2.7 Memory Metadata and Migrations](2.7-memory-metadata-and-migrations.md)
+- [3 Foundation Layer](3-foundation-layer.md)
+  - [3.1 Memory Index Backends](3.1-memory-index-backends.md)
+  - [3.2 Vector Stores](3.2-vector-stores.md)
+  - [3.3 KV, DB and Message Stores](3.3-kv-db-and-message-stores.md)
+  - [3.4 Filter DSL](3.4-filter-dsl.md)
+  - [3.5 Storage Codecs and Security](3.5-storage-codecs-and-security.md)
+  - [3.6 LLM, Embedding and Prompt Layer](3.6-llm-embedding-and-prompt-layer.md)
+- [4 Servers and Interfaces](4-servers-and-interfaces.md)
+  - [4.1 REST Memory Server](4.1-rest-memory-server.md)
+  - [4.2 MCP Server](4.2-mcp-server.md)
+  - [4.3 Agent Memory Plugins](4.3-agent-memory-plugins.md)
+- [5 Agent Memory Platform (Management Console)](5-agent-memory-platform-management-console.md)
+  - [5.1 Platform Backend Services](5.1-platform-backend-services.md)
+  - [5.2 Platform Web UI (Vue)](5.2-platform-web-ui-vue.md)
+- [6 Operations, Deployment and Testing](6-operations-deployment-and-testing.md)
+  - [6.1 Deployment](6.1-deployment.md)
+  - [6.2 Testing Strategy](6.2-testing-strategy.md)
+  - [6.3 Documentation and Licensing](6.3-documentation-and-licensing.md)
+- [7 Glossary](7-glossary.md)
+
+## 附：结构清单外的页
+- [Admin, Config Center and Log Center APIs](x1-admin-config-center-and-log-center-apis.md)
+- [Auth Center and Security](x2-auth-center-and-security.md)
+- [File Memory Index (Markdown + SQLite)](x3-file-memory-index-markdown-sqlite.md)
+- [Log Center and Ops Center](x4-log-center-and-ops-center.md)
+- [Platform Persistence and Migrations](x5-platform-persistence-and-migrations.md)
+- [Store Factory and Backend Selection](x6-store-factory-and-backend-selection.md)

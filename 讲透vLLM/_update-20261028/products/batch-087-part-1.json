@@ -1,0 +1,1501 @@
+{
+ "nodes": [
+  {
+   "id": "document:vllm/parser/AGENTS.md",
+   "type": "document",
+   "name": "AGENTS.md",
+   "filePath": "vllm/parser/AGENTS.md",
+   "summary": "parser 包设计文档：Parser 统一推理提取与工具调用提取；DelegatingParser 包装旧 ReasoningParser+ToolParser 对；engine/ 声明式引擎（terminal/transition/content event 的 ParserEngineConfig）；每模型族一文件（大多继承 ParserEngine，少数为 DelegatingParser 包装）。",
+   "tags": [
+    "documentation",
+    "parser",
+    "agents",
+    "layout"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/parser/abstract_parser.py",
+   "type": "file",
+   "name": "abstract_parser.py",
+   "filePath": "vllm/parser/abstract_parser.py",
+   "summary": "Parser 抽象层（1052 行）：StreamState 流状态、Parser 统一解析接口（parse/parse_delta/is_reasoning_end）、DelegatingParser（22 方法，把 legacy ReasoningParser+ToolParser 对接入统一接口）与 StructuredOutputs→xgrammar Format 映射。",
+   "tags": [
+    "parser",
+    "abstract",
+    "delegating",
+    "streaming"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/parser/beam.py",
+   "type": "file",
+   "name": "beam.py",
+   "filePath": "vllm/parser/beam.py",
+   "summary": "Beam 模型解析器：基于 response_template 元数据 + 语法约束（CheckpointResponseTemplateParser）。",
+   "tags": [
+    "beam",
+    "response-template",
+    "tool-calls"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/parser/cohere_command.py",
+   "type": "file",
+   "name": "cohere_command.py",
+   "filePath": "vllm/parser/cohere_command.py",
+   "summary": "Cohere Command 解析器（692 行）：structural_tag 风格注册表、JSON schema→xgrammar EBNF 的工具 schema 收集、Chat Completions response_format 与 melody 引用转换，CohereCommandParser 组合全部。",
+   "tags": [
+    "cohere",
+    "structural-tags",
+    "xgrammar",
+    "schema"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/parser/deepseek_v41.py",
+   "type": "file",
+   "name": "deepseek_v41.py",
+   "filePath": "vllm/parser/deepseek_v41.py",
+   "summary": "DeepSeek V4.1 解析器（薄壳：config+Parser 子类）。",
+   "tags": [
+    "deepseek",
+    "v41",
+    "thin"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/parser/granite.py",
+   "type": "file",
+   "name": "granite.py",
+   "filePath": "vllm/parser/granite.py",
+   "summary": "Granite 解析器（arg converter + config + ParserEngine 子类）。",
+   "tags": [
+    "granite",
+    "parser-engine",
+    "tool-calls"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/parser/granite_thinking.py",
+   "type": "file",
+   "name": "granite_thinking.py",
+   "filePath": "vllm/parser/granite_thinking.py",
+   "summary": "Granite 4.2 解析器：同 Nemotron V3 格式 + 内容前导换行剥离。",
+   "tags": [
+    "granite",
+    "thinking",
+    "nemotron-format"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/parser/harmony.py",
+   "type": "file",
+   "name": "harmony.py",
+   "filePath": "vllm/parser/harmony.py",
+   "summary": "Harmony 解析器（580 行）：OpenAI harmony 格式分段（_SegmentType/Segment/ChunkResult）、tag 组装、structural tag 生成与请求约束规范化。",
+   "tags": [
+    "harmony",
+    "openai",
+    "segments",
+    "structural-tags"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/parser/llama_json.py",
+   "type": "file",
+   "name": "llama_json.py",
+   "filePath": "vllm/parser/llama_json.py",
+   "summary": "Llama JSON 工具调用解析器：完整输出校验 + arg converter + config。",
+   "tags": [
+    "llama",
+    "json",
+    "tool-calls",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/parser/mimo.py",
+   "type": "file",
+   "name": "mimo.py",
+   "filePath": "vllm/parser/mimo.py",
+   "summary": "MiMo 解析器（Qwen3 格式 + arg converter 薄壳）。",
+   "tags": [
+    "mimo",
+    "qwen3-format",
+    "thin"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/parser/abstract_parser.py:StreamState",
+   "type": "class",
+   "name": "StreamState",
+   "filePath": "vllm/parser/abstract_parser.py",
+   "summary": "parse_delta 的可变流状态（每流一个）。",
+   "tags": [
+    "stream-state",
+    "mutable",
+    "per-stream"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    67,
+    105
+   ]
+  },
+  {
+   "id": "class:vllm/parser/abstract_parser.py:Parser",
+   "type": "class",
+   "name": "Parser",
+   "filePath": "vllm/parser/abstract_parser.py",
+   "summary": "统一解析接口（11 方法）：reasoning/content/tool calls。",
+   "tags": [
+    "parser",
+    "abstract",
+    "unified"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    108,
+    278
+   ]
+  },
+  {
+   "id": "class:vllm/parser/abstract_parser.py:DelegatingParser",
+   "type": "class",
+   "name": "DelegatingParser",
+   "filePath": "vllm/parser/abstract_parser.py",
+   "summary": "委托 Parser（22 方法）：legacy ReasoningParser+ToolParser 对的适配。",
+   "tags": [
+    "delegating",
+    "adapter",
+    "legacy"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    344,
+    1051
+   ]
+  },
+  {
+   "id": "class:vllm/parser/beam.py:BeamReasoningParser",
+   "type": "class",
+   "name": "BeamReasoningParser",
+   "filePath": "vllm/parser/beam.py",
+   "summary": "选 BeamParser 的推理解析器。",
+   "tags": [
+    "beam",
+    "reasoning",
+    "selector"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    75,
+    95
+   ]
+  },
+  {
+   "id": "class:vllm/parser/beam.py:BeamParser",
+   "type": "class",
+   "name": "BeamParser",
+   "filePath": "vllm/parser/beam.py",
+   "summary": "Beam 输出解析（response_template+语法约束，3 方法）。",
+   "tags": [
+    "beam",
+    "response-template",
+    "grammar"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    106,
+    262
+   ]
+  },
+  {
+   "id": "class:vllm/parser/cohere_command.py:CohereTagRegistry",
+   "type": "class",
+   "name": "CohereTagRegistry",
+   "filePath": "vllm/parser/cohere_command.py",
+   "summary": "structural_tag 触发/结束对。",
+   "tags": [
+    "tag-registry",
+    "trigger-end",
+    "namedtuple"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    63,
+    67
+   ]
+  },
+  {
+   "id": "class:vllm/parser/cohere_command.py:CohereCommandParser",
+   "type": "class",
+   "name": "CohereCommandParser",
+   "filePath": "vllm/parser/cohere_command.py",
+   "summary": "Cohere Command 统一解析器（11 方法）。",
+   "tags": [
+    "cohere",
+    "unified",
+    "parser"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    472,
+    691
+   ]
+  },
+  {
+   "id": "class:vllm/parser/granite.py:GraniteParser",
+   "type": "class",
+   "name": "GraniteParser",
+   "filePath": "vllm/parser/granite.py",
+   "summary": "Granite ParserEngine 子类。",
+   "tags": [
+    "granite",
+    "parser-engine",
+    "ibm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    79,
+    89
+   ]
+  },
+  {
+   "id": "class:vllm/parser/granite_thinking.py:GraniteThinkingParser",
+   "type": "class",
+   "name": "GraniteThinkingParser",
+   "filePath": "vllm/parser/granite_thinking.py",
+   "summary": "Granite 4.2：Nemotron V3 格式+前导换行剥离（5 方法）。",
+   "tags": [
+    "granite",
+    "thinking",
+    "newline-strip"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    44,
+    131
+   ]
+  },
+  {
+   "id": "class:vllm/parser/harmony.py:_SegmentType",
+   "type": "class",
+   "name": "_SegmentType",
+   "filePath": "vllm/parser/harmony.py",
+   "summary": "harmony 段类型枚举。",
+   "tags": [
+    "segment-type",
+    "enum",
+    "harmony"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    60,
+    76
+   ]
+  },
+  {
+   "id": "class:vllm/parser/harmony.py:Segment",
+   "type": "class",
+   "name": "Segment",
+   "filePath": "vllm/parser/harmony.py",
+   "summary": "harmony 段 NamedTuple。",
+   "tags": [
+    "segment",
+    "namedtuple",
+    "harmony"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    79,
+    83
+   ]
+  },
+  {
+   "id": "class:vllm/parser/harmony.py:HarmonyParser",
+   "type": "class",
+   "name": "HarmonyParser",
+   "filePath": "vllm/parser/harmony.py",
+   "summary": "harmony 统一解析器（11 方法）。",
+   "tags": [
+    "harmony",
+    "unified",
+    "delegating"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    92,
+    415
+   ]
+  },
+  {
+   "id": "class:vllm/parser/llama_json.py:LlamaJsonParser",
+   "type": "class",
+   "name": "LlamaJsonParser",
+   "filePath": "vllm/parser/llama_json.py",
+   "summary": "Llama JSON 工具调用 ParserEngine（3 方法）。",
+   "tags": [
+    "llama",
+    "json",
+    "parser-engine"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    111,
+    149
+   ]
+  },
+  {
+   "id": "class:vllm/parser/mimo.py:MiMoParser",
+   "type": "class",
+   "name": "MiMoParser",
+   "filePath": "vllm/parser/mimo.py",
+   "summary": "MiMo：Qwen3 格式+arg converter。",
+   "tags": [
+    "mimo",
+    "qwen3",
+    "converter"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    28,
+    47
+   ]
+  },
+  {
+   "id": "class:vllm/parser/deepseek_v41.py:DeepSeekV41Parser",
+   "type": "class",
+   "name": "DeepSeekV41Parser",
+   "filePath": "vllm/parser/deepseek_v41.py",
+   "summary": "DeepSeek V4.1 解析器（DeepSeekV4Parser 别名）。",
+   "tags": [
+    "deepseek",
+    "v41",
+    "alias"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    53,
+    54
+   ]
+  },
+  {
+   "id": "function:vllm/parser/abstract_parser.py:structured_outputs_to_format",
+   "type": "function",
+   "name": "structured_outputs_to_format",
+   "filePath": "vllm/parser/abstract_parser.py",
+   "summary": "StructuredOutputsParams 映射为 xgrammar Format。",
+   "tags": [
+    "structured-outputs",
+    "xgrammar",
+    "mapping"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    281,
+    327
+   ]
+  },
+  {
+   "id": "function:vllm/parser/abstract_parser.py:_xgrammar_supports",
+   "type": "function",
+   "name": "_xgrammar_supports",
+   "filePath": "vllm/parser/abstract_parser.py",
+   "summary": "约束是否通过 xgrammar 校验。",
+   "tags": [
+    "xgrammar",
+    "validation",
+    "predicate"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    330,
+    341
+   ]
+  },
+  {
+   "id": "function:vllm/parser/beam.py:_open_field",
+   "type": "function",
+   "name": "_open_field",
+   "filePath": "vllm/parser/beam.py",
+   "summary": "prefix 显式留下的开放字段。",
+   "tags": [
+    "open-field",
+    "prefix",
+    "template"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    64,
+    72
+   ]
+  },
+  {
+   "id": "function:vllm/parser/cohere_command.py:collect_tool_schema",
+   "type": "function",
+   "name": "collect_tool_schema",
+   "filePath": "vllm/parser/cohere_command.py",
+   "summary": "构建匹配工具定义的 xgrammar EBNF 语法。",
+   "tags": [
+    "xgrammar",
+    "ebnf",
+    "tools"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    121,
+    164
+   ]
+  },
+  {
+   "id": "function:vllm/parser/cohere_command.py:convert_schema_to_structural_tags",
+   "type": "function",
+   "name": "convert_schema_to_structural_tags",
+   "filePath": "vllm/parser/cohere_command.py",
+   "summary": "JSON schema→xgrammar 接受的 structural tag。",
+   "tags": [
+    "schema",
+    "structural-tags",
+    "conversion"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    230,
+    283
+   ]
+  },
+  {
+   "id": "function:vllm/parser/cohere_command.py:_schema_dict_from_structured_outputs",
+   "type": "function",
+   "name": "_schema_dict_from_structured_outputs",
+   "filePath": "vllm/parser/cohere_command.py",
+   "summary": "structured_outputs（json 变体）→schema dict。",
+   "tags": [
+    "schema",
+    "structured-outputs",
+    "extraction"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    380,
+    422
+   ]
+  },
+  {
+   "id": "function:vllm/parser/cohere_command.py:_melody_citations_to_vllm",
+   "type": "function",
+   "name": "_melody_citations_to_vllm",
+   "filePath": "vllm/parser/cohere_command.py",
+   "summary": "melody FilterCitation→vLLM 对象。",
+   "tags": [
+    "melody",
+    "citations",
+    "conversion"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    449,
+    469
+   ]
+  },
+  {
+   "id": "function:vllm/parser/harmony.py:_assemble_tag",
+   "type": "function",
+   "name": "_assemble_tag",
+   "filePath": "vllm/parser/harmony.py",
+   "summary": "harmony tag 组装。",
+   "tags": [
+    "tag",
+    "assembly",
+    "harmony"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    436,
+    472
+   ]
+  },
+  {
+   "id": "function:vllm/parser/harmony.py:get_harmony_structural_tag",
+   "type": "function",
+   "name": "get_harmony_structural_tag",
+   "filePath": "vllm/parser/harmony.py",
+   "summary": "harmony 的 structural tag 生成。",
+   "tags": [
+    "structural-tag",
+    "harmony",
+    "generation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    476,
+    532
+   ]
+  },
+  {
+   "id": "function:vllm/parser/harmony.py:_adjust_output_format",
+   "type": "function",
+   "name": "_adjust_output_format",
+   "filePath": "vllm/parser/harmony.py",
+   "summary": "请求约束规范化为推理-内容布局。",
+   "tags": [
+    "output-format",
+    "canonicalize",
+    "constraints"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    535,
+    579
+   ]
+  },
+  {
+   "id": "function:vllm/parser/llama_json.py:_validate_complete_tool_output",
+   "type": "function",
+   "name": "_validate_complete_tool_output",
+   "filePath": "vllm/parser/llama_json.py",
+   "summary": "校验完整的 Llama 工具调用输出。",
+   "tags": [
+    "validation",
+    "tool-output",
+    "complete"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    39,
+    75
+   ]
+  },
+  {
+   "id": "function:vllm/parser/llama_json.py:llama_json_config",
+   "type": "function",
+   "name": "llama_json_config",
+   "filePath": "vllm/parser/llama_json.py",
+   "summary": "Llama JSON 的 ParserEngine 配置。",
+   "tags": [
+    "config",
+    "parser-engine",
+    "llama"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    86,
+    108
+   ]
+  },
+  {
+   "id": "function:vllm/parser/granite.py:granite_config",
+   "type": "function",
+   "name": "granite_config",
+   "filePath": "vllm/parser/granite.py",
+   "summary": "Granite 的引擎配置。",
+   "tags": [
+    "config",
+    "granite",
+    "engine"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    50,
+    76
+   ]
+  },
+  {
+   "id": "function:vllm/parser/granite.py:_granite_arg_converter",
+   "type": "function",
+   "name": "_granite_arg_converter",
+   "filePath": "vllm/parser/granite.py",
+   "summary": "从 {name:...} 剥出 arguments 对象。",
+   "tags": [
+    "converter",
+    "arguments",
+    "granite"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    40,
+    46
+   ]
+  },
+  {
+   "id": "function:vllm/parser/granite_thinking.py:granite_thinking_config",
+   "type": "function",
+   "name": "granite_thinking_config",
+   "filePath": "vllm/parser/granite_thinking.py",
+   "summary": "Granite 4.2 引擎配置。",
+   "tags": [
+    "config",
+    "granite",
+    "thinking"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    37,
+    41
+   ]
+  },
+  {
+   "id": "function:vllm/parser/deepseek_v41.py:deepseek_v41_config",
+   "type": "function",
+   "name": "deepseek_v41_config",
+   "filePath": "vllm/parser/deepseek_v41.py",
+   "summary": "DeepSeek V4.1 引擎配置。",
+   "tags": [
+    "config",
+    "deepseek",
+    "v41"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    27,
+    50
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "file:vllm/entrypoints/openai/responses/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "file:vllm/parser/engine/adapters.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "file:vllm/parser/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "file:vllm/parser/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "file:vllm/reasoning/abs_reasoning_parsers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "file:vllm/tool_parsers/abstract_tool_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "file:vllm/tool_parsers/streaming.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "file:vllm/tool_parsers/structural_tag_registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "file:vllm/tool_parsers/tool_strict_level.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "file:vllm/v1/structured_output/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/beam.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/beam.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/beam.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/beam.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/beam.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/beam.py",
+   "target": "file:vllm/parser/abstract_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/beam.py",
+   "target": "file:vllm/parser/chat_parsing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/beam.py",
+   "target": "file:vllm/parser/chat_parsing/response_templates.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/beam.py",
+   "target": "file:vllm/parser/response_template.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/beam.py",
+   "target": "file:vllm/parser/response_template_grammar.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/beam.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/beam.py",
+   "target": "file:vllm/tool_parsers/structural_tag_registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/cohere_command.py",
+   "target": "file:vllm/entrypoints/cohere/cohere_chat_message.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/cohere_command.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/cohere_command.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/cohere_command.py",
+   "target": "file:vllm/parser/abstract_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/cohere_command.py",
+   "target": "file:vllm/reasoning/cohere_command_reasoning_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/cohere_command.py",
+   "target": "file:vllm/renderers/cohere.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/cohere_command.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/cohere_command.py",
+   "target": "file:vllm/tool_parsers/cohere_command_tool_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/deepseek_v41.py",
+   "target": "file:vllm/parser/deepseek_v4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/deepseek_v41.py",
+   "target": "file:vllm/parser/engine/parser_engine_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/granite.py",
+   "target": "file:vllm/parser/engine/parser_engine.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/granite.py",
+   "target": "file:vllm/parser/engine/parser_engine_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/granite.py",
+   "target": "file:vllm/parser/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/granite_thinking.py",
+   "target": "file:vllm/parser/nemotron_v3.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/granite_thinking.py",
+   "target": "file:vllm/parser/qwen3.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/harmony.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/harmony.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/harmony.py",
+   "target": "file:vllm/entrypoints/openai/parser/harmony_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/harmony.py",
+   "target": "file:vllm/entrypoints/openai/responses/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/harmony.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/harmony.py",
+   "target": "file:vllm/parser/abstract_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/harmony.py",
+   "target": "file:vllm/reasoning/gptoss_reasoning_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/harmony.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/harmony.py",
+   "target": "file:vllm/tool_parsers/gptoss_tool_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/harmony.py",
+   "target": "file:vllm/tool_parsers/structural_tag_registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/llama_json.py",
+   "target": "file:vllm/parser/engine/parser_engine.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/llama_json.py",
+   "target": "file:vllm/parser/engine/parser_engine_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/llama_json.py",
+   "target": "file:vllm/parser/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/mimo.py",
+   "target": "file:vllm/parser/qwen3.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "class:vllm/parser/abstract_parser.py:StreamState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "class:vllm/parser/abstract_parser.py:Parser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "class:vllm/parser/abstract_parser.py:DelegatingParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "function:vllm/parser/abstract_parser.py:structured_outputs_to_format",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "function:vllm/parser/abstract_parser.py:_xgrammar_supports",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/beam.py",
+   "target": "class:vllm/parser/beam.py:BeamReasoningParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/beam.py",
+   "target": "class:vllm/parser/beam.py:BeamParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/beam.py",
+   "target": "function:vllm/parser/beam.py:_open_field",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/cohere_command.py",
+   "target": "class:vllm/parser/cohere_command.py:CohereTagRegistry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/cohere_command.py",
+   "target": "class:vllm/parser/cohere_command.py:CohereCommandParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/cohere_command.py",
+   "target": "function:vllm/parser/cohere_command.py:collect_tool_schema",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/cohere_command.py",
+   "target": "function:vllm/parser/cohere_command.py:convert_schema_to_structural_tags",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/cohere_command.py",
+   "target": "function:vllm/parser/cohere_command.py:_schema_dict_from_structured_outputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/cohere_command.py",
+   "target": "function:vllm/parser/cohere_command.py:_melody_citations_to_vllm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/granite.py",
+   "target": "class:vllm/parser/granite.py:GraniteParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/granite.py",
+   "target": "function:vllm/parser/granite.py:granite_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/granite.py",
+   "target": "function:vllm/parser/granite.py:_granite_arg_converter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/granite_thinking.py",
+   "target": "class:vllm/parser/granite_thinking.py:GraniteThinkingParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/granite_thinking.py",
+   "target": "function:vllm/parser/granite_thinking.py:granite_thinking_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/harmony.py",
+   "target": "class:vllm/parser/harmony.py:_SegmentType",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/harmony.py",
+   "target": "class:vllm/parser/harmony.py:Segment",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/harmony.py",
+   "target": "class:vllm/parser/harmony.py:HarmonyParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/harmony.py",
+   "target": "function:vllm/parser/harmony.py:_assemble_tag",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/harmony.py",
+   "target": "function:vllm/parser/harmony.py:get_harmony_structural_tag",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/harmony.py",
+   "target": "function:vllm/parser/harmony.py:_adjust_output_format",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/llama_json.py",
+   "target": "class:vllm/parser/llama_json.py:LlamaJsonParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/llama_json.py",
+   "target": "function:vllm/parser/llama_json.py:_validate_complete_tool_output",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/llama_json.py",
+   "target": "function:vllm/parser/llama_json.py:llama_json_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/mimo.py",
+   "target": "class:vllm/parser/mimo.py:MiMoParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/deepseek_v41.py",
+   "target": "class:vllm/parser/deepseek_v41.py:DeepSeekV41Parser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/deepseek_v41.py",
+   "target": "function:vllm/parser/deepseek_v41.py:deepseek_v41_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "class:vllm/parser/abstract_parser.py:StreamState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "class:vllm/parser/abstract_parser.py:Parser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "class:vllm/parser/abstract_parser.py:DelegatingParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/abstract_parser.py",
+   "target": "function:vllm/parser/abstract_parser.py:structured_outputs_to_format",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/beam.py",
+   "target": "class:vllm/parser/beam.py:BeamReasoningParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/beam.py",
+   "target": "class:vllm/parser/beam.py:BeamParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/cohere_command.py",
+   "target": "class:vllm/parser/cohere_command.py:CohereTagRegistry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/cohere_command.py",
+   "target": "class:vllm/parser/cohere_command.py:CohereCommandParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/cohere_command.py",
+   "target": "function:vllm/parser/cohere_command.py:collect_tool_schema",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/cohere_command.py",
+   "target": "function:vllm/parser/cohere_command.py:convert_schema_to_structural_tags",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/granite.py",
+   "target": "class:vllm/parser/granite.py:GraniteParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/granite.py",
+   "target": "function:vllm/parser/granite.py:granite_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/granite_thinking.py",
+   "target": "class:vllm/parser/granite_thinking.py:GraniteThinkingParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/granite_thinking.py",
+   "target": "function:vllm/parser/granite_thinking.py:granite_thinking_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/harmony.py",
+   "target": "class:vllm/parser/harmony.py:Segment",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/harmony.py",
+   "target": "class:vllm/parser/harmony.py:HarmonyParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/harmony.py",
+   "target": "function:vllm/parser/harmony.py:get_harmony_structural_tag",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/llama_json.py",
+   "target": "class:vllm/parser/llama_json.py:LlamaJsonParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/llama_json.py",
+   "target": "function:vllm/parser/llama_json.py:llama_json_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/mimo.py",
+   "target": "class:vllm/parser/mimo.py:MiMoParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/deepseek_v41.py",
+   "target": "class:vllm/parser/deepseek_v41.py:DeepSeekV41Parser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/parser/deepseek_v41.py",
+   "target": "function:vllm/parser/deepseek_v41.py:deepseek_v41_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/parser/abstract_parser.py:DelegatingParser",
+   "target": "class:vllm/parser/abstract_parser.py:Parser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/parser/beam.py:BeamParser",
+   "target": "class:vllm/parser/response_template.py:ResponseTemplateParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/parser/cohere_command.py:CohereCommandParser",
+   "target": "class:vllm/parser/abstract_parser.py:DelegatingParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/parser/harmony.py:HarmonyParser",
+   "target": "class:vllm/parser/abstract_parser.py:DelegatingParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/parser/beam.py:BeamReasoningParser",
+   "target": "class:vllm/parser/response_template.py:ResponseTemplateReasoningParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/parser/beam.py:BeamToolParser",
+   "target": "class:vllm/parser/response_template.py:ResponseTemplateToolParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/parser/beam.py:BeamParser",
+   "target": "class:vllm/parser/response_template.py:ResponseTemplateParser",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

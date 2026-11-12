@@ -1,135 +1,166 @@
-> 来源: [https://deepwiki.com/deepseek-ai/deepseek-harness/6-web-ui](https://deepwiki.com/deepseek-ai/deepseek-harness/6-web-ui)
-> DeepWiki deepseek-ai/deepseek-harness
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/deepseek-harness · page 6 Web UI · fetched 2026-11-04 -->
 
 # Web UI
 
-  Relevant source files 
- - [.agents/notes/implemented/feature/2026-07-28-web-terminal-card.i18n.yaml](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/.agents/notes/implemented/feature/2026-07-28-web-terminal-card.i18n.yaml)
- - [.agents/notes/implemented/feature/2026-07-28-web-terminal-card.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/.agents/notes/implemented/feature/2026-07-28-web-terminal-card.md?plain=1)
- - [.agents/notes/implemented/feature/2026-07-28-web-terminal-card.zh.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/.agents/notes/implemented/feature/2026-07-28-web-terminal-card.zh.md?plain=1)
- - [.agents/notes/implemented/feature/2026-08-11-workspace-sidebar-order-and-folding.i18n.yaml](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/.agents/notes/implemented/feature/2026-08-11-workspace-sidebar-order-and-folding.i18n.yaml)
- - [.agents/notes/implemented/feature/2026-08-11-workspace-sidebar-order-and-folding.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/.agents/notes/implemented/feature/2026-08-11-workspace-sidebar-order-and-folding.md?plain=1)
- - [.agents/notes/implemented/feature/2026-08-11-workspace-sidebar-order-and-folding.zh.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/.agents/notes/implemented/feature/2026-08-11-workspace-sidebar-order-and-folding.zh.md?plain=1)
- - [apps/web/tests/composer-draft-scroll.e2e.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/apps/web/tests/composer-draft-scroll.e2e.ts)
- - [packages/client/ui-conversation/README.i18n.yaml](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/README.i18n.yaml)
- - [packages/client/ui-conversation/README.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/README.md?plain=1)
- - [packages/client/ui-conversation/README.zh.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/README.zh.md?plain=1)
- - [packages/client/ui-conversation/src/client/apply.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/src/client/apply.ts)
- - [packages/client/ui-conversation/src/client/contract/slots.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/src/client/contract/slots.ts)
- - [packages/client/ui-conversation/src/client/skeleton/ConversationRoot.tsx](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/src/client/skeleton/ConversationRoot.tsx)
- - [packages/client/ui-conversation/src/client/skeleton/InputBar.module.css](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/src/client/skeleton/InputBar.module.css)
- - [packages/client/ui-conversation/src/client/skeleton/InputBar.tsx](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/src/client/skeleton/InputBar.tsx)
- - [packages/client/ui-primitives/README.i18n.yaml](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-primitives/README.i18n.yaml)
- - [packages/client/ui-primitives/README.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-primitives/README.md?plain=1)
- - [packages/client/ui-primitives/README.zh.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-primitives/README.zh.md?plain=1)
- - [packages/client/ui-primitives/src/TerminalBlock.module.css](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-primitives/src/TerminalBlock.module.css)
- - [packages/client/ui-primitives/src/TerminalBlock.tsx](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-primitives/src/TerminalBlock.tsx)
- - [packages/client/ui-primitives/src/ansi.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-primitives/src/ansi.ts)
- - [packages/client/ui-workspace/README.i18n.yaml](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-workspace/README.i18n.yaml)
- - [packages/client/ui-workspace/README.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-workspace/README.md?plain=1)
- - [packages/client/ui-workspace/README.zh.md](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-workspace/README.zh.md?plain=1)
- - [packages/client/ui-workspace/src/client/locales.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-workspace/src/client/locales.ts)
- - [packages/client/ui-workspace/src/client/rows/Rows.module.css](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-workspace/src/client/rows/Rows.module.css)
- - [packages/client/ui-workspace/src/client/rows/Rows.tsx](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-workspace/src/client/rows/Rows.tsx)
- - [packages/client/ui-workspace/src/client/stores.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-workspace/src/client/stores.ts)
- - [packages/client/ui-workspace/src/client/tree.ts](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-workspace/src/client/tree.ts)
- 
-  The DeepSeek Harness (dsh) Web UI is a modular, plugin-based React application built on the **Cordis** framework. It provides a rich, extensible environment for interacting with AI agents, managing code workspaces, and inspecting execution trajectories. The architecture emphasizes a strict separation between the browser-side presentation logic and the host-side execution logic, bridged by a type-safe RPC layer.
+<details>
+<summary>Relevant source files</summary>
 
- 
-## Plugin Architecture & UI Composition
+The following files were used as context for generating this wiki page:
 
- The UI is not a monolithic application but a composition of independent packages that register components into **slots**. This allows features like "Code Mode," "Trajectory Inspection," or "MCP Tool Views" to be added or removed without modifying the core shell. The `ui-conversation` package provides the target-neutral skeleton (header, tabs, composer) while concrete targets such as Chat register their own views and renderers [packages/client/ui-conversation/README.md12](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/README.md?plain=1#L12-L12)
+- [apps/web/tests/chat-scroll-contract.e2e.ts](apps/web/tests/chat-scroll-contract.e2e.ts)
+- [docs/subsystems/slots.i18n.yaml](docs/subsystems/slots.i18n.yaml)
+- [docs/subsystems/slots.md](docs/subsystems/slots.md)
+- [docs/subsystems/slots.zh.md](docs/subsystems/slots.zh.md)
+- [packages/client/ui-chat/README.i18n.yaml](packages/client/ui-chat/README.i18n.yaml)
+- [packages/client/ui-chat/README.md](packages/client/ui-chat/README.md)
+- [packages/client/ui-chat/README.zh.md](packages/client/ui-chat/README.zh.md)
+- [packages/client/ui-chat/package.json](packages/client/ui-chat/package.json)
+- [packages/client/ui-chat/src/client/apply.ts](packages/client/ui-chat/src/client/apply.ts)
+- [packages/client/ui-chat/src/client/chat/ChatFlow.tsx](packages/client/ui-chat/src/client/chat/ChatFlow.tsx)
+- [packages/client/ui-chat/src/client/chat/ChatNodeSeat.tsx](packages/client/ui-chat/src/client/chat/ChatNodeSeat.tsx)
+- [packages/client/ui-chat/src/client/chat/ChatView.module.css](packages/client/ui-chat/src/client/chat/ChatView.module.css)
+- [packages/client/ui-chat/src/client/chat/ChatView.tsx](packages/client/ui-chat/src/client/chat/ChatView.tsx)
+- [packages/client/ui-chat/src/client/chat/use-chat-scroll.ts](packages/client/ui-chat/src/client/chat/use-chat-scroll.ts)
+- [packages/client/ui-chat/src/client/chat/use-chat-viewport.ts](packages/client/ui-chat/src/client/chat/use-chat-viewport.ts)
+- [packages/client/ui-chat/src/client/contract/slots.ts](packages/client/ui-chat/src/client/contract/slots.ts)
+- [packages/client/ui-chat/src/client/conversation-nodes/README.i18n.yaml](packages/client/ui-chat/src/client/conversation-nodes/README.i18n.yaml)
+- [packages/client/ui-chat/src/client/conversation-nodes/README.md](packages/client/ui-chat/src/client/conversation-nodes/README.md)
+- [packages/client/ui-chat/src/client/conversation-nodes/README.zh.md](packages/client/ui-chat/src/client/conversation-nodes/README.zh.md)
+- [packages/client/ui-chat/src/client/index.ts](packages/client/ui-chat/src/client/index.ts)
+- [packages/client/ui-chat/src/client/locale.ts](packages/client/ui-chat/src/client/locale.ts)
+- [packages/client/ui-chat/tests/apply-inject.client.spec.tsx](packages/client/ui-chat/tests/apply-inject.client.spec.tsx)
+- [packages/client/ui-chat/tests/chat-apply.client.spec.tsx](packages/client/ui-chat/tests/chat-apply.client.spec.tsx)
+- [packages/client/ui-chat/tests/chat-scroll.client.spec.tsx](packages/client/ui-chat/tests/chat-scroll.client.spec.tsx)
+- [packages/client/ui-chat/tests/chat-view.client.spec.tsx](packages/client/ui-chat/tests/chat-view.client.spec.tsx)
+- [packages/client/ui-chat/tests/chat-viewport.client.spec.ts](packages/client/ui-chat/tests/chat-viewport.client.spec.ts)
+- [packages/client/ui-chat/tests/conversation-node-definitions.client.spec.ts](packages/client/ui-chat/tests/conversation-node-definitions.client.spec.ts)
+- [packages/client/ui-chat/tests/transcript-view-row.client.spec.tsx](packages/client/ui-chat/tests/transcript-view-row.client.spec.tsx)
+- [packages/client/ui-chat/tests/turn-tail-spacing.client.spec.ts](packages/client/ui-chat/tests/turn-tail-spacing.client.spec.ts)
+- [packages/client/ui-chat/tsconfig.json](packages/client/ui-chat/tsconfig.json)
+- [packages/extensions/cordis-client-runner/src/client/slot-catalog.ts](packages/extensions/cordis-client-runner/src/client/slot-catalog.ts)
 
- 
-### Core UI Package Hierarchy
+</details>
 
- 
-| Package | Role | Key Entities |
-|---|---|---|
-| ui-slots | Slot & Injection Kernel | ctx.slots, renderSlot, inject |
-| ui-layout | Main App Frame | AppFrame, Sidebar, ConversationColumn |
-| ui-conversation | Chat & Message Flow | ConversationRoot, InputBar, UiConversation |
-| ui-workspace | File & Session Browser | WorkspaceBrowser, ProjectRowItem |
-| ui-primitives | Shared UI Atoms | MarkdownText, TerminalBlock, Toast |
 
- The UI relies on **Context Merging** via Cordis to allow plugins to contribute to the global state and service registry. `ui-conversation` exposes registries for event definitions and view builders through `ctx.uiConversation` [packages/client/ui-conversation/README.md12-28](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/README.md?plain=1#L12-L28)
 
- 
-### UI Slot Registry System
+The DeepSeek Harness (`dsh`) Web UI is a modular, plugin-based React application built on the **Cordis** framework. It provides a rich, extensible environment for interacting with AI agents, managing code workspaces, and inspecting execution trajectories. The architecture emphasizes a strict separation between browser-side presentation logic and host-side execution, bridged by a type-safe RPC layer. Theme-facing colors and styles rely on `--dsw-*` design tokens [packages/extensions/cordis-client-runner/src/client/slot-catalog.ts:67-75]().
 
- The UI composition is driven by the `ctx.slots` service. Packages register "entries" into named slots, which are then rendered by the owner of that slot. For example, `ui-conversation` registers the `InputBar` as the default entry for the `conversation.composer.bar` slot [packages/client/ui-conversation/src/client/apply.ts182-192](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/src/client/apply.ts#L182-L192)
+This page acts as a parent overview. For specific subsystem details, refer to the child pages:
+- [Conversation UI & Chat View](#6.1)
+- [Workspace Browser & Sidebar](#6.2)
+- [UI Primitives, Trajectory & Tool Views](#6.3)
+- [Settings, Agent Presets & Onboarding](#6.4)
+- [Desktop App & Web Shell Packaging](#6.5)
 
- 
+---
+
+## Plugin Architecture & Slot System
+
+The Web UI is built from independent packages that contribute UI components via a slot-based plugin system. Browser-half packages register React components into named slots exposed by the Cordis client runtime using `ctx.slots.register()` and `ctx.slots.inject()` [packages/extensions/cordis-client-runner/src/client/slot-catalog.ts:67-75](). This mechanism enables flexible dynamic UI composition without hard dependencies or imports of implementation internals, preserving strong decoupling between packages.
+
+Slots have a compile-time contract specifying the slot key name, cardinality (`single`, `list`, `keyed`, or `chain`), data scope (`root`, `session`, or `session-maybe`), exposed props, and owning component entry requirements. The slot catalog source is generated and forms the definitive contract between the shell and dynamic packages [packages/extensions/cordis-client-runner/src/client/slot-catalog.ts:1-75]().
+
+### UI Slot Registration and Composition Flow
+
+```mermaid
+graph TD
+    subgraph "NaturalLanguageSpace"
+        UserInterface["Browser Client UI Composition"]
+    end
+
+    subgraph "CodeEntitySpace"
+        SlotRegister["ctx.slots.register()"]
+        SlotInject["ctx.slots.inject()"]
+        ClientSlotApi["CLIENT_SLOT_API (slot-catalog.ts)"]
+    end
+
+    subgraph "UIImplementations"
+        ChatView["ChatView.tsx (ui-chat)"]
+        InputBar["InputBar.tsx (ui-conversation)"]
+        Primitives["ui-primitives (MarkdownText.tsx)"]
+    end
+
+    UserInterface --> SlotRegister
+    SlotRegister --> SlotInject
+    SlotInject --> ClientSlotApi
+    ClientSlotApi --> ChatView
+    ClientSlotApi --> InputBar
+    ChatView --> Primitives
 ```
 
+Sources: [packages/extensions/cordis-client-runner/src/client/slot-catalog.ts:1-75](), [packages/extensions/cordis-client-runner/src/client/slot-catalog.ts:67-75]()
+
+---
+
+## Key UI Subdomains & Child Pages
+
+### 1. Conversation UI & Chat View  
+The `ui-conversation` package provides the core conversation skeleton (`ConversationRoot`), the `ChatView` component for rendering conversation nodes [packages/client/ui-chat/src/client/chat/ChatView.tsx:60-64](), the input bar with a Lexical editor, and integrates features like streaming assistant messages, steering commands, and queue docking. It uses a slot-based extensibility model to allow plugins to augment or replace UI pieces dynamically.  
+For details, see [Conversation UI & Chat View](#6.1).
+
+### 2. Workspace Browser & Sidebar  
+The `ui-workspace` package handles browsing and selecting workspaces, rendering the session tree hierarchy, and managing directory pickers. It cooperates closely with the `ui-sidebar` package, which maintains sidebar states, and `ui-layout` which manages the overall app frame layout including column partitioning and document preview panes.  
+For details, see [Workspace Browser & Sidebar](#6.2).
+
+### 3. UI Primitives, Trajectory & Tool Views  
+Shared UI primitives (`ui-primitives`) provide essential UI building blocks like icons, markdown renderers, syntax-highlighted code blocks, and file-type icons that all other UI packages consume. The `ui-tool` package renders tool-call details, deliverables, present cards, and user questions within the trajectory inspection ledger. These packages are designed to avoid importing the Cordis plugin runtime to remain lightweight and reusable.  
+For details, see [UI Primitives, Trajectory & Tool Views](#6.3).
+
+### 4. Settings, Agent Presets & Onboarding  
+User configurability is handled by the `ui-settings` package family, which manages model and account settings, general preferences, and plugin toggles. It also includes the UI for authoring agent presets and the onboarding flow that new users see.  
+For details, see [Settings, Agent Presets & Onboarding](#6.4).
+
+### 5. Desktop App & Web Shell Packaging  
+The desktop Electron app packages the Web UI with additional host capabilities like process and project management, packaging, signing, and auto-updates through `apps/desktop` and `desktop-host`. The Web shell is built with Vite under `apps/web`, which provides the runtime boot graph and client entrypoints.  
+For details, see [Desktop App & Web Shell Packaging](#6.5).
+
+Sources: [packages/extensions/cordis-client-runner/src/client/slot-catalog.ts:67-75](), [packages/client/ui-chat/src/client/chat/ChatView.tsx:60-64]()
+
+---
+
+## Component & Data Flow Mapping
+
+The Web UI consumes session controller events and related backend services exposed over a type-safe RPC API proxy. These feeds are projected via observable snapshot stores and selector hooks into React components that render the UI state and respond to interactions [packages/client/ui-chat/src/client/chat/ChatView.tsx:60-70]().
+
+The `ChatView` component maps conversation view snapshot data into keyed React node renderer seats and integrates features like turn navigation, running status indicators, and client-side link handlers [packages/client/ui-chat/src/client/chat/ChatView.tsx:60-75]().
+
+### Web UI Component and Data Flow Mapping
+
+```mermaid
+graph LR
+    subgraph "NaturalLanguageSpace"
+        SessionEventSpace["Session Event Stream"]
+    end
+
+    subgraph "CodeEntitySpace"
+        ChatViewComp["ChatView.tsx (ChatView)"]
+        ChatNodeSeatComp["ChatNodeSeat.tsx (ChatNodeSeat)"]
+        MarkdownTextComp["MarkdownText.tsx (MarkdownText)"]
+        UiPrims["ui-primitives (index.ts)"]
+    end
+
+    SessionEventSpace --> ChatViewComp
+    ChatViewComp --> ChatNodeSeatComp
+    ChatNodeSeatComp --> MarkdownTextComp
+    MarkdownTextComp --> UiPrims
 ```
 
- **Sources:** [packages/client/ui-conversation/src/client/contract/slots.ts92-147](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/src/client/contract/slots.ts#L92-L147) [packages/client/ui-conversation/src/client/apply.ts109-118](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/src/client/apply.ts#L109-L118)
+Sources: [packages/client/ui-chat/src/client/chat/ChatView.tsx:60-75](), [packages/extensions/cordis-client-runner/src/client/slot-catalog.ts:67-75]()
 
- 
-## Key UI Components
+---
 
- 
-### 1. Conversation & Chat Flow
+## Summary
 
- The `ui-conversation` package manages the primary interaction surface. It handles message assembly from `SessionEventLikeEntry` feeds [packages/client/ui-conversation/README.md30](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/README.md?plain=1#L30-L30) and manages the **Composer** chain, which allows temporary takeover by business-owned entries during remote requests [packages/client/ui-conversation/README.md50-62](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/README.md?plain=1#L50-L62)
+The DeepSeek Harness Web UI embraces plugin-driven composition via a robust slot architecture defined by compile-time contracts. It divides concerns cleanly across conversation, workspace management, basic UI primitives, settings, and desktop app packaging. Observables and selector hooks tightly couple backend session state streams to React renderers, ensuring scalable, maintainable UI logic. This parent page orients new contributors to the broad design and provides links to detailed documentation of each core UI sub-area.
 
- 
- - **ConversationRoot**: The resident skeleton that survives session transitions, managing Hero regions and transcript width preferences [packages/client/ui-conversation/src/client/skeleton/ConversationRoot.tsx1-11](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/src/client/skeleton/ConversationRoot.tsx#L1-L11)
- - **InputBar**: The default Lexical-based editor supporting image attachments, permission selection, and optimistic submission [packages/client/ui-conversation/src/client/skeleton/InputBar.tsx9-44](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/src/client/skeleton/InputBar.tsx#L9-L44)
- - **UiConversation**: The core service providing identity-stable bindings for session controllers and managing a durable image URL cache [packages/client/ui-conversation/README.md12-28](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/README.md?plain=1#L12-L28)
- 
- For details, see [Conversation UI & Chat View](https://deepwiki.com/deepseek-ai/deepseek-harness/6.1-conversation-ui-and-chat-view).
 
- 
-### 2. Workspace & Sidebar
+# Child Pages
 
- The `ui-workspace` package manages navigation through a tree-based browser.
+- [Conversation UI & Chat View](#6.1)  
+- [Workspace Browser & Sidebar](#6.2)  
+- [UI Primitives, Trajectory & Tool Views](#6.3)  
+- [Settings, Agent Presets & Onboarding](#6.4)  
+- [Desktop App & Web Shell Packaging](#6.5)
 
- 
- - **WorkspaceBrowser**: Renders the session tree, supporting grouping, archiving, and drag-and-drop inserts [packages/client/ui-workspace/src/client/rows/Rows.tsx73-84](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-workspace/src/client/rows/Rows.tsx#L73-L84)
- - **ProjectRowItem**: A presentation component for workspace folders, supporting rename/delete actions and relative time labels [packages/client/ui-workspace/src/client/rows/Rows.tsx111-131](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-workspace/src/client/rows/Rows.tsx#L111-L131)
- 
- For details, see [Workspace Browser & Sidebar](https://deepwiki.com/deepseek-ai/deepseek-harness/6.2-workspace-browser-and-sidebar).
+---
 
- 
-### 3. UI Primitives & Tool Rendering
-
- `ui-primitives` provides a zero-Cordis library of React atoms designed for untrusted model output [packages/client/ui-primitives/README.md12](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-primitives/README.md?plain=1#L12-L12)
-
- 
- - **MarkdownText**: Renders GFM and TeX math with an incremental streaming renderer to optimize performance during long replies [packages/client/ui-primitives/README.md35-36](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-primitives/README.md?plain=1#L35-L36)
- - **TerminalBlock**: Renders command output with ANSI escape sequence parsing, supporting cursor movement and SGR colors [packages/client/ui-primitives/README.md70](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-primitives/README.md?plain=1#L70-L70)
- 
- For details, see [UI Primitives, Trajectory & Tool Views](https://deepwiki.com/deepseek-ai/deepseek-harness/6.3-ui-primitives-trajectory-and-tool-views).
-
- 
-### 4. Settings & Presets
-
- Global configuration is integrated into the UI via the `settings.general.item` slot.
-
- 
- - **Enter Behavior**: `ui-conversation` contributes a setting to control whether the Enter key triggers a "Queue" or "Steer" action [packages/client/ui-conversation/src/client/apply.ts109-118](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/src/client/apply.ts#L109-L118)
- - **Agent Presets**: Integrated via the `conversation.hero.agentPreset` slot to allow model and instruction selection for new sessions [packages/client/ui-conversation/src/client/contract/slots.ts124-125](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/src/client/contract/slots.ts#L124-L125)
- 
- For details, see [Settings, Agent Presets & Onboarding](https://deepwiki.com/deepseek-ai/deepseek-harness/6.4-settings-agent-presets-and-onboarding).
-
- 
-## Data Flow: Host to Browser
-
- The UI consumes events from the Host-side `SessionController`. The `UiConversation` assembler matches events to definitions and materializes target nodes for rendering [packages/client/ui-conversation/README.md30](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/README.md?plain=1#L30-L30)
-
- 
-```
-
-```
-
- **Sources:** [packages/client/ui-conversation/README.md30-32](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/README.md?plain=1#L30-L32) [packages/client/ui-conversation/src/client/apply.ts157-170](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/src/client/apply.ts#L157-L170) [packages/client/ui-conversation/src/client/skeleton/InputBar.tsx49-55](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/src/client/skeleton/InputBar.tsx#L49-L55)
-
- 
-## Build & Distribution
-
- The Web UI is bundled as part of the client runtime. It utilizes a monorepo structure where packages like `ui-conversation` and `ui-workspace` are aggregated. User-facing copy is localized via `ctx.locale`, with primitives requiring explicit label props as they are intentionally kept independent of the localization service [packages/client/ui-primitives/README.md39-40](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-primitives/README.md?plain=1#L39-L40)
-
- **Sources:** [packages/client/ui-conversation/src/client/apply.ts102-103](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-conversation/src/client/apply.ts#L102-L103) [packages/client/ui-primitives/README.md50-52](https://github.com/deepseek-ai/deepseek-harness/blob/cd5ef814/packages/client/ui-primitives/README.md?plain=1#L50-L52)

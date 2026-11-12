@@ -1,0 +1,42 @@
+# DeepWiki 索引 — google-deepmind/videoprism
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 32 页 · 全文 610318 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+  - [2.1 Installation](2.1-installation.md)
+  - [2.2 Quick Start with Demo Notebooks](2.2-quick-start-with-demo-notebooks.md)
+- [3 Model Variants](3-model-variants.md)
+  - [3.1 Video-Only Models](3.1-video-only-models.md)
+  - [3.2 Video-Text Models (VideoCLIP)](3.2-video-text-models-videoclip.md)
+- [4 Core Architecture](4-core-architecture.md)
+  - [4.1 Model Management System](4.1-model-management-system.md)
+  - [4.2 Encoder Architectures](4.2-encoder-architectures.md)
+  - [4.3 Layer Components](4.3-layer-components.md)
+  - [4.4 Text Tokenization](4.4-text-tokenization.md)
+  - [4.5 Utilities](4.5-utilities.md)
+- [5 Usage Guide](5-usage-guide.md)
+  - [5.1 Video Feature Extraction](5.1-video-feature-extraction.md)
+  - [5.2 Video-Text Retrieval](5.2-video-text-retrieval.md)
+  - [5.3 Loading Custom Checkpoints](5.3-loading-custom-checkpoints.md)
+  - [5.4 Working with Variable Frame Counts](5.4-working-with-variable-frame-counts.md)
+- [6 API Reference](6-api-reference.md)
+  - [6.1 videoprism.models](6.1-videoprism.models.md)
+  - [6.2 videoprism.encoders](6.2-videoprism.encoders.md)
+  - [6.3 videoprism.layers](6.3-videoprism.layers.md)
+  - [6.4 videoprism.tokenizers](6.4-videoprism.tokenizers.md)
+  - [6.5 videoprism.utils](6.5-videoprism.utils.md)
+- [7 Development](7-development.md)
+  - [7.1 Dependencies and Environment](7.1-dependencies-and-environment.md)
+  - [7.2 Testing](7.2-testing.md)
+  - [7.3 Contributing](7.3-contributing.md)
+- [8 Appendix](8-appendix.md)
+  - [8.1 Model Configurations](8.1-model-configurations.md)
+  - [8.2 Checkpoint Registry](8.2-checkpoint-registry.md)
+  - [8.3 License](8.3-license.md)
+
+## 附：结构清单外的页
+- [FactorizedEncoder](x1-factorizedencoder.md)
+- [FactorizedVideoCLIP](x2-factorizedvideoclip.md)
+- [TextEncoder](x3-textencoder.md)

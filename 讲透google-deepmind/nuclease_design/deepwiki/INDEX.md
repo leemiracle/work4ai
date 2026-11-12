@@ -1,0 +1,31 @@
+# DeepWiki 索引 — google-deepmind/nuclease_design
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 231074 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+  - [2.1 Installation & Dependencies](2.1-installation-dependencies.md)
+  - [2.2 Quick Start Guide](2.2-quick-start-guide.md)
+- [3 Data Processing Pipeline](3-data-processing-pipeline.md)
+  - [3.1 Raw Data Sources & Structure](3.1-raw-data-sources-structure.md)
+  - [3.2 Enrichment Factor Calculation](3.2-enrichment-factor-calculation.md)
+  - [3.3 Landscape Generation & Aggregation](3.3-landscape-generation-aggregation.md)
+- [4 Analysis & Visualization](4-analysis-visualization.md)
+  - [4.1 Hit Rate Analysis](4.1-hit-rate-analysis.md)
+  - [4.2 Landscape Analysis](4.2-landscape-analysis.md)
+  - [4.3 Diversity & Clustering Analysis](4.3-diversity-clustering-analysis.md)
+  - [4.4 Protein Activity Analysis](4.4-protein-activity-analysis.md)
+  - [4.5 Specialized Analysis Notebooks](4.5-specialized-analysis-notebooks.md)
+  - [4.6 Campaign Analysis](4.6-campaign-analysis.md)
+- [5 Machine Learning Models](5-machine-learning-models.md)
+  - [5.1 CNN Ensemble Architecture](5.1-cnn-ensemble-architecture.md)
+  - [5.2 Model Analysis & Evaluation](5.2-model-analysis-evaluation.md)
+- [6 Core Libraries](6-core-libraries.md)
+  - [6.1 Plotting Utilities](6.1-plotting-utilities.md)
+  - [6.2 Data Processing Utilities](6.2-data-processing-utilities.md)
+  - [6.3 Constants & Configuration](6.3-constants-configuration.md)
+  - [6.4 Metrics & Analysis Functions](6.4-metrics-analysis-functions.md)
+- [7 Development](7-development.md)
+  - [7.1 Testing Framework](7.1-testing-framework.md)
+  - [7.2 Contributing Guidelines](7.2-contributing-guidelines.md)

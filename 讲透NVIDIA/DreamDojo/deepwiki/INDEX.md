@@ -1,0 +1,42 @@
+# DeepWiki 索引 — NVIDIA/DreamDojo
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 33 页 · 全文 378196 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+  - [2.1 Environment Setup](2.1-environment-setup.md)
+  - [2.2 Downloading Models and Datasets](2.2-downloading-models-and-datasets.md)
+- [3 Architecture](3-architecture.md)
+  - [3.1 Text2World Model](3.1-text2world-model.md)
+  - [3.2 MiniTrainDIT Network](3.2-minitraindit-network.md)
+  - [3.3 Latent Action Model (LAM)](3.3-latent-action-model-lam.md)
+  - [3.4 Tokenizer and Conditioning](3.4-tokenizer-and-conditioning.md)
+- [4 Training Pipeline](4-training-pipeline.md)
+  - [4.1 Pretraining](4.1-pretraining.md)
+  - [4.2 Post-Training](4.2-post-training.md)
+  - [4.3 Distillation](4.3-distillation.md)
+- [5 Configuration System](5-configuration-system.md)
+  - [5.1 Base Configurations](5.1-base-configurations.md)
+  - [5.2 Experiment YAML Files](5.2-experiment-yaml-files.md)
+  - [5.3 Action-Conditioned Configuration](5.3-action-conditioned-configuration.md)
+  - [5.4 Configuration Examples](5.4-configuration-examples.md)
+- [6 Data Pipeline](6-data-pipeline.md)
+  - [6.1 Dataset Configuration](6.1-dataset-configuration.md)
+  - [6.2 Data Preprocessing](6.2-data-preprocessing.md)
+  - [6.3 DataLoader and Sampling](6.3-dataloader-and-sampling.md)
+- [7 Evaluation](7-evaluation.md)
+  - [7.1 Running Evaluations](7.1-running-evaluations.md)
+  - [7.2 Evaluation Datasets](7.2-evaluation-datasets.md)
+  - [7.3 Checkpoint Management](7.3-checkpoint-management.md)
+- [8 Advanced Topics](8-advanced-topics.md)
+  - [8.1 Distributed Training](8.1-distributed-training.md)
+  - [8.2 Memory Optimization](8.2-memory-optimization.md)
+  - [8.3 Attention Backends](8.3-attention-backends.md)
+  - [8.4 LoRA Fine-Tuning](8.4-lora-fine-tuning.md)
+  - [8.5 Training Scripts](8.5-training-scripts.md)
+- [9 Glossary](9-glossary.md)
+
+## 附：结构清单外的页
+- [Action Space Design](x1-action-space-design.md)
+- [Robot-Specific Training](x2-robot-specific-training.md)

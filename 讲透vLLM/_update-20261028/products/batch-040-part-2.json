@@ -1,0 +1,1371 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/flint/ops/moe.py",
+   "type": "file",
+   "name": "moe.py",
+   "filePath": "vllm/models/flint/ops/moe.py",
+   "summary": "Flint MoE kernel 集：BF16/NVFP4 路由专家的 router GEMV、top-k、gate_up/down GEMV、combine Triton kernel 与 TRTLLM BF16 布局行映射；低延迟 flint_moe_ll（共享专家 aux stream + 融合边界）。",
+   "tags": [
+    "moe",
+    "gemv",
+    "triton",
+    "routing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/flint/ops/moe_cute.py",
+   "type": "file",
+   "name": "moe_cute.py",
+   "filePath": "vllm/models/flint/ops/moe_cute.py",
+   "summary": "分组 GEMM MoE（CuTe DSL）：grouped_moe 按战术选 kernel 产 permuted 序专家输出，token 数可变的编译键 warmup。",
+   "tags": [
+    "moe",
+    "grouped-gemm",
+    "cute-dsl",
+    "warmup"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/flint/ops/moe_gemv.py",
+   "type": "file",
+   "name": "moe_gemv.py",
+   "filePath": "vllm/models/flint/ops/moe_gemv.py",
+   "summary": "MoE GEMV kernel 对（CuTe DSL 构建）：小 M 的 gate_up（silu_and_mul 融合）与 down_combine（top-k 加权合并）kernel，按 (kind,h,inter,si,topk) 编译缓存。",
+   "tags": [
+    "moe",
+    "gemv",
+    "cute-dsl",
+    "small-batch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/flint/ops/norm.py",
+   "type": "file",
+   "name": "norm.py",
+   "filePath": "vllm/models/flint/ops/norm.py",
+   "summary": "归一化 kernel：RMSNorm nn.Module（rms_norm/fused_add_rms_norm Triton kernel）与 silu_and_mul。",
+   "tags": [
+    "rmsnorm",
+    "triton",
+    "activation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/flint/ops/nvfp4_gemv.py",
+   "type": "file",
+   "name": "nvfp4_gemv.py",
+   "filePath": "vllm/models/flint/ops/nvfp4_gemv.py",
+   "summary": "NVFP4/BF16 通用 GEMV：调优表（tuned/pick_nt）驱动的小 M W4A16/BF16 GEMV，含 kernel 类构建、逐变体编译 warmup 与精确反量化工具。",
+   "tags": [
+    "nvfp4",
+    "gemv",
+    "tuned",
+    "cute-dsl"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/flint/ops/qk_norm_rope.py",
+   "type": "file",
+   "name": "qk_norm_rope.py",
+   "filePath": "vllm/models/flint/ops/qk_norm_rope.py",
+   "summary": "QK norm+RoPE+cache 写入融合 kernel：从 qkv 归一旋转 q/k 并把 k/v 写入缓存（单 token 路径）。",
+   "tags": [
+    "rope",
+    "rmsnorm",
+    "kv-cache",
+    "fused-kernel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/flint/ops/qkv_fused.py",
+   "type": "file",
+   "name": "qkv_fused.py",
+   "filePath": "vllm/models/flint/ops/qkv_fused.py",
+   "summary": "融合 QKV kernel：残差加 RMSNorm + qkv GEMV + q/k norm、RoPE、缓存写入一次完成（M 小时），可编译带/不带 RoPE 变体。",
+   "tags": [
+    "qkv",
+    "fused-kernel",
+    "gemv",
+    "rope"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/flint/ops/moe.py:FlintMoEWeights",
+   "type": "class",
+   "name": "FlintMoEWeights",
+   "filePath": "vllm/models/flint/ops/moe.py",
+   "summary": "FlashInfer W4A16 布局的路由专家 NVFP4 权重。",
+   "tags": [
+    "moe",
+    "weights",
+    "nvfp4"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    606,
+    644
+   ]
+  },
+  {
+   "id": "class:vllm/models/flint/ops/moe.py:FlintBf16DecodeMoE",
+   "type": "class",
+   "name": "FlintBf16DecodeMoE",
+   "filePath": "vllm/models/flint/ops/moe.py",
+   "summary": "BF16 路由专家的 decode 路径（少 token）。",
+   "tags": [
+    "moe",
+    "bf16",
+    "decode"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    807,
+    870
+   ]
+  },
+  {
+   "id": "class:vllm/models/flint/ops/moe.py:FlintNvfp4Experts",
+   "type": "class",
+   "name": "FlintNvfp4Experts",
+   "filePath": "vllm/models/flint/ops/moe.py",
+   "summary": "NVFP4 GGUF 的逐专家 ModelOpt 张量加载。",
+   "tags": [
+    "moe",
+    "nvfp4",
+    "loading"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    873,
+    973
+   ]
+  },
+  {
+   "id": "class:vllm/models/flint/ops/moe.py:LLMoEWeights",
+   "type": "class",
+   "name": "LLMoEWeights",
+   "filePath": "vllm/models/flint/ops/moe.py",
+   "summary": "flint_moe_ll 用的单层 NVFP4 权重视图（零拷贝）。",
+   "tags": [
+    "moe",
+    "weights",
+    "views"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    983,
+    997
+   ]
+  },
+  {
+   "id": "class:vllm/models/flint/ops/norm.py:RMSNorm",
+   "type": "class",
+   "name": "RMSNorm",
+   "filePath": "vllm/models/flint/ops/norm.py",
+   "summary": "权重持有 + rms_norm/fused_add_rms_norm 的模块。",
+   "tags": [
+    "rmsnorm",
+    "module",
+    "norm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    116,
+    130
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe.py:_topk_row",
+   "type": "function",
+   "name": "_topk_row",
+   "filePath": "vllm/models/flint/ops/moe.py",
+   "summary": "一行 bf16 logits 的 top-k（并列取低专家号，fp32 符号）。",
+   "tags": [
+    "top-k",
+    "triton",
+    "routing"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    158,
+    193
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe.py:_router_kernel",
+   "type": "function",
+   "name": "_router_kernel",
+   "filePath": "vllm/models/flint/ops/moe.py",
+   "summary": "逐 token 的 router GEMV（bf16 logits）+ top-k。",
+   "tags": [
+    "router",
+    "gemv",
+    "triton"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    210,
+    274
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe.py:_topk_kernel",
+   "type": "function",
+   "name": "_topk_kernel",
+   "filePath": "vllm/models/flint/ops/moe.py",
+   "summary": "bf16 router logits 的 top-k kernel。",
+   "tags": [
+    "top-k",
+    "triton",
+    "bf16"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    278,
+    297
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe.py:_gate_up_gemv_kernel",
+   "type": "function",
+   "name": "_gate_up_gemv_kernel",
+   "filePath": "vllm/models/flint/ops/moe.py",
+   "summary": "act[p] = silu(x@Wg[e].T) * (x@Wu[e].T)。",
+   "tags": [
+    "gemv",
+    "silu",
+    "triton"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    301,
+    347
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe.py:_down_gemv_kernel",
+   "type": "function",
+   "name": "_down_gemv_kernel",
+   "filePath": "vllm/models/flint/ops/moe.py",
+   "summary": "out[t] = bf16(sum_j tw*y_j + shared[t])。",
+   "tags": [
+    "gemv",
+    "combine",
+    "triton"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    351,
+    394
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe.py:_combine_kernel",
+   "type": "function",
+   "name": "_combine_kernel",
+   "filePath": "vllm/models/flint/ops/moe.py",
+   "summary": "置换序 act 的 top-k 加权合并。",
+   "tags": [
+    "combine",
+    "triton",
+    "top-k"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    398,
+    423
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe.py:trtllm_bf16_row_maps",
+   "type": "function",
+   "name": "trtllm_bf16_row_maps",
+   "filePath": "vllm/models/flint/ops/moe.py",
+   "summary": "TRTLLM BF16 专家权重的逻辑→物理行映射。",
+   "tags": [
+    "trtllm",
+    "row-maps",
+    "bf16"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    520,
+    546
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe.py:flint_moe_bf16_decode",
+   "type": "function",
+   "name": "flint_moe_bf16_decode",
+   "filePath": "vllm/models/flint/ops/moe.py",
+   "summary": "TRTLLM 布局 BF16 专家的 decode 路 MoE。",
+   "tags": [
+    "moe",
+    "bf16",
+    "decode"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    549,
+    602
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe.py:route",
+   "type": "function",
+   "name": "route",
+   "filePath": "vllm/models/flint/ops/moe.py",
+   "summary": "BF16 router logits → (top-k id, 重归一 fp32 权重)。",
+   "tags": [
+    "routing",
+    "top-k",
+    "renormalize"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    653,
+    694
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe.py:flint_moe",
+   "type": "function",
+   "name": "flint_moe",
+   "filePath": "vllm/models/flint/ops/moe.py",
+   "summary": "BF16 x [M,H] 的路由专家输出+共享输出。",
+   "tags": [
+    "moe",
+    "bf16",
+    "routed"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    697,
+    780
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe.py:_start_shared",
+   "type": "function",
+   "name": "_start_shared",
+   "filePath": "vllm/models/flint/ops/moe.py",
+   "summary": "aux stream 上运行共享专家（fork/join 事件）。",
+   "tags": [
+    "shared-expert",
+    "aux-stream",
+    "events"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    788,
+    804
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe.py:flint_moe_ll",
+   "type": "function",
+   "name": "flint_moe_ll",
+   "filePath": "vllm/models/flint/ops/moe.py",
+   "summary": "M<=LL_MOE_MAX_TOKENS 的低延迟 decode MoE 块。",
+   "tags": [
+    "moe",
+    "low-latency",
+    "decode"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1000,
+    1080
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe.py:ll_weights_from_layers",
+   "type": "function",
+   "name": "ll_weights_from_layers",
+   "filePath": "vllm/models/flint/ops/moe.py",
+   "summary": "从已加载层张量产 LLMoEWeights 视图。",
+   "tags": [
+    "moe",
+    "weights",
+    "views"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1083,
+    1127
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe_cute.py:grouped_moe",
+   "type": "function",
+   "name": "grouped_moe",
+   "filePath": "vllm/models/flint/ops/moe_cute.py",
+   "summary": "permuted 序（未加权 BF16）的分组 GEMM 专家输出。",
+   "tags": [
+    "grouped-gemm",
+    "moe",
+    "cute-dsl"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    29,
+    147
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe_cute.py:_compile_key",
+   "type": "function",
+   "name": "_compile_key",
+   "filePath": "vllm/models/flint/ops/moe_cute.py",
+   "summary": "随 token 数变化的 kernel 编译缓存键。",
+   "tags": [
+    "compile-key",
+    "caching",
+    "moe"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    154,
+    168
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe_cute.py:warmup",
+   "type": "function",
+   "name": "warmup",
+   "filePath": "vllm/models/flint/ops/moe_cute.py",
+   "summary": "编译 min..max token 的全部 grouped-GEMM 变体。",
+   "tags": [
+    "warmup",
+    "compilation",
+    "variants"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    183,
+    210
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe_gemv.py:_build",
+   "type": "function",
+   "name": "_build",
+   "filePath": "vllm/models/flint/ops/moe_gemv.py",
+   "summary": "CuTe DSL GEMV kernel 类构建器（gate_up/down_combine 两 kind）。",
+   "tags": [
+    "gemv",
+    "kernel-builder",
+    "cute-dsl"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    34,
+    416
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe_gemv.py:_compile",
+   "type": "function",
+   "name": "_compile",
+   "filePath": "vllm/models/flint/ops/moe_gemv.py",
+   "summary": "按 key=(kind,h,inter,si,topk) 编译进缓存。",
+   "tags": [
+    "gemv",
+    "compile",
+    "cache"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    448,
+    459
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe_gemv.py:gate_up",
+   "type": "function",
+   "name": "gate_up",
+   "filePath": "vllm/models/flint/ops/moe_gemv.py",
+   "summary": "act[p]=silu_and_mul((x@W1[ids[p]].T)*alpha)（fp32 累加）。",
+   "tags": [
+    "gemv",
+    "silu",
+    "gate-up"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    462,
+    517
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/moe_gemv.py:down_combine",
+   "type": "function",
+   "name": "down_combine",
+   "filePath": "vllm/models/flint/ops/moe_gemv.py",
+   "summary": "out[t]=bf16(sum_j tw*bf16(act_j@W2.T*alpha2)+bf16(shared))。",
+   "tags": [
+    "gemv",
+    "combine",
+    "down"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    520,
+    573
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/norm.py:_launch_norm",
+   "type": "function",
+   "name": "_launch_norm",
+   "filePath": "vllm/models/flint/ops/norm.py",
+   "summary": "归一化 kernel 启动封装。",
+   "tags": [
+    "rmsnorm",
+    "launcher",
+    "triton"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    57,
+    73
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/norm.py:fused_add_rms_norm",
+   "type": "function",
+   "name": "fused_add_rms_norm",
+   "filePath": "vllm/models/flint/ops/norm.py",
+   "summary": "就地：residual=bf16(x+residual)，x=rms_norm(x+residual)。",
+   "tags": [
+    "rmsnorm",
+    "fused",
+    "inplace"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    82,
+    90
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/norm.py:silu_and_mul",
+   "type": "function",
+   "name": "silu_and_mul",
+   "filePath": "vllm/models/flint/ops/norm.py",
+   "summary": "x[:, :D] 的 silu 乘 x[:, D:]。",
+   "tags": [
+    "silu",
+    "activation",
+    "triton"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    103,
+    113
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/nvfp4_gemv.py:pick_nt",
+   "type": "function",
+   "name": "pick_nt",
+   "filePath": "vllm/models/flint/ops/nvfp4_gemv.py",
+   "summary": "覆盖 m 的最小调优 tile 数（GEMV 不占优则 None）。",
+   "tags": [
+    "gemv",
+    "tuned",
+    "dispatch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    82,
+    88
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/nvfp4_gemv.py:_build_kernel_class",
+   "type": "function",
+   "name": "_build_kernel_class",
+   "filePath": "vllm/models/flint/ops/nvfp4_gemv.py",
+   "summary": "GEMV kernel 类构建（NVFP4/BF16 两模式）。",
+   "tags": [
+    "gemv",
+    "kernel-builder",
+    "cute-dsl"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    91,
+    291
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/nvfp4_gemv.py:nvfp4_gemv",
+   "type": "function",
+   "name": "nvfp4_gemv",
+   "filePath": "vllm/models/flint/ops/nvfp4_gemv.py",
+   "summary": "小 M W4A16：x @ dequant(weight).T * global_scale。",
+   "tags": [
+    "gemv",
+    "nvfp4",
+    "w4a16"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    354,
+    392
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/nvfp4_gemv.py:bf16_gemv",
+   "type": "function",
+   "name": "bf16_gemv",
+   "filePath": "vllm/models/flint/ops/nvfp4_gemv.py",
+   "summary": "小 M BF16 GEMV（FP32 累加，同 kernel 复用）。",
+   "tags": [
+    "gemv",
+    "bf16",
+    "small-m"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    395,
+    414
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/nvfp4_gemv.py:warmup",
+   "type": "function",
+   "name": "warmup",
+   "filePath": "vllm/models/flint/ops/nvfp4_gemv.py",
+   "summary": "编译该形状可能选中的全部 GEMV 变体。",
+   "tags": [
+    "warmup",
+    "variants",
+    "gemv"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    427,
+    436
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/nvfp4_gemv.py:dequantize_rows",
+   "type": "function",
+   "name": "dequantize_rows",
+   "filePath": "vllm/models/flint/ops/nvfp4_gemv.py",
+   "summary": "全部权重行的精确 BF16 e2m1*e4m3（不含全局 scale）。",
+   "tags": [
+    "dequantization",
+    "e2m1",
+    "rows"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    474,
+    492
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/qk_norm_rope.py:_qk_norm_rope_cache_kernel",
+   "type": "function",
+   "name": "_qk_norm_rope_cache_kernel",
+   "filePath": "vllm/models/flint/ops/qk_norm_rope.py",
+   "summary": "q/k 归一化旋转并写 k/v 入缓存的 kernel。",
+   "tags": [
+    "rope",
+    "norm",
+    "kv-cache"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    22,
+    103
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/qk_norm_rope.py:qk_norm_rope_cache",
+   "type": "function",
+   "name": "qk_norm_rope_cache",
+   "filePath": "vllm/models/flint/ops/qk_norm_rope.py",
+   "summary": "从 qkv 归一旋转 q/k 写缓存的 Python 封装。",
+   "tags": [
+    "rope",
+    "kv-cache",
+    "wrapper"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    106,
+    187
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/qkv_fused.py:_kernels",
+   "type": "function",
+   "name": "_kernels",
+   "filePath": "vllm/models/flint/ops/qkv_fused.py",
+   "summary": "（编译期）融合 QKV kernel 生成。",
+   "tags": [
+    "qkv",
+    "kernel-builder",
+    "compile-time"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    33,
+    441
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/qkv_fused.py:_compile_qkv",
+   "type": "function",
+   "name": "_compile_qkv",
+   "filePath": "vllm/models/flint/ops/qkv_fused.py",
+   "summary": "编译 qkv 融合 kernel（带/不带 RoPE）。",
+   "tags": [
+    "qkv",
+    "compile",
+    "variants"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    463,
+    490
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/qkv_fused.py:flint_qkv_fused",
+   "type": "function",
+   "name": "flint_qkv_fused",
+   "filePath": "vllm/models/flint/ops/qkv_fused.py",
+   "summary": "残差加 RMSNorm + qkv GEMV + q/k norm、RoPE、cache 写入一次完成。",
+   "tags": [
+    "qkv",
+    "fused-kernel",
+    "rope"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    493,
+    568
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/qkv_fused.py:no_rope_table",
+   "type": "function",
+   "name": "no_rope_table",
+   "filePath": "vllm/models/flint/ops/qkv_fused.py",
+   "summary": "无 RoPE kernel 的占位 fp32 cos|sin 参数。",
+   "tags": [
+    "rope",
+    "placeholder",
+    "no-rope"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    578,
+    583
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/flashinfer_fp4_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/nvfp4_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "file:vllm/models/flint/ops/moe_cute.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "file:vllm/models/flint/ops/moe_gemv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "file:vllm/models/flint/ops/norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe_gemv.py",
+   "target": "file:vllm/models/flint/ops/cute_primitives.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/norm.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/nvfp4_gemv.py",
+   "target": "file:vllm/models/flint/ops/cute_primitives.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/qk_norm_rope.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/qkv_fused.py",
+   "target": "file:vllm/models/flint/ops/cute_primitives.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/qkv_fused.py",
+   "target": "file:vllm/models/flint/ops/nvfp4_gemv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "class:vllm/models/flint/ops/moe.py:FlintMoEWeights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "class:vllm/models/flint/ops/moe.py:FlintBf16DecodeMoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "class:vllm/models/flint/ops/moe.py:FlintNvfp4Experts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "class:vllm/models/flint/ops/moe.py:LLMoEWeights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "function:vllm/models/flint/ops/moe.py:_topk_row",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "function:vllm/models/flint/ops/moe.py:_router_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "function:vllm/models/flint/ops/moe.py:_topk_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "function:vllm/models/flint/ops/moe.py:_gate_up_gemv_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "function:vllm/models/flint/ops/moe.py:_down_gemv_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "function:vllm/models/flint/ops/moe.py:_combine_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "function:vllm/models/flint/ops/moe.py:trtllm_bf16_row_maps",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "function:vllm/models/flint/ops/moe.py:flint_moe_bf16_decode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "function:vllm/models/flint/ops/moe.py:route",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "function:vllm/models/flint/ops/moe.py:flint_moe",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "function:vllm/models/flint/ops/moe.py:_start_shared",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "function:vllm/models/flint/ops/moe.py:flint_moe_ll",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "function:vllm/models/flint/ops/moe.py:ll_weights_from_layers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/norm.py",
+   "target": "class:vllm/models/flint/ops/norm.py:RMSNorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/norm.py",
+   "target": "function:vllm/models/flint/ops/norm.py:_launch_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/norm.py",
+   "target": "function:vllm/models/flint/ops/norm.py:fused_add_rms_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/norm.py",
+   "target": "function:vllm/models/flint/ops/norm.py:silu_and_mul",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe_cute.py",
+   "target": "function:vllm/models/flint/ops/moe_cute.py:grouped_moe",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe_cute.py",
+   "target": "function:vllm/models/flint/ops/moe_cute.py:_compile_key",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe_cute.py",
+   "target": "function:vllm/models/flint/ops/moe_cute.py:warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe_gemv.py",
+   "target": "function:vllm/models/flint/ops/moe_gemv.py:_build",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe_gemv.py",
+   "target": "function:vllm/models/flint/ops/moe_gemv.py:_compile",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe_gemv.py",
+   "target": "function:vllm/models/flint/ops/moe_gemv.py:gate_up",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe_gemv.py",
+   "target": "function:vllm/models/flint/ops/moe_gemv.py:down_combine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/nvfp4_gemv.py",
+   "target": "function:vllm/models/flint/ops/nvfp4_gemv.py:pick_nt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/nvfp4_gemv.py",
+   "target": "function:vllm/models/flint/ops/nvfp4_gemv.py:_build_kernel_class",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/nvfp4_gemv.py",
+   "target": "function:vllm/models/flint/ops/nvfp4_gemv.py:nvfp4_gemv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/nvfp4_gemv.py",
+   "target": "function:vllm/models/flint/ops/nvfp4_gemv.py:bf16_gemv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/nvfp4_gemv.py",
+   "target": "function:vllm/models/flint/ops/nvfp4_gemv.py:warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/nvfp4_gemv.py",
+   "target": "function:vllm/models/flint/ops/nvfp4_gemv.py:dequantize_rows",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/qk_norm_rope.py",
+   "target": "function:vllm/models/flint/ops/qk_norm_rope.py:_qk_norm_rope_cache_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/qk_norm_rope.py",
+   "target": "function:vllm/models/flint/ops/qk_norm_rope.py:qk_norm_rope_cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/qkv_fused.py",
+   "target": "function:vllm/models/flint/ops/qkv_fused.py:_kernels",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/qkv_fused.py",
+   "target": "function:vllm/models/flint/ops/qkv_fused.py:_compile_qkv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/qkv_fused.py",
+   "target": "function:vllm/models/flint/ops/qkv_fused.py:flint_qkv_fused",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/qkv_fused.py",
+   "target": "function:vllm/models/flint/ops/qkv_fused.py:no_rope_table",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "class:vllm/models/flint/ops/moe.py:FlintMoEWeights",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "class:vllm/models/flint/ops/moe.py:FlintBf16DecodeMoE",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "class:vllm/models/flint/ops/moe.py:FlintNvfp4Experts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "class:vllm/models/flint/ops/moe.py:LLMoEWeights",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "function:vllm/models/flint/ops/moe.py:trtllm_bf16_row_maps",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "function:vllm/models/flint/ops/moe.py:flint_moe_bf16_decode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "function:vllm/models/flint/ops/moe.py:route",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "function:vllm/models/flint/ops/moe.py:flint_moe",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "function:vllm/models/flint/ops/moe.py:flint_moe_ll",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe.py",
+   "target": "function:vllm/models/flint/ops/moe.py:ll_weights_from_layers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/norm.py",
+   "target": "class:vllm/models/flint/ops/norm.py:RMSNorm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/norm.py",
+   "target": "function:vllm/models/flint/ops/norm.py:fused_add_rms_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/norm.py",
+   "target": "function:vllm/models/flint/ops/norm.py:silu_and_mul",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe_cute.py",
+   "target": "function:vllm/models/flint/ops/moe_cute.py:grouped_moe",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe_cute.py",
+   "target": "function:vllm/models/flint/ops/moe_cute.py:warmup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe_gemv.py",
+   "target": "function:vllm/models/flint/ops/moe_gemv.py:gate_up",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/moe_gemv.py",
+   "target": "function:vllm/models/flint/ops/moe_gemv.py:down_combine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/nvfp4_gemv.py",
+   "target": "function:vllm/models/flint/ops/nvfp4_gemv.py:pick_nt",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/nvfp4_gemv.py",
+   "target": "function:vllm/models/flint/ops/nvfp4_gemv.py:nvfp4_gemv",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/nvfp4_gemv.py",
+   "target": "function:vllm/models/flint/ops/nvfp4_gemv.py:bf16_gemv",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/nvfp4_gemv.py",
+   "target": "function:vllm/models/flint/ops/nvfp4_gemv.py:warmup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/nvfp4_gemv.py",
+   "target": "function:vllm/models/flint/ops/nvfp4_gemv.py:dequantize_rows",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/qk_norm_rope.py",
+   "target": "function:vllm/models/flint/ops/qk_norm_rope.py:qk_norm_rope_cache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/qkv_fused.py",
+   "target": "function:vllm/models/flint/ops/qkv_fused.py:flint_qkv_fused",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/qkv_fused.py",
+   "target": "function:vllm/models/flint/ops/qkv_fused.py:no_rope_table",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/models/flint/ops/moe.py:flint_moe_ll",
+   "target": "function:vllm/models/flint/ops/moe_gemv.py:gate_up",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/models/flint/ops/moe.py:flint_moe_ll",
+   "target": "function:vllm/models/flint/ops/moe_gemv.py:down_combine",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/models/flint/ops/moe.py:route",
+   "target": "function:vllm/models/flint/ops/moe.py:_router_kernel",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/flint/ops/norm.py:RMSNorm",
+   "target": "function:vllm/models/flint/ops/norm.py:fused_add_rms_norm",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

@@ -1,0 +1,30 @@
+# DeepWiki 索引 — gitroomhq/postiz-agent
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-27
+> 结构 25 页 · 全文 149632 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Project Structure and Build Pipeline](1.2-project-structure-and-build-pipeline.md)
+- [2 CLI Architecture](2-cli-architecture.md)
+  - [2.1 Entrypoint and Command Dispatch](2.1-entrypoint-and-command-dispatch.md)
+  - [2.2 PostizAPI Client](2.2-postizapi-client.md)
+  - [2.3 Configuration and Authentication Modules](2.3-configuration-and-authentication-modules.md)
+- [3 Command Reference](3-command-reference.md)
+  - [3.1 Post Management Commands](3.1-post-management-commands.md)
+  - [3.2 Integration Commands](3.2-integration-commands.md)
+  - [3.3 Analytics Commands](3.3-analytics-commands.md)
+  - [3.4 Media Upload Command](3.4-media-upload-command.md)
+- [4 Platform Integration Guide](4-platform-integration-guide.md)
+  - [4.1 Provider Settings Schemas](4.1-provider-settings-schemas.md)
+  - [4.2 Integration Tools Workflow](4.2-integration-tools-workflow.md)
+- [5 Post Composition and Examples](5-post-composition-and-examples.md)
+  - [5.1 CLI Flag Mode](5.1-cli-flag-mode.md)
+  - [5.2 JSON File Mode](5.2-json-file-mode.md)
+- [6 OAuth2 Auth Server](6-oauth2-auth-server.md)
+  - [6.1 Device Flow Architecture](6.1-device-flow-architecture.md)
+  - [6.2 Auth Server Deployment](6.2-auth-server-deployment.md)
+- [7 AI Agent Integration](7-ai-agent-integration.md)
+  - [7.1 SKILL.md Contract and Discovery Workflow](7.1-skill.md-contract-and-discovery-workflow.md)
+  - [7.2 Claude Plugin Configuration](7.2-claude-plugin-configuration.md)
+- [8 Glossary](8-glossary.md)

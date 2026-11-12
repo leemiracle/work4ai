@@ -1,0 +1,387 @@
+---
+title: Agent Workbench
+author: Harbor-HF maintainers
+date: 2026-09-04
+tags: [agents, workbench, harbor, security]
+---
+
+# Agent Workbench
+
+Agent Workbench is the authenticated `/workbench` page for a generic command-line
+Harbor agent. It restores the useful configure, test, and run flow without
+restoring the old profile or worker systems.
+
+## Flow
+
+The page has three stages:
+
+1. **Configure:** Edit setup and run commands, environment bindings, and output
+   paths. The service compiles the recipe and shows the exact Harbor agent.
+2. **Test:** Run only the setup command in a disposable CPU environment. This
+   stage has no benchmark, model request, inference credential, Bucket mount, or
+   worker authority.
+3. **Run:** Select a reviewed benchmark, model route, cost limit, and result
+   role. Submit the exact tested recipe through `POST /api/v1/runs`.
+
+The browser saves incomplete recipe and run-form edits in local storage after
+400 ms without edits, and flushes pending changes when leaving or hiding the page.
+Binding rows retain their identity while names are edited; row identities are
+browser-only and never enter saved recipes or submissions. The browser does
+not save setup approval, setup state, or launch confirmation. Reloading the page
+therefore keeps the draft but requires a fresh confirmation. Recipe commands and
+literal values must not contain secrets.
+
+A setup pass is temporary evidence. It does not create or approve a profile. It
+does not start a benchmark. The pass is valid for one hour, for the same actor,
+recipe digest, and compiler revision. A service restart makes a recovered setup
+record non-attestable, so the operator must run the test again.
+
+## Fast-Agent starter connection defaults
+
+The Fast-Agent 0.10.24 starter uses its native HF provider routing and does not
+pass `--base-url`. The existing `MODEL_BASE_URL` binding remains only because
+hosted launch admission currently requires a `model_base_url` binding.
+
+At execution time it checks that the injected `OPENAI_API_KEY` is nonempty and
+maps that inference credential to `HF_TOKEN` for the Fast-Agent process only.
+It never reads the control credential. The same process receives `SSL_CERT_FILE`
+pointing to the installed `certifi` CA bundle, obtained using the agent virtual
+environment's Python. Missing or unreadable bundles fail before Fast-Agent starts;
+TLS certificate verification remains enabled even when the task image has no
+system CA store. The recipe contains no credential values.
+
+These defaults apply to newly selected starters. Browser-saved edits and existing
+run records are not rewritten. To adopt them, select the Fast-Agent starter again
+(after preserving custom edits), repeat the setup test, and submit a new run.
+
+## Recipe
+
+The authoritative schema is
+[`agent-workbench-v1.schema.json`](../packages/contracts/schemas/agent-workbench-v1.schema.json).
+A recipe contains:
+
+- a portable name;
+- setup and run shell commands;
+- a `chat-completions` or `responses` route type;
+- a setup timeout from 30 to 3,600 seconds;
+- typed environment bindings; and
+- a required result path and optional ATIF trajectory path below
+  `/logs/agent`.
+
+Environment sources are:
+
+| Source | Setup | Run | Value |
+| --- | --- | --- | --- |
+| `literal` | yes | yes | Non-secret recipe text |
+| `workspace_path` | yes | yes | Writable task workspace |
+| `logs_path` | yes | yes | Agent output directory |
+| `agent_home` | yes | yes | Managed agent home |
+| `model_name` | yes | yes | Model selected for the run |
+| `instruction_path` | no | yes | File that contains the task instruction |
+| `model_base_url` | no | yes | Model route injected for the run |
+| `model_api_key` | no | yes | Inference credential injected for the run |
+
+The compiler rejects duplicate names, shell-reserved names, Harbor control
+names, credential-like literal names or values, paths outside the managed
+roots, duplicate output paths, and run-only bindings in setup commands.
+Instructions stay in a file. The compiler does not put instruction text in a
+shell command.
+
+## Harbor integration
+
+The compiler produces one Harbor agent fragment with this fixed import:
+
+```text
+harbor_hf_agents.command_agent.agent:CommandAgent
+```
+
+The fragment goes into the same Harbor `JobConfig` that a reviewed agent preset
+uses. The normal run record, parent Job, Harbor folder, trial lifecycle, retry
+behavior, result projection, cost stop, and controls apply. There is no
+Workbench-specific run endpoint, task loop, retry loop, worker, profile,
+promotion, preparation Job, or publication record.
+
+The server accepts a Workbench run only when the recipe has both
+`model_base_url` and `model_api_key` bindings. It recompiles the submitted
+recipe, checks the exact setup attestation, and creates one normal run. The
+inference credential appears only as the existing runtime template in the
+Harbor agent environment. It is not stored in the recipe, run record, request,
+Job label, or setup Job.
+
+A diagnostic role is the safe default. Final runs can enter the public
+leaderboard only when the selected benchmark is eligible and Harbor records at
+least one numeric reward.
+
+## Trial concurrency
+
+Workbench and Overview use the same **Concurrent trials** input, API validation,
+and native configuration override. The selected benchmark supplies the default:
+8 for the all-task presets, 1 for the one-task preset. Values such as 8, 10, 12,
+and 16 can be entered directly; the existing supported range remains 1–128.
+
+This is Harbor's `n_concurrent_trials`, not the number of attempts per task, a
+new scheduler, or a hard spending limit. Higher values can increase resource use
+and provider rate-limit pressure. Setup testing is still one disposable setup
+Job and does not use benchmark concurrency.
+
+Changing the benchmark resets the input to its preset default. Explicit draft
+edits survive reload, including older higher values; reload never restores
+launch approval. Concurrency edits invalidate launch confirmation. Submission
+stores the value only in the native Harbor job configuration. Existing run
+records, retry settings, hardware, budgets, and attempts are not rewritten.
+
+## Fast-agent HF routing
+
+The reviewed fast-agent starter installs `fast-agent-mcp==0.10.24` and uses
+fast-agent's native Hugging Face adapter.
+
+This default-only update does not migrate saved/custom recipes or existing runs.
+The setup pin is the only script change; invocation, environment bindings, output
+paths, and metadata-only reasoning semantics remain unchanged. Source review of
+Fast-Agent tags v0.10.21 through v0.10.23 checked `pyproject.toml`,
+`src/fast_agent/cli/commands/go.py`, `cli/shared_options.py`,
+`cli/runtime/agent_setup.py`, `llm/model_factory.py`,
+`llm/provider_key_manager.py`, and `llm/provider/openai/llm_huggingface.py`
+(paths after the first CLI file are relative to `src/fast_agent/`). The CLI still
+accepts the starter's model, prompt-file, workspace, home, results, trajectory,
+shell and quiet options; native HF routing and inference-key mapping are intact.
+The intervening changes concern terminal UI, Codex authentication and native
+DeepSeek defaults, not this explicit HF route. This is source compatibility
+review, not a live inference or package-install verification.
+
+Harbor's `src/harbor/agents/installed/base.py` at pinned `dcd0a7ac` retains
+installation and execution authority through `setup`, `install`, and
+`exec_as_agent`; the existing command-agent adapter is unchanged. Reviewed
+upstream history through `191d1b98` adds no required behavior for this recipe pin,
+so this update needs neither a Harbor pin bump nor an execution patch.
+
+The guided Run form separates evaluation labels from execution:
+
+- **Recorded model** is the identity saved in `submission.model.id`. It does not
+  select or verify the model used by the harness.
+- **Recorded provider** is optional metadata, stored as `unspecified` when blank.
+- **Harness model string** is stored unchanged in Harbor's
+  `agents[0].model_name`. The recipe's `model_name` environment binding delivers
+  it to the invocation command. The command remains responsible for consuming it.
+
+For example:
+
+- Recorded model: `example-org/model-one`
+- Recorded provider: `together`
+- Harness model string: `hf.example-org/model-one:together`
+
+The Fast-Agent starter passes an explicit `hf.<model>:<provider>` string unchanged
+into its native HF adapter. For older API clients that omit
+`workbench.harbor_agent.model_name`, the builder retains the existing
+`openai/<model>:<provider>` default; the starter converts that legacy form at the
+CLI boundary. Other recipes define their own model-string conventions. There is
+no harness-name switch in the submission service.
+
+Editing recorded identity does not rewrite the harness string. Changing run
+settings clears launch confirmation. Browser drafts preserve the two values
+separately, but never preserve setup or launch approval; older drafts require
+entering the harness string explicitly. Preset submission and the native New Job
+page are unchanged.
+
+These fields do not enable new credential routes. Environment bindings deliver
+credentials from the configured source; they do not authorize arbitrary secrets.
+`model_api_key` without `credential_ref` still supplies only the existing HF inference credential. Never
+paste keys into commands, literal environment values, model strings, or config
+files. A non-HF provider needs its own reviewed credential source and delivery
+path before execution can be supported.
+
+In particular, the bundled FX 0.0.6 recipe consumes `model_name` as `FX_MODEL` and
+expects a Vercel AI Gateway key as `AI_GATEWAY_API_KEY`. An HF provider selection
+or HF token does not satisfy that requirement. The FX starter remains available
+for editing and setup testing, not benchmark launch through this HF-only path.
+
+The run already receives an inference-only key through its `model_api_key`
+binding. The starter exposes that same key as `HF_TOKEN` only for the fast-agent
+process, because its native HF adapter uses that environment name. It does not
+read or forward the control Space's `HF_TOKEN`, add a persistent secret, write
+credential values into files, or give inference credentials to setup tests.
+The generic command-agent plugin and results/ATIF output paths remain unchanged;
+Harbor continues to own trial execution and reported cost handling.
+
+Browser-saved drafts keep their old command. After deploying this change, select
+the fast-agent starter again (preserve any custom recipe edits separately), check
+the new run command, and rerun setup. Recipe changes invalidate the old setup
+attestation. First run a small diagnostic with a bounded campaign cost ceiling;
+a successful setup alone does not test model access or inference behavior.
+
+## Task execution permissions
+
+The command-agent runs setup and task commands through Harbor's public
+`BaseInstalledAgent.exec_as_agent()` method, like ACP. It uses the environment's
+default task user instead of forcing a separate unprivileged account. In task
+images whose default user is root, commands can install system dependencies
+inside the disposable task container. An explicitly configured non-root user
+is not promoted to root. This is not host-root access.
+
+Recipe commands still receive a clean environment containing only fixed runtime
+settings and declared bindings. HOME remains the managed agent home; USER and
+LOGNAME reflect the actual task user. Staging assigns agent files to the task
+user without recursively changing ownership or permissions of benchmark data.
+Harbor continues to own the trial lifecycle and process cleanup.
+
+The container is the isolation boundary, not `env -i`: task root can inspect
+other processes and files inside that same container. The reviewed HF Sandbox
+creation path does not forward the parent control credential or parent Bucket
+mounts. Only the approved inference binding reaches recipe execution. Do not add
+control credentials, writable canonical storage, or privileged host mounts to
+task containers. This change does not repair the separate existing parent-worker
+control-credential and writable-Bucket boundary defect.
+
+## Setup runners
+
+Local development uses Docker. The container has bounded CPU, memory, process,
+time, log, file-count, and file-preview limits. It mounts only temporary
+workspace, logs, agent-home, and recipe paths.
+
+A hosted deployment can use one temporary Hugging Face Job for each setup test.
+The Job uses:
+
+- `cpu-basic` on `amd64`;
+- an immutable reviewed image;
+- one attempt;
+- no secrets;
+- no volumes;
+- no Space attachment; and
+- opaque ownership and recipe labels.
+
+The control service verifies the returned Job specification. If verification
+fails after creation, it cancels that Job. Cancellation targets only the Job
+that belongs to the actor-owned setup record. Setup logs are bounded to 2 MiB
+per stream. At most 1,000 files and 1 MiB of text previews are retained by the
+control process.
+
+The hosted runner needs these variables:
+
+```text
+HARBOR_HF_WORKBENCH_RUNNER=hf-jobs
+HARBOR_HF_WORKBENCH_IMAGE=<image>@sha256:<digest>
+```
+
+Production rejects a hosted Workbench image that does not use an immutable
+digest. `disabled` is the production default. Development defaults to `docker`.
+
+## Command-line use
+
+Set the normal control URL and bearer token in the shell. Then use:
+
+```bash
+harbor-hf workbench preview recipe.json
+harbor-hf workbench setup start recipe.json --yes --wait
+harbor-hf workbench setup list
+harbor-hf workbench setup status <setup-test-id>
+harbor-hf workbench setup wait <setup-test-id>
+harbor-hf workbench setup logs <setup-test-id>
+harbor-hf workbench setup files <setup-test-id>
+harbor-hf workbench setup file <setup-test-id> <file-id>
+harbor-hf workbench setup cancel <setup-test-id> --yes
+```
+
+Submit the exact passed recipe through the normal run command:
+
+```bash
+harbor-hf run submit \
+  --benchmark terminal-bench-2-1 \
+  --preset one-task-1-trial \
+  --model publisher/model \
+  --provider provider \
+  --harness recipe.json \
+  --setup-test <setup-test-id> \
+  --cost-ceiling-usd 100 \
+  --role diagnostic \
+  --yes
+```
+
+`--harness` and `--setup-test` must be used together. A Workbench submission
+cannot also select an agent preset and must use reasoning effort `off`.
+
+## Starter recipes
+
+The page keeps the historical Fast Agent and FX starter recipes with their
+pinned versions and checksums.
+
+The Fast Agent starter has direct model base URL and API key bindings, so it can
+complete the full setup and Harbor run flow.
+
+The FX starter uses its original Vercel AI Gateway assumptions. It can be
+setup-tested, but it cannot start a Harbor run until its recipe declares the
+direct model route and credential bindings required by Harbor-HF. This prevents
+an inference credential from going to an unintended endpoint.
+
+## Recorded reasoning intent
+
+Workbench accepts free text in the existing `submission.model.reasoning_effort`.
+It is metadata only, not a provider parameter or capability declaration. The
+compiler never appends it to model strings, environment variables, commands or
+kwargs; the exact tested recipe remains execution authority. Native agent preset
+reasoning options on Overview are unchanged.
+
+Text is preserved verbatim, including spaces and numeric-looking values such as
+`100` and `75`. Empty text explicitly means unset; whitespace-only text is retained,
+not silently normalized. Omitted API values and older browser drafts retain the
+legacy `off` default. The limit is 160 characters; Unicode controls/formatting and
+line/paragraph separators, plus recognizable credential material, are rejected.
+The CLI passes the exact string to the same service validation. Drafts persist
+intent outside the recipe, and run detail labels it as submission metadata rather
+than effective reasoning. Intent changes require renewed launch confirmation but
+not another setup test. Existing recipes and immutable submissions are untouched.
+
+## Native per-agent execution budgets
+
+Benchmark presets may now contain a single native `job.agents` fragment with only
+`override_timeout_sec` and `max_timeout_sec` (positive seconds or null). This is a
+restricted subset of Harbor AgentConfig, not an additional preset timeout field.
+The benchmark owns these execution timing values; the selected reviewed agent or
+Workbench recipe owns identity, environment, kwargs and setup timeout. Both
+compilers preserve the timing fragment when constructing that one reviewed agent.
+Multiple fragments and arbitrary agent configuration are rejected. This narrow
+merge trades the old prohibition on benchmark agent fragments for native timing
+expressiveness without exposing an alternative agent authority.
+
+For six hours of agent execution replacing task-specific budgets, use:
+
+```json
+{
+  "agents": [{ "override_timeout_sec": 21600, "max_timeout_sec": null }],
+  "agent_timeout_multiplier": 1
+}
+```
+
+Harbor applies the override instead of the task budget, the cap before the
+multiplier, and the explicit phase multiplier instead of the global multiplier.
+A null cap does not shorten this budget. Setup, verifier, environment build and
+whole-Job lifetime are independent and unchanged; infrastructure lifetime and
+cost stops can still interrupt execution. No timeout is resolved locally.
+
+Reviewed pinned Harbor `dcd0a7ac74b7bd417780d9cb27cd819c7ec82e4e`:
+`src/harbor/models/job/config.py`, `src/harbor/models/trial/config.py`, and
+`src/harbor/trial/trial.py`. Public configuration authority is JobConfig and its
+AgentConfig fields. Fresh upstream history through `191d1b98` retains this timing
+behavior; newer validation/dry-run changes do not supply missing behavior here.
+No upstream gap, pin update or execution patch is needed for this scope.
+Registry task membership remains Harbor-owned: no task counter, resolver or
+benchmark/model/harness-specific branch is added to the compilers.
+
+
+## Local provider credential references
+
+Workbench supports operator-managed Space secret references for
+provider inference: the app selects reviewed references and shows presence only,
+never accepts or stores key values. Explicit environment bindings deliver only the
+selected credential to reviewed execution. See [Provider credential references](provider-credential-references.md)
+for the operator-only register/select/review/approve flow after separately approved
+deployment. Workbench Manage secrets edits name-only references in the canonical
+Bucket registry; the server derives exact recipe/model/image grants. No manifest
+path or offline hash workflow remains. Revision conflicts and uncertain saves
+require refresh and review, never automatic retries. Standalone setup success is
+not approval.
+
+Deployment caveat: align the live two-secret inventory and control-only token
+instructions under separate explicit deployment and credential-transfer approval.
+This local implementation does not authorize activation.
+Standalone setup tests remain secret-free; Harbor's authorized benchmark agent env
+covers setup and run. Host review constraints are not firewall enforcement.

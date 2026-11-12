@@ -1,0 +1,642 @@
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![GoDoc](https://pkg.go.dev/badge/github.com/NVIDIA/gontainer/v2)](https://pkg.go.dev/github.com/NVIDIA/gontainer/v2)
+![Test](https://github.com/NVIDIA/gontainer/actions/workflows/go.yml/badge.svg)
+[![Report](https://goreportcard.com/badge/github.com/NVIDIA/gontainer/v2)](https://goreportcard.com/report/github.com/NVIDIA/gontainer/v2)
+
+# Gontainer
+
+Simple but powerful dependency injection container for Go projects!
+
+<p align="center"><img src="splash.gif" width="600"/></p>
+
+## Use Cases
+
+- 🚢 Building a **fleet of similar services** that share one uniform entry point, with
+  the specifics factored out into reusable modules.
+- 🤝 Keeping services consistent across a team or organization, so they are easy to
+  read, operate, and hand over.
+- ⚡ Standing up new services quickly by composing ready-made building blocks instead
+  of rewriting the same plumbing every time.
+
+See the [complete webapp example](./examples/03_complete_webapp/main.go) for this in
+action.
+
+## Features
+
+- 🎯 Automatic dependency injection based on function signatures.
+- ✨ Super simple interface to register and run services.
+- 🚀 Lazy service creation only when actually needed.
+- 🔄 Lifecycle management with proper cleanup in reverse order.
+- 🤖 Clean and tested implementation using reflection and generics.
+- 🧩 No external packages, no code generation, zero dependencies.
+
+## Quick Start
+
+The example shows how to build the simplest app using service container.
+
+```go
+package main
+
+import (
+    "log"
+    "github.com/NVIDIA/gontainer/v2"
+)
+
+// Your services.
+type Database struct{ connString string }
+type UserService struct{ db *Database }
+
+func main() {
+    err := gontainer.Run(
+        // Register Database.
+        gontainer.NewFactory(func() *Database {
+            return &Database{connString: "postgres://localhost/myapp"}
+        }),
+        
+        // Register UserService - Database is auto-injected!
+        gontainer.NewFactory(func(db *Database) *UserService {
+            return &UserService{db: db}
+        }),
+        
+        // Use your services.
+        gontainer.NewEntrypoint(func(users *UserService) {
+            log.Printf("UserService ready with DB: %s", users.db)
+        }),
+    )
+    
+    if err != nil {
+        log.Fatal(err)
+    }
+}
+```
+
+## Examples
+
+* [Console command example](./examples/01_console_command/main.go) – demonstrates how to build a simple console command.
+  ```
+  12:51:32 Executing service container
+  12:51:32 Hello from the Hello Service Bob
+  12:51:32 Service container executed
+  ```
+* [Daemon service example](./examples/02_daemon_service/main.go) – demonstrates how to maintain background services.
+  ```
+  12:48:22 Executing service container
+  12:48:22 Starting listening on: http://127.0.0.1:8080
+  12:48:22 Starting serving HTTP requests
+  ------ Application was started and now accepts HTTP requests -------------
+  ------ CTRL+C was pressed or a TERM signal was sent to the process -------
+  12:48:28 Exiting from serving by signal
+  12:48:28 Service container executed
+  ```
+* [Complete webapp example](./examples/03_complete_webapp/main.go) – demonstrates how to organize web application with multiple services.
+  ```
+  15:19:48 INFO msg="Starting service container" service=logger
+  15:19:48 INFO msg="Configuring app endpoints" service=app
+  15:19:48 INFO msg="Configuring health endpoints" service=app
+  15:19:48 INFO msg="Starting HTTP server" service=http address=127.0.0.1:8080
+  ------ Application was started and now accepts HTTP requests -------------
+  15:19:54 INFO msg="Serving home page" service=app remote-addr=127.0.0.1:62640
+  15:20:01 INFO msg="Serving health check" service=app remote-addr=127.0.0.1:62640
+  ------ CTRL+C was pressed or a TERM signal was sent to the process -------
+  15:20:04 INFO msg="Terminating by signal" service=app
+  15:20:04 INFO msg="Closing HTTP server" service=http
+  ```
+* [Transient service example](./examples/04_transient_services/main.go) – demonstrates how to return a function that can be called multiple times to produce transient services.
+  ```
+  11:19:22 Executing service container
+  11:19:22 New value: 8767488676555705225
+  11:19:22 New value: 5813207273458254863
+  11:19:22 New value: 750077227530805093
+  11:19:22 Service container executed
+  ```
+
+## Installation
+
+```bash
+go get github.com/NVIDIA/gontainer/v2
+```
+
+Requirements: Go 1.21+
+
+## Core Concepts
+
+### 1. Define Services
+
+Services are just regular Go types:
+
+```go
+type EmailService struct {
+    smtp string
+}
+
+func (s *EmailService) SendWelcome(email string) error {
+    log.Printf("Sending welcome email to %s via %s", email, s.smtp)
+    return nil
+}
+```
+
+### 2. Register Factories
+
+Factories create your services. Dependencies are declared as function parameters:
+
+```go
+// Simple factory.
+gontainer.NewFactory(func() *EmailService {
+    return &EmailService{smtp: "smtp.gmail.com"}
+})
+
+// Factory with dependencies - auto-injected!
+gontainer.NewFactory(func(config *Config, logger *Logger) *EmailService {
+    logger.Info("Creating email service")
+    return &EmailService{smtp: config.SMTPHost}
+})
+
+// Factory with a cleanup callback.
+gontainer.NewFactory(func() (*Database, func() error) {
+    db, _ := sql.Open("postgres", "...")
+    
+    return db, func() error {
+        log.Println("Closing database")
+        return db.Close()
+    }
+})
+```
+
+### 3. Run Container
+
+```go
+err := gontainer.Run(
+    gontainer.NewFactory(...),
+    gontainer.NewFactory(...),
+    gontainer.NewEntrypoint(func(/* dependencies */) {
+        // application entry point
+    }),
+)
+```
+
+## Advanced Features
+
+### Resource Cleanup
+
+Return a cleanup function from your factory to handle graceful shutdown:
+
+```go
+gontainer.NewFactory(func() (*Server, func() error) {
+    server := &http.Server{Addr: ":8080"}
+    go server.ListenAndServe()
+    
+    // Cleanup function called on container shutdown.
+    return server, func() error {
+        ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+        defer cancel()
+        return server.Shutdown(ctx)
+    }
+})
+```
+
+### Optional Dependencies
+
+Use when a service might not be registered:
+
+```go
+gontainer.NewFactory(func(metrics gontainer.Optional[*MetricsService]) *API {
+    api := &API{}
+    
+    // Use metrics if available
+    if m := metrics.Get(); m != nil {
+        api.metrics = m
+    }
+    
+    return api
+})
+```
+
+### Multiple Dependencies
+
+Get all services implementing an interface:
+
+```go
+type Middleware interface {
+    Process(http.Handler) http.Handler
+}
+
+gontainer.NewFactory(func(middlewares gontainer.Multiple[Middleware]) *Router {
+    router := &Router{}
+    for _, mw := range middlewares {
+        router.Use(mw)
+    }
+    return router
+})
+```
+
+### Interface Dependencies
+
+A factory can depend on an interface, and the container injects a registered
+service that implements it:
+
+```go
+type Store interface {
+    Get(key string) (string, bool)
+}
+
+gontainer.NewFactory(func() *MemoryStore {
+    return &MemoryStore{} // implements Store
+})
+
+gontainer.NewFactory(func(store Store) *API {
+    return &API{store: store}
+})
+```
+
+> **When several services implement the same interface, a regular dependency
+> resolves to the _first one in registration order_, and only that
+> implementation is spawned - others are left untouched.** This is by
+> design: it keeps regular resolution deterministic and free of side effects.
+> To receive every implementation, depend on
+> [`Multiple[T]`](#multiple-dependencies) instead.
+
+### Multiple Instances of the Same Type
+
+The container matches services by exact type. To register several instances
+of the same underlying type, give each one a distinct named type (compile-time)
+or group them in a composite service (runtime):
+
+```go
+// Compile-time: the set of instances is known at build time.
+// Typos and wiring mistakes are caught by the compiler.
+type UsersDB  *sql.DB
+type OrdersDB *sql.DB
+
+gontainer.NewFactory(func(c *Config) (UsersDB, func() error) {
+    db, _ := sql.Open("postgres", c.UsersDSN)
+    return db, db.Close
+})
+
+gontainer.NewFactory(func(c *Config) (OrdersDB, func() error) {
+    db, _ := sql.Open("postgres", c.OrdersDSN)
+    return db, db.Close
+})
+
+gontainer.NewFactory(func(u UsersDB, o OrdersDB) *Service {
+    return &Service{users: u, orders: o}
+})
+```
+
+```go
+// Runtime: the set of instances comes from configuration.
+// Access is stringly-typed but flexible.
+type DBs struct{ byAlias map[string]*sql.DB }
+
+func (d *DBs) Get(alias string) *sql.DB { return d.byAlias[alias] }
+
+gontainer.NewFactory(func(c *Config) (*DBs, func() error) {
+    open := make(map[string]*sql.DB, len(c.Databases))
+    for alias, dsn := range c.Databases {
+        db, _ := sql.Open("postgres", dsn)
+        open[alias] = db
+    }
+    return &DBs{byAlias: open}, func() error {
+        var errs []error
+        for _, db := range open {
+            errs = append(errs, db.Close())
+        }
+        return errors.Join(errs...)
+    }
+})
+
+gontainer.NewFactory(func(dbs *DBs) *Service {
+    return &Service{users: dbs.Get("users")}
+})
+```
+
+### Dynamic Resolution
+
+Resolve services on-demand:
+
+```go
+gontainer.NewEntrypoint(func(resolver *gontainer.Resolver) error {
+    // Resolve service dynamically.
+    var userService *UserService
+    if err := resolver.Resolve(&userService); err != nil {
+        return err
+    }
+    
+    return userService.DoWork()
+})
+```
+
+### Transient Services
+
+Create new instances on each call:
+
+```go
+// Factory returns a function that creates new instances.
+gontainer.NewFactory(func(db *Database) func() *Transaction {
+    return func() *Transaction {
+        return &Transaction{
+            id: uuid.New(),
+            db: db,
+        }
+    }
+})
+
+// Use the factory function.
+gontainer.NewEntrypoint(func(newTx func() *Transaction) {
+    tx1 := newTx()  // new instance
+    tx2 := newTx()  // another new instance
+})
+```
+
+### Factory Annotations
+
+Attach arbitrary metadata to a factory or entrypoint with `WithAnnotation`.
+Annotations are exposed via `Factory.Annotations()` / `Entrypoint.Annotations()`
+and can be read **without starting the container** - useful for `--help`,
+config validation, CLI dispatch, or any pre-run tooling built on top of the
+same factory definitions.
+
+```go
+type cliHelp struct {
+    Cmd string
+    Doc string
+}
+
+configFactory := gontainer.NewFactory(
+    newConfig,
+    gontainer.WithAnnotation(cliHelp{Cmd: "config", Doc: "Print resolved config"}),
+)
+
+dbFactory := gontainer.NewFactory(
+    newDatabase,
+    gontainer.WithAnnotation(cliHelp{Cmd: "db", Doc: "Ping the database"}),
+)
+
+// Inspect annotations without starting the container.
+for _, f := range []*gontainer.Factory{configFactory, dbFactory} {
+    for _, a := range f.Annotations() {
+        if h, ok := a.(cliHelp); ok {
+            fmt.Printf("%s\t%s\n", h.Cmd, h.Doc)
+        }
+    }
+}
+
+// Start the container with the same factories when ready.
+_ = gontainer.Run(configFactory, dbFactory, entrypoint)
+```
+
+### Testing Factories
+
+A factory is an ordinary function, so it can be unit-tested directly - without
+starting a container. Build its `Optional[T]` and `Multiple[T]` parameters by
+hand with `NewOptional` and `NewMultiple`, then call the function and assert on
+the result:
+
+```go
+// newAPI is the function normally passed to gontainer.NewFactory.
+func newAPI(
+    metrics gontainer.Optional[*MetricsService],
+    plugins gontainer.Multiple[Plugin],
+) *API {
+    api := &API{plugins: plugins}
+    if m := metrics.Get(); m != nil {
+        api.metrics = m
+    }
+    return api
+}
+
+func TestNewAPI(t *testing.T) {
+    // A present optional (even a nil value is present) plus an ordered collection.
+    api := newAPI(
+        gontainer.NewOptional(&MetricsService{}),
+        gontainer.NewMultiple(pluginA, pluginB),
+    )
+    if api.metrics == nil || len(api.plugins) != 2 {
+        t.Fatal("expected metrics and both plugins to be wired")
+    }
+
+    // An absent optional is the zero value; no arguments make an empty collection.
+    api = newAPI(
+        gontainer.Optional[*MetricsService]{},
+        gontainer.NewMultiple[Plugin](),
+    )
+    if api.metrics != nil || len(api.plugins) != 0 {
+        t.Fatal("expected no metrics and no plugins")
+    }
+}
+```
+
+- `NewOptional(v)` always creates a present value (`Ok() == true`), even when
+  `v` is `nil`; an absent dependency is the natural zero value
+  `gontainer.Optional[T]{}`.
+- `NewMultiple(vs...)` creates a collection from `vs`, preserving their order,
+  while `NewMultiple[T]()` creates a valid empty collection.
+
+> **Note:** this approach does not work for factories that depend on the
+> built-in `*gontainer.Resolver` or `*gontainer.Invoker` services. Both are
+> provided by the container and hold an unexported reference to its registry,
+> so a working instance exists only inside a running container and cannot be
+> constructed by hand. A factory whose signature requires either of them has to
+> be tested through a container rather than in isolation.
+
+To keep such a factory testable, depend on a **local interface** that covers
+only the methods you actually call, instead of on the concrete type. The
+container still injects its built-in `*gontainer.Resolver` / `*gontainer.Invoker`
+(they satisfy the interface structurally), while a unit test can pass a fake:
+
+```go
+// resolver is the narrow slice of *gontainer.Resolver the factory relies on.
+type resolver interface {
+    Resolve(varPtr any) error
+}
+
+// newHandler is the function normally passed to gontainer.NewFactory.
+func newHandler(r resolver) *Handler {
+    var dep *Dependency
+    _ = r.Resolve(&dep)
+    return &Handler{dep: dep}
+}
+
+func TestNewHandler(t *testing.T) {
+    // fakeResolver stands in for the container-provided resolver.
+    handler := newHandler(fakeResolver{dep: &Dependency{}})
+    if handler.dep == nil {
+        t.Fatal("expected the dependency to be resolved")
+    }
+}
+```
+
+The same pattern applies to `*gontainer.Invoker` through a local
+`Invoke(function any) ([]any, error)` interface.
+
+## API Reference
+
+### Module Functions
+
+Gontainer module interface is really simple:
+
+```go
+// Run creates and runs a container with provided factories and entrypoints.
+func Run(options ...Option) error
+
+// NewFactory registers a service factory.
+func NewFactory(fn any) *Factory
+
+// NewService registers a pre-created service.
+func NewService[T any](service T) *Factory
+
+// NewEntrypoint registers an entrypoint function.
+func NewEntrypoint(fn any) *Entrypoint
+```
+
+### Factory Signatures
+
+**Factory** is a function that creates one service. It can have dependencies as parameters,
+and can optionally return an error and/or a cleanup function for the factory.
+
+**Dependencies** are other services that the factory needs which are automatically injected.
+
+**Service** is a user-provided type. It can be any type except untyped `any` and `error`.
+
+
+```go
+// The simplest factory.
+func() *Service
+
+// Factory with dependencies.
+func(dep1 *Dep1, dep2 *Dep2) *Service
+
+// Factory with error.
+func() (*Service, error)
+
+// Factory with cleanup.
+func() (*Service, func() error)
+
+// Factory with cleanup and error.
+func() (*Service, func() error, error)
+```
+
+### Built-in Services
+
+Gontainer provides several built-in services that can be injected into factories and functions.
+They provide access to container features like dynamic resolution and invocation.
+
+```go
+// *gontainer.Resolver - Dynamic service resolution.
+func(resolver *gontainer.Resolver) *Service
+
+// *gontainer.Invoker - Dynamic function invocation.
+func(invoker *gontainer.Invoker) *Service
+```
+
+### Special Types
+
+Gontainer provides special types for declaring optional and multiple
+dependencies in factory and entrypoint signatures. See
+[Optional Dependencies](#optional-dependencies) and
+[Multiple Dependencies](#multiple-dependencies) for full examples.
+
+```go
+// Optional[T] - declares a dependency that may be absent from the container.
+// Call .Get() to read the value; the zero value of T is returned when no
+// matching factory is registered.
+func(logger gontainer.Optional[*Logger]) *Service
+
+// Multiple[T] - declares a dependency on all services assignable to T.
+// Range over the slice to access each registered service.
+func(providers gontainer.Multiple[AuthProvider]) *Router
+```
+
+To build `Optional[T]` and `Multiple[T]` values by hand - for example, to
+unit-test a factory function without a container - use the `NewOptional` and
+`NewMultiple` constructors. See
+[Testing Factories](#testing-factories).
+
+## Error Handling
+
+Container errors are rendered as a structured traceback: the root cause
+on the first line, followed by resolution frames with `file:line`
+references.
+
+Startup error - error returned by a factory:
+
+```
+Configuration load failed:
+ - DATABASE_USERNAME: required environment variable is not set
+ - DATABASE_PASSWORD: required environment variable is not set
+
+Traceback:
+  Factory for *myapp.Config
+    at /path/to/app/config.go:18
+  Factory for *myapp.Database
+    at /path/to/app/db.go:24
+  Entrypoint
+    at /path/to/app/main.go:15
+```
+
+Close error - errors returned from close callbacks:
+
+```
+connection reset by peer
+
+Source:
+  Factory for *myapp.Database
+    at /path/to/app/db.go:24
+```
+
+Typed errors are also exposed for programmatic matching:
+
+```go
+err := gontainer.Run(factories...)
+
+switch {
+case errors.Is(err, gontainer.ErrFactoryReturnedError):
+    // Factory returned an error.
+case errors.Is(err, gontainer.ErrEntrypointReturnedError):
+    // Entrypoint returned an error.
+case errors.Is(err, gontainer.ErrNoEntrypointsProvided):
+    // No entrypoints were provided.
+case errors.Is(err, gontainer.ErrCircularDependency):
+    // Circular dependency detected.
+case errors.Is(err, gontainer.ErrDependencyNotResolved):
+    // Service type not registered.
+case errors.Is(err, gontainer.ErrFactoryTypeDuplicated):
+    // Service type was duplicated.
+}
+```
+
+## Panics Handling
+
+Gontainer treats a panic as a bug, not a control-flow mechanism, and never recovers
+from one. A panic in a factory, an entrypoint, or a cleanup callback propagates
+straight out of `Run` and crashes the process loudly, with the full stack trace
+intact.
+
+Expected failures should be returned as an `error` - which the container renders as
+the structured traceback shown above - while a panic signals a programming error that
+you want to surface immediately rather than silently absorb.
+
+In addition, the public interface validates its arguments eagerly and panics on
+misuse. These panics indicate a programming error in the caller, not a runtime failure:
+
+- `NewFactory` and `NewEntrypoint` panic when the argument is `nil`, is not a
+  function, is a typed nil function, or has an unsupported signature.
+- `Invoker.Invoke` panics when the argument is `nil`, is not a function, or is a
+  typed nil function.
+- `Resolver.Resolve` panics when the target is not a valid, non-nil, writable
+  pointer.
+
+Valid calls never panic for these reasons: any failure during dependency
+resolution, graph construction, factory or entrypoint execution, invocation, or
+cleanup is still returned as an `error`.
+
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## License
+
+Apache 2.0 – See [LICENSE](LICENSE) for details.
+
+## Documentation for `v1`
+
+Documentation for the previous major version `v1` is available at [v1 branch](https://github.com/NVIDIA/gontainer/tree/v1).

@@ -1,0 +1,151 @@
+{
+ "nodes": [
+  {
+   "id": "config:packages/compaction/compaction-image-offload/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/compaction/compaction-image-offload/tsconfig.json",
+   "summary": "包级 TS 配置：extends 仓根 base，rootDir=src、outDir=lib/types，references 覆盖 agent/llm/session 等。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/compaction/compaction-tool-result-pruner/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/compaction/compaction-tool-result-pruner/README.md",
+   "summary": "dsh-compaction-tool-result-pruner 包英文主文档：防止超大工具输出填满上下文——压缩触发符合后，把超预算文本替换为有界头部+「middle pruned」短标记+有界尾部；压力之下对话不变；完整原始结果留在会话日志供精确重放与检查；裁剪零模型调用，可能单独缓解压力免于摘要；字符预算仅近似 token，压力是否缓解由 token 计量判定。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/compaction/compaction-tool-result-pruner/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/compaction/compaction-tool-result-pruner/package.json",
+   "summary": "@deepseek-ai/dsh-compaction-tool-result-pruner 包清单：工具结果 surface 节点的重放安全免模型头/中/尾裁剪，依赖 util-values/schemastery。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/compaction/compaction-tool-result-pruner/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/compaction/compaction-tool-result-pruner/src/index.ts",
+   "summary": "ToolResultPruner（ctx.toolResultPruner，185 行）：确定性头/中/尾裁剪当前工具结果 surface 节点——measureContent 按码点计文本（非文本块零成本），pruneContent 按码点切文本保留富块顺序（不劈代理对，字素簇可能分开），pruneSession 扫描候选并记录影子价格事件；static inject tokenMeter（裁剪确实需要计价能力）；再导出 config.ts 的 DEFAULTS/PRUNE_MARKER/resolveConfig。",
+   "tags": [
+    "service-definition",
+    "pruning",
+    "replay-safe"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/compaction/compaction-tool-result-pruner/src/index.ts:ToolResultPruner",
+   "type": "class",
+   "name": "ToolResultPruner",
+   "filePath": "packages/compaction/compaction-tool-result-pruner/src/index.ts",
+   "lineRange": [
+    44,
+    183
+   ],
+   "summary": "140 行裁剪 Service：构造解析冻结字符预算；measureContent 码点计量、pruneContent 保留边界不劈代理对的确定性裁剪、pruneSession 会话级扫描裁剪（阈值以下不动）。",
+   "tags": [
+    "service-definition",
+    "deterministic-pruning"
+   ],
+   "complexity": "moderate"
+  }
+ ],
+ "edges": [
+  {
+   "source": "config:packages/compaction/compaction-image-offload/tsconfig.json",
+   "target": "file:packages/compaction/compaction-image-offload/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "document:packages/compaction/compaction-tool-result-pruner/README.md",
+   "target": "file:packages/compaction/compaction-tool-result-pruner/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/compaction/compaction-tool-result-pruner/package.json",
+   "target": "file:packages/compaction/compaction-tool-result-pruner/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/compaction/compaction-tool-result-pruner/src/index.ts",
+   "target": "class:packages/compaction/compaction-tool-result-pruner/src/index.ts:ToolResultPruner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/compaction/compaction-tool-result-pruner/src/index.ts",
+   "target": "class:packages/compaction/compaction-tool-result-pruner/src/index.ts:ToolResultPruner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/compaction/compaction-tool-result-pruner/src/index.ts",
+   "target": "file:packages/compaction/compaction-tool-result-pruner/src/config.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-tool-result-pruner/src/index.ts",
+   "target": "file:packages/compaction/compaction-tool-result-pruner/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-tool-result-pruner/src/index.ts",
+   "target": "file:packages/compaction/compaction/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-tool-result-pruner/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-tool-result-pruner/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/compaction/compaction-tool-result-pruner/src/index.ts",
+   "target": "file:packages/llm/token-meter/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

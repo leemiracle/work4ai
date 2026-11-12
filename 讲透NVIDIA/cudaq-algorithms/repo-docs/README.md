@@ -1,0 +1,69 @@
+# CUDA-Q Algorithms
+
+CUDA-Q Algorithms is a primitive-first algorithms library built on CUDA-Q,
+focused on fault-tolerant quantum computing (FTQC) primitives: block
+encodings, qubitization, quantum singular value transformation, product
+formulas, and the state-preparation and fermion-to-qubit building blocks
+they compose with.
+
+NISQ-era application workflows such as VQE, ADAPT-VQE, QAOA, GQE, and
+optimizer loops are intentionally out of scope.
+
+## Python primitives
+
+`cudaq_algorithms` is a pure-Python package implemented as CUDA-Q Python
+kernels and host-side helpers (the only runtime requirement is the
+`cudaq` Python package):
+
+- fermion-to-qubit transforms (`fermion.jordan_wigner`,
+  `fermion.bravyi_kitaev`)
+- state-preparation kernels and operator pools (`stateprep`)
+- Pauli LCU block encoding (`PauliLCU`, plus prepare/select/apply kernels)
+- qubitization walks and Chebyshev moment measurement (`Walk`)
+- QSVT phase sequences (`QSVT`, `PhaseSequence`)
+- Suzuki-Trotter product formulas (`trotter.Trotter`, orders 1/2/4)
+- chemistry input bridges (`chemistry.from_pyscf`, `chemistry.from_psi4`,
+  `chemistry.from_fcidump`)
+
+Simulation-only helpers (statevector access) are isolated in
+`cudaq_algorithms.sim_utils`; everything else is hardware-shaped. The
+documentation is a Sphinx site under [docs/](https://github.com/NVIDIA/cudaq-algorithms/tree/main/docs) (build instructions in
+[docs/README.md](https://github.com/NVIDIA/cudaq-algorithms/blob/main/docs/README.md)); the runnable, self-verifying examples
+live in [docs/sphinx/examples/python/](https://github.com/NVIDIA/cudaq-algorithms/tree/main/docs/sphinx/examples/python).
+
+Classical chemistry preprocessing ships as a peer pure-Python module:
+double factorization of two-electron integrals (X-DF and C-DF/RC-DF) on
+NumPy/SciPy with optional CuPy GPU acceleration — see the preprocessing
+guide in the Sphinx docs.
+
+## Chemistry Inputs
+
+The library APIs operate on reusable algorithmic inputs: one- and two-body
+tensors, qubit Hamiltonians, Pauli words, and state-preparation operator
+pools. The `chemistry` module provides bridges that produce those inputs
+from electronic-structure packages — `from_pyscf` and `from_psi4` extract
+molecular-orbital integrals from a converged mean-field calculation, and
+`from_fcidump` parses the standard FCIDUMP interchange format. The
+electronic-structure packages themselves are optional and never imported
+at package-import time; everything downstream of the integrals runs
+without them.
+
+## License
+
+The code in this repository is licensed under the [Apache License 2.0](https://github.com/NVIDIA/cudaq-algorithms/blob/main/LICENSE). Dependency license references and attributions are listed in [NOTICE](https://github.com/NVIDIA/cudaq-algorithms/blob/main/NOTICE).
+
+**NOTICE AND DISCLAIMER:** This software automatically retrieves, accesses or
+interacts with external materials. Those retrieved materials are not
+distributed with this software and are governed solely by separate terms,
+conditions and licenses. You are solely responsible for finding, reviewing
+and complying with all applicable terms, conditions, and licenses, and for
+verifying the security, integrity and suitability of any retrieved materials
+for your specific use case. This software is provided "AS IS", without
+warranty of any kind. The author makes no representations or warranties
+regarding any retrieved materials, and assumes no liability for any losses,
+damages, liabilities or legal consequences from your use or inability to use
+this software or any retrieved materials. Use this software and the
+retrieved materials at your own risk.
+
+See [CONTRIBUTING.md](https://github.com/NVIDIA/cudaq-algorithms/blob/main/CONTRIBUTING.md) for contribution requirements,
+including Developer Certificate of Origin (DCO) sign-off.

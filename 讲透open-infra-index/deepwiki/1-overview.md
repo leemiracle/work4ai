@@ -1,148 +1,222 @@
-> 来源: [https://deepwiki.com/deepseek-ai/open-infra-index/1-overview](https://deepwiki.com/deepseek-ai/open-infra-index/1-overview)
-> DeepWiki deepseek-ai/open-infra-index
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/open-infra-index · page 1 Overview · fetched 2026-10-30 -->
 
 # Overview
 
-  Relevant source files 
- - [README.md](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1)
- - [deep_ep/__init__.py](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py)
- 
-  
+<details>
+<summary>Relevant source files</summary>
+
+The following files were used as context for generating this wiki page:
+
+- [LICENSE](LICENSE)
+- [README.md](README.md)
+
+</details>
+
+
+
 ## Purpose and Scope
 
- DeepEP (DeepEveryParallel) is a high-performance communication library tailored for modern machine learning training and inference, specifically optimized for **Mixture-of-Experts (MoE) expert parallelism**. It provides high-throughput and low-latency all-to-all GPU kernels for MoE dispatch and combine operations, supporting low-precision formats like FP8 [README.md1-5](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L1-L5)
+This document introduces the DeepSeek AI infrastructure repository, which contains seven core infrastructure components released during DeepSeek's February 2025 Open-Source Week initiative. These components form the foundational building blocks of DeepSeek's production AI training and inference systems, specifically optimized for large-scale Mixture of Experts (MoE) models including DeepSeek-V3 and DeepSeek-R1.
 
- The library features a lightweight **Just-In-Time (JIT)** compilation system, allowing it to run without pre-compilation of CUDA kernels during installation [README.md3-5](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L3-L5) DeepEP V2 introduces a significant architectural shift from the NVSHMEM-based V1 to a more efficient **NCCL Gin backend**, achieving up to 1.3x peak performance while reducing SM occupancy by up to 4x [README.md9-57](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L9-L57)
+This overview covers the high-level system architecture, component relationships, and production performance characteristics. For detailed technical information about individual components, see [Components](#2). For comprehensive inference system documentation, see [DeepSeek V3/R1 Inference System](#3). For in-depth technical analyses, see [Technical Deep Dives](#4).
 
- **Sources:** [README.md1-17](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L1-L17) [deep_ep/__init__.py71-84](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L71-L84)
+Sources: [README.md:1-112]()
 
- 
----
+## DeepSeek Open-Source Week Initiative
 
- 
-## Architectural Evolution: V1 to V2
+DeepSeek's Open-Source Week represents a systematic release of production-tested infrastructure components that power their online AI services. Starting February 24, 2025, DeepSeek released one component daily for six days, culminating in a comprehensive inference system overview.
 
- DeepEP V2 represents a complete refactoring of the communication layer. The transition from V1 to V2 involves several major shifts in backend technology and resource management:
+The initiative emphasizes practical, battle-tested code rather than theoretical contributions - all components are documented, deployed, and actively serving production workloads handling millions of daily requests for DeepSeek's V3 and R1 models.
 
- 
-| Feature | V1 (Legacy) | V2 (Elastic) |
-|---|---|---|
-| Backend | NVSHMEM (IBGDA/Symmetric Heap) | NCCL Gin (Header-only, lightweight) |
-| Interface | Buffer class | ElasticBuffer & EPHandle |
-| Resource Allocation | Manual tuning (num_sms, Config) | Analytical calculation via formulas |
-| Domain Scale | Limited scale-out | Up to EP2048 |
-| SM Occupancy | High (e.g., 24 SMs) | Low (e.g., 4-6 SMs) |
-| JIT Pipeline | Partial / Pre-compiled | Fully JIT (NVRTC-based) |
+### Release Timeline
 
- **Sources:** [README.md9-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L9-L25) [README.md115-116](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L116) [deep_ep/buffers/elastic.py16-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L30)
+| Day | Component | Category | Key Capability |
+|-----|-----------|----------|----------------|
+| 1 | `FlashMLA` | Compute Optimization | MLA decoding kernel for Hopper GPUs |
+| 2 | `DeepEP` | Communication & Parallelism | Expert Parallel communication library |
+| 3 | `DeepGEMM` | Compute Optimization | FP8 GEMM library for dense and MoE |
+| 4 | `DualPipe` + `EPLB` | Communication & Parallelism | Pipeline parallelism and load balancing |
+| 5 | `3FS` + `Smallpond` | Storage & Data Processing | File system and data processing |
+| 6 | Inference System | Integration | Complete V3/R1 inference architecture |
 
- 
----
+Sources: [README.md:18-104]()
 
- 
-## System Architecture and Code Entities
+## System Architecture Overview
 
- The following diagram maps the high-level system components to their corresponding code entities and files, illustrating the bridge between the Python user space and the CUDA kernel implementations.
+The DeepSeek infrastructure implements a comprehensive software-hardware co-design optimized for MoE model architectures. The system integrates specialized compute kernels, communication libraries, and storage solutions to achieve high throughput and efficiency.
 
- 
+**DeepSeek Infrastructure System Architecture**
+
+```mermaid
+graph TB
+    subgraph "Client_Layer" ["Client Layer"]
+        HTTP_API["HTTP API"]
+        WebSocket["WebSocket"]
+        gRPC["gRPC"]
+    end
+    
+    subgraph "Inference_Engine" ["Inference Engine"]
+        LoadBalancer["nginx Load Balancer"]
+        InferenceService["vLLM-based Inference Service"]
+        RequestRouter["Request Router"]
+    end
+    
+    subgraph "Compute_Layer" ["Compute Optimization Layer"]
+        FlashMLA_Kernel["FlashMLA Kernel"]
+        DeepGEMM_Dense["DeepGEMM Dense GEMM"]
+        DeepGEMM_MoE["DeepGEMM MoE GEMM"]
+    end
+    
+    subgraph "Communication_Layer" ["Communication & Parallelism Layer"]
+        DeepEP_Library["DeepEP Library"]
+        DualPipe_Algo["DualPipe Algorithm"]
+        EPLB_Balancer["EPLB Load Balancer"]
+    end
+    
+    subgraph "Storage_Layer" ["Storage & Data Processing Layer"]
+        ThreeFS_System["3FS File System"]
+        Smallpond_Framework["Smallpond Framework"]
+        KVCache["Paged KV Cache"]
+    end
+    
+    subgraph "Hardware_Layer" ["Hardware Layer"]
+        H800_GPUs["NVIDIA H800 GPUs"]
+        NVLink_Interconnect["NVLink Interconnect"]
+        RDMA_Network["RDMA Networks"]
+        SSD_Storage["Modern SSD Storage"]
+    end
+    
+    HTTP_API --> LoadBalancer
+    WebSocket --> LoadBalancer
+    gRPC --> LoadBalancer
+    
+    LoadBalancer --> InferenceService
+    InferenceService --> RequestRouter
+    
+    RequestRouter --> FlashMLA_Kernel
+    RequestRouter --> DeepGEMM_Dense
+    RequestRouter --> DeepGEMM_MoE
+    
+    FlashMLA_Kernel --> DeepEP_Library
+    DeepGEMM_Dense --> DeepEP_Library
+    DeepGEMM_MoE --> DeepEP_Library
+    
+    DeepEP_Library --> DualPipe_Algo
+    DeepEP_Library --> EPLB_Balancer
+    
+    InferenceService --> ThreeFS_System
+    InferenceService --> KVCache
+    ThreeFS_System --> Smallpond_Framework
+    
+    FlashMLA_Kernel --> H800_GPUs
+    DeepGEMM_Dense --> H800_GPUs
+    DeepGEMM_MoE --> H800_GPUs
+    DeepEP_Library --> NVLink_Interconnect
+    DeepEP_Library --> RDMA_Network
+    ThreeFS_System --> SSD_Storage
+    ThreeFS_System --> RDMA_Network
 ```
 
+Sources: [README.md:32-87]()
+
+## Component Categories and Relationships
+
+The seven core components are organized into three functional categories, each addressing specific optimization challenges in large-scale AI infrastructure.
+
+**Component Categorization and Data Flow**
+
+```mermaid
+graph TD
+    subgraph "Compute_Optimization" ["Compute Optimization"]
+        FlashMLA["FlashMLA<br/>MLA Decoding Kernel<br/>580 TFLOPS BF16"]
+        DeepGEMM["DeepGEMM<br/>FP8 GEMM Library<br/>1350+ FP8 TFLOPS"]
+    end
+    
+    subgraph "Communication_Parallelism" ["Communication & Parallelism"]
+        DeepEP["DeepEP<br/>Expert Parallel Comm<br/>NVLink + RDMA"]
+        DualPipe["DualPipe<br/>Bidirectional Pipeline<br/>Overlap Algorithm"]
+        EPLB["EPLB<br/>Expert-Parallel<br/>Load Balancer"]
+    end
+    
+    subgraph "Storage_Data" ["Storage & Data Processing"]
+        ThreeFS["3FS<br/>Fire-Flyer File System<br/>6.6 TiB/s throughput"]
+        Smallpond["Smallpond<br/>Data Processing<br/>Framework on 3FS"]
+    end
+    
+    subgraph "Models" ["DeepSeek Models"]
+        V3Model["DeepSeek-V3<br/>256 Experts, 8 Active<br/>MoE Architecture"]
+        R1Model["DeepSeek-R1<br/>Reasoning Model"]
+    end
+    
+    subgraph "Hardware" ["Hardware Resources"]
+        H800Cluster["H800 GPU Cluster<br/>~278 Peak Nodes"]
+        RDMANet["RDMA Networks<br/>High-speed Interconnect"]
+    end
+    
+    V3Model --> FlashMLA
+    R1Model --> FlashMLA
+    V3Model --> DeepGEMM
+    R1Model --> DeepGEMM
+    
+    DeepGEMM --> DeepEP
+    FlashMLA --> DeepEP
+    DeepEP --> DualPipe
+    DeepEP --> EPLB
+    
+    DualPipe --> ThreeFS
+    EPLB --> ThreeFS
+    ThreeFS --> Smallpond
+    
+    FlashMLA --> H800Cluster
+    DeepGEMM --> H800Cluster
+    DeepEP --> RDMANet
+    ThreeFS --> RDMANet
 ```
 
- **Diagram: DeepEP V2 Code Entity Mapping**
+Sources: [README.md:32-87]()
 
- **Sources:** [deep_ep/__init__.py87-97](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L87-L97) [deep_ep/buffers/elastic.py16-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L30) [README.md13-17](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L13-L17) [csrc/python_api.cpp1-39](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/python_api.cpp#L1-L39)
+## Production Performance Metrics
 
- 
+The integrated system achieves significant performance benchmarks in production environments, demonstrating the effectiveness of the co-designed infrastructure components.
+
+### Inference Performance
+
+| Metric | Value | Hardware Context |
+|--------|-------|------------------|
+| Input tokens/second | 73.7k per H800 node | Production V3/R1 serving |
+| Output tokens/second | 14.8k per H800 node | Production V3/R1 serving |
+| Daily input volume | 608B tokens | Aggregate system throughput |
+| Daily output volume | 168B tokens | Aggregate system throughput |
+| Cost profit margin | 545% | Economic efficiency analysis |
+
+### Component Performance
+
+| Component | Performance Metric | Hardware |
+|-----------|-------------------|----------|
+| `FlashMLA` | 580 TFLOPS BF16 compute-bound | H800 GPU |
+| `FlashMLA` | 3000 GB/s memory-bound | H800 GPU |
+| `DeepGEMM` | 1350+ FP8 TFLOPS | Hopper GPUs |
+| `3FS` | 6.6 TiB/s aggregate read | 180-node cluster |
+| `3FS` | 40+ GiB/s per client | KV cache lookup |
+
+### Cache Performance
+
+The production system maintains efficient caching with Redis achieving 342B cache hits at a 56.3% hit rate, significantly reducing computational overhead for repeated queries.
+
+Sources: [README.md:96-100]()
+
+## Research and Publications
+
+The infrastructure components are supported by peer-reviewed research publications that detail the theoretical foundations and empirical evaluations.
+
+### Current Publications
+
+- **ISCA 2025**: "Insights into DeepSeek-V3: Scaling Challenges and Reflections on Hardware for AI Architectures" - Industry track paper analyzing V3 scaling challenges
+- **SC 2024**: "Fire-Flyer AI-HPC: A Cost-Effective Software-Hardware Co-Design for Deep Learning" - Comprehensive system architecture analysis
+
+These publications provide deeper technical context for the infrastructure design decisions and performance optimizations implemented across the component suite.
+
+Sources: [README.md:12-14](), [README.md:107-111]()
+
 ---
 
- 
-## Core Abstractions: ElasticBuffer and EPHandle
-
- 
-### ElasticBuffer
-
- The `ElasticBuffer` is the primary interface in V2. It manages a single contiguous GPU buffer that serves as a symmetric memory window across the communication group [README.md115-116](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L116) It uses `NCCLSymmetricMemoryContext` to handle cross-GPU memory registration and RDMA window management [csrc/kernels/backend/nccl.cu10-50](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/kernels/backend/nccl.cu#L10-L50) It supports both standard EP operations and experimental features like PP and Engram.
-
- 
-### EPHandle
-
- The `EPHandle` is a metadata object produced during the dispatch phase. It caches critical routing information, including:
-
- 
- - **Expert Alignment**: Padding information for memory efficiency [deep_ep/buffers/elastic.py32-40](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L32-L40)
- - **Token Counts**: `psum_num_recv_tokens_per_expert` and `num_recv_tokens` [deep_ep/buffers/elastic.py45-55](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L45-L55)
- - **Routing Metadata**: `topk_idx` and `recv_src_metadata` for the combine phase [deep_ep/buffers/elastic.py42-50](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L42-L50)
- 
- This handle can be reused for subsequent `combine` operations or cached during inference decoding to eliminate redundant metadata calculation [README.md18-20](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L18-L20)
-
- **Sources:** [deep_ep/buffers/elastic.py16-110](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L110) [README.md115-130](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L130)
-
- 
----
-
- 
-## Supported Communication Modes
-
- DeepEP V2 provides a unified interface for several high-performance primitives, executed via the NCCL Gin backend:
-
- 
- - **EP Dispatch/Combine**: The core MoE all-to-all kernels. Supports `do_expand` for GEMM layout optimization and `expert_alignment` for memory efficiency [deep_ep/buffers/elastic.py134-210](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L134-L210)
- - **Engram (Remote Memory Access)**: Zero-SM RDMA-based remote memory fetching (e.g., for KV cache). Uses `engram_write` and `engram_fetch` (returning a hook) to access remote memory with minimal compute overhead [README.md23-31](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L23-L31)
- - **Pipeline Parallelism (PP)**: Experimental zero-SM RDMA primitives (`pp_send`, `pp_recv`) for point-to-point communication between pipeline stages [README.md24-100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L24-L100)
- - **All-Gather Reduce-Scatter (AGRS)**: Experimental primitives for data and tensor parallelism, including `all_gather` updates [README.md37-98](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L37-L98)
- 
- 
-```
-
-```
-
- **Diagram: V2 Dispatch Execution Flow**
-
- **Sources:** [deep_ep/buffers/elastic.py113-400](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L113-L400) [README.md97-101](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L97-L101) [csrc/kernels/backend/nccl.cu60-100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/kernels/backend/nccl.cu#L60-L100)
-
- 
----
-
- 
-## Resource Allocation and Topology
-
- V2 eliminates the need for manual auto-tuning by using analytical formulas to determine optimal resource usage.
-
- 
-### Analytical SM Tuning
-
- The method `get_theoretical_num_sms` calculates the required SM count based on hardware performance characteristics:
-
- 
- - **Bandwidth Modeling**: Considers `sm_read_gbs`, `sm_write_gbs`, `rdma_gbs`, and `nvlink_gbs` [deep_ep/buffers/elastic.py441-450](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L441-L450)
- - **Overlap**: Adjusts counts based on the `prefer_overlap_with_compute` flag to allow communication to hide behind computation [deep_ep/buffers/elastic.py121-125](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L121-L125)
- 
- 
-### Topology Domains
-
- DeepEP models the cluster as a logical grid of ranks:
-
- 
- - **Scale-up Domain**: Communication via NVLink (Intra-node/Intra-LSA) [deep_ep/utils/envs.py10-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L10-L25)
- - **Scale-out Domain**: Communication via RDMA (Inter-node/Rail-only) [deep_ep/utils/envs.py10-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L10-L25)
- - **Hybrid Mode**: When `allow_hybrid_mode=True`, the library uses a hierarchical approach, combining NVLink and RDMA to maximize throughput in large clusters [deep_ep/buffers/elastic.py120-121](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L120-L121)
- 
- **Sources:** [deep_ep/buffers/elastic.py113-470](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L113-L470) [README.md18-22](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L18-L22) [deep_ep/utils/envs.py7-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L7-L30)
-
- 
----
-
- 
-## Hardware and Software Requirements
-
- To utilize DeepEP V2, the following environment is required:
-
- 
- - **GPU Architecture**: NVIDIA Hopper (SM90) or newer (e.g., Blackwell/SM100) [README.md63-65](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L63-L65)
- - **CUDA**: 12.3 or above for SM90 support [README.md67-68](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L67-L68)
- - **NCCL**: 2.30.4 or above (recommended via `nvidia-nccl-cu13` pip package) [README.md70-79](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L70-L79)
- - **Interconnect**: NVLink for intra-node; RDMA (InfiniBand/RoCE) for inter-node [README.md71-72](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L71-L72)
- - **Python**: 3.8+ with PyTorch 2.10+ [README.md66-69](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L66-L69)
- 
- **Sources:** [README.md63-72](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L63-L72) [deep_ep/__init__.py46-70](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L46-L70)

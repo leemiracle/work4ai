@@ -1,0 +1,32 @@
+# DeepWiki 索引 — huggingface/huggingface_hub
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 631699 字符
+
+- [1 Overview](1-overview.md)
+- [2 Core API Client (HfApi)](2-core-api-client-hfapi.md)
+  - [2.1 Repository Operations](2.1-repository-operations.md)
+  - [2.2 File Download System](2.2-file-download-system.md)
+  - [2.3 File Upload System](2.3-file-upload-system.md)
+  - [2.4 Commit API and Storage Backends](2.4-commit-api-and-storage-backends.md)
+  - [2.5 Cache Architecture](2.5-cache-architecture.md)
+- [3 Inference Client](3-inference-client.md)
+  - [3.1 Task Methods and Providers](3.1-task-methods-and-providers.md)
+  - [3.2 Streaming and Chat Completions](3.2-streaming-and-chat-completions.md)
+  - [3.3 Model Context Protocol (MCP)](3.3-model-context-protocol-mcp.md)
+- [4 File System Interface (HfFileSystem)](4-file-system-interface-hffilesystem.md)
+- [5 ML Framework Integration](5-ml-framework-integration.md)
+  - [5.1 ModelHubMixin Pattern](5.1-modelhubmixin-pattern.md)
+  - [5.2 Framework-Specific Implementations](5.2-framework-specific-implementations.md)
+- [6 Repository Cards and Metadata](6-repository-cards-and-metadata.md)
+- [7 Command Line Interface](7-command-line-interface.md)
+  - [7.1 File and Repository Commands](7.1-file-and-repository-commands.md)
+  - [7.2 Cache Management Commands](7.2-cache-management-commands.md)
+  - [7.3 Jobs and Compute System](7.3-jobs-and-compute-system.md)
+  - [7.4 Authentication Commands](7.4-authentication-commands.md)
+  - [7.5 Extensions System](7.5-extensions-system.md)
+- [8 Authentication and Security](8-authentication-and-security.md)
+- [9 HTTP Layer and Error Handling](9-http-layer-and-error-handling.md)
+- [10 Configuration and Environment Variables](10-configuration-and-environment-variables.md)
+- [11 Community Features](11-community-features.md)
+- [12 Development and Contributing](12-development-and-contributing.md)

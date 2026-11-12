@@ -1,0 +1,5556 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/model_executor/models/llama_eagle3.py",
+   "type": "file",
+   "name": "llama_eagle3.py",
+   "filePath": "vllm/model_executor/models/llama_eagle3.py",
+   "summary": "LLaMA 的 EAGLE-3 draft（三层薄实现），EAGLE3 用目标模型隐层作 draft 输入。",
+   "tags": [
+    "spec-decode",
+    "eagle3",
+    "llama"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/models/llama_eagle3.py:LlamaModel",
+   "type": "class",
+   "name": "LlamaModel",
+   "filePath": "vllm/model_executor/models/llama_eagle3.py",
+   "lineRange": [
+    162,
+    303
+   ],
+   "summary": "draft 主干（4 方法）。",
+   "tags": [
+    "draft-model",
+    "backbone"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/models/llama_eagle3.py:Eagle3LlamaForCausalLM",
+   "type": "class",
+   "name": "Eagle3LlamaForCausalLM",
+   "filePath": "vllm/model_executor/models/llama_eagle3.py",
+   "lineRange": [
+    306,
+    470
+   ],
+   "summary": "draft 封装（6 方法）。",
+   "tags": [
+    "draft-model",
+    "causal-lm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/models/llava.py",
+   "type": "file",
+   "name": "llava.py",
+   "filePath": "vllm/model_executor/models/llava.py",
+   "summary": "LLaVA 基础家族（741 行）：BaseLlava 三件套+Llava/PixtralHF 双分支（HF 权重布局兼容），init_vision_tower_for_llava 工厂；LlavaForConditionalGeneration 12 方法。",
+   "tags": [
+    "multimodal",
+    "llava-family",
+    "base"
+   ],
+   "complexity": "complex",
+   "languageNotes": "LlavaLikeConfig/LlavaLikeProcessor Protocol 定义了 llava 系配置鸭子接口，llava_next/onevision 系全部继承本文件基类。"
+  },
+  {
+   "id": "class:vllm/model_executor/models/llava.py:BaseLlavaProcessingInfo",
+   "type": "class",
+   "name": "BaseLlavaProcessingInfo",
+   "filePath": "vllm/model_executor/models/llava.py",
+   "lineRange": [
+    169,
+    211
+   ],
+   "summary": "家族处理信息基类（7 方法）。",
+   "tags": [
+    "multimodal",
+    "processing",
+    "base-class"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/llava.py:PixtralHFMultiModalProcessor",
+   "type": "class",
+   "name": "PixtralHFMultiModalProcessor",
+   "filePath": "vllm/model_executor/models/llava.py",
+   "lineRange": [
+    317,
+    392
+   ],
+   "summary": "PixtralHF 权重布局分支的预处理器（4 方法）。",
+   "tags": [
+    "multimodal",
+    "processor"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/llava.py:LlavaForConditionalGeneration",
+   "type": "class",
+   "name": "LlavaForConditionalGeneration",
+   "filePath": "vllm/model_executor/models/llava.py",
+   "lineRange": [
+    492,
+    741
+   ],
+   "summary": "多模态总装（12 方法，SupportsEagle/Eagle3）。",
+   "tags": [
+    "multimodal",
+    "causal-lm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/models/llava_next.py",
+   "type": "file",
+   "name": "llava_next.py",
+   "filePath": "vllm/model_executor/models/llava_next.py",
+   "summary": "LLaVA-NeXT（1.5 升级版）：任意宽高图像多网格切分策略，ForConditionalGeneration 14 方法。",
+   "tags": [
+    "multimodal",
+    "llava-family",
+    "anyres"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/llava_next.py:LlavaNextProcessingInfo",
+   "type": "class",
+   "name": "LlavaNextProcessingInfo",
+   "filePath": "vllm/model_executor/models/llava_next.py",
+   "lineRange": [
+    92,
+    194
+   ],
+   "summary": "AnyRes 网格切分处理信息（5 方法）。",
+   "tags": [
+    "multimodal",
+    "anyres"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/llava_next.py:LlavaNextForConditionalGeneration",
+   "type": "class",
+   "name": "LlavaNextForConditionalGeneration",
+   "filePath": "vllm/model_executor/models/llava_next.py",
+   "lineRange": [
+    232,
+    635
+   ],
+   "summary": "多模态总装（14 方法）。",
+   "tags": [
+    "multimodal",
+    "causal-lm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/models/llava_next_video.py",
+   "type": "file",
+   "name": "llava_next_video.py",
+   "filePath": "vllm/model_executor/models/llava_next_video.py",
+   "summary": "LLaVA-NeXT-Video：视频帧池化（VideoPooler 时域平均池化）+图像/视频双通道 projector。",
+   "tags": [
+    "multimodal",
+    "video",
+    "llava-family"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/llava_next_video.py:LlavaNextVideoPooler",
+   "type": "class",
+   "name": "LlavaNextVideoPooler",
+   "filePath": "vllm/model_executor/models/llava_next_video.py",
+   "lineRange": [
+    239,
+    271
+   ],
+   "summary": "视频帧时域池化器（2 方法）。",
+   "tags": [
+    "video",
+    "pooling"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/models/llava_next_video.py:LlavaNextVideoForConditionalGeneration",
+   "type": "class",
+   "name": "LlavaNextVideoForConditionalGeneration",
+   "filePath": "vllm/model_executor/models/llava_next_video.py",
+   "lineRange": [
+    304,
+    522
+   ],
+   "summary": "多模态总装（11 方法）。",
+   "tags": [
+    "multimodal",
+    "video",
+    "causal-lm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/models/llava_onevision.py",
+   "type": "file",
+   "name": "llava_onevision.py",
+   "filePath": "vllm/model_executor/models/llava_onevision.py",
+   "summary": "LLaVA-OneVision：图像/视频统一 AnyRes 处理（InputsByModality 分模态打包），ProcessingInfo 继承 llava_next。",
+   "tags": [
+    "multimodal",
+    "video",
+    "llava-family",
+    "onevision"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/llava_onevision.py:LlavaOnevisionProcessingInfo",
+   "type": "class",
+   "name": "LlavaOnevisionProcessingInfo",
+   "filePath": "vllm/model_executor/models/llava_onevision.py",
+   "lineRange": [
+    127,
+    257
+   ],
+   "summary": "多模态处理信息（10 方法，含视频帧策略）。",
+   "tags": [
+    "multimodal",
+    "processing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/llava_onevision.py:LlavaOnevisionForConditionalGeneration",
+   "type": "class",
+   "name": "LlavaOnevisionForConditionalGeneration",
+   "filePath": "vllm/model_executor/models/llava_onevision.py",
+   "lineRange": [
+    464,
+    912
+   ],
+   "summary": "多模态总装（16 方法）。",
+   "tags": [
+    "multimodal",
+    "causal-lm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/models/llava_onevision2.py",
+   "type": "file",
+   "name": "llava_onevision2.py",
+   "filePath": "vllm/model_executor/models/llava_onevision2.py",
+   "summary": "LLaVA-OneVision-2（2315 行，本批最大）：自带视觉塔（Rope2D+PatchMerger+窗口注意力块）+codec 视频源解析（fps/时间戳/帧抽取 PIL 化+prompt 标记展开）+14 方法 ProcessingInfo，video backend 抽象。",
+   "tags": [
+    "multimodal",
+    "video",
+    "llava-family",
+    "codec"
+   ],
+   "complexity": "complex",
+   "languageNotes": "视频输入走 codec 路径：_extract_codec_video_paths/_codec_timestamp_runs/_frame_video_to_pil_and_timestamps 全套帧级处理在模型文件内完成。"
+  },
+  {
+   "id": "class:vllm/model_executor/models/llava_onevision2.py:LlavaOnevision2VisionTower",
+   "type": "class",
+   "name": "LlavaOnevision2VisionTower",
+   "filePath": "vllm/model_executor/models/llava_onevision2.py",
+   "lineRange": [
+    1116,
+    1284
+   ],
+   "summary": "视觉塔（5 方法）。",
+   "tags": [
+    "vision",
+    "backbone"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/llava_onevision2.py:LlavaOnevision2MultiModalProcessor",
+   "type": "class",
+   "name": "LlavaOnevision2MultiModalProcessor",
+   "filePath": "vllm/model_executor/models/llava_onevision2.py",
+   "lineRange": [
+    1555,
+    2004
+   ],
+   "summary": "多模态预处理器（6 方法，含视频源解析）。",
+   "tags": [
+    "multimodal",
+    "processor",
+    "video"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/llava_onevision2.py:LlavaOnevision2ProcessingInfo",
+   "type": "class",
+   "name": "LlavaOnevision2ProcessingInfo",
+   "filePath": "vllm/model_executor/models/llava_onevision2.py",
+   "lineRange": [
+    1287,
+    1455
+   ],
+   "summary": "处理信息（14 方法）。",
+   "tags": [
+    "multimodal",
+    "processing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/llava_onevision2.py:LlavaOnevision2ForConditionalGeneration",
+   "type": "class",
+   "name": "LlavaOnevision2ForConditionalGeneration",
+   "filePath": "vllm/model_executor/models/llava_onevision2.py",
+   "lineRange": [
+    2012,
+    2315
+   ],
+   "summary": "多模态总装（15 方法）。",
+   "tags": [
+    "multimodal",
+    "causal-lm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/models/longcat_flash.py",
+   "type": "file",
+   "name": "longcat_flash.py",
+   "filePath": "vllm/model_executor/models/longcat_flash.py",
+   "summary": "LongCat-Flash MoE 模型：MLA 注意力（加载期 LoRA norm 缩放）+LongcatRouter+MoE，Eagle 支持。",
+   "tags": [
+    "model",
+    "moe",
+    "mla",
+    "longcat"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/longcat_flash.py:LongcatMoe",
+   "type": "class",
+   "name": "LongcatMoe",
+   "filePath": "vllm/model_executor/models/longcat_flash.py",
+   "lineRange": [
+    175,
+    246
+   ],
+   "summary": "MoE 块。",
+   "tags": [
+    "moe"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/longcat_flash.py:FlashModel",
+   "type": "class",
+   "name": "FlashModel",
+   "filePath": "vllm/model_executor/models/longcat_flash.py",
+   "lineRange": [
+    374,
+    548
+   ],
+   "summary": "主干（5 方法）。",
+   "tags": [
+    "backbone"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/longcat_flash.py:LongcatFlashForCausalLM",
+   "type": "class",
+   "name": "LongcatFlashForCausalLM",
+   "filePath": "vllm/model_executor/models/longcat_flash.py",
+   "lineRange": [
+    551,
+    621
+   ],
+   "summary": "causal LM 封装（6 方法）。",
+   "tags": [
+    "causal-lm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/models/longcat_flash_mtp.py",
+   "type": "file",
+   "name": "longcat_flash_mtp.py",
+   "filePath": "vllm/model_executor/models/longcat_flash_mtp.py",
+   "summary": "LongCat-Flash 的 MTP draft：Layer/Predictor/MTP 三层。",
+   "tags": [
+    "spec-decode",
+    "mtp",
+    "longcat"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/models/longcat_flash_mtp.py:LongCatMultiTokenPredictor",
+   "type": "class",
+   "name": "LongCatMultiTokenPredictor",
+   "filePath": "vllm/model_executor/models/longcat_flash_mtp.py",
+   "lineRange": [
+    74,
+    123
+   ],
+   "summary": "MTP 层栈（2 方法）。",
+   "tags": [
+    "mtp",
+    "stack"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/models/longcat_flash_mtp.py:LongCatFlashMTP",
+   "type": "class",
+   "name": "LongCatFlashMTP",
+   "filePath": "vllm/model_executor/models/longcat_flash_mtp.py",
+   "lineRange": [
+    126,
+    316
+   ],
+   "summary": "MTP 封装（6 方法）。",
+   "tags": [
+    "mtp",
+    "causal-lm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "type": "file",
+   "name": "longcat_flash_ngram.py",
+   "filePath": "vllm/model_executor/models/longcat_flash_ngram.py",
+   "summary": "LongCat-Flash-Lite n-gram 嵌入模型：NgramEmbedding（n-gram 查表位置增强）+FlashNgramModel（继承 FlashModel）+独立 LongcatNgramModelState（DefaultModelState 实现）。",
+   "tags": [
+    "model",
+    "ngram",
+    "longcat",
+    "state"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/longcat_flash_ngram.py:NgramEmbedding",
+   "type": "class",
+   "name": "NgramEmbedding",
+   "filePath": "vllm/model_executor/models/longcat_flash_ngram.py",
+   "lineRange": [
+    49,
+    167
+   ],
+   "summary": "n-gram 嵌入模块（4 方法）。",
+   "tags": [
+    "ngram",
+    "embedding"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/longcat_flash_ngram.py:FlashNgramModel",
+   "type": "class",
+   "name": "FlashNgramModel",
+   "filePath": "vllm/model_executor/models/longcat_flash_ngram.py",
+   "lineRange": [
+    170,
+    196
+   ],
+   "summary": "主干（FlashModel 子类）。",
+   "tags": [
+    "backbone",
+    "ngram"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/model_executor/models/longcat_flash_ngram.py:LongcatFlashNgramForCausalLM",
+   "type": "class",
+   "name": "LongcatFlashNgramForCausalLM",
+   "filePath": "vllm/model_executor/models/longcat_flash_ngram.py",
+   "lineRange": [
+    199,
+    266
+   ],
+   "summary": "causal LM 封装（7 方法）。",
+   "tags": [
+    "causal-lm",
+    "ngram"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/longcat_flash_ngram.py:LongcatNgramModelState",
+   "type": "class",
+   "name": "LongcatNgramModelState",
+   "filePath": "vllm/model_executor/models/longcat_flash_ngram.py",
+   "lineRange": [
+    269,
+    402
+   ],
+   "summary": "n-gram 模型状态（6 方法，独立状态管理）。",
+   "tags": [
+    "state",
+    "ngram"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/models/mamba2.py",
+   "type": "file",
+   "name": "mamba2.py",
+   "filePath": "vllm/model_executor/models/mamba2.py",
+   "summary": "Mamba2 纯 SSM 模型（IsAttentionFree+SupportsMambaPrefixCaching）：无注意力的状态空间模型基准。",
+   "tags": [
+    "model",
+    "mamba",
+    "ssm",
+    "attention-free"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mamba2.py:Mamba2Model",
+   "type": "class",
+   "name": "Mamba2Model",
+   "filePath": "vllm/model_executor/models/mamba2.py",
+   "lineRange": [
+    96,
+    164
+   ],
+   "summary": "主干（3 方法）。",
+   "tags": [
+    "backbone",
+    "ssm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mamba2.py:Mamba2ForCausalLM",
+   "type": "class",
+   "name": "Mamba2ForCausalLM",
+   "filePath": "vllm/model_executor/models/mamba2.py",
+   "lineRange": [
+    167,
+    275
+   ],
+   "summary": "causal LM 封装（10 方法，IsAttentionFree）。",
+   "tags": [
+    "causal-lm",
+    "ssm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/models/midashenglm.py",
+   "type": "file",
+   "name": "midashenglm.py",
+   "filePath": "vllm/model_executor/models/midashenglm.py",
+   "summary": "MiDashengLM 音频模型：Dasheng 音频前端（patch embed+transformer）+下采样 projector，mel 帧计算。",
+   "tags": [
+    "model",
+    "audio",
+    "dasheng"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/midashenglm.py:DashengAudioTransformer",
+   "type": "class",
+   "name": "DashengAudioTransformer",
+   "filePath": "vllm/model_executor/models/midashenglm.py",
+   "lineRange": [
+    351,
+    459
+   ],
+   "summary": "音频 transformer 主干（4 方法）。",
+   "tags": [
+    "audio",
+    "transformer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/midashenglm.py:MiDashengLMMultiModalProcessor",
+   "type": "class",
+   "name": "MiDashengLMMultiModalProcessor",
+   "filePath": "vllm/model_executor/models/midashenglm.py",
+   "lineRange": [
+    578,
+    666
+   ],
+   "summary": "音频多模态预处理器（4 方法）。",
+   "tags": [
+    "audio",
+    "processor"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/midashenglm.py:MiDashengLMModel",
+   "type": "class",
+   "name": "MiDashengLMModel",
+   "filePath": "vllm/model_executor/models/midashenglm.py",
+   "lineRange": [
+    674,
+    812
+   ],
+   "summary": "模型主体（8 方法，SupportsMultiModal）。",
+   "tags": [
+    "audio",
+    "causal-lm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/models/mimo.py",
+   "type": "file",
+   "name": "mimo.py",
+   "filePath": "vllm/model_executor/models/mimo.py",
+   "summary": "MiMo 模型：Qwen2Model/Qwen2ForCausalLM 直接继承的最薄实现。",
+   "tags": [
+    "model",
+    "qwen-derived",
+    "mimo"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mimo.py:MiMoModel",
+   "type": "class",
+   "name": "MiMoModel",
+   "filePath": "vllm/model_executor/models/mimo.py",
+   "lineRange": [
+    57,
+    88
+   ],
+   "summary": "Qwen2Model 子类。",
+   "tags": [
+    "backbone"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mimo.py:MiMoForCausalLM",
+   "type": "class",
+   "name": "MiMoForCausalLM",
+   "filePath": "vllm/model_executor/models/mimo.py",
+   "lineRange": [
+    91,
+    136
+   ],
+   "summary": "Qwen2ForCausalLM 子类。",
+   "tags": [
+    "causal-lm"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/models/mimo_audio.py",
+   "type": "file",
+   "name": "mimo_audio.py",
+   "filePath": "vllm/model_executor/models/mimo_audio.py",
+   "summary": "MiMo 音频全家桶（1398 行）：RVQ tokenizer（EuclideanCodebook/VQ/RVQ 全套+kmeans 初始化）+AudioEncoder transformer+动态 RoPE，含批处理 tokenize 工具。",
+   "tags": [
+    "audio",
+    "rvq",
+    "tokenizer",
+    "mimo"
+   ],
+   "complexity": "complex",
+   "languageNotes": "残差向量量化（RVQ）codec 完整实现在模型文件内：_kmeans 码本初始化+group_by_length 分组长打包。"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mimo_audio.py:EuclideanCodebook",
+   "type": "class",
+   "name": "EuclideanCodebook",
+   "filePath": "vllm/model_executor/models/mimo_audio.py",
+   "lineRange": [
+    220,
+    331
+   ],
+   "summary": "欧氏码本（11 方法）。",
+   "tags": [
+    "rvq",
+    "codebook"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mimo_audio.py:ResidualVectorQuantizer",
+   "type": "class",
+   "name": "ResidualVectorQuantizer",
+   "filePath": "vllm/model_executor/models/mimo_audio.py",
+   "lineRange": [
+    462,
+    513
+   ],
+   "summary": "RVQ 量化器（4 方法）。",
+   "tags": [
+    "rvq",
+    "quantizer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mimo_audio.py:AudioEncoder",
+   "type": "class",
+   "name": "AudioEncoder",
+   "filePath": "vllm/model_executor/models/mimo_audio.py",
+   "lineRange": [
+    777,
+    987
+   ],
+   "summary": "音频 encoder transformer（5 方法）。",
+   "tags": [
+    "audio",
+    "encoder"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mimo_audio.py:MimoAudioEncoder",
+   "type": "class",
+   "name": "MimoAudioEncoder",
+   "filePath": "vllm/model_executor/models/mimo_audio.py",
+   "lineRange": [
+    1177,
+    1398
+   ],
+   "summary": "对外音频编码器（7 方法）。",
+   "tags": [
+    "audio",
+    "model"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/models/mimo_mtp.py",
+   "type": "file",
+   "name": "mimo_mtp.py",
+   "filePath": "vllm/model_executor/models/mimo_mtp.py",
+   "summary": "MiMo 的 MTP draft：三层结构。",
+   "tags": [
+    "spec-decode",
+    "mtp",
+    "mimo"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mimo_mtp.py:MiMoMultiTokenPredictor",
+   "type": "class",
+   "name": "MiMoMultiTokenPredictor",
+   "filePath": "vllm/model_executor/models/mimo_mtp.py",
+   "lineRange": [
+    91,
+    150
+   ],
+   "summary": "MTP 层栈（4 方法）。",
+   "tags": [
+    "mtp",
+    "stack"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mimo_mtp.py:MiMoMTP",
+   "type": "class",
+   "name": "MiMoMTP",
+   "filePath": "vllm/model_executor/models/mimo_mtp.py",
+   "lineRange": [
+    153,
+    222
+   ],
+   "summary": "MTP 封装（5 方法）。",
+   "tags": [
+    "mtp",
+    "causal-lm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/models/mimo_v2.py",
+   "type": "file",
+   "name": "mimo_v2.py",
+   "filePath": "vllm/model_executor/models/mimo_v2.py",
+   "summary": "MiMo-V2 MoE 模型（1129 行）：自实现 MLA 注意力+MoE+FP8 QKV 投影在线重量化（_requantize_fp8/_shard_fp8_qkv_proj——加载期把 per-tensor scale 转分块 scale）。",
+   "tags": [
+    "model",
+    "moe",
+    "mla",
+    "mimo"
+   ],
+   "complexity": "complex",
+   "languageNotes": "特色是加载期 FP8 重量化工具链：per-tensor→分组 scale 的在线转换避免重新导出权重。"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mimo_v2.py:MiMoV2MoE",
+   "type": "class",
+   "name": "MiMoV2MoE",
+   "filePath": "vllm/model_executor/models/mimo_v2.py",
+   "lineRange": [
+    117,
+    216
+   ],
+   "summary": "MoE 块。",
+   "tags": [
+    "moe"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mimo_v2.py:MiMoV2Attention",
+   "type": "class",
+   "name": "MiMoV2Attention",
+   "filePath": "vllm/model_executor/models/mimo_v2.py",
+   "lineRange": [
+    219,
+    379
+   ],
+   "summary": "MLA 注意力（2 方法）。",
+   "tags": [
+    "attention",
+    "mla"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mimo_v2.py:MiMoV2Model",
+   "type": "class",
+   "name": "MiMoV2Model",
+   "filePath": "vllm/model_executor/models/mimo_v2.py",
+   "lineRange": [
+    769,
+    1058
+   ],
+   "summary": "主干（6 方法，EagleModelMixin）。",
+   "tags": [
+    "backbone",
+    "eagle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mimo_v2.py:MiMoV2FlashForCausalLM",
+   "type": "class",
+   "name": "MiMoV2FlashForCausalLM",
+   "filePath": "vllm/model_executor/models/mimo_v2.py",
+   "lineRange": [
+    1061,
+    1122
+   ],
+   "summary": "causal LM 封装（6 方法，SupportsEagle3+MixtureOfExperts）。",
+   "tags": [
+    "causal-lm",
+    "eagle3",
+    "moe"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "type": "file",
+   "name": "mimo_v2_mtp.py",
+   "filePath": "vllm/model_executor/models/mimo_v2_mtp.py",
+   "summary": "MiMo-V2 的 MTP draft：Layer/_Layers 私有层栈/Predictor/MTP 四层+OmniMTP（多模态 MTP 变体）。",
+   "tags": [
+    "spec-decode",
+    "mtp",
+    "mimo"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mimo_v2_mtp.py:MiMoV2MultiTokenPredictor",
+   "type": "class",
+   "name": "MiMoV2MultiTokenPredictor",
+   "filePath": "vllm/model_executor/models/mimo_v2_mtp.py",
+   "lineRange": [
+    170,
+    220
+   ],
+   "summary": "MTP 层栈（4 方法）。",
+   "tags": [
+    "mtp",
+    "stack"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mimo_v2_mtp.py:MiMoV2MTP",
+   "type": "class",
+   "name": "MiMoV2MTP",
+   "filePath": "vllm/model_executor/models/mimo_v2_mtp.py",
+   "lineRange": [
+    223,
+    386
+   ],
+   "summary": "MTP 封装（5 方法）。",
+   "tags": [
+    "mtp",
+    "causal-lm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mimo_v2_mtp.py:MiMoV2OmniMTP",
+   "type": "class",
+   "name": "MiMoV2OmniMTP",
+   "filePath": "vllm/model_executor/models/mimo_v2_mtp.py",
+   "lineRange": [
+    389,
+    414
+   ],
+   "summary": "多模态 MTP 变体（MiMoV2MTP+SupportsMultiModal）。",
+   "tags": [
+    "mtp",
+    "multimodal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "type": "file",
+   "name": "mimo_v2_omni.py",
+   "filePath": "vllm/model_executor/models/mimo_v2_omni.py",
+   "summary": "MiMo-V2-Omni 多模态模型（1576 行）：视觉塔（MiMoVision 系，Qwen2.5-Vision 组件复用）+14 方法 ProcessingInfo+13 方法总装。",
+   "tags": [
+    "model",
+    "multimodal",
+    "mimo",
+    "omni"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mimo_v2_omni.py:MiMoVisionTransformer",
+   "type": "class",
+   "name": "MiMoVisionTransformer",
+   "filePath": "vllm/model_executor/models/mimo_v2_omni.py",
+   "lineRange": [
+    414,
+    673
+   ],
+   "summary": "视觉主干（8 方法）。",
+   "tags": [
+    "vision",
+    "backbone"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mimo_v2_omni.py:MiMoV2OmniProcessingInfo",
+   "type": "class",
+   "name": "MiMoV2OmniProcessingInfo",
+   "filePath": "vllm/model_executor/models/mimo_v2_omni.py",
+   "lineRange": [
+    684,
+    901
+   ],
+   "summary": "处理信息（14 方法）。",
+   "tags": [
+    "multimodal",
+    "processing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mimo_v2_omni.py:MiMoV2OmniForCausalLM",
+   "type": "class",
+   "name": "MiMoV2OmniForCausalLM",
+   "filePath": "vllm/model_executor/models/mimo_v2_omni.py",
+   "lineRange": [
+    1229,
+    1576
+   ],
+   "summary": "多模态总装（13 方法，SupportsEagle3）。",
+   "tags": [
+    "multimodal",
+    "causal-lm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/models/minicpm.py",
+   "type": "file",
+   "name": "minicpm.py",
+   "filePath": "vllm/model_executor/models/minicpm.py",
+   "summary": "MiniCPM 模型：MoE/dense 双前缀+缩放注意力，Eagle 系 draft 的目标基座。",
+   "tags": [
+    "model",
+    "minicpm-family",
+    "eagle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpm.py:MiniCPMModel",
+   "type": "class",
+   "name": "MiniCPMModel",
+   "filePath": "vllm/model_executor/models/minicpm.py",
+   "lineRange": [
+    401,
+    555
+   ],
+   "summary": "主干（5 方法，EagleModelMixin）。",
+   "tags": [
+    "backbone",
+    "eagle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpm.py:MiniCPMForCausalLM",
+   "type": "class",
+   "name": "MiniCPMForCausalLM",
+   "filePath": "vllm/model_executor/models/minicpm.py",
+   "lineRange": [
+    558,
+    654
+   ],
+   "summary": "causal LM 封装（6 方法）。",
+   "tags": [
+    "causal-lm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/models/minicpm3.py",
+   "type": "file",
+   "name": "minicpm3.py",
+   "filePath": "vllm/model_executor/models/minicpm3.py",
+   "summary": "MiniCPM-3：仅替换注意力实现的增量版（其余组件继承 MiniCPM 系）。",
+   "tags": [
+    "model",
+    "minicpm-family"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpm3.py:MiniCPM3Attention",
+   "type": "class",
+   "name": "MiniCPM3Attention",
+   "filePath": "vllm/model_executor/models/minicpm3.py",
+   "lineRange": [
+    52,
+    183
+   ],
+   "summary": "V3 注意力（2 方法）。",
+   "tags": [
+    "attention"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpm3.py:MiniCPM3ForCausalLM",
+   "type": "class",
+   "name": "MiniCPM3ForCausalLM",
+   "filePath": "vllm/model_executor/models/minicpm3.py",
+   "lineRange": [
+    224,
+    233
+   ],
+   "summary": "MiniCPMForCausalLM 子类薄壳。",
+   "tags": [
+    "causal-lm"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/models/minicpm_eagle.py",
+   "type": "file",
+   "name": "minicpm_eagle.py",
+   "filePath": "vllm/model_executor/models/minicpm_eagle.py",
+   "summary": "MiniCPM 的 EAGLE draft（目标为 MiniCPM-V3）。",
+   "tags": [
+    "spec-decode",
+    "eagle",
+    "minicpm-family"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpm_eagle.py:EagleMiniCPMModel",
+   "type": "class",
+   "name": "EagleMiniCPMModel",
+   "filePath": "vllm/model_executor/models/minicpm_eagle.py",
+   "lineRange": [
+    155,
+    302
+   ],
+   "summary": "draft 主干（5 方法）。",
+   "tags": [
+    "draft-model",
+    "backbone"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpm_eagle.py:EagleMiniCPMForCausalLM",
+   "type": "class",
+   "name": "EagleMiniCPMForCausalLM",
+   "filePath": "vllm/model_executor/models/minicpm_eagle.py",
+   "lineRange": [
+    305,
+    406
+   ],
+   "summary": "draft 封装（6 方法）。",
+   "tags": [
+    "draft-model",
+    "causal-lm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/models/minicpm_ocr.py",
+   "type": "file",
+   "name": "minicpm_ocr.py",
+   "filePath": "vllm/model_executor/models/minicpm_ocr.py",
+   "summary": "MiniCPM-OCR：MiniCPM-V4.6 的 OCR 特化（继承其三件套）。",
+   "tags": [
+    "model",
+    "ocr",
+    "minicpm-family"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpm_ocr.py:MiniCPMOcrMultiModalProcessor",
+   "type": "class",
+   "name": "MiniCPMOcrMultiModalProcessor",
+   "filePath": "vllm/model_executor/models/minicpm_ocr.py",
+   "lineRange": [
+    175,
+    401
+   ],
+   "summary": "OCR 预处理器（6 方法）。",
+   "tags": [
+    "ocr",
+    "processor"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpm_ocr.py:MiniCPMOcrForConditionalGeneration",
+   "type": "class",
+   "name": "MiniCPMOcrForConditionalGeneration",
+   "filePath": "vllm/model_executor/models/minicpm_ocr.py",
+   "lineRange": [
+    409,
+    413
+   ],
+   "summary": "V4.6 总装薄壳。",
+   "tags": [
+    "ocr",
+    "causal-lm"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/models/minicpmo.py",
+   "type": "file",
+   "name": "minicpmo.py",
+   "filePath": "vllm/model_executor/models/minicpmo.py",
+   "summary": "MiniCPM-O 全家桶（1048 行）：Whisper 音频编码+多版本总装（2_6/4_5/默认），音频嵌入 items 与 MiniCPM-V 共享处理器框架。",
+   "tags": [
+    "model",
+    "omni",
+    "audio",
+    "minicpm-family"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpmo.py:MiniCPMOProcessingInfo",
+   "type": "class",
+   "name": "MiniCPMOProcessingInfo",
+   "filePath": "vllm/model_executor/models/minicpmo.py",
+   "lineRange": [
+    285,
+    390
+   ],
+   "summary": "处理信息（12 方法，继承 V 系）。",
+   "tags": [
+    "omni",
+    "processing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpmo.py:MiniCPMWhisperEncoder",
+   "type": "class",
+   "name": "MiniCPMWhisperEncoder",
+   "filePath": "vllm/model_executor/models/minicpmo.py",
+   "lineRange": [
+    628,
+    689
+   ],
+   "summary": "Whisper 编码器（2 方法）。",
+   "tags": [
+    "audio",
+    "encoder"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpmo.py:MiniCPMOBaseModel",
+   "type": "class",
+   "name": "MiniCPMOBaseModel",
+   "filePath": "vllm/model_executor/models/minicpmo.py",
+   "lineRange": [
+    698,
+    966
+   ],
+   "summary": "家族基类（11 方法：视觉+音频双通路）。",
+   "tags": [
+    "omni",
+    "base-class"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpmo.py:MiniCPMO",
+   "type": "class",
+   "name": "MiniCPMO",
+   "filePath": "vllm/model_executor/models/minicpmo.py",
+   "lineRange": [
+    1004,
+    1048
+   ],
+   "summary": "默认版本总装（2 方法）。",
+   "tags": [
+    "omni",
+    "causal-lm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/models/minicpmv.py",
+   "type": "file",
+   "name": "minicpmv.py",
+   "filePath": "vllm/model_executor/models/minicpmv.py",
+   "summary": "MiniCPM-V 家族大本营（2483 行）：版本工厂（get_version_by_config）分发 2_0/2_5/2_6/4_0/4_5 五版本+Resampler 两代+EncoderCudaGraphMixin（18 方法，视觉塔 CUDA graph 捕获）。",
+   "tags": [
+    "model",
+    "multimodal",
+    "minicpm-family",
+    "versioned"
+   ],
+   "complexity": "complex",
+   "languageNotes": "视觉塔编码器 CUDA graph 是本家族特色：_MiniCPMVEncoderCudaGraphMixin 把 vision encoder 录进图避免每步重编译。"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpmv.py:MiniCPMVMultiModalProcessor",
+   "type": "class",
+   "name": "MiniCPMVMultiModalProcessor",
+   "filePath": "vllm/model_executor/models/minicpmv.py",
+   "lineRange": [
+    894,
+    1211
+   ],
+   "summary": "家族预处理器（11 方法）。",
+   "tags": [
+    "multimodal",
+    "processor"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpmv.py:MiniCPMVBaseModel",
+   "type": "class",
+   "name": "MiniCPMVBaseModel",
+   "filePath": "vllm/model_executor/models/minicpmv.py",
+   "lineRange": [
+    1214,
+    1444
+   ],
+   "summary": "家族基类（16 方法）。",
+   "tags": [
+    "multimodal",
+    "base-class"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpmv.py:_MiniCPMVEncoderCudaGraphMixin",
+   "type": "class",
+   "name": "_MiniCPMVEncoderCudaGraphMixin",
+   "filePath": "vllm/model_executor/models/minicpmv.py",
+   "lineRange": [
+    1561,
+    1941
+   ],
+   "summary": "编码器 CUDA graph 混入（18 方法）。",
+   "tags": [
+    "cudagraph",
+    "encoder",
+    "mixin"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpmv.py:MiniCPMV2_6",
+   "type": "class",
+   "name": "MiniCPMV2_6",
+   "filePath": "vllm/model_executor/models/minicpmv.py",
+   "lineRange": [
+    2127,
+    2228
+   ],
+   "summary": "V2.6 版本（6 方法）。",
+   "tags": [
+    "multimodal",
+    "version"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpmv.py:MiniCPMV",
+   "type": "class",
+   "name": "MiniCPMV",
+   "filePath": "vllm/model_executor/models/minicpmv.py",
+   "lineRange": [
+    2448,
+    2483
+   ],
+   "summary": "版本工厂入口（1 方法）。",
+   "tags": [
+    "multimodal",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "type": "file",
+   "name": "minicpmv4_6.py",
+   "filePath": "vllm/model_executor/models/minicpmv4_6.py",
+   "summary": "MiniCPM-V 4.6（1551 行）：窗口注意力视觉塔（SelfAttn+Merger 双形态）+下采样 MLP+10 方法预处理器，IsHybrid+HasInnerState。",
+   "tags": [
+    "model",
+    "multimodal",
+    "window-attention",
+    "minicpm-family"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpmv4_6.py:MiniCPMV4_6MultiModalProcessor",
+   "type": "class",
+   "name": "MiniCPMV4_6MultiModalProcessor",
+   "filePath": "vllm/model_executor/models/minicpmv4_6.py",
+   "lineRange": [
+    206,
+    644
+   ],
+   "summary": "预处理器（10 方法）。",
+   "tags": [
+    "multimodal",
+    "processor"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpmv4_6.py:MiniCPMV4_6ViTWindowAttentionMerger",
+   "type": "class",
+   "name": "MiniCPMV4_6ViTWindowAttentionMerger",
+   "filePath": "vllm/model_executor/models/minicpmv4_6.py",
+   "lineRange": [
+    925,
+    1053
+   ],
+   "summary": "窗口注意力合并器（4 方法）。",
+   "tags": [
+    "window-attention",
+    "merger"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpmv4_6.py:MiniCPMV4_6ForConditionalGeneration",
+   "type": "class",
+   "name": "MiniCPMV4_6ForConditionalGeneration",
+   "filePath": "vllm/model_executor/models/minicpmv4_6.py",
+   "lineRange": [
+    1150,
+    1551
+   ],
+   "summary": "多模态总装（16 方法，IsHybrid+Eagle3+MRoPE）。",
+   "tags": [
+    "multimodal",
+    "causal-lm",
+    "hybrid"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/models/minicpmv4_7.py",
+   "type": "file",
+   "name": "minicpmv4_7.py",
+   "filePath": "vllm/model_executor/models/minicpmv4_7.py",
+   "summary": "MiniCPM-V 4.7：继承 V4.6 的轻增量+canvas 布局引擎（_CanvasLayout/_compute_canvas_packed：多图拼贴到统一画布的布局分配算法）。",
+   "tags": [
+    "model",
+    "multimodal",
+    "canvas",
+    "minicpm-family"
+   ],
+   "complexity": "complex",
+   "languageNotes": "canvas 布局是多图输入的拼贴打包：_assign_canvas_span 把多张图按网格分配到统一画布减少 padding。"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minicpmv4_7.py:MiniCPMV4_7ForConditionalGeneration",
+   "type": "class",
+   "name": "MiniCPMV4_7ForConditionalGeneration",
+   "filePath": "vllm/model_executor/models/minicpmv4_7.py",
+   "lineRange": [
+    124,
+    261
+   ],
+   "summary": "多模态总装（4 方法）。",
+   "tags": [
+    "multimodal",
+    "causal-lm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/models/minimax_m2.py",
+   "type": "file",
+   "name": "minimax_m2.py",
+   "filePath": "vllm/model_executor/models/minimax_m2.py",
+   "summary": "MiniMax-M2 MoE 模型：MoE/注意力/解码层自实现，EagleModelMixin+SupportsEagle3。",
+   "tags": [
+    "model",
+    "moe",
+    "minimax",
+    "eagle3"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minimax_m2.py:MiniMaxM2MoE",
+   "type": "class",
+   "name": "MiniMaxM2MoE",
+   "filePath": "vllm/model_executor/models/minimax_m2.py",
+   "lineRange": [
+    70,
+    134
+   ],
+   "summary": "MoE 块（3 方法）。",
+   "tags": [
+    "moe"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minimax_m2.py:MiniMaxM2Model",
+   "type": "class",
+   "name": "MiniMaxM2Model",
+   "filePath": "vllm/model_executor/models/minimax_m2.py",
+   "lineRange": [
+    321,
+    425
+   ],
+   "summary": "主干（4 方法，EagleModelMixin）。",
+   "tags": [
+    "backbone",
+    "eagle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/minimax_m2.py:MiniMaxM2ForCausalLM",
+   "type": "class",
+   "name": "MiniMaxM2ForCausalLM",
+   "filePath": "vllm/model_executor/models/minimax_m2.py",
+   "lineRange": [
+    428,
+    488
+   ],
+   "summary": "causal LM 封装（5 方法）。",
+   "tags": [
+    "causal-lm",
+    "eagle3"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/models/mistral3.py",
+   "type": "file",
+   "name": "mistral3.py",
+   "filePath": "vllm/model_executor/models/mistral3.py",
+   "summary": "Mistral-3 多模态（Pixtral 视觉）：PatchMerger+HF encoder info（继承 PixtralHF），init_vision_tower 工厂。",
+   "tags": [
+    "model",
+    "multimodal",
+    "mistral",
+    "pixtral"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mistral3.py:Mistral3HFEncoderInfo",
+   "type": "class",
+   "name": "Mistral3HFEncoderInfo",
+   "filePath": "vllm/model_executor/models/mistral3.py",
+   "lineRange": [
+    188,
+    216
+   ],
+   "summary": "HF encoder 信息（PixtralHFEncoderInfo 子类）。",
+   "tags": [
+    "encoder-info"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mistral3.py:Mistral3MultiModalProcessor",
+   "type": "class",
+   "name": "Mistral3MultiModalProcessor",
+   "filePath": "vllm/model_executor/models/mistral3.py",
+   "lineRange": [
+    293,
+    364
+   ],
+   "summary": "多模态预处理器（3 方法）。",
+   "tags": [
+    "multimodal",
+    "processor"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mistral3.py:Mistral3ForConditionalGeneration",
+   "type": "class",
+   "name": "Mistral3ForConditionalGeneration",
+   "filePath": "vllm/model_executor/models/mistral3.py",
+   "lineRange": [
+    418,
+    634
+   ],
+   "summary": "多模态总装（9 方法，SupportsEagle/Eagle3）。",
+   "tags": [
+    "multimodal",
+    "causal-lm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/models/mistral_large_3_eagle.py",
+   "type": "file",
+   "name": "mistral_large_3_eagle.py",
+   "filePath": "vllm/model_executor/models/mistral_large_3_eagle.py",
+   "summary": "Mistral-Large-3 的 EAGLE draft：DeepseekV2Model 复用（MLA 系 draft）。",
+   "tags": [
+    "spec-decode",
+    "eagle",
+    "mistral",
+    "mla"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mistral_large_3_eagle.py:EagleMistralLarge3Model",
+   "type": "class",
+   "name": "EagleMistralLarge3Model",
+   "filePath": "vllm/model_executor/models/mistral_large_3_eagle.py",
+   "lineRange": [
+    51,
+    126
+   ],
+   "summary": "draft 主干（DeepseekV2Model 子类，2 方法）。",
+   "tags": [
+    "draft-model",
+    "backbone"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/models/mistral_large_3_eagle.py:EagleMistralLarge3ForCausalLM",
+   "type": "class",
+   "name": "EagleMistralLarge3ForCausalLM",
+   "filePath": "vllm/model_executor/models/mistral_large_3_eagle.py",
+   "lineRange": [
+    129,
+    192
+   ],
+   "summary": "draft 封装（5 方法，SupportsMultiModalEmbeddings）。",
+   "tags": [
+    "draft-model",
+    "causal-lm"
+   ],
+   "complexity": "moderate"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/model_executor/models/llama_eagle3.py",
+   "target": "file:vllm/compilation/decorators.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llama_eagle3.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llama_eagle3.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llama_eagle3.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llama_eagle3.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llama_eagle3.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llama_eagle3.py",
+   "target": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llama_eagle3.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llama_eagle3.py",
+   "target": "file:vllm/model_executor/models/llama.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llama_eagle3.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llama_eagle3.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llama_eagle3.py",
+   "target": "class:vllm/model_executor/models/llama_eagle3.py:LlamaModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/llama_eagle3.py",
+   "target": "class:vllm/model_executor/models/llama_eagle3.py:LlamaModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/llama_eagle3.py",
+   "target": "class:vllm/model_executor/models/llama_eagle3.py:Eagle3LlamaForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/llama_eagle3.py",
+   "target": "class:vllm/model_executor/models/llama_eagle3.py:Eagle3LlamaForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "file:vllm/model_executor/models/clip.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "file:vllm/model_executor/models/module_mapping.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "file:vllm/model_executor/models/pixtral.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "file:vllm/model_executor/models/siglip.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "file:vllm/model_executor/models/vision.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "file:vllm/multimodal/processing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "file:vllm/utils/tensor_schema.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "class:vllm/model_executor/models/llava.py:BaseLlavaProcessingInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "class:vllm/model_executor/models/llava.py:BaseLlavaProcessingInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "class:vllm/model_executor/models/llava.py:PixtralHFMultiModalProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "class:vllm/model_executor/models/llava.py:PixtralHFMultiModalProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "class:vllm/model_executor/models/llava.py:LlavaForConditionalGeneration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava.py",
+   "target": "class:vllm/model_executor/models/llava.py:LlavaForConditionalGeneration",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next.py",
+   "target": "file:vllm/model_executor/models/clip.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next.py",
+   "target": "file:vllm/model_executor/models/llava.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next.py",
+   "target": "file:vllm/model_executor/models/module_mapping.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next.py",
+   "target": "file:vllm/model_executor/models/siglip.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next.py",
+   "target": "file:vllm/model_executor/models/vision.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next.py",
+   "target": "file:vllm/utils/tensor_schema.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next.py",
+   "target": "class:vllm/model_executor/models/llava_next.py:LlavaNextProcessingInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next.py",
+   "target": "class:vllm/model_executor/models/llava_next.py:LlavaNextProcessingInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next.py",
+   "target": "class:vllm/model_executor/models/llava_next.py:LlavaNextForConditionalGeneration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next.py",
+   "target": "class:vllm/model_executor/models/llava_next.py:LlavaNextForConditionalGeneration",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "file:vllm/model_executor/models/clip.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "file:vllm/model_executor/models/llava.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "file:vllm/model_executor/models/module_mapping.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "file:vllm/model_executor/models/siglip.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "file:vllm/model_executor/models/vision.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "file:vllm/multimodal/processing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "file:vllm/utils/collection_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "file:vllm/utils/tensor_schema.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "class:vllm/model_executor/models/llava_next_video.py:LlavaNextVideoPooler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "class:vllm/model_executor/models/llava_next_video.py:LlavaNextVideoPooler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "class:vllm/model_executor/models/llava_next_video.py:LlavaNextVideoForConditionalGeneration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_next_video.py",
+   "target": "class:vllm/model_executor/models/llava_next_video.py:LlavaNextVideoForConditionalGeneration",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "file:vllm/model_executor/models/clip.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "file:vllm/model_executor/models/llava.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "file:vllm/model_executor/models/llava_next.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "file:vllm/model_executor/models/siglip.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "file:vllm/multimodal/processing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "file:vllm/utils/tensor_schema.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "class:vllm/model_executor/models/llava_onevision.py:LlavaOnevisionProcessingInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "class:vllm/model_executor/models/llava_onevision.py:LlavaOnevisionProcessingInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "class:vllm/model_executor/models/llava_onevision.py:LlavaOnevisionForConditionalGeneration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision.py",
+   "target": "class:vllm/model_executor/models/llava_onevision.py:LlavaOnevisionForConditionalGeneration",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/compilation/decorators.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/model_executor/models/module_mapping.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/model_executor/models/vision.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/multimodal/processing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/multimodal/processing/dummy_inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/multimodal/video.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/transformers_utils/processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/transformers_utils/repo_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/transformers_utils/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "file:vllm/utils/tensor_schema.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "class:vllm/model_executor/models/llava_onevision2.py:LlavaOnevision2VisionTower",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "class:vllm/model_executor/models/llava_onevision2.py:LlavaOnevision2VisionTower",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "class:vllm/model_executor/models/llava_onevision2.py:LlavaOnevision2MultiModalProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "class:vllm/model_executor/models/llava_onevision2.py:LlavaOnevision2MultiModalProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "class:vllm/model_executor/models/llava_onevision2.py:LlavaOnevision2ProcessingInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "class:vllm/model_executor/models/llava_onevision2.py:LlavaOnevision2ProcessingInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "class:vllm/model_executor/models/llava_onevision2.py:LlavaOnevision2ForConditionalGeneration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/llava_onevision2.py",
+   "target": "class:vllm/model_executor/models/llava_onevision2.py:LlavaOnevision2ForConditionalGeneration",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "file:vllm/compilation/decorators.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "class:vllm/model_executor/models/longcat_flash.py:LongcatMoe",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "class:vllm/model_executor/models/longcat_flash.py:LongcatMoe",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "class:vllm/model_executor/models/longcat_flash.py:FlashModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "class:vllm/model_executor/models/longcat_flash.py:FlashModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "class:vllm/model_executor/models/longcat_flash.py:LongcatFlashForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash.py",
+   "target": "class:vllm/model_executor/models/longcat_flash.py:LongcatFlashForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_mtp.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_mtp.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_mtp.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_mtp.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_mtp.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_mtp.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_mtp.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_mtp.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_mtp.py",
+   "target": "file:vllm/model_executor/models/longcat_flash.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_mtp.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_mtp.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_mtp.py",
+   "target": "class:vllm/model_executor/models/longcat_flash_mtp.py:LongCatMultiTokenPredictor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_mtp.py",
+   "target": "class:vllm/model_executor/models/longcat_flash_mtp.py:LongCatMultiTokenPredictor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_mtp.py",
+   "target": "class:vllm/model_executor/models/longcat_flash_mtp.py:LongCatFlashMTP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_mtp.py",
+   "target": "class:vllm/model_executor/models/longcat_flash_mtp.py:LongCatFlashMTP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "file:vllm/model_executor/models/longcat_flash.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "file:vllm/v1/worker/gpu/model_states/default.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "file:vllm/v1/worker/gpu/states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "class:vllm/model_executor/models/longcat_flash_ngram.py:NgramEmbedding",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "class:vllm/model_executor/models/longcat_flash_ngram.py:NgramEmbedding",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "class:vllm/model_executor/models/longcat_flash_ngram.py:FlashNgramModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "class:vllm/model_executor/models/longcat_flash_ngram.py:FlashNgramModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "class:vllm/model_executor/models/longcat_flash_ngram.py:LongcatFlashNgramForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "class:vllm/model_executor/models/longcat_flash_ngram.py:LongcatFlashNgramForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "class:vllm/model_executor/models/longcat_flash_ngram.py:LongcatNgramModelState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/longcat_flash_ngram.py",
+   "target": "class:vllm/model_executor/models/longcat_flash_ngram.py:LongcatNgramModelState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/models/longcat_flash_ngram.py:FlashNgramModel",
+   "target": "class:vllm/model_executor/models/longcat_flash.py:FlashModel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/models/mamba2.py",
+   "target": "file:vllm/compilation/decorators.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mamba2.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mamba2.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mamba2.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mamba2.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mamba2.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_mixer2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mamba2.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mamba2.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mamba2.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mamba2.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mamba2.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mamba2.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mamba2.py",
+   "target": "class:vllm/model_executor/models/mamba2.py:Mamba2Model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mamba2.py",
+   "target": "class:vllm/model_executor/models/mamba2.py:Mamba2Model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mamba2.py",
+   "target": "class:vllm/model_executor/models/mamba2.py:Mamba2ForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mamba2.py",
+   "target": "class:vllm/model_executor/models/mamba2.py:Mamba2ForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "file:vllm/model_executor/layers/conv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "file:vllm/multimodal/processing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "file:vllm/multimodal/processing/processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "file:vllm/transformers_utils/configs/midashenglm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "file:vllm/utils/tensor_schema.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "class:vllm/model_executor/models/midashenglm.py:DashengAudioTransformer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "class:vllm/model_executor/models/midashenglm.py:DashengAudioTransformer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "class:vllm/model_executor/models/midashenglm.py:MiDashengLMMultiModalProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "class:vllm/model_executor/models/midashenglm.py:MiDashengLMMultiModalProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "class:vllm/model_executor/models/midashenglm.py:MiDashengLMModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/midashenglm.py",
+   "target": "class:vllm/model_executor/models/midashenglm.py:MiDashengLMModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo.py",
+   "target": "file:vllm/compilation/decorators.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo.py",
+   "target": "file:vllm/model_executor/models/qwen2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo.py",
+   "target": "class:vllm/model_executor/models/mimo.py:MiMoModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo.py",
+   "target": "class:vllm/model_executor/models/mimo.py:MiMoModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo.py",
+   "target": "class:vllm/model_executor/models/mimo.py:MiMoForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo.py",
+   "target": "class:vllm/model_executor/models/mimo.py:MiMoForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/models/mimo.py:MiMoModel",
+   "target": "class:vllm/model_executor/models/qwen2.py:Qwen2Model",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/models/mimo.py:MiMoForCausalLM",
+   "target": "class:vllm/model_executor/models/qwen2.py:Qwen2ForCausalLM",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_audio.py",
+   "target": "file:vllm/vllm_flash_attn/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_audio.py",
+   "target": "class:vllm/model_executor/models/mimo_audio.py:EuclideanCodebook",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_audio.py",
+   "target": "class:vllm/model_executor/models/mimo_audio.py:EuclideanCodebook",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_audio.py",
+   "target": "class:vllm/model_executor/models/mimo_audio.py:ResidualVectorQuantizer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_audio.py",
+   "target": "class:vllm/model_executor/models/mimo_audio.py:ResidualVectorQuantizer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_audio.py",
+   "target": "class:vllm/model_executor/models/mimo_audio.py:AudioEncoder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_audio.py",
+   "target": "class:vllm/model_executor/models/mimo_audio.py:AudioEncoder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_audio.py",
+   "target": "class:vllm/model_executor/models/mimo_audio.py:MimoAudioEncoder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_audio.py",
+   "target": "class:vllm/model_executor/models/mimo_audio.py:MimoAudioEncoder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_mtp.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_mtp.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_mtp.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_mtp.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_mtp.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_mtp.py",
+   "target": "file:vllm/model_executor/models/qwen2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_mtp.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_mtp.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_mtp.py",
+   "target": "class:vllm/model_executor/models/mimo_mtp.py:MiMoMultiTokenPredictor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_mtp.py",
+   "target": "class:vllm/model_executor/models/mimo_mtp.py:MiMoMultiTokenPredictor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_mtp.py",
+   "target": "class:vllm/model_executor/models/mimo_mtp.py:MiMoMTP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_mtp.py",
+   "target": "class:vllm/model_executor/models/mimo_mtp.py:MiMoMTP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/compilation/decorators.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "class:vllm/model_executor/models/mimo_v2.py:MiMoV2MoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "class:vllm/model_executor/models/mimo_v2.py:MiMoV2MoE",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "class:vllm/model_executor/models/mimo_v2.py:MiMoV2Attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "class:vllm/model_executor/models/mimo_v2.py:MiMoV2Attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "class:vllm/model_executor/models/mimo_v2.py:MiMoV2Model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "class:vllm/model_executor/models/mimo_v2.py:MiMoV2Model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "class:vllm/model_executor/models/mimo_v2.py:MiMoV2FlashForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2.py",
+   "target": "class:vllm/model_executor/models/mimo_v2.py:MiMoV2FlashForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/models/mimo_v2.py:MiMoV2Model",
+   "target": "class:vllm/model_executor/models/interfaces.py:EagleModelMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "target": "file:vllm/model_executor/models/mimo_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "target": "class:vllm/model_executor/models/mimo_v2_mtp.py:MiMoV2MultiTokenPredictor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "target": "class:vllm/model_executor/models/mimo_v2_mtp.py:MiMoV2MultiTokenPredictor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "target": "class:vllm/model_executor/models/mimo_v2_mtp.py:MiMoV2MTP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "target": "class:vllm/model_executor/models/mimo_v2_mtp.py:MiMoV2MTP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "target": "class:vllm/model_executor/models/mimo_v2_mtp.py:MiMoV2OmniMTP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_mtp.py",
+   "target": "class:vllm/model_executor/models/mimo_v2_mtp.py:MiMoV2OmniMTP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/common.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/model_executor/models/mimo_audio.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/model_executor/models/mimo_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/model_executor/models/qwen2_5_vl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/model_executor/models/qwen2_vl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/model_executor/models/vision.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/multimodal/processing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/multimodal/processing/processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/transformers_utils/configs/mimo_v2_omni.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/transformers_utils/processors/mimo_v2_omni.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "file:vllm/v1/attention/ops/triton_prefill_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "class:vllm/model_executor/models/mimo_v2_omni.py:MiMoVisionTransformer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "class:vllm/model_executor/models/mimo_v2_omni.py:MiMoVisionTransformer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "class:vllm/model_executor/models/mimo_v2_omni.py:MiMoV2OmniProcessingInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "class:vllm/model_executor/models/mimo_v2_omni.py:MiMoV2OmniProcessingInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "class:vllm/model_executor/models/mimo_v2_omni.py:MiMoV2OmniForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mimo_v2_omni.py",
+   "target": "class:vllm/model_executor/models/mimo_v2_omni.py:MiMoV2OmniForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "file:vllm/compilation/decorators.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "class:vllm/model_executor/models/minicpm.py:MiniCPMModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "class:vllm/model_executor/models/minicpm.py:MiniCPMModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "class:vllm/model_executor/models/minicpm.py:MiniCPMForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm.py",
+   "target": "class:vllm/model_executor/models/minicpm.py:MiniCPMForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/models/minicpm.py:MiniCPMModel",
+   "target": "class:vllm/model_executor/models/interfaces.py:EagleModelMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm3.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm3.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm3.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm3.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm3.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm3.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm3.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm3.py",
+   "target": "file:vllm/model_executor/models/minicpm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm3.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm3.py",
+   "target": "class:vllm/model_executor/models/minicpm3.py:MiniCPM3Attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm3.py",
+   "target": "class:vllm/model_executor/models/minicpm3.py:MiniCPM3Attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm3.py",
+   "target": "class:vllm/model_executor/models/minicpm3.py:MiniCPM3ForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm3.py",
+   "target": "class:vllm/model_executor/models/minicpm3.py:MiniCPM3ForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/models/minicpm3.py:MiniCPM3Model",
+   "target": "class:vllm/model_executor/models/minicpm.py:MiniCPMModel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/models/minicpm3.py:MiniCPM3ForCausalLM",
+   "target": "class:vllm/model_executor/models/minicpm.py:MiniCPMForCausalLM",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_eagle.py",
+   "target": "file:vllm/compilation/decorators.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_eagle.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_eagle.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_eagle.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_eagle.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_eagle.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_eagle.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_eagle.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_eagle.py",
+   "target": "file:vllm/model_executor/models/minicpm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_eagle.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_eagle.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_eagle.py",
+   "target": "class:vllm/model_executor/models/minicpm_eagle.py:EagleMiniCPMModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_eagle.py",
+   "target": "class:vllm/model_executor/models/minicpm_eagle.py:EagleMiniCPMModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_eagle.py",
+   "target": "class:vllm/model_executor/models/minicpm_eagle.py:EagleMiniCPMForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_eagle.py",
+   "target": "class:vllm/model_executor/models/minicpm_eagle.py:EagleMiniCPMForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_ocr.py",
+   "target": "file:vllm/model_executor/models/minicpmv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_ocr.py",
+   "target": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_ocr.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_ocr.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_ocr.py",
+   "target": "file:vllm/multimodal/processing/processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_ocr.py",
+   "target": "class:vllm/model_executor/models/minicpm_ocr.py:MiniCPMOcrMultiModalProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_ocr.py",
+   "target": "class:vllm/model_executor/models/minicpm_ocr.py:MiniCPMOcrMultiModalProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_ocr.py",
+   "target": "class:vllm/model_executor/models/minicpm_ocr.py:MiniCPMOcrForConditionalGeneration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpm_ocr.py",
+   "target": "class:vllm/model_executor/models/minicpm_ocr.py:MiniCPMOcrForConditionalGeneration",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/models/minicpm_ocr.py:MiniCPMOcrForConditionalGeneration",
+   "target": "class:vllm/model_executor/models/minicpmv4_6.py:MiniCPMV4_6ForConditionalGeneration",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmo.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmo.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmo.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmo.py",
+   "target": "file:vllm/model_executor/models/minicpmv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmo.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmo.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmo.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmo.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmo.py",
+   "target": "file:vllm/multimodal/processing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmo.py",
+   "target": "file:vllm/transformers_utils/processors/minicpmo.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmo.py",
+   "target": "file:vllm/utils/tensor_schema.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmo.py",
+   "target": "class:vllm/model_executor/models/minicpmo.py:MiniCPMOProcessingInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmo.py",
+   "target": "class:vllm/model_executor/models/minicpmo.py:MiniCPMOProcessingInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmo.py",
+   "target": "class:vllm/model_executor/models/minicpmo.py:MiniCPMWhisperEncoder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmo.py",
+   "target": "class:vllm/model_executor/models/minicpmo.py:MiniCPMWhisperEncoder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmo.py",
+   "target": "class:vllm/model_executor/models/minicpmo.py:MiniCPMOBaseModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmo.py",
+   "target": "class:vllm/model_executor/models/minicpmo.py:MiniCPMOBaseModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmo.py",
+   "target": "class:vllm/model_executor/models/minicpmo.py:MiniCPMO",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmo.py",
+   "target": "class:vllm/model_executor/models/minicpmo.py:MiniCPMO",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/model_executor/layers/resampler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/model_executor/models/idefics2_vision_model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/model_executor/models/llama.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/model_executor/models/minicpm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/model_executor/models/module_mapping.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/model_executor/models/qwen2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/model_executor/models/qwen3.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/multimodal/processing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/multimodal/processing/processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/transformers_utils/processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/transformers_utils/processors/minicpmv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/transformers_utils/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/utils/collection_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/utils/gpu_sync_debug.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/utils/tensor_schema.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "file:vllm/v1/worker/encoder_cudagraph_defs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "class:vllm/model_executor/models/minicpmv.py:MiniCPMVMultiModalProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "class:vllm/model_executor/models/minicpmv.py:MiniCPMVMultiModalProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "class:vllm/model_executor/models/minicpmv.py:MiniCPMVBaseModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "class:vllm/model_executor/models/minicpmv.py:MiniCPMVBaseModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "class:vllm/model_executor/models/minicpmv.py:_MiniCPMVEncoderCudaGraphMixin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "class:vllm/model_executor/models/minicpmv.py:MiniCPMV2_6",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "class:vllm/model_executor/models/minicpmv.py:MiniCPMV2_6",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "class:vllm/model_executor/models/minicpmv.py:MiniCPMV",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv.py",
+   "target": "class:vllm/model_executor/models/minicpmv.py:MiniCPMV",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "file:vllm/model_executor/models/idefics2_vision_model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "file:vllm/model_executor/models/minicpmv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "file:vllm/model_executor/models/module_mapping.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "file:vllm/model_executor/models/qwen3_5.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "file:vllm/model_executor/models/vision.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "file:vllm/multimodal/processing/processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "class:vllm/model_executor/models/minicpmv4_6.py:MiniCPMV4_6MultiModalProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "class:vllm/model_executor/models/minicpmv4_6.py:MiniCPMV4_6MultiModalProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "class:vllm/model_executor/models/minicpmv4_6.py:MiniCPMV4_6ViTWindowAttentionMerger",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "class:vllm/model_executor/models/minicpmv4_6.py:MiniCPMV4_6ViTWindowAttentionMerger",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "class:vllm/model_executor/models/minicpmv4_6.py:MiniCPMV4_6ForConditionalGeneration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "target": "class:vllm/model_executor/models/minicpmv4_6.py:MiniCPMV4_6ForConditionalGeneration",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/models/minicpmv4_6.py:MiniCPMV4_6ForConditionalGeneration",
+   "target": "class:vllm/model_executor/models/minicpmv.py:MiniCPMVBaseModel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_7.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_7.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_7.py",
+   "target": "file:vllm/model_executor/models/minicpmv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_7.py",
+   "target": "file:vllm/model_executor/models/minicpmv4_6.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_7.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_7.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_7.py",
+   "target": "file:vllm/tokenizers/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_7.py",
+   "target": "class:vllm/model_executor/models/minicpmv4_7.py:MiniCPMV4_7ForConditionalGeneration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minicpmv4_7.py",
+   "target": "class:vllm/model_executor/models/minicpmv4_7.py:MiniCPMV4_7ForConditionalGeneration",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/models/minicpmv4_7.py:MiniCPMV4_7ForConditionalGeneration",
+   "target": "class:vllm/model_executor/models/minicpmv4_6.py:MiniCPMV4_6ForConditionalGeneration",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "file:vllm/compilation/decorators.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "file:vllm/model_executor/layers/minimax_rms_norm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "class:vllm/model_executor/models/minimax_m2.py:MiniMaxM2MoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "class:vllm/model_executor/models/minimax_m2.py:MiniMaxM2MoE",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "class:vllm/model_executor/models/minimax_m2.py:MiniMaxM2Model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "class:vllm/model_executor/models/minimax_m2.py:MiniMaxM2Model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "class:vllm/model_executor/models/minimax_m2.py:MiniMaxM2ForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/minimax_m2.py",
+   "target": "class:vllm/model_executor/models/minimax_m2.py:MiniMaxM2ForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/models/minimax_m2.py:MiniMaxM2Model",
+   "target": "class:vllm/model_executor/models/interfaces.py:EagleModelMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "file:vllm/model_executor/layers/fusion/mm_input_norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "file:vllm/model_executor/models/module_mapping.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "file:vllm/model_executor/models/pixtral.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "file:vllm/multimodal/processing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "file:vllm/utils/tensor_schema.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "class:vllm/model_executor/models/mistral3.py:Mistral3HFEncoderInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "class:vllm/model_executor/models/mistral3.py:Mistral3HFEncoderInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "class:vllm/model_executor/models/mistral3.py:Mistral3MultiModalProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "class:vllm/model_executor/models/mistral3.py:Mistral3MultiModalProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "class:vllm/model_executor/models/mistral3.py:Mistral3ForConditionalGeneration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral3.py",
+   "target": "class:vllm/model_executor/models/mistral3.py:Mistral3ForConditionalGeneration",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral_large_3_eagle.py",
+   "target": "file:vllm/compilation/decorators.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral_large_3_eagle.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral_large_3_eagle.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral_large_3_eagle.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral_large_3_eagle.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral_large_3_eagle.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral_large_3_eagle.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral_large_3_eagle.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral_large_3_eagle.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral_large_3_eagle.py",
+   "target": "file:vllm/model_executor/models/mistral_large_3.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral_large_3_eagle.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral_large_3_eagle.py",
+   "target": "class:vllm/model_executor/models/mistral_large_3_eagle.py:EagleMistralLarge3Model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral_large_3_eagle.py",
+   "target": "class:vllm/model_executor/models/mistral_large_3_eagle.py:EagleMistralLarge3Model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral_large_3_eagle.py",
+   "target": "class:vllm/model_executor/models/mistral_large_3_eagle.py:EagleMistralLarge3ForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/models/mistral_large_3_eagle.py",
+   "target": "class:vllm/model_executor/models/mistral_large_3_eagle.py:EagleMistralLarge3ForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/models/mistral_large_3_eagle.py:EagleMistralLarge3Model",
+   "target": "class:vllm/model_executor/models/deepseek_v2.py:DeepseekV2Model",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

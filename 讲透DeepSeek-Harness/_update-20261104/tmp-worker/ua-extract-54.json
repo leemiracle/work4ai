@@ -1,0 +1,2623 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 22,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "packages/typert/README.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 52,
+      "nonEmptyLines": 35,
+      "sections": [
+        {
+          "heading": "packages/typert",
+          "level": 1,
+          "line": 6
+        },
+        {
+          "heading": "Summary",
+          "level": 2,
+          "line": 10
+        },
+        {
+          "heading": "Table of Contents",
+          "level": 2,
+          "line": 14
+        },
+        {
+          "heading": "Packages",
+          "level": 2,
+          "line": 23
+        },
+        {
+          "heading": "Related documentation",
+          "level": 2,
+          "line": 35
+        },
+        {
+          "heading": "Dev Note",
+          "level": 2,
+          "line": 45
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 6
+      }
+    },
+    {
+      "path": "packages/typert/generator/README.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 174,
+      "nonEmptyLines": 109,
+      "sections": [
+        {
+          "heading": "@deepseek-ai/dsh-typert-generator",
+          "level": 1,
+          "line": 6
+        },
+        {
+          "heading": "Summary",
+          "level": 2,
+          "line": 10
+        },
+        {
+          "heading": "Table of Contents",
+          "level": 2,
+          "line": 14
+        },
+        {
+          "heading": "Use this package",
+          "level": 2,
+          "line": 26
+        },
+        {
+          "heading": "Publishing Typert artifacts from a package",
+          "level": 3,
+          "line": 30
+        },
+        {
+          "heading": "Ordinary Remote metadata",
+          "level": 3,
+          "line": 47
+        },
+        {
+          "heading": "Analyzing a workspace statically",
+          "level": 3,
+          "line": 61
+        },
+        {
+          "heading": "Running generation inside a tsdown build",
+          "level": 3,
+          "line": 67
+        },
+        {
+          "heading": "Generating without a bundler",
+          "level": 3,
+          "line": 75
+        },
+        {
+          "heading": "Understand the implementation",
+          "level": 2,
+          "line": 84
+        },
+        {
+          "heading": "Design concept",
+          "level": 3,
+          "line": 91
+        },
+        {
+          "heading": "Source map",
+          "level": 3,
+          "line": 95
+        },
+        {
+          "heading": "Analysis and faces",
+          "level": 3,
+          "line": 110
+        },
+        {
+          "heading": "Emission and publication contract",
+          "level": 3,
+          "line": 114
+        },
+        {
+          "heading": "Catalog projection",
+          "level": 3,
+          "line": 120
+        },
+        {
+          "heading": "Further Exploration",
+          "level": 2,
+          "line": 131
+        },
+        {
+          "heading": "Model Experience",
+          "level": 2,
+          "line": 144
+        },
+        {
+          "heading": "KV Cache effect",
+          "level": 4,
+          "line": 148
+        },
+        {
+          "heading": "Known Limitations and Deferred Work",
+          "level": 2,
+          "line": 152
+        },
+        {
+          "heading": "Dev Note",
+          "level": 3,
+          "line": 167
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 20
+      }
+    },
+    {
+      "path": "packages/typert/generator/package.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 48,
+      "nonEmptyLines": 48,
+      "sections": [
+        {
+          "heading": "name",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "description",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "version",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "publishConfig",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "repository",
+          "level": 1,
+          "line": 8
+        },
+        {
+          "heading": "type",
+          "level": 1,
+          "line": 9
+        },
+        {
+          "heading": "main",
+          "level": 1,
+          "line": 14
+        },
+        {
+          "heading": "types",
+          "level": 1,
+          "line": 15
+        },
+        {
+          "heading": "exports",
+          "level": 1,
+          "line": 16
+        },
+        {
+          "heading": "files",
+          "level": 1,
+          "line": 28
+        },
+        {
+          "heading": "license",
+          "level": 1,
+          "line": 33
+        },
+        {
+          "heading": "dependencies",
+          "level": 1,
+          "line": 34
+        },
+        {
+          "heading": "peerDependencies",
+          "level": 1,
+          "line": 38
+        },
+        {
+          "heading": "devDependencies",
+          "level": 1,
+          "line": 41
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 14
+      }
+    },
+    {
+      "path": "packages/typert/generator/src/artifact-files.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 59,
+      "nonEmptyLines": 55,
+      "functions": [
+        {
+          "name": "writePackageArtifacts",
+          "startLine": 29,
+          "endLine": 46,
+          "params": [
+            "packageDir",
+            "artifacts"
+          ]
+        },
+        {
+          "name": "writeWorkspaceArtifacts",
+          "startLine": 57,
+          "endLine": 59,
+          "params": [
+            "root",
+            "artifacts"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "writePackageArtifacts",
+          "line": 29,
+          "isDefault": false
+        },
+        {
+          "name": "writeWorkspaceArtifacts",
+          "line": 57,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "writePackageArtifacts",
+          "callee": "join",
+          "lineNumber": 30
+        },
+        {
+          "caller": "writePackageArtifacts",
+          "callee": "mkdirSync",
+          "lineNumber": 31
+        },
+        {
+          "caller": "writePackageArtifacts",
+          "callee": "writeFileSync",
+          "lineNumber": 34
+        },
+        {
+          "caller": "writePackageArtifacts",
+          "callee": "join",
+          "lineNumber": 34
+        },
+        {
+          "caller": "writePackageArtifacts",
+          "callee": "writeFileSync",
+          "lineNumber": 35
+        },
+        {
+          "caller": "writePackageArtifacts",
+          "callee": "join",
+          "lineNumber": 35
+        },
+        {
+          "caller": "writePackageArtifacts",
+          "callee": "writeFileSync",
+          "lineNumber": 38
+        },
+        {
+          "caller": "writePackageArtifacts",
+          "callee": "join",
+          "lineNumber": 38
+        },
+        {
+          "caller": "writePackageArtifacts",
+          "callee": "writeFileSync",
+          "lineNumber": 39
+        },
+        {
+          "caller": "writePackageArtifacts",
+          "callee": "join",
+          "lineNumber": 39
+        },
+        {
+          "caller": "writePackageArtifacts",
+          "callee": "writeFileSync",
+          "lineNumber": 40
+        },
+        {
+          "caller": "writePackageArtifacts",
+          "callee": "join",
+          "lineNumber": 40
+        },
+        {
+          "caller": "writePackageArtifacts",
+          "callee": "artifacts.some",
+          "lineNumber": 43
+        },
+        {
+          "caller": "writePackageArtifacts",
+          "callee": "rmSync",
+          "lineNumber": 44
+        },
+        {
+          "caller": "writePackageArtifacts",
+          "callee": "join",
+          "lineNumber": 44
+        },
+        {
+          "caller": "writeWorkspaceArtifacts",
+          "callee": "writePackageArtifacts",
+          "lineNumber": 58
+        },
+        {
+          "caller": "writeWorkspaceArtifacts",
+          "callee": "join",
+          "lineNumber": 58
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "packages/typert/generator/src/build-output-guard.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 225,
+      "nonEmptyLines": 207,
+      "functions": [
+        {
+          "name": "findBuildOutputLoads",
+          "startLine": 44,
+          "endLine": 67,
+          "params": [
+            "program",
+            "root",
+            "host"
+          ]
+        },
+        {
+          "name": "findUnresolvedWorkspaceImports",
+          "startLine": 91,
+          "endLine": 116,
+          "params": [
+            "program",
+            "root",
+            "host"
+          ]
+        },
+        {
+          "name": "packageNameOf",
+          "startLine": 118,
+          "endLine": 121,
+          "params": [
+            "specifier"
+          ]
+        },
+        {
+          "name": "exportSource",
+          "startLine": 123,
+          "endLine": 138,
+          "params": [
+            "packageRoot",
+            "specifier"
+          ]
+        },
+        {
+          "name": "property",
+          "startLine": 140,
+          "endLine": 142,
+          "params": [
+            "value",
+            "key"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "BuildOutputClassifier",
+          "startLine": 150,
+          "endLine": 225,
+          "methods": [
+            "constructor",
+            "canonical",
+            "display",
+            "isWorkspaceFile",
+            "isBuildOutput",
+            "sourceFor",
+            "linkedWorkspacePackage",
+            "packageRoot"
+          ],
+          "properties": [
+            "packageRoots",
+            "realPaths",
+            "realRoot"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "findBuildOutputLoads",
+          "line": 44,
+          "isDefault": false
+        },
+        {
+          "name": "findUnresolvedWorkspaceImports",
+          "line": 91,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "findBuildOutputLoads",
+          "callee": "program.getSourceFiles",
+          "lineNumber": 51
+        },
+        {
+          "caller": "findBuildOutputLoads",
+          "callee": "classifier.isBuildOutput",
+          "lineNumber": 52
+        },
+        {
+          "caller": "findBuildOutputLoads",
+          "callee": "outputs.set",
+          "lineNumber": 52
+        },
+        {
+          "caller": "findBuildOutputLoads",
+          "callee": "classifier.canonical",
+          "lineNumber": 52
+        },
+        {
+          "caller": "findBuildOutputLoads",
+          "callee": "program.getCompilerOptions",
+          "lineNumber": 55
+        },
+        {
+          "caller": "findBuildOutputLoads",
+          "callee": "program.getSourceFiles",
+          "lineNumber": 56
+        },
+        {
+          "caller": "findBuildOutputLoads",
+          "callee": "classifier.isWorkspaceFile",
+          "lineNumber": 57
+        },
+        {
+          "caller": "findBuildOutputLoads",
+          "callee": "classifier.isBuildOutput",
+          "lineNumber": 57
+        },
+        {
+          "caller": "findBuildOutputLoads",
+          "callee": "ts.preProcessFile",
+          "lineNumber": 58
+        },
+        {
+          "caller": "findBuildOutputLoads",
+          "callee": "ts.resolveModuleName",
+          "lineNumber": 59
+        },
+        {
+          "caller": "findBuildOutputLoads",
+          "callee": "outputs.get",
+          "lineNumber": 60
+        },
+        {
+          "caller": "findBuildOutputLoads",
+          "callee": "classifier.canonical",
+          "lineNumber": 60
+        },
+        {
+          "caller": "findBuildOutputLoads",
+          "callee": "importers?.push",
+          "lineNumber": 61
+        },
+        {
+          "caller": "findBuildOutputLoads",
+          "callee": "classifier.display",
+          "lineNumber": 61
+        },
+        {
+          "caller": "findBuildOutputLoads",
+          "callee": "[...outputs]\n    .sort(([left], [right]) => left.localeCompare(right))\n    .map",
+          "lineNumber": 64
+        },
+        {
+          "caller": "findBuildOutputLoads",
+          "callee": "[...outputs]\n    .sort",
+          "lineNumber": 64
+        },
+        {
+          "caller": "findBuildOutputLoads",
+          "callee": "left.localeCompare",
+          "lineNumber": 65
+        },
+        {
+          "caller": "findBuildOutputLoads",
+          "callee": "classifier.display",
+          "lineNumber": 66
+        },
+        {
+          "caller": "findBuildOutputLoads",
+          "callee": "classifier.sourceFor",
+          "lineNumber": 66
+        },
+        {
+          "caller": "findUnresolvedWorkspaceImports",
+          "callee": "program.getCompilerOptions",
+          "lineNumber": 97
+        },
+        {
+          "caller": "findUnresolvedWorkspaceImports",
+          "callee": "ts.createModuleResolutionCache",
+          "lineNumber": 98
+        },
+        {
+          "caller": "findUnresolvedWorkspaceImports",
+          "callee": "program.getSourceFiles",
+          "lineNumber": 100
+        },
+        {
+          "caller": "findUnresolvedWorkspaceImports",
+          "callee": "classifier.isWorkspaceFile",
+          "lineNumber": 101
+        },
+        {
+          "caller": "findUnresolvedWorkspaceImports",
+          "callee": "classifier.isBuildOutput",
+          "lineNumber": 101
+        },
+        {
+          "caller": "findUnresolvedWorkspaceImports",
+          "callee": "ts.preProcessFile",
+          "lineNumber": 102
+        },
+        {
+          "caller": "findUnresolvedWorkspaceImports",
+          "callee": "specifier.startsWith",
+          "lineNumber": 103
+        },
+        {
+          "caller": "findUnresolvedWorkspaceImports",
+          "callee": "isAbsolute",
+          "lineNumber": 103
+        },
+        {
+          "caller": "findUnresolvedWorkspaceImports",
+          "callee": "specifier.includes",
+          "lineNumber": 103
+        },
+        {
+          "caller": "findUnresolvedWorkspaceImports",
+          "callee": "ts.resolveModuleName",
+          "lineNumber": 104
+        },
+        {
+          "caller": "findUnresolvedWorkspaceImports",
+          "callee": "classifier.linkedWorkspacePackage",
+          "lineNumber": 105
+        },
+        {
+          "caller": "findUnresolvedWorkspaceImports",
+          "callee": "packageNameOf",
+          "lineNumber": 105
+        },
+        {
+          "caller": "findUnresolvedWorkspaceImports",
+          "callee": "exportSource",
+          "lineNumber": 107
+        },
+        {
+          "caller": "findUnresolvedWorkspaceImports",
+          "callee": "found.push",
+          "lineNumber": 108
+        },
+        {
+          "caller": "findUnresolvedWorkspaceImports",
+          "callee": "classifier.display",
+          "lineNumber": 109
+        },
+        {
+          "caller": "findUnresolvedWorkspaceImports",
+          "callee": "classifier.display",
+          "lineNumber": 111
+        },
+        {
+          "caller": "findUnresolvedWorkspaceImports",
+          "callee": "found.sort",
+          "lineNumber": 115
+        },
+        {
+          "caller": "findUnresolvedWorkspaceImports",
+          "callee": "left.file.localeCompare",
+          "lineNumber": 115
+        },
+        {
+          "caller": "findUnresolvedWorkspaceImports",
+          "callee": "left.specifier.localeCompare",
+          "lineNumber": 115
+        },
+        {
+          "caller": "packageNameOf",
+          "callee": "specifier.split",
+          "lineNumber": 119
+        },
+        {
+          "caller": "packageNameOf",
+          "callee": "parts.slice(0, specifier.startsWith('@') ? 2 : 1).join",
+          "lineNumber": 120
+        },
+        {
+          "caller": "packageNameOf",
+          "callee": "parts.slice",
+          "lineNumber": 120
+        },
+        {
+          "caller": "packageNameOf",
+          "callee": "specifier.startsWith",
+          "lineNumber": 120
+        },
+        {
+          "caller": "exportSource",
+          "callee": "packageNameOf",
+          "lineNumber": 124
+        },
+        {
+          "caller": "exportSource",
+          "callee": "specifier.slice",
+          "lineNumber": 125
+        },
+        {
+          "caller": "exportSource",
+          "callee": "JSON.parse",
+          "lineNumber": 128
+        },
+        {
+          "caller": "exportSource",
+          "callee": "readFileSync",
+          "lineNumber": 128
+        },
+        {
+          "caller": "exportSource",
+          "callee": "join",
+          "lineNumber": 128
+        },
+        {
+          "caller": "exportSource",
+          "callee": "property",
+          "lineNumber": 133
+        },
+        {
+          "caller": "exportSource",
+          "callee": "property",
+          "lineNumber": 133
+        },
+        {
+          "caller": "exportSource",
+          "callee": "property",
+          "lineNumber": 134
+        },
+        {
+          "caller": "exportSource",
+          "callee": "types.startsWith",
+          "lineNumber": 135
+        },
+        {
+          "caller": "exportSource",
+          "callee": "join",
+          "lineNumber": 136
+        },
+        {
+          "caller": "exportSource",
+          "callee": "types.slice('./lib/types/'.length).replace",
+          "lineNumber": 136
+        },
+        {
+          "caller": "exportSource",
+          "callee": "types.slice",
+          "lineNumber": 136
+        },
+        {
+          "caller": "exportSource",
+          "callee": "[stem, `${stem}x`].find",
+          "lineNumber": 137
+        },
+        {
+          "caller": "exportSource",
+          "callee": "existsSync",
+          "lineNumber": 137
+        },
+        {
+          "caller": "constructor",
+          "callee": "this.canonical",
+          "lineNumber": 156
+        },
+        {
+          "caller": "canonical",
+          "callee": "resolve",
+          "lineNumber": 160
+        },
+        {
+          "caller": "canonical",
+          "callee": "this.realPaths.get",
+          "lineNumber": 161
+        },
+        {
+          "caller": "canonical",
+          "callee": "realpathSync.native",
+          "lineNumber": 165
+        },
+        {
+          "caller": "canonical",
+          "callee": "this.realPaths.set",
+          "lineNumber": 169
+        },
+        {
+          "caller": "display",
+          "callee": "relative",
+          "lineNumber": 174
+        },
+        {
+          "caller": "display",
+          "callee": "this.canonical",
+          "lineNumber": 174
+        },
+        {
+          "caller": "display",
+          "callee": "path.startsWith",
+          "lineNumber": 175
+        },
+        {
+          "caller": "display",
+          "callee": "isAbsolute",
+          "lineNumber": 175
+        },
+        {
+          "caller": "display",
+          "callee": "resolve",
+          "lineNumber": 175
+        },
+        {
+          "caller": "display",
+          "callee": "join",
+          "lineNumber": 175
+        },
+        {
+          "caller": "isWorkspaceFile",
+          "callee": "relative",
+          "lineNumber": 179
+        },
+        {
+          "caller": "isWorkspaceFile",
+          "callee": "this.canonical",
+          "lineNumber": 179
+        },
+        {
+          "caller": "isWorkspaceFile",
+          "callee": "path.startsWith",
+          "lineNumber": 180
+        },
+        {
+          "caller": "isWorkspaceFile",
+          "callee": "isAbsolute",
+          "lineNumber": 180
+        },
+        {
+          "caller": "isWorkspaceFile",
+          "callee": "path.split(sep).includes",
+          "lineNumber": 180
+        },
+        {
+          "caller": "isWorkspaceFile",
+          "callee": "path.split",
+          "lineNumber": 180
+        },
+        {
+          "caller": "isBuildOutput",
+          "callee": "this.isWorkspaceFile",
+          "lineNumber": 184
+        },
+        {
+          "caller": "isBuildOutput",
+          "callee": "this.canonical",
+          "lineNumber": 185
+        },
+        {
+          "caller": "isBuildOutput",
+          "callee": "this.packageRoot",
+          "lineNumber": 186
+        },
+        {
+          "caller": "isBuildOutput",
+          "callee": "dirname",
+          "lineNumber": 186
+        },
+        {
+          "caller": "isBuildOutput",
+          "callee": "relative(packageRoot, real).split",
+          "lineNumber": 187
+        },
+        {
+          "caller": "isBuildOutput",
+          "callee": "relative",
+          "lineNumber": 187
+        },
+        {
+          "caller": "sourceFor",
+          "callee": "this.canonical",
+          "lineNumber": 191
+        },
+        {
+          "caller": "sourceFor",
+          "callee": "this.packageRoot",
+          "lineNumber": 192
+        },
+        {
+          "caller": "sourceFor",
+          "callee": "dirname",
+          "lineNumber": 192
+        },
+        {
+          "caller": "sourceFor",
+          "callee": "relative(packageRoot, real).split",
+          "lineNumber": 194
+        },
+        {
+          "caller": "sourceFor",
+          "callee": "relative",
+          "lineNumber": 194
+        },
+        {
+          "caller": "sourceFor",
+          "callee": "rest.at",
+          "lineNumber": 195
+        },
+        {
+          "caller": "sourceFor",
+          "callee": "join",
+          "lineNumber": 197
+        },
+        {
+          "caller": "sourceFor",
+          "callee": "rest.slice",
+          "lineNumber": 197
+        },
+        {
+          "caller": "sourceFor",
+          "callee": "last.replace",
+          "lineNumber": 197
+        },
+        {
+          "caller": "sourceFor",
+          "callee": "[stem, `${stem}x`].find",
+          "lineNumber": 198
+        },
+        {
+          "caller": "sourceFor",
+          "callee": "existsSync",
+          "lineNumber": 198
+        },
+        {
+          "caller": "sourceFor",
+          "callee": "this.display",
+          "lineNumber": 199
+        },
+        {
+          "caller": "linkedWorkspacePackage",
+          "callee": "dirname",
+          "lineNumber": 203
+        },
+        {
+          "caller": "linkedWorkspacePackage",
+          "callee": "resolve",
+          "lineNumber": 203
+        },
+        {
+          "caller": "linkedWorkspacePackage",
+          "callee": "join",
+          "lineNumber": 205
+        },
+        {
+          "caller": "linkedWorkspacePackage",
+          "callee": "existsSync",
+          "lineNumber": 206
+        },
+        {
+          "caller": "linkedWorkspacePackage",
+          "callee": "this.canonical",
+          "lineNumber": 207
+        },
+        {
+          "caller": "linkedWorkspacePackage",
+          "callee": "this.isWorkspaceFile",
+          "lineNumber": 208
+        },
+        {
+          "caller": "linkedWorkspacePackage",
+          "callee": "join",
+          "lineNumber": 208
+        },
+        {
+          "caller": "linkedWorkspacePackage",
+          "callee": "this.canonical",
+          "lineNumber": 210
+        },
+        {
+          "caller": "linkedWorkspacePackage",
+          "callee": "dirname",
+          "lineNumber": 210
+        },
+        {
+          "caller": "linkedWorkspacePackage",
+          "callee": "dirname",
+          "lineNumber": 211
+        },
+        {
+          "caller": "packageRoot",
+          "callee": "this.packageRoots.has",
+          "lineNumber": 216
+        },
+        {
+          "caller": "packageRoot",
+          "callee": "this.packageRoots.get",
+          "lineNumber": 216
+        },
+        {
+          "caller": "packageRoot",
+          "callee": "existsSync",
+          "lineNumber": 217
+        },
+        {
+          "caller": "packageRoot",
+          "callee": "join",
+          "lineNumber": 217
+        },
+        {
+          "caller": "packageRoot",
+          "callee": "dirname",
+          "lineNumber": 219
+        },
+        {
+          "caller": "packageRoot",
+          "callee": "this.packageRoot",
+          "lineNumber": 221
+        },
+        {
+          "caller": "packageRoot",
+          "callee": "dirname",
+          "lineNumber": 221
+        },
+        {
+          "caller": "packageRoot",
+          "callee": "this.packageRoots.set",
+          "lineNumber": 222
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 5,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "packages/typert/generator/src/tool-schema.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 152,
+      "nonEmptyLines": 146,
+      "functions": [
+        {
+          "name": "projectToolSchema",
+          "startLine": 34,
+          "endLine": 131,
+          "params": [
+            "renderer",
+            "type",
+            "closedObjects",
+            "optional"
+          ]
+        },
+        {
+          "name": "literals",
+          "startLine": 133,
+          "endLine": 136,
+          "params": [
+            "schema"
+          ]
+        },
+        {
+          "name": "disjoint",
+          "startLine": 138,
+          "endLine": 152,
+          "params": [
+            "left",
+            "right"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "ToolSchemaError",
+          "startLine": 7,
+          "endLine": 9,
+          "methods": [],
+          "properties": [
+            "name"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "ToolSchemaError",
+          "line": 7,
+          "isDefault": false
+        },
+        {
+          "name": "projectToolSchema",
+          "line": 34,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "project",
+          "callee": "renderer.node",
+          "lineNumber": 40
+        },
+        {
+          "caller": "project",
+          "callee": "active.has",
+          "lineNumber": 42
+        },
+        {
+          "caller": "project",
+          "callee": "fail",
+          "lineNumber": 42
+        },
+        {
+          "caller": "project",
+          "callee": "active.add",
+          "lineNumber": 43
+        },
+        {
+          "caller": "project",
+          "callee": "['string', 'number', 'boolean'].includes",
+          "lineNumber": 47
+        },
+        {
+          "caller": "project",
+          "callee": "fail",
+          "lineNumber": 48
+        },
+        {
+          "caller": "project",
+          "callee": "fail",
+          "lineNumber": 51
+        },
+        {
+          "caller": "project",
+          "callee": "project",
+          "lineNumber": 54
+        },
+        {
+          "caller": "project",
+          "callee": "project",
+          "lineNumber": 55
+        },
+        {
+          "caller": "project",
+          "callee": "object",
+          "lineNumber": 56
+        },
+        {
+          "caller": "project",
+          "callee": "fail",
+          "lineNumber": 59
+        },
+        {
+          "caller": "project",
+          "callee": "renderer.declaration",
+          "lineNumber": 61
+        },
+        {
+          "caller": "project",
+          "callee": "project",
+          "lineNumber": 63
+        },
+        {
+          "caller": "project",
+          "callee": "object",
+          "lineNumber": 64
+        },
+        {
+          "caller": "project",
+          "callee": "fail",
+          "lineNumber": 65
+        },
+        {
+          "caller": "project",
+          "callee": "node.types.filter((item) => {\n            const branch = renderer.node(item)\n            return !(optional && branch.kind === 'keyword' && branch.name === 'undefined')\n          }).map",
+          "lineNumber": 69
+        },
+        {
+          "caller": "project",
+          "callee": "node.types.filter",
+          "lineNumber": 69
+        },
+        {
+          "caller": "project",
+          "callee": "renderer.node",
+          "lineNumber": 70
+        },
+        {
+          "caller": "project",
+          "callee": "project",
+          "lineNumber": 72
+        },
+        {
+          "caller": "project",
+          "callee": "union",
+          "lineNumber": 73
+        },
+        {
+          "caller": "project",
+          "callee": "fail",
+          "lineNumber": 75
+        },
+        {
+          "caller": "project",
+          "callee": "active.delete",
+          "lineNumber": 78
+        },
+        {
+          "caller": "object",
+          "callee": "project",
+          "lineNumber": 89
+        },
+        {
+          "caller": "object",
+          "callee": "Object.keys",
+          "lineNumber": 90
+        },
+        {
+          "caller": "object",
+          "callee": "project",
+          "lineNumber": 90
+        },
+        {
+          "caller": "object",
+          "callee": "fail",
+          "lineNumber": 91
+        },
+        {
+          "caller": "object",
+          "callee": "fail",
+          "lineNumber": 96
+        },
+        {
+          "caller": "object",
+          "callee": "project",
+          "lineNumber": 98
+        },
+        {
+          "caller": "object",
+          "callee": "required.push",
+          "lineNumber": 100
+        },
+        {
+          "caller": "union",
+          "callee": "input.some",
+          "lineNumber": 105
+        },
+        {
+          "caller": "union",
+          "callee": "Object.keys",
+          "lineNumber": 105
+        },
+        {
+          "caller": "union",
+          "callee": "['object', 'array'].includes",
+          "lineNumber": 108
+        },
+        {
+          "caller": "union",
+          "callee": "branches.find",
+          "lineNumber": 109
+        },
+        {
+          "caller": "union",
+          "callee": "branches.push",
+          "lineNumber": 110
+        },
+        {
+          "caller": "union",
+          "callee": "literals",
+          "lineNumber": 111
+        },
+        {
+          "caller": "union",
+          "callee": "literals",
+          "lineNumber": 112
+        },
+        {
+          "caller": "union",
+          "callee": "fail",
+          "lineNumber": 122
+        },
+        {
+          "caller": "union",
+          "callee": "branches.entries",
+          "lineNumber": 123
+        },
+        {
+          "caller": "union",
+          "callee": "branches.slice",
+          "lineNumber": 124
+        },
+        {
+          "caller": "union",
+          "callee": "disjoint",
+          "lineNumber": 125
+        },
+        {
+          "caller": "union",
+          "callee": "fail",
+          "lineNumber": 125
+        },
+        {
+          "caller": "projectToolSchema",
+          "callee": "project",
+          "lineNumber": 130
+        },
+        {
+          "caller": "disjoint",
+          "callee": "left.oneOf.every",
+          "lineNumber": 139
+        },
+        {
+          "caller": "disjoint",
+          "callee": "disjoint",
+          "lineNumber": 139
+        },
+        {
+          "caller": "disjoint",
+          "callee": "right.oneOf.every",
+          "lineNumber": 140
+        },
+        {
+          "caller": "disjoint",
+          "callee": "disjoint",
+          "lineNumber": 140
+        },
+        {
+          "caller": "disjoint",
+          "callee": "(left.required ?? []).some",
+          "lineNumber": 143
+        },
+        {
+          "caller": "disjoint",
+          "callee": "right.required?.includes",
+          "lineNumber": 144
+        },
+        {
+          "caller": "disjoint",
+          "callee": "literals",
+          "lineNumber": 148
+        },
+        {
+          "caller": "disjoint",
+          "callee": "literals",
+          "lineNumber": 149
+        },
+        {
+          "caller": "disjoint",
+          "callee": "first.every",
+          "lineNumber": 150
+        },
+        {
+          "caller": "disjoint",
+          "callee": "second.includes",
+          "lineNumber": 150
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 2,
+        "functionCount": 3,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "packages/typert/generator/src/worker.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 66,
+      "nonEmptyLines": 60,
+      "functions": [
+        {
+          "name": "parseRequest",
+          "startLine": 28,
+          "endLine": 47,
+          "params": [
+            "value"
+          ]
+        },
+        {
+          "name": "respond",
+          "startLine": 49,
+          "endLine": 63,
+          "params": []
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "parseRequest",
+          "callee": "Array.isArray",
+          "lineNumber": 38
+        },
+        {
+          "caller": "parseRequest",
+          "callee": "faces.every",
+          "lineNumber": 38
+        },
+        {
+          "caller": "respond",
+          "callee": "parseRequest",
+          "lineNumber": 51
+        },
+        {
+          "caller": "respond",
+          "callee": "generator.generateContributors",
+          "lineNumber": 53
+        },
+        {
+          "caller": "respond",
+          "callee": "String",
+          "lineNumber": 55
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 0,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "packages/typert/generator/tsconfig.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 18,
+      "nonEmptyLines": 18,
+      "sections": [
+        {
+          "heading": "extends",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "compilerOptions",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "include",
+          "level": 1,
+          "line": 7
+        },
+        {
+          "heading": "references",
+          "level": 1,
+          "line": 10
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    },
+    {
+      "path": "packages/typert/loader/README.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 128,
+      "nonEmptyLines": 78,
+      "sections": [
+        {
+          "heading": "@deepseek-ai/dsh-typert-loader",
+          "level": 1,
+          "line": 6
+        },
+        {
+          "heading": "Summary",
+          "level": 2,
+          "line": 10
+        },
+        {
+          "heading": "Table of Contents",
+          "level": 2,
+          "line": 14
+        },
+        {
+          "heading": "Use this package",
+          "level": 2,
+          "line": 26
+        },
+        {
+          "heading": "Minimal configuration",
+          "level": 3,
+          "line": 30
+        },
+        {
+          "heading": "What gets registered",
+          "level": 3,
+          "line": 45
+        },
+        {
+          "heading": "Observable behavior and failures",
+          "level": 3,
+          "line": 51
+        },
+        {
+          "heading": "Understand the implementation",
+          "level": 2,
+          "line": 58
+        },
+        {
+          "heading": "Design concept",
+          "level": 3,
+          "line": 65
+        },
+        {
+          "heading": "Manifest validation",
+          "level": 3,
+          "line": 69
+        },
+        {
+          "heading": "Caching and ownership",
+          "level": 3,
+          "line": 73
+        },
+        {
+          "heading": "Source map",
+          "level": 3,
+          "line": 77
+        },
+        {
+          "heading": "Further Exploration",
+          "level": 2,
+          "line": 88
+        },
+        {
+          "heading": "Model Experience",
+          "level": 2,
+          "line": 100
+        },
+        {
+          "heading": "KV Cache effect",
+          "level": 4,
+          "line": 104
+        },
+        {
+          "heading": "Known Limitations and Deferred Work",
+          "level": 2,
+          "line": 108
+        },
+        {
+          "heading": "Dev Note",
+          "level": 3,
+          "line": 121
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 17
+      }
+    },
+    {
+      "path": "packages/typert/loader/package.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 48,
+      "nonEmptyLines": 48,
+      "sections": [
+        {
+          "heading": "name",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "description",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "version",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "publishConfig",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "repository",
+          "level": 1,
+          "line": 8
+        },
+        {
+          "heading": "type",
+          "level": 1,
+          "line": 9
+        },
+        {
+          "heading": "main",
+          "level": 1,
+          "line": 14
+        },
+        {
+          "heading": "types",
+          "level": 1,
+          "line": 15
+        },
+        {
+          "heading": "exports",
+          "level": 1,
+          "line": 16
+        },
+        {
+          "heading": "files",
+          "level": 1,
+          "line": 25
+        },
+        {
+          "heading": "license",
+          "level": 1,
+          "line": 30
+        },
+        {
+          "heading": "peerDependencies",
+          "level": 1,
+          "line": 31
+        },
+        {
+          "heading": "dependencies",
+          "level": 1,
+          "line": 36
+        },
+        {
+          "heading": "devDependencies",
+          "level": 1,
+          "line": 39
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 14
+      }
+    },
+    {
+      "path": "packages/typert/loader/tsconfig.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 30,
+      "nonEmptyLines": 30,
+      "sections": [
+        {
+          "heading": "extends",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "compilerOptions",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "include",
+          "level": 1,
+          "line": 7
+        },
+        {
+          "heading": "references",
+          "level": 1,
+          "line": 10
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    },
+    {
+      "path": "packages/typert/protocol/README.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 176,
+      "nonEmptyLines": 109,
+      "sections": [
+        {
+          "heading": "@deepseek-ai/dsh-typert-protocol",
+          "level": 1,
+          "line": 6
+        },
+        {
+          "heading": "Summary",
+          "level": 2,
+          "line": 10
+        },
+        {
+          "heading": "Table of Contents",
+          "level": 2,
+          "line": 14
+        },
+        {
+          "heading": "Use this package",
+          "level": 2,
+          "line": 26
+        },
+        {
+          "heading": "Exposing a Host method",
+          "level": 3,
+          "line": 30
+        },
+        {
+          "heading": "Identifying the caller and admitting non-owner callers",
+          "level": 3,
+          "line": 59
+        },
+        {
+          "heading": "Associating Host objects and Contexts with wire identities",
+          "level": 3,
+          "line": 65
+        },
+        {
+          "heading": "Reporting and reading a Remote failure",
+          "level": 3,
+          "line": 71
+        },
+        {
+          "heading": "Receiving forwarded Host events on the Client",
+          "level": 3,
+          "line": 86
+        },
+        {
+          "heading": "Understand the implementation",
+          "level": 2,
+          "line": 93
+        },
+        {
+          "heading": "Design concept",
+          "level": 3,
+          "line": 100
+        },
+        {
+          "heading": "Remote markers",
+          "level": 3,
+          "line": 104
+        },
+        {
+          "heading": "Protocol maps and descriptors",
+          "level": 3,
+          "line": 110
+        },
+        {
+          "heading": "Wire identity grammar",
+          "level": 3,
+          "line": 116
+        },
+        {
+          "heading": "Source map",
+          "level": 3,
+          "line": 120
+        },
+        {
+          "heading": "Further Exploration",
+          "level": 2,
+          "line": 137
+        },
+        {
+          "heading": "Model Experience",
+          "level": 2,
+          "line": 150
+        },
+        {
+          "heading": "KV Cache effect",
+          "level": 4,
+          "line": 154
+        },
+        {
+          "heading": "Known Limitations and Deferred Work",
+          "level": 2,
+          "line": 158
+        },
+        {
+          "heading": "Dev Note",
+          "level": 3,
+          "line": 169
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 20
+      }
+    },
+    {
+      "path": "packages/typert/protocol/package.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 48,
+      "nonEmptyLines": 48,
+      "sections": [
+        {
+          "heading": "name",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "description",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "version",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "publishConfig",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "repository",
+          "level": 1,
+          "line": 8
+        },
+        {
+          "heading": "type",
+          "level": 1,
+          "line": 9
+        },
+        {
+          "heading": "main",
+          "level": 1,
+          "line": 14
+        },
+        {
+          "heading": "types",
+          "level": 1,
+          "line": 15
+        },
+        {
+          "heading": "exports",
+          "level": 1,
+          "line": 16
+        },
+        {
+          "heading": "files",
+          "level": 1,
+          "line": 32
+        },
+        {
+          "heading": "license",
+          "level": 1,
+          "line": 37
+        },
+        {
+          "heading": "dependencies",
+          "level": 1,
+          "line": 38
+        },
+        {
+          "heading": "peerDependencies",
+          "level": 1,
+          "line": 42
+        },
+        {
+          "heading": "devDependencies",
+          "level": 1,
+          "line": 45
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 14
+      }
+    },
+    {
+      "path": "packages/typert/protocol/src/json-value.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 53,
+      "nonEmptyLines": 50,
+      "functions": [
+        {
+          "name": "isRemoteJsonValue",
+          "startLine": 12,
+          "endLine": 14,
+          "params": [
+            "value"
+          ]
+        },
+        {
+          "name": "isRemoteUplinkItem",
+          "startLine": 23,
+          "endLine": 25,
+          "params": [
+            "value"
+          ]
+        },
+        {
+          "name": "visitJsonValue",
+          "startLine": 27,
+          "endLine": 53,
+          "params": [
+            "value",
+            "ancestors"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "isRemoteJsonValue",
+          "line": 12,
+          "isDefault": false
+        },
+        {
+          "name": "isRemoteUplinkItem",
+          "line": 23,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "isRemoteJsonValue",
+          "callee": "visitJsonValue",
+          "lineNumber": 13
+        },
+        {
+          "caller": "isRemoteUplinkItem",
+          "callee": "isRemoteJsonValue",
+          "lineNumber": 24
+        },
+        {
+          "caller": "visitJsonValue",
+          "callee": "Number.isFinite",
+          "lineNumber": 29
+        },
+        {
+          "caller": "visitJsonValue",
+          "callee": "Object.is",
+          "lineNumber": 29
+        },
+        {
+          "caller": "visitJsonValue",
+          "callee": "ancestors.has",
+          "lineNumber": 31
+        },
+        {
+          "caller": "visitJsonValue",
+          "callee": "ancestors.add",
+          "lineNumber": 32
+        },
+        {
+          "caller": "visitJsonValue",
+          "callee": "Array.isArray",
+          "lineNumber": 34
+        },
+        {
+          "caller": "visitJsonValue",
+          "callee": "Object.getPrototypeOf",
+          "lineNumber": 35
+        },
+        {
+          "caller": "visitJsonValue",
+          "callee": "Reflect.ownKeys",
+          "lineNumber": 36
+        },
+        {
+          "caller": "visitJsonValue",
+          "callee": "Object.hasOwn",
+          "lineNumber": 38
+        },
+        {
+          "caller": "visitJsonValue",
+          "callee": "visitJsonValue",
+          "lineNumber": 38
+        },
+        {
+          "caller": "visitJsonValue",
+          "callee": "Object.getPrototypeOf",
+          "lineNumber": 42
+        },
+        {
+          "caller": "visitJsonValue",
+          "callee": "Reflect.ownKeys",
+          "lineNumber": 44
+        },
+        {
+          "caller": "visitJsonValue",
+          "callee": "Object.getOwnPropertyDescriptor",
+          "lineNumber": 46
+        },
+        {
+          "caller": "visitJsonValue",
+          "callee": "visitJsonValue",
+          "lineNumber": 47
+        },
+        {
+          "caller": "visitJsonValue",
+          "callee": "Reflect.get",
+          "lineNumber": 47
+        },
+        {
+          "caller": "visitJsonValue",
+          "callee": "ancestors.delete",
+          "lineNumber": 51
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 3,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "packages/typert/protocol/src/owned-value.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 39,
+      "nonEmptyLines": 35,
+      "functions": [
+        {
+          "name": "typertOwnedValue",
+          "startLine": 18,
+          "endLine": 29,
+          "params": [
+            "value",
+            "release"
+          ]
+        },
+        {
+          "name": "isTypertOwnedValue",
+          "startLine": 36,
+          "endLine": 39,
+          "params": [
+            "value"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "TYPERT_OWNED_VALUE",
+          "line": 4,
+          "isDefault": false
+        },
+        {
+          "name": "typertOwnedValue",
+          "line": 18,
+          "isDefault": false
+        },
+        {
+          "name": "isTypertOwnedValue",
+          "line": 36,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "typertOwnedValue",
+          "callee": "release",
+          "lineNumber": 26
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 3,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "packages/typert/protocol/src/principal.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 17,
+      "nonEmptyLines": 15,
+      "functions": [
+        {
+          "name": "principalOf",
+          "startLine": 14,
+          "endLine": 17,
+          "params": [
+            "invocation"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "principalOf",
+          "line": 14,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "packages/typert/protocol/src/remote-access.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 38,
+      "nonEmptyLines": 34,
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "packages/typert/protocol/src/remote-info.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 161,
+      "nonEmptyLines": 143,
+      "functions": [
+        {
+          "name": "createTypertRemoteInfo",
+          "startLine": 28,
+          "endLine": 30,
+          "params": [
+            "spec",
+            "zod"
+          ]
+        },
+        {
+          "name": "isTypertRemoteMethod",
+          "startLine": 90,
+          "endLine": 94,
+          "params": [
+            "descriptor"
+          ]
+        },
+        {
+          "name": "optional",
+          "startLine": 96,
+          "endLine": 98,
+          "params": [
+            "parameter"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "RemoteInfo",
+          "startLine": 32,
+          "endLine": 83,
+          "methods": [
+            "constructor",
+            "package",
+            "descriptors",
+            "methods",
+            "resolve"
+          ],
+          "properties": [
+            "index"
+          ]
+        },
+        {
+          "name": "NamedInput",
+          "startLine": 100,
+          "endLine": 140,
+          "methods": [
+            "constructor",
+            "codec",
+            "jsonSchema",
+            "jsonSchemaError",
+            "project"
+          ],
+          "properties": [
+            "schema",
+            "projection",
+            "create"
+          ]
+        },
+        {
+          "name": "ResultValue",
+          "startLine": 142,
+          "endLine": 161,
+          "methods": [
+            "constructor",
+            "mode",
+            "typeSymbol",
+            "create",
+            "decode",
+            "encode",
+            "description",
+            "jsonSchemaError",
+            "jsonSchema"
+          ],
+          "properties": [
+            "projection"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "createTypertRemoteInfo",
+          "line": 28,
+          "isDefault": false
+        },
+        {
+          "name": "isTypertRemoteMethod",
+          "line": 90,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "descriptors",
+          "callee": "this.resolve",
+          "lineNumber": 38
+        },
+        {
+          "caller": "methods",
+          "callee": "this.resolve",
+          "lineNumber": 39
+        },
+        {
+          "caller": "resolve",
+          "callee": "Object.create",
+          "lineNumber": 45
+        },
+        {
+          "caller": "resolve",
+          "callee": "Object.entries",
+          "lineNumber": 46
+        },
+        {
+          "caller": "resolve",
+          "callee": "endpoint.indexOf",
+          "lineNumber": 47
+        },
+        {
+          "caller": "resolve",
+          "callee": "endpoint.slice",
+          "lineNumber": 48
+        },
+        {
+          "caller": "resolve",
+          "callee": "endpoint.slice",
+          "lineNumber": 49
+        },
+        {
+          "caller": "resolve",
+          "callee": "definition.parameters.map",
+          "lineNumber": 50
+        },
+        {
+          "caller": "resolve",
+          "callee": "Object.assign",
+          "lineNumber": 61
+        },
+        {
+          "caller": "invoke",
+          "callee": "parameters.map",
+          "lineNumber": 68
+        },
+        {
+          "caller": "invoke",
+          "callee": "values.push",
+          "lineNumber": 69
+        },
+        {
+          "caller": "invoke",
+          "callee": "Reflect.get",
+          "lineNumber": 71
+        },
+        {
+          "caller": "invoke",
+          "callee": "Reflect.get",
+          "lineNumber": 72
+        },
+        {
+          "caller": "invoke",
+          "callee": "call.apply",
+          "lineNumber": 73
+        },
+        {
+          "caller": "resolve",
+          "callee": "descriptors.push",
+          "lineNumber": 79
+        },
+        {
+          "caller": "jsonSchema",
+          "callee": "this.project",
+          "lineNumber": 119
+        },
+        {
+          "caller": "jsonSchemaError",
+          "callee": "this.project",
+          "lineNumber": 120
+        },
+        {
+          "caller": "project",
+          "callee": "this.parameters.find",
+          "lineNumber": 124
+        },
+        {
+          "caller": "project",
+          "callee": "this.codec",
+          "lineNumber": 124
+        },
+        {
+          "caller": "project",
+          "callee": "this.codec",
+          "lineNumber": 126
+        },
+        {
+          "caller": "project",
+          "callee": "Object.fromEntries",
+          "lineNumber": 131
+        },
+        {
+          "caller": "project",
+          "callee": "this.parameters.map",
+          "lineNumber": 131
+        },
+        {
+          "caller": "project",
+          "callee": "this.codec",
+          "lineNumber": 132
+        },
+        {
+          "caller": "project",
+          "callee": "this.parameters.filter(parameter => !optional(parameter)).map",
+          "lineNumber": 135
+        },
+        {
+          "caller": "project",
+          "callee": "this.parameters.filter",
+          "lineNumber": 135
+        },
+        {
+          "caller": "project",
+          "callee": "optional",
+          "lineNumber": 135
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 3,
+        "classCount": 3
+      }
+    },
+    {
+      "path": "packages/typert/protocol/tsconfig.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 21,
+      "nonEmptyLines": 21,
+      "sections": [
+        {
+          "heading": "extends",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "compilerOptions",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "include",
+          "level": 1,
+          "line": 7
+        },
+        {
+          "heading": "references",
+          "level": 1,
+          "line": 10
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    },
+    {
+      "path": "packages/typert/registry/README.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 137,
+      "nonEmptyLines": 84,
+      "sections": [
+        {
+          "heading": "@deepseek-ai/dsh-typert-registry",
+          "level": 1,
+          "line": 6
+        },
+        {
+          "heading": "Summary",
+          "level": 2,
+          "line": 10
+        },
+        {
+          "heading": "Table of Contents",
+          "level": 2,
+          "line": 14
+        },
+        {
+          "heading": "Use this package",
+          "level": 2,
+          "line": 26
+        },
+        {
+          "heading": "Minimal setup",
+          "level": 3,
+          "line": 30
+        },
+        {
+          "heading": "Querying schemas and reflection",
+          "level": 3,
+          "line": 38
+        },
+        {
+          "heading": "Registering a contribution",
+          "level": 3,
+          "line": 44
+        },
+        {
+          "heading": "Lookup and Context providers",
+          "level": 3,
+          "line": 50
+        },
+        {
+          "heading": "Understand the implementation",
+          "level": 2,
+          "line": 59
+        },
+        {
+          "heading": "Design concept",
+          "level": 3,
+          "line": 66
+        },
+        {
+          "heading": "Sub-registries",
+          "level": 3,
+          "line": 70
+        },
+        {
+          "heading": "Identity and validation",
+          "level": 3,
+          "line": 80
+        },
+        {
+          "heading": "Source map",
+          "level": 3,
+          "line": 84
+        },
+        {
+          "heading": "Further Exploration",
+          "level": 2,
+          "line": 97
+        },
+        {
+          "heading": "Model Experience",
+          "level": 2,
+          "line": 110
+        },
+        {
+          "heading": "KV Cache effect",
+          "level": 4,
+          "line": 114
+        },
+        {
+          "heading": "Known Limitations and Deferred Work",
+          "level": 2,
+          "line": 118
+        },
+        {
+          "heading": "Dev Note",
+          "level": 3,
+          "line": 130
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 18
+      }
+    },
+    {
+      "path": "packages/typert/registry/package.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 65,
+      "nonEmptyLines": 65,
+      "sections": [
+        {
+          "heading": "name",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "description",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "version",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "publishConfig",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "repository",
+          "level": 1,
+          "line": 8
+        },
+        {
+          "heading": "type",
+          "level": 1,
+          "line": 9
+        },
+        {
+          "heading": "main",
+          "level": 1,
+          "line": 14
+        },
+        {
+          "heading": "types",
+          "level": 1,
+          "line": 15
+        },
+        {
+          "heading": "exports",
+          "level": 1,
+          "line": 16
+        },
+        {
+          "heading": "dsh",
+          "level": 1,
+          "line": 35
+        },
+        {
+          "heading": "scripts",
+          "level": 1,
+          "line": 42
+        },
+        {
+          "heading": "files",
+          "level": 1,
+          "line": 46
+        },
+        {
+          "heading": "license",
+          "level": 1,
+          "line": 54
+        },
+        {
+          "heading": "dependencies",
+          "level": 1,
+          "line": 55
+        },
+        {
+          "heading": "peerDependencies",
+          "level": 1,
+          "line": 58
+        },
+        {
+          "heading": "devDependencies",
+          "level": 1,
+          "line": 61
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 16
+      }
+    },
+    {
+      "path": "packages/typert/registry/tsconfig.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 21,
+      "nonEmptyLines": 21,
+      "sections": [
+        {
+          "heading": "extends",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "compilerOptions",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "include",
+          "level": 1,
+          "line": 7
+        },
+        {
+          "heading": "references",
+          "level": 1,
+          "line": 10
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    }
+  ]
+}

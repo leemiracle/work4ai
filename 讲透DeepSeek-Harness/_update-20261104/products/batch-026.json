@@ -1,0 +1,1321 @@
+{
+ "nodes": [
+  {
+   "id": "file:packages/shell/shell-env/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/shell/shell-env/src/index.ts",
+   "summary": "ctx.shellEnv 注册表实现（name=shell-env）：内置 shell 事实（DSH_HOME/DSH_SHELL=1/DSH_SESSION_ID/DSH_PROFILE*）由注册表自持，插件可注册 effect 作用域的可枚举附加事实；重复所有权与未声明运行时键大声失败。",
+   "tags": [
+    "service-definition",
+    "registry",
+    "environment",
+    "cordis"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/shell/shell-env/src/index.ts:ShellEnvRegistry",
+   "type": "class",
+   "name": "ShellEnvRegistry",
+   "filePath": "packages/shell/shell-env/src/index.ts",
+   "lineRange": [
+    93,
+    202
+   ],
+   "summary": "ctx.shellEnv 的 Cordis Service：受信 DSH_* 变量的注册/枚举/逐执行收集，内置事实读取 launcher 提供的 profileContext，插件事实随 effect 处置。",
+   "tags": [
+    "service-definition",
+    "registry",
+    "exported"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/shell/shell-env/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/shell/shell-env/src/index.ts",
+   "lineRange": [
+    209,
+    211
+   ],
+   "summary": "插件 apply：注册 ShellEnvRegistry 服务。",
+   "tags": [
+    "plugin-entry",
+    "exported"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/shell/shell-env/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/shell/shell-env/tsconfig.json",
+   "summary": "dsh-shell-env 的 TypeScript 编译配置。",
+   "tags": [
+    "configuration",
+    "typescript"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/shell/tool-bash/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/shell/tool-bash/README.md",
+   "summary": "dsh-tool-bash 包参考：模型面 bash 工具——前台+run_in_background 执行（job 注册表组合时每次调用注册 ctx.jobs）、DSH_* 托管环境、逐调用沙箱策略解析与同轮升级面（sandbox_permissions+justification 经 ctx.approval）、拒绝渲染与截断通知。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "tool",
+    "bash"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:packages/shell/tool-bash/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/shell/tool-bash/package.json",
+   "summary": "@deepseek-ai/dsh-tool-bash 包清单：模型面 bash 工具插件。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/shell/tool-bash/src/background.ts",
+   "type": "file",
+   "name": "background.ts",
+   "filePath": "packages/shell/tool-bash/src/background.ts",
+   "summary": "bash 进程句柄的通用 job 适配：注册表记录的终局 outcome、它泵出的拉取源、前台调用停止等待时渲染的环形读——沙箱事实（runner 未跑命令/拒绝+升级提示）以标记形式附加。",
+   "tags": [
+    "jobs",
+    "background",
+    "adaptation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/shell/tool-bash/src/background.ts:processJob",
+   "type": "function",
+   "name": "processJob",
+   "filePath": "packages/shell/tool-bash/src/background.ts",
+   "lineRange": [
+    99,
+    129
+   ],
+   "summary": "把后台 ShellProcess 适配为 JobHooks 生命周期：outcome/sources/ring 读的接线与终局标记追加。",
+   "tags": [
+    "jobs",
+    "exported"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/shell/tool-bash/src/background.ts:processOutcome",
+   "type": "function",
+   "name": "processOutcome",
+   "filePath": "packages/shell/tool-bash/src/background.ts",
+   "lineRange": [
+    44,
+    55
+   ],
+   "summary": "把已定局运行的沙箱/退出事实投影为 job 终局 outcome。",
+   "tags": [
+    "jobs",
+    "outcome",
+    "exported"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/shell/tool-bash/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/shell/tool-bash/src/index.ts",
+   "summary": "模型面 bash 工具主体（apply 355 行）：defineTool 注册 bash 工具——参数校验、工作目录解析、逐调用沙箱策略、前台等待 job 或超时返回 id、后台立即返回 id；部署策略归 tools/pre-execute 与沙箱 executor。",
+   "tags": [
+    "tool",
+    "bash",
+    "consumer",
+    "jobs"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/shell/tool-bash/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/shell/tool-bash/src/index.ts",
+   "lineRange": [
+    202,
+    556
+   ],
+   "summary": "工具注册主体：bash 工具 schema/描述/呈现器与执行器（前台等待+后台注册 job+升级审批流），经 ctx.tools 注册。",
+   "tags": [
+    "plugin-entry",
+    "tool-registration",
+    "exported"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/shell/tool-bash/src/index.ts:canonicalBashResult",
+   "type": "function",
+   "name": "canonicalBashResult",
+   "filePath": "packages/shell/tool-bash/src/index.ts",
+   "lineRange": [
+    155,
+    179
+   ],
+   "summary": "把 shell 运行结果整形为规范的工具结果（含截断通知与退出状态）。",
+   "tags": [
+    "result-shaping"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/shell/tool-bash/src/index.ts:presentBashCall",
+   "type": "function",
+   "name": "presentBashCall",
+   "filePath": "packages/shell/tool-bash/src/index.ts",
+   "lineRange": [
+    108,
+    124
+   ],
+   "summary": "UI 调用呈现器：终端卡片形态的调用视图。",
+   "tags": [
+    "presentation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/shell/tool-bash/src/render.ts",
+   "type": "file",
+   "name": "render.ts",
+   "filePath": "packages/shell/tool-bash/src/render.ts",
+   "summary": "bash 工具的模型面结果渲染：stdout→标记 stderr 节→退出状态标记；非零退出是报告而非错误（模型自行决定反应），只有基础设施失败（spawn 错误/中止）才是 isError。",
+   "tags": [
+    "rendering",
+    "model-output",
+    "exit-status"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/shell/tool-bash/src/render.ts:renderResult",
+   "type": "function",
+   "name": "renderResult",
+   "filePath": "packages/shell/tool-bash/src/render.ts",
+   "lineRange": [
+    28,
+    66
+   ],
+   "summary": "把完成运行渲染为模型可见文本：流截断通知附 spill 路径，退出状态以标记呈现。",
+   "tags": [
+    "rendering",
+    "exported"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/shell/tool-bash/src/render.ts:renderJobRead",
+   "type": "function",
+   "name": "renderJobRead",
+   "filePath": "packages/shell/tool-bash/src/render.ts",
+   "lineRange": [
+    97,
+    118
+   ],
+   "summary": "渲染一次后台 job 的环形读取增量。",
+   "tags": [
+    "rendering",
+    "jobs",
+    "exported"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/shell/tool-bash/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/shell/tool-bash/tsconfig.json",
+   "summary": "dsh-tool-bash 的 TypeScript 编译配置。",
+   "tags": [
+    "configuration",
+    "typescript"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/shell/tool-bash-persistent/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/shell/tool-bash-persistent/README.md",
+   "summary": "dsh-tool-bash-persistent 包参考：经 owner 作用域 PTY seam 的持久 bash 工具——单所有者会话、滚动缓冲截断告知、命令完成标记轮询与会话退出响应。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "persistent-shell",
+    "pty"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/shell/tool-bash-persistent/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/shell/tool-bash-persistent/package.json",
+   "summary": "@deepseek-ai/dsh-tool-bash-persistent 包清单：持久 bash 工具插件。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/shell/tool-bash-persistent/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/shell/tool-bash-persistent/src/index.ts",
+   "summary": "持久 bash 工具实现：persistentShells 会话注册表管理 owner 隔离的 PTY 会话，executeCommand 包装命令并轮询完成标记（一页 1000 行足够找刚发出的标记，整段滚动缓冲仅在命令定局或需要部分输出时组装）；截断/前缀丢失/重置/超时各有固定文案。",
+   "tags": [
+    "tool",
+    "persistent-shell",
+    "pty",
+    "scrollback"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/shell/tool-bash-persistent/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/shell/tool-bash-persistent/src/index.ts",
+   "lineRange": [
+    467,
+    487
+   ],
+   "summary": "插件 apply：向 ctx.tools 注册持久 bash 工具。",
+   "tags": [
+    "plugin-entry",
+    "exported"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/shell/tool-bash-persistent/src/index.ts:persistentShells",
+   "type": "function",
+   "name": "persistentShells",
+   "filePath": "packages/shell/tool-bash-persistent/src/index.ts",
+   "lineRange": [
+    224,
+    298
+   ],
+   "summary": "会话注册表工厂：按 agent 持有/复用持久 PTY 会话并处理会话退出与重置。",
+   "tags": [
+    "registry",
+    "sessions"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/shell/tool-bash-persistent/src/index.ts:executeCommand",
+   "type": "function",
+   "name": "executeCommand",
+   "filePath": "packages/shell/tool-bash-persistent/src/index.ts",
+   "lineRange": [
+    300,
+    393
+   ],
+   "summary": "单条命令执行：包装标记→写入 PTY→轮询完成→按 deadline 截断，超时以 PERSISTENT_BASH_TIMEOUT 报告。",
+   "tags": [
+    "execution",
+    "polling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/shell/tool-bash-persistent/src/index.ts:registerPersistentBash",
+   "type": "function",
+   "name": "registerPersistentBash",
+   "filePath": "packages/shell/tool-bash-persistent/src/index.ts",
+   "lineRange": [
+    400,
+    441
+   ],
+   "summary": "定义并注册持久 bash 工具（schema+执行器接线）。",
+   "tags": [
+    "tool-registration"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:packages/shell/tool-bash-persistent/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/shell/tool-bash-persistent/tsconfig.json",
+   "summary": "dsh-tool-bash-persistent 的 TypeScript 编译配置。",
+   "tags": [
+    "configuration",
+    "typescript"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/shell/tool-pwsh/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/shell/tool-pwsh/README.md",
+   "summary": "dsh-tool-pwsh 包参考：Windows 组合的模型面 pwsh 工具（PowerShell 方言：原生 C:\\ 路径与 $env:NAME 变量），与 dsh-tool-bash 逐调用镜像——job 注册、DSH_* 环境、逐调用沙箱策略、升级面与标记渲染同构。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "tool",
+    "pwsh"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:packages/shell/tool-pwsh/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/shell/tool-pwsh/package.json",
+   "summary": "@deepseek-ai/dsh-tool-pwsh 包清单：模型面 pwsh 工具插件。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/shell/tool-pwsh/src/background.ts",
+   "type": "file",
+   "name": "background.ts",
+   "filePath": "packages/shell/tool-pwsh/src/background.ts",
+   "summary": "pwsh 进程句柄的通用 job 适配（tool-bash/background 的逐调用孪生）：终局 outcome、拉取源、环形读与沙箱事实标记。",
+   "tags": [
+    "jobs",
+    "background",
+    "pwsh"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/shell/tool-pwsh/src/background.ts:processJob",
+   "type": "function",
+   "name": "processJob",
+   "filePath": "packages/shell/tool-pwsh/src/background.ts",
+   "lineRange": [
+    101,
+    131
+   ],
+   "summary": "把后台 pwsh ShellProcess 适配为 JobHooks 生命周期。",
+   "tags": [
+    "jobs",
+    "exported"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/shell/tool-pwsh/src/background.ts:processOutcome",
+   "type": "function",
+   "name": "processOutcome",
+   "filePath": "packages/shell/tool-pwsh/src/background.ts",
+   "lineRange": [
+    46,
+    57
+   ],
+   "summary": "把已定局运行的沙箱/退出事实投影为 job 终局 outcome。",
+   "tags": [
+    "jobs",
+    "outcome",
+    "exported"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/shell/tool-pwsh/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/shell/tool-pwsh/src/index.ts",
+   "summary": "模型面 pwsh 工具主体（apply 404 行）：与 bash 工具逐调用镜像的 PowerShell 方言契约——路径/环境变量语义、job 注册、沙箱策略、升级审批与标记渲染；呈现为解析退出状态的终端卡片。",
+   "tags": [
+    "tool",
+    "pwsh",
+    "consumer",
+    "jobs"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/shell/tool-pwsh/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/shell/tool-pwsh/src/index.ts",
+   "lineRange": [
+    212,
+    615
+   ],
+   "summary": "工具注册主体：pwsh 工具 schema/描述/执行器（前台等待+后台 job+升级审批）注册到 ctx.tools。",
+   "tags": [
+    "plugin-entry",
+    "tool-registration",
+    "exported"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/shell/tool-pwsh/src/index.ts:canonicalPwshResult",
+   "type": "function",
+   "name": "canonicalPwshResult",
+   "filePath": "packages/shell/tool-pwsh/src/index.ts",
+   "lineRange": [
+    161,
+    187
+   ],
+   "summary": "把 pwsh 运行结果整形为规范工具结果（截断通知与退出状态）。",
+   "tags": [
+    "result-shaping"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/shell/tool-pwsh/src/index.ts:pwshDescription",
+   "type": "function",
+   "name": "pwshDescription",
+   "filePath": "packages/shell/tool-pwsh/src/index.ts",
+   "lineRange": [
+    121,
+    149
+   ],
+   "summary": "生成 pwsh 工具的动态描述（PowerShell 方言指引）。",
+   "tags": [
+    "description"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/shell/tool-pwsh/src/render.ts",
+   "type": "file",
+   "name": "render.ts",
+   "filePath": "packages/shell/tool-pwsh/src/render.ts",
+   "summary": "pwsh 工具的模型面结果渲染（bash 版孪生）：stdout/stderr 标记节/退出状态标记，非零退出是报告非错误。",
+   "tags": [
+    "rendering",
+    "model-output",
+    "pwsh"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/shell/tool-pwsh/src/render.ts:renderPwshResult",
+   "type": "function",
+   "name": "renderPwshResult",
+   "filePath": "packages/shell/tool-pwsh/src/render.ts",
+   "lineRange": [
+    48,
+    86
+   ],
+   "summary": "把完成运行的 pwsh 结果渲染为模型可见文本。",
+   "tags": [
+    "rendering",
+    "exported"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/shell/tool-pwsh/src/render.ts:renderPwshJobRead",
+   "type": "function",
+   "name": "renderPwshJobRead",
+   "filePath": "packages/shell/tool-pwsh/src/render.ts",
+   "lineRange": [
+    117,
+    138
+   ],
+   "summary": "渲染一次后台 pwsh job 的环形读取增量。",
+   "tags": [
+    "rendering",
+    "jobs",
+    "exported"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/shell/tool-pwsh/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/shell/tool-pwsh/tsconfig.json",
+   "summary": "dsh-tool-pwsh 的 TypeScript 编译配置。",
+   "tags": [
+    "configuration",
+    "typescript"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/shell/tool-pwsh-persistent/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/shell/tool-pwsh-persistent/README.md",
+   "summary": "dsh-tool-pwsh-persistent 包参考：owner 作用域 PTY seam 上的持久 pwsh 工具，与 bash 持久版共享会话注册表/轮询环/重置契约（jscpd 标注的刻意镜像）。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "persistent-shell",
+    "pwsh"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/shell/tool-pwsh-persistent/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/shell/tool-pwsh-persistent/package.json",
+   "summary": "@deepseek-ai/dsh-tool-pwsh-persistent 包清单：持久 pwsh 工具插件。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/shell/tool-pwsh-persistent/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/shell/tool-pwsh-persistent/src/index.ts",
+   "summary": "持久 pwsh 工具实现（bash 持久版的刻意镜像）：会话注册表、命令包装（Select-String 截断提示方言）、完成标记轮询、滚动缓冲组装与会话退出响应；超时码 PERSISTENT_PWSH_TIMEOUT。",
+   "tags": [
+    "tool",
+    "persistent-shell",
+    "pty",
+    "pwsh"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/shell/tool-pwsh-persistent/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/shell/tool-pwsh-persistent/src/index.ts",
+   "lineRange": [
+    478,
+    498
+   ],
+   "summary": "插件 apply：向 ctx.tools 注册持久 pwsh 工具。",
+   "tags": [
+    "plugin-entry",
+    "exported"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/shell/tool-pwsh-persistent/src/index.ts:persistentShells",
+   "type": "function",
+   "name": "persistentShells",
+   "filePath": "packages/shell/tool-pwsh-persistent/src/index.ts",
+   "lineRange": [
+    247,
+    308
+   ],
+   "summary": "pwsh 持久会话注册表：按 agent 持有/复用 PTY 会话并处理退出重置。",
+   "tags": [
+    "registry",
+    "sessions"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/shell/tool-pwsh-persistent/src/index.ts:executeCommand",
+   "type": "function",
+   "name": "executeCommand",
+   "filePath": "packages/shell/tool-pwsh-persistent/src/index.ts",
+   "lineRange": [
+    310,
+    404
+   ],
+   "summary": "单条 pwsh 命令执行：包装→写入→轮询完成标记→截断组装。",
+   "tags": [
+    "execution",
+    "polling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/shell/tool-pwsh-persistent/src/index.ts:registerPersistentPwsh",
+   "type": "function",
+   "name": "registerPersistentPwsh",
+   "filePath": "packages/shell/tool-pwsh-persistent/src/index.ts",
+   "lineRange": [
+    411,
+    452
+   ],
+   "summary": "定义并注册持久 pwsh 工具（schema+执行器接线）。",
+   "tags": [
+    "tool-registration"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:packages/shell/tool-pwsh-persistent/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/shell/tool-pwsh-persistent/tsconfig.json",
+   "summary": "dsh-tool-pwsh-persistent 的 TypeScript 编译配置。",
+   "tags": [
+    "configuration",
+    "typescript"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/shell/shell-env/src/index.ts",
+   "target": "file:packages/shell/shell/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/shell-env/src/index.ts",
+   "target": "file:packages/util/home-paths/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/shell-env/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/shell-env/src/index.ts",
+   "target": "file:packages/boot/app-boot/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/shell-env/src/index.ts",
+   "target": "class:packages/shell/shell-env/src/index.ts:ShellEnvRegistry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/shell-env/src/index.ts",
+   "target": "class:packages/shell/shell-env/src/index.ts:ShellEnvRegistry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/shell/shell-env/src/index.ts",
+   "target": "function:packages/shell/shell-env/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/shell-env/src/index.ts",
+   "target": "function:packages/shell/shell-env/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/background.ts",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/background.ts",
+   "target": "file:packages/shell/shell/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/background.ts",
+   "target": "file:packages/jobs/jobs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/background.ts",
+   "target": "function:packages/shell/tool-bash/src/background.ts:processJob",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/background.ts",
+   "target": "function:packages/shell/tool-bash/src/background.ts:processJob",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/background.ts",
+   "target": "function:packages/shell/tool-bash/src/background.ts:processOutcome",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/background.ts",
+   "target": "function:packages/shell/tool-bash/src/background.ts:processOutcome",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/index.ts",
+   "target": "file:packages/session/working-directory/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/index.ts",
+   "target": "file:packages/jobs/jobs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/index.ts",
+   "target": "file:packages/interaction/user-approval/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/index.ts",
+   "target": "file:packages/shell/shell-env/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/index.ts",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/index.ts",
+   "target": "file:packages/sandbox/sandbox-policy/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/index.ts",
+   "target": "file:packages/shell/shell/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/index.ts",
+   "target": "file:packages/shell/tool-bash/src/background.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/index.ts",
+   "target": "file:packages/shell/tool-bash/src/render.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/index.ts",
+   "target": "function:packages/shell/tool-bash/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/index.ts",
+   "target": "function:packages/shell/tool-bash/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/index.ts",
+   "target": "function:packages/shell/tool-bash/src/index.ts:canonicalBashResult",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/index.ts",
+   "target": "function:packages/shell/tool-bash/src/index.ts:presentBashCall",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/render.ts",
+   "target": "file:packages/shell/shell/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/render.ts",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/render.ts",
+   "target": "function:packages/shell/tool-bash/src/render.ts:renderResult",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/render.ts",
+   "target": "function:packages/shell/tool-bash/src/render.ts:renderResult",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/render.ts",
+   "target": "function:packages/shell/tool-bash/src/render.ts:renderJobRead",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-bash/src/render.ts",
+   "target": "function:packages/shell/tool-bash/src/render.ts:renderJobRead",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/shell/tool-bash-persistent/src/index.ts",
+   "target": "file:packages/session/working-directory/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash-persistent/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash-persistent/src/index.ts",
+   "target": "file:packages/util/output-retention/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash-persistent/src/index.ts",
+   "target": "file:packages/terminal/terminal/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash-persistent/src/index.ts",
+   "target": "file:packages/util/timeout/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash-persistent/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-bash-persistent/src/index.ts",
+   "target": "function:packages/shell/tool-bash-persistent/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-bash-persistent/src/index.ts",
+   "target": "function:packages/shell/tool-bash-persistent/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/shell/tool-bash-persistent/src/index.ts",
+   "target": "function:packages/shell/tool-bash-persistent/src/index.ts:persistentShells",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-bash-persistent/src/index.ts",
+   "target": "function:packages/shell/tool-bash-persistent/src/index.ts:executeCommand",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-bash-persistent/src/index.ts",
+   "target": "function:packages/shell/tool-bash-persistent/src/index.ts:registerPersistentBash",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/background.ts",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/background.ts",
+   "target": "file:packages/shell/shell/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/background.ts",
+   "target": "file:packages/jobs/jobs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/background.ts",
+   "target": "function:packages/shell/tool-pwsh/src/background.ts:processJob",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/background.ts",
+   "target": "function:packages/shell/tool-pwsh/src/background.ts:processJob",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/background.ts",
+   "target": "function:packages/shell/tool-pwsh/src/background.ts:processOutcome",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/background.ts",
+   "target": "function:packages/shell/tool-pwsh/src/background.ts:processOutcome",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/index.ts",
+   "target": "file:packages/session/working-directory/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/index.ts",
+   "target": "file:packages/jobs/jobs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/index.ts",
+   "target": "file:packages/shell/shell-env/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/index.ts",
+   "target": "file:packages/interaction/user-approval/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/index.ts",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/index.ts",
+   "target": "file:packages/sandbox/sandbox-policy/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/index.ts",
+   "target": "file:packages/shell/shell/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/index.ts",
+   "target": "file:packages/shell/tool-pwsh/src/background.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/index.ts",
+   "target": "file:packages/shell/tool-pwsh/src/render.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/index.ts",
+   "target": "function:packages/shell/tool-pwsh/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/index.ts",
+   "target": "function:packages/shell/tool-pwsh/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/index.ts",
+   "target": "function:packages/shell/tool-pwsh/src/index.ts:canonicalPwshResult",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/index.ts",
+   "target": "function:packages/shell/tool-pwsh/src/index.ts:pwshDescription",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/render.ts",
+   "target": "file:packages/shell/shell/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/render.ts",
+   "target": "file:packages/sandbox/sandbox/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/render.ts",
+   "target": "function:packages/shell/tool-pwsh/src/render.ts:renderPwshResult",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/render.ts",
+   "target": "function:packages/shell/tool-pwsh/src/render.ts:renderPwshResult",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/render.ts",
+   "target": "function:packages/shell/tool-pwsh/src/render.ts:renderPwshJobRead",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh/src/render.ts",
+   "target": "function:packages/shell/tool-pwsh/src/render.ts:renderPwshJobRead",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh-persistent/src/index.ts",
+   "target": "file:packages/session/working-directory/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh-persistent/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh-persistent/src/index.ts",
+   "target": "file:packages/util/output-retention/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh-persistent/src/index.ts",
+   "target": "file:packages/terminal/terminal/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh-persistent/src/index.ts",
+   "target": "file:packages/util/timeout/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh-persistent/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh-persistent/src/index.ts",
+   "target": "function:packages/shell/tool-pwsh-persistent/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh-persistent/src/index.ts",
+   "target": "function:packages/shell/tool-pwsh-persistent/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh-persistent/src/index.ts",
+   "target": "function:packages/shell/tool-pwsh-persistent/src/index.ts:persistentShells",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh-persistent/src/index.ts",
+   "target": "function:packages/shell/tool-pwsh-persistent/src/index.ts:executeCommand",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/shell/tool-pwsh-persistent/src/index.ts",
+   "target": "function:packages/shell/tool-pwsh-persistent/src/index.ts:registerPersistentPwsh",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "function:packages/shell/tool-bash/src/index.ts:apply",
+   "target": "function:packages/shell/tool-bash/src/background.ts:processJob",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/shell/tool-bash/src/index.ts:apply",
+   "target": "function:packages/shell/tool-bash/src/render.ts:renderResult",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/shell/tool-pwsh/src/index.ts:apply",
+   "target": "function:packages/shell/tool-pwsh/src/background.ts:processJob",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/shell/tool-pwsh/src/index.ts:apply",
+   "target": "function:packages/shell/tool-pwsh/src/render.ts:renderPwshResult",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/shell/tool-bash-persistent/src/index.ts:registerPersistentBash",
+   "target": "function:packages/shell/tool-bash-persistent/src/index.ts:persistentShells",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/shell/tool-pwsh-persistent/src/index.ts:registerPersistentPwsh",
+   "target": "function:packages/shell/tool-pwsh-persistent/src/index.ts:persistentShells",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

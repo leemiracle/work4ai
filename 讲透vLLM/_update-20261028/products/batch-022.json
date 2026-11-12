@@ -1,0 +1,5937 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "type": "file",
+   "name": "app_state.py",
+   "filePath": "vllm/entrypoints/launchers/api_server/app_state.py",
+   "summary": "API server 应用状态初始化（init_app_state：engine client/模型列表/各 OpenAI serving 单例装配）。",
+   "tags": [
+    "api-server",
+    "app-state",
+    "initialization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/api_server/app_state.py:init_app_state",
+   "type": "function",
+   "name": "init_app_state",
+   "filePath": "vllm/entrypoints/launchers/api_server/app_state.py",
+   "lineRange": [
+    24,
+    178
+   ],
+   "summary": "初始化 app state：engine client、模型列表与全部 serving 单例（chat/completions/embeddings等）。",
+   "tags": [
+    "app-state",
+    "initialization",
+    "wiring"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "type": "file",
+   "name": "entry.py",
+   "filePath": "vllm/entrypoints/launchers/api_server/entry.py",
+   "summary": "API server 入口：engine client 构建、build_and_serve 主流程与多 worker 启动。",
+   "tags": [
+    "api-server",
+    "entry-point",
+    "lifecycle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/api_server/entry.py:build_async_engine_client",
+   "type": "function",
+   "name": "build_async_engine_client",
+   "filePath": "vllm/entrypoints/launchers/api_server/entry.py",
+   "lineRange": [
+    35,
+    65
+   ],
+   "summary": "按配置构建异步引擎客户端。",
+   "tags": [
+    "engine-client",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/api_server/entry.py:build_async_engine_client_from_engine_args",
+   "type": "function",
+   "name": "build_async_engine_client_from_engine_args",
+   "filePath": "vllm/entrypoints/launchers/api_server/entry.py",
+   "lineRange": [
+    69,
+    112
+   ],
+   "summary": "从 engine args 构建异步引擎客户端（含平台分发）。",
+   "tags": [
+    "engine-client",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/api_server/entry.py:build_and_serve",
+   "type": "function",
+   "name": "build_and_serve",
+   "filePath": "vllm/entrypoints/launchers/api_server/entry.py",
+   "lineRange": [
+    115,
+    161
+   ],
+   "summary": "API server 主流程：引擎构建+app 装配+serve。",
+   "tags": [
+    "entry-point",
+    "lifecycle"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/api_server/entry.py:run_server",
+   "type": "function",
+   "name": "run_server",
+   "filePath": "vllm/entrypoints/launchers/api_server/entry.py",
+   "lineRange": [
+    164,
+    176
+   ],
+   "summary": "运行单个 API server（uvicorn）。",
+   "tags": [
+    "server",
+    "run"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/api_server/entry.py:run_server_worker",
+   "type": "function",
+   "name": "run_server_worker",
+   "filePath": "vllm/entrypoints/launchers/api_server/entry.py",
+   "lineRange": [
+    179,
+    201
+   ],
+   "summary": "多 worker 模式的单 worker 启动。",
+   "tags": [
+    "worker",
+    "run"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/api_server/entry.py:main",
+   "type": "function",
+   "name": "main",
+   "filePath": "vllm/entrypoints/launchers/api_server/entry.py",
+   "lineRange": [
+    204,
+    226
+   ],
+   "summary": "API server CLI 主入口。",
+   "tags": [
+    "entry-point",
+    "cli"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "type": "file",
+   "name": "routers.py",
+   "filePath": "vllm/entrypoints/launchers/api_server/routers.py",
+   "summary": "注册全部 API 路由（register_api_routers：OpenAI/Anthropic/Cohere/RL/scale_out 等按开关挂载）。",
+   "tags": [
+    "api-server",
+    "routers",
+    "registration"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/api_server/routers.py:register_api_routers",
+   "type": "function",
+   "name": "register_api_routers",
+   "filePath": "vllm/entrypoints/launchers/api_server/routers.py",
+   "lineRange": [
+    12,
+    97
+   ],
+   "summary": "按启用开关注册全部 API 路由（OpenAI/兼容层/RL/scale_out）。",
+   "tags": [
+    "routers",
+    "registration",
+    "dispatch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/launchers/app.py",
+   "type": "file",
+   "name": "app.py",
+   "filePath": "vllm/entrypoints/launchers/app.py",
+   "summary": "构建主 FastAPI app（build_app： lifespan 与全局中间件）。",
+   "tags": [
+    "fastapi",
+    "app-factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/app.py:build_app",
+   "type": "function",
+   "name": "build_app",
+   "filePath": "vllm/entrypoints/launchers/app.py",
+   "lineRange": [
+    19,
+    56
+   ],
+   "summary": "构建主 FastAPI app（lifespan 与中间件）。",
+   "tags": [
+    "fastapi",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "type": "file",
+   "name": "dp_supervisor.py",
+   "filePath": "vllm/entrypoints/launchers/dp_supervisor.py",
+   "summary": "数据并行监督者（DPSupervisor）：每本地 DP rank 拉起一个子 server 进程（python/rust 双形态）、多端口外部 LB 模式与就绪探测。",
+   "tags": [
+    "data-parallel",
+    "supervisor",
+    "multi-process",
+    "load-balancer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/launchers/dp_supervisor.py:DPSupervisor",
+   "type": "class",
+   "name": "DPSupervisor",
+   "filePath": "vllm/entrypoints/launchers/dp_supervisor.py",
+   "lineRange": [
+    269,
+    559
+   ],
+   "summary": "DP 监督者（291 行 10 方法）：子进程生命周期、就绪探测与优雅关闭。",
+   "tags": [
+    "supervisor",
+    "data-parallel",
+    "process-management"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/dp_supervisor.py:infer_multi_port_external_lb_start_rank",
+   "type": "function",
+   "name": "infer_multi_port_external_lb_start_rank",
+   "filePath": "vllm/entrypoints/launchers/dp_supervisor.py",
+   "lineRange": [
+    42,
+    49
+   ],
+   "summary": "推断多端口外部 LB 的起始 rank。",
+   "tags": [
+    "load-balancer",
+    "rank"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/dp_supervisor.py:validate_multi_port_external_lb_args",
+   "type": "function",
+   "name": "validate_multi_port_external_lb_args",
+   "filePath": "vllm/entrypoints/launchers/dp_supervisor.py",
+   "lineRange": [
+    52,
+    115
+   ],
+   "summary": "校验多端口外部 LB 模式参数。",
+   "tags": [
+    "validation",
+    "load-balancer"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/dp_supervisor.py:_build_vllm_dp_server_args",
+   "type": "function",
+   "name": "_build_vllm_dp_server_args",
+   "filePath": "vllm/entrypoints/launchers/dp_supervisor.py",
+   "lineRange": [
+    118,
+    134
+   ],
+   "summary": "构造子 DP server 的启动参数。",
+   "tags": [
+    "args",
+    "construction"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/dp_supervisor.py:_build_device_ids",
+   "type": "function",
+   "name": "_build_device_ids",
+   "filePath": "vllm/entrypoints/launchers/dp_supervisor.py",
+   "lineRange": [
+    137,
+    155
+   ],
+   "summary": "构造各子进程的可见设备列表。",
+   "tags": [
+    "devices",
+    "construction"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/dp_supervisor.py:_probe_endpoint",
+   "type": "function",
+   "name": "_probe_endpoint",
+   "filePath": "vllm/entrypoints/launchers/dp_supervisor.py",
+   "lineRange": [
+    177,
+    216
+   ],
+   "summary": "探测子 server 端点就绪。",
+   "tags": [
+    "probe",
+    "readiness"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/dp_supervisor.py:_build_dp_supervisor_app",
+   "type": "function",
+   "name": "_build_dp_supervisor_app",
+   "filePath": "vllm/entrypoints/launchers/dp_supervisor.py",
+   "lineRange": [
+    219,
+    237
+   ],
+   "summary": "构建 supervisor 自身的 FastAPI app。",
+   "tags": [
+    "fastapi",
+    "construction"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/dp_supervisor.py:_run_vllm_dp_server",
+   "type": "function",
+   "name": "_run_vllm_dp_server",
+   "filePath": "vllm/entrypoints/launchers/dp_supervisor.py",
+   "lineRange": [
+    252,
+    266
+   ],
+   "summary": "按形态（python/rust）运行子 DP server。",
+   "tags": [
+    "dispatch",
+    "child-process"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/launchers/grpc_server.py",
+   "type": "file",
+   "name": "grpc_server.py",
+   "filePath": "vllm/entrypoints/launchers/grpc_server.py",
+   "summary": "vLLM gRPC server：基于 AsyncLLM + smg-grpc-servicer 包的 VllmEngineServicer。",
+   "tags": [
+    "grpc",
+    "server",
+    "async-engine"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/grpc_server.py:serve_grpc",
+   "type": "function",
+   "name": "serve_grpc",
+   "filePath": "vllm/entrypoints/launchers/grpc_server.py",
+   "lineRange": [
+    56,
+    173
+   ],
+   "summary": "启动 gRPC 服务（AsyncLLM + VllmEngineServicer，118 行）。",
+   "tags": [
+    "grpc",
+    "server",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/grpc_server.py:main",
+   "type": "function",
+   "name": "main",
+   "filePath": "vllm/entrypoints/launchers/grpc_server.py",
+   "lineRange": [
+    176,
+    205
+   ],
+   "summary": "gRPC server CLI 入口。",
+   "tags": [
+    "entry-point",
+    "cli"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/launchers/launcher.py",
+   "type": "file",
+   "name": "launcher.py",
+   "filePath": "vllm/entrypoints/launchers/launcher.py",
+   "summary": "HTTP 服务启动器：NoSignalServer（静默 uvicorn）、serve_http（socket 预绑定/优雅关闭/watchdog）。",
+   "tags": [
+    "http-server",
+    "uvicorn",
+    "lifecycle",
+    "signal-handling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/launchers/launcher.py:NoSignalServer",
+   "type": "class",
+   "name": "NoSignalServer",
+   "filePath": "vllm/entrypoints/launchers/launcher.py",
+   "lineRange": [
+    47,
+    160
+   ],
+   "summary": "静默 uvicorn Server（屏蔽信号，由外层管理关闭）。",
+   "tags": [
+    "uvicorn",
+    "signal-handling"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/launcher.py:_readable",
+   "type": "function",
+   "name": "_readable",
+   "filePath": "vllm/entrypoints/launchers/launcher.py",
+   "lineRange": [
+    163,
+    174
+   ],
+   "summary": "地址可读化（日志用）。",
+   "tags": [
+    "utility",
+    "logging"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/launcher.py:serve_http",
+   "type": "function",
+   "name": "serve_http",
+   "filePath": "vllm/entrypoints/launchers/launcher.py",
+   "lineRange": [
+    177,
+    312
+   ],
+   "summary": "HTTP 服务主函数（socket 预绑定/多 socket/优雅关闭，136 行）。",
+   "tags": [
+    "http",
+    "serve",
+    "lifecycle"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/launcher.py:watchdog_loop",
+   "type": "function",
+   "name": "watchdog_loop",
+   "filePath": "vllm/entrypoints/launchers/launcher.py",
+   "lineRange": [
+    315,
+    323
+   ],
+   "summary": "看门狗循环监控异常退出。",
+   "tags": [
+    "watchdog",
+    "monitoring"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/launcher.py:terminate_if_errored",
+   "type": "function",
+   "name": "terminate_if_errored",
+   "filePath": "vllm/entrypoints/launchers/launcher.py",
+   "lineRange": [
+    326,
+    338
+   ],
+   "summary": "出错时终止 server。",
+   "tags": [
+    "error-handling",
+    "terminate"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/launcher.py:create_server_socket",
+   "type": "function",
+   "name": "create_server_socket",
+   "filePath": "vllm/entrypoints/launchers/launcher.py",
+   "lineRange": [
+    341,
+    356
+   ],
+   "summary": "创建服务 socket（含 reuseport）。",
+   "tags": [
+    "socket",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/launcher.py:create_server_unix_socket",
+   "type": "function",
+   "name": "create_server_unix_socket",
+   "filePath": "vllm/entrypoints/launchers/launcher.py",
+   "lineRange": [
+    359,
+    362
+   ],
+   "summary": "创建 Unix domain socket。",
+   "tags": [
+    "socket",
+    "unix"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/launcher.py:setup_server",
+   "type": "function",
+   "name": "setup_server",
+   "filePath": "vllm/entrypoints/launchers/launcher.py",
+   "lineRange": [
+    366,
+    393
+   ],
+   "summary": "装配 server socket 与 app。",
+   "tags": [
+    "setup",
+    "server"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/launchers/render/app_state.py",
+   "type": "file",
+   "name": "app_state.py",
+   "filePath": "vllm/entrypoints/launchers/render/app_state.py",
+   "summary": "render 服务应用状态初始化（init_render_app_state）。",
+   "tags": [
+    "render",
+    "app-state",
+    "initialization"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/render/app_state.py:init_render_app_state",
+   "type": "function",
+   "name": "init_render_app_state",
+   "filePath": "vllm/entrypoints/launchers/render/app_state.py",
+   "lineRange": [
+    22,
+    126
+   ],
+   "summary": "初始化 render app 状态。",
+   "tags": [
+    "render",
+    "app-state"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/launchers/render/entry.py",
+   "type": "file",
+   "name": "entry.py",
+   "filePath": "vllm/entrypoints/launchers/render/entry.py",
+   "summary": "render launcher 入口（build_and_serve_renderer + FastAPI 启动）。",
+   "tags": [
+    "render",
+    "entry-point",
+    "fastapi"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/render/entry.py:build_and_serve_renderer",
+   "type": "function",
+   "name": "build_and_serve_renderer",
+   "filePath": "vllm/entrypoints/launchers/render/entry.py",
+   "lineRange": [
+    21,
+    62
+   ],
+   "summary": "构建并启动 renderer 服务。",
+   "tags": [
+    "render",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/render/entry.py:run_launch_fastapi",
+   "type": "function",
+   "name": "run_launch_fastapi",
+   "filePath": "vllm/entrypoints/launchers/render/entry.py",
+   "lineRange": [
+    65,
+    105
+   ],
+   "summary": "以 FastAPI 方式运行 launcher。",
+   "tags": [
+    "fastapi",
+    "run"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/launchers/run_batch.py",
+   "type": "file",
+   "name": "run_batch.py",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "summary": "批量推理 launcher（1125 行）：批输入/输出文件管理、URL 数据上传下载、进度跟踪与逐请求执行。",
+   "tags": [
+    "batch",
+    "offline",
+    "file-io",
+    "progress"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/launchers/run_batch.py:BatchTranscriptionRequest",
+   "type": "class",
+   "name": "BatchTranscriptionRequest",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    93,
+    120
+   ],
+   "summary": "批量转录请求模型。",
+   "tags": [
+    "protocol",
+    "transcription"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/launchers/run_batch.py:BatchTranslationRequest",
+   "type": "class",
+   "name": "BatchTranslationRequest",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    123,
+    150
+   ],
+   "summary": "批量翻译请求模型。",
+   "tags": [
+    "protocol",
+    "translation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/launchers/run_batch.py:BatchRequestInput",
+   "type": "class",
+   "name": "BatchRequestInput",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    163,
+    201
+   ],
+   "summary": "批量推理单请求输入模型。",
+   "tags": [
+    "protocol",
+    "request"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/launchers/run_batch.py:BatchFrontendArgs",
+   "type": "class",
+   "name": "BatchFrontendArgs",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    243,
+    291
+   ],
+   "summary": "批处理前端参数。",
+   "tags": [
+    "config",
+    "frontend"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/launchers/run_batch.py:BatchProgressTracker",
+   "type": "class",
+   "name": "BatchProgressTracker",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    336,
+    356
+   ],
+   "summary": "批处理进度跟踪器。",
+   "tags": [
+    "progress",
+    "tracking"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:make_arg_parser",
+   "type": "function",
+   "name": "make_arg_parser",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    294,
+    297
+   ],
+   "summary": "构建批处理 argparse parser。",
+   "tags": [
+    "argparse",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:parse_args",
+   "type": "function",
+   "name": "parse_args",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    300,
+    316
+   ],
+   "summary": "解析批处理参数。",
+   "tags": [
+    "argparse",
+    "cli"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:staging_file",
+   "type": "function",
+   "name": "staging_file",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    363,
+    374
+   ],
+   "summary": "staging 文件路径管理。",
+   "tags": [
+    "staging",
+    "file-io"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:open_batch_input",
+   "type": "function",
+   "name": "open_batch_input",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    378,
+    414
+   ],
+   "summary": "打开并解析批输入文件。",
+   "tags": [
+    "file-io",
+    "input"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:validate_batch",
+   "type": "function",
+   "name": "validate_batch",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    417,
+    428
+   ],
+   "summary": "校验批输入合法性。",
+   "tags": [
+    "validation",
+    "batch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:upload_data",
+   "type": "function",
+   "name": "upload_data",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    431,
+    485
+   ],
+   "summary": "上传 inline/URL 数据到引擎。",
+   "tags": [
+    "upload",
+    "data"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:batch_output_writer",
+   "type": "function",
+   "name": "batch_output_writer",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    489,
+    512
+   ],
+   "summary": "批输出写入器（异步流式）。",
+   "tags": [
+    "file-io",
+    "output"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:download_bytes_from_url",
+   "type": "function",
+   "name": "download_bytes_from_url",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    515,
+    585
+   ],
+   "summary": "从 URL 下载数据字节。",
+   "tags": [
+    "download",
+    "url"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:make_error_request_output",
+   "type": "function",
+   "name": "make_error_request_output",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    588,
+    600
+   ],
+   "summary": "构造错误请求输出。",
+   "tags": [
+    "error",
+    "output"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:make_async_error_request_output",
+   "type": "function",
+   "name": "make_async_error_request_output",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    603,
+    606
+   ],
+   "summary": "构造异步错误请求输出。",
+   "tags": [
+    "error",
+    "output"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:run_request",
+   "type": "function",
+   "name": "run_request",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    609,
+    648
+   ],
+   "summary": "执行单条批请求。",
+   "tags": [
+    "execution",
+    "request"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:url_matches",
+   "type": "function",
+   "name": "url_matches",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    662,
+    666
+   ],
+   "summary": "URL 前缀匹配。",
+   "tags": [
+    "url",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:handle_endpoint_request",
+   "type": "function",
+   "name": "handle_endpoint_request",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    669,
+    697
+   ],
+   "summary": "处理 endpoint 型批请求（http 转发）。",
+   "tags": [
+    "endpoint",
+    "proxy"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:make_transcription_wrapper",
+   "type": "function",
+   "name": "make_transcription_wrapper",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    700,
+    770
+   ],
+   "summary": "转录/翻译 handler 包装器工厂（Batch*Request→*Request 转换）。",
+   "tags": [
+    "transcription",
+    "wrapper",
+    "factory"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:build_endpoint_registry",
+   "type": "function",
+   "name": "build_endpoint_registry",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    773,
+    865
+   ],
+   "summary": "构建 endpoint 注册表（全部 serving 对象与 handler 配置，93 行）。",
+   "tags": [
+    "endpoint-registry",
+    "wiring"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:is_same_local_file",
+   "type": "function",
+   "name": "is_same_local_file",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    868,
+    879
+   ],
+   "summary": "判定两路径是否同一本地文件。",
+   "tags": [
+    "file-io",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:validate_run_batch_args",
+   "type": "function",
+   "name": "validate_run_batch_args",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    882,
+    911
+   ],
+   "summary": "校验批处理参数。",
+   "tags": [
+    "validation",
+    "args"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:ignore_admission_limits",
+   "type": "function",
+   "name": "ignore_admission_limits",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    914,
+    934
+   ],
+   "summary": "绕过准入限制的请求重写。",
+   "tags": [
+    "admission",
+    "rewrite"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:run_one_request",
+   "type": "function",
+   "name": "run_one_request",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    937,
+    959
+   ],
+   "summary": "执行单条请求（含输出写入）。",
+   "tags": [
+    "execution",
+    "request"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:dispatch_batch",
+   "type": "function",
+   "name": "dispatch_batch",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    962,
+    1050
+   ],
+   "summary": "批调度主循环（89 行：max_inflight 并发、按输入序写出、首错取消余批）。",
+   "tags": [
+    "dispatch",
+    "concurrency",
+    "batch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:run_batch",
+   "type": "function",
+   "name": "run_batch",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    1053,
+    1088
+   ],
+   "summary": "批处理主流程（参数校验→注册表→调度）。",
+   "tags": [
+    "batch",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/run_batch.py:main",
+   "type": "function",
+   "name": "main",
+   "filePath": "vllm/entrypoints/launchers/run_batch.py",
+   "lineRange": [
+    1091,
+    1108
+   ],
+   "summary": "run_batch CLI 主入口。",
+   "tags": [
+    "entry-point",
+    "cli"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/launchers/utils/server_utils.py",
+   "type": "file",
+   "name": "server_utils.py",
+   "filePath": "vllm/entrypoints/launchers/utils/server_utils.py",
+   "summary": "server 公共工具：日志配置加载与 FastAPI lifespan（引擎启停）。",
+   "tags": [
+    "server-utils",
+    "logging",
+    "lifespan"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/utils/server_utils.py:load_log_config",
+   "type": "function",
+   "name": "load_log_config",
+   "filePath": "vllm/entrypoints/launchers/utils/server_utils.py",
+   "lineRange": [
+    19,
+    29
+   ],
+   "summary": "加载日志配置文件。",
+   "tags": [
+    "logging",
+    "config"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/utils/server_utils.py:get_uvicorn_log_config",
+   "type": "function",
+   "name": "get_uvicorn_log_config",
+   "filePath": "vllm/entrypoints/launchers/utils/server_utils.py",
+   "lineRange": [
+    32,
+    69
+   ],
+   "summary": "获取 uvicorn 日志配置。",
+   "tags": [
+    "logging",
+    "uvicorn"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/launchers/utils/server_utils.py:lifespan",
+   "type": "function",
+   "name": "lifespan",
+   "filePath": "vllm/entrypoints/launchers/utils/server_utils.py",
+   "lineRange": [
+    76,
+    109
+   ],
+   "summary": "FastAPI lifespan（引擎启动/关闭钩子）。",
+   "tags": [
+    "lifespan",
+    "fastapi"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/mcp/tool.py",
+   "type": "file",
+   "name": "tool.py",
+   "filePath": "vllm/entrypoints/mcp/tool.py",
+   "summary": "MCP 工具抽象与 Harmony（gpt-oss）浏览器/Python 工具实现。",
+   "tags": [
+    "mcp",
+    "tools",
+    "gpt-oss",
+    "harmony"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/mcp/tool.py:Tool",
+   "type": "class",
+   "name": "Tool",
+   "filePath": "vllm/entrypoints/mcp/tool.py",
+   "lineRange": [
+    48,
+    55
+   ],
+   "summary": "MCP 工具抽象基类。",
+   "tags": [
+    "mcp",
+    "abstract-base"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/mcp/tool.py:HarmonyBrowserTool",
+   "type": "class",
+   "name": "HarmonyBrowserTool",
+   "filePath": "vllm/entrypoints/mcp/tool.py",
+   "lineRange": [
+    58,
+    97
+   ],
+   "summary": "Harmony（gpt-oss）浏览器工具。",
+   "tags": [
+    "harmony",
+    "browser",
+    "tool"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/mcp/tool.py:HarmonyPythonTool",
+   "type": "class",
+   "name": "HarmonyPythonTool",
+   "filePath": "vllm/entrypoints/mcp/tool.py",
+   "lineRange": [
+    100,
+    185
+   ],
+   "summary": "Harmony Python 工具。",
+   "tags": [
+    "harmony",
+    "python",
+    "tool"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/mcp/tool.py:validate_gpt_oss_install",
+   "type": "function",
+   "name": "validate_gpt_oss_install",
+   "filePath": "vllm/entrypoints/mcp/tool.py",
+   "lineRange": [
+    25,
+    45
+   ],
+   "summary": "校验 gpt-oss 安装可用性。",
+   "tags": [
+    "gpt-oss",
+    "validation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/mcp/tool_server.py",
+   "type": "file",
+   "name": "tool_server.py",
+   "filePath": "vllm/entrypoints/mcp/tool_server.py",
+   "summary": "MCP 工具服务器：ToolServer 抽象、MCPToolServer（stdio）与 DemoToolServer。",
+   "tags": [
+    "mcp",
+    "tool-server",
+    "stdio"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/mcp/tool_server.py:ToolServer",
+   "type": "class",
+   "name": "ToolServer",
+   "filePath": "vllm/entrypoints/mcp/tool_server.py",
+   "lineRange": [
+    76,
+    96
+   ],
+   "summary": "工具服务器抽象基类。",
+   "tags": [
+    "abstract-base",
+    "tool-server"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/mcp/tool_server.py:MCPToolServer",
+   "type": "class",
+   "name": "MCPToolServer",
+   "filePath": "vllm/entrypoints/mcp/tool_server.py",
+   "lineRange": [
+    99,
+    191
+   ],
+   "summary": "MCP 工具服务器（stdio 传输）。",
+   "tags": [
+    "mcp",
+    "stdio",
+    "server"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/mcp/tool_server.py:DemoToolServer",
+   "type": "class",
+   "name": "DemoToolServer",
+   "filePath": "vllm/entrypoints/mcp/tool_server.py",
+   "lineRange": [
+    194,
+    231
+   ],
+   "summary": "演示用工具服务器。",
+   "tags": [
+    "demo",
+    "tool-server"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/mcp/tool_server.py:list_server_and_tools",
+   "type": "function",
+   "name": "list_server_and_tools",
+   "filePath": "vllm/entrypoints/mcp/tool_server.py",
+   "lineRange": [
+    20,
+    30
+   ],
+   "summary": "列出服务器与工具信息。",
+   "tags": [
+    "discovery",
+    "tools"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/mcp/tool_server.py:trim_schema",
+   "type": "function",
+   "name": "trim_schema",
+   "filePath": "vllm/entrypoints/mcp/tool_server.py",
+   "lineRange": [
+    33,
+    55
+   ],
+   "summary": "裁剪工具 schema（去除不支持字段）。",
+   "tags": [
+    "schema",
+    "trim"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/mcp/tool_server.py:post_process_tools_description",
+   "type": "function",
+   "name": "post_process_tools_description",
+   "filePath": "vllm/entrypoints/mcp/tool_server.py",
+   "lineRange": [
+    58,
+    73
+   ],
+   "summary": "后处理工具描述文本。",
+   "tags": [
+    "tools",
+    "description"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/mcp/tool_server.py:init_tool_server",
+   "type": "function",
+   "name": "init_tool_server",
+   "filePath": "vllm/entrypoints/mcp/tool_server.py",
+   "lineRange": [
+    234,
+    244
+   ],
+   "summary": "初始化工具服务器实例。",
+   "tags": [
+    "factory",
+    "tool-server"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/rl/factories.py",
+   "type": "file",
+   "name": "factories.py",
+   "filePath": "vllm/entrypoints/rl/factories.py",
+   "summary": "RL API 路由注册工厂。",
+   "tags": [
+    "rl",
+    "factories",
+    "router-registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/rl/factories.py:register_rl_api_routers",
+   "type": "function",
+   "name": "register_rl_api_routers",
+   "filePath": "vllm/entrypoints/rl/factories.py",
+   "lineRange": [
+    8,
+    11
+   ],
+   "summary": "注册 RL API 路由到 app。",
+   "tags": [
+    "rl",
+    "router-registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/rl/offline.py",
+   "type": "file",
+   "name": "offline.py",
+   "filePath": "vllm/entrypoints/rl/offline.py",
+   "summary": "RL 离线混入（RLOfflineMixin）：经 collective_rpc 驱动权重传输引擎初始化/更新（RL 训练权重热更新）。",
+   "tags": [
+    "rl",
+    "offline",
+    "weight-transfer",
+    "training"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/rl/offline.py:RLOfflineMixin",
+   "type": "class",
+   "name": "RLOfflineMixin",
+   "filePath": "vllm/entrypoints/rl/offline.py",
+   "lineRange": [
+    11,
+    68
+   ],
+   "summary": "RL 离线混入：权重传输引擎 init/shutdown/update 经 collective_rpc 下发。",
+   "tags": [
+    "rl",
+    "weight-transfer",
+    "mixin"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/rl/online/api_router.py",
+   "type": "file",
+   "name": "api_router.py",
+   "filePath": "vllm/entrypoints/rl/online/api_router.py",
+   "summary": "RL 在线 API 路由：权重热更新全流程（pause/update_weights/finish/版本检查/world_size）与训练控制端点。",
+   "tags": [
+    "rl",
+    "online-api",
+    "weight-update",
+    "training"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/entrypoints/rl/online/api_router.py:pause_generation",
+   "type": "function",
+   "name": "pause_generation",
+   "filePath": "vllm/entrypoints/rl/online/api_router.py",
+   "lineRange": [
+    32,
+    75
+   ],
+   "summary": "暂停引擎生成（权重更新前调用）。",
+   "tags": [
+    "rl",
+    "pause",
+    "lifecycle"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/rl/online/api_router.py:resume_generation",
+   "type": "function",
+   "name": "resume_generation",
+   "filePath": "vllm/entrypoints/rl/online/api_router.py",
+   "lineRange": [
+    79,
+    94
+   ],
+   "summary": "恢复引擎生成。",
+   "tags": [
+    "rl",
+    "resume",
+    "lifecycle"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/rl/online/api_router.py:abort_requests",
+   "type": "function",
+   "name": "abort_requests",
+   "filePath": "vllm/entrypoints/rl/online/api_router.py",
+   "lineRange": [
+    98,
+    142
+   ],
+   "summary": "中止在途请求。",
+   "tags": [
+    "abort",
+    "requests"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/rl/online/api_router.py:is_paused",
+   "type": "function",
+   "name": "is_paused",
+   "filePath": "vllm/entrypoints/rl/online/api_router.py",
+   "lineRange": [
+    146,
+    159
+   ],
+   "summary": "查询引擎是否暂停。",
+   "tags": [
+    "status",
+    "pause"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/rl/online/api_router.py:init_weight_transfer_engine",
+   "type": "function",
+   "name": "init_weight_transfer_engine",
+   "filePath": "vllm/entrypoints/rl/online/api_router.py",
+   "lineRange": [
+    163,
+    171
+   ],
+   "summary": "初始化权重传输引擎端点。",
+   "tags": [
+    "rl",
+    "weight-transfer",
+    "endpoint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/rl/online/api_router.py:shutdown_weight_transfer_engine",
+   "type": "function",
+   "name": "shutdown_weight_transfer_engine",
+   "filePath": "vllm/entrypoints/rl/online/api_router.py",
+   "lineRange": [
+    175,
+    178
+   ],
+   "summary": "关闭权重传输引擎端点。",
+   "tags": [
+    "rl",
+    "weight-transfer",
+    "endpoint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/rl/online/api_router.py:start_weight_update",
+   "type": "function",
+   "name": "start_weight_update",
+   "filePath": "vllm/entrypoints/rl/online/api_router.py",
+   "lineRange": [
+    182,
+    185
+   ],
+   "summary": "启动权重更新端点。",
+   "tags": [
+    "rl",
+    "weight-update",
+    "endpoint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/rl/online/api_router.py:start_draft_weight_update",
+   "type": "function",
+   "name": "start_draft_weight_update",
+   "filePath": "vllm/entrypoints/rl/online/api_router.py",
+   "lineRange": [
+    189,
+    192
+   ],
+   "summary": "启动 draft 模型权重更新。",
+   "tags": [
+    "rl",
+    "draft",
+    "weight-update"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/rl/online/api_router.py:update_weights",
+   "type": "function",
+   "name": "update_weights",
+   "filePath": "vllm/entrypoints/rl/online/api_router.py",
+   "lineRange": [
+    196,
+    204
+   ],
+   "summary": "更新权重端点。",
+   "tags": [
+    "rl",
+    "weight-update",
+    "endpoint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/rl/online/api_router.py:finish_weight_update",
+   "type": "function",
+   "name": "finish_weight_update",
+   "filePath": "vllm/entrypoints/rl/online/api_router.py",
+   "lineRange": [
+    208,
+    214
+   ],
+   "summary": "结束权重更新端点。",
+   "tags": [
+    "rl",
+    "weight-update",
+    "endpoint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/rl/online/api_router.py:update_weight_version",
+   "type": "function",
+   "name": "update_weight_version",
+   "filePath": "vllm/entrypoints/rl/online/api_router.py",
+   "lineRange": [
+    218,
+    223
+   ],
+   "summary": "更新权重版本端点。",
+   "tags": [
+    "rl",
+    "version",
+    "endpoint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/rl/online/api_router.py:weight_checker",
+   "type": "function",
+   "name": "weight_checker",
+   "filePath": "vllm/entrypoints/rl/online/api_router.py",
+   "lineRange": [
+    233,
+    266
+   ],
+   "summary": "权重一致性检查端点。",
+   "tags": [
+    "rl",
+    "validation",
+    "endpoint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/rl/online/api_router.py:get_world_size",
+   "type": "function",
+   "name": "get_world_size",
+   "filePath": "vllm/entrypoints/rl/online/api_router.py",
+   "lineRange": [
+    270,
+    289
+   ],
+   "summary": "获取引擎 world size 端点。",
+   "tags": [
+    "rl",
+    "world-size",
+    "endpoint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/rl/online/metrics.py",
+   "type": "file",
+   "name": "metrics.py",
+   "filePath": "vllm/entrypoints/rl/online/metrics.py",
+   "summary": "RL 权重传输操作的时长与 in-flight 指标。",
+   "tags": [
+    "rl",
+    "metrics",
+    "weight-transfer"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/rl/online/metrics.py:WeightOperationMetrics",
+   "type": "class",
+   "name": "WeightOperationMetrics",
+   "filePath": "vllm/entrypoints/rl/online/metrics.py",
+   "lineRange": [
+    16,
+    42
+   ],
+   "summary": "权重传输操作指标（时长/in-flight 计数）。",
+   "tags": [
+    "metrics",
+    "weight-transfer"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/rl/online/metrics.py:weight_operation_metrics",
+   "type": "function",
+   "name": "weight_operation_metrics",
+   "filePath": "vllm/entrypoints/rl/online/metrics.py",
+   "lineRange": [
+    49,
+    56
+   ],
+   "summary": "权重操作指标的上下文管理器。",
+   "tags": [
+    "metrics",
+    "context-manager"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/scale_out/derender/serving.py",
+   "type": "file",
+   "name": "serving.py",
+   "filePath": "vllm/entrypoints/scale_out/derender/serving.py",
+   "summary": "scale-out 反渲染服务（ServingDerender）：把已渲染文本还原为 token/messages。",
+   "tags": [
+    "scale-out",
+    "derender",
+    "serving"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/scale_out/derender/serving.py:ServingDerender",
+   "type": "class",
+   "name": "ServingDerender",
+   "filePath": "vllm/entrypoints/scale_out/derender/serving.py",
+   "lineRange": [
+    47,
+    457
+   ],
+   "summary": "反渲染服务：已渲染文本→token/messages 还原。",
+   "tags": [
+    "derender",
+    "serving",
+    "scale-out"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/entrypoints/scale_out/factories.py",
+   "type": "file",
+   "name": "factories.py",
+   "filePath": "vllm/entrypoints/scale_out/factories.py",
+   "summary": "scale-out 状态与路由注册工厂：init_render_state/init_scale_out_state/register_scale_out_api_routers。",
+   "tags": [
+    "scale-out",
+    "factories",
+    "state-init"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/scale_out/factories.py:init_render_state",
+   "type": "function",
+   "name": "init_render_state",
+   "filePath": "vllm/entrypoints/scale_out/factories.py",
+   "lineRange": [
+    32,
+    55
+   ],
+   "summary": "初始化 render/derender 服务状态。",
+   "tags": [
+    "factories",
+    "state-init"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/scale_out/factories.py:init_scale_out_state",
+   "type": "function",
+   "name": "init_scale_out_state",
+   "filePath": "vllm/entrypoints/scale_out/factories.py",
+   "lineRange": [
+    58,
+    84
+   ],
+   "summary": "初始化 scale-out（token 直通）状态。",
+   "tags": [
+    "factories",
+    "state-init"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/scale_out/factories.py:register_scale_out_api_routers",
+   "type": "function",
+   "name": "register_scale_out_api_routers",
+   "filePath": "vllm/entrypoints/scale_out/factories.py",
+   "lineRange": [
+    87,
+    137
+   ],
+   "summary": "注册 scale-out 全部路由。",
+   "tags": [
+    "factories",
+    "router-registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/scale_out/render/api_router.py",
+   "type": "file",
+   "name": "api_router.py",
+   "filePath": "vllm/entrypoints/scale_out/render/api_router.py",
+   "summary": "scale-out 渲染路由：chat/completions/messages/responses 各端点的 render 变体。",
+   "tags": [
+    "scale-out",
+    "render",
+    "api-router"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/scale_out/render/api_router.py:render_chat_completion",
+   "type": "function",
+   "name": "render_chat_completion",
+   "filePath": "vllm/entrypoints/scale_out/render/api_router.py",
+   "lineRange": [
+    41,
+    50
+   ],
+   "summary": "chat completion 的 render 端点。",
+   "tags": [
+    "render",
+    "endpoint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/scale_out/render/api_router.py:render_messages",
+   "type": "function",
+   "name": "render_messages",
+   "filePath": "vllm/entrypoints/scale_out/render/api_router.py",
+   "lineRange": [
+    64,
+    71
+   ],
+   "summary": "messages 的 render 端点。",
+   "tags": [
+    "render",
+    "endpoint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/scale_out/render/api_router.py:render_completion",
+   "type": "function",
+   "name": "render_completion",
+   "filePath": "vllm/entrypoints/scale_out/render/api_router.py",
+   "lineRange": [
+    84,
+    91
+   ],
+   "summary": "completion 的 render 端点。",
+   "tags": [
+    "render",
+    "endpoint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/scale_out/render/api_router.py:render_responses",
+   "type": "function",
+   "name": "render_responses",
+   "filePath": "vllm/entrypoints/scale_out/render/api_router.py",
+   "lineRange": [
+    105,
+    111
+   ],
+   "summary": "responses 的 render 端点。",
+   "tags": [
+    "render",
+    "endpoint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "type": "file",
+   "name": "serving.py",
+   "filePath": "vllm/entrypoints/scale_out/render/serving.py",
+   "summary": "scale-out 渲染服务（ServingRender）：chat 模板渲染与 transfer 参数提升。",
+   "tags": [
+    "scale-out",
+    "render",
+    "serving"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/scale_out/render/serving.py:ServingRender",
+   "type": "class",
+   "name": "ServingRender",
+   "filePath": "vllm/entrypoints/scale_out/render/serving.py",
+   "lineRange": [
+    72,
+    445
+   ],
+   "summary": "渲染服务：chat 模板渲染输出（供分离部署消费）。",
+   "tags": [
+    "render",
+    "serving",
+    "scale-out"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/entrypoints/scale_out/render/serving.py:_hoist_transfer_params",
+   "type": "function",
+   "name": "_hoist_transfer_params",
+   "filePath": "vllm/entrypoints/scale_out/render/serving.py",
+   "lineRange": [
+    54,
+    69
+   ],
+   "summary": "提升传输参数到请求顶层。",
+   "tags": [
+    "params",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/scale_out/token_in_token_out/api_router.py",
+   "type": "file",
+   "name": "api_router.py",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/api_router.py",
+   "summary": "token-in-token-out API 路由：直接 token 输入的 generate/abort 端点。",
+   "tags": [
+    "token-in-token-out",
+    "api-router",
+    "generate"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/scale_out/token_in_token_out/api_router.py:generate",
+   "type": "function",
+   "name": "generate",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/api_router.py",
+   "lineRange": [
+    58,
+    73
+   ],
+   "summary": "token 直通 generate 端点。",
+   "tags": [
+    "generate",
+    "endpoint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/scale_out/token_in_token_out/api_router.py:abort_requests",
+   "type": "function",
+   "name": "abort_requests",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/api_router.py",
+   "lineRange": [
+    79,
+    98
+   ],
+   "summary": "token 直通 abort 端点。",
+   "tags": [
+    "abort",
+    "endpoint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/scale_out/token_in_token_out/api_router.py:attach_router",
+   "type": "function",
+   "name": "attach_router",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/api_router.py",
+   "lineRange": [
+    107,
+    117
+   ],
+   "summary": "挂载 token 直通路由。",
+   "tags": [
+    "router",
+    "attach"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "type": "file",
+   "name": "mm_features.py",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "summary": "render 时多模态特征提取与 generate 输入构造 helper。",
+   "tags": [
+    "multimodal",
+    "features",
+    "render"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py:merge_mm_kwargs_items",
+   "type": "function",
+   "name": "merge_mm_kwargs_items",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "lineRange": [
+    31,
+    40
+   ],
+   "summary": "合并多模态 kwargs 项。",
+   "tags": [
+    "multimodal",
+    "merge"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py:_encode_metadata_items",
+   "type": "function",
+   "name": "_encode_metadata_items",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "lineRange": [
+    43,
+    65
+   ],
+   "summary": "编码 metadata 项。",
+   "tags": [
+    "metadata",
+    "encode"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py:_encode_mm_kwargs_with_metadata",
+   "type": "function",
+   "name": "_encode_mm_kwargs_with_metadata",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "lineRange": [
+    68,
+    92
+   ],
+   "summary": "带 metadata 编码多模态 kwargs。",
+   "tags": [
+    "multimodal",
+    "encode"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py:mm_kwargs_from_features",
+   "type": "function",
+   "name": "mm_kwargs_from_features",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "lineRange": [
+    95,
+    118
+   ],
+   "summary": "从特征恢复多模态 kwargs。",
+   "tags": [
+    "multimodal",
+    "reconstruct"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py:placeholder_ranges_from_engine_input",
+   "type": "function",
+   "name": "placeholder_ranges_from_engine_input",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "lineRange": [
+    121,
+    136
+   ],
+   "summary": "从引擎输入提取占位区间。",
+   "tags": [
+    "placeholder",
+    "ranges"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py:extract_mm_features",
+   "type": "function",
+   "name": "extract_mm_features",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "lineRange": [
+    139,
+    176
+   ],
+   "summary": "提取多模态特征（render 时）。",
+   "tags": [
+    "multimodal",
+    "features"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "type": "file",
+   "name": "protocol.py",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "summary": "token-in-token-out 协议（1010 行）：GenerateRequest/tokens 与 text 双模式响应/流事件全套 wire 类型。",
+   "tags": [
+    "token-in-token-out",
+    "protocol",
+    "pydantic",
+    "wire-types"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:ParseContext",
+   "type": "class",
+   "name": "ParseContext",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "lineRange": [
+    52,
+    100
+   ],
+   "summary": "tokenization 上下文模型。",
+   "tags": [
+    "protocol",
+    "tokenization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:MultiModalFeatures",
+   "type": "class",
+   "name": "MultiModalFeatures",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "lineRange": [
+    125,
+    208
+   ],
+   "summary": "多模态特征传输模型。",
+   "tags": [
+    "protocol",
+    "multimodal"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:GenerateRequest",
+   "type": "class",
+   "name": "GenerateRequest",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "lineRange": [
+    221,
+    450
+   ],
+   "summary": "token 直通 generate 请求模型（230 行）。",
+   "tags": [
+    "protocol",
+    "generate",
+    "request"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:GenerateChoiceBase",
+   "type": "class",
+   "name": "GenerateChoiceBase",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "lineRange": [
+    486,
+    515
+   ],
+   "summary": "generate 响应 choice 基类。",
+   "tags": [
+    "protocol",
+    "choice"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:DerenderChatRequest",
+   "type": "class",
+   "name": "DerenderChatRequest",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "lineRange": [
+    665,
+    708
+   ],
+   "summary": "derender chat 请求模型。",
+   "tags": [
+    "protocol",
+    "derender",
+    "request"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:DerenderCompletionRequest",
+   "type": "class",
+   "name": "DerenderCompletionRequest",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "lineRange": [
+    712,
+    768
+   ],
+   "summary": "derender completion 请求模型。",
+   "tags": [
+    "protocol",
+    "derender",
+    "request"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:DerenderStreamState",
+   "type": "class",
+   "name": "DerenderStreamState",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "lineRange": [
+    771,
+    895
+   ],
+   "summary": "derender 流式状态机（125 行）。",
+   "tags": [
+    "protocol",
+    "derender",
+    "stream-state"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:DerenderChatStreamRequest",
+   "type": "class",
+   "name": "DerenderChatStreamRequest",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "lineRange": [
+    898,
+    946
+   ],
+   "summary": "derender chat 流请求模型。",
+   "tags": [
+    "protocol",
+    "derender",
+    "stream"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:output_mode_or_tokens",
+   "type": "function",
+   "name": "output_mode_or_tokens",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "lineRange": [
+    638,
+    646
+   ],
+   "summary": "解析输出模式或 token 数。",
+   "tags": [
+    "output-mode",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "type": "file",
+   "name": "serving.py",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "summary": "token 直通服务（ServingTokens，803 行）：token 级 generate 与 logprob 输出。",
+   "tags": [
+    "token-in-token-out",
+    "serving",
+    "logprobs"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/entrypoints/scale_out/token_in_token_out/serving.py:ServingTokens",
+   "type": "class",
+   "name": "ServingTokens",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "lineRange": [
+    120,
+    922
+   ],
+   "summary": "token 直通服务主类（803 行）：token 级 generate 与 logprob 计算。",
+   "tags": [
+    "serving",
+    "tokens",
+    "logprobs"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/entrypoints/scale_out/token_in_token_out/serving.py:_logprob_token",
+   "type": "function",
+   "name": "_logprob_token",
+   "filePath": "vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "lineRange": [
+    94,
+    108
+   ],
+   "summary": "单 token logprob 计算。",
+   "tags": [
+    "logprob",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "type": "file",
+   "name": "request_logger.py",
+   "filePath": "vllm/entrypoints/serve/utils/request_logger.py",
+   "summary": "请求日志器（RequestLogger：含 max log len 截断）。",
+   "tags": [
+    "logging",
+    "request",
+    "utility"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/entrypoints/serve/utils/request_logger.py:RequestLogger",
+   "type": "class",
+   "name": "RequestLogger",
+   "filePath": "vllm/entrypoints/serve/utils/request_logger.py",
+   "lineRange": [
+    20,
+    125
+   ],
+   "summary": "请求日志器（含截断与预处理）。",
+   "tags": [
+    "logging",
+    "request"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/utils/sse_keep_alive.py",
+   "type": "file",
+   "name": "sse_keep_alive.py",
+   "filePath": "vllm/entrypoints/serve/utils/sse_keep_alive.py",
+   "summary": "SSE keep-alive 注释流：防代理/隧道（Cloudflare/NGINX/ALB）空闲超时断连。",
+   "tags": [
+    "sse",
+    "keep-alive",
+    "streaming"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/utils/sse_keep_alive.py:with_sse_keep_alive",
+   "type": "function",
+   "name": "with_sse_keep_alive",
+   "filePath": "vllm/entrypoints/serve/utils/sse_keep_alive.py",
+   "lineRange": [
+    21,
+    33
+   ],
+   "summary": "为流式响应包一层 keep-alive 注释。",
+   "tags": [
+    "sse",
+    "keep-alive"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/utils/sse_keep_alive.py:_keep_alive_stream",
+   "type": "function",
+   "name": "_keep_alive_stream",
+   "filePath": "vllm/entrypoints/serve/utils/sse_keep_alive.py",
+   "lineRange": [
+    36,
+    65
+   ],
+   "summary": "周期性注入 SSE 注释的实现。",
+   "tags": [
+    "sse",
+    "stream"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/serve/utils/tool_calls_utils.py",
+   "type": "file",
+   "name": "tool_calls_utils.py",
+   "filePath": "vllm/entrypoints/serve/utils/tool_calls_utils.py",
+   "summary": "工具调用工具：并行工具调用过滤与 finish_reason 解析。",
+   "tags": [
+    "tool-calls",
+    "utility",
+    "finish-reason"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/utils/tool_calls_utils.py:maybe_filter_parallel_tool_calls",
+   "type": "function",
+   "name": "maybe_filter_parallel_tool_calls",
+   "filePath": "vllm/entrypoints/serve/utils/tool_calls_utils.py",
+   "lineRange": [
+    22,
+    38
+   ],
+   "summary": "按配置过滤并行工具调用。",
+   "tags": [
+    "tool-calls",
+    "filter"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/entrypoints/serve/utils/tool_calls_utils.py:resolve_finish_reason",
+   "type": "function",
+   "name": "resolve_finish_reason",
+   "filePath": "vllm/entrypoints/serve/utils/tool_calls_utils.py",
+   "lineRange": [
+    41,
+    59
+   ],
+   "summary": "解析工具调用的 finish_reason。",
+   "tags": [
+    "tool-calls",
+    "finish-reason"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "function:vllm/entrypoints/launchers/api_server/app_state.py:init_app_state",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "function:vllm/entrypoints/launchers/api_server/app_state.py:init_app_state",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "function:vllm/entrypoints/launchers/api_server/entry.py:build_async_engine_client",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "function:vllm/entrypoints/launchers/api_server/entry.py:build_async_engine_client",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "function:vllm/entrypoints/launchers/api_server/entry.py:build_async_engine_client_from_engine_args",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "function:vllm/entrypoints/launchers/api_server/entry.py:build_async_engine_client_from_engine_args",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "function:vllm/entrypoints/launchers/api_server/entry.py:build_and_serve",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "function:vllm/entrypoints/launchers/api_server/entry.py:build_and_serve",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "function:vllm/entrypoints/launchers/api_server/entry.py:run_server",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "function:vllm/entrypoints/launchers/api_server/entry.py:run_server",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "function:vllm/entrypoints/launchers/api_server/entry.py:run_server_worker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "function:vllm/entrypoints/launchers/api_server/entry.py:run_server_worker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "function:vllm/entrypoints/launchers/api_server/entry.py:main",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "function:vllm/entrypoints/launchers/api_server/entry.py:main",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "target": "function:vllm/entrypoints/launchers/api_server/routers.py:register_api_routers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "target": "function:vllm/entrypoints/launchers/api_server/routers.py:register_api_routers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/app.py",
+   "target": "function:vllm/entrypoints/launchers/app.py:build_app",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/app.py",
+   "target": "function:vllm/entrypoints/launchers/app.py:build_app",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "target": "class:vllm/entrypoints/launchers/dp_supervisor.py:DPSupervisor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "target": "class:vllm/entrypoints/launchers/dp_supervisor.py:DPSupervisor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "target": "function:vllm/entrypoints/launchers/dp_supervisor.py:infer_multi_port_external_lb_start_rank",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "target": "function:vllm/entrypoints/launchers/dp_supervisor.py:infer_multi_port_external_lb_start_rank",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "target": "function:vllm/entrypoints/launchers/dp_supervisor.py:validate_multi_port_external_lb_args",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "target": "function:vllm/entrypoints/launchers/dp_supervisor.py:validate_multi_port_external_lb_args",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "target": "function:vllm/entrypoints/launchers/dp_supervisor.py:_build_vllm_dp_server_args",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "target": "function:vllm/entrypoints/launchers/dp_supervisor.py:_build_device_ids",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "target": "function:vllm/entrypoints/launchers/dp_supervisor.py:_probe_endpoint",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "target": "function:vllm/entrypoints/launchers/dp_supervisor.py:_build_dp_supervisor_app",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "target": "function:vllm/entrypoints/launchers/dp_supervisor.py:_run_vllm_dp_server",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/grpc_server.py",
+   "target": "function:vllm/entrypoints/launchers/grpc_server.py:serve_grpc",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/grpc_server.py",
+   "target": "function:vllm/entrypoints/launchers/grpc_server.py:serve_grpc",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/grpc_server.py",
+   "target": "function:vllm/entrypoints/launchers/grpc_server.py:main",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/grpc_server.py",
+   "target": "function:vllm/entrypoints/launchers/grpc_server.py:main",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "class:vllm/entrypoints/launchers/launcher.py:NoSignalServer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "class:vllm/entrypoints/launchers/launcher.py:NoSignalServer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "function:vllm/entrypoints/launchers/launcher.py:_readable",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "function:vllm/entrypoints/launchers/launcher.py:serve_http",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "function:vllm/entrypoints/launchers/launcher.py:serve_http",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "function:vllm/entrypoints/launchers/launcher.py:watchdog_loop",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "function:vllm/entrypoints/launchers/launcher.py:watchdog_loop",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "function:vllm/entrypoints/launchers/launcher.py:terminate_if_errored",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "function:vllm/entrypoints/launchers/launcher.py:terminate_if_errored",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "function:vllm/entrypoints/launchers/launcher.py:create_server_socket",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "function:vllm/entrypoints/launchers/launcher.py:create_server_socket",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "function:vllm/entrypoints/launchers/launcher.py:create_server_unix_socket",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "function:vllm/entrypoints/launchers/launcher.py:create_server_unix_socket",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "function:vllm/entrypoints/launchers/launcher.py:setup_server",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "function:vllm/entrypoints/launchers/launcher.py:setup_server",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/app_state.py",
+   "target": "function:vllm/entrypoints/launchers/render/app_state.py:init_render_app_state",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/app_state.py",
+   "target": "function:vllm/entrypoints/launchers/render/app_state.py:init_render_app_state",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/entry.py",
+   "target": "function:vllm/entrypoints/launchers/render/entry.py:build_and_serve_renderer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/entry.py",
+   "target": "function:vllm/entrypoints/launchers/render/entry.py:build_and_serve_renderer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/entry.py",
+   "target": "function:vllm/entrypoints/launchers/render/entry.py:run_launch_fastapi",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/entry.py",
+   "target": "function:vllm/entrypoints/launchers/render/entry.py:run_launch_fastapi",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "class:vllm/entrypoints/launchers/run_batch.py:BatchTranscriptionRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "class:vllm/entrypoints/launchers/run_batch.py:BatchTranscriptionRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "class:vllm/entrypoints/launchers/run_batch.py:BatchTranslationRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "class:vllm/entrypoints/launchers/run_batch.py:BatchTranslationRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "class:vllm/entrypoints/launchers/run_batch.py:BatchRequestInput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "class:vllm/entrypoints/launchers/run_batch.py:BatchRequestInput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "class:vllm/entrypoints/launchers/run_batch.py:BatchFrontendArgs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "class:vllm/entrypoints/launchers/run_batch.py:BatchFrontendArgs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "class:vllm/entrypoints/launchers/run_batch.py:BatchProgressTracker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "class:vllm/entrypoints/launchers/run_batch.py:BatchProgressTracker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:make_arg_parser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:make_arg_parser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:parse_args",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:parse_args",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:staging_file",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:staging_file",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:open_batch_input",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:open_batch_input",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:validate_batch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:validate_batch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:upload_data",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:upload_data",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:batch_output_writer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:batch_output_writer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:download_bytes_from_url",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:download_bytes_from_url",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:make_error_request_output",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:make_error_request_output",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:make_async_error_request_output",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:make_async_error_request_output",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:run_request",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:run_request",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:url_matches",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:url_matches",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:handle_endpoint_request",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:handle_endpoint_request",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:make_transcription_wrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:make_transcription_wrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:build_endpoint_registry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:build_endpoint_registry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:is_same_local_file",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:is_same_local_file",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:validate_run_batch_args",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:validate_run_batch_args",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:ignore_admission_limits",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:ignore_admission_limits",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:run_one_request",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:run_one_request",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:dispatch_batch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:dispatch_batch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:run_batch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:run_batch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:main",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "function:vllm/entrypoints/launchers/run_batch.py:main",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/utils/server_utils.py",
+   "target": "function:vllm/entrypoints/launchers/utils/server_utils.py:load_log_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/utils/server_utils.py",
+   "target": "function:vllm/entrypoints/launchers/utils/server_utils.py:load_log_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/utils/server_utils.py",
+   "target": "function:vllm/entrypoints/launchers/utils/server_utils.py:get_uvicorn_log_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/utils/server_utils.py",
+   "target": "function:vllm/entrypoints/launchers/utils/server_utils.py:get_uvicorn_log_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/utils/server_utils.py",
+   "target": "function:vllm/entrypoints/launchers/utils/server_utils.py:lifespan",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/utils/server_utils.py",
+   "target": "function:vllm/entrypoints/launchers/utils/server_utils.py:lifespan",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool.py",
+   "target": "class:vllm/entrypoints/mcp/tool.py:Tool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool.py",
+   "target": "class:vllm/entrypoints/mcp/tool.py:Tool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool.py",
+   "target": "class:vllm/entrypoints/mcp/tool.py:HarmonyBrowserTool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool.py",
+   "target": "class:vllm/entrypoints/mcp/tool.py:HarmonyBrowserTool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool.py",
+   "target": "class:vllm/entrypoints/mcp/tool.py:HarmonyPythonTool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool.py",
+   "target": "class:vllm/entrypoints/mcp/tool.py:HarmonyPythonTool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool.py",
+   "target": "function:vllm/entrypoints/mcp/tool.py:validate_gpt_oss_install",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool.py",
+   "target": "function:vllm/entrypoints/mcp/tool.py:validate_gpt_oss_install",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool_server.py",
+   "target": "class:vllm/entrypoints/mcp/tool_server.py:ToolServer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool_server.py",
+   "target": "class:vllm/entrypoints/mcp/tool_server.py:ToolServer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool_server.py",
+   "target": "class:vllm/entrypoints/mcp/tool_server.py:MCPToolServer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool_server.py",
+   "target": "class:vllm/entrypoints/mcp/tool_server.py:MCPToolServer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool_server.py",
+   "target": "class:vllm/entrypoints/mcp/tool_server.py:DemoToolServer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool_server.py",
+   "target": "class:vllm/entrypoints/mcp/tool_server.py:DemoToolServer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool_server.py",
+   "target": "function:vllm/entrypoints/mcp/tool_server.py:list_server_and_tools",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool_server.py",
+   "target": "function:vllm/entrypoints/mcp/tool_server.py:list_server_and_tools",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool_server.py",
+   "target": "function:vllm/entrypoints/mcp/tool_server.py:trim_schema",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool_server.py",
+   "target": "function:vllm/entrypoints/mcp/tool_server.py:trim_schema",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool_server.py",
+   "target": "function:vllm/entrypoints/mcp/tool_server.py:post_process_tools_description",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool_server.py",
+   "target": "function:vllm/entrypoints/mcp/tool_server.py:post_process_tools_description",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool_server.py",
+   "target": "function:vllm/entrypoints/mcp/tool_server.py:init_tool_server",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool_server.py",
+   "target": "function:vllm/entrypoints/mcp/tool_server.py:init_tool_server",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/factories.py",
+   "target": "function:vllm/entrypoints/rl/factories.py:register_rl_api_routers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/factories.py",
+   "target": "function:vllm/entrypoints/rl/factories.py:register_rl_api_routers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/offline.py",
+   "target": "class:vllm/entrypoints/rl/offline.py:RLOfflineMixin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/offline.py",
+   "target": "class:vllm/entrypoints/rl/offline.py:RLOfflineMixin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:pause_generation",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:pause_generation",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:resume_generation",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:resume_generation",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:abort_requests",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:abort_requests",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:is_paused",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:is_paused",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:init_weight_transfer_engine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:init_weight_transfer_engine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:shutdown_weight_transfer_engine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:shutdown_weight_transfer_engine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:start_weight_update",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:start_weight_update",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:start_draft_weight_update",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:start_draft_weight_update",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:update_weights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:update_weights",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:finish_weight_update",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:finish_weight_update",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:update_weight_version",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:update_weight_version",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:weight_checker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:weight_checker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:get_world_size",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "function:vllm/entrypoints/rl/online/api_router.py:get_world_size",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/metrics.py",
+   "target": "class:vllm/entrypoints/rl/online/metrics.py:WeightOperationMetrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/metrics.py",
+   "target": "class:vllm/entrypoints/rl/online/metrics.py:WeightOperationMetrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/metrics.py",
+   "target": "function:vllm/entrypoints/rl/online/metrics.py:weight_operation_metrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/metrics.py",
+   "target": "function:vllm/entrypoints/rl/online/metrics.py:weight_operation_metrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/derender/serving.py",
+   "target": "class:vllm/entrypoints/scale_out/derender/serving.py:ServingDerender",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/derender/serving.py",
+   "target": "class:vllm/entrypoints/scale_out/derender/serving.py:ServingDerender",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/factories.py",
+   "target": "function:vllm/entrypoints/scale_out/factories.py:init_render_state",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/factories.py",
+   "target": "function:vllm/entrypoints/scale_out/factories.py:init_render_state",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/factories.py",
+   "target": "function:vllm/entrypoints/scale_out/factories.py:init_scale_out_state",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/factories.py",
+   "target": "function:vllm/entrypoints/scale_out/factories.py:init_scale_out_state",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/factories.py",
+   "target": "function:vllm/entrypoints/scale_out/factories.py:register_scale_out_api_routers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/factories.py",
+   "target": "function:vllm/entrypoints/scale_out/factories.py:register_scale_out_api_routers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/api_router.py",
+   "target": "function:vllm/entrypoints/scale_out/render/api_router.py:render_chat_completion",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/api_router.py",
+   "target": "function:vllm/entrypoints/scale_out/render/api_router.py:render_chat_completion",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/api_router.py",
+   "target": "function:vllm/entrypoints/scale_out/render/api_router.py:render_messages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/api_router.py",
+   "target": "function:vllm/entrypoints/scale_out/render/api_router.py:render_messages",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/api_router.py",
+   "target": "function:vllm/entrypoints/scale_out/render/api_router.py:render_completion",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/api_router.py",
+   "target": "function:vllm/entrypoints/scale_out/render/api_router.py:render_completion",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/api_router.py",
+   "target": "function:vllm/entrypoints/scale_out/render/api_router.py:render_responses",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/api_router.py",
+   "target": "function:vllm/entrypoints/scale_out/render/api_router.py:render_responses",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "class:vllm/entrypoints/scale_out/render/serving.py:ServingRender",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "class:vllm/entrypoints/scale_out/render/serving.py:ServingRender",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "function:vllm/entrypoints/scale_out/render/serving.py:_hoist_transfer_params",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/api_router.py",
+   "target": "function:vllm/entrypoints/scale_out/token_in_token_out/api_router.py:generate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/api_router.py",
+   "target": "function:vllm/entrypoints/scale_out/token_in_token_out/api_router.py:generate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/api_router.py",
+   "target": "function:vllm/entrypoints/scale_out/token_in_token_out/api_router.py:abort_requests",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/api_router.py",
+   "target": "function:vllm/entrypoints/scale_out/token_in_token_out/api_router.py:abort_requests",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/api_router.py",
+   "target": "function:vllm/entrypoints/scale_out/token_in_token_out/api_router.py:attach_router",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/api_router.py",
+   "target": "function:vllm/entrypoints/scale_out/token_in_token_out/api_router.py:attach_router",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "target": "function:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py:merge_mm_kwargs_items",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "target": "function:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py:merge_mm_kwargs_items",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "target": "function:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py:_encode_metadata_items",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "target": "function:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py:_encode_mm_kwargs_with_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "target": "function:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py:mm_kwargs_from_features",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "target": "function:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py:mm_kwargs_from_features",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "target": "function:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py:placeholder_ranges_from_engine_input",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "target": "function:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py:placeholder_ranges_from_engine_input",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "target": "function:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py:extract_mm_features",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "target": "function:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py:extract_mm_features",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:ParseContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:ParseContext",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:MultiModalFeatures",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:MultiModalFeatures",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:GenerateRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:GenerateRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:GenerateChoiceBase",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:GenerateChoiceBase",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:DerenderChatRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:DerenderChatRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:DerenderCompletionRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:DerenderCompletionRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:DerenderStreamState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:DerenderStreamState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:DerenderChatStreamRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "class:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:DerenderChatStreamRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "function:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:output_mode_or_tokens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "function:vllm/entrypoints/scale_out/token_in_token_out/protocol.py:output_mode_or_tokens",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "class:vllm/entrypoints/scale_out/token_in_token_out/serving.py:ServingTokens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "class:vllm/entrypoints/scale_out/token_in_token_out/serving.py:ServingTokens",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "function:vllm/entrypoints/scale_out/token_in_token_out/serving.py:_logprob_token",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "target": "class:vllm/entrypoints/serve/utils/request_logger.py:RequestLogger",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "target": "class:vllm/entrypoints/serve/utils/request_logger.py:RequestLogger",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/sse_keep_alive.py",
+   "target": "function:vllm/entrypoints/serve/utils/sse_keep_alive.py:with_sse_keep_alive",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/sse_keep_alive.py",
+   "target": "function:vllm/entrypoints/serve/utils/sse_keep_alive.py:with_sse_keep_alive",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/sse_keep_alive.py",
+   "target": "function:vllm/entrypoints/serve/utils/sse_keep_alive.py:_keep_alive_stream",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/tool_calls_utils.py",
+   "target": "function:vllm/entrypoints/serve/utils/tool_calls_utils.py:maybe_filter_parallel_tool_calls",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/tool_calls_utils.py",
+   "target": "function:vllm/entrypoints/serve/utils/tool_calls_utils.py:maybe_filter_parallel_tool_calls",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/tool_calls_utils.py",
+   "target": "function:vllm/entrypoints/serve/utils/tool_calls_utils.py:resolve_finish_reason",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/tool_calls_utils.py",
+   "target": "function:vllm/entrypoints/serve/utils/tool_calls_utils.py:resolve_finish_reason",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "file:vllm/entrypoints/common/cli_args.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "file:vllm/entrypoints/mcp/tool_server.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "file:vllm/entrypoints/openai/models/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "file:vllm/entrypoints/openai/models/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "file:vllm/entrypoints/serve/tokenize/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "file:vllm/plugins/endpoint_plugins/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "file:vllm/renderers/online_derenderer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "file:vllm/renderers/online_renderer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "file:vllm/parser/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "file:vllm/entrypoints/generate/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "file:vllm/entrypoints/scale_out/factories.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "file:vllm/entrypoints/speech_to_text/factories.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "file:vllm/entrypoints/pooling/factories.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "target": "file:vllm/entrypoints/generate/structured_decisions/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "file:vllm/engine/arg_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "file:vllm/entrypoints/common/cli_args.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "file:vllm/usage/usage_lib.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "file:vllm/utils/system_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "file:vllm/entrypoints/launchers/app.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "file:vllm/entrypoints/launchers/launcher.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "file:vllm/entrypoints/launchers/utils/server_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "file:vllm/entrypoints/launchers/api_server/app_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "file:vllm/v1/engine/async_llm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "file:vllm/entrypoints/common/startup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "target": "file:vllm/utils/argparse_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "target": "file:vllm/entrypoints/serve/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "target": "file:vllm/entrypoints/openai/models/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "target": "file:vllm/entrypoints/generate/structured_decisions/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "target": "file:vllm/entrypoints/openai/decisions/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "target": "file:vllm/entrypoints/serve/sagemaker/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "target": "file:vllm/entrypoints/rl/factories.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "target": "file:vllm/entrypoints/generate/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "target": "file:vllm/entrypoints/serve/elastic_ep/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "target": "file:vllm/entrypoints/serve/checkpoint/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "target": "file:vllm/entrypoints/scale_out/factories.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "target": "file:vllm/entrypoints/speech_to_text/factories.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "target": "file:vllm/entrypoints/pooling/factories.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "target": "file:vllm/entrypoints/serve/fault_tolerance/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/app.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/app.py",
+   "target": "file:vllm/entrypoints/serve/exception_handling/register.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/app.py",
+   "target": "file:vllm/entrypoints/serve/middleware/register.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/app.py",
+   "target": "file:vllm/entrypoints/serve/sagemaker/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/app.py",
+   "target": "file:vllm/plugins/endpoint_plugins/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/app.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/app.py",
+   "target": "file:vllm/entrypoints/launchers/api_server/routers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/app.py",
+   "target": "file:vllm/entrypoints/launchers/utils/server_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "target": "file:vllm/utils/system_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "target": "file:vllm/v1/engine/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "target": "file:vllm/entrypoints/launchers/launcher.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "target": "file:vllm/entrypoints/launchers/utils/server_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "target": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/dp_supervisor.py",
+   "target": "file:vllm/entrypoints/cli/serve.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/grpc_server.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/grpc_server.py",
+   "target": "file:vllm/engine/arg_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/grpc_server.py",
+   "target": "file:vllm/entrypoints/common/startup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/grpc_server.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/grpc_server.py",
+   "target": "file:vllm/usage/usage_lib.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/grpc_server.py",
+   "target": "file:vllm/utils/argparse_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/grpc_server.py",
+   "target": "file:vllm/v1/engine/async_llm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/grpc_server.py",
+   "target": "file:vllm/version.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "file:vllm/entrypoints/common/cli_args.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "file:vllm/entrypoints/common/startup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "file:vllm/entrypoints/launchers/utils/ssl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "file:vllm/tracing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "file:vllm/utils/network_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "file:vllm/utils/system_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "file:vllm/version.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/launcher.py",
+   "target": "file:vllm/entrypoints/launchers/utils/constants.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/app_state.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/app_state.py",
+   "target": "file:vllm/entrypoints/common/cli_args.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/app_state.py",
+   "target": "file:vllm/entrypoints/mcp/tool_server.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/app_state.py",
+   "target": "file:vllm/entrypoints/openai/models/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/app_state.py",
+   "target": "file:vllm/entrypoints/openai/models/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/app_state.py",
+   "target": "file:vllm/entrypoints/scale_out/factories.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/app_state.py",
+   "target": "file:vllm/entrypoints/serve/tokenize/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/app_state.py",
+   "target": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/app_state.py",
+   "target": "file:vllm/plugins/endpoint_plugins/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/app_state.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/app_state.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/app_state.py",
+   "target": "file:vllm/renderers/online_derenderer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/app_state.py",
+   "target": "file:vllm/renderers/online_renderer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/entry.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/entry.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/entry.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/entry.py",
+   "target": "file:vllm/entrypoints/launchers/app.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/entry.py",
+   "target": "file:vllm/entrypoints/launchers/launcher.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/entry.py",
+   "target": "file:vllm/entrypoints/launchers/utils/server_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/entry.py",
+   "target": "file:vllm/entrypoints/launchers/render/app_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/entry.py",
+   "target": "file:vllm/entrypoints/common/cli_args.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/entry.py",
+   "target": "file:vllm/entrypoints/common/startup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/render/entry.py",
+   "target": "file:vllm/utils/argparse_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/connections.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/engine/arg_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/entrypoints/common/cli_args.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/entrypoints/pooling/embed/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/entrypoints/pooling/scoring/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/entrypoints/serve/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/reasoning/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/utils/argparse_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/utils/mem_constants.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/version.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/run_batch.py",
+   "target": "file:vllm/usage/usage_lib.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/utils/server_utils.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/utils/server_utils.py",
+   "target": "file:vllm/config/logging.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/utils/server_utils.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/utils/server_utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/utils/server_utils.py",
+   "target": "file:vllm/utils/gc_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/launchers/utils/server_utils.py",
+   "target": "file:vllm/logging_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool.py",
+   "target": "file:vllm/entrypoints/openai/responses/context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool_server.py",
+   "target": "file:vllm/entrypoints/mcp/tool.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/mcp/tool_server.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/factories.py",
+   "target": "file:vllm/entrypoints/rl/online/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/offline.py",
+   "target": "file:vllm/distributed/weight_transfer/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/offline.py",
+   "target": "file:vllm/entrypoints/common/offline.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "file:vllm/distributed/weight_transfer/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "file:vllm/entrypoints/rl/online/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/rl/online/api_router.py",
+   "target": "file:vllm/v1/engine/async_llm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/derender/serving.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/derender/serving.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/derender/serving.py",
+   "target": "file:vllm/entrypoints/openai/completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/derender/serving.py",
+   "target": "file:vllm/entrypoints/openai/models/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/derender/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/derender/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/derender/serving.py",
+   "target": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/derender/serving.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/derender/serving.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/derender/serving.py",
+   "target": "file:vllm/renderers/online_derenderer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/derender/serving.py",
+   "target": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/derender/serving.py",
+   "target": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/factories.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/factories.py",
+   "target": "file:vllm/entrypoints/serve/exception_handling/error_response.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/factories.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/factories.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/factories.py",
+   "target": "file:vllm/entrypoints/anthropic/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/factories.py",
+   "target": "file:vllm/entrypoints/anthropic/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/factories.py",
+   "target": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/factories.py",
+   "target": "file:vllm/entrypoints/scale_out/derender/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/factories.py",
+   "target": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/factories.py",
+   "target": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/factories.py",
+   "target": "file:vllm/entrypoints/scale_out/derender/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/factories.py",
+   "target": "file:vllm/entrypoints/scale_out/render/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/factories.py",
+   "target": "file:vllm/entrypoints/scale_out/token_in_token_out/api_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/api_router.py",
+   "target": "file:vllm/entrypoints/anthropic/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/api_router.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/api_router.py",
+   "target": "file:vllm/entrypoints/openai/completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/api_router.py",
+   "target": "file:vllm/entrypoints/openai/responses/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/api_router.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/api_router.py",
+   "target": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/api_router.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/api_router.py",
+   "target": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/api_router.py",
+   "target": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/entrypoints/anthropic/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/entrypoints/anthropic/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/entrypoints/openai/completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/entrypoints/openai/models/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/entrypoints/openai/responses/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/parser/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/renderers/inputs/preprocess.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/renderers/online_renderer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/entrypoints/mcp/tool_server.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/render/serving.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/api_router.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/api_router.py",
+   "target": "file:vllm/entrypoints/serve/tokenize/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/api_router.py",
+   "target": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/api_router.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/api_router.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/api_router.py",
+   "target": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/api_router.py",
+   "target": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "target": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_serde.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "target": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "file:vllm/entrypoints/openai/completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "file:vllm/logprobs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/entrypoints/generate/base/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/entrypoints/openai/models/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/logprobs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/renderers/online_derenderer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/renderers/online_renderer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/utils/collection_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/utils/serial_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/entrypoints/scale_out/token_in_token_out/mm_features.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/scale_out/token_in_token_out/serving.py",
+   "target": "file:vllm/entrypoints/scale_out/token_in_token_out/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "target": "file:vllm/entrypoints/pooling/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "target": "file:vllm/entrypoints/serve/engine/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "target": "file:vllm/pooling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/tool_calls_utils.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/tool_calls_utils.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/serve/utils/tool_calls_utils.py",
+   "target": "file:vllm/entrypoints/openai/responses/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/entrypoints/launchers/run_batch.py:BatchTranscriptionRequest",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionRequest",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/launchers/run_batch.py:BatchTranslationRequest",
+   "target": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationRequest",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/launchers/run_batch.py:BatchRequestInput",
+   "target": "class:vllm/entrypoints/serve/engine/protocol.py:OpenAIBaseModel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/launchers/run_batch.py:BatchFrontendArgs",
+   "target": "class:vllm/entrypoints/common/cli_args.py:BaseFrontendArgs",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/mcp/tool.py:HarmonyBrowserTool",
+   "target": "class:vllm/entrypoints/mcp/tool.py:Tool",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/mcp/tool.py:HarmonyPythonTool",
+   "target": "class:vllm/entrypoints/mcp/tool.py:Tool",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/mcp/tool_server.py:MCPToolServer",
+   "target": "class:vllm/entrypoints/mcp/tool_server.py:ToolServer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/mcp/tool_server.py:DemoToolServer",
+   "target": "class:vllm/entrypoints/mcp/tool_server.py:ToolServer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/rl/offline.py:RLOfflineMixin",
+   "target": "class:vllm/entrypoints/common/offline.py:OfflineInferenceMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/scale_out/derender/serving.py:ServingDerender",
+   "target": "class:vllm/entrypoints/serve/engine/serving.py:BaseServing",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/scale_out/render/serving.py:ServingRender",
+   "target": "class:vllm/entrypoints/serve/engine/serving.py:BaseServing",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/scale_out/token_in_token_out/serving.py:ServingTokens",
+   "target": "class:vllm/entrypoints/generate/base/serving.py:GenerateBaseServing",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

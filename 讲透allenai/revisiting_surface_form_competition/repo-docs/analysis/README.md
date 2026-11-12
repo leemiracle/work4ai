@@ -1,0 +1,5 @@
+`compute_pmi.py` computes the PMI accuracy of each model, prompt format, and seed combination on a given dataset, and appends the result to the existing logfile. It can be run with `--dataset {openbookqa, commonsense_qa, mmlu}`. This script assumes you have run `main.py` for all combinations of prompt (`no_answer_choices`, `string_answer_choices`, `enumerated_answer_choices`) and model (`google-flan-t5-xxl`, `curie`, `davinci`, `davinci-instruct-beta`, `text-davinci-003`, `facebook-opt-30b`) with seed `10` (both the regular and `--uncontextual_premise` versions), and that the appropriate csv and log output files exist in `./data/`.
+
+`compute_bounds.py` produces the results (in LaTeX form) in Table 8 for a given `--dataset {openbookqa, commonsense_qa, mmlu}`, `--prompt-format {no_answer_choices, string_answer_choices, enumerated_answer_choices}`, `--model {google-flan-t5-xxl, curie, davinci, davinci-instruct-beta, text-davinci-003, facebook-opt-30b}`, and `--num-primes {0, 1, 2, 4, 8}`.
+
+`fill_tables.py` will compute and print results from Table 9 in LaTeX format. Specify a metric `--metric {"accuracy", "PMI accuracy", "prob. mass", "invalid answers"}`.

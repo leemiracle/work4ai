@@ -1,0 +1,27 @@
+# =============================================================================
+# 模块定位：config-example.yaml —— KNighter 主配置模板（复制为 config.yaml 使用）
+# 论文映射：各参数直接对应论文 §4/§5 的实验设定——model=o3-mini（默认后端）、
+#           checker_nums=10（对应 Algorithm 1 的 maxIterations，每个 commit 最多
+#           合成 10 份 checker 再挑 valid）、扫描用 Linux v6.13 + allyesconfig。
+# 管线角色：src/main.py 任一模式启动时 --config_file 指向它，由 src/global_config.py
+#           的单例加载；路径必须是绝对路径（LLVM_dir/linux_dir）。
+# 关键项：
+#   result_dir  —— 各阶段产物（checker/报告/元数据）的落盘根目录
+#   LLVM_dir    —— setup_llvm.py 准备好的 LLVM 18.1.8 构建目录（含 scan-build、plugin 编译产物）
+#   checker_nums—— 论文 Algorithm 1 的 maxIterations：单 commit 合成尝试上限
+#   linux_dir   —— Linux 内核仓（git checkout 到 buggy/patched commit 做差分验证与全库扫描）
+#   key_file    —— LLM 凭据文件（见 src/llm_keys_example.yaml）
+#   model       —— 模型名：o3-mini/gpt-4o/deepseek-reasoner/... 或 "local:模型名"（本地 vLLM）
+# =============================================================================
+# 产物输出目录（绝对路径）
+result_dir: "/absolute-patch/results/debug"
+# LLVM 构建目录（绝对路径；scripts/setup_llvm.py 会在此编译 LLVM 18.1.8 并放置 plugin）
+LLVM_dir: "/absolute-patch/llvm"
+# 单个 commit 的合成尝试上限（论文 Algorithm 1 的 maxIterations，默认 10）
+checker_nums: 10
+# Linux 内核源码仓（差分验证 checkout 父提交/补丁提交；全库扫描的目标）
+linux_dir: "/absolute-patch/linux"
+# LLM API 凭据文件路径（参照 src/llm_keys_example.yaml 填写）
+key_file: "llm_keys.yaml"
+# 默认模型：论文 §5 "We use O3-mini as our default LLM backend"
+model: "o3-mini"

@@ -1,0 +1,33 @@
+# DeepWiki 索引 — NVIDIA/personaplex
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 390495 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Quick Start](1.1-quick-start.md)
+  - [1.2 System Architecture](1.2-system-architecture.md)
+- [2 Model Architecture](2-model-architecture.md)
+  - [2.1 Voice Conditioning](2.1-voice-conditioning.md)
+  - [2.2 Text-based Role Prompts](2.2-text-based-role-prompts.md)
+  - [2.3 Training Data and Methodology](2.3-training-data-and-methodology.md)
+- [3 Server Application](3-server-application.md)
+  - [3.1 Server Deployment](3.1-server-deployment.md)
+  - [3.2 Offline Evaluation](3.2-offline-evaluation.md)
+- [4 Client Application](4-client-application.md)
+  - [4.1 Client Setup and Configuration](4.1-client-setup-and-configuration.md)
+  - [4.2 Audio Processing Pipeline](4.2-audio-processing-pipeline.md)
+  - [4.3 Client Routing and UI](4.3-client-routing-and-ui.md)
+  - [4.4 Client Build Pipeline](4.4-client-build-pipeline.md)
+- [5 Deployment and Containerization](5-deployment-and-containerization.md)
+  - [5.1 Server Container](5.1-server-container.md)
+  - [5.2 Client Container](5.2-client-container.md)
+  - [5.3 Production Deployment](5.3-production-deployment.md)
+- [6 Development Workflow](6-development-workflow.md)
+  - [6.1 Code Quality and Formatting](6.1-code-quality-and-formatting.md)
+  - [6.2 Testing and Issue Reporting](6.2-testing-and-issue-reporting.md)
+  - [6.3 Version Control and Git Workflow](6.3-version-control-and-git-workflow.md)
+- [7 Configuration Reference](7-configuration-reference.md)
+  - [7.1 Environment Variables](7.1-environment-variables.md)
+  - [7.2 Package Dependencies](7.2-package-dependencies.md)
+  - [7.3 Build and Styling Configuration](7.3-build-and-styling-configuration.md)
+- [8 Licensing](8-licensing.md)

@@ -1,0 +1,32 @@
+# DeepWiki 索引 — anthropics/claude-for-legal
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 222013 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Core Concepts and Terminology](1.2-core-concepts-and-terminology.md)
+- [2 Plugin Architecture](2-plugin-architecture.md)
+  - [2.1 Plugin Structure and Manifests](2.1-plugin-structure-and-manifests.md)
+  - [2.2 Practice Profiles and Cold-Start System](2.2-practice-profiles-and-cold-start-system.md)
+  - [2.3 MCP Connectors](2.3-mcp-connectors.md)
+- [3 Practice-Area Plugins](3-practice-area-plugins.md)
+  - [3.1 Commercial and Corporate Legal](3.1-commercial-and-corporate-legal.md)
+  - [3.2 Employment and IP Legal](3.2-employment-and-ip-legal.md)
+  - [3.3 Privacy, Regulatory, and AI Governance Legal](3.3-privacy-regulatory-and-ai-governance-legal.md)
+  - [3.4 Litigation Legal](3.4-litigation-legal.md)
+  - [3.5 Product Legal](3.5-product-legal.md)
+  - [3.6 Law Student and Legal Clinic](3.6-law-student-and-legal-clinic.md)
+  - [3.7 Legal Builder Hub](3.7-legal-builder-hub.md)
+- [4 Managed Agent Cookbooks](4-managed-agent-cookbooks.md)
+  - [4.1 Agent Manifest Format and Deployment](4.1-agent-manifest-format-and-deployment.md)
+  - [4.2 Cross-Agent Handoff and Orchestration](4.2-cross-agent-handoff-and-orchestration.md)
+- [5 External Plugins](5-external-plugins.md)
+  - [5.1 CoCounsel Legal (Thomson Reuters)](5.1-cocounsel-legal-thomson-reuters.md)
+- [6 Safety, Guardrails, and Output Quality](6-safety-guardrails-and-output-quality.md)
+  - [6.1 Skill Design Principles and CLAUDE.md Guardrails](6.1-skill-design-principles-and-claude.md-guardrails.md)
+  - [6.2 Prompt Injection Defense and Security Model](6.2-prompt-injection-defense-and-security-model.md)
+- [7 Developer and Contributor Guide](7-developer-and-contributor-guide.md)
+  - [7.1 Validation and Testing Scripts](7.1-validation-and-testing-scripts.md)
+  - [7.2 Community Contributions and CLA](7.2-community-contributions-and-cla.md)
+- [8 Glossary](8-glossary.md)

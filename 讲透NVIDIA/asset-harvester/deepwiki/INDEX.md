@@ -1,0 +1,31 @@
+# DeepWiki 索引 — NVIDIA/asset-harvester
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 175059 字符
+
+- [1 Asset Harvester Overview](1-asset-harvester-overview.md)
+  - [1.1 Getting Started: Installation and Setup](1.1-getting-started-installation-and-setup.md)
+  - [1.2 End-to-End Pipeline Walkthrough](1.2-end-to-end-pipeline-walkthrough.md)
+  - [1.3 Data Samples Reference](1.3-data-samples-reference.md)
+- [2 NCore Parser: Data Ingestion](2-ncore-parser-data-ingestion.md)
+  - [2.1 NCoreParser: Extraction and Filtering Logic](2.1-ncoreparser-extraction-and-filtering-logic.md)
+  - [2.2 Image Segmentation: Mask2Former Integration](2.2-image-segmentation-mask2former-integration.md)
+  - [2.3 NCore Parser Schemas and Output Format](2.3-ncore-parser-schemas-and-output-format.md)
+- [3 SparseViewDiT: Multiview Diffusion](3-sparseviewdit-multiview-diffusion.md)
+  - [3.1 SparseViewDiT Model Architecture](3.1-sparseviewdit-model-architecture.md)
+  - [3.2 SparseViewDiT Inference Pipelines](3.2-sparseviewdit-inference-pipelines.md)
+  - [3.3 Multiview Diffusion Data and Preprocessing](3.3-multiview-diffusion-data-and-preprocessing.md)
+  - [3.4 Multiview Diffusion Utilities and Model Builder](3.4-multiview-diffusion-utilities-and-model-builder.md)
+- [4 TokenGS: 3D Gaussian Lifting](4-tokengs-3d-gaussian-lifting.md)
+  - [4.1 TokenGS Model Architecture](4.1-tokengs-model-architecture.md)
+  - [4.2 TokenGS Lifting Inference and PLY Export](4.2-tokengs-lifting-inference-and-ply-export.md)
+  - [4.3 TokenGS Training Pipeline](4.3-tokengs-training-pipeline.md)
+  - [4.4 TokenGS Data Pipeline](4.4-tokengs-data-pipeline.md)
+- [5 Camera Estimator (AHCEstimator)](5-camera-estimator-ahcestimator.md)
+  - [5.1 AHCEstimator Inference Interface](5.1-ahcestimator-inference-interface.md)
+  - [5.2 AttributeModel and CRadio Backbone](5.2-attributemodel-and-cradio-backbone.md)
+- [6 Shared Utilities and Infrastructure](6-shared-utilities-and-infrastructure.md)
+  - [6.1 C-RADIO Compatibility Patches](6.1-c-radio-compatibility-patches.md)
+  - [6.2 Shared I/O and Image Utilities](6.2-shared-i-o-and-image-utilities.md)
+  - [6.3 Developer Tooling and CI](6.3-developer-tooling-and-ci.md)
+- [7 Glossary](7-glossary.md)

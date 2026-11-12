@@ -1,0 +1,4576 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "type": "file",
+   "name": "serving.py",
+   "filePath": "vllm/entrypoints/speech_to_text/base/serving.py",
+   "summary": "语音转文本（transcription/translation）serving 基类：音频上传解析/切分、enc-dec prompt 构建、流式与非流式响应装配（verbose/diarized 变体）与 ASR 分块拼接语言规则。",
+   "tags": [
+    "speech-to-text",
+    "serving",
+    "asr"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/entrypoints/speech_to_text/base/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/entrypoints/speech_to_text/base/utils.py",
+   "summary": "speech_to_text 路由共享工具：读上传文件前先按 Content-Length 限流，流式兜底防超限物化。",
+   "tags": [
+    "file-upload",
+    "limits",
+    "utilities"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/speech_to_text/realtime/connection.py",
+   "type": "file",
+   "name": "connection.py",
+   "filePath": "vllm/entrypoints/speech_to_text/realtime/connection.py",
+   "summary": "Realtime WebSocket 连接管理：音频 buffer append/commit 会话状态机、StreamingInput 转换与 transcription delta/done 事件下发。",
+   "tags": [
+    "realtime",
+    "websocket",
+    "streaming"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "type": "file",
+   "name": "protocol.py",
+   "filePath": "vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "summary": "realtime 转写协议事件模型：InputAudioBuffer Append/Commit、SessionUpdate/Created、TranscriptionDelta/Done 与 ErrorEvent。",
+   "tags": [
+    "protocol",
+    "events",
+    "realtime"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/entrypoints/speech_to_text/realtime/serving.py",
+   "type": "file",
+   "name": "serving.py",
+   "filePath": "vllm/entrypoints/speech_to_text/realtime/serving.py",
+   "summary": "OpenAIServingRealtime：经 WebSocket 流式音频转文本服务（audio chunk→StreamingInput 增量请求）。",
+   "tags": [
+    "realtime",
+    "serving",
+    "websocket"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "type": "file",
+   "name": "protocol.py",
+   "filePath": "vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "summary": "/v1/audio/transcriptions 协议：TranscriptionRequest（270 行、按 OpenAI 文档字段序）、verbose/分段/说话人归属（diarized）响应模型与 usage。",
+   "tags": [
+    "protocol",
+    "transcription",
+    "audio"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "type": "file",
+   "name": "protocol.py",
+   "filePath": "vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "summary": "/v1/audio/translations 协议：TranslationRequest 与流式/verbose/分段响应模型（与 transcription 同构、目标语言语义）。",
+   "tags": [
+    "protocol",
+    "translation",
+    "audio"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/env_override.py",
+   "type": "file",
+   "name": "env_override.py",
+   "filePath": "vllm/env_override.py",
+   "summary": "torch/inductor 环境与 monkey-patch 集合：import torch 前的 CUDA 兼容路径与 ROCm 符号提升，加 TorchInductor 图分区/FxGraphCache pickle/cpp codegen/pattern matcher 的版本化 backport 与 vllm:: 自定义算子 fallback 放行。",
+   "tags": [
+    "monkey-patch",
+    "inductor",
+    "compatibility"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/envs.py",
+   "type": "file",
+   "name": "envs.py",
+   "filePath": "vllm/envs.py",
+   "summary": "全仓环境变量注册表（2500 行）：VLLM_* 变量定义+类型转换+choices 校验工厂、惰性 __getattr__ 访问与 enable/disable_envs_cache 缓存开关、torch.compile 缓存因子 compile_factors 与 rust CLI 路径解析。",
+   "tags": [
+    "environment",
+    "configuration",
+    "registry"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/exceptions.py",
+   "type": "file",
+   "name": "exceptions.py",
+   "filePath": "vllm/exceptions.py",
+   "summary": "vLLM 异常体系：VLLMError 下分 ClientError(4xx)/ServerError(5xx) 两大支，含校验/NotFound/LoRA 缺失/生成失败/可重试与 GracefulHTTP 系（队列溢出 503、max queued tokens、profiler 重复激活）。",
+   "tags": [
+    "exceptions",
+    "error-handling",
+    "http"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/forward_context.py",
+   "type": "file",
+   "name": "forward_context.py",
+   "filePath": "vllm/forward_context.py",
+   "summary": "forward 上下文设施：ForwardContext（attention metadata/slot mapping/DP metadata/cudagraph 运行时模式/ubatch slices）与 set/override/get 上下文管理器，是每次前向注入公共逻辑的枢纽。",
+   "tags": [
+    "forward-context",
+    "attention-metadata",
+    "context-manager"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/inputs/engine.py",
+   "type": "file",
+   "name": "engine.py",
+   "filePath": "vllm/inputs/engine.py",
+   "summary": "引擎输入 schema：TokensInput/EmbedsInput/MultiModalInput(MultiModalEncDecInput)/EncoderDecoderInput 与构造器及 enc-dec 输入校验/拆分（decoder_input_ids 对齐 GenerationMixin）。",
+   "tags": [
+    "inputs",
+    "schema",
+    "encoder-decoder"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/inputs/llm.py",
+   "type": "file",
+   "name": "llm.py",
+   "filePath": "vllm/inputs/llm.py",
+   "summary": "LLM API prompt schema：TextPrompt/TokensPrompt/EmbedsPrompt/ExplicitEncoderDecoderPrompt/DataPrompt 与多模态内建类型注解。",
+   "tags": [
+    "prompts",
+    "schema",
+    "llm-api"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/ir/op.py",
+   "type": "file",
+   "name": "op.py",
+   "filePath": "vllm/ir/op.py",
+   "summary": "vLLM IR 算子注册框架：IrOp 注册表（pysec/native/triton 实现、activation 参数约定、inplace 支持、tolerance）与 register_op 装饰器、torch custom op wrap 开关。",
+   "tags": [
+    "ir",
+    "op-registry",
+    "custom-ops"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/ir/ops/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/ir/ops/__init__.py",
+   "summary": "IR 内建算子 barrel：re-export activation/layernorm 算子。",
+   "tags": [
+    "barrel",
+    "ir"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/ir/ops/activation.py",
+   "type": "file",
+   "name": "activation.py",
+   "filePath": "vllm/ir/ops/activation.py",
+   "summary": "IR 激活算子：gelu_and_mul_sparse（高斯稀疏化+GELU+门控乘）及其输入生成器。",
+   "tags": [
+    "ir",
+    "activation",
+    "ops"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/ir/ops/layernorm.py",
+   "type": "file",
+   "name": "layernorm.py",
+   "filePath": "vllm/ir/ops/layernorm.py",
+   "summary": "IR 归一化算子：rms_norm 与 fused_add_rms_norm（inplace）及各自输入生成器。",
+   "tags": [
+    "ir",
+    "layernorm",
+    "ops"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/ir/util.py",
+   "type": "file",
+   "name": "util.py",
+   "filePath": "vllm/ir/util.py",
+   "summary": "IR 工具：hash_source（函数/对象源码哈希）、weak_lru_cache/weak_cache（弱引用防泄漏缓存）。",
+   "tags": [
+    "ir",
+    "utilities",
+    "caching"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/kernels/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/kernels/__init__.py",
+   "summary": "kernels 包 barrel：导出 triton/vllm_c/aiter_ops/oink_ops 四个后端子模块。",
+   "tags": [
+    "barrel",
+    "kernels"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/kernels/aiter_ops.py",
+   "type": "file",
+   "name": "aiter_ops.py",
+   "filePath": "vllm/kernels/aiter_ops.py",
+   "summary": "ROCm AITER RMSNorm 算子桥接：rms_norm/fused_add_rms_norm 注册为自定义算子（2D 密集约束检测 + fake 实现），经 ir 注册表暴露。",
+   "tags": [
+    "rocm",
+    "aiter",
+    "rmsnorm",
+    "custom-ops"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/entrypoints/speech_to_text/base/serving.py:asr_inter_chunk_separator",
+   "type": "function",
+   "name": "asr_inter_chunk_separator",
+   "filePath": "vllm/entrypoints/speech_to_text/base/serving.py",
+   "summary": "ASR 文本分块间插入的分隔符：no_space_languages（中日韩等）插空串，其余插空格。",
+   "tags": [
+    "asr",
+    "text-join"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    82,
+    90
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/base/serving.py:SpeechToTextBaseServing",
+   "type": "class",
+   "name": "SpeechToTextBaseServing",
+   "filePath": "vllm/entrypoints/speech_to_text/base/serving.py",
+   "summary": "transcription/translation 公共基类（11 个方法）：模型校验（SupportsTranscription）、音频加载/按时长切分、enc-dec 输入构建、流式 chunk 拼接与 verbose/diarized 响应装配。",
+   "tags": [
+    "speech-to-text",
+    "serving",
+    "base"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    93,
+    846
+   ]
+  },
+  {
+   "id": "function:vllm/entrypoints/speech_to_text/base/utils.py:read_upload_with_limit",
+   "type": "function",
+   "name": "read_upload_with_limit",
+   "filePath": "vllm/entrypoints/speech_to_text/base/utils.py",
+   "summary": "限流读上传文件：先查 Content-Length，超限立即拒绝；流式读取兜底防伪造头。",
+   "tags": [
+    "upload",
+    "size-limit"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    14,
+    65
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/realtime/connection.py:RealtimeConnection",
+   "type": "class",
+   "name": "RealtimeConnection",
+   "filePath": "vllm/entrypoints/speech_to_text/realtime/connection.py",
+   "summary": "realtime WebSocket 生命周期与状态管理（10 个方法）：音频 buffer append/commit、会话参数更新、转写 delta/done/error 事件下发与关闭清理。",
+   "tags": [
+    "realtime",
+    "websocket",
+    "state-machine"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    35,
+    314
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:InputAudioBufferAppend",
+   "type": "class",
+   "name": "InputAudioBufferAppend",
+   "filePath": "vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "summary": "追加音频块事件模型。",
+   "tags": [
+    "protocol",
+    "events"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    15,
+    19
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:InputAudioBufferCommit",
+   "type": "class",
+   "name": "InputAudioBufferCommit",
+   "filePath": "vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "summary": "提交并处理累计音频 buffer。",
+   "tags": [
+    "protocol",
+    "events"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    22,
+    26
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:SessionUpdate",
+   "type": "class",
+   "name": "SessionUpdate",
+   "filePath": "vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "summary": "会话参数配置事件。",
+   "tags": [
+    "protocol",
+    "events"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    30,
+    34
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:SessionCreated",
+   "type": "class",
+   "name": "SessionCreated",
+   "filePath": "vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "summary": "连接建立通知事件。",
+   "tags": [
+    "protocol",
+    "events"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    37,
+    42
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:TranscriptionDelta",
+   "type": "class",
+   "name": "TranscriptionDelta",
+   "filePath": "vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "summary": "增量转写文本事件。",
+   "tags": [
+    "protocol",
+    "events"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    45,
+    49
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:TranscriptionDone",
+   "type": "class",
+   "name": "TranscriptionDone",
+   "filePath": "vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "summary": "最终转写结果（含 usage）事件。",
+   "tags": [
+    "protocol",
+    "events"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    52,
+    57
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:ErrorEvent",
+   "type": "class",
+   "name": "ErrorEvent",
+   "filePath": "vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "summary": "错误通知事件。",
+   "tags": [
+    "protocol",
+    "events"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    60,
+    65
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/realtime/serving.py:OpenAIServingRealtime",
+   "type": "class",
+   "name": "OpenAIServingRealtime",
+   "filePath": "vllm/entrypoints/speech_to_text/realtime/serving.py",
+   "summary": "WebSocket 实时音频转写服务：音频块转 StreamingInput 增量请求，经 StreamingInputOutputCollector 流式返回。",
+   "tags": [
+    "realtime",
+    "serving",
+    "streaming-input"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    23,
+    89
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionResponseStreamChoice",
+   "type": "class",
+   "name": "TranscriptionResponseStreamChoice",
+   "filePath": "vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "summary": "流式转写 choice 模型。",
+   "tags": [
+    "protocol",
+    "streaming"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    37,
+    40
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionStreamResponse",
+   "type": "class",
+   "name": "TranscriptionStreamResponse",
+   "filePath": "vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "summary": "流式转写 chunk 模型。",
+   "tags": [
+    "protocol",
+    "streaming"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    43,
+    49
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionRequest",
+   "type": "class",
+   "name": "TranscriptionRequest",
+   "filePath": "vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "summary": "transcription 请求模型（4 个方法）：file/model/language/hotwords/timestamp 粒度等，按 OpenAI 文档字段序并含 to_sampling_params 与音频参数解析。",
+   "tags": [
+    "protocol",
+    "request"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    52,
+    322
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionUsageAudio",
+   "type": "class",
+   "name": "TranscriptionUsageAudio",
+   "filePath": "vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "summary": "转写 usage 的音频明细（时长等）。",
+   "tags": [
+    "protocol",
+    "usage"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    326,
+    328
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionResponse",
+   "type": "class",
+   "name": "TranscriptionResponse",
+   "filePath": "vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "summary": "基础转写响应（纯文本）。",
+   "tags": [
+    "protocol",
+    "response"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    331,
+    334
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionWord",
+   "type": "class",
+   "name": "TranscriptionWord",
+   "filePath": "vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "summary": "词级时间戳条目。",
+   "tags": [
+    "protocol",
+    "timestamps"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    337,
+    345
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionSegment",
+   "type": "class",
+   "name": "TranscriptionSegment",
+   "filePath": "vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "summary": "分段转写结果（含起止时间与平均对数概率）。",
+   "tags": [
+    "protocol",
+    "segments"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    348,
+    387
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionResponseVerbose",
+   "type": "class",
+   "name": "TranscriptionResponseVerbose",
+   "filePath": "vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "summary": "verbose 转写响应（文本+分段+词）。",
+   "tags": [
+    "protocol",
+    "response"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    390,
+    404
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionDiarizedSegment",
+   "type": "class",
+   "name": "TranscriptionDiarizedSegment",
+   "filePath": "vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "summary": "带说话人归属的转写分段。",
+   "tags": [
+    "protocol",
+    "diarization"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    407,
+    415
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionResponseDiarized",
+   "type": "class",
+   "name": "TranscriptionResponseDiarized",
+   "filePath": "vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "summary": "OpenAI 兼容的 diarized 转写响应。",
+   "tags": [
+    "protocol",
+    "diarization"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    418,
+    425
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationResponseStreamChoice",
+   "type": "class",
+   "name": "TranslationResponseStreamChoice",
+   "filePath": "vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "summary": "流式翻译 choice 模型。",
+   "tags": [
+    "protocol",
+    "streaming"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    37,
+    40
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationStreamResponse",
+   "type": "class",
+   "name": "TranslationStreamResponse",
+   "filePath": "vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "summary": "流式翻译 chunk 模型。",
+   "tags": [
+    "protocol",
+    "streaming"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    43,
+    49
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationRequest",
+   "type": "class",
+   "name": "TranslationRequest",
+   "filePath": "vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "summary": "translation 请求模型（4 个方法）：与 transcription 同构但语义为译出目标语言。",
+   "tags": [
+    "protocol",
+    "request"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    52,
+    307
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationResponse",
+   "type": "class",
+   "name": "TranslationResponse",
+   "filePath": "vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "summary": "基础翻译响应。",
+   "tags": [
+    "protocol",
+    "response"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    311,
+    313
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationWord",
+   "type": "class",
+   "name": "TranslationWord",
+   "filePath": "vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "summary": "词级时间戳条目（翻译）。",
+   "tags": [
+    "protocol",
+    "timestamps"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    316,
+    324
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationSegment",
+   "type": "class",
+   "name": "TranslationSegment",
+   "filePath": "vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "summary": "分段翻译结果。",
+   "tags": [
+    "protocol",
+    "segments"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    327,
+    366
+   ]
+  },
+  {
+   "id": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationResponseVerbose",
+   "type": "class",
+   "name": "TranslationResponseVerbose",
+   "filePath": "vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "summary": "verbose 翻译响应。",
+   "tags": [
+    "protocol",
+    "response"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    369,
+    383
+   ]
+  },
+  {
+   "id": "function:vllm/env_override.py:_get_torch_root",
+   "type": "function",
+   "name": "_get_torch_root",
+   "filePath": "vllm/env_override.py",
+   "summary": "不 import torch 定位已安装 torch 包根目录。",
+   "tags": [
+    "torch",
+    "introspection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    8,
+    17
+   ]
+  },
+  {
+   "id": "function:vllm/env_override.py:_get_torch_version_attr",
+   "type": "function",
+   "name": "_get_torch_version_attr",
+   "filePath": "vllm/env_override.py",
+   "summary": "不 import torch 读取 torch.version 属性（避免导入副作用）。",
+   "tags": [
+    "torch",
+    "version"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    20,
+    43
+   ]
+  },
+  {
+   "id": "function:vllm/env_override.py:_maybe_set_cuda_compatibility_path",
+   "type": "function",
+   "name": "_maybe_set_cuda_compatibility_path",
+   "filePath": "vllm/env_override.py",
+   "summary": "在 import torch 前设置 CUDA 前向兼容 LD_LIBRARY_PATH。",
+   "tags": [
+    "cuda",
+    "compatibility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    51,
+    94
+   ]
+  },
+  {
+   "id": "function:vllm/env_override.py:_maybe_promote_torch_symbols_for_rocm",
+   "type": "function",
+   "name": "_maybe_promote_torch_symbols_for_rocm",
+   "filePath": "vllm/env_override.py",
+   "summary": "ROCm 下把 libtorch_cpu.so 提升到全局符号域（GPU profiling 需要）。",
+   "tags": [
+    "rocm",
+    "profiling"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    97,
+    144
+   ]
+  },
+  {
+   "id": "function:vllm/env_override.py:memory_plan_reuse_patched",
+   "type": "function",
+   "name": "memory_plan_reuse_patched",
+   "filePath": "vllm/env_override.py",
+   "summary": "TorchInductor memory plan 复用补丁。",
+   "tags": [
+    "inductor",
+    "patch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    193,
+    249
+   ]
+  },
+  {
+   "id": "function:vllm/env_override.py:get_graph_partition_signature_patched",
+   "type": "function",
+   "name": "get_graph_partition_signature_patched",
+   "filePath": "vllm/env_override.py",
+   "summary": "图分区签名补丁：含输入/输出节点与图内释放输入的判定。",
+   "tags": [
+    "inductor",
+    "partition"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    261,
+    397
+   ]
+  },
+  {
+   "id": "function:vllm/env_override.py:should_partition_patched",
+   "type": "function",
+   "name": "should_partition_patched",
+   "filePath": "vllm/env_override.py",
+   "summary": "inductor 图在该节点是否分区的补丁判定。",
+   "tags": [
+    "inductor",
+    "partition"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    421,
+    500
+   ]
+  },
+  {
+   "id": "function:vllm/env_override.py:_update_scheduler_patched",
+   "type": "function",
+   "name": "_update_scheduler_patched",
+   "filePath": "vllm/env_override.py",
+   "summary": "重初始化 inductor scheduler（初始不生成 CUBIN 避免基准偏置）。",
+   "tags": [
+    "inductor",
+    "scheduler"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    503,
+    518
+   ]
+  },
+  {
+   "id": "function:vllm/env_override.py:_patch_get_raw_stream_if_needed",
+   "type": "function",
+   "name": "_patch_get_raw_stream_if_needed",
+   "filePath": "vllm/env_override.py",
+   "summary": "TorchInductor autotune get_raw_stream() bug 的 workaround。",
+   "tags": [
+    "inductor",
+    "workaround"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    527,
+    540
+   ]
+  },
+  {
+   "id": "function:vllm/env_override.py:_apply_constrain_to_fx_strides_patch",
+   "type": "function",
+   "name": "_apply_constrain_to_fx_strides_patch",
+   "filePath": "vllm/env_override.py",
+   "summary": "全局 patch lowering.constrain_to_fx_strides（幂等）。",
+   "tags": [
+    "inductor",
+    "lowering"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    581,
+    619
+   ]
+  },
+  {
+   "id": "function:vllm/env_override.py:_apply_fxgraphcache_pickle_patch",
+   "type": "function",
+   "name": "_apply_fxgraphcache_pickle_patch",
+   "filePath": "vllm/env_override.py",
+   "summary": "包装 FxGraphCachePickler.dumps 把 ValueError 转 bypass（幂等）。",
+   "tags": [
+    "inductor",
+    "fxgraphcache"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    665,
+    687
+   ]
+  },
+  {
+   "id": "function:vllm/env_override.py:_patch_cpp_indirect_assert_if_needed",
+   "type": "function",
+   "name": "_patch_cpp_indirect_assert_if_needed",
+   "filePath": "vllm/env_override.py",
+   "summary": "torch 2.11.x 的 cpp codegen indirect_assert backport（延迟到 inductor 自然导入后应用）。",
+   "tags": [
+    "inductor",
+    "backport"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    776,
+    816
+   ]
+  },
+  {
+   "id": "class:vllm/env_override.py:_VllmFallbackAllowList",
+   "type": "class",
+   "name": "_VllmFallbackAllowList",
+   "filePath": "vllm/env_override.py",
+   "summary": "成员判定代理：自动放行 vllm::*/vllm_aiter::* 命名空间的自定义算子。",
+   "tags": [
+    "inductor",
+    "allow-list"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    855,
+    884
+   ]
+  },
+  {
+   "id": "function:vllm/env_override.py:_patch_inductor_fallback_allow_list",
+   "type": "function",
+   "name": "_patch_inductor_fallback_allow_list",
+   "filePath": "vllm/env_override.py",
+   "summary": "包装 FALLBACK_ALLOW_LIST，让 vllm 命名空间算子免于 inductor fallback 限制。",
+   "tags": [
+    "inductor",
+    "custom-ops"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    887,
+    914
+   ]
+  },
+  {
+   "id": "function:vllm/env_override.py:_apply_inductor_pattern_matcher_patch",
+   "type": "function",
+   "name": "_apply_inductor_pattern_matcher_patch",
+   "filePath": "vllm/env_override.py",
+   "summary": "允许 pattern matcher 处理不支持 dtype 的自定义算子与 functionalization 包装。",
+   "tags": [
+    "inductor",
+    "pattern-matcher"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    920,
+    932
+   ]
+  },
+  {
+   "id": "function:vllm/envs.py:use_aot_compile",
+   "type": "function",
+   "name": "use_aot_compile",
+   "filePath": "vllm/envs.py",
+   "summary": "是否使用 AOT compile。",
+   "tags": [
+    "env",
+    "compile"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    383,
+    392
+   ]
+  },
+  {
+   "id": "function:vllm/envs.py:use_mega_aot_artifact",
+   "type": "function",
+   "name": "use_mega_aot_artifact",
+   "filePath": "vllm/envs.py",
+   "summary": "是否使用 mega AOT 产物。",
+   "tags": [
+    "env",
+    "compile"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    395,
+    402
+   ]
+  },
+  {
+   "id": "function:vllm/envs.py:env_with_choices",
+   "type": "function",
+   "name": "env_with_choices",
+   "filePath": "vllm/envs.py",
+   "summary": "构造按允许值校验环境变量的 lambda（默认值支持）。",
+   "tags": [
+    "env",
+    "validation",
+    "factory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    405,
+    447
+   ]
+  },
+  {
+   "id": "function:vllm/envs.py:env_list_with_choices",
+   "type": "function",
+   "name": "env_list_with_choices",
+   "filePath": "vllm/envs.py",
+   "summary": "构造校验逗号分隔列表环境变量的 lambda。",
+   "tags": [
+    "env",
+    "validation",
+    "factory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    450,
+    502
+   ]
+  },
+  {
+   "id": "function:vllm/envs.py:env_set_with_choices",
+   "type": "function",
+   "name": "env_set_with_choices",
+   "filePath": "vllm/envs.py",
+   "summary": "构造校验逗号分隔集合并返回 set 的 lambda。",
+   "tags": [
+    "env",
+    "validation",
+    "factory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    505,
+    519
+   ]
+  },
+  {
+   "id": "function:vllm/envs.py:get_vllm_port",
+   "type": "function",
+   "name": "get_vllm_port",
+   "filePath": "vllm/envs.py",
+   "summary": "读 VLLM_PORT（支持 auto 随机端口），非法值抛错。",
+   "tags": [
+    "env",
+    "port"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    522,
+    549
+   ]
+  },
+  {
+   "id": "function:vllm/envs.py:get_env_or_set_default",
+   "type": "function",
+   "name": "get_env_or_set_default",
+   "filePath": "vllm/envs.py",
+   "summary": "读环境变量，未设则用工厂生成默认值并写回。",
+   "tags": [
+    "env",
+    "default"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    560,
+    577
+   ]
+  },
+  {
+   "id": "function:vllm/envs.py:_resolve_rust_cli_path",
+   "type": "function",
+   "name": "_resolve_rust_cli_path",
+   "filePath": "vllm/envs.py",
+   "summary": "解析 vllm-rs 二进制路径：仅 VLLM_USE_RUST_FRONTEND/BENCH 启用时返回。",
+   "tags": [
+    "env",
+    "rust"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    588,
+    620
+   ]
+  },
+  {
+   "id": "function:vllm/envs.py:__getattr__",
+   "type": "function",
+   "name": "__getattr__",
+   "filePath": "vllm/envs.py",
+   "summary": "模块级惰性读取环境变量；enable_envs_cache 后被 functools.cache 包装为缓存访问。",
+   "tags": [
+    "env",
+    "lazy-loading"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    2318,
+    2326
+   ]
+  },
+  {
+   "id": "function:vllm/envs.py:enable_envs_cache",
+   "type": "function",
+   "name": "enable_envs_cache",
+   "filePath": "vllm/envs.py",
+   "summary": "开启环境变量缓存（服务初始化后调用，避免重复求值 lambda）。",
+   "tags": [
+    "env",
+    "cache"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    2335,
+    2353
+   ]
+  },
+  {
+   "id": "function:vllm/envs.py:disable_envs_cache",
+   "type": "function",
+   "name": "disable_envs_cache",
+   "filePath": "vllm/envs.py",
+   "summary": "关闭/重置环境变量缓存（测试隔离用）。",
+   "tags": [
+    "env",
+    "cache"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    2356,
+    2364
+   ]
+  },
+  {
+   "id": "function:vllm/envs.py:compile_factors",
+   "type": "function",
+   "name": "compile_factors",
+   "filePath": "vllm/envs.py",
+   "summary": "返回 torch.compile 缓存键环境因子：全部已知 env 排除 ignored_factors 后哈希。",
+   "tags": [
+    "env",
+    "compile-cache"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    2378,
+    2521
+   ]
+  },
+  {
+   "id": "class:vllm/exceptions.py:VLLMError",
+   "type": "class",
+   "name": "VLLMError",
+   "filePath": "vllm/exceptions.py",
+   "summary": "全部 vLLM 异常的基类；子类分 ClientError(4xx)/ServerError(5xx)。",
+   "tags": [
+    "exception",
+    "base"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    10,
+    17
+   ]
+  },
+  {
+   "id": "class:vllm/exceptions.py:VLLMClientError",
+   "type": "class",
+   "name": "VLLMClientError",
+   "filePath": "vllm/exceptions.py",
+   "summary": "客户端请求引起的错误基类（映射 4xx）。",
+   "tags": [
+    "exception",
+    "client"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    20,
+    21
+   ]
+  },
+  {
+   "id": "class:vllm/exceptions.py:VLLMServerError",
+   "type": "class",
+   "name": "VLLMServerError",
+   "filePath": "vllm/exceptions.py",
+   "summary": "服务端内部错误基类（映射 5xx）。",
+   "tags": [
+    "exception",
+    "server"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    24,
+    25
+   ]
+  },
+  {
+   "id": "class:vllm/exceptions.py:VLLMValidationError",
+   "type": "class",
+   "name": "VLLMValidationError",
+   "filePath": "vllm/exceptions.py",
+   "summary": "请求校验失败错误（可附 parameter 与官方 API 参数对照）。",
+   "tags": [
+    "exception",
+    "validation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    28,
+    56
+   ]
+  },
+  {
+   "id": "class:vllm/exceptions.py:VLLMNotFoundError",
+   "type": "class",
+   "name": "VLLMNotFoundError",
+   "filePath": "vllm/exceptions.py",
+   "summary": "vLLM 版 NotFoundError。",
+   "tags": [
+    "exception",
+    "not-found"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    59,
+    62
+   ]
+  },
+  {
+   "id": "class:vllm/exceptions.py:ChatTemplateResolutionError",
+   "type": "class",
+   "name": "ChatTemplateResolutionError",
+   "filePath": "vllm/exceptions.py",
+   "summary": "chat template 解析失败异常。",
+   "tags": [
+    "exception",
+    "chat-template"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    65,
+    68
+   ]
+  },
+  {
+   "id": "class:vllm/exceptions.py:LoRAAdapterNotFoundError",
+   "type": "class",
+   "name": "LoRAAdapterNotFoundError",
+   "filePath": "vllm/exceptions.py",
+   "summary": "请求的 LoRA adapter 不存在（可携带候选列表提示）。",
+   "tags": [
+    "exception",
+    "lora"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    71,
+    93
+   ]
+  },
+  {
+   "id": "class:vllm/exceptions.py:VLLMUnprocessableEntityError",
+   "type": "class",
+   "name": "VLLMUnprocessableEntityError",
+   "filePath": "vllm/exceptions.py",
+   "summary": "请求内容无法处理（422）。",
+   "tags": [
+    "exception",
+    "unprocessable"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    96,
+    128
+   ]
+  },
+  {
+   "id": "class:vllm/exceptions.py:GenerationError",
+   "type": "class",
+   "name": "GenerationError",
+   "filePath": "vllm/exceptions.py",
+   "summary": "finish_reason 指示内部错误（500）时抛出。",
+   "tags": [
+    "exception",
+    "generation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    131,
+    136
+   ]
+  },
+  {
+   "id": "class:vllm/exceptions.py:RetryableRequestError",
+   "type": "class",
+   "name": "RetryableRequestError",
+   "filePath": "vllm/exceptions.py",
+   "summary": "瞬态请求级失败，客户端可安全重试。",
+   "tags": [
+    "exception",
+    "retryable"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    139,
+    144
+   ]
+  },
+  {
+   "id": "class:vllm/exceptions.py:GracefulHTTPError",
+   "type": "class",
+   "name": "GracefulHTTPError",
+   "filePath": "vllm/exceptions.py",
+   "summary": "应翻译为 HTTP 错误响应的异常（正常运行中预期发生，如准入拒绝）。",
+   "tags": [
+    "exception",
+    "http"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    147,
+    159
+   ]
+  },
+  {
+   "id": "class:vllm/exceptions.py:QueueOverflowError",
+   "type": "class",
+   "name": "QueueOverflowError",
+   "filePath": "vllm/exceptions.py",
+   "summary": "准入会超请求队列上限：返回 503 供 LB/SDK 重试。",
+   "tags": [
+    "exception",
+    "queue",
+    "503"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    162,
+    174
+   ]
+  },
+  {
+   "id": "class:vllm/exceptions.py:MaxQueuedTokensError",
+   "type": "class",
+   "name": "MaxQueuedTokensError",
+   "filePath": "vllm/exceptions.py",
+   "summary": "待处理 prefill token 超限：返回 503。",
+   "tags": [
+    "exception",
+    "admission",
+    "503"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    177,
+    189
+   ]
+  },
+  {
+   "id": "class:vllm/exceptions.py:ProfilerAlreadyActiveError",
+   "type": "class",
+   "name": "ProfilerAlreadyActiveError",
+   "filePath": "vllm/exceptions.py",
+   "summary": "profiling 会话已激活时重复开启。",
+   "tags": [
+    "exception",
+    "profiler"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    192,
+    200
+   ]
+  },
+  {
+   "id": "class:vllm/forward_context.py:BatchDescriptor",
+   "type": "class",
+   "name": "BatchDescriptor",
+   "filePath": "vllm/forward_context.py",
+   "summary": "cudagraph 分派的批描述子（尽量少的项以唯一刻画 padded batch）。",
+   "tags": [
+    "cudagraph",
+    "batch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    30,
+    57
+   ]
+  },
+  {
+   "id": "function:vllm/forward_context.py:_compute_sp_num_tokens",
+   "type": "function",
+   "name": "_compute_sp_num_tokens",
+   "filePath": "vllm/forward_context.py",
+   "summary": "计算 sequence parallel 的 num tokens。",
+   "tags": [
+    "sequence-parallel",
+    "tokens"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    60,
+    77
+   ]
+  },
+  {
+   "id": "class:vllm/forward_context.py:DPMetadata",
+   "type": "class",
+   "name": "DPMetadata",
+   "filePath": "vllm/forward_context.py",
+   "summary": "DP 元数据：num_tokens_across_dp_cpu 与 chunked local_sizes（仅 chunked_sizes 上下文设置）。",
+   "tags": [
+    "data-parallel",
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    81,
+    137
+   ]
+  },
+  {
+   "id": "class:vllm/forward_context.py:ForwardContext",
+   "type": "class",
+   "name": "ForwardContext",
+   "filePath": "vllm/forward_context.py",
+   "summary": "每次前向的上下文：no_compile 层、attention metadata（v1 dict/DBO list）、slot mapping、DP metadata、cudagraph 运行时模式与 ubatch slices。",
+   "tags": [
+    "forward-context",
+    "metadata"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    141,
+    202
+   ]
+  },
+  {
+   "id": "function:vllm/forward_context.py:get_forward_context",
+   "type": "function",
+   "name": "get_forward_context",
+   "filePath": "vllm/forward_context.py",
+   "summary": "取当前 forward context。",
+   "tags": [
+    "forward-context",
+    "accessor"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    208,
+    214
+   ]
+  },
+  {
+   "id": "function:vllm/forward_context.py:in_piecewise_cudagraph",
+   "type": "function",
+   "name": "in_piecewise_cudagraph",
+   "filePath": "vllm/forward_context.py",
+   "summary": "当前前向是否运行在 piecewise cudagraph 模式（capture 或 replay 时）。",
+   "tags": [
+    "cudagraph",
+    "query"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    221,
+    227
+   ]
+  },
+  {
+   "id": "function:vllm/forward_context.py:create_forward_context",
+   "type": "function",
+   "name": "create_forward_context",
+   "filePath": "vllm/forward_context.py",
+   "summary": "按批/配置创建 forward context。",
+   "tags": [
+    "forward-context",
+    "factory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    230,
+    259
+   ]
+  },
+  {
+   "id": "function:vllm/forward_context.py:override_forward_context",
+   "type": "function",
+   "name": "override_forward_context",
+   "filePath": "vllm/forward_context.py",
+   "summary": "临时覆盖当前 forward context 的上下文管理器（特定 forward 用）。",
+   "tags": [
+    "forward-context",
+    "context-manager"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    263,
+    274
+   ]
+  },
+  {
+   "id": "function:vllm/forward_context.py:set_forward_context",
+   "type": "function",
+   "name": "set_forward_context",
+   "filePath": "vllm/forward_context.py",
+   "summary": "存储当前 forward context（attention metadata 等）的上下文管理器：每次前向注入公共逻辑的统一入口。",
+   "tags": [
+    "forward-context",
+    "context-manager"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    278,
+    392
+   ]
+  },
+  {
+   "id": "class:vllm/inputs/engine.py:_InputOptions",
+   "type": "class",
+   "name": "_InputOptions",
+   "filePath": "vllm/inputs/engine.py",
+   "summary": "所有 SingletonInput 类型的公共选项 TypedDict。",
+   "tags": [
+    "inputs",
+    "options"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    18,
+    27
+   ]
+  },
+  {
+   "id": "class:vllm/inputs/engine.py:TokensInput",
+   "type": "class",
+   "name": "TokensInput",
+   "filePath": "vllm/inputs/engine.py",
+   "summary": "token 型引擎输入。",
+   "tags": [
+    "inputs",
+    "tokens"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    30,
+    44
+   ]
+  },
+  {
+   "id": "function:vllm/inputs/engine.py:tokens_input",
+   "type": "function",
+   "name": "tokens_input",
+   "filePath": "vllm/inputs/engine.py",
+   "summary": "从可选值构造 TokensInput。",
+   "tags": [
+    "inputs",
+    "factory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    47,
+    63
+   ]
+  },
+  {
+   "id": "class:vllm/inputs/engine.py:EmbedsInput",
+   "type": "class",
+   "name": "EmbedsInput",
+   "filePath": "vllm/inputs/engine.py",
+   "summary": "embedding 型引擎输入。",
+   "tags": [
+    "inputs",
+    "embeds"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    66,
+    89
+   ]
+  },
+  {
+   "id": "function:vllm/inputs/engine.py:embeds_input",
+   "type": "function",
+   "name": "embeds_input",
+   "filePath": "vllm/inputs/engine.py",
+   "summary": "构造 EmbedsInput。",
+   "tags": [
+    "inputs",
+    "factory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    92,
+    114
+   ]
+  },
+  {
+   "id": "class:vllm/inputs/engine.py:MultiModalInput",
+   "type": "class",
+   "name": "MultiModalInput",
+   "filePath": "vllm/inputs/engine.py",
+   "summary": "多模态引擎输入。",
+   "tags": [
+    "inputs",
+    "multimodal"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    129,
+    151
+   ]
+  },
+  {
+   "id": "function:vllm/inputs/engine.py:mm_input",
+   "type": "function",
+   "name": "mm_input",
+   "filePath": "vllm/inputs/engine.py",
+   "summary": "构造 MultiModalInput。",
+   "tags": [
+    "inputs",
+    "factory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    154,
+    176
+   ]
+  },
+  {
+   "id": "class:vllm/inputs/engine.py:MultiModalEncDecInput",
+   "type": "class",
+   "name": "MultiModalEncDecInput",
+   "filePath": "vllm/inputs/engine.py",
+   "summary": "enc-dec 模型的多模态输入（纯文本 enc-dec 也走此路径）。",
+   "tags": [
+    "inputs",
+    "encoder-decoder"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    179,
+    193
+   ]
+  },
+  {
+   "id": "function:vllm/inputs/engine.py:mm_enc_dec_input",
+   "type": "function",
+   "name": "mm_enc_dec_input",
+   "filePath": "vllm/inputs/engine.py",
+   "summary": "构造 MultiModalEncDecInput。",
+   "tags": [
+    "inputs",
+    "factory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    196,
+    218
+   ]
+  },
+  {
+   "id": "class:vllm/inputs/engine.py:EncoderDecoderInput",
+   "type": "class",
+   "name": "EncoderDecoderInput",
+   "filePath": "vllm/inputs/engine.py",
+   "summary": "已渲染的 enc-dec prompt，可直接交给 LLMEngine/AsyncLLM.add_request。",
+   "tags": [
+    "inputs",
+    "encoder-decoder"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    242,
+    256
+   ]
+  },
+  {
+   "id": "function:vllm/inputs/engine.py:_validate_enc_input",
+   "type": "function",
+   "name": "_validate_enc_input",
+   "filePath": "vllm/inputs/engine.py",
+   "summary": "编码器输入校验。",
+   "tags": [
+    "inputs",
+    "validation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    273,
+    288
+   ]
+  },
+  {
+   "id": "function:vllm/inputs/engine.py:_prepare_decoder_input_ids_for_generation",
+   "type": "function",
+   "name": "_prepare_decoder_input_ids_for_generation",
+   "filePath": "vllm/inputs/engine.py",
+   "summary": "按 GenerationMixin 语义准备 decoder_input_ids。",
+   "tags": [
+    "encoder-decoder",
+    "decoder"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    300,
+    313
+   ]
+  },
+  {
+   "id": "function:vllm/inputs/engine.py:build_enc_dec_input",
+   "type": "function",
+   "name": "build_enc_dec_input",
+   "filePath": "vllm/inputs/engine.py",
+   "summary": "构建 enc-dec 引擎输入（校验+decoder 准备）。",
+   "tags": [
+    "inputs",
+    "factory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    316,
+    363
+   ]
+  },
+  {
+   "id": "function:vllm/inputs/engine.py:split_enc_dec_input",
+   "type": "function",
+   "name": "split_enc_dec_input",
+   "filePath": "vllm/inputs/engine.py",
+   "summary": "把 enc-dec 输入拆回 (encoder, decoder) 两半。",
+   "tags": [
+    "inputs",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    366,
+    372
+   ]
+  },
+  {
+   "id": "class:vllm/inputs/llm.py:MultiModalDataBuiltins",
+   "type": "class",
+   "name": "MultiModalDataBuiltins",
+   "filePath": "vllm/inputs/llm.py",
+   "summary": "vLLM 预定义模态类型的 TypedDict。",
+   "tags": [
+    "prompts",
+    "multimodal"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    29,
+    42
+   ]
+  },
+  {
+   "id": "class:vllm/inputs/llm.py:_PromptOptions",
+   "type": "class",
+   "name": "_PromptOptions",
+   "filePath": "vllm/inputs/llm.py",
+   "summary": "所有 SingletonPrompt 类型的公共选项 TypedDict。",
+   "tags": [
+    "prompts",
+    "options"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    64,
+    101
+   ]
+  },
+  {
+   "id": "class:vllm/inputs/llm.py:TextPrompt",
+   "type": "class",
+   "name": "TextPrompt",
+   "filePath": "vllm/inputs/llm.py",
+   "summary": "文本 prompt schema。",
+   "tags": [
+    "prompts",
+    "text"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    104,
+    108
+   ]
+  },
+  {
+   "id": "class:vllm/inputs/llm.py:TokensPrompt",
+   "type": "class",
+   "name": "TokensPrompt",
+   "filePath": "vllm/inputs/llm.py",
+   "summary": "tokenized prompt schema。",
+   "tags": [
+    "prompts",
+    "tokens"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    111,
+    127
+   ]
+  },
+  {
+   "id": "class:vllm/inputs/llm.py:EmbedsPrompt",
+   "type": "class",
+   "name": "EmbedsPrompt",
+   "filePath": "vllm/inputs/llm.py",
+   "summary": "embedding prompt schema。",
+   "tags": [
+    "prompts",
+    "embeds"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    130,
+    148
+   ]
+  },
+  {
+   "id": "class:vllm/inputs/llm.py:ExplicitEncoderDecoderPrompt",
+   "type": "class",
+   "name": "ExplicitEncoderDecoderPrompt",
+   "filePath": "vllm/inputs/llm.py",
+   "summary": "显式 (encoder, decoder) prompt 对（仅 enc-dec 模型合法）。",
+   "tags": [
+    "prompts",
+    "encoder-decoder"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    190,
+    206
+   ]
+  },
+  {
+   "id": "class:vllm/inputs/llm.py:DataPrompt",
+   "type": "class",
+   "name": "DataPrompt",
+   "filePath": "vllm/inputs/llm.py",
+   "summary": "由 IO processor 插件转成 PromptType 的通用输入。",
+   "tags": [
+    "prompts",
+    "plugin"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    234,
+    243
+   ]
+  },
+  {
+   "id": "function:vllm/ir/op.py:_validate_name",
+   "type": "function",
+   "name": "_validate_name",
+   "filePath": "vllm/ir/op.py",
+   "summary": "校验算子名匹配 [a-z_][a-z_0-9]*。",
+   "tags": [
+    "ir",
+    "validation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    40,
+    47
+   ]
+  },
+  {
+   "id": "function:vllm/ir/op.py:enable_torch_wrap",
+   "type": "function",
+   "name": "enable_torch_wrap",
+   "filePath": "vllm/ir/op.py",
+   "summary": "临时开关 torch custom op 包装的上下文管理器（关闭时绕过 torch 层）。",
+   "tags": [
+    "ir",
+    "custom-ops"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    61,
+    74
+   ]
+  },
+  {
+   "id": "function:vllm/ir/op.py:register_op",
+   "type": "function",
+   "name": "register_op",
+   "filePath": "vllm/ir/op.py",
+   "summary": "注册新 IR 算子的装饰器（重载集）：native 实现→pysec/triton 实现、tolerance 与 inplace 选项，登记进 IrOp.registry。",
+   "tags": [
+    "ir",
+    "registry",
+    "decorator"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    102,
+    150
+   ]
+  },
+  {
+   "id": "class:vllm/ir/op.py:IrOp",
+   "type": "class",
+   "name": "IrOp",
+   "filePath": "vllm/ir/op.py",
+   "summary": "IR 算子对象（20 个方法）：名称/实现表（native/pysec/triton）/activation 参数约定（x 前缀）/inplace 支持与 trace/lowering 帮助。",
+   "tags": [
+    "ir",
+    "op"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    153,
+    468
+   ]
+  },
+  {
+   "id": "class:vllm/ir/op.py:IrOpInplace",
+   "type": "class",
+   "name": "IrOpInplace",
+   "filePath": "vllm/ir/op.py",
+   "summary": "支持 maybe_inplace 的 IR 算子变体。",
+   "tags": [
+    "ir",
+    "inplace"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    471,
+    487
+   ]
+  },
+  {
+   "id": "class:vllm/ir/op.py:IrOpInplaceOverload",
+   "type": "class",
+   "name": "IrOpInplaceOverload",
+   "filePath": "vllm/ir/op.py",
+   "summary": "inplace 重载描述（输出索引等）。",
+   "tags": [
+    "ir",
+    "inplace"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    490,
+    529
+   ]
+  },
+  {
+   "id": "class:vllm/ir/op.py:IrOpImpl",
+   "type": "class",
+   "name": "IrOpImpl",
+   "filePath": "vllm/ir/op.py",
+   "summary": "单个后端实现（native/triton/pysec）的描述与调用适配。",
+   "tags": [
+    "ir",
+    "impl"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    532,
+    653
+   ]
+  },
+  {
+   "id": "function:vllm/ir/ops/activation.py:gelu_and_mul_sparse",
+   "type": "function",
+   "name": "gelu_and_mul_sparse",
+   "filePath": "vllm/ir/ops/activation.py",
+   "summary": "高斯稀疏化+GELU+门控乘 IR 算子。",
+   "tags": [
+    "ir",
+    "activation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    12,
+    22
+   ]
+  },
+  {
+   "id": "function:vllm/ir/ops/activation.py:_gelu_and_mul_sparse_input_generator",
+   "type": "function",
+   "name": "_gelu_and_mul_sparse_input_generator",
+   "filePath": "vllm/ir/ops/activation.py",
+   "summary": "该算子的测试输入生成器。",
+   "tags": [
+    "ir",
+    "testing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    26,
+    34
+   ]
+  },
+  {
+   "id": "function:vllm/ir/ops/layernorm.py:rms_norm",
+   "type": "function",
+   "name": "rms_norm",
+   "filePath": "vllm/ir/ops/layernorm.py",
+   "summary": "加权 RMSNorm IR 算子。",
+   "tags": [
+    "ir",
+    "layernorm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    10,
+    21
+   ]
+  },
+  {
+   "id": "function:vllm/ir/ops/layernorm.py:_rms_norm_input_generator",
+   "type": "function",
+   "name": "_rms_norm_input_generator",
+   "filePath": "vllm/ir/ops/layernorm.py",
+   "summary": "rms_norm 测试输入生成器。",
+   "tags": [
+    "ir",
+    "testing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    25,
+    34
+   ]
+  },
+  {
+   "id": "function:vllm/ir/ops/layernorm.py:fused_add_rms_norm",
+   "type": "function",
+   "name": "fused_add_rms_norm",
+   "filePath": "vllm/ir/ops/layernorm.py",
+   "summary": "fused add+RMSNorm IR 算子（allow_inplace）。",
+   "tags": [
+    "ir",
+    "layernorm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    44,
+    62
+   ]
+  },
+  {
+   "id": "function:vllm/ir/ops/layernorm.py:_fused_add_rms_norm_input_generator",
+   "type": "function",
+   "name": "_fused_add_rms_norm_input_generator",
+   "filePath": "vllm/ir/ops/layernorm.py",
+   "summary": "fused_add_rms_norm 测试输入生成器。",
+   "tags": [
+    "ir",
+    "testing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    70,
+    80
+   ]
+  },
+  {
+   "id": "function:vllm/ir/util.py:hash_source",
+   "type": "function",
+   "name": "hash_source",
+   "filePath": "vllm/ir/util.py",
+   "summary": "对函数/对象源码做哈希（缓存键用途）。",
+   "tags": [
+    "ir",
+    "hashing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    12,
+    34
+   ]
+  },
+  {
+   "id": "function:vllm/ir/util.py:weak_lru_cache",
+   "type": "function",
+   "name": "weak_lru_cache",
+   "filePath": "vllm/ir/util.py",
+   "summary": "持 self 弱引用的 LRU cache（避免 functools.lru_cache 的实例泄漏）。",
+   "tags": [
+    "ir",
+    "caching"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    37,
+    56
+   ]
+  },
+  {
+   "id": "function:vllm/kernels/aiter_ops.py:flatten_to_2d_is_free",
+   "type": "function",
+   "name": "flatten_to_2d_is_free",
+   "filePath": "vllm/kernels/aiter_ops.py",
+   "summary": "reshape(-1, last) 是否为单位步长视图（AITER norm kernel 只收密集 2D 的前提检测）。",
+   "tags": [
+    "rocm",
+    "layout-check"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    38,
+    57
+   ]
+  },
+  {
+   "id": "function:vllm/kernels/aiter_ops.py:rms_norm",
+   "type": "function",
+   "name": "rms_norm",
+   "filePath": "vllm/kernels/aiter_ops.py",
+   "summary": "AITER RMSNorm 自定义算子入口（密集 2D 直通）。",
+   "tags": [
+    "rocm",
+    "rmsnorm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    74,
+    81
+   ]
+  },
+  {
+   "id": "function:vllm/kernels/aiter_ops.py:_rms_norm_impl",
+   "type": "function",
+   "name": "_rms_norm_impl",
+   "filePath": "vllm/kernels/aiter_ops.py",
+   "summary": "rms_norm 的实际实现分发。",
+   "tags": [
+    "rocm",
+    "impl"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    84,
+    93
+   ]
+  },
+  {
+   "id": "function:vllm/kernels/aiter_ops.py:fused_add_rms_norm",
+   "type": "function",
+   "name": "fused_add_rms_norm",
+   "filePath": "vllm/kernels/aiter_ops.py",
+   "summary": "AITER fused add+RMSNorm 自定义算子入口。",
+   "tags": [
+    "rocm",
+    "rmsnorm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    120,
+    131
+   ]
+  },
+  {
+   "id": "function:vllm/kernels/aiter_ops.py:_rocm_aiter_rmsnorm2d_fwd_with_add_impl",
+   "type": "function",
+   "name": "_rocm_aiter_rmsnorm2d_fwd_with_add_impl",
+   "filePath": "vllm/kernels/aiter_ops.py",
+   "summary": "rocm_aiter_rmsnorm2d_fwd_with_add 底层调用。",
+   "tags": [
+    "rocm",
+    "impl"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    134,
+    163
+   ]
+  },
+  {
+   "id": "function:vllm/kernels/aiter_ops.py:_rocm_aiter_rmsnorm2d_fwd_with_add_fake",
+   "type": "function",
+   "name": "_rocm_aiter_rmsnorm2d_fwd_with_add_fake",
+   "filePath": "vllm/kernels/aiter_ops.py",
+   "summary": "该算子的 fake/meta 实现。",
+   "tags": [
+    "rocm",
+    "fake-tensor"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    166,
+    175
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "function:vllm/entrypoints/speech_to_text/base/serving.py:asr_inter_chunk_separator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "function:vllm/entrypoints/speech_to_text/base/serving.py:asr_inter_chunk_separator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "class:vllm/entrypoints/speech_to_text/base/serving.py:SpeechToTextBaseServing",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "class:vllm/entrypoints/speech_to_text/base/serving.py:SpeechToTextBaseServing",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/utils.py",
+   "target": "function:vllm/entrypoints/speech_to_text/base/utils.py:read_upload_with_limit",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/utils.py",
+   "target": "function:vllm/entrypoints/speech_to_text/base/utils.py:read_upload_with_limit",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/connection.py",
+   "target": "class:vllm/entrypoints/speech_to_text/realtime/connection.py:RealtimeConnection",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/connection.py",
+   "target": "class:vllm/entrypoints/speech_to_text/realtime/connection.py:RealtimeConnection",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:InputAudioBufferAppend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:InputAudioBufferAppend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:InputAudioBufferCommit",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:InputAudioBufferCommit",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:SessionUpdate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:SessionUpdate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:SessionCreated",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:SessionCreated",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:TranscriptionDelta",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:TranscriptionDelta",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:TranscriptionDone",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:TranscriptionDone",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:ErrorEvent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/realtime/protocol.py:ErrorEvent",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/serving.py",
+   "target": "class:vllm/entrypoints/speech_to_text/realtime/serving.py:OpenAIServingRealtime",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/serving.py",
+   "target": "class:vllm/entrypoints/speech_to_text/realtime/serving.py:OpenAIServingRealtime",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionResponseStreamChoice",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionResponseStreamChoice",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionStreamResponse",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionStreamResponse",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionUsageAudio",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionUsageAudio",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionResponse",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionResponse",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionWord",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionWord",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionSegment",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionSegment",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionResponseVerbose",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionResponseVerbose",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionDiarizedSegment",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionDiarizedSegment",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionResponseDiarized",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/transcription/protocol.py:TranscriptionResponseDiarized",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationResponseStreamChoice",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationResponseStreamChoice",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationStreamResponse",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationStreamResponse",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationResponse",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationResponse",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationWord",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationWord",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationSegment",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationSegment",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationResponseVerbose",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "class:vllm/entrypoints/speech_to_text/translation/protocol.py:TranslationResponseVerbose",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "function:vllm/env_override.py:_get_torch_root",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "function:vllm/env_override.py:_get_torch_version_attr",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "function:vllm/env_override.py:_maybe_set_cuda_compatibility_path",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "function:vllm/env_override.py:_maybe_promote_torch_symbols_for_rocm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "function:vllm/env_override.py:memory_plan_reuse_patched",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "function:vllm/env_override.py:memory_plan_reuse_patched",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "function:vllm/env_override.py:get_graph_partition_signature_patched",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "function:vllm/env_override.py:get_graph_partition_signature_patched",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "function:vllm/env_override.py:should_partition_patched",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "function:vllm/env_override.py:should_partition_patched",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "function:vllm/env_override.py:_update_scheduler_patched",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "function:vllm/env_override.py:_patch_get_raw_stream_if_needed",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "function:vllm/env_override.py:_apply_constrain_to_fx_strides_patch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "function:vllm/env_override.py:_apply_fxgraphcache_pickle_patch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "function:vllm/env_override.py:_patch_cpp_indirect_assert_if_needed",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "class:vllm/env_override.py:_VllmFallbackAllowList",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "function:vllm/env_override.py:_patch_inductor_fallback_allow_list",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "function:vllm/env_override.py:_apply_inductor_pattern_matcher_patch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:use_aot_compile",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:use_aot_compile",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:use_mega_aot_artifact",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:use_mega_aot_artifact",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:env_with_choices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:env_with_choices",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:env_list_with_choices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:env_list_with_choices",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:env_set_with_choices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:env_set_with_choices",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:get_vllm_port",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:get_vllm_port",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:get_env_or_set_default",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:get_env_or_set_default",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:_resolve_rust_cli_path",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:__getattr__",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:enable_envs_cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:enable_envs_cache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:disable_envs_cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:disable_envs_cache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:compile_factors",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "function:vllm/envs.py:compile_factors",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:VLLMError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:VLLMError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:VLLMClientError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:VLLMClientError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:VLLMServerError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:VLLMServerError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:VLLMValidationError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:VLLMValidationError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:VLLMNotFoundError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:VLLMNotFoundError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:ChatTemplateResolutionError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:ChatTemplateResolutionError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:LoRAAdapterNotFoundError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:LoRAAdapterNotFoundError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:VLLMUnprocessableEntityError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:VLLMUnprocessableEntityError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:GenerationError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:GenerationError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:RetryableRequestError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:RetryableRequestError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:GracefulHTTPError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:GracefulHTTPError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:QueueOverflowError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:QueueOverflowError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:MaxQueuedTokensError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:MaxQueuedTokensError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:ProfilerAlreadyActiveError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/exceptions.py",
+   "target": "class:vllm/exceptions.py:ProfilerAlreadyActiveError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "class:vllm/forward_context.py:BatchDescriptor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "class:vllm/forward_context.py:BatchDescriptor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "function:vllm/forward_context.py:_compute_sp_num_tokens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "class:vllm/forward_context.py:DPMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "class:vllm/forward_context.py:DPMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "class:vllm/forward_context.py:ForwardContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "class:vllm/forward_context.py:ForwardContext",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "function:vllm/forward_context.py:get_forward_context",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "function:vllm/forward_context.py:get_forward_context",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "function:vllm/forward_context.py:in_piecewise_cudagraph",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "function:vllm/forward_context.py:in_piecewise_cudagraph",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "function:vllm/forward_context.py:create_forward_context",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "function:vllm/forward_context.py:create_forward_context",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "function:vllm/forward_context.py:override_forward_context",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "function:vllm/forward_context.py:override_forward_context",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "function:vllm/forward_context.py:set_forward_context",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "function:vllm/forward_context.py:set_forward_context",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "class:vllm/inputs/engine.py:_InputOptions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "class:vllm/inputs/engine.py:TokensInput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "class:vllm/inputs/engine.py:TokensInput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "function:vllm/inputs/engine.py:tokens_input",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "function:vllm/inputs/engine.py:tokens_input",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "class:vllm/inputs/engine.py:EmbedsInput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "class:vllm/inputs/engine.py:EmbedsInput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "function:vllm/inputs/engine.py:embeds_input",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "function:vllm/inputs/engine.py:embeds_input",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "class:vllm/inputs/engine.py:MultiModalInput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "class:vllm/inputs/engine.py:MultiModalInput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "function:vllm/inputs/engine.py:mm_input",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "function:vllm/inputs/engine.py:mm_input",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "class:vllm/inputs/engine.py:MultiModalEncDecInput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "class:vllm/inputs/engine.py:MultiModalEncDecInput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "function:vllm/inputs/engine.py:mm_enc_dec_input",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "function:vllm/inputs/engine.py:mm_enc_dec_input",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "class:vllm/inputs/engine.py:EncoderDecoderInput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "class:vllm/inputs/engine.py:EncoderDecoderInput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "function:vllm/inputs/engine.py:_validate_enc_input",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "function:vllm/inputs/engine.py:_prepare_decoder_input_ids_for_generation",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "function:vllm/inputs/engine.py:build_enc_dec_input",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "function:vllm/inputs/engine.py:build_enc_dec_input",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "function:vllm/inputs/engine.py:split_enc_dec_input",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "function:vllm/inputs/engine.py:split_enc_dec_input",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/inputs/llm.py",
+   "target": "class:vllm/inputs/llm.py:MultiModalDataBuiltins",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/llm.py",
+   "target": "class:vllm/inputs/llm.py:MultiModalDataBuiltins",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/inputs/llm.py",
+   "target": "class:vllm/inputs/llm.py:_PromptOptions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/llm.py",
+   "target": "class:vllm/inputs/llm.py:TextPrompt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/llm.py",
+   "target": "class:vllm/inputs/llm.py:TextPrompt",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/inputs/llm.py",
+   "target": "class:vllm/inputs/llm.py:TokensPrompt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/llm.py",
+   "target": "class:vllm/inputs/llm.py:TokensPrompt",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/inputs/llm.py",
+   "target": "class:vllm/inputs/llm.py:EmbedsPrompt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/llm.py",
+   "target": "class:vllm/inputs/llm.py:EmbedsPrompt",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/inputs/llm.py",
+   "target": "class:vllm/inputs/llm.py:ExplicitEncoderDecoderPrompt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/llm.py",
+   "target": "class:vllm/inputs/llm.py:ExplicitEncoderDecoderPrompt",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/inputs/llm.py",
+   "target": "class:vllm/inputs/llm.py:DataPrompt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/inputs/llm.py",
+   "target": "class:vllm/inputs/llm.py:DataPrompt",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/ir/op.py",
+   "target": "function:vllm/ir/op.py:_validate_name",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/ir/op.py",
+   "target": "function:vllm/ir/op.py:enable_torch_wrap",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/ir/op.py",
+   "target": "function:vllm/ir/op.py:enable_torch_wrap",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/ir/op.py",
+   "target": "function:vllm/ir/op.py:register_op",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/ir/op.py",
+   "target": "function:vllm/ir/op.py:register_op",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/ir/op.py",
+   "target": "class:vllm/ir/op.py:IrOp",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/ir/op.py",
+   "target": "class:vllm/ir/op.py:IrOp",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/ir/op.py",
+   "target": "class:vllm/ir/op.py:IrOpInplace",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/ir/op.py",
+   "target": "class:vllm/ir/op.py:IrOpInplace",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/ir/op.py",
+   "target": "class:vllm/ir/op.py:IrOpInplaceOverload",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/ir/op.py",
+   "target": "class:vllm/ir/op.py:IrOpInplaceOverload",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/ir/op.py",
+   "target": "class:vllm/ir/op.py:IrOpImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/ir/op.py",
+   "target": "class:vllm/ir/op.py:IrOpImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/ir/ops/activation.py",
+   "target": "function:vllm/ir/ops/activation.py:gelu_and_mul_sparse",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/ir/ops/activation.py",
+   "target": "function:vllm/ir/ops/activation.py:gelu_and_mul_sparse",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/ir/ops/activation.py",
+   "target": "function:vllm/ir/ops/activation.py:_gelu_and_mul_sparse_input_generator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/ir/ops/layernorm.py",
+   "target": "function:vllm/ir/ops/layernorm.py:rms_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/ir/ops/layernorm.py",
+   "target": "function:vllm/ir/ops/layernorm.py:rms_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/ir/ops/layernorm.py",
+   "target": "function:vllm/ir/ops/layernorm.py:_rms_norm_input_generator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/ir/ops/layernorm.py",
+   "target": "function:vllm/ir/ops/layernorm.py:fused_add_rms_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/ir/ops/layernorm.py",
+   "target": "function:vllm/ir/ops/layernorm.py:fused_add_rms_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/ir/ops/layernorm.py",
+   "target": "function:vllm/ir/ops/layernorm.py:_fused_add_rms_norm_input_generator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/ir/util.py",
+   "target": "function:vllm/ir/util.py:hash_source",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/ir/util.py",
+   "target": "function:vllm/ir/util.py:hash_source",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/ir/util.py",
+   "target": "function:vllm/ir/util.py:weak_lru_cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/ir/util.py",
+   "target": "function:vllm/ir/util.py:weak_lru_cache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/kernels/aiter_ops.py",
+   "target": "function:vllm/kernels/aiter_ops.py:flatten_to_2d_is_free",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/kernels/aiter_ops.py",
+   "target": "function:vllm/kernels/aiter_ops.py:flatten_to_2d_is_free",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/kernels/aiter_ops.py",
+   "target": "function:vllm/kernels/aiter_ops.py:rms_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/kernels/aiter_ops.py",
+   "target": "function:vllm/kernels/aiter_ops.py:rms_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/kernels/aiter_ops.py",
+   "target": "function:vllm/kernels/aiter_ops.py:_rms_norm_impl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/kernels/aiter_ops.py",
+   "target": "function:vllm/kernels/aiter_ops.py:fused_add_rms_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/kernels/aiter_ops.py",
+   "target": "function:vllm/kernels/aiter_ops.py:fused_add_rms_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/kernels/aiter_ops.py",
+   "target": "function:vllm/kernels/aiter_ops.py:_rocm_aiter_rmsnorm2d_fwd_with_add_impl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/kernels/aiter_ops.py",
+   "target": "function:vllm/kernels/aiter_ops.py:_rocm_aiter_rmsnorm2d_fwd_with_add_fake",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/entrypoints/generate/base/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/entrypoints/openai/models/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/entrypoints/serve/engine/typing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/entrypoints/serve/utils/api_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/logprobs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/model_executor/model_loader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/model_executor/models/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/multimodal/audio.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/multimodal/media/audio.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/renderers/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/renderers/inputs/preprocess.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/serving.py",
+   "target": "file:vllm/utils/async_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/utils.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/base/utils.py",
+   "target": "file:vllm/utils/mem_constants.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/connection.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/connection.py",
+   "target": "file:vllm/entrypoints/serve/exception_handling/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/connection.py",
+   "target": "file:vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/connection.py",
+   "target": "file:vllm/entrypoints/speech_to_text/realtime/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/connection.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/connection.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/connection.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/connection.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/protocol.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/serving.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/serving.py",
+   "target": "file:vllm/entrypoints/generate/base/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/serving.py",
+   "target": "file:vllm/entrypoints/openai/models/serving.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/serving.py",
+   "target": "file:vllm/entrypoints/serve/utils/request_logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/serving.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/serving.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/serving.py",
+   "target": "file:vllm/model_executor/model_loader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/serving.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/realtime/serving.py",
+   "target": "file:vllm/renderers/inputs/preprocess.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "file:vllm/config/speech_to_text.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "file:vllm/entrypoints/speech_to_text/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/transcription/protocol.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "file:vllm/config/speech_to_text.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "file:vllm/entrypoints/serve/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "file:vllm/entrypoints/speech_to_text/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/entrypoints/speech_to_text/translation/protocol.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/env_override.py",
+   "target": "file:vllm/utils/torch_version.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/envs.py",
+   "target": "file:vllm/utils/torch_version.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "file:vllm/v1/worker/dp_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/forward_context.py",
+   "target": "file:vllm/v1/worker/ubatch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/inputs/engine.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/inputs/llm.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/ir/op.py",
+   "target": "file:vllm/ir/tolerances.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/ir/op.py",
+   "target": "file:vllm/ir/util.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/ir/op.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/ir/op.py",
+   "target": "file:vllm/logging_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/ir/op.py",
+   "target": "file:vllm/logging_utils/lazy.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/ir/ops/__init__.py",
+   "target": "file:vllm/ir/ops/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/ir/ops/__init__.py",
+   "target": "file:vllm/ir/ops/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/ir/ops/activation.py",
+   "target": "file:vllm/ir/op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/ir/ops/layernorm.py",
+   "target": "file:vllm/ir/op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/kernels/__init__.py",
+   "target": "file:vllm/kernels/aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/kernels/__init__.py",
+   "target": "file:vllm/kernels/oink_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/kernels/__init__.py",
+   "target": "file:vllm/kernels/triton/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/kernels/__init__.py",
+   "target": "file:vllm/kernels/vllm_c.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/kernels/aiter_ops.py",
+   "target": "file:vllm/ir/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/kernels/aiter_ops.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/kernels/aiter_ops.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/entrypoints/speech_to_text/base/serving.py:SpeechToTextBaseServing",
+   "target": "class:vllm/entrypoints/generate/base/serving.py:GenerateBaseServing",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/entrypoints/speech_to_text/realtime/serving.py:OpenAIServingRealtime",
+   "target": "class:vllm/entrypoints/generate/base/serving.py:GenerateBaseServing",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/exceptions.py:VLLMClientError",
+   "target": "class:vllm/exceptions.py:VLLMError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/exceptions.py:VLLMServerError",
+   "target": "class:vllm/exceptions.py:VLLMError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/exceptions.py:VLLMValidationError",
+   "target": "class:vllm/exceptions.py:VLLMClientError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/exceptions.py:VLLMNotFoundError",
+   "target": "class:vllm/exceptions.py:VLLMClientError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/exceptions.py:ChatTemplateResolutionError",
+   "target": "class:vllm/exceptions.py:VLLMClientError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/exceptions.py:LoRAAdapterNotFoundError",
+   "target": "class:vllm/exceptions.py:VLLMNotFoundError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/exceptions.py:VLLMUnprocessableEntityError",
+   "target": "class:vllm/exceptions.py:VLLMClientError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/exceptions.py:GenerationError",
+   "target": "class:vllm/exceptions.py:VLLMServerError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/exceptions.py:RetryableRequestError",
+   "target": "class:vllm/exceptions.py:GenerationError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/exceptions.py:GracefulHTTPError",
+   "target": "class:vllm/exceptions.py:VLLMError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/exceptions.py:QueueOverflowError",
+   "target": "class:vllm/exceptions.py:GracefulHTTPError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/exceptions.py:MaxQueuedTokensError",
+   "target": "class:vllm/exceptions.py:GracefulHTTPError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/exceptions.py:ProfilerAlreadyActiveError",
+   "target": "class:vllm/exceptions.py:GracefulHTTPError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/inputs/engine.py:TokensInput",
+   "target": "class:vllm/inputs/engine.py:_InputOptions",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/inputs/engine.py:EmbedsInput",
+   "target": "class:vllm/inputs/engine.py:_InputOptions",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/inputs/engine.py:MultiModalInput",
+   "target": "class:vllm/inputs/engine.py:_InputOptions",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/inputs/engine.py:MultiModalEncDecInput",
+   "target": "class:vllm/inputs/engine.py:MultiModalInput",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/inputs/llm.py:TextPrompt",
+   "target": "class:vllm/inputs/llm.py:_PromptOptions",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/inputs/llm.py:TokensPrompt",
+   "target": "class:vllm/inputs/llm.py:_PromptOptions",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/inputs/llm.py:EmbedsPrompt",
+   "target": "class:vllm/inputs/llm.py:_PromptOptions",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/inputs/llm.py:DataPrompt",
+   "target": "class:vllm/inputs/llm.py:_PromptOptions",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/ir/op.py:IrOpInplace",
+   "target": "class:vllm/ir/op.py:IrOp",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "function:vllm/ir/ops/layernorm.py:rms_norm",
+   "target": "function:vllm/ir/op.py:register_op",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/ir/ops/layernorm.py:fused_add_rms_norm",
+   "target": "function:vllm/ir/op.py:register_op",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/ir/ops/activation.py:gelu_and_mul_sparse",
+   "target": "function:vllm/ir/op.py:register_op",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

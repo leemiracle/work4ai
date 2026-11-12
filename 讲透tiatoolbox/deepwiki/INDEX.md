@@ -1,0 +1,32 @@
+# DeepWiki 索引 — TissueImageAnalytics/tiatoolbox
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-21
+> 结构 27 页 · 全文 328694 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation and Setup](1.1-installation-and-setup.md)
+  - [1.2 Core Concepts](1.2-core-concepts.md)
+- [2 Data Systems](2-data-systems.md)
+  - [2.1 WSI Reading and Formats](2.1-wsi-reading-and-formats.md)
+  - [2.2 Annotation Management](2.2-annotation-management.md)
+- [3 Image Processing Pipeline](3-image-processing-pipeline.md)
+  - [3.1 Patch Extraction](3.1-patch-extraction.md)
+  - [3.2 Stain Processing](3.2-stain-processing.md)
+  - [3.3 Image Registration](3.3-image-registration.md)
+  - [3.4 Tissue Masking and Utilities](3.4-tissue-masking-and-utilities.md)
+- [4 Model and Inference Systems](4-model-and-inference-systems.md)
+  - [4.1 Prediction Engines](4.1-prediction-engines.md)
+  - [4.2 Model Architectures](4.2-model-architectures.md)
+  - [4.3 Pretrained Models](4.3-pretrained-models.md)
+- [5 Advanced Tools](5-advanced-tools.md)
+  - [5.1 Graph Construction and Analysis](5.1-graph-construction-and-analysis.md)
+  - [5.2 Tile Pyramid Generation](5.2-tile-pyramid-generation.md)
+  - [5.3 Visualization and Rendering](5.3-visualization-and-rendering.md)
+- [6 Examples and Tutorials](6-examples-and-tutorials.md)
+  - [6.1 Basic Usage Examples](6.1-basic-usage-examples.md)
+  - [6.2 Advanced Analysis Pipelines](6.2-advanced-analysis-pipelines.md)
+- [7 Command Line Interface](7-command-line-interface.md)
+- [8 Development and Contributing](8-development-and-contributing.md)
+  - [8.1 Contributing Guidelines](8.1-contributing-guidelines.md)
+  - [8.2 Testing Framework](8.2-testing-framework.md)
+  - [8.3 CI/CD and Development Infrastructure](8.3-ci-cd-and-development-infrastructure.md)

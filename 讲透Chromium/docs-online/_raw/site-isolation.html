@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Site Isolation Design Document</title>
+  <link rel="stylesheet" href="/_stylesheets/@docsearch/style.css">
+  <link rel="stylesheet" href="/_stylesheets/default.css">
+  <link rel="stylesheet" href="/_stylesheets/highlight.js/github.min.css">
+</head>
+
+<header id="site-header">
+  <button id="mobile-nav-toggle" class="mobile-nav-toggle" type="button" aria-label="Open navigation menu" aria-controls="sidebar-left" aria-expanded="false">
+    <span class="mobile-nav-toggle-bars" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+  </button>
+  <a class="header-brand" href="/">
+    <img alt="the Chromium logo" src="/_assets/icon-chromium-96.png" width="48" height="48">
+    <h2>The Chromium Projects</h2>
+  </a>
+  <div id="search"></div>
+</header>
+<div id="mobile-header-spacer" aria-hidden="true"></div>
+
+<div id="mobile-nav-backdrop" aria-hidden="true"></div>
+
+<div id="main-wrapper">
+  <nav id="sidebar-left" class="sidebar-nav" aria-label="Site navigation">
+    <div class="mobile-nav-header">
+      <h3>Menu</h3>
+      <button id="mobile-nav-close" class="mobile-nav-close" type="button" aria-label="Close navigation menu">&times;</button>
+    </div>
+    <section class="sidebar-primary">
+      <a href="/chromium-projects">Home</a>
+      <a href="/Home">Chromium</a>
+      <a href="/chromium-os">ChromiumOS</a>
+    </section>
+    <section class="sidebar-quick-links">
+      <h4>Quick links</h4>
+      <a href="/for-testers/bug-reporting-guidelines">Report bugs</a>
+      <a href="/developers/discussion-groups">Discuss</a>
+    </section>
+    <section class="sidebar-other-sites">
+      <h4>Other sites</h4>
+      <a href="https://blog.chromium.org/">Chromium Blog</a>
+      <a href="https://developer.chrome.com/extensions">Google Chrome Extensions</a>
+    </section>
+    <section class="sidebar-license" role="complementary">
+      Except as otherwise
+      <a href="https://developers.google.com/site-policies.html#restrictions">noted</a>,
+      the content of this page is licensed under a
+      <a href="https://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 license</a>,
+      and examples are licensed under the
+      <a href="https://chromium.googlesource.com/chromium/src/+/HEAD/LICENSE">BSD License</a>.
+    </section>
+    <section class="sidebar-privacy" role="complementary">
+      <a href="https://policies.google.com/privacy">Privacy</a>
+    </section>
+    <a class="edit-this-page" href="https://edit.chromium.org/edit?repo=chromium/website/main&file=site/developers/design-documents/site-isolation/index.md&cloneRepo=chromium/website:refs/heads/main&fullPath=chromium/site/developers/design-documents/site-isolation/index.md">Edit</a>
+  </nav>
+  <main>
+    <div class="breadcrumbs">
+      <a href="/developers">For Developers</a> &gt;
+      <a href="/developers/design-documents">Design Documents</a> &gt;
+    </div>
+    <h1>Site Isolation Design Document</h1>
+  <p><em>This design document covers technical information about how Site Isolation is
+built. For a general overview of Site Isolation, see
+<a href="https://www.chromium.org/Home/chromium-security/site-isolation">https://www.chromium.org/<wbr>Home/<wbr>chromium-security/<wbr>site-isolation</a>.</em></p>
+<h2 id="motivation" tabindex="-1"><a class="header-anchor" href="#motivation">Motivation</a></h2>
+<p>Chrome's <a href="/developers/design-documents/multi-process-architecture">multi-process
+architecture</a> provides
+many benefits for speed, stability, and security. It allows web pages in
+unrelated tabs to run in parallel, and it allows users to continue using the
+browser and other tabs when a renderer process crashes. Because the renderer
+processes don't require direct access to disk, network, or devices, Chrome can
+also run them inside a restricted
+<a href="/developers/design-documents/sandbox">sandbox</a>. This <a href="http://crypto.stanford.edu/websec/chromium/">limits the
+damage</a> that attackers can cause if
+they exploit a vulnerability in the renderer, including making it difficult for
+attackers to access the user's filesystem or devices, as well as privileged
+pages (e.g., settings or extensions) and pages in other profiles (e.g.,
+Incognito mode).</p>
+<p><a href="/developers/design-documents/site-isolation/ChromeSiteIsolationProject-arch.png"><img alt="image"
+src="/developers/design-documents/site-isolation/ChromeSiteIsolationProject-arch.png"
+height=137
+width=320></a></p>
+<p>However, for a long time there was a large opportunity to use Chrome's sandbox
+for greater security benefits: isolating web sites from each other. Until
+version 67, Chrome made an effort to place pages from different web sites in
+different renderer processes when possible, but due to compatibility
+constraints, there were many cases in which pages from different sites share a
+process (e.g., cross-site iframes). In these cases, we used to rely on the
+renderer process to enforce the Same Origin Policy and keep web sites isolated
+from each other.</p>
+<p>This page describes our &quot;site isolation&quot; efforts to improve Chrome to use
+sandboxed renderer processes as a security boundary between web sites, even in
+the presence of vulnerabilities in the renderer process. Our goal is to ensure a
+renderer process can be limited to contain pages from at most one web site. The
+browser process can then restrict that process's access to cookies and other
+resources, based on which web sites require dedicated processes.</p>
+<p><strong>Status:</strong> Site Isolation has been enabled by default on desktop platforms (for
+all sites) in Chrome 67, and on Android (for sites users log into) in Chrome 77.
+This helps defend against speculative side channel attacks (e.g., Spectre), and
+(on desktop) against UXSS and fully compromised renderer processes.</p>
+<nav class="table-of-contents"><ol><li><a href="#motivation">Motivation</a></li><li><a href="#threat-model">Threat Model</a></li><li><a href="#requirements">Requirements</a></li><li><a href="#project-progression">Project Progression</a></li><li><a href="#project-tasks">Project Tasks</a></li><li><a href="#performance">Performance</a></li><li><a href="#how-to-enable">How to Enable</a></li><li><a href="#development-resources">Development Resources</a></li><li><a href="#2015-site-isolation-summit-talks">2015 Site Isolation Summit Talks</a><ol><li><a href="#site-isolation-overview">Site Isolation Overview</a><ol><li><a href="#site-isolation-overview-1">Site Isolation Overview</a></li></ol></li><li><a href="#chromium-changes-for-oopif">Chromium Changes for OOPIF</a><ol><li><a href="#chromium-changes-for-oopif-1">Chromium Changes for OOPIF</a></li></ol></li><li><a href="#blink-changes-for-oopif">Blink Changes for OOPIF</a><ol><li><a href="#blink-changes-for-oopif-1">Blink Changes for OOPIF</a></li></ol></li></ol></li><li><a href="#discussionsquestions">Discussions/Questions</a></li></ol></nav><h2 id="threat-model" tabindex="-1"><a class="header-anchor" href="#threat-model"><strong>Threat Model</strong></a></h2>
+<p>For a &quot;one-site-per-process&quot; security policy, we assume that an attacker can
+convince the user to visit a page that exploits a vulnerability in the renderer
+process, allowing the attacker to run arbitrary code within the sandbox. We also
+assume that an attacker may use <a href="https://security.googleblog.com/2018/01/todays-cpu-vulnerability-what-you-need.html">speculative side channel
+attacks</a>
+(e.g., Spectre) to read data within a renderer process. We focus on attackers
+that want to steal information or abuse privileges granted to other web sites.</p>
+<p>Here, we use a precise definition for a <strong>site</strong> that we use as a principal: a
+page's site includes the scheme and registered domain name, including the public
+suffix, but ignoring subdomains, port, or path. We use sites instead of origins
+to avoid breaking compatibility with existing web pages that might modify their
+document.domain to communicate across subdomains.</p>
+<p>We consider the following threats in scope for the proposed policy (once fully
+implemented):</p>
+<ul>
+<li><strong>Stealing cross-site cookies and HTML5 stored data.</strong> We can
+prevent a renderer process from receiving cookies or stored data
+from sites other than its own.</li>
+<li><strong>Stealing cross-site HTML, XML, and JSON data.</strong> Using MIME type
+and content sniffing, we can prevent a renderer process from loading
+most sensitive cross-site data. We cannot block all cross-site
+resources, however, because images, scripts, and other opaque files
+are permitted across sites.</li>
+<li><strong>Stealing saved passwords.</strong> We can prevent a renderer process from
+receiving saved passwords from sites other than its own.</li>
+<li><strong>Abusing permissions granted to another site.</strong> We can prevent a
+renderer process from using permissions such as geolocation that the
+user has granted to other sites.</li>
+<li><strong>Compromising X-Frame-Options.</strong> We can prevent a renderer process
+from loading cross-site pages in iframes. This allows the browser
+process to decide if a given site can be loaded in an iframe or not
+based on X-Frame-Options or CSP frame-ancestors headers.</li>
+<li><strong>Accessing cross-site DOM elements via UXSS bugs.</strong> An attacker
+exploiting a universal cross-site scripting bug in the renderer
+process will not be able to access DOM elements of cross-site pages,
+which will not live in the same renderer process.</li>
+</ul>
+<p>We do not expect this policy to mitigate traditional cross-site attacks or
+attacks that occur within the page of a victim site, such as XSS, CSRF, XSSI, or
+clickjacking.</p>
+<h2 id="requirements" tabindex="-1"><a class="header-anchor" href="#requirements">Requirements</a></h2>
+<p>To support a site-per-process policy in a multi-process web browser, we need to
+identify the smallest unit that cannot be split into multiple processes. This is
+not actually a single page, but rather a group of documents from the same web
+site that have references to each other. Such documents have full script access
+to each other's content, and they must run on a single thread, not concurrently.
+This group may span multiple frames or tabs, and they may come from multiple
+sub-domains of the same site.</p>
+<p><a href="/developers/design-documents/site-isolation/ChromeSiteIsolationProject-siteinstances.png"><img alt="image"
+src="/developers/design-documents/site-isolation/ChromeSiteIsolationProject-siteinstances.png"
+height=150
+width=400></a></p>
+<p>The HTML spec refers to this group as a &quot;<a href="http://dev.w3.org/html5/spec/single-page.html#unit-of-related-similar-origin-browsing-contexts">unit of related similar-origin
+browsing
+contexts</a>.&quot;
+In Chrome, we refer to this as a <strong>SiteInstance</strong>. All of the documents within a
+SiteInstance may be able to script each other, and we must thus render them in
+the same process.</p>
+<p>Note that a single tab might be navigated from one web site to another, and thus
+it may show different SiteInstances at different times. To support a
+site-per-process policy, a browser must be able to swap between renderer
+processes for these navigations.</p>
+<p>There are also certain JavaScript interactions, such as postMessage() or
+close(), that are allowed between windows or frames even when they are showing
+documents from different sites. It is necessary to support these limited
+interactions between renderer processes.</p>
+<p>In addition, top-level documents may contain iframes from different web sites.
+These iframes have their own security context and must be rendered in a process
+based on their own site, not the site of their parent frame.</p>
+<p>Finally, it is important that sensitive cross-site data is not delivered to the
+renderer process, even if requested from contexts like image or script tags
+which normally work cross-site. This requires identifying which responses to
+allow and which to block.</p>
+<h2 id="project-progression" tabindex="-1"><a class="header-anchor" href="#project-progression">Project Progression</a></h2>
+<p>As described on our <a href="/developers/design-documents/process-models">Process
+Models</a> page, there were originally
+several cases in which Chrome (prior to version 67) would place documents from
+different sites in the same renderer process. This kept Chrome compatible with
+existing web pages with cross-site iframes, at least until Site Isolation was
+enabled. Some examples of cross-site pages that shared a process at the time:</p>
+<ul>
+<li>Cross-site iframes were usually hosted in the same process as their
+parent document.</li>
+<li>Most renderer-initiated navigations (including link clicks, form
+submissions, and script navigations) were kept within the current
+process even if they cross a site boundary. This is because other
+windows in the same process could attempt to use postMessage or
+similar calls to interact with them.</li>
+<li>If too many renderer processes had been created, Chrome started to
+reuse existing processes rather than creating new ones. This reduces
+memory overhead.</li>
+</ul>
+<p>However, at the time, Chrome already had taken many large steps towards site
+isolation. For example, it swapped renderer processes for cross-site navigations
+that were initiated in the browser process (such as omnibox navigations or
+bookmarks). Cross-origin JavaScript interactions were supported across
+processes, such as postMessage() and navigating another window. Chrome
+eventually gained support for out-of-process iframes in some contexts.</p>
+<p>That early progress allowed us to use a stricter security policy for certain
+types of pages, such as privileged WebUI pages (like the Settings page). These
+pages are never allowed to share a process with regular web pages, even when
+navigating in a single tab. This is generally acceptable from a compatibility
+perspective because no scripting is expected between normal pages and WebUI
+pages, and because these can never be loaded in subframes of unprivileged pages.</p>
+<p>As of Chrome 56, Chrome started using out-of-process iframes to <a href="https://blog.chromium.org/2017/05/improving-extension-security-with-out.html">keep web
+content out of privileged extension
+processes</a>.</p>
+<p>As of Chrome 63, Site Isolation could be
+<a href="https://support.google.com/chrome/answer/7623121?hl=en">enabled</a> as an
+<a href="/Home/chromium-security/site-isolation">additional mitigation against universal cross-site scripting (UXSS)
+vulnerabilities and Spectre</a>. It was
+also available via <a href="https://www.blog.google/topics/connected-workspaces/security-enhancements-and-more-enterprise-chrome-browser-customers/">enterprise
+policy</a>.
+That initial support was still in progress and had <a href="https://support.google.com/chrome/a/answer/7581529">known issues and
+tradeoffs</a>, but helped to
+defend against UXSS vulnerabilities and Spectre by putting pages from different
+sites in different processes to prevent leaks of cross-site data. The feature
+did not yet mitigate attacks with arbitrary remote code execution in the
+renderer process; this will later be possible as additional enforcements in the
+browser process are completed.</p>
+<p>In Chrome 67, Site Isolation was enabled for all sites on desktop platforms
+(Windows, Mac, Linux, and ChromeOS), helping to defend against Spectre.</p>
+<p>In Chrome 77, Site Isolation was also enabled on Android devices with at least 2
+GB of RAM, but only for sites that users log into (to keep memory overhead
+lower). By this time, Site Isolation on desktop (i.e., with the full
+site-per-process policy) also defended against fully compromised renderer
+processes.</p>
+<h2 id="project-tasks" tabindex="-1"><a class="header-anchor" href="#project-tasks">Project Tasks</a></h2>
+<p>To support a site-per-process policy in Chrome, we needed to complete the tasks
+outlined below. These ensure that cross-site navigations and script interactions
+will not break, despite having all pages from different sites in different
+processes. The master tracking bug is <a href="https://crbug.com/467770">https://crbug.com/<wbr>467770</a>.</p>
+<ul>
+<li><strong>Cross-Process Navigations</strong>
+Any navigation to a different web site requires a process swap in the
+current tab or frame.
+<em>Status:</em> Complete. Cross-process navigations are supported in all frames,
+and they are used for many cases: out-of-process iframes, keeping privileged
+WebUI or extension pages isolated from web pages, any cross-site main frame
+navigation, etc.</li>
+<li><strong>Cross-Process JavaScript</strong>
+As mentioned above, some window and frame level interactions are allowed
+between pages from different sites. Common examples are postMessage, close,
+focus, blur, and assignments to window.location, notably excluding any
+access to page content. These interactions can generally be made
+asynchronous and can be implemented by passing messages to the appropriate
+renderer process.
+<em>Status:</em> Complete. Chrome supports all required interactions, including
+frame placeholders, postMessage, close, closed, focus, blur, and assignments
+to window.location between top-level windows in different processes.</li>
+<li><strong>Out-of-Process iframes</strong>
+Iframes have separate security contexts from their parent document, so
+cross-site iframes must be rendered in a different process from their
+parent. It is also important that an iframe that is from the same origin as
+a popup window shares a process with the popup window and not its own parent
+page. We render these out-of-process iframes in a separate RenderFrame
+composited into the correct visual location, much like plugins. This is by
+far the largest requirement for supporting site-per-process, as it involves
+a major architecture change to the Chrome and Blink codebases.
+<em>Status:</em> Complete. The first uses of <a href="/developers/design-documents/oop-iframes">Out-of-Process
+iframes</a> (OOPIFs) launched in
+Chrome 56, isolating extensions from web content. Widespread use for
+cross-site iframes launched in Chrome 67 on desktop, and in Chrome 77 for
+Android. Tracked at <a href="https://crbug.com/99379">https://crbug.com/<wbr>99379</a>.</li>
+<li><strong>Cross-Origin Read Blocking</strong>
+While any given site is allowed to request many types of cross-site
+resources (such as scripts and images), the browser process should prevent
+it from receiving cross-site HTML, XML, and JSON data (based on a
+combination of MIME type and content sniffing).
+<em>Status:</em> Complete. Our initial <a href="/developers/design-documents/blocking-cross-site-documents">Cross-Site Document Blocking
+Policy</a> design
+evolved into <a href="/Home/chromium-security/corb-for-developers">Cross-Origin Read Blocking
+(CORB)</a>, with a <a href="https://chromium.googlesource.com/chromium/src/+/HEAD/services/network/cross_origin_read_blocking_explainer.md">CORB
+Explainer</a>.
+This was implemented for non-compromised renderer processes when Site
+Isolation is enabled as of Chrome 63, and for compromised renderers as of
+Chrome 77. The work was tracked at <a href="https://crbug.com/268640">https://crbug.com/<wbr>268640</a>.</li>
+<li><strong>Browser Process Enforcements</strong>
+Some of Chrome's security checks are performed in the renderer process. When
+a process is locked to a given site, the browser process can enforce many of
+these checks itself, limiting what a compromised renderer process can
+achieve in an attack. This includes attempts to access site specific stored
+data and permissions, as well as other attempts to lie to the browser
+process.
+<em>Status:</em> Most enforcements are in place, though more are tracked in
+<a href="https://crbug.com/786673">https://crbug.com/<wbr>786673</a>.</li>
+<li><strong>Improved Renderer Process Limit Policy</strong>
+We have investigated ways to limit number of extra processes Chrome creates
+in Site Isolation modes. One option is to support modes that only isolate a
+set of origins or sites (i.e., --isolate-origins) rather than all sites
+(i.e., --site-per-process). However, we are currently leaning towards
+isolating all sites given our current findings. Note that a page from one
+site may reuse a process that has already been used for that same site, and
+we aggressively reuse processes in this way for subframes when possible.
+Processes will not be reused for cross-site pages.
+<em>Status:</em> On desktop, we isolate all sites, allowing process reuse only for
+pages from the same site. On Android, only a subset of sites end up in
+dedicated processes.</li>
+</ul>
+<h2 id="performance" tabindex="-1"><a class="header-anchor" href="#performance">Performance</a></h2>
+<p>Monitoring the performance impact of Site Isolation on Chrome has been a
+critical part of this effort. Site Isolation can affect performance in several
+ways, both positive and negative: some frames may render faster by running in
+parallel with the rest of the page, but creating additional renderer processes
+also increases memory requirements and may introduce latency on cross-process
+navigations. We are taking several steps to minimize the costs incurred, and we
+are using metrics collected from actual browsing data to measure the impact.</p>
+<p>As mentioned above under &quot;Renderer Process Limit Policy,&quot; we investigated one
+option for reducing the number of processes by isolating only a subset of web
+sites. In such a mode, most web sites would continue to use Chrome's old process
+model, while web sites that users are likely to log into would be isolated.
+However, we are currently aiming to isolate all sites if possible, based on
+current performance measurements, simplicity, and the extra protection it
+offers.</p>
+<p>Our evaluation is described in our USENIX Security 2019 paper: <a href="https://www.usenix.org/conference/usenixsecurity19/presentation/reis">Site Isolation:
+Process Separation for Web Sites within the
+Browser</a>.</p>
+<h2 id="how-to-enable" tabindex="-1"><a class="header-anchor" href="#how-to-enable">How to Enable</a></h2>
+<p>See this <a href="/Home/chromium-security/site-isolation">Site Isolation Overview page</a>
+for more details on how to enable or configure Site Isolation. In most cases, no
+action is necessary.</p>
+<h2 id="development-resources" tabindex="-1"><a class="header-anchor" href="#development-resources"><strong>Development Resources</strong></a></h2>
+<p>Updating Chrome Features:</p>
+<ul>
+<li><a href="https://docs.google.com/document/d/1Iqe_CzFVA6hyxe7h2bUKusxsjB6frXfdAYLerM3JjPo/edit?usp=sharing">Feature Update FAQ for Out-of-Process
+iframes</a></li>
+<li><a href="https://docs.google.com/document/d/1dCR2aEoBJj_Yqcs6GuM7lUPr0gag77L5OSgDa8bebsI/edit?usp=sharing">Features to Update for Out-of-Process
+iframes</a></li>
+</ul>
+<p>Build Status:</p>
+<ul>
+<li>Site Isolation FYI bots:
+<a href="http://build.chromium.org/p/chromium.fyi/builders/Site%20Isolation%20Linux">Linux</a>
+and
+<a href="http://build.chromium.org/p/chromium.fyi/builders/Site%20Isolation%20Win">Windows</a></li>
+<li>Site Isolation try bot:
+<a href="http://build.chromium.org/p/tryserver.chromium.linux/builders/linux_site_isolation">linux_site_isolation</a></li>
+</ul>
+<h2 id="2015-site-isolation-summit-talks" tabindex="-1"><a class="header-anchor" href="#2015-site-isolation-summit-talks">2015 Site Isolation Summit Talks</a></h2>
+<p>Talks and discussion from January 2015.</p>
+<h3 id="site-isolation-overview" tabindex="-1"><a class="header-anchor" href="#site-isolation-overview">Site Isolation Overview</a></h3>
+<p><a href="https://docs.google.com/presentation/d/10HTTK4dsxO5p6FcpEOq8EkuV4yiBx2n6dBki8cqDWyo/edit?usp=sharing">Slides</a></p>
+<h4 id="site-isolation-overview-1" tabindex="-1"><a class="header-anchor" href="#site-isolation-overview-1">Site Isolation Overview</a></h4>
+<h3 id="chromium-changes-for-oopif" tabindex="-1"><a class="header-anchor" href="#chromium-changes-for-oopif">Chromium Changes for OOPIF</a></h3>
+<p><a href="https://docs.google.com/presentation/d/1e25K7BW3etNDm1-lkMltMcCcRDeVwLibBcbACRhqZ1k/edit?usp=sharing">Slides</a></p>
+<h4 id="chromium-changes-for-oopif-1" tabindex="-1"><a class="header-anchor" href="#chromium-changes-for-oopif-1">Chromium Changes for OOPIF</a></h4>
+<h3 id="blink-changes-for-oopif" tabindex="-1"><a class="header-anchor" href="#blink-changes-for-oopif">Blink Changes for OOPIF</a></h3>
+<p><a href="https://docs.google.com/presentation/d/11nrXiuXBTC72E5l_MUtu2eJN6rcW9PtBewDOPPTk9Bc/edit?usp=sharing">Slides</a></p>
+<h4 id="blink-changes-for-oopif-1" tabindex="-1"><a class="header-anchor" href="#blink-changes-for-oopif-1">Blink Changes for OOPIF</a></h4>
+<h2 id="discussionsquestions" tabindex="-1"><a class="header-anchor" href="#discussionsquestions">Discussions/<wbr>Questions</a></h2>
+<p>The mailing list for technical discussions on Site Isolation is
+<a href="mailto:site-isolation-dev@chromium.org">site-isolation-dev@chromium.org</a>.</p>
+
+  </main>
+</div>
+<script>
+// Configure Algolia search.
+let s = document.createElement('script');
+s.src = '/_scripts/@docsearch/index.js';
+document.head.append(s);
+
+window.addEventListener('load', () => {
+  // Add the Algolia search widget.
+  docsearch({
+    container: '#search',
+    appId: 'RZDQYCCABX',
+    apiKey: '98b0eabafeb13fe3e1af693d5713d8b4',
+    indexName: 'chromium'
+  });
+});
+
+// Configure Google Analytics v4
+s = document.createElement('script');
+s.src = 'https://www.googletagmanager.com/gtag/js?id=G-24XP4PG02H'
+s.async = true;
+document.head.append(s)
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-24XP4PG02H');
+
+// Configure consent bar.
+s = document.createElement('script');
+s.src = 'https://www.gstatic.com/brandstudio/kato/cookie_choice_component/cookie_consent_bar.v3.js'
+s.dataset.autoloadCookieConsentBar = true;
+s.dataset.autoloadCookieContentBarIntlCode = '';
+document.head.append(s);
+
+// Configure the mobile navigation drawer.
+// Keep in sync with $mobile-nav-breakpoint in default.scss.
+const mobileNavBreakpoint = 768;
+const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+const mobileNav = document.getElementById('sidebar-left');
+const mobileNavClose = document.getElementById('mobile-nav-close');
+const mobileNavBackdrop = document.getElementById('mobile-nav-backdrop');
+const siteHeader = document.getElementById('site-header');
+
+if (mobileNavToggle && mobileNav && mobileNavClose && mobileNavBackdrop) {
+  const setMobileNavState = (isOpen) => {
+    mobileNavToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    document.body.classList.toggle('mobile-nav-open', isOpen);
+    if (isOpen && siteHeader) {
+      siteHeader.classList.remove('mobile-header-hidden');
+    }
+  };
+
+  const closeMobileNav = (returnFocus = false) => {
+    setMobileNavState(false);
+    if (returnFocus) {
+      mobileNavToggle.focus();
+    }
+  };
+
+  const openMobileNav = () => {
+    setMobileNavState(true);
+    mobileNav.scrollTop = 0;
+    mobileNavClose.focus();
+  };
+
+  mobileNavToggle.addEventListener('click', () => {
+    if (document.body.classList.contains('mobile-nav-open')) {
+      closeMobileNav();
+    } else {
+      openMobileNav();
+    }
+  });
+
+  mobileNavClose.addEventListener('click', () => closeMobileNav(true));
+  mobileNavBackdrop.addEventListener('click', () => closeMobileNav(true));
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeMobileNav(true);
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > mobileNavBreakpoint) {
+      closeMobileNav();
+    }
+  });
+
+  mobileNav.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', closeMobileNav);
+  });
+}
+
+if (siteHeader) {
+  // Ignore small changes in direction so touch scrolling does not make the
+  // header flicker in and out of view.
+  const mobileHeaderScrollThresholdPx = 10;
+
+  // Ignore elastic overscroll beyond the top or bottom of the page.
+  const getClampedScrollY = () => {
+    const maxScrollY = Math.max(
+        document.documentElement.scrollHeight - window.innerHeight, 0);
+    return Math.min(Math.max(window.scrollY, 0), maxScrollY);
+  };
+
+  let accumulatedHeaderScroll = 0;
+  let lastHeaderScrollY = getClampedScrollY();
+  let headerScrollUpdatePending = false;
+
+  const showMobileHeader = () => {
+    siteHeader.classList.remove('mobile-header-hidden');
+  };
+
+  const updateMobileHeader = () => {
+    const currentScrollY = getClampedScrollY();
+    const scrollDelta = currentScrollY - lastHeaderScrollY;
+    lastHeaderScrollY = currentScrollY;
+    headerScrollUpdatePending = false;
+
+    if (window.innerWidth > mobileNavBreakpoint ||
+        currentScrollY <= siteHeader.offsetHeight ||
+        document.body.classList.contains('mobile-nav-open')) {
+      accumulatedHeaderScroll = 0;
+      showMobileHeader();
+      return;
+    }
+
+    if (scrollDelta === 0) {
+      return;
+    }
+
+    if ((scrollDelta > 0 && accumulatedHeaderScroll < 0) ||
+        (scrollDelta < 0 && accumulatedHeaderScroll > 0)) {
+      accumulatedHeaderScroll = 0;
+    }
+    accumulatedHeaderScroll += scrollDelta;
+
+    if (Math.abs(accumulatedHeaderScroll) < mobileHeaderScrollThresholdPx) {
+      return;
+    }
+
+    siteHeader.classList.toggle(
+        'mobile-header-hidden', accumulatedHeaderScroll > 0);
+    accumulatedHeaderScroll = 0;
+  };
+
+  window.addEventListener('scroll', () => {
+    if (!headerScrollUpdatePending) {
+      window.requestAnimationFrame(updateMobileHeader);
+      headerScrollUpdatePending = true;
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    accumulatedHeaderScroll = 0;
+    lastHeaderScrollY = getClampedScrollY();
+    if (window.innerWidth > mobileNavBreakpoint) {
+      showMobileHeader();
+    }
+  });
+}</script>

@@ -1,0 +1,40 @@
+# DeepWiki 索引 — NVIDIA/xr-ai
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 24 页 · 全文 410109 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Repository Layout and Conventions](1.2-repository-layout-and-conventions.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 Device I/O Hub](2.1-device-i-o-hub.md)
+  - [2.2 Agent SDK](2.2-agent-sdk.md)
+  - [2.3 Process Orchestration and Launcher](2.3-process-orchestration-and-launcher.md)
+  - [2.4 AI Inference Services](2.4-ai-inference-services.md)
+  - [2.5 XR Capability Services](2.5-xr-capability-services.md)
+- [3 Agent Samples](3-agent-samples.md)
+  - [3.1 simple-vlm-example](3.1-simple-vlm-example.md)
+  - [3.2 xr-render-demo](3.2-xr-render-demo.md)
+  - [3.3 lab-instrument-monitoring](3.3-lab-instrument-monitoring.md)
+  - [3.4 tea-making-sample](3.4-tea-making-sample.md)
+- [4 Client SDKs (StreamKit)](4-client-sdks-streamkit.md)
+  - [4.1 iOS / visionOS Client](4.1-ios-visionos-client.md)
+  - [4.2 Android Client](4.2-android-client.md)
+  - [4.3 Web and WebXR Clients](4.3-web-and-webxr-clients.md)
+  - [4.4 Native C++ Client](4.4-native-c-client.md)
+- [5 Infrastructure and CI/CD](5-infrastructure-and-ci-cd.md)
+  - [5.1 Documentation System](5.1-documentation-system.md)
+  - [5.2 Testing Strategy](5.2-testing-strategy.md)
+  - [5.3 Dependency Management and Security](5.3-dependency-management-and-security.md)
+- [6 Glossary](6-glossary.md)
+
+## 附：结构清单外的页
+- [Model Server Samples and GPU Profiles](x1-model-server-samples-and-gpu-profiles.md)
+- [Speech Services (STT / TTS)](x2-speech-services-stt-tts.md)
+- [xr-ai-hub: IPC Client](x3-xr-ai-hub-ipc-client.md)
+- [xr-ai-models: Model Service Protocols](x4-xr-ai-models-model-service-protocols.md)
+- [xr-ai-runtime: Agent Runtime and Topics](x5-xr-ai-runtime-agent-runtime-and-topics.md)
+- [xr-ai-tools: Native Tool Framework](x6-xr-ai-tools-native-tool-framework.md)
+- [xr-ai-vllm Backend](x7-xr-ai-vllm-backend.md)
+- [xr-ai-voice: Voice Pipeline](x8-xr-ai-voice-voice-pipeline.md)
+- [xr-ai-web-events: Telemetry Viewer](x9-xr-ai-web-events-telemetry-viewer.md)

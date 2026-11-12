@@ -1,0 +1,4124 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/engine/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/v1/engine/__init__.py",
+   "summary": "v1 引擎前后端进程间通信的协议消息定义：以 msgspec.Struct（array_like/omit_defaults）与枚举定义 EngineCoreRequest/EngineCoreOutput(s)、CheckpointState、FinishReason 等 ZMQ 传输数据契约，新字段只允许追加以保持位置序列化兼容。",
+   "tags": [
+    "protocol",
+    "data-model",
+    "msgspec",
+    "serialization",
+    "ipc"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/engine/admission_control.py",
+   "type": "file",
+   "name": "admission_control.py",
+   "filePath": "vllm/v1/engine/admission_control.py",
+   "summary": "无锁的多进程准入统计：每个 API server 进程独占一个 cache-line 对齐槽位写计数，读端聚合全部槽位，同时避开进程间锁与伪共享。",
+   "tags": [
+    "shared-memory",
+    "lock-free",
+    "admission",
+    "stats"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/engine/async_llm.py",
+   "type": "file",
+   "name": "async_llm.py",
+   "filePath": "vllm/v1/engine/async_llm.py",
+   "summary": "V1 异步引擎前端 AsyncLLM：API server 侧 generate/abort 主入口，编排 InputProcessor（预处理）、engine client（提交 EngineCoreRequest）与 OutputProcessor（流式结果回传），并处理 elastic EP 退役、profiling 与 tracing。",
+   "tags": [
+    "async-engine",
+    "frontend",
+    "api-server",
+    "streaming"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/engine/coordinator.py",
+   "type": "file",
+   "name": "coordinator.py",
+   "filePath": "vllm/v1/engine/coordinator.py",
+   "summary": "DP>1 部署的协调器进程：在多个 DP 引擎 rank 与一个或多个前端 API server 之间中转请求/输出，并基于各 rank 的 waiting/running/KV 使用统计做 wave coordination 对齐 prefill。",
+   "tags": [
+    "data-parallel",
+    "coordinator",
+    "zmq",
+    "load-balancing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/engine/core.py",
+   "type": "file",
+   "name": "core.py",
+   "filePath": "vllm/v1/engine/core.py",
+   "summary": "V1 引擎核心：EngineCore 实现模型加载、KV cache 规划与 step 主循环（schedule→execute→update）；EngineCoreProc/DPEngineCoreProc 用 ZMQ 把它跑在后台进程，EngineCoreActorMixin 系列提供 Ray actor 化的 DP 部署。",
+   "tags": [
+    "engine-core",
+    "main-loop",
+    "zmq",
+    "ray"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/engine/core_client.py",
+   "type": "file",
+   "name": "core_client.py",
+   "filePath": "vllm/v1/engine/core_client.py",
+   "summary": "EngineCore 客户端家族：EngineCoreClient 抽象基类之下，InprocClient（进程内）、Sync/AsyncMPClient（ZMQ 多进程）、DPAsyncMPClient（外部 LB）、DPLBAsyncMPClient（内置 LB）覆盖全部部署形态，含启动握手、utility future 与弹性扩缩容缓存。",
+   "tags": [
+    "client",
+    "zmq",
+    "data-parallel",
+    "ipc"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/engine/detokenizer.py",
+   "type": "file",
+   "name": "detokenizer.py",
+   "filePath": "vllm/v1/engine/detokenizer.py",
+   "summary": "增量反词元化：按 tokenizer 能力分派 Fast（tokenizers DecodeStream）与 Slow（python detokenize_incrementally）两条路径，并实现 stop string 匹配截断。",
+   "tags": [
+    "detokenizer",
+    "streaming",
+    "stop-strings"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/engine/exceptions.py",
+   "type": "file",
+   "name": "exceptions.py",
+   "filePath": "vllm/v1/engine/exceptions.py",
+   "summary": "引擎层异常定义：可恢复的 EngineGenerateError 与不可恢复的 EngineDeadError（区分服务端日志消息与面向 API 客户端的提示文案）。",
+   "tags": [
+    "exceptions",
+    "error-handling",
+    "api"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/engine/input_processor.py",
+   "type": "file",
+   "name": "input_processor.py",
+   "filePath": "vllm/v1/engine/input_processor.py",
+   "summary": "请求预处理器：把 text/tokens/prompt_embeds/多模态/beam search 各类输入规范化为 EngineCoreRequest，含 LoRA、diffusion 参数、custom logits processors 参数校验与多模态 encoder 预算评估。",
+   "tags": [
+    "preprocessing",
+    "input-validation",
+    "multimodal"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/engine/llm_engine.py",
+   "type": "file",
+   "name": "llm_engine.py",
+   "filePath": "vllm/v1/engine/llm_engine.py",
+   "summary": "向后兼容的同步 LLMEngine：保留 V0 风格 add_request()/step() 接口，内部完全跑在 V1 EngineCore 之上（经 InprocClient 或 MP 客户端）。",
+   "tags": [
+    "offline-engine",
+    "compatibility",
+    "sync"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/engine/logprobs.py",
+   "type": "file",
+   "name": "logprobs.py",
+   "filePath": "vllm/v1/engine/logprobs.py",
+   "summary": "请求级 logprobs 处理器：维护 sample logprobs/prompt logprobs/cumulative logprob 的增量累积，并与 LogprobsTensors/Lists 结构互转。",
+   "tags": [
+    "logprobs",
+    "aggregation",
+    "streaming"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/engine/output_processor.py",
+   "type": "file",
+   "name": "output_processor.py",
+   "filePath": "vllm/v1/engine/output_processor.py",
+   "summary": "输出后处理器：把 EngineCoreOutputs 增量转为面向用户的 RequestOutput/PoolingRequestOutput，管理每请求 RequestState、增量 detokenizer/logprobs、n>1 父子请求合并、streaming input 分块与 per-request 统计。",
+   "tags": [
+    "output-processing",
+    "streaming",
+    "request-state"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/engine/parallel_sampling.py",
+   "type": "file",
+   "name": "parallel_sampling.py",
+   "filePath": "vllm/v1/engine/parallel_sampling.py",
+   "summary": "n>1 并行采样的父请求管理：保存父请求参数并派生 n 个子请求的采样参数，聚合子请求完成状态后统一产出父输出。",
+   "tags": [
+    "parallel-sampling",
+    "n-sampling",
+    "aggregation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/engine/tensor_ipc.py",
+   "type": "file",
+   "name": "tensor_ipc.py",
+   "filePath": "vllm/v1/engine/tensor_ipc.py",
+   "summary": "基于 torch.multiprocessing.Queue 的零拷贝 tensor IPC 传输：API server 把多模态 tensor 经共享内存（GPU/CPU）发给 engine core，替代在 msgpack 层内嵌大 tensor。",
+   "tags": [
+    "ipc",
+    "shared-memory",
+    "multimodal",
+    "tensors"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/engine/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/v1/engine/utils.py",
+   "summary": "引擎进程启动/管理工具：ZMQ 地址协商与启动握手（EngineZmqAddresses/HandshakeMetadata）、本地多进程与 Ray actor 两种 CoreEngine 管理器、DP rank 的物理 GPU 分配，以及 launch/wait 启动编排。",
+   "tags": [
+    "startup",
+    "zmq",
+    "multiprocessing",
+    "ray"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/engine/__init__.py:CheckpointState",
+   "type": "class",
+   "name": "CheckpointState",
+   "filePath": "vllm/v1/engine/__init__.py",
+   "summary": "引擎进程 checkpoint 生命周期状态机（StrEnum）：只在 RUNNING 态服务，可在 RUNNING/PAUSED/CHECKPOINTING 间循环任意次。",
+   "tags": [
+    "enum",
+    "checkpoint",
+    "lifecycle"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    44,
+    61
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/__init__.py:EEPNotificationType",
+   "type": "class",
+   "name": "EEPNotificationType",
+   "filePath": "vllm/v1/engine/__init__.py",
+   "summary": "弹性 EP（elastic expert parallel）扩缩容通知类型枚举，用于 rank 退役/扩容事件传递。",
+   "tags": [
+    "enum",
+    "elastic-ep",
+    "notification"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    64,
+    66
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/__init__.py:FinishReason",
+   "type": "class",
+   "name": "FinishReason",
+   "filePath": "vllm/v1/engine/__init__.py",
+   "summary": "请求结束原因 IntEnum（stop/length/abort/error/repetition）：用整数而非字符串以紧凑序列化，取值对应外部 API 的 finish_reason。",
+   "tags": [
+    "enum",
+    "api",
+    "finish-reason"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    69,
+    90
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/__init__.py:EngineCoreReadyResponse",
+   "type": "class",
+   "name": "EngineCoreReadyResponse",
+   "filePath": "vllm/v1/engine/__init__.py",
+   "summary": "EngineCore 启动完成后发给每个前端的就绪响应：携带初始化后可能变化的配置（如 auto-fit 后的 max_model_len、缩放后的 num_gpu_blocks）。",
+   "tags": [
+    "handshake",
+    "startup",
+    "config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    94,
+    134
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/__init__.py:EngineCoreRequest",
+   "type": "class",
+   "name": "EngineCoreRequest",
+   "filePath": "vllm/v1/engine/__init__.py",
+   "summary": "前端→EngineCore 的请求消息（msgspec.Struct）：token ids/多模态特征/采样参数/prompt_embeds 与混合输入的 per-position 掩码；array_like 位置序列化要求新字段只能追加。",
+   "tags": [
+    "msgspec",
+    "request",
+    "ipc",
+    "multimodal"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    137,
+    197
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/__init__.py:EngineCoreEventType",
+   "type": "class",
+   "name": "EngineCoreEventType",
+   "filePath": "vllm/v1/engine/__init__.py",
+   "summary": "引擎核心请求事件类型 IntEnum，配合时间戳事件供前端计算请求各阶段间隔。",
+   "tags": [
+    "enum",
+    "events",
+    "metrics"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    200,
+    205
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/__init__.py:EngineCoreEvent",
+   "type": "class",
+   "name": "EngineCoreEvent",
+   "filePath": "vllm/v1/engine/__init__.py",
+   "summary": "带单调时间戳的请求级事件（msgspec.Struct），前端用相邻事件差值计算 queueing/prefill 等阶段耗时。",
+   "tags": [
+    "msgspec",
+    "event",
+    "timestamps"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    208,
+    224
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/__init__.py:EngineCoreOutput",
+   "type": "class",
+   "name": "EngineCoreOutput",
+   "filePath": "vllm/v1/engine/__init__.py",
+   "summary": "EngineCore→前端的单请求增量输出（msgspec.Struct）：新 token/logprobs/pooling 结果/结束原因/NaN 计数/mm 缓存缺失哈希（可重试信号）等，字段追加在末尾以保序列化兼容。",
+   "tags": [
+    "msgspec",
+    "output",
+    "ipc",
+    "incremental"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    227,
+    275
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/__init__.py:UtilityOutput",
+   "type": "class",
+   "name": "UtilityOutput",
+   "filePath": "vllm/v1/engine/__init__.py",
+   "summary": "utility 方法（复用同一条 socket 的 RPC 风格调用，如 EEP/FT 状态查询）的返回信封：call_id + 失败消息 + UtilityResult。",
+   "tags": [
+    "msgspec",
+    "rpc",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    278,
+    287
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/__init__.py:EngineCoreOutputs",
+   "type": "class",
+   "name": "EngineCoreOutputs",
+   "filePath": "vllm/v1/engine/__init__.py",
+   "summary": "一次调度步的批量输出信封（msgspec.Struct）：outputs 列表 + finished/aborted 请求集合等，是 output 端 ZMQ socket 的顶层载荷。",
+   "tags": [
+    "msgspec",
+    "batch-output",
+    "ipc"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    290,
+    321
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/__init__.py:EngineCoreRequestType",
+   "type": "class",
+   "name": "EngineCoreRequestType",
+   "filePath": "vllm/v1/engine/__init__.py",
+   "summary": "以十六进制字节串定义的请求类型枚举，可直接经 socket 发送而无需单独编码步骤。",
+   "tags": [
+    "enum",
+    "ipc",
+    "framing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    324,
+    336
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/__init__.py:ReconfigureDistributedRequest",
+   "type": "class",
+   "name": "ReconfigureDistributedRequest",
+   "filePath": "vllm/v1/engine/__init__.py",
+   "summary": "运行时重配分布式拓扑的请求消息（如 elastic EP 扩缩容后的 rank 重配）。",
+   "tags": [
+    "msgspec",
+    "elastic-ep",
+    "distributed"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    339,
+    346
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/__init__.py:ReconfigureRankType",
+   "type": "class",
+   "name": "ReconfigureRankType",
+   "filePath": "vllm/v1/engine/__init__.py",
+   "summary": "分布式重配请求中的 rank 角色枚举。",
+   "tags": [
+    "enum",
+    "elastic-ep",
+    "distributed"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    349,
+    353
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/__init__.py:EngineStatusType",
+   "type": "class",
+   "name": "EngineStatusType",
+   "filePath": "vllm/v1/engine/__init__.py",
+   "summary": "引擎状态查询（utility 通道）返回的状态类别枚举。",
+   "tags": [
+    "enum",
+    "status",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    356,
+    359
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/admission_control.py:SharedAdmissionStats",
+   "type": "class",
+   "name": "SharedAdmissionStats",
+   "filePath": "vllm/v1/engine/admission_control.py",
+   "summary": "共享内存准入计数器包装：每进程独占 64 字节槽（8 个计数器）避免 false sharing，提供跨进程的 num_requests 聚合读写，供 DP 准入控制使用。",
+   "tags": [
+    "shared-memory",
+    "cache-line",
+    "counters"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    13,
+    52
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/async_llm.py:InputStreamError",
+   "type": "class",
+   "name": "InputStreamError",
+   "filePath": "vllm/v1/engine/async_llm.py",
+   "summary": "包装用户输入流 generator 抛出的异常，使其不被误包进 EngineGenerateError 而保留原始语义。",
+   "tags": [
+    "exception",
+    "streaming-input"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    81,
+    90
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/async_llm.py:AsyncLLM",
+   "type": "class",
+   "name": "AsyncLLM",
+   "filePath": "vllm/v1/engine/async_llm.py",
+   "summary": "异步 LLM 引擎前端（67 个方法）：请求全生命周期管理（streaming input、n>1 并行采样、pause/resume）、引擎客户端选择、logits processors 校验与 utility RPC，是 chat/completions 服务与 EngineCore 之间的全部业务面。",
+   "tags": [
+    "async-engine",
+    "request-lifecycle",
+    "streaming",
+    "orchestration"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    93,
+    1454
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/coordinator.py:DPCoordinator",
+   "type": "class",
+   "name": "DPCoordinator",
+   "filePath": "vllm/v1/engine/coordinator.py",
+   "summary": "DP 协调器逻辑类：把前端请求按各 rank 统计转发给合适的 DP rank，聚合输出回发前端，支持外部 LB 与 wave 协调两种模式。",
+   "tags": [
+    "data-parallel",
+    "routing",
+    "zmq"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    23,
+    139
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/coordinator.py:DPCoordinatorProc",
+   "type": "class",
+   "name": "DPCoordinatorProc",
+   "filePath": "vllm/v1/engine/coordinator.py",
+   "summary": "协调器进程封装：搭建前/后向 ZMQ socket、运行消息泵主循环、维护每引擎 waiting/running/KV 使用统计并处理 shutdown。",
+   "tags": [
+    "process",
+    "zmq",
+    "message-pump"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    148,
+    462
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/core.py:EngineCore",
+   "type": "class",
+   "name": "EngineCore",
+   "filePath": "vllm/v1/engine/core.py",
+   "summary": "引擎内循环（48 个方法）：初始化 executor/model_runner，经 kv_cache_planning 生成 KV cache 配置与 Scheduler，循环执行 schedule→execute_model→update_from_output，并处理 checkpoint、EEP 通知与 utility 调用。",
+   "tags": [
+    "engine-core",
+    "scheduler-loop",
+    "kv-cache"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    123,
+    1198
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/core.py:EngineCoreProc",
+   "type": "class",
+   "name": "EngineCoreProc",
+   "filePath": "vllm/v1/engine/core.py",
+   "summary": "ZMQ 包装的 EngineCore 后台进程（38 个方法）：启动握手、busy-loop 收发 EngineCoreRequest/Outputs、心跳健康检查与信号处理。",
+   "tags": [
+    "process",
+    "zmq",
+    "busy-loop"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1207,
+    2380
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/core.py:DPEngineCoreProc",
+   "type": "class",
+   "name": "DPEngineCoreProc",
+   "filePath": "vllm/v1/engine/core.py",
+   "summary": "数据并行场景的 EngineCoreProc：增加 rank 统计上报、prefill 波对齐与 DP 协调器交互。",
+   "tags": [
+    "data-parallel",
+    "process",
+    "zmq"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    2383,
+    2785
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/core.py:EngineCoreActorMixin",
+   "type": "class",
+   "name": "EngineCoreActorMixin",
+   "filePath": "vllm/v1/engine/core.py",
+   "summary": "Ray actor 化 EngineCore 的混入：以 Ray 队列替代 ZMQ 输入，处理 actor 生命周期与 DP rank 协调。",
+   "tags": [
+    "ray",
+    "actor",
+    "mixin"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    2788,
+    2911
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/core.py:DPMoEEngineCoreActor",
+   "type": "class",
+   "name": "DPMoEEngineCoreActor",
+   "filePath": "vllm/v1/engine/core.py",
+   "summary": "MoE 模型数据并行场景的 Ray actor 组合（ActorMixin + DPEngineCoreProc 行为）。",
+   "tags": [
+    "ray",
+    "moe",
+    "data-parallel"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    2914,
+    2934
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/core.py:EngineCoreActor",
+   "type": "class",
+   "name": "EngineCoreActor",
+   "filePath": "vllm/v1/engine/core.py",
+   "summary": "非 MoE / 非 DP 场景的 Ray actor 组合。",
+   "tags": [
+    "ray",
+    "actor"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    2937,
+    2962
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/core_client.py:EngineCoreClient",
+   "type": "class",
+   "name": "EngineCoreClient",
+   "filePath": "vllm/v1/engine/core_client.py",
+   "summary": "客户端抽象基类（56 个方法）：定义 add_request/abort/get_output 与 utility RPC 接口，不同子类按进程模型与异步语义实现。",
+   "tags": [
+    "abc",
+    "client",
+    "ipc"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    84,
+    373
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/core_client.py:InprocClient",
+   "type": "class",
+   "name": "InprocClient",
+   "filePath": "vllm/v1/engine/core_client.py",
+   "summary": "进程内客户端：直接持有 EngineCore 实例同步 add_request/step（无 busy loop），用于 offline LLMEngine。",
+   "tags": [
+    "in-process",
+    "sync",
+    "offline"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    376,
+    508
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/core_client.py:BackgroundResources",
+   "type": "class",
+   "name": "BackgroundResources",
+   "filePath": "vllm/v1/engine/core_client.py",
+   "summary": "以弱引用 finalizer 管理后台进程/socket 的清理，避免客户端对象循环引用导致资源不释放。",
+   "tags": [
+    "cleanup",
+    "finalizer",
+    "lifecycle"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    512,
+    598
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/core_client.py:MPClient",
+   "type": "class",
+   "name": "MPClient",
+   "filePath": "vllm/v1/engine/core_client.py",
+   "summary": "多进程客户端基类：启动 EngineCoreProc/DP 协调器、ZMQ 收发与编解码、启动握手与 shutdown，并维护 ElasticScalingCache 与 EEP 通知。",
+   "tags": [
+    "multiprocessing",
+    "zmq",
+    "handshake"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    608,
+    940
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/core_client.py:SyncMPClient",
+   "type": "class",
+   "name": "SyncMPClient",
+   "filePath": "vllm/v1/engine/core_client.py",
+   "summary": "同步多进程客户端：阻塞式 send/get_output，供 offline 用法。",
+   "tags": [
+    "sync",
+    "multiprocessing"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    965,
+    1156
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/core_client.py:AsyncMPClient",
+   "type": "class",
+   "name": "AsyncMPClient",
+   "filePath": "vllm/v1/engine/core_client.py",
+   "summary": "asyncio 版多进程客户端：后台 output-handler 线程 + asyncio 队列，支持 streaming 与 utility future。",
+   "tags": [
+    "asyncio",
+    "multiprocessing",
+    "streaming"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1159,
+    1486
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/core_client.py:DPAsyncMPClient",
+   "type": "class",
+   "name": "DPAsyncMPClient",
+   "filePath": "vllm/v1/engine/core_client.py",
+   "summary": "多引擎（DP）异步客户端基类：在外部负载均衡假设下按 engine_index 路由请求并聚合输出。",
+   "tags": [
+    "data-parallel",
+    "asyncio",
+    "external-lb"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1489,
+    1727
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/core_client.py:DPLBAsyncMPClient",
+   "type": "class",
+   "name": "DPLBAsyncMPClient",
+   "filePath": "vllm/v1/engine/core_client.py",
+   "summary": "内置负载均衡的 DP 异步客户端：按各引擎 waiting/running/KV 统计做 prefill 感知调度与直接解码分配。",
+   "tags": [
+    "data-parallel",
+    "load-balancing",
+    "asyncio"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1730,
+    2205
+   ]
+  },
+  {
+   "id": "function:vllm/v1/engine/core_client.py:_process_utility_output",
+   "type": "function",
+   "name": "_process_utility_output",
+   "filePath": "vllm/v1/engine/core_client.py",
+   "summary": "把 utility 调用返回的 UtilityOutput 写回对应 waiting future 的模块级助手。",
+   "tags": [
+    "utility",
+    "futures"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    943,
+    962
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/detokenizer.py:IncrementalDetokenizer",
+   "type": "class",
+   "name": "IncrementalDetokenizer",
+   "filePath": "vllm/v1/engine/detokenizer.py",
+   "summary": "增量 detokenizer 基类与无 tokenizer 时的空实现；from_new_request 工厂按 tokenizer 能力选择 fast/slow 实现。",
+   "tags": [
+    "detokenizer",
+    "factory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    31,
+    66
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/detokenizer.py:BaseIncrementalDetokenizer",
+   "type": "class",
+   "name": "BaseIncrementalDetokenizer",
+   "filePath": "vllm/v1/engine/detokenizer.py",
+   "summary": "有 tokenizer 的公共基类：维护 read_offset/prefix_offset，增量解码并做 stop string 匹配与输出缓冲管理。",
+   "tags": [
+    "detokenizer",
+    "incremental",
+    "stop-strings"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    69,
+    176
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/detokenizer.py:FastIncrementalDetokenizer",
+   "type": "class",
+   "name": "FastIncrementalDetokenizer",
+   "filePath": "vllm/v1/engine/detokenizer.py",
+   "summary": "基于 tokenizers 库 DecodeStream 的快速增量解码器。",
+   "tags": [
+    "detokenizer",
+    "fast",
+    "hf-tokenizers"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    179,
+    259
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/detokenizer.py:SlowIncrementalDetokenizer",
+   "type": "class",
+   "name": "SlowIncrementalDetokenizer",
+   "filePath": "vllm/v1/engine/detokenizer.py",
+   "summary": "python 版 detokenize_incrementally 兜底实现，处理增量解码的 UTF-8 边界与 stop 字符串。",
+   "tags": [
+    "detokenizer",
+    "slow-path"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    262,
+    318
+   ]
+  },
+  {
+   "id": "function:vllm/v1/engine/detokenizer.py:check_stop_strings",
+   "type": "function",
+   "name": "check_stop_strings",
+   "filePath": "vllm/v1/engine/detokenizer.py",
+   "summary": "检查输出文本是否命中任一 stop 字符串并截断序列，返回 (命中串, 偏移)。",
+   "tags": [
+    "stop-strings",
+    "text-processing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    321,
+    373
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/exceptions.py:EngineGenerateError",
+   "type": "class",
+   "name": "EngineGenerateError",
+   "filePath": "vllm/v1/engine/exceptions.py",
+   "summary": "AsyncLLM.generate 过程中可恢复错误的异常类型。",
+   "tags": [
+    "exception",
+    "recoverable"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    6,
+    9
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/exceptions.py:EngineDeadError",
+   "type": "class",
+   "name": "EngineDeadError",
+   "filePath": "vllm/v1/engine/exceptions.py",
+   "summary": "EngineCore 进程死亡时的不可恢复异常：str(exc) 面向服务端日志，CLIENT_MESSAGE 面向 API 客户端。",
+   "tags": [
+    "exception",
+    "fatal",
+    "api-message"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    12,
+    28
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/input_processor.py:InputProcessor",
+   "type": "class",
+   "name": "InputProcessor",
+   "filePath": "vllm/v1/engine/input_processor.py",
+   "summary": "预处理引擎（16 个方法）：renderer 渲染 prompt、多模态预算计算、逐请求 token 化与长度检查、采样参数合法性校验，产出可直接发给 EngineCore 的 EngineCoreRequest。",
+   "tags": [
+    "preprocessing",
+    "request-normalization",
+    "multimodal"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    41,
+    673
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/llm_engine.py:LLMEngine",
+   "type": "class",
+   "name": "LLMEngine",
+   "filePath": "vllm/v1/engine/llm_engine.py",
+   "summary": "offline LLM API 的同步引擎封装（35 个方法）：add_request→InputProcessor→client 提交→step 拉取输出，支持 profiling、metrics 与多进程模式。",
+   "tags": [
+    "offline-engine",
+    "sync",
+    "step-loop"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    54,
+    526
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/logprobs.py:LogprobsProcessor",
+   "type": "class",
+   "name": "LogprobsProcessor",
+   "filePath": "vllm/v1/engine/logprobs.py",
+   "summary": "聚合单请求全部采样与 prompt logprobs（9 个方法）：detokenized 文本对齐、top-k 截断与最终 cumulative_logprob 计算。",
+   "tags": [
+    "logprobs",
+    "aggregation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    32,
+    368
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/output_processor.py:RequestOutputCollector",
+   "type": "class",
+   "name": "RequestOutputCollector",
+   "filePath": "vllm/v1/engine/output_processor.py",
+   "summary": "单请求输出的收集/合并队列：delta 模式下合并相邻输出，供消费方 asyncio 任务按需取走。",
+   "tags": [
+    "queue",
+    "merging",
+    "streaming"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    53,
+    113
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/output_processor.py:StreamingInputOutputCollector",
+   "type": "class",
+   "name": "StreamingInputOutputCollector",
+   "filePath": "vllm/v1/engine/output_processor.py",
+   "summary": "streaming input 请求的收集器：不在输入块边界（未 finished 却带 finish_reason 的输出）处跨块合并。",
+   "tags": [
+    "streaming-input",
+    "merging"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    128,
+    160
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/output_processor.py:StreamingUpdate",
+   "type": "class",
+   "name": "StreamingUpdate",
+   "filePath": "vllm/v1/engine/output_processor.py",
+   "summary": "流式输入的增量 prompt 数据：当前子请求完成时应用的下一块输入（prompt/token ids/是否 final）。",
+   "tags": [
+    "streaming-input",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    170,
+    180
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/output_processor.py:RequestState",
+   "type": "class",
+   "name": "RequestState",
+   "filePath": "vllm/v1/engine/output_processor.py",
+   "summary": "输出侧的单请求全部状态：输出 token 数、采样统计、父子请求关系、KV 复用统计与 streaming input 缓冲，是 OutputProcessor 的核心数据结构。",
+   "tags": [
+    "request-state",
+    "data-model",
+    "streaming"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    183,
+    548
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/output_processor.py:OutputProcessor",
+   "type": "class",
+   "name": "OutputProcessor",
+   "filePath": "vllm/v1/engine/output_processor.py",
+   "summary": "输出处理主体（17 个方法）：按 EngineCoreOutputs 更新各 RequestState、生成最终/增量 RequestOutput、处理 abort/错误传播与 iteration 统计上报。",
+   "tags": [
+    "output-processing",
+    "streaming",
+    "orchestration"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    551,
+    1047
+   ]
+  },
+  {
+   "id": "function:vllm/v1/engine/output_processor.py:_is_chunk_boundary",
+   "type": "function",
+   "name": "_is_chunk_boundary",
+   "filePath": "vllm/v1/engine/output_processor.py",
+   "summary": "判断输出是否为 streaming input 的块边界：未 finished 的请求带 finish_reason。",
+   "tags": [
+    "streaming-input",
+    "helper"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    116,
+    125
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/parallel_sampling.py:ParentRequest",
+   "type": "class",
+   "name": "ParentRequest",
+   "filePath": "vllm/v1/engine/parallel_sampling.py",
+   "summary": "父请求信息与状态（7 个方法）：跟踪 n 个子请求完成数、按 index 合并子输出并在全部完成后标记父请求结束。",
+   "tags": [
+    "parallel-sampling",
+    "aggregation"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    13,
+    152
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/tensor_ipc.py:TensorIpcData",
+   "type": "class",
+   "name": "TensorIpcData",
+   "filePath": "vllm/v1/engine/tensor_ipc.py",
+   "summary": "经 torch.multiprocessing.Queue 传递的 tensor 信封：tensor_id 与实际 tensor，靠共享内存（GPU/CPU）避免序列化拷贝。",
+   "tags": [
+    "ipc",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    31,
+    41
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/tensor_ipc.py:TensorIpcSender",
+   "type": "class",
+   "name": "TensorIpcSender",
+   "filePath": "vllm/v1/engine/tensor_ipc.py",
+   "summary": "发送端逻辑：按客户端索引维护队列；TP/PP>1 时只发往 rank 0（唯一消费多模态 tensor 的 rank）。",
+   "tags": [
+    "ipc",
+    "sender",
+    "queue"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    44,
+    104
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/tensor_ipc.py:TensorIpcReceiver",
+   "type": "class",
+   "name": "TensorIpcReceiver",
+   "filePath": "vllm/v1/engine/tensor_ipc.py",
+   "summary": "接收端逻辑：按请求聚合收到的 tensor_id→tensor 映射，供 MsgpackDecoder 解码 EngineCoreRequest 时做引用替换。",
+   "tags": [
+    "ipc",
+    "receiver",
+    "queue"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    113,
+    176
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/utils.py:EngineZmqAddresses",
+   "type": "class",
+   "name": "EngineZmqAddresses",
+   "filePath": "vllm/v1/engine/utils.py",
+   "summary": "解析后向引擎进程广播的前端 ZMQ 端点：每客户端 input/output 地址 + 可选 DP 协调器与统计发布地址。",
+   "tags": [
+    "zmq",
+    "addresses",
+    "handshake"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    100,
+    114
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/utils.py:EngineZmqListeners",
+   "type": "class",
+   "name": "EngineZmqListeners",
+   "filePath": "vllm/v1/engine/utils.py",
+   "summary": "前端侧 ZMQ 监听器集合（inputs/outputs），提供实际地址解析与统一 cleanup。",
+   "tags": [
+    "zmq",
+    "listeners"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    118,
+    135
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/utils.py:EngineHandshakeMetadata",
+   "type": "class",
+   "name": "EngineHandshakeMetadata",
+   "filePath": "vllm/v1/engine/utils.py",
+   "summary": "启动握手时发给每个引擎进程的元数据：需要连接的前端 ZMQ 队列地址等。",
+   "tags": [
+    "handshake",
+    "zmq",
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    139,
+    146
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/utils.py:CoreEngineProcManager",
+   "type": "class",
+   "name": "CoreEngineProcManager",
+   "filePath": "vllm/v1/engine/utils.py",
+   "summary": "本地多进程引擎管理器：创建 EngineCoreProc/DP 协调器子进程、跟踪就绪状态并安全关闭。",
+   "tags": [
+    "process-manager",
+    "lifecycle",
+    "multiprocessing"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    242,
+    383
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/utils.py:SignalCallback",
+   "type": "class",
+   "name": "SignalCallback",
+   "filePath": "vllm/v1/engine/utils.py",
+   "summary": "经专用线程从信号处理器上下文安全触发回调。",
+   "tags": [
+    "signal",
+    "thread-safety"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    386,
+    410
+   ]
+  },
+  {
+   "id": "class:vllm/v1/engine/utils.py:CoreEngineActorManager",
+   "type": "class",
+   "name": "CoreEngineActorManager",
+   "filePath": "vllm/v1/engine/utils.py",
+   "summary": "Ray actor 版引擎管理器（9 个方法）：按节点资源放置 actor（DP master 优先）、就绪握手、弹性扩缩容与批量关闭，是 CoreEngineProcManager 的 Ray 化对应物。",
+   "tags": [
+    "ray",
+    "actor-manager",
+    "elastic"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    498,
+    1117
+   ]
+  },
+  {
+   "id": "function:vllm/v1/engine/utils.py:get_engine_process_shutdown_timeout",
+   "type": "function",
+   "name": "get_engine_process_shutdown_timeout",
+   "filePath": "vllm/v1/engine/utils.py",
+   "summary": "解析引擎进程管理器 shutdown 超时：VllmConfig.shutdown_timeout 控制在途请求排空时间。",
+   "tags": [
+    "shutdown",
+    "timeout",
+    "config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    47,
+    72
+   ]
+  },
+  {
+   "id": "function:vllm/v1/engine/utils.py:_dp_nodes_master_first",
+   "type": "function",
+   "name": "_dp_nodes_master_first",
+   "filePath": "vllm/v1/engine/utils.py",
+   "summary": "列出 Ray 活跃节点 (node_id, resources)，按 node:<ip> 资源把 DP master 节点排在最前。",
+   "tags": [
+    "ray",
+    "placement",
+    "data-parallel"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    164,
+    186
+   ]
+  },
+  {
+   "id": "function:vllm/v1/engine/utils.py:_node_ip_from_resources",
+   "type": "function",
+   "name": "_node_ip_from_resources",
+   "filePath": "vllm/v1/engine/utils.py",
+   "summary": "从 Ray 节点资源字典解析节点 IP（node:<ip> 资源键）。",
+   "tags": [
+    "ray",
+    "utilities"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    189,
+    203
+   ]
+  },
+  {
+   "id": "function:vllm/v1/engine/utils.py:_configure_uniproc_startup_threads",
+   "type": "function",
+   "name": "_configure_uniproc_startup_threads",
+   "filePath": "vllm/v1/engine/utils.py",
+   "summary": "单进程启动时预先配置线程，避免后续 fork 引入线程状态问题。",
+   "tags": [
+    "startup",
+    "threads",
+    "uniproc"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    207,
+    239
+   ]
+  },
+  {
+   "id": "function:vllm/v1/engine/utils.py:set_assigned_physical_gpu_ids_for_dp_rank",
+   "type": "function",
+   "name": "set_assigned_physical_gpu_ids_for_dp_rank",
+   "filePath": "vllm/v1/engine/utils.py",
+   "summary": "为指定 DP rank 在配置上填写 assigned_physical_gpu_ids（用户指定或按 world_size 均分）。",
+   "tags": [
+    "gpu",
+    "data-parallel",
+    "config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    413,
+    436
+   ]
+  },
+  {
+   "id": "function:vllm/v1/engine/utils.py:get_physical_gpu_ids_for_local_dp_rank",
+   "type": "function",
+   "name": "get_physical_gpu_ids_for_local_dp_rank",
+   "filePath": "vllm/v1/engine/utils.py",
+   "summary": "计算本地 DP rank 应使用的物理 GPU id 列表（按 world_size 切分）。",
+   "tags": [
+    "gpu",
+    "data-parallel"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    439,
+    483
+   ]
+  },
+  {
+   "id": "function:vllm/v1/engine/utils.py:_apply_dp_identity_suffix",
+   "type": "function",
+   "name": "_apply_dp_identity_suffix",
+   "filePath": "vllm/v1/engine/utils.py",
+   "summary": "给进程标题/日志附加 DP 身份后缀便于区分。",
+   "tags": [
+    "logging",
+    "data-parallel"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    486,
+    495
+   ]
+  },
+  {
+   "id": "function:vllm/v1/engine/utils.py:get_engine_zmq_bind_addresses",
+   "type": "function",
+   "name": "get_engine_zmq_bind_addresses",
+   "filePath": "vllm/v1/engine/utils.py",
+   "summary": "创建 tcp://host:0 占位的引擎-客户端 ZMQ 端点模板（含控制 bundle 与多客户端扇出）。",
+   "tags": [
+    "zmq",
+    "addresses",
+    "startup"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1120,
+    1161
+   ]
+  },
+  {
+   "id": "function:vllm/v1/engine/utils.py:bind_engine_zmq_listeners",
+   "type": "function",
+   "name": "bind_engine_zmq_listeners",
+   "filePath": "vllm/v1/engine/utils.py",
+   "summary": "启动引擎进程前绑定前端传输监听器并回填实际端口。",
+   "tags": [
+    "zmq",
+    "bind",
+    "startup"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1164,
+    1186
+   ]
+  },
+  {
+   "id": "function:vllm/v1/engine/utils.py:launch_core_engines",
+   "type": "function",
+   "name": "launch_core_engines",
+   "filePath": "vllm/v1/engine/utils.py",
+   "summary": "按部署形态（uniproc/MP/Ray、DP、MoE）启动引擎与 DP 协调器进程/actor 的总编排入口。",
+   "tags": [
+    "startup",
+    "orchestration",
+    "process-launch"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1206,
+    1400
+   ]
+  },
+  {
+   "id": "function:vllm/v1/engine/utils.py:wait_for_engine_startup",
+   "type": "function",
+   "name": "wait_for_engine_startup",
+   "filePath": "vllm/v1/engine/utils.py",
+   "summary": "等待全部引擎就绪的握手循环：收齐 READY 消息、交换 ZMQ 地址，失败时清理并上报首个错误。",
+   "tags": [
+    "startup",
+    "handshake",
+    "readiness"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1403,
+    1596
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:CheckpointState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:CheckpointState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:EEPNotificationType",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:EEPNotificationType",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:FinishReason",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:FinishReason",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:EngineCoreReadyResponse",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:EngineCoreReadyResponse",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:EngineCoreRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:EngineCoreRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:EngineCoreEventType",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:EngineCoreEventType",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:EngineCoreEvent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:EngineCoreEvent",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:EngineCoreOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:EngineCoreOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:UtilityOutput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:UtilityOutput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:EngineCoreOutputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:EngineCoreOutputs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:EngineCoreRequestType",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:EngineCoreRequestType",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:ReconfigureDistributedRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:ReconfigureDistributedRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:ReconfigureRankType",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:ReconfigureRankType",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:EngineStatusType",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "class:vllm/v1/engine/__init__.py:EngineStatusType",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/admission_control.py",
+   "target": "class:vllm/v1/engine/admission_control.py:SharedAdmissionStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/admission_control.py",
+   "target": "class:vllm/v1/engine/admission_control.py:SharedAdmissionStats",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "class:vllm/v1/engine/async_llm.py:InputStreamError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "class:vllm/v1/engine/async_llm.py:InputStreamError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "class:vllm/v1/engine/async_llm.py:AsyncLLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "class:vllm/v1/engine/async_llm.py:AsyncLLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/coordinator.py",
+   "target": "class:vllm/v1/engine/coordinator.py:DPCoordinator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/coordinator.py",
+   "target": "class:vllm/v1/engine/coordinator.py:DPCoordinator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/coordinator.py",
+   "target": "class:vllm/v1/engine/coordinator.py:DPCoordinatorProc",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/coordinator.py",
+   "target": "class:vllm/v1/engine/coordinator.py:DPCoordinatorProc",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "class:vllm/v1/engine/core.py:EngineCore",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "class:vllm/v1/engine/core.py:EngineCore",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "class:vllm/v1/engine/core.py:EngineCoreProc",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "class:vllm/v1/engine/core.py:EngineCoreProc",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "class:vllm/v1/engine/core.py:DPEngineCoreProc",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "class:vllm/v1/engine/core.py:DPEngineCoreProc",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "class:vllm/v1/engine/core.py:EngineCoreActorMixin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "class:vllm/v1/engine/core.py:EngineCoreActorMixin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "class:vllm/v1/engine/core.py:DPMoEEngineCoreActor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "class:vllm/v1/engine/core.py:DPMoEEngineCoreActor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "class:vllm/v1/engine/core.py:EngineCoreActor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "class:vllm/v1/engine/core.py:EngineCoreActor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "class:vllm/v1/engine/core_client.py:EngineCoreClient",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "class:vllm/v1/engine/core_client.py:EngineCoreClient",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "class:vllm/v1/engine/core_client.py:InprocClient",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "class:vllm/v1/engine/core_client.py:InprocClient",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "class:vllm/v1/engine/core_client.py:BackgroundResources",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "class:vllm/v1/engine/core_client.py:BackgroundResources",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "class:vllm/v1/engine/core_client.py:MPClient",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "class:vllm/v1/engine/core_client.py:MPClient",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "class:vllm/v1/engine/core_client.py:SyncMPClient",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "class:vllm/v1/engine/core_client.py:SyncMPClient",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "class:vllm/v1/engine/core_client.py:AsyncMPClient",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "class:vllm/v1/engine/core_client.py:AsyncMPClient",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "class:vllm/v1/engine/core_client.py:DPAsyncMPClient",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "class:vllm/v1/engine/core_client.py:DPAsyncMPClient",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "class:vllm/v1/engine/core_client.py:DPLBAsyncMPClient",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "class:vllm/v1/engine/core_client.py:DPLBAsyncMPClient",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "function:vllm/v1/engine/core_client.py:_process_utility_output",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/detokenizer.py",
+   "target": "class:vllm/v1/engine/detokenizer.py:IncrementalDetokenizer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/detokenizer.py",
+   "target": "class:vllm/v1/engine/detokenizer.py:IncrementalDetokenizer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/detokenizer.py",
+   "target": "class:vllm/v1/engine/detokenizer.py:BaseIncrementalDetokenizer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/detokenizer.py",
+   "target": "class:vllm/v1/engine/detokenizer.py:BaseIncrementalDetokenizer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/detokenizer.py",
+   "target": "class:vllm/v1/engine/detokenizer.py:FastIncrementalDetokenizer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/detokenizer.py",
+   "target": "class:vllm/v1/engine/detokenizer.py:FastIncrementalDetokenizer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/detokenizer.py",
+   "target": "class:vllm/v1/engine/detokenizer.py:SlowIncrementalDetokenizer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/detokenizer.py",
+   "target": "class:vllm/v1/engine/detokenizer.py:SlowIncrementalDetokenizer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/detokenizer.py",
+   "target": "function:vllm/v1/engine/detokenizer.py:check_stop_strings",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/detokenizer.py",
+   "target": "function:vllm/v1/engine/detokenizer.py:check_stop_strings",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/exceptions.py",
+   "target": "class:vllm/v1/engine/exceptions.py:EngineGenerateError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/exceptions.py",
+   "target": "class:vllm/v1/engine/exceptions.py:EngineGenerateError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/exceptions.py",
+   "target": "class:vllm/v1/engine/exceptions.py:EngineDeadError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/exceptions.py",
+   "target": "class:vllm/v1/engine/exceptions.py:EngineDeadError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "class:vllm/v1/engine/input_processor.py:InputProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "class:vllm/v1/engine/input_processor.py:InputProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "class:vllm/v1/engine/llm_engine.py:LLMEngine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "class:vllm/v1/engine/llm_engine.py:LLMEngine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/logprobs.py",
+   "target": "class:vllm/v1/engine/logprobs.py:LogprobsProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/logprobs.py",
+   "target": "class:vllm/v1/engine/logprobs.py:LogprobsProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "class:vllm/v1/engine/output_processor.py:RequestOutputCollector",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "class:vllm/v1/engine/output_processor.py:RequestOutputCollector",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "class:vllm/v1/engine/output_processor.py:StreamingInputOutputCollector",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "class:vllm/v1/engine/output_processor.py:StreamingInputOutputCollector",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "class:vllm/v1/engine/output_processor.py:StreamingUpdate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "class:vllm/v1/engine/output_processor.py:StreamingUpdate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "class:vllm/v1/engine/output_processor.py:RequestState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "class:vllm/v1/engine/output_processor.py:RequestState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "class:vllm/v1/engine/output_processor.py:OutputProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "class:vllm/v1/engine/output_processor.py:OutputProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "function:vllm/v1/engine/output_processor.py:_is_chunk_boundary",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/parallel_sampling.py",
+   "target": "class:vllm/v1/engine/parallel_sampling.py:ParentRequest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/parallel_sampling.py",
+   "target": "class:vllm/v1/engine/parallel_sampling.py:ParentRequest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/tensor_ipc.py",
+   "target": "class:vllm/v1/engine/tensor_ipc.py:TensorIpcData",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/tensor_ipc.py",
+   "target": "class:vllm/v1/engine/tensor_ipc.py:TensorIpcData",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/tensor_ipc.py",
+   "target": "class:vllm/v1/engine/tensor_ipc.py:TensorIpcSender",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/tensor_ipc.py",
+   "target": "class:vllm/v1/engine/tensor_ipc.py:TensorIpcSender",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/tensor_ipc.py",
+   "target": "class:vllm/v1/engine/tensor_ipc.py:TensorIpcReceiver",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/tensor_ipc.py",
+   "target": "class:vllm/v1/engine/tensor_ipc.py:TensorIpcReceiver",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "class:vllm/v1/engine/utils.py:EngineZmqAddresses",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "class:vllm/v1/engine/utils.py:EngineZmqAddresses",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "class:vllm/v1/engine/utils.py:EngineZmqListeners",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "class:vllm/v1/engine/utils.py:EngineZmqListeners",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "class:vllm/v1/engine/utils.py:EngineHandshakeMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "class:vllm/v1/engine/utils.py:EngineHandshakeMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "class:vllm/v1/engine/utils.py:CoreEngineProcManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "class:vllm/v1/engine/utils.py:CoreEngineProcManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "class:vllm/v1/engine/utils.py:SignalCallback",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "class:vllm/v1/engine/utils.py:SignalCallback",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "class:vllm/v1/engine/utils.py:CoreEngineActorManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "class:vllm/v1/engine/utils.py:CoreEngineActorManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "function:vllm/v1/engine/utils.py:get_engine_process_shutdown_timeout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "function:vllm/v1/engine/utils.py:get_engine_process_shutdown_timeout",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "function:vllm/v1/engine/utils.py:_dp_nodes_master_first",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "function:vllm/v1/engine/utils.py:_node_ip_from_resources",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "function:vllm/v1/engine/utils.py:_configure_uniproc_startup_threads",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "function:vllm/v1/engine/utils.py:set_assigned_physical_gpu_ids_for_dp_rank",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "function:vllm/v1/engine/utils.py:set_assigned_physical_gpu_ids_for_dp_rank",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "function:vllm/v1/engine/utils.py:get_physical_gpu_ids_for_local_dp_rank",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "function:vllm/v1/engine/utils.py:get_physical_gpu_ids_for_local_dp_rank",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "function:vllm/v1/engine/utils.py:_apply_dp_identity_suffix",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "function:vllm/v1/engine/utils.py:get_engine_zmq_bind_addresses",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "function:vllm/v1/engine/utils.py:get_engine_zmq_bind_addresses",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "function:vllm/v1/engine/utils.py:bind_engine_zmq_listeners",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "function:vllm/v1/engine/utils.py:bind_engine_zmq_listeners",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "function:vllm/v1/engine/utils.py:launch_core_engines",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "function:vllm/v1/engine/utils.py:launch_core_engines",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "function:vllm/v1/engine/utils.py:wait_for_engine_startup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "function:vllm/v1/engine/utils.py:wait_for_engine_startup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "file:vllm/config/kv_events.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "file:vllm/pooling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "file:vllm/v1/kv_hints/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "file:vllm/v1/metrics/stats.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/__init__.py",
+   "target": "file:vllm/v1/serial_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/config/kv_events.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/config/profiler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/distributed/weight_transfer/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/engine/arg_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/engine/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/entrypoints/serve/elastic_ep/middleware.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/pooling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/profiler/wrapper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/renderers/inputs/preprocess.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/tracing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/transformers_utils/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/usage/usage_lib.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/utils/async_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/utils/collection_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/v1/engine/admission_control.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/v1/engine/core_client.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/v1/engine/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/v1/engine/input_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/v1/engine/output_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/v1/engine/parallel_sampling.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/v1/executor/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/v1/fault_tolerance/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/v1/kv_hints/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/v1/metrics/loggers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/v1/metrics/prometheus.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/async_llm.py",
+   "target": "file:vllm/v1/metrics/stats.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/coordinator.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/coordinator.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/coordinator.py",
+   "target": "file:vllm/utils/network_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/coordinator.py",
+   "target": "file:vllm/utils/system_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/coordinator.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/coordinator.py",
+   "target": "file:vllm/v1/serial_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/coordinator.py",
+   "target": "file:vllm/v1/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/config/pooler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/distributed/ec_transfer/ec_connector/encoder_output_width.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/distributed/elastic_ep/elastic_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/logging_utils/dump_input.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/multimodal/cache/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/plugins/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/tracing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/transformers_utils/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/utils/gc_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/utils/hashing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/utils/network_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/utils/numa_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/utils/system_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/utils/watch_dog.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/v1/core/kv_cache_planning.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/v1/core/kv_cache_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/v1/core/sched/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/v1/core/single_type_kv_cache_manager.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/v1/engine/tensor_ipc.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/v1/engine/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/v1/executor/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/v1/metrics/stats.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/v1/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/v1/serial_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/v1/structured_output/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/v1/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core.py",
+   "target": "file:vllm/version.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/config/kv_events.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/tracing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/utils/async_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/utils/network_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/v1/engine/coordinator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/v1/engine/core.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/v1/engine/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/v1/engine/tensor_ipc.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/v1/engine/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/v1/executor/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/v1/fault_tolerance/engine_core_sentinel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/v1/fault_tolerance/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/v1/pool/late_interaction.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/core_client.py",
+   "target": "file:vllm/v1/serial_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/detokenizer.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/detokenizer.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/detokenizer.py",
+   "target": "file:vllm/tokenizers/detokenizer_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/detokenizer.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/detokenizer.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/exceptions.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/multimodal/encoder_budget.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/multimodal/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/pooling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/renderers/inputs/preprocess.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/utils/async_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/utils/diffusion.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/utils/jsontree.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/v1/kv_hints/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/v1/sample/logits_processor/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/input_processor.py",
+   "target": "file:vllm/v1/worker/gpu/sample/logits_processor/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/compilation/wrapper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/config/profiler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/engine/arg_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/pooling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/renderers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/renderers/inputs/preprocess.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/tasks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/tracing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/usage/usage_lib.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/v1/engine/core_client.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/v1/engine/input_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/v1/engine/output_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/v1/engine/parallel_sampling.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/v1/executor/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/v1/kv_hints/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/v1/metrics/loggers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/v1/metrics/reader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/v1/metrics/stats.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/v1/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/llm_engine.py",
+   "target": "file:vllm/v1/worker/worker_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/logprobs.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/logprobs.py",
+   "target": "file:vllm/logprobs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/logprobs.py",
+   "target": "file:vllm/tokenizers/detokenizer_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/logprobs.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/logprobs.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "file:vllm/lora/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "file:vllm/tracing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "file:vllm/v1/engine/admission_control.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "file:vllm/v1/engine/detokenizer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "file:vllm/v1/engine/logprobs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "file:vllm/v1/engine/parallel_sampling.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "file:vllm/v1/metrics/stats.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/output_processor.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/parallel_sampling.py",
+   "target": "file:vllm/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/parallel_sampling.py",
+   "target": "file:vllm/sampling_params.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/parallel_sampling.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/parallel_sampling.py",
+   "target": "file:vllm/v1/metrics/stats.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/tensor_ipc.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/tensor_ipc.py",
+   "target": "file:vllm/v1/serial_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "file:vllm/ray/ray_env.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "file:vllm/utils/network_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "file:vllm/utils/numa_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "file:vllm/utils/system_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "file:vllm/v1/engine/coordinator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "file:vllm/v1/engine/core.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "file:vllm/v1/executor/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "file:vllm/v1/executor/ray_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/engine/utils.py",
+   "target": "file:vllm/v1/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/v1/engine/async_llm.py:AsyncLLM",
+   "target": "class:vllm/engine/protocol.py:EngineClient",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/core.py:EngineCoreProc",
+   "target": "class:vllm/v1/engine/core.py:EngineCore",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/core.py:DPEngineCoreProc",
+   "target": "class:vllm/v1/engine/core.py:EngineCoreProc",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/core.py:DPMoEEngineCoreActor",
+   "target": "class:vllm/v1/engine/core.py:EngineCoreActorMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/core.py:DPMoEEngineCoreActor",
+   "target": "class:vllm/v1/engine/core.py:DPEngineCoreProc",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/core.py:EngineCoreActor",
+   "target": "class:vllm/v1/engine/core.py:EngineCoreActorMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/core.py:EngineCoreActor",
+   "target": "class:vllm/v1/engine/core.py:EngineCoreProc",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/core_client.py:InprocClient",
+   "target": "class:vllm/v1/engine/core_client.py:EngineCoreClient",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/core_client.py:MPClient",
+   "target": "class:vllm/v1/engine/core_client.py:EngineCoreClient",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/core_client.py:SyncMPClient",
+   "target": "class:vllm/v1/engine/core_client.py:MPClient",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/core_client.py:AsyncMPClient",
+   "target": "class:vllm/v1/engine/core_client.py:MPClient",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/core_client.py:DPAsyncMPClient",
+   "target": "class:vllm/v1/engine/core_client.py:AsyncMPClient",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/core_client.py:DPLBAsyncMPClient",
+   "target": "class:vllm/v1/engine/core_client.py:DPAsyncMPClient",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/detokenizer.py:BaseIncrementalDetokenizer",
+   "target": "class:vllm/v1/engine/detokenizer.py:IncrementalDetokenizer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/detokenizer.py:FastIncrementalDetokenizer",
+   "target": "class:vllm/v1/engine/detokenizer.py:BaseIncrementalDetokenizer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/detokenizer.py:SlowIncrementalDetokenizer",
+   "target": "class:vllm/v1/engine/detokenizer.py:BaseIncrementalDetokenizer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/exceptions.py:EngineGenerateError",
+   "target": "class:vllm/exceptions.py:VLLMServerError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/exceptions.py:EngineDeadError",
+   "target": "class:vllm/exceptions.py:VLLMServerError",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/output_processor.py:StreamingInputOutputCollector",
+   "target": "class:vllm/v1/engine/output_processor.py:RequestOutputCollector",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/tensor_ipc.py:TensorIpcSender",
+   "target": "class:vllm/v1/serial_utils.py:OOBTensorConsumer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/engine/core.py:EngineCore",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:get_global_kv_cache_groups",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/engine/core.py:EngineCore",
+   "target": "function:vllm/v1/core/kv_cache_planning.py:get_kv_cache_configs",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/engine/core.py:EngineCore",
+   "target": "function:vllm/v1/core/single_type_kv_cache_manager.py:register_all_kvcache_specs",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/engine/core.py:EngineCore",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:get_request_block_hasher",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/engine/core.py:EngineCore",
+   "target": "function:vllm/v1/core/kv_cache_utils.py:generate_scheduler_kv_cache_config",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/v1/engine/utils.py:launch_core_engines",
+   "target": "class:vllm/v1/engine/coordinator.py:DPCoordinator",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

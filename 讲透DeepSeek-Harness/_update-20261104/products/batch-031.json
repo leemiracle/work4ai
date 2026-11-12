@@ -1,0 +1,174 @@
+{
+ "nodes": [
+  {
+   "id": "config:packages/ssh/subprocess-ssh/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/ssh/subprocess-ssh/package.json",
+   "summary": "@deepseek-ai/dsh-subprocess-ssh 包清单：基于共享 POSIX SSH helper 的子进程与终端 provider，peer 依赖 dsh-ssh/dsh-subprocess/dsh-subprocess-local，zod 校验 RPC 响应。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "ssh",
+    "subprocess"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/ssh/subprocess-ssh/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/ssh/subprocess-ssh/src/index.ts",
+   "summary": "SSH 远程子进程与 PTY 终端 provider：RemoteProcess 用独立 SSH 流承载 stdin/stdout/stderr/control 并在异步分配期间保持可用；SshSubprocessRuntime 继承 SubprocessRuntime、注入 'ssh' 服务，经 ssh.request RPC 驱动远端 helper 的 prepare/start/terminate/done 生命周期，无法确认终止时释放整条 SSH 连接租约。",
+   "tags": [
+    "service-provider",
+    "ssh",
+    "subprocess",
+    "rpc",
+    "cordis-plugin"
+   ],
+   "complexity": "complex",
+   "languageNotes": "default export 服务类 + static inject 声明（Cordis Service Provider 范式）；OutputCollector 快照经 base64 坐标换算对账，rewind/mismatch 直接抛错而非降级。"
+  },
+  {
+   "id": "class:packages/ssh/subprocess-ssh/src/index.ts:RemoteCleanupError",
+   "type": "class",
+   "name": "RemoteCleanupError",
+   "filePath": "packages/ssh/subprocess-ssh/src/index.ts",
+   "lineRange": [
+    18,
+    18
+   ],
+   "summary": "AggregateError 子类，标记\"终端分配失败且远端清理结果未知\"的复合错误，供 dispose 阶段重新抛出而非吞掉。",
+   "tags": [
+    "error-type",
+    "cleanup",
+    "terminal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/ssh/subprocess-ssh/src/index.ts:RemoteProcess",
+   "type": "class",
+   "name": "RemoteProcess",
+   "filePath": "packages/ssh/subprocess-ssh/src/index.ts",
+   "lineRange": [
+    21,
+    226
+   ],
+   "summary": "单个远端普通进程句柄（implements SubprocessHandle）：构造时按 stdio 模式装配 PassThrough 流与 OutputCollector 快照对账，start() 经 prepare/start 两段 RPC 提交，terminate 失败时 dispose 整条 SSH 连接以释放 helper 租约，drainOutput 以 graceMs 限时排空。",
+   "tags": [
+    "subprocess-handle",
+    "stream-piping",
+    "output-collection",
+    "lifecycle"
+   ],
+   "complexity": "complex",
+   "languageNotes": "提交两阶段（committed 标志）+ AbortController + socket 关闭追踪三重生命周期交织；对象模式 stdio 走 SshRpcPeer 增量 snapshot，非对象模式直接 pipe。"
+  },
+  {
+   "id": "class:packages/ssh/subprocess-ssh/src/index.ts:SshSubprocessRuntime",
+   "type": "class",
+   "name": "SshSubprocessRuntime",
+   "filePath": "packages/ssh/subprocess-ssh/src/index.ts",
+   "lineRange": [
+    229,
+    343
+   ],
+   "summary": "Cordis Service Provider（extends SubprocessRuntime，static inject=['ssh']，default export）：spawn/spawnTerminal/resolveExecutable/terminalEnvironment 全部转发为 ssh.request RPC；ctx.effect 注册 dispose 时终止全部活进程与终端并以 AggregateError 汇报未确认清理。",
+   "tags": [
+    "service-provider",
+    "cordis-plugin",
+    "ssh",
+    "subprocess-runtime",
+    "disposal"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:packages/ssh/subprocess-ssh/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/ssh/subprocess-ssh/tsconfig.json",
+   "summary": "包级 TypeScript 编译配置：extends tsconfig.base.json，rootDir src / outDir lib/types，project references 指向 vendor cordis/schemastery 与 ssh、subprocess、subprocess-local 三个 workspace 依赖。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/ssh/subprocess-ssh/src/index.ts",
+   "target": "class:packages/ssh/subprocess-ssh/src/index.ts:RemoteCleanupError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/ssh/subprocess-ssh/src/index.ts",
+   "target": "class:packages/ssh/subprocess-ssh/src/index.ts:RemoteProcess",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/ssh/subprocess-ssh/src/index.ts",
+   "target": "class:packages/ssh/subprocess-ssh/src/index.ts:SshSubprocessRuntime",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/ssh/subprocess-ssh/src/index.ts",
+   "target": "class:packages/ssh/subprocess-ssh/src/index.ts:SshSubprocessRuntime",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:packages/ssh/subprocess-ssh/src/index.ts:SshSubprocessRuntime",
+   "target": "class:packages/subprocess/subprocess/src/index.ts:SubprocessRuntime",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:packages/ssh/subprocess-ssh/src/index.ts",
+   "target": "file:packages/subprocess/subprocess/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/ssh/subprocess-ssh/src/index.ts",
+   "target": "file:packages/subprocess/subprocess-local/src/output.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/ssh/subprocess-ssh/src/index.ts",
+   "target": "file:packages/ssh/ssh/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/ssh/subprocess-ssh/src/index.ts",
+   "target": "file:packages/ssh/ssh/src/schemas.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/ssh/subprocess-ssh/src/index.ts",
+   "target": "file:packages/ssh/ssh/src/protocol.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

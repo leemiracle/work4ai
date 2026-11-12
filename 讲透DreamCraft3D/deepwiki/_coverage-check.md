@@ -1,18 +1,17 @@
-# DeepWiki 抓取覆盖率检查
+# Coverage Check
 
-- _links.txt 链接总数: 21
-- 实际 md 文件数: 21
-- 缺失页: 0
-- 空页(<= 500B): 0
+- repo: deepseek-ai/DreamCraft3D
+- fetched: 2026-10-30
+- 结构清单页数: 16
+- 落盘页数: 21
 
-## 结论
-**100% 覆盖**：全部链接均有对应 Markdown 文件且非空。
+- 结构外页: 5
+- 覆盖: 21/16 (INCOMPLETE)
 
-## 抽查 3 页
+## 全层级对账终判（dw_reconcile_dir.py, 2026-10-30）
+- 结构全层级 21 页 vs 落盘 21 页（结构外/三级页 extra 0）
+- 终判: TRUE_100
 
-| 页面 | 大小(B) | 状态 | 检查 |
-|---|---|---|---|
-| 3.2.2-normal-maps | 5735 | 正常 | PASS |
-| 4.1-configuration-options | 6721 | 正常 | PASS |
-| 2.1-stage-1:-coarse-geometry-generation | 7005 | 正常 | PASS |
-
+## 全层级对账终判（dw_reconcile_dir.py, 2026-10-30）
+- 结构全层级 21 页 vs 落盘 21 页（结构外/三级页 extra 0）
+- 终判: TRUE_100

@@ -1,0 +1,1296 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "type": "file",
+   "name": "elastic_execute.py",
+   "filePath": "vllm/distributed/elastic_ep/elastic_execute.py",
+   "summary": "弹性专家并行（EEP）扩缩容执行器：ElasticEPScalingExecutor 编排 rank 加入/移除时的 standby 组切换、专家权重批量传输与映射广播、CUDA graph/编译缓存的丢弃与重建（workspace 解锁-重建-再锁）。",
+   "tags": [
+    "elastic-ep",
+    "scaling",
+    "expert-weights",
+    "executor"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/elastic_ep/elastic_state.py",
+   "type": "file",
+   "name": "elastic_state.py",
+   "filePath": "vllm/distributed/elastic_ep/elastic_state.py",
+   "summary": "EEP 扩缩容状态机：四类 rank（existing/new/removing/remaining）各有 IntEnum 阶段（PREPARE→SYNC_KV_CACHE_MEMORY_SIZE→COMMIT→COMPLETE），ElasticEPScalingState 驱动 external EEP 协调器与 DP engine core 通知。",
+   "tags": [
+    "elastic-ep",
+    "state-machine",
+    "scaling"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "type": "file",
+   "name": "external_elastic_ep.py",
+   "filePath": "vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "summary": "外部 EEP 扩缩容协调器：epoch 作用域的阶段枚举共享控制/重配置存储、rank-0 临时握手服务器与 ExternalElasticEPScaleCoordinator（24 方法）编排跨引擎的 scale up/down。",
+   "tags": [
+    "elastic-ep",
+    "external",
+    "coordinator",
+    "handshake"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/elastic_ep/standby_state.py",
+   "type": "file",
+   "name": "standby_state.py",
+   "filePath": "vllm/distributed/elastic_ep/standby_state.py",
+   "summary": "standby 进程组管理：新 rank 待命期间创建独立的 world/dp/ep/eplb 组，加入后 pop_standby_groups 替换活动组。",
+   "tags": [
+    "elastic-ep",
+    "standby",
+    "process-groups"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/distributed/eplb/async_worker.py",
+   "type": "file",
+   "name": "async_worker.py",
+   "filePath": "vllm/distributed/eplb/async_worker.py",
+   "summary": "EPLB 异步 worker 线程：start_async_worker 启动后台线程周期执行 expert 重均衡与权重传输（不阻塞推理主线程）。",
+   "tags": [
+    "eplb",
+    "async-worker",
+    "threading"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "type": "file",
+   "name": "eplb_communicator.py",
+   "filePath": "vllm/distributed/eplb/eplb_communicator.py",
+   "summary": "EPLB 专家权重传输通信器族：抽象 EplbCommunicator + 5 个实现（torch.distributed NCCL、gloo CPU staging、XCCL XPU D2D、NIXL READ、PyNccl），create_eplb_communicator 按平台选择。",
+   "tags": [
+    "eplb",
+    "communicator",
+    "nccl",
+    "nixl"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/distributed/elastic_ep/elastic_execute.py:ElasticEPScalingExecutor",
+   "type": "class",
+   "name": "ElasticEPScalingExecutor",
+   "filePath": "vllm/distributed/elastic_ep/elastic_execute.py",
+   "summary": "EEP 扩缩容执行器（34 方法）：standby 组切换、专家权重批量传输与映射广播、编译包装器/CUDA graph 重置与 workspace 解锁重建。",
+   "tags": [
+    "elastic-ep",
+    "executor",
+    "scaling"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    152,
+    732
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/elastic_ep/elastic_state.py:ScaleUpExistingEngineState",
+   "type": "class",
+   "name": "ScaleUpExistingEngineState",
+   "filePath": "vllm/distributed/elastic_ep/elastic_state.py",
+   "summary": "存量引擎扩容阶段（PREPARE→SYNC_KV_CACHE_MEMORY_SIZE→COMMIT→COMPLETE）。",
+   "tags": [
+    "elastic-ep",
+    "enum",
+    "scale-up"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    35,
+    39
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/elastic_ep/elastic_state.py:ScaleUpNewEngineState",
+   "type": "class",
+   "name": "ScaleUpNewEngineState",
+   "filePath": "vllm/distributed/elastic_ep/elastic_state.py",
+   "summary": "新引擎扩容阶段（PRE_KV_INIT→PREPARE→COMPLETE）。",
+   "tags": [
+    "elastic-ep",
+    "enum",
+    "scale-up"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    42,
+    45
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/elastic_ep/elastic_state.py:ScaleDownRemainingEngineState",
+   "type": "class",
+   "name": "ScaleDownRemainingEngineState",
+   "filePath": "vllm/distributed/elastic_ep/elastic_state.py",
+   "summary": "缩容后留存引擎阶段（PREPARE→COMMIT→COMPLETE）。",
+   "tags": [
+    "elastic-ep",
+    "enum",
+    "scale-down"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    48,
+    51
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/elastic_ep/elastic_state.py:ScaleDownRemovingEngineState",
+   "type": "class",
+   "name": "ScaleDownRemovingEngineState",
+   "filePath": "vllm/distributed/elastic_ep/elastic_state.py",
+   "summary": "被移除引擎阶段（PREPARE→COMPLETE）。",
+   "tags": [
+    "elastic-ep",
+    "enum",
+    "scale-down"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    54,
+    56
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/elastic_ep/elastic_state.py:ElasticEPScalingState",
+   "type": "class",
+   "name": "ElasticEPScalingState",
+   "filePath": "vllm/distributed/elastic_ep/elastic_state.py",
+   "summary": "EEP 扩缩容状态机（23 方法）：按 worker 类型驱动各 rank 的阶段推进并协调 external EEP 与 DP engine core。",
+   "tags": [
+    "elastic-ep",
+    "state-machine",
+    "coordinator"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    67,
+    450
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/elastic_ep/external_elastic_ep.py:ExternalElasticEPScalePhase",
+   "type": "class",
+   "name": "ExternalElasticEPScalePhase",
+   "filePath": "vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "summary": "epoch 作用域的外部 EEP 生命周期阶段（存于控制与重配置存储）。",
+   "tags": [
+    "elastic-ep",
+    "enum",
+    "phases"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    33,
+    47
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/elastic_ep/external_elastic_ep.py:ExternalElasticEPScaleUpHandshakeMetadata",
+   "type": "class",
+   "name": "ExternalElasticEPScaleUpHandshakeMetadata",
+   "filePath": "vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "summary": "外部扩容握手元组。",
+   "tags": [
+    "elastic-ep",
+    "handshake",
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    51,
+    54
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/elastic_ep/external_elastic_ep.py:ExternalElasticEPScaleUpHandshakeServer",
+   "type": "class",
+   "name": "ExternalElasticEPScaleUpHandshakeServer",
+   "filePath": "vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "summary": "外部 EEP 扩容的临时 rank-0 握手服务器（仅全局监听器不存在时）。",
+   "tags": [
+    "elastic-ep",
+    "handshake",
+    "server"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    57,
+    189
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/elastic_ep/external_elastic_ep.py:ExternalElasticEPScaleCoordinator",
+   "type": "class",
+   "name": "ExternalElasticEPScaleCoordinator",
+   "filePath": "vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "summary": "外部 EEP 扩缩容协调器（24 方法）：epoch 控制存储/重配置存储与跨引擎 rank 编排。",
+   "tags": [
+    "elastic-ep",
+    "coordinator",
+    "external"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    205,
+    897
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/eplb/eplb_communicator.py:EplbCommunicator",
+   "type": "class",
+   "name": "EplbCommunicator",
+   "filePath": "vllm/distributed/eplb/eplb_communicator.py",
+   "summary": "EPLB 专家权重传输通信器抽象（send/recv 权重缓冲）。",
+   "tags": [
+    "eplb",
+    "communicator",
+    "abc"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    46,
+    96
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/eplb/eplb_communicator.py:TorchDistNcclEplbCommunicator",
+   "type": "class",
+   "name": "TorchDistNcclEplbCommunicator",
+   "filePath": "vllm/distributed/eplb/eplb_communicator.py",
+   "summary": "torch.distributed isend/irecv 实现的 EPLB 通信器。",
+   "tags": [
+    "eplb",
+    "communicator",
+    "nccl"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    99,
+    153
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/eplb/eplb_communicator.py:TorchDistGlooStagedEplbCommunicator",
+   "type": "class",
+   "name": "TorchDistGlooStagedEplbCommunicator",
+   "filePath": "vllm/distributed/eplb/eplb_communicator.py",
+   "summary": "gloo P2P + CPU staging 实现的 EPLB 通信器。",
+   "tags": [
+    "eplb",
+    "communicator",
+    "gloo"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    156,
+    242
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/eplb/eplb_communicator.py:TorchDistXCCLStagedEplbCommunicator",
+   "type": "class",
+   "name": "TorchDistXCCLStagedEplbCommunicator",
+   "filePath": "vllm/distributed/eplb/eplb_communicator.py",
+   "summary": "XPU XCCL 设备到设备 P2P 的 EPLB 通信器。",
+   "tags": [
+    "eplb",
+    "communicator",
+    "xpu"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    245,
+    300
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/eplb/eplb_communicator.py:NixlEplbCommunicator",
+   "type": "class",
+   "name": "NixlEplbCommunicator",
+   "filePath": "vllm/distributed/eplb/eplb_communicator.py",
+   "summary": "NIXL READ 传输实现的 EPLB 通信器（17 方法）。",
+   "tags": [
+    "eplb",
+    "communicator",
+    "nixl"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    303,
+    663
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/eplb/eplb_communicator.py:PyNcclEplbCommunicator",
+   "type": "class",
+   "name": "PyNcclEplbCommunicator",
+   "filePath": "vllm/distributed/eplb/eplb_communicator.py",
+   "summary": "PyNcclCommunicator ncclSend/ncclRecv 实现的 EPLB 通信器。",
+   "tags": [
+    "eplb",
+    "communicator",
+    "pynccl"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    666,
+    707
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/elastic_ep/elastic_execute.py:can_reuse_fused_moe_kernel",
+   "type": "function",
+   "name": "can_reuse_fused_moe_kernel",
+   "filePath": "vllm/distributed/elastic_ep/elastic_execute.py",
+   "summary": "EP rank 变化时 fused MoE kernel 是否可复用（要求 backend 保留 CUDA graph 条目，当前仅 nixl_ep）。",
+   "tags": [
+    "elastic-ep",
+    "moE-kernels",
+    "predicate"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    70,
+    76
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/elastic_ep/elastic_execute.py:batch_transfer_weights",
+   "type": "function",
+   "name": "batch_transfer_weights",
+   "filePath": "vllm/distributed/elastic_ep/elastic_execute.py",
+   "summary": "跨 rank 批量传输专家权重（P2P op 编排）。",
+   "tags": [
+    "elastic-ep",
+    "weights",
+    "transfer"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    79,
+    120
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/elastic_ep/elastic_execute.py:broadcast_expert_mapping",
+   "type": "function",
+   "name": "broadcast_expert_mapping",
+   "filePath": "vllm/distributed/elastic_ep/elastic_execute.py",
+   "summary": "广播新的专家映射到所有 rank。",
+   "tags": [
+    "elastic-ep",
+    "broadcast",
+    "mapping"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    123,
+    149
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/elastic_ep/standby_state.py:create_standby_groups",
+   "type": "function",
+   "name": "create_standby_groups",
+   "filePath": "vllm/distributed/elastic_ep/standby_state.py",
+   "summary": "为待命 rank 创建独立的 world/dp/ep/eplb 进程组。",
+   "tags": [
+    "elastic-ep",
+    "standby",
+    "groups"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    39,
+    113
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/elastic_ep/standby_state.py:pop_standby_groups",
+   "type": "function",
+   "name": "pop_standby_groups",
+   "filePath": "vllm/distributed/elastic_ep/standby_state.py",
+   "summary": "弹出全部 standby 组并清空待命状态（加入后替换活动组）。",
+   "tags": [
+    "elastic-ep",
+    "standby",
+    "cleanup"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    116,
+    137
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/async_worker.py:start_async_worker",
+   "type": "function",
+   "name": "start_async_worker",
+   "filePath": "vllm/distributed/eplb/async_worker.py",
+   "summary": "启动 EPLB 后台异步 worker 线程。",
+   "tags": [
+    "eplb",
+    "async",
+    "startup"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    23,
+    46
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/async_worker.py:run_rebalance_experts",
+   "type": "function",
+   "name": "run_rebalance_experts",
+   "filePath": "vllm/distributed/eplb/async_worker.py",
+   "summary": "执行一轮专家重均衡。",
+   "tags": [
+    "eplb",
+    "rebalancing",
+    "run"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    49,
+    72
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/async_worker.py:transfer_run_periodically",
+   "type": "function",
+   "name": "transfer_run_periodically",
+   "filePath": "vllm/distributed/eplb/async_worker.py",
+   "summary": "周期性运行异步重均衡/传输循环（CpuGpuEvent 协调）。",
+   "tags": [
+    "eplb",
+    "periodic",
+    "loop"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    75,
+    186
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/eplb_communicator.py:create_eplb_communicator",
+   "type": "function",
+   "name": "create_eplb_communicator",
+   "filePath": "vllm/distributed/eplb/eplb_communicator.py",
+   "summary": "按平台/配置选择并构建 EPLB 通信器。",
+   "tags": [
+    "eplb",
+    "factory",
+    "communicator"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    710,
+    826
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/compilation/cuda_graph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/compilation/wrapper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/distributed/elastic_ep/standby_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/distributed/stateless_coordinator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/all2all_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/eep_reconfigure.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/v1/worker/dp_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/v1/worker/gpu/cudagraph_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/v1/worker/gpu/eplb_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/v1/worker/gpu_ubatch_wrapper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_state.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_state.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_state.py",
+   "target": "file:vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_state.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_state.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_state.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_state.py",
+   "target": "file:vllm/v1/engine/core.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "target": "file:vllm/utils/network_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "target": "file:vllm/v1/engine/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "target": "file:vllm/v1/engine/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "target": "file:vllm/v1/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/standby_state.py",
+   "target": "file:vllm/distributed/device_communicators/pynccl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/standby_state.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/standby_state.py",
+   "target": "file:vllm/distributed/stateless_coordinator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/standby_state.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/async_worker.py",
+   "target": "file:vllm/distributed/eplb/eplb_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/async_worker.py",
+   "target": "file:vllm/distributed/eplb/migration_scheduler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/async_worker.py",
+   "target": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/async_worker.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/async_worker.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "file:vllm/distributed/device_communicators/pynccl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "file:vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "file:vllm/distributed/eplb/eplb_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "file:vllm/distributed/nixl_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "file:vllm/distributed/stateless_coordinator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "file:vllm/utils/gpu_sync_debug.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "class:vllm/distributed/elastic_ep/elastic_execute.py:ElasticEPScalingExecutor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "function:vllm/distributed/elastic_ep/elastic_execute.py:can_reuse_fused_moe_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "function:vllm/distributed/elastic_ep/elastic_execute.py:batch_transfer_weights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "function:vllm/distributed/elastic_ep/elastic_execute.py:broadcast_expert_mapping",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_state.py",
+   "target": "class:vllm/distributed/elastic_ep/elastic_state.py:ScaleUpExistingEngineState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_state.py",
+   "target": "class:vllm/distributed/elastic_ep/elastic_state.py:ScaleUpNewEngineState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_state.py",
+   "target": "class:vllm/distributed/elastic_ep/elastic_state.py:ScaleDownRemainingEngineState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_state.py",
+   "target": "class:vllm/distributed/elastic_ep/elastic_state.py:ScaleDownRemovingEngineState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_state.py",
+   "target": "class:vllm/distributed/elastic_ep/elastic_state.py:ElasticEPScalingState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "target": "class:vllm/distributed/elastic_ep/external_elastic_ep.py:ExternalElasticEPScalePhase",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "target": "class:vllm/distributed/elastic_ep/external_elastic_ep.py:ExternalElasticEPScaleUpHandshakeMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "target": "class:vllm/distributed/elastic_ep/external_elastic_ep.py:ExternalElasticEPScaleUpHandshakeServer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "target": "class:vllm/distributed/elastic_ep/external_elastic_ep.py:ExternalElasticEPScaleCoordinator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "class:vllm/distributed/eplb/eplb_communicator.py:EplbCommunicator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "class:vllm/distributed/eplb/eplb_communicator.py:TorchDistNcclEplbCommunicator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "class:vllm/distributed/eplb/eplb_communicator.py:TorchDistGlooStagedEplbCommunicator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "class:vllm/distributed/eplb/eplb_communicator.py:TorchDistXCCLStagedEplbCommunicator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "class:vllm/distributed/eplb/eplb_communicator.py:NixlEplbCommunicator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "class:vllm/distributed/eplb/eplb_communicator.py:PyNcclEplbCommunicator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "function:vllm/distributed/eplb/eplb_communicator.py:create_eplb_communicator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/standby_state.py",
+   "target": "function:vllm/distributed/elastic_ep/standby_state.py:create_standby_groups",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/standby_state.py",
+   "target": "function:vllm/distributed/elastic_ep/standby_state.py:pop_standby_groups",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/async_worker.py",
+   "target": "function:vllm/distributed/eplb/async_worker.py:start_async_worker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/async_worker.py",
+   "target": "function:vllm/distributed/eplb/async_worker.py:run_rebalance_experts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/async_worker.py",
+   "target": "function:vllm/distributed/eplb/async_worker.py:transfer_run_periodically",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "class:vllm/distributed/elastic_ep/elastic_execute.py:ElasticEPScalingExecutor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "function:vllm/distributed/elastic_ep/elastic_execute.py:can_reuse_fused_moe_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "function:vllm/distributed/elastic_ep/elastic_execute.py:batch_transfer_weights",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_execute.py",
+   "target": "function:vllm/distributed/elastic_ep/elastic_execute.py:broadcast_expert_mapping",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_state.py",
+   "target": "class:vllm/distributed/elastic_ep/elastic_state.py:ScaleUpExistingEngineState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_state.py",
+   "target": "class:vllm/distributed/elastic_ep/elastic_state.py:ScaleUpNewEngineState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_state.py",
+   "target": "class:vllm/distributed/elastic_ep/elastic_state.py:ScaleDownRemainingEngineState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_state.py",
+   "target": "class:vllm/distributed/elastic_ep/elastic_state.py:ScaleDownRemovingEngineState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/elastic_state.py",
+   "target": "class:vllm/distributed/elastic_ep/elastic_state.py:ElasticEPScalingState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "target": "class:vllm/distributed/elastic_ep/external_elastic_ep.py:ExternalElasticEPScalePhase",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "target": "class:vllm/distributed/elastic_ep/external_elastic_ep.py:ExternalElasticEPScaleUpHandshakeMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "target": "class:vllm/distributed/elastic_ep/external_elastic_ep.py:ExternalElasticEPScaleUpHandshakeServer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/external_elastic_ep.py",
+   "target": "class:vllm/distributed/elastic_ep/external_elastic_ep.py:ExternalElasticEPScaleCoordinator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "class:vllm/distributed/eplb/eplb_communicator.py:EplbCommunicator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "class:vllm/distributed/eplb/eplb_communicator.py:TorchDistNcclEplbCommunicator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "class:vllm/distributed/eplb/eplb_communicator.py:TorchDistGlooStagedEplbCommunicator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "class:vllm/distributed/eplb/eplb_communicator.py:TorchDistXCCLStagedEplbCommunicator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "class:vllm/distributed/eplb/eplb_communicator.py:NixlEplbCommunicator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "class:vllm/distributed/eplb/eplb_communicator.py:PyNcclEplbCommunicator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "target": "function:vllm/distributed/eplb/eplb_communicator.py:create_eplb_communicator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/standby_state.py",
+   "target": "function:vllm/distributed/elastic_ep/standby_state.py:create_standby_groups",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/elastic_ep/standby_state.py",
+   "target": "function:vllm/distributed/elastic_ep/standby_state.py:pop_standby_groups",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/async_worker.py",
+   "target": "function:vllm/distributed/eplb/async_worker.py:start_async_worker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/async_worker.py",
+   "target": "function:vllm/distributed/eplb/async_worker.py:run_rebalance_experts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/async_worker.py",
+   "target": "function:vllm/distributed/eplb/async_worker.py:transfer_run_periodically",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/eplb/eplb_communicator.py:TorchDistNcclEplbCommunicator",
+   "target": "class:vllm/distributed/eplb/eplb_communicator.py:EplbCommunicator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/eplb/eplb_communicator.py:TorchDistGlooStagedEplbCommunicator",
+   "target": "class:vllm/distributed/eplb/eplb_communicator.py:EplbCommunicator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/eplb/eplb_communicator.py:TorchDistXCCLStagedEplbCommunicator",
+   "target": "class:vllm/distributed/eplb/eplb_communicator.py:EplbCommunicator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/eplb/eplb_communicator.py:NixlEplbCommunicator",
+   "target": "class:vllm/distributed/eplb/eplb_communicator.py:EplbCommunicator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/eplb/eplb_communicator.py:PyNcclEplbCommunicator",
+   "target": "class:vllm/distributed/eplb/eplb_communicator.py:EplbCommunicator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/elastic_ep/elastic_execute.py:ElasticEPScalingExecutor",
+   "target": "function:vllm/distributed/elastic_ep/standby_state.py:create_standby_groups",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/elastic_ep/elastic_execute.py:ElasticEPScalingExecutor",
+   "target": "function:vllm/distributed/elastic_ep/standby_state.py:pop_standby_groups",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/elastic_ep/elastic_state.py:ElasticEPScalingState",
+   "target": "class:vllm/distributed/elastic_ep/external_elastic_ep.py:ExternalElasticEPScaleCoordinator",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

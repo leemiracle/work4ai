@@ -1,0 +1,31 @@
+# DeepWiki 索引 — google-deepmind/dm-haiku
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 202963 字符
+
+- [1 Overview](1-overview.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 Parameter and State Management](2.1-parameter-and-state-management.md)
+  - [2.2 Module System](2.2-module-system.md)
+  - [2.3 Transformation System](2.3-transformation-system.md)
+  - [2.4 JAX Integration](2.4-jax-integration.md)
+  - [2.5 Parameter Lifting](2.5-parameter-lifting.md)
+- [3 Module Library](3-module-library.md)
+  - [3.1 Basic Modules](3.1-basic-modules.md)
+  - [3.2 Convolutional Modules](3.2-convolutional-modules.md)
+  - [3.3 Recurrent Modules](3.3-recurrent-modules.md)
+  - [3.4 Advanced Modules](3.4-advanced-modules.md)
+- [4 Utilities](4-utilities.md)
+  - [4.1 Data Structures and Filtering](4.1-data-structures-and-filtering.md)
+  - [4.2 Parameter Initialization](4.2-parameter-initialization.md)
+  - [4.3 Visualization Tools](4.3-visualization-tools.md)
+  - [4.4 Mixed Precision and Configuration](4.4-mixed-precision-and-configuration.md)
+  - [4.5 Flax Interoperability](4.5-flax-interoperability.md)
+- [5 Development and Testing](5-development-and-testing.md)
+  - [5.1 Testing Infrastructure](5.1-testing-infrastructure.md)
+  - [5.2 CI/CD and Build System](5.2-ci-cd-and-build-system.md)
+- [6 Examples](6-examples.md)
+  - [6.1 Image Classification](6.1-image-classification.md)
+  - [6.2 Transformer Models](6.2-transformer-models.md)
+  - [6.3 Reinforcement Learning Examples](6.3-reinforcement-learning-examples.md)
+- [7 Glossary](7-glossary.md)

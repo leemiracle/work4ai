@@ -1,0 +1,1503 @@
+{
+ "nodes": [
+  {
+   "id": "document:packages/api/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/api/README.md",
+   "summary": "api 包组总图：remote BFF——gateway、remote-access 与各 controller（account/job/session/terminal/workspace）构成 Typert Remote 面。",
+   "tags": [
+    "documentation",
+    "package-group",
+    "overview"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/api/account-controller/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/api/account-controller/README.md",
+   "summary": "dsh-api-account-controller 包参考：账户 UI 消费者的已认证 Remote 操作（登录/资料/余额/奖励）。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "account"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/api/account-controller/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/api/account-controller/package.json",
+   "summary": "dsh-api-account-controller 包清单（Host 面单 tsconfig）。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/api/account-controller/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/api/account-controller/src/index.ts",
+   "summary": "AccountController（TypertRemoteService，account 命名空间）：@Remote 方法转发 deepseekAccount 提供者——getState/getProfile/getBalance/奖励确认/浏览器登录流程。",
+   "tags": [
+    "remote-service",
+    "typert",
+    "account",
+    "provider"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/api/account-controller/src/index.ts:AccountController",
+   "type": "class",
+   "name": "AccountController",
+   "filePath": "packages/api/account-controller/src/index.ts",
+   "lineRange": [
+    10,
+    120
+   ],
+   "summary": "account 命名空间 Remote 服务（TypertRemoteService Provider）：@Remote 方法转发 deepseekAccount——状态/资料/余额/奖励/登录尝试全链。",
+   "tags": [
+    "remote-service",
+    "account",
+    "typert"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/api/account-controller/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/api/account-controller/src/types.ts",
+   "summary": "账户视图类型 re-export barrel。",
+   "tags": [
+    "barrel",
+    "type-definition"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/api/account-controller/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/api/account-controller/tsconfig.json",
+   "summary": "dsh-api-account-controller TypeScript 叶配置。",
+   "tags": [
+    "configuration",
+    "typescript"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/api/gateway/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/api/gateway/README.md",
+   "summary": "dsh-api-gateway 包参考：Typert Remote 调度核心——unary 走 Connection，活动 Remote 流走 Gateway 拥有的 WebSocket mux。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "gateway",
+    "typert"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/api/gateway/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/api/gateway/package.json",
+   "summary": "dsh-api-gateway 包清单：Host/Client 双编译面（tsconfig.host.json）。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/api/gateway/src/access.ts",
+   "type": "file",
+   "name": "access.ts",
+   "filePath": "packages/api/gateway/src/access.ts",
+   "summary": "非属主访问决策的资源解析：从 Typert 已验证参数读出一次调用或转发事件触碰的资源（readers/lookup 参数/Context 身份/默认 resolver 四级来源）。",
+   "tags": [
+    "access-control",
+    "resource-resolution"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/api/gateway/src/access.ts:callResources",
+   "type": "function",
+   "name": "callResources",
+   "filePath": "packages/api/gateway/src/access.ts",
+   "lineRange": [
+    40,
+    81
+   ],
+   "summary": "解析一次调用触碰的资源：readers 优先，其次 lookup 参数 wire id、Context 身份、kind 默认 resolver/default field；invalid 返回 undefined。",
+   "tags": [
+    "access-control",
+    "resource-resolution"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/api/gateway/src/access.ts:eventResources",
+   "type": "function",
+   "name": "eventResources",
+   "filePath": "packages/api/gateway/src/access.ts",
+   "lineRange": [
+    93,
+    104
+   ],
+   "summary": "解析一次转发事件触碰的资源（事件 readers 或全局资源）。",
+   "tags": [
+    "access-control",
+    "events"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/api/gateway/src/client/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/api/gateway/src/client/index.ts",
+   "summary": "Gateway Client 面装配：ClientRemoteService（命名空间代理+严格输入/编解码校验）、RemoteNamespaceService、ClientStreamHandle 及 apply 挂载。",
+   "tags": [
+    "client-face",
+    "remote-service",
+    "typert"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/api/gateway/src/client/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/api/gateway/src/client/index.ts",
+   "lineRange": [
+    141,
+    143
+   ],
+   "summary": "Client 插件入口：装载 ClientRemote 到当前 scope。",
+   "tags": [
+    "plugin-entry",
+    "installer"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/api/gateway/src/client/index.ts:ClientRemoteService",
+   "type": "class",
+   "name": "ClientRemoteService",
+   "filePath": "packages/api/gateway/src/client/index.ts",
+   "lineRange": [
+    145,
+    547
+   ],
+   "summary": "Client Remote 基服务：命名空间方法代理、严格输入与 codec 校验、流打开与载波失败重建。",
+   "tags": [
+    "client-service",
+    "remote-proxy"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/api/gateway/src/client/index.ts:ClientStreamHandle",
+   "type": "class",
+   "name": "ClientStreamHandle",
+   "filePath": "packages/api/gateway/src/client/index.ts",
+   "lineRange": [
+    556,
+    629
+   ],
+   "summary": "Client 逻辑流句柄：取消、完成等待与帧迭代。",
+   "tags": [
+    "stream-handle",
+    "client"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/api/gateway/src/client/index.ts:RemoteNamespaceService",
+   "type": "class",
+   "name": "RemoteNamespaceService",
+   "filePath": "packages/api/gateway/src/client/index.ts",
+   "lineRange": [
+    638,
+    718
+   ],
+   "summary": "单个生成命名空间的 Client 服务装配（方法描述符→代理）。",
+   "tags": [
+    "client-service",
+    "namespace"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/api/gateway/src/client/journal-stream.ts",
+   "type": "file",
+   "name": "journal-stream.ts",
+   "filePath": "packages/api/gateway/src/client/journal-stream.ts",
+   "summary": "重连 Remote 流上的游标/页/活尾协调：RemoteJournalFrame/RemoteJournalChange 词汇与 JournalStream 重连合并语义（opened/replace/prepend/append）。",
+   "tags": [
+    "journal-stream",
+    "reconnection",
+    "cursor"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/api/gateway/src/client/remote-events.ts",
+   "type": "file",
+   "name": "remote-events.ts",
+   "filePath": "packages/api/gateway/src/client/remote-events.ts",
+   "summary": "Client 转发 Remote Event 订阅与投递：ClientRemoteEvents 拥有事件代际、waterfall 请求的 HTTP 结果回投与取消。",
+   "tags": [
+    "remote-events",
+    "client-face",
+    "waterfall"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/api/gateway/src/client/remote-events.ts:parseRemoteEventFrame",
+   "type": "function",
+   "name": "parseRemoteEventFrame",
+   "filePath": "packages/api/gateway/src/client/remote-events.ts",
+   "lineRange": [
+    282,
+    314
+   ],
+   "summary": "解析并校验一条下行事件帧（ready/emit/waterfall/cancel）。",
+   "tags": [
+    "parser",
+    "wire-protocol"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/api/gateway/src/client/remote-events.ts:ClientRemoteEvents",
+   "type": "class",
+   "name": "ClientRemoteEvents",
+   "filePath": "packages/api/gateway/src/client/remote-events.ts",
+   "lineRange": [
+    63,
+    262
+   ],
+   "summary": "转发事件 Client 拥有者：事件代际生命周期、监听器链（emit/waterfall）、结果经 HTTP 端点回投与取消帧处理。",
+   "tags": [
+    "remote-events",
+    "client-face"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/api/gateway/src/client/stream-client.ts",
+   "type": "file",
+   "name": "stream-client.ts",
+   "filePath": "packages/api/gateway/src/client/stream-client.ts",
+   "summary": "Client 复用流 socket 拥有者：RemoteStreamMuxClient 共享单物理 WebSocket 于多条独立可取消逻辑流；载波错误可被域传输重试。",
+   "tags": [
+    "stream-client",
+    "websocket",
+    "multiplexing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/api/gateway/src/client/stream-client.ts:RemoteStreamCarrierError",
+   "type": "class",
+   "name": "RemoteStreamCarrierError",
+   "filePath": "packages/api/gateway/src/client/stream-client.ts",
+   "lineRange": [
+    15,
+    24
+   ],
+   "summary": "物理载波失败错误，域传输可捕获后重试。",
+   "tags": [
+    "error",
+    "carrier"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/api/gateway/src/client/stream-client.ts:RemoteStreamMuxClient",
+   "type": "class",
+   "name": "RemoteStreamMuxClient",
+   "filePath": "packages/api/gateway/src/client/stream-client.ts",
+   "lineRange": [
+    52,
+    394
+   ],
+   "summary": "单物理 WebSocket 上的逻辑流多路复用 Client：socket 修订号等待/重连语义、uplink 泵与 per-stream inbox。",
+   "tags": [
+    "stream-client",
+    "multiplexing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/api/gateway/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/api/gateway/src/index.ts",
+   "summary": "TypertGatewayService（ctx.typertGateway）：基于 Cordis Services 与注册提供者的活动 Remote 调度——方法绑定校验、参数编解码、GatewayInvocation、转发事件队列与 mux 服务器集成。",
+   "tags": [
+    "service-definition",
+    "gateway",
+    "typert",
+    "dispatch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/api/gateway/src/index.ts:TypertGatewayError",
+   "type": "class",
+   "name": "TypertGatewayError",
+   "filePath": "packages/api/gateway/src/index.ts",
+   "lineRange": [
+    178,
+    207
+   ],
+   "summary": "Gateway 面类型化错误（稳定错误码+可选字段）。",
+   "tags": [
+    "error",
+    "typed-error"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/api/gateway/src/index.ts:TypertGatewayService",
+   "type": "class",
+   "name": "TypertGatewayService",
+   "filePath": "packages/api/gateway/src/index.ts",
+   "lineRange": [
+    214,
+    1121
+   ],
+   "summary": "typertGateway 服务（Service Definition+Provider）：注册 Remote 服务与事件源、方法绑定校验、参数/结果编解码、GatewayInvocation 执行与 mux 流打开。",
+   "tags": [
+    "service",
+    "gateway",
+    "typert",
+    "dispatch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/api/gateway/src/index.ts:UplinkDecoder",
+   "type": "class",
+   "name": "UplinkDecoder",
+   "filePath": "packages/api/gateway/src/index.ts",
+   "lineRange": [
+    1378,
+    1451
+   ],
+   "summary": "流 uplink 帧的增量 JSON 解码器（分帧到达的值重组）。",
+   "tags": [
+    "decoder",
+    "stream"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/api/gateway/src/index.ts:GatewayInvocation",
+   "type": "class",
+   "name": "GatewayInvocation",
+   "filePath": "packages/api/gateway/src/index.ts",
+   "lineRange": [
+    1458,
+    1504
+   ],
+   "summary": "一次 Remote 调用的执行包装：peer 校验、方法信号、流/一元结果编码。",
+   "tags": [
+    "invocation",
+    "dispatch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/api/gateway/src/remote-error-codes.ts",
+   "type": "file",
+   "name": "remote-error-codes.ts",
+   "filePath": "packages/api/gateway/src/remote-error-codes.ts",
+   "summary": "Gateway 稳定 wire 错误码表（gateway/* 家族）与 fault details 类型。",
+   "tags": [
+    "error-codes",
+    "wire-protocol"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/api/gateway/src/stream-protocol.ts",
+   "type": "file",
+   "name": "stream-protocol.ts",
+   "filePath": "packages/api/gateway/src/stream-protocol.ts",
+   "summary": "Gateway 拥有的 Remote 流与事件结果 RPC 的 wire 消息：路径常量、帧判别联合与双向消息解析/校验器。",
+   "tags": [
+    "wire-protocol",
+    "stream",
+    "parser"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/api/gateway/src/stream-protocol.ts:parseRemoteEventResult",
+   "type": "function",
+   "name": "parseRemoteEventResult",
+   "filePath": "packages/api/gateway/src/stream-protocol.ts",
+   "lineRange": [
+    102,
+    138
+   ],
+   "summary": "解析事件结果端点回投的载荷（成功值/拒绝/失败）。",
+   "tags": [
+    "parser",
+    "events"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/api/gateway/src/stream-protocol.ts:parseRemoteStreamClientMessage",
+   "type": "function",
+   "name": "parseRemoteStreamClientMessage",
+   "filePath": "packages/api/gateway/src/stream-protocol.ts",
+   "lineRange": [
+    264,
+    286
+   ],
+   "summary": "解析并校验 Client→Server 流消息（open/data/close）。",
+   "tags": [
+    "parser",
+    "wire-protocol"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/api/gateway/src/stream-protocol.ts:parseRemoteStreamServerMessage",
+   "type": "function",
+   "name": "parseRemoteStreamServerMessage",
+   "filePath": "packages/api/gateway/src/stream-protocol.ts",
+   "lineRange": [
+    293,
+    315
+   ],
+   "summary": "解析并校验 Server→Client 流消息（opened/frame/failure）。",
+   "tags": [
+    "parser",
+    "wire-protocol"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/api/gateway/src/stream-server.ts",
+   "type": "file",
+   "name": "stream-server.ts",
+   "filePath": "packages/api/gateway/src/stream-server.ts",
+   "summary": "RemoteStreamMuxServer：no-server WebSocket 接受者与全部活动逻辑流的 Host 拥有者——心跳、uplink 字节上限、permessage-deflate 协商。",
+   "tags": [
+    "stream-server",
+    "websocket",
+    "host"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/api/gateway/src/stream-server.ts:RemoteStreamMuxServer",
+   "type": "class",
+   "name": "RemoteStreamMuxServer",
+   "filePath": "packages/api/gateway/src/stream-server.ts",
+   "lineRange": [
+    55,
+    151
+   ],
+   "summary": "no-server WebSocket 接受者：升级校验、心跳 ping、每流 uplink 字节上限与压缩协商，转发给 Gateway 流分发器。",
+   "tags": [
+    "stream-server",
+    "websocket"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/api/gateway/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/api/gateway/src/types.ts",
+   "summary": "Gateway 服务类型：InvokeRemoteRequest/TypertGateway/WireStream 等面词汇。",
+   "tags": [
+    "type-definition"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/api/gateway/tsconfig.host.json",
+   "type": "config",
+   "name": "tsconfig.host.json",
+   "filePath": "packages/api/gateway/tsconfig.host.json",
+   "summary": "dsh-api-gateway Host 面 TypeScript 叶配置。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "host-face"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/api/job-controller/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/api/job-controller/README.md",
+   "summary": "dsh-api-job-controller 包参考：后台任务 roster/输出的流式 Remote 面。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "jobs"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/api/job-controller/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/api/job-controller/package.json",
+   "summary": "dsh-api-job-controller 包清单（Host/Client 双面）。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/api/job-controller/src/client/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/api/job-controller/src/client/index.ts",
+   "summary": "Client 面 apply 装载：挂载 ctx.jobs 客户服务（ClientJobs）与模型源。",
+   "tags": [
+    "plugin-entry",
+    "client-face"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/api/job-controller/src/client/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/api/job-controller/src/client/index.ts",
+   "lineRange": [
+    31,
+    36
+   ],
+   "summary": "Client 插件入口：装载 ClientJobs 与模型源到 ctx.jobs。",
+   "tags": [
+    "plugin-entry",
+    "installer"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/api/job-controller/src/client/model.ts",
+   "type": "file",
+   "name": "model.ts",
+   "filePath": "packages/api/job-controller/src/client/model.ts",
+   "summary": "ClientJobsModel：roster 行与观察状态的内存模型源（JobsSource），供 UI 消费的响应式状态。",
+   "tags": [
+    "client-model",
+    "jobs",
+    "state-source"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/api/job-controller/src/client/model.ts:ClientJobsModel",
+   "type": "class",
+   "name": "ClientJobsModel",
+   "filePath": "packages/api/job-controller/src/client/model.ts",
+   "lineRange": [
+    63,
+    216
+   ],
+   "summary": "jobs 客户模型源：roster 行映射、follow 观察状态与世代合并（UI 响应式状态）。",
+   "tags": [
+    "client-model",
+    "state"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/api/job-controller/src/client/service.ts",
+   "type": "file",
+   "name": "service.ts",
+   "filePath": "packages/api/job-controller/src/client/service.ts",
+   "summary": "ClientJobs（ctx.jobs 客户服务）：引用计数的 job.list roster 流与 job.follow 观察流（重连共享/游标续读）+ job.kill 人类终止直通。",
+   "tags": [
+    "client-service",
+    "jobs",
+    "stream-sharing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/api/job-controller/src/client/service.ts:ClientJobs",
+   "type": "class",
+   "name": "ClientJobs",
+   "filePath": "packages/api/job-controller/src/client/service.ts",
+   "lineRange": [
+    93,
+    277
+   ],
+   "summary": "ctx.jobs 客户服务：watchRows/observeOutput 引用计数流共享、重连整集恢复与模型游标续读、kill 直通。",
+   "tags": [
+    "client-service",
+    "jobs",
+    "ref-counting"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/api/job-controller/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/api/job-controller/src/index.ts",
+   "summary": "JobController（TypertRemoteService，job 命名空间）：流式可见 roster、单任务保留输出观察与人类 kill；观察节奏/帧字节预算为 Config。",
+   "tags": [
+    "remote-service",
+    "typert",
+    "jobs",
+    "provider"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/api/job-controller/src/index.ts:JobController",
+   "type": "class",
+   "name": "JobController",
+   "filePath": "packages/api/job-controller/src/index.ts",
+   "lineRange": [
+    43,
+    128
+   ],
+   "summary": "job 命名空间 Remote 服务：list 整集流、follow 输出观察流（flush 窗口+帧字节预算）与 kill；观察读非消费。",
+   "tags": [
+    "remote-service",
+    "jobs",
+    "typert"
+   ],
+   "complexity": "moderate"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/api/account-controller/src/index.ts",
+   "target": "class:packages/api/account-controller/src/index.ts:AccountController",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/account-controller/src/index.ts",
+   "target": "class:packages/api/account-controller/src/index.ts:AccountController",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/api/account-controller/src/index.ts",
+   "target": "file:packages/api/account-controller/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/account-controller/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/account-controller/src/index.ts",
+   "target": "file:packages/credentials/deepseek-account/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/account-controller/src/index.ts",
+   "target": "file:packages/credentials/deepseek-account/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/account-controller/src/index.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/account-controller/src/types.ts",
+   "target": "file:packages/credentials/deepseek-account/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/access.ts",
+   "target": "function:packages/api/gateway/src/access.ts:callResources",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/gateway/src/access.ts",
+   "target": "function:packages/api/gateway/src/access.ts:callResources",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/api/gateway/src/access.ts",
+   "target": "function:packages/api/gateway/src/access.ts:eventResources",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/gateway/src/access.ts",
+   "target": "function:packages/api/gateway/src/access.ts:eventResources",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/api/gateway/src/access.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/index.ts",
+   "target": "function:packages/api/gateway/src/client/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/index.ts",
+   "target": "function:packages/api/gateway/src/client/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/index.ts",
+   "target": "class:packages/api/gateway/src/client/index.ts:ClientRemoteService",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/index.ts",
+   "target": "class:packages/api/gateway/src/client/index.ts:ClientStreamHandle",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/index.ts",
+   "target": "class:packages/api/gateway/src/client/index.ts:RemoteNamespaceService",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/index.ts",
+   "target": "file:packages/api/gateway/src/client/journal-stream.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/index.ts",
+   "target": "file:packages/api/gateway/src/client/remote-events.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/index.ts",
+   "target": "file:packages/api/gateway/src/client/remote-stream.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/index.ts",
+   "target": "file:packages/api/gateway/src/client/snapshot-stream.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/index.ts",
+   "target": "file:packages/api/gateway/src/client/stream-client.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/index.ts",
+   "target": "file:packages/api/gateway/src/remote-error-codes.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/index.ts",
+   "target": "file:packages/client/connection/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/index.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/journal-stream.ts",
+   "target": "file:packages/api/gateway/src/client/remote-stream.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/journal-stream.ts",
+   "target": "file:packages/api/gateway/src/client/stream-client.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/journal-stream.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/remote-events.ts",
+   "target": "function:packages/api/gateway/src/client/remote-events.ts:parseRemoteEventFrame",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/remote-events.ts",
+   "target": "class:packages/api/gateway/src/client/remote-events.ts:ClientRemoteEvents",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/remote-events.ts",
+   "target": "class:packages/api/gateway/src/client/remote-events.ts:ClientRemoteEvents",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/remote-events.ts",
+   "target": "file:packages/api/gateway/src/stream-protocol.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/remote-events.ts",
+   "target": "file:packages/client/connection/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/remote-events.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/remote-events.ts",
+   "target": "file:packages/util/crypto/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/stream-client.ts",
+   "target": "class:packages/api/gateway/src/client/stream-client.ts:RemoteStreamCarrierError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/stream-client.ts",
+   "target": "class:packages/api/gateway/src/client/stream-client.ts:RemoteStreamCarrierError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/stream-client.ts",
+   "target": "class:packages/api/gateway/src/client/stream-client.ts:RemoteStreamMuxClient",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/stream-client.ts",
+   "target": "class:packages/api/gateway/src/client/stream-client.ts:RemoteStreamMuxClient",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/stream-client.ts",
+   "target": "file:packages/api/gateway/src/stream-protocol.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/stream-client.ts",
+   "target": "file:packages/client/connection/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/stream-client.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/stream-client.ts",
+   "target": "file:packages/util/crypto/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/client/stream-client.ts",
+   "target": "file:packages/util/deque/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/index.ts",
+   "target": "class:packages/api/gateway/src/index.ts:TypertGatewayError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/gateway/src/index.ts",
+   "target": "class:packages/api/gateway/src/index.ts:TypertGatewayError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/api/gateway/src/index.ts",
+   "target": "class:packages/api/gateway/src/index.ts:TypertGatewayService",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/gateway/src/index.ts",
+   "target": "class:packages/api/gateway/src/index.ts:TypertGatewayService",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/api/gateway/src/index.ts",
+   "target": "class:packages/api/gateway/src/index.ts:UplinkDecoder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/gateway/src/index.ts",
+   "target": "class:packages/api/gateway/src/index.ts:GatewayInvocation",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/gateway/src/index.ts",
+   "target": "file:packages/api/gateway/src/access.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/index.ts",
+   "target": "file:packages/api/gateway/src/remote-error-codes.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/index.ts",
+   "target": "file:packages/api/gateway/src/stream-protocol.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/index.ts",
+   "target": "file:packages/api/gateway/src/stream-server.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/index.ts",
+   "target": "file:packages/api/gateway/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/index.ts",
+   "target": "file:packages/api/remote-access/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/index.ts",
+   "target": "file:packages/boot/cmdline/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/index.ts",
+   "target": "file:packages/client/connection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/index.ts",
+   "target": "file:packages/host/webserver/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/index.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/index.ts",
+   "target": "file:packages/util/deque/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/index.ts",
+   "target": "file:packages/util/timeout/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/stream-protocol.ts",
+   "target": "function:packages/api/gateway/src/stream-protocol.ts:parseRemoteEventResult",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/gateway/src/stream-protocol.ts",
+   "target": "function:packages/api/gateway/src/stream-protocol.ts:parseRemoteEventResult",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/api/gateway/src/stream-protocol.ts",
+   "target": "function:packages/api/gateway/src/stream-protocol.ts:parseRemoteStreamClientMessage",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/gateway/src/stream-protocol.ts",
+   "target": "function:packages/api/gateway/src/stream-protocol.ts:parseRemoteStreamClientMessage",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/api/gateway/src/stream-protocol.ts",
+   "target": "function:packages/api/gateway/src/stream-protocol.ts:parseRemoteStreamServerMessage",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/gateway/src/stream-protocol.ts",
+   "target": "function:packages/api/gateway/src/stream-protocol.ts:parseRemoteStreamServerMessage",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/api/gateway/src/stream-protocol.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/stream-protocol.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/stream-server.ts",
+   "target": "class:packages/api/gateway/src/stream-server.ts:RemoteStreamMuxServer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/gateway/src/stream-server.ts",
+   "target": "class:packages/api/gateway/src/stream-server.ts:RemoteStreamMuxServer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/api/gateway/src/stream-server.ts",
+   "target": "file:packages/api/gateway/src/stream-protocol.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/stream-server.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/stream-server.ts",
+   "target": "file:packages/util/deque/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/types.ts",
+   "target": "file:packages/api/gateway/src/stream-protocol.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/gateway/src/types.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/index.ts",
+   "target": "function:packages/api/job-controller/src/client/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/index.ts",
+   "target": "function:packages/api/job-controller/src/client/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/index.ts",
+   "target": "file:packages/api/job-controller/src/client/model.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/index.ts",
+   "target": "file:packages/api/job-controller/src/client/service.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/index.ts",
+   "target": "file:packages/api/job-controller/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/model.ts",
+   "target": "class:packages/api/job-controller/src/client/model.ts:ClientJobsModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/model.ts",
+   "target": "class:packages/api/job-controller/src/client/model.ts:ClientJobsModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/model.ts",
+   "target": "file:packages/api/job-controller/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/model.ts",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/model.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/model.ts",
+   "target": "file:packages/jobs/jobs/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/model.ts",
+   "target": "file:packages/jobs/jobs/src/view.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/service.ts",
+   "target": "class:packages/api/job-controller/src/client/service.ts:ClientJobs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/service.ts",
+   "target": "class:packages/api/job-controller/src/client/service.ts:ClientJobs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/service.ts",
+   "target": "file:packages/api/gateway/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/service.ts",
+   "target": "file:packages/api/job-controller/src/client/model.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/service.ts",
+   "target": "file:packages/api/job-controller/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/service.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/service.ts",
+   "target": "file:packages/jobs/jobs/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/job-controller/src/client/service.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/job-controller/src/index.ts",
+   "target": "class:packages/api/job-controller/src/index.ts:JobController",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/api/job-controller/src/index.ts",
+   "target": "class:packages/api/job-controller/src/index.ts:JobController",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/api/job-controller/src/index.ts",
+   "target": "file:packages/api/job-controller/src/observe.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/job-controller/src/index.ts",
+   "target": "file:packages/api/job-controller/src/rows.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/job-controller/src/index.ts",
+   "target": "file:packages/api/job-controller/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/job-controller/src/index.ts",
+   "target": "file:packages/jobs/jobs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/api/job-controller/src/index.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "document:packages/api/README.md",
+   "target": "file:packages/api/gateway/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/api/gateway/README.md",
+   "target": "file:packages/api/gateway/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/api/account-controller/README.md",
+   "target": "file:packages/api/account-controller/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/api/job-controller/README.md",
+   "target": "file:packages/api/job-controller/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/api/gateway/package.json",
+   "target": "file:packages/api/gateway/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "class:packages/api/gateway/src/index.ts:TypertGatewayService",
+   "target": "class:packages/api/gateway/src/stream-server.ts:RemoteStreamMuxServer",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:packages/api/gateway/src/index.ts:TypertGatewayService",
+   "target": "function:packages/api/gateway/src/access.ts:callResources",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:packages/api/job-controller/src/index.ts:JobController",
+   "target": "file:packages/api/job-controller/src/observe.ts",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:packages/api/job-controller/src/client/service.ts:ClientJobs",
+   "target": "class:packages/api/job-controller/src/client/model.ts:ClientJobsModel",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:packages/api/gateway/src/client/index.ts:ClientRemoteService",
+   "target": "class:packages/api/gateway/src/client/stream-client.ts:RemoteStreamMuxClient",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

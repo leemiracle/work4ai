@@ -1,0 +1,32 @@
+# DeepWiki 索引 — NVIDIA/rumpelpod
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 194165 字符
+
+- [1 Rumpelpod Overview](1-rumpelpod-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Configuration Reference](1.2-configuration-reference.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 Daemon](2.1-daemon.md)
+  - [2.2 Pod Server (In-Container HTTP API)](2.2-pod-server-in-container-http-api.md)
+  - [2.3 Executor Engine and Backend Abstraction](2.3-executor-engine-and-backend-abstraction.md)
+  - [2.4 Networking: Tunnels, Proxies, and Port Forwarding](2.4-networking-tunnels-proxies-and-port-forwarding.md)
+- [3 CLI Commands Reference](3-cli-commands-reference.md)
+  - [3.1 Pod Lifecycle Commands](3.1-pod-lifecycle-commands.md)
+  - [3.2 LLM Agent Commands](3.2-llm-agent-commands.md)
+  - [3.3 Image Management Commands](3.3-image-management-commands.md)
+- [4 Git Integration](4-git-integration.md)
+  - [4.1 Git Ref Namespace and Synchronization](4.1-git-ref-namespace-and-synchronization.md)
+  - [4.2 Git HTTP Server and Tunnel](4.2-git-http-server-and-tunnel.md)
+- [5 LLM Cache Proxy](5-llm-cache-proxy.md)
+- [6 Testing Infrastructure](6-testing-infrastructure.md)
+  - [6.1 xtest Runner and cargo pipeline](6.1-xtest-runner-and-cargo-pipeline.md)
+  - [6.2 Integration Test Harness](6.2-integration-test-harness.md)
+  - [6.3 Agent Integration Tests](6.3-agent-integration-tests.md)
+- [7 Development Environment](7-development-environment.md)
+  - [7.1 Devcontainer Setup](7.1-devcontainer-setup.md)
+  - [7.2 CI/CD and Release Pipeline](7.2-ci-cd-and-release-pipeline.md)
+- [8 Rumpelhub (In-Cluster Companion)](8-rumpelhub-in-cluster-companion.md)
+  - [8.1 Hub Installation and Management](8.1-hub-installation-and-management.md)
+  - [8.2 Hub HTTP Server](8.2-hub-http-server.md)
+- [9 Glossary](9-glossary.md)

@@ -1,165 +1,215 @@
-> 来源: [https://deepwiki.com/deepseek-ai/DeepSeek-MoE/2-model-architecture](https://deepwiki.com/deepseek-ai/DeepSeek-MoE/2-model-architecture)
-> DeepWiki deepseek-ai/DeepSeek-MoE
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/DeepSeek-MoE · page 2 Model Architecture · fetched 2026-10-30 -->
 
 # Model Architecture
 
-  Relevant source files 
- - [README.md](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1)
- - [paper.pdf](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/paper.pdf)
- 
-  This document provides a technical overview of the DeepSeek-Coder-V2 model architecture. It covers the Mixture-of-Experts (MoE) design, model variants, and key architectural features that enable the model's performance in code-related tasks.
+<details>
+<summary>Relevant source files</summary>
 
- For specific information about different model sizes and implementations, see [Model Variants](https://deepwiki.com/deepseek-ai/DeepSeek-Coder-V2/2.1-model-variants). For details about the extended context window implementation, see [Context Length Capabilities](https://deepwiki.com/deepseek-ai/DeepSeek-Coder-V2/2.2-context-length-capabilities).
+The following files were used as context for generating this wiki page:
 
- 
-## Core Architecture
+- [DeepSeekMoE.pdf](DeepSeekMoE.pdf)
+- [README.md](README.md)
 
- DeepSeek-Coder-V2 is built on the DeepSeekMoE framework, implementing a sparse Mixture-of-Experts architecture. This design allows the model to maintain a large number of total parameters while only activating a fraction of those parameters during inference.
+</details>
 
- 
-### Mixture-of-Experts Architecture
 
- 
+
+## Purpose and Scope
+
+This document provides a detailed technical explanation of the DeepSeekMoE 16B model's architecture. It covers the underlying Mixture of Experts (MoE) design, the innovative approaches used for expert segmentation and isolation, and how these architectural decisions impact the model's efficiency and performance. For information about how to use the model for inference, see [Model Usage](#3), and for fine-tuning approaches, see [Fine-tuning](#4).
+
+## Overview of DeepSeekMoE 16B
+
+DeepSeekMoE 16B is a Mixture-of-Experts language model with 16.4 billion total parameters. The architecture employs an innovative MoE design that enables the model to achieve comparable performance to dense models with significantly reduced computational requirements. During inference, the model activates only about 40% of its parameters, making it computationally equivalent to a ~6.6B dense model while delivering performance on par with models like DeepSeek 7B and LLaMA2 7B.
+
+```mermaid
+flowchart TD
+    A["DeepSeekMoE 16B"]
+    A --> B["Base Model (16.4B parameters)"]
+    A --> C["Chat Model (16.4B parameters)"]
+    
+    B --> D["Model Architecture"]
+    D --> E["MoE Design"]
+    E --> F["Router/Gate Network"]
+    E --> G["Expert Networks"]
+    
+    F --> H["Dynamic Expert Selection"]
+    G --> I["Fine-grained Expert Segmentation"]
+    G --> J["Shared Experts Isolation"]
+    
+    K["~40% Computation of Equivalent\nDense Models"]
+    I --> K
+    J --> K
 ```
 
+Sources: [README.md:63-66]()
+
+## Mixture of Experts Architecture
+
+The DeepSeekMoE model implements a Mixture-of-Experts architecture, which is fundamentally different from traditional dense transformer models. In an MoE architecture, instead of activating all parameters for every input token, the model dynamically routes each token to a subset of specialized neural network modules called "experts."
+
+```mermaid
+flowchart TB
+    A["Input Tokens"] --> B["Transformer Encoder Layers"]
+    B --> C["MoE Layer"]
+    C --> D["Router/Gate Network"]
+    D --> |"Routes tokens"| E["Expert Networks"]
+    
+    subgraph "Experts"
+        E --> E1["Expert 1"]
+        E --> E2["Expert 2"]
+        E --> E3["..."]
+        E --> E4["Expert N"]
+    end
+    
+    E1 & E2 & E3 & E4 --> F["Combine Expert Outputs"]
+    F --> G["Subsequent Transformer Layers"]
+    G --> H["Output"]
 ```
 
- In this architecture:
+Sources: [README.md:63-66]()
 
- 
- - Input tokens are embedded into continuous vector representations
- - These embeddings pass through multiple transformer layers
- - Within each transformer layer, after self-attention, a router network selectively activates only specific experts in the MoE feed-forward blocks
- - The outputs from activated experts are combined and processed through a language modeling head to produce the final output
- 
- Sources: [README.md57-59](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L57-L59) [README.md70](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L70-L70)
+### Router Network
 
- 
-### Parameter Efficiency
+The router (or gate) network is a critical component of the MoE architecture. It analyzes each input token and determines which expert(s) should process it. This dynamic routing mechanism is what allows the model to:
 
- The key innovation of the MoE architecture is parameter efficiency. For example:
+1. Activate only a subset of parameters for each token
+2. Enable specialization of experts for different types of inputs
+3. Achieve computational efficiency by processing each token with only the most relevant parameters
 
- 
- - The 16B parameter model activates only 2.4B parameters for each token
- - The 236B parameter model activates only 21B parameters for each token
- 
- This sparse activation pattern enables DeepSeek-Coder-V2 to achieve better computational and memory efficiency than comparable dense models, making it possible to train and deploy larger models effectively.
+Sources: [README.md:63-66]()
 
- 
+## Key Architectural Innovations
+
+DeepSeekMoE introduces two principal innovations in its MoE architecture:
+
+### 1. Fine-grained Expert Segmentation
+
+```mermaid
+flowchart LR
+    A["Traditional MoE"] --> B["Coarse-grained Experts"]
+    B --> C["Entire Feed-forward Layers\nas Single Experts"]
+    
+    D["DeepSeekMoE"] --> E["Fine-grained Expert Segmentation"]
+    E --> F["Feed-forward Layers Split\ninto Multiple Smaller Experts"]
+    F --> G["Increased Specialization"]
+    F --> H["More Efficient Routing"]
+```
+
+Fine-grained expert segmentation involves breaking down the traditional monolithic experts into smaller, more specialized units. This approach allows for more precise routing of computation and enhances the ability of experts to specialize in specific types of language processing tasks.
+
+Sources: [README.md:64]()
+
+### 2. Shared Experts Isolation
+
+```mermaid
+flowchart TD
+    A["Input Tokens"] --> B["Router Network"]
+    
+    B --> C["Token Type Classification"]
+    
+    C --> D["Domain-specific Tokens"]
+    C --> E["General Knowledge Tokens"]
+    
+    D --> F["Specialized Experts"]
+    E --> G["Shared Experts"]
+    
+    F --> H["Isolation Mechanism"]
+    G --> H
+    
+    H --> I["Prevents Interference Between\nDifferent Types of Knowledge"]
+```
+
+Shared experts isolation is a technique that prevents interference between different types of knowledge processing. By isolating shared experts from specialized ones, the model can maintain clearer boundaries between general knowledge and domain-specific expertise, leading to improved performance on specialized tasks without compromising general capabilities.
+
+Sources: [README.md:64]()
+
 ## Model Variants
 
- DeepSeek-Coder-V2 encompasses four primary model variants:
+DeepSeekMoE is available in two variants, both sharing the same underlying architecture but with different usage orientations:
 
- 
+```mermaid
+flowchart LR
+    A["DeepSeekMoE 16B"]
+    
+    A --> B["Base Model"]
+    B --> B1["Raw Text Completion"]
+    B --> B2["Foundation for\nFine-tuning"]
+    
+    A --> C["Chat Model"]
+    C --> C1["Optimized for\nDialogue"]
+    C --> C2["Follows Chat\nTemplate Format"]
 ```
 
-```
+1. **Base Model**: Designed for general text completion tasks and as a foundation for fine-tuning on specific domains
+2. **Chat Model**: Optimized for dialogue interactions, following a specific chat template format
 
- 
-### Model Specifications
+Both variants maintain the computational efficiency of the MoE architecture, requiring only about 40% of the computations compared to equivalent dense models.
 
- 
-| Model | Total Parameters | Active Parameters | Context Length | Type |
-|---|---|---|---|---|
-| DeepSeek-Coder-V2-Lite-Base | 16B | 2.4B | 128K | Base |
-| DeepSeek-Coder-V2-Lite-Instruct | 16B | 2.4B | 128K | Instruct |
-| DeepSeek-Coder-V2-Base | 236B | 21B | 128K | Base |
-| DeepSeek-Coder-V2-Instruct | 236B | 21B | 128K | Instruct |
+Sources: [README.md:63-66](), [README.md:110-111]()
 
- Sources: [README.md69-80](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L69-L80)
+## Efficiency Characteristics
 
- 
-### Base vs. Instruct Models
+DeepSeekMoE's architectural innovations result in significant efficiency gains:
 
- The model family includes two types of variants:
+| Metric | DeepSeekMoE 16B | Comparable Dense Models |
+|--------|-----------------|-------------------------|
+| Total Parameters | 16.4B | 7B (DeepSeek, LLaMA2) |
+| Active Parameters (per token) | ~6.6B (~40%) | 7B (100%) |
+| Memory Requirements | 40GB | 40GB+ |
+| Computational Requirements | ~40% of dense models | 100% |
+| Performance | Comparable to 7B dense models | Baseline |
 
- 
- - **Base Models**: Foundation models trained primarily for code completion and generation tasks
- - **Instruct Models**: Fine-tuned versions of the base models optimized for following instructions and engaging in dialogue interactions
- 
- The Instruct models are better suited for chat-based interactions and following complex instructions, while the Base models may perform better for pure code completion tasks.
+This efficiency allows the model to run on a single GPU with 40GB of memory without requiring quantization, making it more accessible for research and applications.
 
- 
-## Development Process
+Sources: [README.md:63-66](), [README.md:81-85](), [README.md:95-100]()
 
- DeepSeek-Coder-V2 was developed through a systematic multi-stage process:
+## Training Details
 
- 
-```
+DeepSeekMoE 16B was trained from scratch on a diverse corpus of 2 trillion tokens, evenly split between English and Chinese languages. This balanced training data helps the model develop strong capabilities in both languages and across a wide range of domains.
 
-```
+Sources: [README.md:65]()
 
- The development process included:
-
- 
- - Starting from an intermediate checkpoint of the DeepSeek-V2 model
- - Additional pre-training with 6 trillion tokens of code-focused data
- - Creating base models optimized for code-related tasks
- - Fine-tuning with instruction data to create the instruct variants
- 
- This process enhanced the model's coding and mathematical reasoning capabilities while maintaining its general language understanding.
-
- Sources: [README.md58-59](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L58-L59)
-
- 
-## Technical Implementation
-
- 
-### Programming Language Coverage
-
- The model architecture is designed to support a wide range of programming languages - 338 in total, a significant expansion from the 86 languages supported in previous DeepSeek models. This comprehensive language coverage required architectural considerations to handle the diverse syntax and patterns across different programming languages.
-
- 
-### Memory and Computation Design
-
- The MoE architecture is specifically designed to optimize memory usage and computational efficiency:
-
- 
-```
-
-```
-
- This selective activation approach allows the model to maintain strong performance while reducing the computational requirements for both training and inference.
-
- 
-### Inference Optimizations
-
- The architecture supports several inference optimization techniques:
-
- 
- - **Tensor Parallelism**: Distributing the model across multiple GPUs
- - **FP8 Support**: Reduced precision for more efficient computation
- - **FP8 KV Cache**: Memory-efficient key-value caching
- - **MLA Optimizations**: Multi-layer attention optimizations
- 
- Sources: [README.md280-291](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L280-L291)
-
- 
 ## Hardware Requirements
 
- The hardware requirements for DeepSeek-Coder-V2 reflect its architecture:
+The DeepSeekMoE architecture's efficiency allows for deployment on more modest hardware compared to models with similar capabilities:
 
- 
- - **DeepSeek-Coder-V2-Lite models**: Can run on consumer hardware with appropriate optimizations
- - **DeepSeek-Coder-V2 (full 236B models)**: Require 80GB*8 GPUs for inference when using BF16 format
- 
- These requirements stem directly from the model's architectural design and parameter count.
+- Can be deployed on a single GPU with 40GB memory
+- No quantization required for base deployment
+- For fine-tuning, different hardware configurations are recommended based on the approach:
+  - Full fine-tuning: 8x A100 40G GPUs (using DeepSpeed ZeRO-3)
+  - LoRA fine-tuning: Reduced memory footprint (using DeepSpeed ZeRO-2)
+  - QLoRA fine-tuning: Single A100 80G GPU (using 4/8-bit quantization)
 
- Sources: [README.md188-190](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L188-L190)
+Sources: [README.md:66](), [README.md:193-226](), [README.md:230-264]()
 
- 
-## Model Input and Output Processing
+## Inference Process
 
- 
+The inference process in DeepSeekMoE follows this general flow:
+
+```mermaid
+sequenceDiagram
+    participant Input as "Input Tokens"
+    participant Layers as "Transformer Layers"
+    participant Router as "Router Network"
+    participant Experts as "Expert Networks"
+    participant Output as "Output Generation"
+    
+    Input->>Layers: Token embeddings
+    loop For each MoE layer
+        Layers->>Router: Token representations
+        Router->>Router: Determine expert allocation
+        Router->>Experts: Route tokens to appropriate experts
+        Experts->>Experts: Process tokens (only ~40% of parameters active)
+        Experts->>Layers: Return expert outputs
+    end
+    Layers->>Output: Generate next token probabilities
+    Output->>Output: Sample next token
 ```
 
-```
+During inference, each token is dynamically routed to the most appropriate experts by the router network, activating only about 40% of the total parameters for any given input.
 
- The model architecture includes specialized tokenization designed to handle code-specific constructs effectively, including:
+Sources: [README.md:63-66](), [README.md:122-176]()
 
- 
- - Special tokens for code-specific elements
- - Support for FIM (Fill-In-Middle) operations with dedicated tokens (`<｜fim▁begin｜>`, `<｜fim▁hole｜>`, `<｜fim▁end｜>`)
- - Chat template format with role-based tokens for dialogue interactions
- 
- Sources: [README.md205-227](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L205-L227) [README.md229-274](https://github.com/deepseek-ai/DeepSeek-Coder-V2/blob/c59bc464/README.md?plain=1#L229-L274)
+---
+

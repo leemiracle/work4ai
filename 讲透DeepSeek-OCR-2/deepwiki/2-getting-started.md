@@ -1,150 +1,259 @@
-> 来源: [https://deepwiki.com/deepseek-ai/DeepSeek-OCR-2/2-getting-started](https://deepwiki.com/deepseek-ai/DeepSeek-OCR-2/2-getting-started)
-> DeepWiki deepseek-ai/DeepSeek-OCR-2
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/DeepSeek-OCR-2 · page 2 Getting Started · fetched 2026-10-30 -->
 
 # Getting Started
 
-  Relevant source files 
- - [README.md](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1)
- - [install.sh](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/install.sh)
- - [setup.py](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py)
- 
-  This page provides an introduction to installing and using DeepEP V2. It covers system requirements, dependency installation, building the library, and first steps for new users. DeepEP V2 features a complete refactoring of Expert Parallelism (EP) with a new **NCCL Gin backend**, replacing the NVSHMEM-based V1 for primary paths [README.md9-14](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L9-L14)
+<details>
+<summary>Relevant source files</summary>
 
- For detailed build configuration options, see [Installation and Build](https://deepwiki.com/deepseek-ai/DeepEP/2.1-installation-and-build). For complete working examples, see [Quick Start Guide](https://deepwiki.com/deepseek-ai/DeepEP/2.2-quick-start-guide).
+The following files were used as context for generating this wiki page:
 
- **Sources:** [README.md1-109](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L1-L109)
+- [README.md](README.md)
 
- 
+</details>
+
+
+
+This page covers environment setup and minimal working examples for running DeepSeek-OCR-2. It is the entry point before diving into deeper topics. For detailed parameter documentation of the transformers path, see [Transformers Inference](#3.1). For detailed vLLM configuration, see [vLLM Configuration](#3.2.1). For architecture details, see [Core Architecture](#4).
+
 ---
 
- 
-## Prerequisites and System Requirements
+## Prerequisites
 
- DeepEP V2 is optimized for modern NVIDIA GPU architectures and high-performance interconnects.
+The following prerequisites are required before installation.
 
- 
-### Hardware Requirements
+| Requirement | Version |
+|---|---|
+| CUDA | 11.8 |
+| PyTorch | 2.6.0 |
+| Python | 3.12.9 (via conda) |
+| vLLM wheel | 0.8.5+cu118 (manual download) |
+| flash-attn | 2.7.3 |
 
- 
-| Component | Requirement | Purpose |
+The vLLM wheel must be downloaded manually from the [vllm-project releases page](https://github.com/vllm-project/vllm/releases/tag/v0.8.5) before running the install commands.
+
+Sources: [README.md:64-83]()
+
+---
+
+## Installation
+
+**Step 1 — Clone the repository**
+
+```bash
+git clone https://github.com/deepseek-ai/DeepSeek-OCR-2.git
+```
+
+**Step 2 — Create and activate the conda environment**
+
+```bash
+conda create -n deepseek-ocr2 python=3.12.9 -y
+conda activate deepseek-ocr2
+```
+
+**Step 3 — Install packages**
+
+```bash
+pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu118
+pip install vllm-0.8.5+cu118-cp38-abi3-manylinux1_x86_64.whl
+pip install -r requirements.txt
+pip install flash-attn==2.7.3 --no-build-isolation
+```
+
+> **Note:** If you run both vLLM and transformers inference in the same environment, you may see the warning `vllm 0.8.5+cu118 requires transformers>=4.51.1`. This can be safely ignored when using the two backends together.
+
+For more on flash-attn and `_attn_implementation`, see [Flash Attention](#8.2).
+
+Sources: [README.md:64-84]()
+
+---
+
+## Choosing an Inference Backend
+
+Two independent inference paths are available. The table below summarizes when to use each.
+
+| | **Transformers (`DeepSeek-OCR2-hf/`)** | **vLLM (`DeepSeek-OCR2-vllm/`)** |
 |---|---|---|
-| GPU Architecture | Hopper (SM90) or compatible | Primary target for V2 kernels README.md65 |
-| Intra-node Interconnect | NVLink | High-bandwidth scale-up communication README.md71 |
-| Inter-node Network | RDMA (InfiniBand/RoCE) | Scale-out communication README.md72 |
+| Entry point | `run_dpsk_ocr2.py` | `run_dpsk_ocr2_image.py`, `run_dpsk_ocr2_pdf.py`, `run_dpsk_ocr2_eval_batch.py` |
+| Model loading | `AutoModel.from_pretrained()` | `LLM` / `AsyncLLMEngine` via vLLM plugin |
+| Best for | Single images, prototyping | Batch PDFs, throughput-sensitive workloads, evaluation |
+| Output | Markdown / text returned from `model.infer()` | `.mmd` files, annotated images, `_layouts.pdf` |
 
- 
-### Software Requirements
+For a detailed comparison, see [Inference Backends](#3).
 
- 
-| Component | Version | Notes |
+**Setup flow (both paths share the same model checkpoint):**
+
+```mermaid
+flowchart TD
+    HUB["\"deepseek-ai/DeepSeek-OCR-2\n(HuggingFace Hub)\""]
+
+    subgraph hf_path["\"DeepSeek-OCR2-hf/\""]
+        RUN_HF["\"run_dpsk_ocr2.py\""]
+        AUTO["\"AutoModel.from_pretrained()\nAutoTokenizer.from_pretrained()\""]
+        INFER_M["\"model.infer()\""]
+        RUN_HF --> AUTO --> INFER_M
+    end
+
+    subgraph vllm_path["\"DeepSeek-OCR2-vllm/\""]
+        CFG["\"config.py\""]
+        SCRIPTS["\"run_dpsk_ocr2_image.py\nrun_dpsk_ocr2_pdf.py\nrun_dpsk_ocr2_eval_batch.py\""]
+        ENGINE["\"LLM / AsyncLLMEngine\nDeepseekOCR2ForCausalLM\""]
+        CFG --> SCRIPTS --> ENGINE
+    end
+
+    HUB -->|"weights + remote code"| AUTO
+    HUB -->|"weights loaded by vLLM"| ENGINE
+```
+
+Sources: [README.md:86-129]()
+
+---
+
+## Quick Start: Transformers Path
+
+The HuggingFace transformers path uses `AutoModel` and `AutoTokenizer` with `trust_remote_code=True`. The custom `infer()` method is delivered from the remote model repository.
+
+```python
+from transformers import AutoModel, AutoTokenizer
+import torch
+import os
+
+os.environ["CUDA_VISIBLE_DEVICES"] = '0'
+model_name = 'deepseek-ai/DeepSeek-OCR-2'
+
+tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+model = AutoModel.from_pretrained(
+    model_name,
+    _attn_implementation='flash_attention_2',
+    trust_remote_code=True,
+    use_safetensors=True
+)
+model = model.eval().cuda().to(torch.bfloat16)
+
+prompt = "<image>\n<|grounding|>Convert the document to markdown. "
+image_file = 'your_image.jpg'
+output_path = 'your/output/dir'
+
+res = model.infer(
+    tokenizer,
+    prompt=prompt,
+    image_file=image_file,
+    output_path=output_path,
+    base_size=1024,
+    image_size=768,
+    crop_mode=True,
+    save_results=True
+)
+```
+
+Alternatively, run the provided script directly:
+
+```bash
+cd DeepSeek-OCR2-master/DeepSeek-OCR2-hf
+python run_dpsk_ocr2.py
+```
+
+**Key call chain for the transformers path:**
+
+```mermaid
+sequenceDiagram
+    participant Script as "run_dpsk_ocr2.py"
+    participant HF as "HuggingFace Hub"
+    participant Model as "AutoModel (DeepSeek-OCR-2)"
+    participant GPU as "CUDA GPU"
+
+    Script->>HF: "AutoTokenizer.from_pretrained(trust_remote_code=True)"
+    HF-->>Script: "tokenizer"
+    Script->>HF: "AutoModel.from_pretrained(flash_attention_2, use_safetensors=True)"
+    HF-->>Script: "model + remote infer() method"
+    Script->>GPU: "model.eval().cuda().to(bfloat16)"
+    Script->>GPU: "model.infer(tokenizer, prompt, image_file, ...)"
+    GPU-->>Script: "markdown / OCR text"
+```
+
+Sources: [README.md:105-129]()
+
+---
+
+## Quick Start: vLLM Path
+
+Before running any vLLM script, edit `DeepSeek-OCR2-vllm/config.py` to set `INPUT_PATH` and `OUTPUT_PATH` for your environment. The `TOKENIZER` instance in `config.py` is created eagerly at import time. See [vLLM Configuration](#3.2.1) for all available parameters.
+
+```bash
+cd DeepSeek-OCR2-master/DeepSeek-OCR2-vllm
+```
+
+**Single image with streaming output:**
+```bash
+python run_dpsk_ocr2_image.py
+```
+
+**PDF batch inference (concurrent processing):**
+```bash
+python run_dpsk_ocr2_pdf.py
+```
+
+**OmniDocBench evaluation:**
+```bash
+python run_dpsk_ocr2_eval_batch.py
+```
+
+**vLLM runner-to-output mapping:**
+
+```mermaid
+flowchart LR
+    CFG["\"config.py\nMODEL_PATH, PROMPT\nINPUT_PATH, OUTPUT_PATH\nBASE_SIZE, IMAGE_SIZE\""]
+
+    subgraph runners["\"Runner Scripts\""]
+        RI["\"run_dpsk_ocr2_image.py\n(AsyncLLMEngine, streaming)\""]
+        RP["\"run_dpsk_ocr2_pdf.py\n(pdf_to_images, batch)\""]
+        RE["\"run_dpsk_ocr2_eval_batch.py\n(ThreadPoolExecutor)\""]
+    end
+
+    subgraph outputs["\"Output Files\""]
+        O1["\"result.mmd\nannotated images\""]
+        O2["\".mmd, _det.mmd\n_layouts.pdf\""]
+        O3["\"markdown per image\""]
+    end
+
+    CFG --> RI --> O1
+    CFG --> RP --> O2
+    CFG --> RE --> O3
+```
+
+Sources: [README.md:86-103]()
+
+---
+
+## Prompt Formats
+
+Two standard prompts control model behavior. Select one based on your task.
+
+| Task | Prompt |
+|---|---|
+| Document to Markdown (with layout) | `<image>\n<|grounding|>Convert the document to markdown.` |
+| Free OCR (text only, no layout) | `<image>\nFree OCR.` |
+
+The `<|grounding|>` token activates bounding-box output in the model response. See [Task-Specific Prompts](#7.2) and [Special Tokens](#7.1) for full details.
+
+Sources: [README.md:134-138]()
+
+---
+
+## Dynamic Resolution
+
+Both inference paths use the same tiling strategy by default.
+
+| Parameter | Default | Meaning |
 |---|---|---|
-| Python | 3.8+ | README.md66 |
-| CUDA Toolkit | 12.3+ | Required for SM90 PTX support README.md68 |
-| PyTorch | 2.10+ | README.md69 |
-| NCCL | 2.30.4+ | Required for the Gin backend README.md70 |
+| `base_size` | `1024` | Global thumbnail resolution |
+| `image_size` | `768` | Per-tile resolution |
+| `crop_mode` | `True` | Enable local tile crops |
+| `MIN_CROPS` | `2` | Minimum number of local tiles |
+| `MAX_CROPS` | `6` | Maximum number of local tiles |
 
- **Sources:** [README.md63-72](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L63-L72)
+This produces `(0–6) × 144 + 256` visual tokens per image. See [Dynamic Resolution System](#6) for the full tiling implementation.
 
- 
+Sources: [README.md:131-132]()
+
 ---
 
- 
-## Installation Workflow Overview
-
- The following diagram shows the V2 installation and setup workflow, mapping steps to specific code entities and environment variables.
-
- 
-### Installation and Setup Pipeline
-
- 
-```
-
-```
-
- **Sources:** [README.md74-108](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L74-L108) [setup.py13-127](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L13-L127)
-
- 
----
-
- 
-## Core Installation Steps
-
- 
-### 1. Install NCCL
-
- DeepEP V2 relies on NCCL for its Gin backend. It is recommended to install it via pip so the build system can automatically locate it using the `find_pkgs` utility [README.md74-80](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L74-L80) [setup.py95](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L95-L95)
-
- 
-```
-
-```
-
- 
-### 2. Environment Variables
-
- The build system and JIT compiler use several persistent environment variables that are captured during installation into `deep_ep/envs.py` [setup.py13-14](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L13-L14) [setup.py78-89](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L78-L89):
-
- 
- - `EP_NCCL_ROOT_DIR`: Path to the NCCL installation for linking.
- - `EP_JIT_CACHE_DIR`: Directory where JIT-compiled kernels are stored.
- - `EP_NUM_TOPK_IDX_BITS`: Bits of `topk_idx.dtype` (32 or 64) [setup.py164](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L164-L164)
- - `EP_NIC_NAME`: The name of the NIC to use for RDMA communication.
- 
- 
-### 3. Build and Install
-
- DeepEP uses a standard `setup.py` for installation. Note that V2 kernels are header-only and compiled at runtime via JIT, so the installation phase primarily builds the Python bindings (`csrc/python_api.cpp`) and backend wrappers [README.md3-13](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L3-L13) [setup.py100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L100-L100)
-
- 
-```
-
-```
-
- For a detailed step-by-step guide including building from source and NCCL verification, see [Installation and Build](https://deepwiki.com/deepseek-ai/DeepEP/2.1-installation-and-build).
-
- **Sources:** [README.md88-106](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L88-L106) [setup.py13-100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L13-L100) [install.sh1-12](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/install.sh#L1-L12)
-
- 
----
-
- 
-## First Steps with ElasticBuffer
-
- In V2, the `ElasticBuffer` is the primary entry point for all EP operations [README.md113-115](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L113-L115) It unifies high-throughput and low-latency modes and handles analytical resource allocation [README.md17-20](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L17-L20)
-
- 
-### Component Relationship
-
- 
-```
-
-```
-
- 
-### Basic Initialization
-
- Unlike V1, V2 calculates the optimal number of SMs analytically using `get_theoretical_num_sms`, eliminating the need for manual auto-tuning [README.md158-160](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L158-L160)
-
- 
-```
-
-```
-
- For minimal working examples and a guide on handle caching for inference, see [Quick Start Guide](https://deepwiki.com/deepseek-ai/DeepEP/2.2-quick-start-guide).
-
- **Sources:** [README.md117-163](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L117-L163) [setup.py79-85](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/setup.py#L79-L85)
-
- 
----
-
- 
-## Verification
-
- After installation, you should verify the setup using the provided test suite in `tests/elastic/` [README.md94-101](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L94-L101)
-
- 
-```
-
-```
-
- **Sources:** [README.md94-101](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L94-L101)

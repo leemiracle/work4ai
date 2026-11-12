@@ -1,0 +1,5659 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py",
+   "type": "file",
+   "name": "debug.py",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py",
+   "summary": "等待记录调试：mailbox 区名的 CRC-32 region_id 与从 health words 还原各 CTA 首个放弃等待。",
+   "tags": [
+    "debug",
+    "wait-records"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py",
+   "type": "file",
+   "name": "mx.py",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py",
+   "summary": "mono kernel 共享的 FP8/MX 算术：E4M3 范围、E8M0 scale code、aiter shuffle_scale 布局寻址、FP4 权重 tile 装载与缩放 MFMA。",
+   "tags": [
+    "mx",
+    "fp8",
+    "emit"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "type": "file",
+   "name": "ops.py",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "summary": "mono kernel 的设备侧原语库（47 个）：wave 归约/shuffle、近似硬件数学、bf16/fp8 打包、缓冲资源与执行模型常量。",
+   "tags": [
+    "flydsl",
+    "device-primitives"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "type": "file",
+   "name": "plan.py",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "summary": "kernel 构建参数体系：全部标量进 FlyDSL JIT 缓存键（source_digest+key_tuple）、KernelAbi 访问记录与成对布局工具。",
+   "tags": [
+    "flydsl",
+    "jit-cache",
+    "plan"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ranks.py",
+   "type": "file",
+   "name": "ranks.py",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/ranks.py",
+   "summary": "kernel 内视角的 TP 组：每 rank peer buffer 基址装载与 bf16 partial 的 rank 序求和（in-kernel all-reduce）。",
+   "tags": [
+    "tp",
+    "peer-memory",
+    "all-reduce"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "type": "file",
+   "name": "sync.py",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "summary": "带标签 mailbox：CTA 间（device 作用域）与 GPU 间（system 作用域）交接，每值配 32 位 tag，region 命名记录（Addr/Mailbox），10s 放弃自旋。",
+   "tags": [
+    "sync",
+    "mailbox",
+    "epoch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "type": "file",
+   "name": "layer.py",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "summary": "K2 layer_post：单 launch 完成一层从 attention 核心输出到 MoE 输出——K2a o_proj+AR+MLP AttnRes 与 K2b latent MoE。",
+   "tags": [
+    "flydsl",
+    "k2",
+    "layer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/stages/__init__.py",
+   "summary": "stages 子包 barrel。",
+   "tags": [
+    "package"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py",
+   "type": "file",
+   "name": "gemv.py",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py",
+   "summary": "K3 mono 共享的 bf16 GEMV 件：16 权重行×最多 16 token 行、每 32K 一个 mfma_f32_16x16x32_bf16。",
+   "tags": [
+    "flydsl",
+    "gemv",
+    "bf16"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "type": "file",
+   "name": "moe.py",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "summary": "K2b latent MoE（1025 行 FlyDSL）：router/latent/sgu early 任务、top-16 路由、MXFP4 专家（aiter inline 量化）、shared expert SiTU、up_proj 与最终 all-reduce全部 kernel 内。",
+   "tags": [
+    "flydsl",
+    "latent-moe",
+    "mxfp4"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "summary": "specialized decode 配置层：DecodeConfig、唯一读取开关的 decode_backend、支持矩阵校验 unsupported() 与逐层 kind 划分。",
+   "tags": [
+    "config",
+    "support-matrix"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "type": "file",
+   "name": "decode.py",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "summary": "SpecializedDecode 执行器：每步一次路由决策（plan→Step），层 kernel 在原生层循环内执行；TP rank 全体一致拒绝协议。",
+   "tags": [
+    "executor",
+    "plan",
+    "tp-agreement"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py",
+   "type": "file",
+   "name": "guards.py",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py",
+   "summary": "需要已加载模型/已绑定 KV cache 的拒绝项（weight_reasons/cache_reasons）与 FailStop 监视（health words→16 步内全员同步停机）。",
+   "tags": [
+    "guards",
+    "fail-stop"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "type": "file",
+   "name": "layers.py",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "summary": "层 kernel 适配：WholeLayer（KDA 层 K1→K2）与 FfnLayer（vLLM MLA 至 o_proj 输入后 K2），FlyDSL compile_build 预编译。",
+   "tags": [
+    "layers",
+    "adapter"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py",
+   "type": "file",
+   "name": "peer.py",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py",
+   "summary": "kernel 内 TP 集合通信的 peer 内存：每 rank 一个 uncached buffer、全员互持地址与 tp_agree 预协商（ROCm/ATOM 改编，MIT）。",
+   "tags": [
+    "peer-memory",
+    "tp"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/runner.py",
+   "type": "file",
+   "name": "runner.py",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/runner.py",
+   "summary": "每 rank 运行态：共享 scratch（各 launch mailbox tag 不同）、设备步进 epoch、health words 与 TP 组 peer 内存。",
+   "tags": [
+    "runner",
+    "state"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/common/mm_preprocess.py",
+   "type": "file",
+   "name": "mm_preprocess.py",
+   "filePath": "vllm/models/kimi_k3/common/mm_preprocess.py",
+   "summary": "K3 共享多模态预处理：标准 image 模态（K2.5 的 navit 布局改造）、dummy 输入与 processor。",
+   "tags": [
+    "multimodal",
+    "preprocessing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "type": "file",
+   "name": "dspark_mla.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "summary": "K3 dense MLA DSpark draft 模型：跨层 KV 复制进 cross-layer 线性、fused allreduce+rmsnorm。",
+   "tags": [
+    "dspark",
+    "spec-decode",
+    "mla"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "type": "file",
+   "name": "kda.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda.py",
+   "summary": "KDA 的 NVIDIA 实现（1526 行）：decode/prefill/spec-decode 后端解析（融合 kernel/FlashInfer/FLA vendored）、RecoverSSM 验证与 cute_dsl gemm_rs_ar 融合。",
+   "tags": [
+    "kda",
+    "nvidia",
+    "dispatch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "type": "file",
+   "name": "kda_metadata.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "summary": "KDA 的 GDN metadata 特化（NVIDIA）：镜像 GDN builder 的分类与 cudagraph staging，spec-decode metadata 设备端上载与 RecoverSSM 对齐/提交元数据。",
+   "tags": [
+    "kda",
+    "metadata",
+    "spec-decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/__init__.py",
+   "summary": "KV-balanced MLA decode 子包 barrel：TokenSpeed FP8 MLA decode kernel+设备端 KV 均衡分片规划。",
+   "tags": [
+    "barrel",
+    "kv-balanced"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py",
+   "type": "file",
+   "name": "backend.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py",
+   "summary": "KIMI_K3_KV_BALANCED_MLA attention 后端：MLACommonBackend 体系下的 metadata builder/backend/impl 三件套。",
+   "tags": [
+    "attention-backend",
+    "mla"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py",
+   "type": "file",
+   "name": "core.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py",
+   "summary": "KV-balanced 核心：设备端 plan work list kernel（每请求 split 计数→work list）与按 (heads,q,causal) shape 的 KvBalancedMla 编译缓存。",
+   "tags": [
+    "kv-balanced",
+    "split-kv",
+    "plan"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/decode.py",
+   "type": "file",
+   "name": "decode.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/decode.py",
+   "summary": "KV-balanced decode：覆盖 target verify 与 DSpark draft（含/不含 DCP），逐前向 forward context 装配。",
+   "tags": [
+    "decode",
+    "kv-balanced"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "type": "file",
+   "name": "helpers.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "summary": "MLA decode tile 调度助手：架构/tiler 选择、q tile 布局与静态/工作表两种持久 tile scheduler。",
+   "tags": [
+    "tile-scheduler",
+    "helpers"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/kernel.py",
+   "type": "file",
+   "name": "kernel.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/kernel.py",
+   "summary": "vendored TokenSpeed FP8 MLA decode kernel（4882 行 CuTe）：Blackwell tcgen05.mma f8f6f4、2-CTA M128 tile 与 TMEM 管理。",
+   "tags": [
+    "cute",
+    "blackwell",
+    "fp8",
+    "mla"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "type": "file",
+   "name": "latent_moe_runner.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "summary": "latent MoE runner（NVIDIA）：复制 routed up-projection 语义，融合路径 tp>1 未归约 combine 输出+尾部分层（LatentTailTier 按 token 数选实现）。",
+   "tags": [
+    "latent-moe",
+    "runner"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "type": "file",
+   "name": "low_latency_gemm.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "summary": "K3 decode GEMM 选择器（1065 行）：纯按 (N,K,M) 形状分派 SM90/100/103/107 的 CuTe skinny/FlashInfer 低延迟 kernel，实测分派表+autotune+KDA 投影并发。",
+   "tags": [
+    "low-latency",
+    "gemm",
+    "shape-dispatch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py:region_id",
+   "type": "function",
+   "name": "region_id",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py",
+   "summary": "mailbox 区名的 CRC-32 region id（各 kernel 一致）。",
+   "tags": [
+    "debug",
+    "crc"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    16,
+    19
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py:region_ids",
+   "type": "function",
+   "name": "region_ids",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py",
+   "summary": "Mailbox 的名字→region_id 表。",
+   "tags": [
+    "debug"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    22,
+    24
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py:given_up_waits",
+   "type": "function",
+   "name": "given_up_waits",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py",
+   "summary": "从 health words 还原各 CTA 首个放弃的等待（最早优先）。",
+   "tags": [
+    "debug",
+    "fail-stop"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    27,
+    38
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py:code_ceil",
+   "type": "function",
+   "name": "code_ceil",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py",
+   "summary": "≥v 的最小 2 的幂的偏置指数（钳到 [1,254]）。",
+   "tags": [
+    "e8m0"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    31,
+    38
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py:scale_index",
+   "type": "function",
+   "name": "scale_index",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py",
+   "summary": "aiter shuffle_scale 布局中 (row,col) 的 E8M0 字节寻址。",
+   "tags": [
+    "e8m0",
+    "layout"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    52,
+    57
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py:fp4_tile_load",
+   "type": "function",
+   "name": "fp4_tile_load",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py",
+   "summary": "FP4 权重 (16,16) 洗牌组的 16B 装载。",
+   "tags": [
+    "fp4",
+    "load"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    60,
+    73
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py:mfma_scaled",
+   "type": "function",
+   "name": "mfma_scaled",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py",
+   "summary": "gfx950 f8f6f4 缩放 MFMA（E8M0 scale 字节）。",
+   "tags": [
+    "mfma",
+    "scaled"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    76,
+    84
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:unlikely",
+   "type": "function",
+   "name": "unlikely",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "summary": "cond 标记冷分支（llvm.expect）：罕见路径移出热路径。",
+   "tags": [
+    "codegen-hint"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    99,
+    111
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:fresh",
+   "type": "function",
+   "name": "fresh",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "summary": "经 opaque move 的每 lane Int32（使其上数学可被重排）。",
+   "tags": [
+    "codegen-hint"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    114,
+    124
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:xshfl",
+   "type": "function",
+   "name": "xshfl",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "summary": "lane^off 的值：32/16 偏移 permlane_swap，行内 DPP。",
+   "tags": [
+    "shuffle"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    158,
+    177
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:block_max",
+   "type": "function",
+   "name": "block_max",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "summary": "CTA 全 wave 的最大值归约。",
+   "tags": [
+    "reduction"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    221,
+    232
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:block_excl_scan",
+   "type": "function",
+   "name": "block_excl_scan",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "summary": "CTA 线程序排他前缀和+总数。",
+   "tags": [
+    "scan"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    261,
+    275
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:global_load",
+   "type": "function",
+   "name": "global_load",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "summary": "64 位全局地址的 1/2/4 字 i32 装载（>4GiB 池可达）。",
+   "tags": [
+    "load"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    278,
+    287
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:batched_rounds",
+   "type": "function",
+   "name": "batched_rounds",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "summary": "CTA 对 v=tid+THREADS·i<n 的跨步循环。",
+   "tags": [
+    "loop"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    314,
+    327
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:rows_to_lds",
+   "type": "function",
+   "name": "rows_to_lds",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "summary": "device 作用域读 bf16 行块进 LDS。",
+   "tags": [
+    "lds"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    330,
+    341
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:fp8x8_bf16_pk",
+   "type": "function",
+   "name": "fp8x8_bf16_pk",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "summary": "两 dword 的 8 个 fp8→bf16 MFMA 操作数（v_cvt_scalef32_pk）。",
+   "tags": [
+    "fp8",
+    "convert"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    386,
+    396
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:KernelAbi",
+   "type": "class",
+   "name": "KernelAbi",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "summary": "kernel ABI 记录（访问追踪）。",
+   "tags": [
+    "abi"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    142,
+    167
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:Space",
+   "type": "class",
+   "name": "Space",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "summary": "地址作用域枚举（device/system）。",
+   "tags": [
+    "scope"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    184,
+    186
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:Access",
+   "type": "class",
+   "name": "Access",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "summary": "一次记录的访问。",
+   "tags": [
+    "abi"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    190,
+    194
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:Record",
+   "type": "class",
+   "name": "Record",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "summary": "访问记录条目。",
+   "tags": [
+    "abi"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    198,
+    201
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:source_digest",
+   "type": "function",
+   "name": "source_digest",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "summary": "mono 目录下全部 .py 的 sha256（进 JIT 缓存键）。",
+   "tags": [
+    "jit-cache",
+    "digest"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    43,
+    56
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:key_tuple",
+   "type": "function",
+   "name": "key_tuple",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "summary": "构建键的 (字段,标量值) 对+sources。",
+   "tags": [
+    "jit-cache",
+    "key"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    59,
+    72
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:pair_layout",
+   "type": "function",
+   "name": "pair_layout",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "summary": "items 按序成对布局（名字→(偏移,字节)）。",
+   "tags": [
+    "layout"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    112,
+    120
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:recording",
+   "type": "function",
+   "name": "recording",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "summary": "记录块内被追踪 kernel 的访问。",
+   "tags": [
+    "abi",
+    "tracing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    208,
+    215
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ranks.py:peer_bases",
+   "type": "function",
+   "name": "peer_bases",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/ranks.py",
+   "summary": "从 peers 表一次性装载各 rank peer buffer 基址。",
+   "tags": [
+    "peer-memory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    17,
+    20
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ranks.py:sum_partials",
+   "type": "function",
+   "name": "sum_partials",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/ranks.py",
+   "summary": "tp 个 rank 在 mailbox 区的 bf16 partial 按 rank 序求和。",
+   "tags": [
+    "all-reduce"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    23,
+    33
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:Addr",
+   "type": "class",
+   "name": "Addr",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "summary": "mailbox 区地址（名字+作用域，追踪时记录）。",
+   "tags": [
+    "sync",
+    "address"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    106,
+    113
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:Mailbox",
+   "type": "class",
+   "name": "Mailbox",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "summary": "标签对交接：每个 32 位值与 tag 相邻存储；device/system 双作用域、10s 放弃。",
+   "tags": [
+    "sync",
+    "mailbox",
+    "fail-stop"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    141,
+    242
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:_spin",
+   "type": "function",
+   "name": "_spin",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "summary": "重发 load_all 直到 pending 清空（至多 WAIT_TICKS，放弃后粘滞）。",
+   "tags": [
+    "spin",
+    "fail-stop"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    42,
+    78
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:stall",
+   "type": "function",
+   "name": "stall",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "summary": "测试用故障钩：指定 rank 的 CTA0 停摆 ticks。",
+   "tags": [
+    "testing",
+    "fault-injection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    82,
+    96
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:sreg",
+   "type": "function",
+   "name": "sreg",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "summary": "scratch 区字节偏移寻址。",
+   "tags": [
+    "addressing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    116,
+    118
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:preg",
+   "type": "function",
+   "name": "preg",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "summary": "peer 对称区寻址。",
+   "tags": [
+    "addressing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    121,
+    124
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:shift",
+   "type": "function",
+   "name": "shift",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "summary": "地址平移 delta 字节（同区）。",
+   "tags": [
+    "addressing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    127,
+    129
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:publish",
+   "type": "function",
+   "name": "publish",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "summary": "本 CTA 普通存储对全员可见后由线程 who 发布 mailbox 对。",
+   "tags": [
+    "publish"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    246,
+    255
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py:K2Build",
+   "type": "class",
+   "name": "K2Build",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "summary": "K2 构建参数。",
+   "tags": [
+    "flydsl",
+    "build"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    84,
+    97
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py:scratch_layout",
+   "type": "function",
+   "name": "scratch_layout",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "summary": "K2 scratch 布局。",
+   "tags": [
+    "scratch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    145,
+    155
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py:stage_oproj",
+   "type": "function",
+   "name": "stage_oproj",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "summary": "o_proj 任务 gi,gi+200,gi+400（<448）：每任务权重全在途（一个 MFMA 延迟）。",
+   "tags": [
+    "flydsl",
+    "o-proj"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    163,
+    171
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py:build",
+   "type": "function",
+   "name": "build",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "summary": "K2 launch 的 FlyDSL 主构建（K2a o_proj/AR/AttnRes + K2b latent MoE）。",
+   "tags": [
+    "flydsl",
+    "build"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    177,
+    504
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py:k2_launch",
+   "type": "function",
+   "name": "k2_launch",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "summary": "K2 host launcher（core 输入/prefix 原地更新/out 输出）。",
+   "tags": [
+    "flydsl",
+    "launcher"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    510,
+    573
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py:loads",
+   "type": "function",
+   "name": "loads",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py",
+   "summary": "wave 的 16 权重行操作数装载。",
+   "tags": [
+    "flydsl",
+    "gemv"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    37,
+    64
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py:mfmas",
+   "type": "function",
+   "name": "mfmas",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py",
+   "summary": "装载操作数对 LDS token 行的 MFMA 步进。",
+   "tags": [
+    "flydsl",
+    "gemv"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    67,
+    92
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py:rows_to_lds",
+   "type": "function",
+   "name": "rows_to_lds",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py",
+   "summary": "bf16 [s,ldk] 的 token 行入 LDS。",
+   "tags": [
+    "flydsl",
+    "lds"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    101,
+    121
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:scratch_layout",
+   "type": "function",
+   "name": "scratch_layout",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "summary": "K2b scratch 布局。",
+   "tags": [
+    "scratch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    147,
+    165
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:pk_fp4_f32",
+   "type": "function",
+   "name": "pk_fp4_f32",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "summary": "两 f32/scale→E2M1 半字节入字节 j（RNE 饱和）。",
+   "tags": [
+    "fp4",
+    "quant"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    209,
+    220
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:pk_fp4_bf16",
+   "type": "function",
+   "name": "pk_fp4_bf16",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "summary": "packed bf16 对/scale→E2M1 半字节。",
+   "tags": [
+    "fp4",
+    "quant"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    223,
+    234
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:early_out",
+   "type": "function",
+   "name": "early_out",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "summary": "early 任务（0 router/1 latent/2 sgu）的 16 行（K-split 部分序）。",
+   "tags": [
+    "early-tasks"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    239,
+    288
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:stage_route",
+   "type": "function",
+   "name": "stage_route",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "summary": "token t 的 896 logits→sigmoid+bias→top-16 路由。",
+   "tags": [
+    "flydsl",
+    "router"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    372,
+    455
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:load_route",
+   "type": "function",
+   "name": "load_route",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "summary": "ROUTE→LDS（ids/weights）与专家并集 U 构建。",
+   "tags": [
+    "flydsl",
+    "route"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    463,
+    509
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:load_latq",
+   "type": "function",
+   "name": "load_latq",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "summary": "LAT（各 rank 448 列）→MXFP4 aiter inline 量化。",
+   "tags": [
+    "flydsl",
+    "quant"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    513,
+    540
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:stage_ug",
+   "type": "function",
+   "name": "stage_ug",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "summary": "槽任务的 gate/up 行 GEMV（MXFP4）。",
+   "tags": [
+    "flydsl",
+    "ug"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    585,
+    648
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:stage_down",
+   "type": "function",
+   "name": "stage_down",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "summary": "latent 行 16rgd..：每槽 w2 对其 picks 的 down GEMV。",
+   "tags": [
+    "flydsl",
+    "down"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    722,
+    802
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:stage_sdown",
+   "type": "function",
+   "name": "stage_sdown",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "summary": "shared down 行 16j.. 对 h 的 GEMV→partial。",
+   "tags": [
+    "flydsl",
+    "shared"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    843,
+    884
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:stage_lnorm",
+   "type": "function",
+   "name": "stage_lnorm",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "summary": "各 rank LATR 按 rank 序 fp32→bf16 与逐任务平方和（latent RMSNorm）。",
+   "tags": [
+    "flydsl",
+    "layernorm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    916,
+    958
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:stage_up",
+   "type": "function",
+   "name": "stage_up",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "summary": "本 rank 分片的 up 行 16j..：LN GEMV+SHP→bf16。",
+   "tags": [
+    "flydsl",
+    "up"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    962,
+    999
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py:DecodeConfig",
+   "type": "class",
+   "name": "DecodeConfig",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "summary": "specialized decode 配置（后端开关与约束）。",
+   "tags": [
+    "config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    31,
+    41
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py:decode_backend",
+   "type": "function",
+   "name": "decode_backend",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "summary": "读取 decode 开关的唯一位置。",
+   "tags": [
+    "config",
+    "switch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    44,
+    47
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py:specialized_decode_config",
+   "type": "function",
+   "name": "specialized_decode_config",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "summary": "部署的 specialized decode 配置（None=常规 decode；不支持的组合抛错）。",
+   "tags": [
+    "config",
+    "validation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    50,
+    74
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py:unsupported",
+   "type": "function",
+   "name": "unsupported",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "summary": "本部署不能跑 specialized decode 的全部原因（空=可以；仅配置层）。",
+   "tags": [
+    "support-matrix"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    77,
+    172
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py:layer_kinds",
+   "type": "function",
+   "name": "layer_kinds",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "summary": "解码层→kind 映射（kernel 服务的 MoE 层+AttnRes）。",
+   "tags": [
+    "layers",
+    "mapping"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    214,
+    229
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py:Step",
+   "type": "class",
+   "name": "Step",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "summary": "已规划步：width 行完整均匀 spec-verify 请求。",
+   "tags": [
+    "step",
+    "plan"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    47,
+    57
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py:step_reason",
+   "type": "function",
+   "name": "step_reason",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "summary": "步的 KDA metadata 是否为纯 spec-verify 完整均匀步（否则 None+原因）。",
+   "tags": [
+    "plan",
+    "routing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    60,
+    74
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py:agree",
+   "type": "function",
+   "name": "agree",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "summary": "任一 rank 有 reasons 则全员抛错（单独拒绝会让同侪悬死）。",
+   "tags": [
+    "tp-agreement"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    77,
+    85
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py:SpecializedDecode",
+   "type": "class",
+   "name": "SpecializedDecode",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "summary": "执行器（5 个方法）：构建层 kernel、逐 KV cache 绑定、每步 plan。",
+   "tags": [
+    "executor"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    88,
+    198
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py:weight_reasons",
+   "type": "function",
+   "name": "weight_reasons",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py",
+   "summary": "已加载模型逐层权重的拒绝原因（kernel 读取口径）。",
+   "tags": [
+    "guards",
+    "weights"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    15,
+    94
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py:cache_reasons",
+   "type": "function",
+   "name": "cache_reasons",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py",
+   "summary": "各 KDA 层 (conv,recurrent) 状态的 KV cache 拒绝原因（K1 读取口径）。",
+   "tags": [
+    "guards",
+    "kv-cache"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    97,
+    112
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py:FailStop",
+   "type": "class",
+   "name": "FailStop",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py",
+   "summary": "fail-stop 监视（2 个方法）：任一 rank health word FAILED 后每 16 步 TP CPU 组同步，全员同步步停机。",
+   "tags": [
+    "fail-stop",
+    "health-words"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    115,
+    154
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py:_k2_key",
+   "type": "function",
+   "name": "_k2_key",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "summary": "K2 构建键。",
+   "tags": [
+    "keys"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    26,
+    38
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py:_k2",
+   "type": "function",
+   "name": "_k2",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "summary": "从 core（o_proj 输入）跑 K2：prefix 原地更新。",
+   "tags": [
+    "k2"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    41,
+    79
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py:compile_build",
+   "type": "function",
+   "name": "compile_build",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "summary": "预编译一个 launch 的 kernel（K2Build/KdaPreBuild），FlyDSL JIT。",
+   "tags": [
+    "compile",
+    "jit"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    82,
+    101
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py:_Layer",
+   "type": "class",
+   "name": "_Layer",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "summary": "层 kernel 基类。",
+   "tags": [
+    "base"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    104,
+    115
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py:WholeLayer",
+   "type": "class",
+   "name": "WholeLayer",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "summary": "KDA 整层：K1（AttnRes→核心输出）后 K2。",
+   "tags": [
+    "whole-layer",
+    "kda"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    118,
+    197
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py:FfnLayer",
+   "type": "class",
+   "name": "FfnLayer",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "summary": "MLA 层：vLLM MLA 至 o_proj 输入后仅 K2。",
+   "tags": [
+    "ffn-layer",
+    "mla"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    200,
+    221
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py:_DeviceBytes",
+   "type": "class",
+   "name": "_DeviceBytes",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py",
+   "summary": "裸设备地址的非持有 torch 视图（__cuda_array_interface__）。",
+   "tags": [
+    "device-memory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    15,
+    25
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py:PeerBuffer",
+   "type": "class",
+   "name": "PeerBuffer",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py",
+   "summary": "每 rank 一个 uncached buffer、全员互持地址（addresses 按 TP rank 索引）。",
+   "tags": [
+    "peer-memory"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    28,
+    92
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py:tp_agree",
+   "type": "function",
+   "name": "tp_agree",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py",
+   "summary": "组内全员 ok 才 True（任何集合通信前的协商）。",
+   "tags": [
+    "tp-agreement"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    104,
+    112
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/runner.py:MonoRunner",
+   "type": "class",
+   "name": "MonoRunner",
+   "filePath": "vllm/models/kimi_k3/amd/specialized_decode/runtime/runner.py",
+   "summary": "每 rank 运行态（4 个方法）：共享 scratch、步进 epoch、health words、peer 内存（全员同步构建）。",
+   "tags": [
+    "runner",
+    "state"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    24,
+    76
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/common/mm_preprocess.py:navit_resize_image",
+   "type": "function",
+   "name": "navit_resize_image",
+   "filePath": "vllm/models/kimi_k3/common/mm_preprocess.py",
+   "summary": "K2.5 navit 布局的图像 resize。",
+   "tags": [
+    "navit",
+    "image"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    40,
+    90
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/common/mm_preprocess.py:KimiK3ProcessingInfo",
+   "type": "class",
+   "name": "KimiK3ProcessingInfo",
+   "filePath": "vllm/models/kimi_k3/common/mm_preprocess.py",
+   "summary": "K3 处理信息（标准 image 模态）。",
+   "tags": [
+    "processing-info"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    93,
+    192
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/common/mm_preprocess.py:KimiK3DummyInputsBuilder",
+   "type": "class",
+   "name": "KimiK3DummyInputsBuilder",
+   "filePath": "vllm/models/kimi_k3/common/mm_preprocess.py",
+   "summary": "profiling 用 dummy 图像输入（占位 token 文本）。",
+   "tags": [
+    "dummy-inputs"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    195,
+    232
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/common/mm_preprocess.py:KimiK3MultiModalProcessor",
+   "type": "class",
+   "name": "KimiK3MultiModalProcessor",
+   "filePath": "vllm/models/kimi_k3/common/mm_preprocess.py",
+   "summary": "K3 image-only 多模态 processor。",
+   "tags": [
+    "processor"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    235,
+    317
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/dspark_mla.py:_duplicate_context_kv_weights",
+   "type": "function",
+   "name": "_duplicate_context_kv_weights",
+   "filePath": "vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "summary": "把每层 KV 投影装进跨层线性。",
+   "tags": [
+    "dspark",
+    "weights"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    39,
+    58
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/dspark_mla.py:K3DSparkDecoderLayer",
+   "type": "class",
+   "name": "K3DSparkDecoderLayer",
+   "filePath": "vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "summary": "DSpark draft 解码层。",
+   "tags": [
+    "dspark",
+    "layer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    61,
+    131
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/dspark_mla.py:K3DSparkModel",
+   "type": "class",
+   "name": "K3DSparkModel",
+   "filePath": "vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "summary": "DSpark draft 骨干（9 个方法）。",
+   "tags": [
+    "dspark",
+    "backbone"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    134,
+    430
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/dspark_mla.py:K3DSparkForCausalLM",
+   "type": "class",
+   "name": "K3DSparkForCausalLM",
+   "filePath": "vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "summary": "DSpark draft 入口（14 个方法）。",
+   "tags": [
+    "dspark",
+    "causal-lm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    433,
+    537
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kda.py:a_log_weight_loader",
+   "type": "function",
+   "name": "a_log_weight_loader",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda.py",
+   "summary": "KDA A_log 旧 4D/新 1D 双格式装载。",
+   "tags": [
+    "weights",
+    "compat"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    86,
+    108
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/kda.py:_KimiGDNMergedColumnParallelLinear",
+   "type": "class",
+   "name": "_KimiGDNMergedColumnParallelLinear",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda.py",
+   "summary": "一个输出跨 TP rank 复制的合并投影。",
+   "tags": [
+    "linear",
+    "tp"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    111,
+    184
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/kda.py:KimiK3DeltaAttention",
+   "type": "class",
+   "name": "KimiK3DeltaAttention",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda.py",
+   "summary": "KDA 层 NVIDIA 实现（8 个方法）：decode/prefill/spec-decode 后端解析与 RecoverSSM。",
+   "tags": [
+    "kda",
+    "attention"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    570,
+    1526
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kda.py:is_fused_kda_decode_supported",
+   "type": "function",
+   "name": "is_fused_kda_decode_supported",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda.py",
+   "summary": "融合 KDA decode 支持性。",
+   "tags": [
+    "support-check"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    187,
+    214
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kda.py:is_flashinfer_fused_kda_decode_supported",
+   "type": "function",
+   "name": "is_flashinfer_fused_kda_decode_supported",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda.py",
+   "summary": "FlashInfer 融合 decode 支持性。",
+   "tags": [
+    "support-check",
+    "flashinfer"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    217,
+    241
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kda.py:is_flashinfer_fused_kda_spec_decode_supported",
+   "type": "function",
+   "name": "is_flashinfer_fused_kda_spec_decode_supported",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda.py",
+   "summary": "FlashInfer 融合 spec-decode 支持性。",
+   "tags": [
+    "support-check",
+    "flashinfer"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    244,
+    269
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kda.py:resolve_kda_spec_decode_backend",
+   "type": "function",
+   "name": "resolve_kda_spec_decode_backend",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda.py",
+   "summary": "解析 spec-decode KDA 后端。",
+   "tags": [
+    "dispatch",
+    "spec-decode"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    272,
+    308
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kda.py:resolve_kda_decode_backend",
+   "type": "function",
+   "name": "resolve_kda_decode_backend",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda.py",
+   "summary": "解析 decode KDA 后端（融合 kernel/FlashInfer/vendored）。",
+   "tags": [
+    "dispatch",
+    "decode"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    311,
+    363
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kda.py:is_flashkda_supported",
+   "type": "function",
+   "name": "is_flashkda_supported",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda.py",
+   "summary": "FlashKDA 支持性。",
+   "tags": [
+    "support-check"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    366,
+    382
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kda.py:is_flashinfer_recurrent_kda_prefill_supported",
+   "type": "function",
+   "name": "is_flashinfer_recurrent_kda_prefill_supported",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda.py",
+   "summary": "FlashInfer recurrent prefill 支持性。",
+   "tags": [
+    "support-check"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    385,
+    403
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kda.py:_flashkda_prefill",
+   "type": "function",
+   "name": "_flashkda_prefill",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda.py",
+   "summary": "FlashKDA prefill 路径。",
+   "tags": [
+    "prefill"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    406,
+    447
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kda.py:_flashinfer_kda_prefill",
+   "type": "function",
+   "name": "_flashinfer_kda_prefill",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda.py",
+   "summary": "FlashInfer prefill 路径。",
+   "tags": [
+    "prefill"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    450,
+    486
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kda.py:resolve_kda_prefill_backend",
+   "type": "function",
+   "name": "resolve_kda_prefill_backend",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda.py",
+   "summary": "解析 prefill KDA 后端。",
+   "tags": [
+    "dispatch",
+    "prefill"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    489,
+    528
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kda.py:_make_decode_conv1d_weight_loader",
+   "type": "function",
+   "name": "_make_decode_conv1d_weight_loader",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda.py",
+   "summary": "decode conv1d 权重 loader 工厂。",
+   "tags": [
+    "weights",
+    "factory"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    531,
+    556
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kda.py:_make_decode_norm_weight_loader",
+   "type": "function",
+   "name": "_make_decode_norm_weight_loader",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda.py",
+   "summary": "decode norm 权重 loader 工厂。",
+   "tags": [
+    "weights",
+    "factory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    559,
+    567
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kda_metadata.py:_get_aligned_state_indices_kernel",
+   "type": "function",
+   "name": "_get_aligned_state_indices_kernel",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "summary": "状态索引对齐 kernel。",
+   "tags": [
+    "triton",
+    "state"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    53,
+    98
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kda_metadata.py:_mamba_get_block_table_tensor",
+   "type": "function",
+   "name": "_mamba_get_block_table_tensor",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "summary": "mamba block table 张量获取。",
+   "tags": [
+    "block-table"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    101,
+    137
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kda_metadata.py:_stage_spec_decode_metadata_kernel",
+   "type": "function",
+   "name": "_stage_spec_decode_metadata_kernel",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "summary": "spec-decode metadata 上载 CUDA-graph 缓冲 kernel。",
+   "tags": [
+    "staging",
+    "cudagraph"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    141,
+    204
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kda_metadata.py:stage_spec_decode_metadata",
+   "type": "function",
+   "name": "stage_spec_decode_metadata",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "summary": "spec-decode metadata 设备端 staging 入口。",
+   "tags": [
+    "staging"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    207,
+    242
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/kda_metadata.py:KDARecoverSSMAlignMetadata",
+   "type": "class",
+   "name": "KDARecoverSSMAlignMetadata",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "summary": "RecoverSSM 对齐阶段 metadata。",
+   "tags": [
+    "recoverssm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    246,
+    249
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/kda_metadata.py:KDARecoverSSMCommitMetadata",
+   "type": "class",
+   "name": "KDARecoverSSMCommitMetadata",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "summary": "RecoverSSM 提交阶段 metadata。",
+   "tags": [
+    "recoverssm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    253,
+    257
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/kda_metadata.py:KimiK3KDAMetadata",
+   "type": "class",
+   "name": "KimiK3KDAMetadata",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "summary": "KDA metadata（GDN+RecoverSSM 双继承）。",
+   "tags": [
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    261,
+    299
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/kda_metadata.py:KimiK3KDAMetadataBuilder",
+   "type": "class",
+   "name": "KimiK3KDAMetadataBuilder",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "summary": "KDA metadata builder（3 个方法）。",
+   "tags": [
+    "metadata",
+    "builder"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    302,
+    737
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/kda_metadata.py:KimiK3KDAAttentionBackend",
+   "type": "class",
+   "name": "KimiK3KDAAttentionBackend",
+   "filePath": "vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "summary": "KDA attention 后端（3 个方法）。",
+   "tags": [
+    "backend"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    740,
+    753
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py:KimiK3KvBalancedMLAMetadataBuilder",
+   "type": "class",
+   "name": "KimiK3KvBalancedMLAMetadataBuilder",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py",
+   "summary": "KV-balanced metadata builder。",
+   "tags": [
+    "metadata",
+    "builder"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    43,
+    65
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py:KimiK3KvBalancedMLABackend",
+   "type": "class",
+   "name": "KimiK3KvBalancedMLABackend",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py",
+   "summary": "KV-balanced attention 后端（7 个方法）。",
+   "tags": [
+    "backend"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    68,
+    130
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py:KimiK3KvBalancedMLAImpl",
+   "type": "class",
+   "name": "KimiK3KvBalancedMLAImpl",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py",
+   "summary": "后端 impl（2 个方法）。",
+   "tags": [
+    "backend",
+    "impl"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    133,
+    189
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py:_plan_work_list_kernel",
+   "type": "function",
+   "name": "_plan_work_list_kernel",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py",
+   "summary": "设备端 work list 规划 kernel：每请求 split 计数→work list。",
+   "tags": [
+    "triton",
+    "split-kv"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    77,
+    147
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py:_compile",
+   "type": "function",
+   "name": "_compile",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py",
+   "summary": "单 (heads,q,causal) 形状的 kernel 编译（128 行 packed query、请求内 causal）。",
+   "tags": [
+    "compile",
+    "jit"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    151,
+    251
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py:supports",
+   "type": "function",
+   "name": "supports",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py",
+   "summary": "kernel 能否跑该形状（需 2-CTA M128 tile）。",
+   "tags": [
+    "support-check"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    254,
+    258
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py:KvBalancedMla",
+   "type": "class",
+   "name": "KvBalancedMla",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py",
+   "summary": "单形状 KV-balanced decode（3 个方法）：plan 一次/反复 execute。",
+   "tags": [
+    "kv-balanced",
+    "core"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    261,
+    377
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/decode.py:KvBalancedDecode",
+   "type": "class",
+   "name": "KvBalancedDecode",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/decode.py",
+   "summary": "单 MLA 层的 KV-balanced decode（4 个方法，覆盖 verify+DSpark draft、含 DCP）。",
+   "tags": [
+    "decode",
+    "kv-balanced"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    48,
+    228
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:get_mla_decode_arch",
+   "type": "function",
+   "name": "get_mla_decode_arch",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "summary": "支持的 MLA decode 设备→CuTe 架构名。",
+   "tags": [
+    "arch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    34,
+    41
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:select_mla_decode_tilers",
+   "type": "function",
+   "name": "select_mla_decode_tilers",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "summary": "按 head/q_len 选 decode MMA tile。",
+   "tags": [
+    "tilers"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    44,
+    67
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:compute_q_tile_layout",
+   "type": "function",
+   "name": "compute_q_tile_layout",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "summary": "query tile 总行数/数量/末 tile 有效行。",
+   "tags": [
+    "tile-layout"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    70,
+    85
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:get_mla_decode_fold_sq_factor",
+   "type": "function",
+   "name": "get_mla_decode_fold_sq_factor",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "summary": "整除 seq_len_q 的最大 query fold 因子。",
+   "tags": [
+    "fold"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    88,
+    99
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:MLAStaticTileSchedulerParams",
+   "type": "class",
+   "name": "MLAStaticTileSchedulerParams",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "summary": "静态 tile scheduler 参数。",
+   "tags": [
+    "tile-scheduler"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    102,
+    186
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:WorkTileInfo",
+   "type": "class",
+   "name": "WorkTileInfo",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "summary": "工作 tile 信息。",
+   "tags": [
+    "tile-scheduler"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    201,
+    222
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:MLAStaticTileScheduler",
+   "type": "class",
+   "name": "MLAStaticTileScheduler",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "summary": "静态持久 tile scheduler。",
+   "tags": [
+    "tile-scheduler"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    225,
+    355
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:MLAWorkListTileScheduler",
+   "type": "class",
+   "name": "MLAWorkListTileScheduler",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "summary": "设备 work list 持久 tile scheduler（KV-balanced 新增）。",
+   "tags": [
+    "tile-scheduler",
+    "work-list"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    366,
+    414
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/kernel.py:tcgen05_mma_ws_f8f6f4_one",
+   "type": "function",
+   "name": "tcgen05_mma_ws_f8f6f4_one",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/kernel.py",
+   "summary": "单 K 块 tcgen05.mma.ws.kind::f8f6f4 指令发射。",
+   "tags": [
+    "blackwell",
+    "tcgen05"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    96,
+    121
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/kernel.py:BlackwellMultiHeadLatentAttentionForwardFP8",
+   "type": "class",
+   "name": "BlackwellMultiHeadLatentAttentionForwardFP8",
+   "filePath": "vllm/models/kimi_k3/nvidia/kv_balanced_mla/kernel.py",
+   "summary": "vendored TokenSpeed FP8 MLA decode kernel（39 个方法：TMEM 管理、2-CTA tile、split-KV partial/LSE）。",
+   "tags": [
+    "cute",
+    "blackwell",
+    "fp8"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    155,
+    4882
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/latent_moe_runner.py:LatentTailTier",
+   "type": "class",
+   "name": "LatentTailTier",
+   "filePath": "vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "summary": "按 token 数选择尾实现的层级枚举（共享复制 up-projection）。",
+   "tags": [
+    "latent-moe",
+    "tiers"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    26,
+    52
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/latent_moe_runner.py:LatentMoERunner",
+   "type": "class",
+   "name": "LatentMoERunner",
+   "filePath": "vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "summary": "latent MoE runner（10 个方法）：融合路径 tp>1 未归约 combine+分层尾部（flashinfer 融合 AR+norm 尾）。",
+   "tags": [
+    "latent-moe",
+    "runner"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    55,
+    425
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:_kda_qkvg_flashinfer_backend",
+   "type": "function",
+   "name": "_kda_qkvg_flashinfer_backend",
+   "filePath": "vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "summary": "低 M QKVG 分支的实测 FlashInfer 后端。",
+   "tags": [
+    "flashinfer"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    68,
+    79
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:_cute",
+   "type": "function",
+   "name": "_cute",
+   "filePath": "vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "summary": "CuTe kernel 包装。",
+   "tags": [
+    "cute"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    98,
+    111
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:select_kimi_k3_backend",
+   "type": "function",
+   "name": "select_kimi_k3_backend",
+   "filePath": "vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "summary": "本 (N,K) 在 num_tokens 下的后端（None=回退）。",
+   "tags": [
+    "dispatch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    635,
+    644
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:_low_latency_table",
+   "type": "function",
+   "name": "_low_latency_table",
+   "filePath": "vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "summary": "当前设备的实测分派表（不支持则 None）。",
+   "tags": [
+    "dispatch",
+    "table"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    670,
+    679
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:_runtime_ok",
+   "type": "function",
+   "name": "_runtime_ok",
+   "filePath": "vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "summary": "运行时条件校验。",
+   "tags": [
+    "validation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    686,
+    698
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:_residual_ok",
+   "type": "function",
+   "name": "_residual_ok",
+   "filePath": "vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "summary": "残差路径条件校验。",
+   "tags": [
+    "validation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    701,
+    710
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:_run_plan",
+   "type": "function",
+   "name": "_run_plan",
+   "filePath": "vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "summary": "按预计算 plan 跑低延迟 kernel。",
+   "tags": [
+    "execute"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    713,
+    732
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:run_kda_projection_overlap",
+   "type": "function",
+   "name": "run_kda_projection_overlap",
+   "filePath": "vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "summary": "TP8 KDA decode 投影分支并发执行（多流）。",
+   "tags": [
+    "overlap",
+    "multi-stream"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    735,
+    823
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:autotune_kda_qkvg",
+   "type": "function",
+   "name": "autotune_kda_qkvg",
+   "filePath": "vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "summary": "CUDA graph capture 前 autotune QKVG GEMM。",
+   "tags": [
+    "autotune"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    826,
+    869
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:try_low_latency_gemm",
+   "type": "function",
+   "name": "try_low_latency_gemm",
+   "filePath": "vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "summary": "跑形状选中的低延迟 kernel（无则 None 回退）。",
+   "tags": [
+    "dispatch",
+    "execute"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    884,
+    907
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:_enable_kda_projection_overlap",
+   "type": "function",
+   "name": "_enable_kda_projection_overlap",
+   "filePath": "vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "summary": "启用 KDA 投影并发的安装逻辑。",
+   "tags": [
+    "install"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    966,
+    997
+   ]
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:enable_kimi_k3_low_latency_gemm",
+   "type": "function",
+   "name": "enable_kimi_k3_low_latency_gemm",
+   "filePath": "vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "summary": "安装形状分派低延迟 GEMM 并注册 CuTe warmup（按模块名匹配）。",
+   "tags": [
+    "install",
+    "warmup"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1000,
+    1065
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:ProjectionSpec",
+   "type": "class",
+   "name": "ProjectionSpec",
+   "filePath": "vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "summary": "投影 (N,K) 规格。",
+   "tags": [
+    "spec"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    83,
+    95
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:_KimiK3LowLatencyApply",
+   "type": "class",
+   "name": "_KimiK3LowLatencyApply",
+   "filePath": "vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "summary": "mixin：先试预计算 plan 否则回退基类方法。",
+   "tags": [
+    "mixin"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    910,
+    931
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:KimiK3LowLatencyLinearMethod",
+   "type": "class",
+   "name": "KimiK3LowLatencyLinearMethod",
+   "filePath": "vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "summary": "低延迟 linear 量化方法。",
+   "tags": [
+    "linear-method"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    934,
+    957
+   ]
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:KimiK3LowLatencyEmbeddingMethod",
+   "type": "class",
+   "name": "KimiK3LowLatencyEmbeddingMethod",
+   "filePath": "vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "summary": "低延迟 embedding 方法。",
+   "tags": [
+    "embedding-method"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    960,
+    963
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py:region_id",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py:region_id",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py:region_ids",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py:region_ids",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py:given_up_waits",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py:given_up_waits",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py:code_ceil",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py:code_ceil",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py:scale_index",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py:scale_index",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py:fp4_tile_load",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py:fp4_tile_load",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py:mfma_scaled",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py:mfma_scaled",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:unlikely",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:unlikely",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:fresh",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:fresh",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:xshfl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:xshfl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:block_max",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:block_max",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:block_excl_scan",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:block_excl_scan",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:global_load",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:global_load",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:batched_rounds",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:batched_rounds",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:rows_to_lds",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:rows_to_lds",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:fp8x8_bf16_pk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py:fp8x8_bf16_pk",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:KernelAbi",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:KernelAbi",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:Space",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:Space",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:Access",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:Access",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:Record",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:Record",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:source_digest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:source_digest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:key_tuple",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:key_tuple",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:pair_layout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:pair_layout",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:recording",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py:recording",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ranks.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ranks.py:peer_bases",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ranks.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ranks.py:peer_bases",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ranks.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ranks.py:sum_partials",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ranks.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ranks.py:sum_partials",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:Addr",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:Addr",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:Mailbox",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:Mailbox",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:_spin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:stall",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:stall",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:sreg",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:sreg",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:preg",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:preg",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:shift",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:shift",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:publish",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py:publish",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py:K2Build",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py:K2Build",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py:scratch_layout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py:scratch_layout",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py:stage_oproj",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py:stage_oproj",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py:build",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py:build",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py:k2_launch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py:k2_launch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py:loads",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py:loads",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py:mfmas",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py:mfmas",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py:rows_to_lds",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py:rows_to_lds",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:scratch_layout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:scratch_layout",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:pk_fp4_f32",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:pk_fp4_f32",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:pk_fp4_bf16",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:pk_fp4_bf16",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:early_out",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:early_out",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:stage_route",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:stage_route",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:load_route",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:load_route",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:load_latq",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:load_latq",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:stage_ug",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:stage_ug",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:stage_down",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:stage_down",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:stage_sdown",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:stage_sdown",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:stage_lnorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:stage_lnorm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:stage_up",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py:stage_up",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py:DecodeConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py:DecodeConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py:decode_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py:decode_backend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py:specialized_decode_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py:specialized_decode_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py:unsupported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py:unsupported",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py:layer_kinds",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py:layer_kinds",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py:Step",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py:Step",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py:step_reason",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py:step_reason",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py:agree",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py:agree",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py:SpecializedDecode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py:SpecializedDecode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py:weight_reasons",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py:weight_reasons",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py:cache_reasons",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py:cache_reasons",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py:FailStop",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py:FailStop",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py:_k2_key",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py:_k2",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py:compile_build",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py:compile_build",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py:_Layer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py:WholeLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py:WholeLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py:FfnLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py:FfnLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py:_DeviceBytes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py:PeerBuffer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py:PeerBuffer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py:tp_agree",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py",
+   "target": "function:vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py:tp_agree",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/runner.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/runner.py:MonoRunner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/runner.py",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/runner.py:MonoRunner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/common/mm_preprocess.py",
+   "target": "function:vllm/models/kimi_k3/common/mm_preprocess.py:navit_resize_image",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/common/mm_preprocess.py",
+   "target": "function:vllm/models/kimi_k3/common/mm_preprocess.py:navit_resize_image",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/common/mm_preprocess.py",
+   "target": "class:vllm/models/kimi_k3/common/mm_preprocess.py:KimiK3ProcessingInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/common/mm_preprocess.py",
+   "target": "class:vllm/models/kimi_k3/common/mm_preprocess.py:KimiK3ProcessingInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/common/mm_preprocess.py",
+   "target": "class:vllm/models/kimi_k3/common/mm_preprocess.py:KimiK3DummyInputsBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/common/mm_preprocess.py",
+   "target": "class:vllm/models/kimi_k3/common/mm_preprocess.py:KimiK3DummyInputsBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/common/mm_preprocess.py",
+   "target": "class:vllm/models/kimi_k3/common/mm_preprocess.py:KimiK3MultiModalProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/common/mm_preprocess.py",
+   "target": "class:vllm/models/kimi_k3/common/mm_preprocess.py:KimiK3MultiModalProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/dspark_mla.py:_duplicate_context_kv_weights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/dspark_mla.py:K3DSparkDecoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/dspark_mla.py:K3DSparkDecoderLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/dspark_mla.py:K3DSparkModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/dspark_mla.py:K3DSparkModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/dspark_mla.py:K3DSparkForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/dspark_mla.py:K3DSparkForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:a_log_weight_loader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:a_log_weight_loader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kda.py:_KimiGDNMergedColumnParallelLinear",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kda.py:KimiK3DeltaAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kda.py:KimiK3DeltaAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:is_fused_kda_decode_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:is_fused_kda_decode_supported",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:is_flashinfer_fused_kda_decode_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:is_flashinfer_fused_kda_decode_supported",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:is_flashinfer_fused_kda_spec_decode_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:is_flashinfer_fused_kda_spec_decode_supported",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:resolve_kda_spec_decode_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:resolve_kda_spec_decode_backend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:resolve_kda_decode_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:resolve_kda_decode_backend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:is_flashkda_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:is_flashkda_supported",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:is_flashinfer_recurrent_kda_prefill_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:is_flashinfer_recurrent_kda_prefill_supported",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:_flashkda_prefill",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:_flashinfer_kda_prefill",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:resolve_kda_prefill_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:resolve_kda_prefill_backend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:_make_decode_conv1d_weight_loader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda.py:_make_decode_norm_weight_loader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda_metadata.py:_get_aligned_state_indices_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda_metadata.py:_mamba_get_block_table_tensor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda_metadata.py:_stage_spec_decode_metadata_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda_metadata.py:stage_spec_decode_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kda_metadata.py:stage_spec_decode_metadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kda_metadata.py:KDARecoverSSMAlignMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kda_metadata.py:KDARecoverSSMAlignMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kda_metadata.py:KDARecoverSSMCommitMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kda_metadata.py:KDARecoverSSMCommitMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kda_metadata.py:KimiK3KDAMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kda_metadata.py:KimiK3KDAMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kda_metadata.py:KimiK3KDAMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kda_metadata.py:KimiK3KDAMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kda_metadata.py:KimiK3KDAAttentionBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kda_metadata.py:KimiK3KDAAttentionBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py:KimiK3KvBalancedMLAMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py:KimiK3KvBalancedMLAMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py:KimiK3KvBalancedMLABackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py:KimiK3KvBalancedMLABackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py:KimiK3KvBalancedMLAImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py:KimiK3KvBalancedMLAImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py:_plan_work_list_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py:_compile",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py:supports",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py:supports",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py:KvBalancedMla",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py:KvBalancedMla",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/decode.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/decode.py:KvBalancedDecode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/decode.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/decode.py:KvBalancedDecode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:get_mla_decode_arch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:get_mla_decode_arch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:select_mla_decode_tilers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:select_mla_decode_tilers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:compute_q_tile_layout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:compute_q_tile_layout",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:get_mla_decode_fold_sq_factor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:get_mla_decode_fold_sq_factor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:MLAStaticTileSchedulerParams",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:MLAStaticTileSchedulerParams",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:WorkTileInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:WorkTileInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:MLAStaticTileScheduler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:MLAStaticTileScheduler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:MLAWorkListTileScheduler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py:MLAWorkListTileScheduler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/kernel.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/kernel.py:tcgen05_mma_ws_f8f6f4_one",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/kernel.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/kv_balanced_mla/kernel.py:tcgen05_mma_ws_f8f6f4_one",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/kernel.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/kernel.py:BlackwellMultiHeadLatentAttentionForwardFP8",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/kernel.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/kernel.py:BlackwellMultiHeadLatentAttentionForwardFP8",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/latent_moe_runner.py:LatentTailTier",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/latent_moe_runner.py:LatentTailTier",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/latent_moe_runner.py:LatentMoERunner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/latent_moe_runner.py:LatentMoERunner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:_kda_qkvg_flashinfer_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:_cute",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:select_kimi_k3_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:select_kimi_k3_backend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:_low_latency_table",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:_runtime_ok",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:_residual_ok",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:_run_plan",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:run_kda_projection_overlap",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:run_kda_projection_overlap",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:autotune_kda_qkvg",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:autotune_kda_qkvg",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:try_low_latency_gemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:try_low_latency_gemm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:_enable_kda_projection_overlap",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:enable_kimi_k3_low_latency_gemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:enable_kimi_k3_low_latency_gemm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:ProjectionSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:ProjectionSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:_KimiK3LowLatencyApply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:KimiK3LowLatencyLinearMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:KimiK3LowLatencyLinearMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:KimiK3LowLatencyEmbeddingMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/low_latency_gemm.py:KimiK3LowLatencyEmbeddingMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/abi.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/abi.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ranks.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/abi.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/attention/back.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/attention/kda.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/debug.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ranks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/mx.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/ranks.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/sync.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/gemv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/abi.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/runner.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/oracle/mxfp4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/attention/back.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/attention/kda.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/guards.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "target": "file:vllm/models/kimi_k3/amd/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/attention/kda.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/stages/moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/decode.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/runner.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/runner.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/runner.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/abi.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/runner.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/attention/kda.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/runner.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/common/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/runner.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/mono/layer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/runner.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/runner.py",
+   "target": "file:vllm/models/kimi_k3/amd/specialized_decode/runtime/peer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/common/mm_preprocess.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/common/mm_preprocess.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/common/mm_preprocess.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/common/mm_preprocess.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/common/mm_preprocess.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/common/mm_preprocess.py",
+   "target": "file:vllm/multimodal/processing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/common/mm_preprocess.py",
+   "target": "file:vllm/transformers_utils/configs/kimi_k3.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/common/mm_preprocess.py",
+   "target": "file:vllm/transformers_utils/processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/common/mm_preprocess.py",
+   "target": "file:vllm/transformers_utils/processors/kimi_k25_vision_fused.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/common/mm_preprocess.py",
+   "target": "file:vllm/transformers_utils/processors/kimi_k3.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "target": "file:vllm/model_executor/models/qwen3_dspark.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "target": "file:vllm/models/common/ops/fused_allreduce_rms_norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/mla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/dspark_mla.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/model_executor/kernels/linear/cute_dsl/gemm_rs_ar.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/model_executor/layers/mamba/gdn/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/model_executor/layers/mamba/kda_checkpoint.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/causal_conv1d.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/gather_initial_states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/model_executor/layers/quantization/modelopt.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/model_executor/parameter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/ops/recoverssm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/ops/third_party/kda/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/recoverssm/kernels.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/kda.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/transformers_utils/configs/kimi_linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/utils/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/ops/recoverssm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "file:vllm/v1/attention/backends/gdn_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "file:vllm/v1/attention/backends/recoverssm_metadata.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kda_metadata.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py",
+   "target": "file:vllm/model_executor/layers/attention/mla_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/decode.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/decode.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/decode.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/decode.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/decode.py",
+   "target": "file:vllm/model_executor/layers/attention/mla_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/decode.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/core.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/decode.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/decode.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/decode.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/kernel.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/kv_balanced_mla/helpers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_allreduce_gemma_rms_norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/trtllm_mxfp4_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/trtllm_nvfp4_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/moe_output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/ops/latent_moe_tail.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "target": "file:vllm/utils/multi_stream_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/latent_moe_runner.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "file:vllm/model_executor/kernels/linear/cute_dsl/skinny_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/kda.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/ops/cute_dsl/kda_skinny_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/low_latency_gemm.py",
+   "target": "file:vllm/utils/multi_stream_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py:WholeLayer",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py:_Layer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py:FfnLayer",
+   "target": "class:vllm/models/kimi_k3/amd/specialized_decode/runtime/layers.py:_Layer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/kimi_k3/nvidia/kda.py:_KimiGDNMergedColumnParallelLinear",
+   "target": "class:vllm/model_executor/layers/linear.py:MergedColumnParallelLinear",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/kimi_k3/nvidia/kda.py:KimiK3DeltaAttention",
+   "target": "class:vllm/model_executor/layers/mamba/gdn/base.py:GatedDeltaNetAttention",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/kimi_k3/nvidia/kda_metadata.py:KimiK3KDAMetadata",
+   "target": "class:vllm/v1/attention/backends/gdn_attn.py:GDNAttentionMetadata",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/kimi_k3/nvidia/kda_metadata.py:KimiK3KDAMetadataBuilder",
+   "target": "class:vllm/v1/attention/backends/gdn_attn.py:GDNAttentionMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/kimi_k3/nvidia/kda_metadata.py:KimiK3KDAAttentionBackend",
+   "target": "class:vllm/v1/attention/backends/gdn_attn.py:GDNAttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/kimi_k3/nvidia/kv_balanced_mla/backend.py:KimiK3KvBalancedMLABackend",
+   "target": "class:vllm/model_executor/layers/attention/mla_attention.py:MLACommonBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/kimi_k3/nvidia/latent_moe_runner.py:LatentMoERunner",
+   "target": "class:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:MoERunner",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

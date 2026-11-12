@@ -1,0 +1,38 @@
+# =============================================================================
+# 模块定位：docker-compose.yml —— 容器编排（卷挂载 + 环境变量 + 默认命令示例）
+# 管线角色：把 config.yaml / llm_keys.yaml / commits/ 从宿主挂进容器；
+#           LLVM(/data/llvm) 与内核(/data/linux) 打进 named volume 由 init_docker.py
+#           首次构建，结果目录 /data/results 独立成卷（容器重建不丢结果）。
+# 用法：docker compose run knighter（命令行覆盖 command 跑 gen/refine/scan/triage）
+# =============================================================================
+version: '3.8'
+
+services:
+  knighter:
+    # 从当前目录 Dockerfile 构建
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      # 结果目录用 named volume 持久化（LLVM 与内核编译产物也在此卷内）
+      - knighter_results:/data/results
+      # 主配置（config.yaml 由 config-example.yaml 复制修改而来）
+      - ./config.yaml:/app/config.yaml
+      # LLM 凭据文件（.gitignore 忽略，不入镜像）
+      - ./src/llm_keys.yaml:/app/src/llm_keys.yaml
+      # 评测 commit 清单（commits.txt=61 条论文评测集 / commits-debug.txt=2 条快速自测）
+      - ./commits:/app/commits
+    environment:
+      # init_docker.py 下载/编译的落点，与 config.yaml 中的路径对应
+      - LLVM_DIR=/data/llvm
+      - LINUX_DIR=/data/linux
+      - RESULT_DIR=/data/results
+    # 工作目录切到 src/（main.py 所在，相对路径 import 依赖它）
+    working_dir: /app/src
+    # 默认只打印帮助；真实任务覆盖 command，例如：
+    command: ["/bin/zsh", "-c", "python3 main.py --help"]
+    # command: ["/bin/zsh", "-c", "python3 main.py gen --commit_file=../commits/commits-selected.txt --config_file=../config.yaml"]
+    # command: ["/bin/zsh", "-c", "python3 main.py refine --checker_dir=/data/results --config_file=../config.yaml"]
+
+volumes:
+  knighter_results:

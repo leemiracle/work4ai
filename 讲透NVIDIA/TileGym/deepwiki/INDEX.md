@@ -1,0 +1,30 @@
+# DeepWiki 索引 — NVIDIA/TileGym
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 367275 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+  - [2.1 Prerequisites and Installation](2.1-prerequisites-and-installation.md)
+  - [2.2 Quick Start Guide](2.2-quick-start-guide.md)
+- [3 Core Library](3-core-library.md)
+  - [3.1 Package Architecture](3.1-package-architecture.md)
+  - [3.2 Backend Management System](3.2-backend-management-system.md)
+- [4 Transformer Inference](4-transformer-inference.md)
+  - [4.1 Inference System Overview](4.1-inference-system-overview.md)
+  - [4.2 Running Inference](4.2-running-inference.md)
+  - [4.3 Benchmarking Performance](4.3-benchmarking-performance.md)
+  - [4.4 Sample Input Data](4.4-sample-input-data.md)
+- [5 Docker Deployment](5-docker-deployment.md)
+  - [5.1 Building the Container](5.1-building-the-container.md)
+  - [5.2 Running in Docker](5.2-running-in-docker.md)
+- [6 Development Guide](6-development-guide.md)
+  - [6.1 Development Setup](6.1-development-setup.md)
+  - [6.2 Testing Infrastructure](6.2-testing-infrastructure.md)
+  - [6.3 Code Quality Tools](6.3-code-quality-tools.md)
+- [7 Contributing](7-contributing.md)
+  - [7.1 Contribution Guidelines](7.1-contribution-guidelines.md)
+  - [7.2 Contributor License Agreement](7.2-contributor-license-agreement.md)
+- [8 Legal and Licensing](8-legal-and-licensing.md)
+  - [8.1 Project License](8.1-project-license.md)
+  - [8.2 Third-Party Dependencies](8.2-third-party-dependencies.md)

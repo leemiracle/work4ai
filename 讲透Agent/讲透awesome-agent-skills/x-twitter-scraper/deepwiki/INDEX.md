@@ -1,0 +1,30 @@
+# DeepWiki 索引 — Xquik-dev/x-twitter-scraper
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 183889 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started & Installation](1.1-getting-started-installation.md)
+  - [1.2 Authentication & Credits](1.2-authentication-credits.md)
+- [2 MCP Server Integration](2-mcp-server-integration.md)
+  - [2.1 MCP Setup & Client Configuration](2.1-mcp-setup-client-configuration.md)
+  - [2.2 MCP Tools: `explore` and `xquik`](2.2-mcp-tools-explore-and-xquik.md)
+- [3 REST API Reference](3-rest-api-reference.md)
+  - [3.1 X Lookups & Write Actions](3.1-x-lookups-write-actions.md)
+  - [3.2 Bulk Extractions](3.2-bulk-extractions.md)
+  - [3.3 Monitors, Webhooks & Events](3.3-monitors-webhooks-events.md)
+  - [3.4 Automations & Flow Engine](3.4-automations-flow-engine.md)
+  - [3.5 Content Composition & Style Analysis](3.5-content-composition-style-analysis.md)
+  - [3.6 Giveaway Draws](3.6-giveaway-draws.md)
+- [4 Data Types & Schemas](4-data-types-schemas.md)
+  - [4.1 Core Data Models](4.1-core-data-models.md)
+  - [4.2 MCP-Specific Schemas](4.2-mcp-specific-schemas.md)
+- [5 Integration Guides & Code Examples](5-integration-guides-code-examples.md)
+  - [5.1 JavaScript / Node.js Examples](5.1-javascript-node.js-examples.md)
+  - [5.2 Python Examples](5.2-python-examples.md)
+  - [5.3 Slash Commands Reference](5.3-slash-commands-reference.md)
+- [6 Skill Package Structure](6-skill-package-structure.md)
+  - [6.1 SKILL.md & Agent Behavior](6.1-skill.md-agent-behavior.md)
+  - [6.2 Registry & Discovery Configurations](6.2-registry-discovery-configurations.md)
+  - [6.3 Focused Skills Catalog](6.3-focused-skills-catalog.md)
+- [7 Glossary](7-glossary.md)

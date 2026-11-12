@@ -1,0 +1,90 @@
+{
+  "nodes": [
+    {
+      "id": "document:packages/feedback/README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "packages/feedback/README.md",
+      "summary": "feedback 包组总览：记录人类对 Session 与助手消息的反馈，session 级备注（/feedback 命令）与逐消息评分（messageFeedback 服务）两包互相独立，反馈永不进入模型上下文。",
+      "tags": ["documentation", "package-group", "feedback", "overview"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:packages/feedback/command-feedback/README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "packages/feedback/command-feedback/README.md",
+      "summary": "dsh-command-feedback 包参考文档：/feedback 斜杠命令、sessionFeedback Host Remote（Web 反馈对话框）与七类固定分类法；记录即时且不触发模型回合，含实现设计、源码映射与模型体验章节。",
+      "tags": ["documentation", "package-reference", "slash-command", "feedback", "remote"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:packages/feedback/command-feedback/package.json",
+      "type": "config",
+      "name": "package.json",
+      "filePath": "packages/feedback/command-feedback/package.json",
+      "summary": "@deepseek-ai/dsh-command-feedback 包清单：导出 ./types 子路径与 typert host/remote 双面，peer 依赖 dsh-commands/dsh-session/dsh-anonymous-user-id/cordis/dsh-typert-protocol，运行时依赖 zod。",
+      "tags": ["configuration", "package-manifest", "exports", "dependencies"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:packages/feedback/command-feedback/src/types.ts",
+      "type": "file",
+      "name": "types.ts",
+      "filePath": "packages/feedback/command-feedback/src/types.ts",
+      "summary": "Session 级反馈公共词汇：FeedbackCategory 七类固定分类、FeedbackRecord 载荷、经 declaration merging 扩展 SessionEventMap 的 feedback/record 事件，以及 sessionFeedback.record Remote 的请求/结果类型；纯类型无运行时值，供浏览器插件单独引用。",
+      "tags": ["type-definition", "feedback", "session-event", "remote-protocol", "barrel-of-types"],
+      "complexity": "simple",
+      "languageNotes": "通过 declare module '@deepseek-ai/dsh-session/types' 对 SessionEventMap 做类型级合并，注册 log-only 事件 feedback/record。"
+    },
+    {
+      "id": "config:packages/feedback/command-feedback/tsconfig.json",
+      "type": "config",
+      "name": "tsconfig.json",
+      "filePath": "packages/feedback/command-feedback/tsconfig.json",
+      "summary": "command-feedback 的 TypeScript 项目引用配置：src→lib/types 输出，引用 vendor/cosmokit、vendor/cordis、interaction/commands、core/session、identity/anonymous-user-id 与 typert/protocol。",
+      "tags": ["configuration", "typescript", "project-references", "build-system"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:packages/feedback/message-feedback/README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "packages/feedback/message-feedback/README.md",
+      "summary": "dsh-message-feedback 包参考文档：对已定稿助手消息的评分/分类/备注，canonical Session log 拥有全部增删改；list/put/delete 三操作含版本冲突语义、maxNoteBytes 校验与 note-blank/note-too-large 业务错误说明。",
+      "tags": ["documentation", "package-reference", "message-rating", "session-log", "versioning"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:packages/feedback/message-feedback/package.json",
+      "type": "config",
+      "name": "package.json",
+      "filePath": "packages/feedback/message-feedback/package.json",
+      "summary": "@deepseek-ai/dsh-message-feedback 包清单：同款 ./types 与 typert 双导出面，peer 依赖 dsh-brand/dsh-llm/dsh-session/dsh-session-persistence/dsh-typert-protocol 并反向依赖 dsh-command-feedback（共享分类法），依赖 schemastery 与 zod。",
+      "tags": ["configuration", "package-manifest", "exports", "dependencies"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:packages/feedback/message-feedback/tsconfig.json",
+      "type": "config",
+      "name": "tsconfig.json",
+      "filePath": "packages/feedback/message-feedback/tsconfig.json",
+      "summary": "message-feedback 的 TypeScript 项目引用配置：src→lib/types 输出并声明对 session、session-persistence、command-feedback 等上游包的编译依赖。",
+      "tags": ["configuration", "typescript", "project-references", "build-system"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {"source": "file:packages/feedback/command-feedback/src/types.ts", "target": "file:packages/core/session/src/types.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "document:packages/feedback/README.md", "target": "document:packages/feedback/command-feedback/README.md", "type": "related", "direction": "forward", "weight": 0.5},
+    {"source": "document:packages/feedback/README.md", "target": "document:packages/feedback/message-feedback/README.md", "type": "related", "direction": "forward", "weight": 0.5},
+    {"source": "document:packages/feedback/command-feedback/README.md", "target": "file:packages/feedback/command-feedback/src/index.ts", "type": "documents", "direction": "forward", "weight": 0.5},
+    {"source": "document:packages/feedback/command-feedback/README.md", "target": "file:packages/feedback/command-feedback/src/types.ts", "type": "documents", "direction": "forward", "weight": 0.5},
+    {"source": "document:packages/feedback/message-feedback/README.md", "target": "file:packages/feedback/message-feedback/src/index.ts", "type": "documents", "direction": "forward", "weight": 0.5},
+    {"source": "document:packages/feedback/message-feedback/README.md", "target": "file:packages/feedback/message-feedback/src/types.ts", "type": "documents", "direction": "forward", "weight": 0.5},
+    {"source": "config:packages/feedback/command-feedback/package.json", "target": "file:packages/feedback/command-feedback/src/index.ts", "type": "configures", "direction": "forward", "weight": 0.6},
+    {"source": "config:packages/feedback/command-feedback/tsconfig.json", "target": "file:packages/feedback/command-feedback/src/index.ts", "type": "configures", "direction": "forward", "weight": 0.6},
+    {"source": "config:packages/feedback/message-feedback/package.json", "target": "file:packages/feedback/message-feedback/src/index.ts", "type": "configures", "direction": "forward", "weight": 0.6},
+    {"source": "config:packages/feedback/message-feedback/tsconfig.json", "target": "file:packages/feedback/message-feedback/src/index.ts", "type": "configures", "direction": "forward", "weight": 0.6}
+  ]
+}

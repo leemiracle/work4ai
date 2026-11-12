@@ -1,0 +1,30 @@
+# DeepWiki 索引 — NVIDIA/bluebazel
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 168235 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started & Configuration](1.1-getting-started-configuration.md)
+  - [1.2 Extension Activation & Initialization](1.2-extension-activation-initialization.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 Data Models](2.1-data-models.md)
+  - [2.2 Target Management & Persistence](2.2-target-management-persistence.md)
+  - [2.3 Services Layer](2.3-services-layer.md)
+- [3 Bazel Integration](3-bazel-integration.md)
+  - [3.1 BazelService & Target Discovery](3.1-bazelservice-target-discovery.md)
+  - [3.2 BazelParser & BUILD File Analysis](3.2-bazelparser-build-file-analysis.md)
+- [4 Controllers](4-controllers.md)
+  - [4.1 Target Action Controllers (Build, Run, Test, Debug)](4.1-target-action-controllers-build-run-test-debug.md)
+  - [4.2 Command Registration](4.2-command-registration.md)
+  - [4.3 User Commands & Custom Task Execution](4.3-user-commands-custom-task-execution.md)
+- [5 User Interface](5-user-interface.md)
+  - [5.1 Bazel Target Tree View](5.1-bazel-target-tree-view.md)
+  - [5.2 CodeLens Providers](5.2-codelens-providers.md)
+- [6 Language Plugin System](6-language-plugin-system.md)
+  - [6.1 C/C++ Language Plugin](6.1-c-c-language-plugin.md)
+  - [6.2 Python & Go Language Plugins](6.2-python-go-language-plugins.md)
+- [7 Testing](7-testing.md)
+  - [7.1 Extension Integration Tests](7.1-extension-integration-tests.md)
+  - [7.2 Service Unit Tests](7.2-service-unit-tests.md)
+- [8 Build, Packaging & Release](8-build-packaging-release.md)
+- [9 Glossary](9-glossary.md)

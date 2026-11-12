@@ -1,0 +1,643 @@
+{
+ "nodes": [
+  {
+   "id": "file:packages/preset/agent-preset-registry/src/definition.ts",
+   "type": "file",
+   "name": "definition.ts",
+   "filePath": "packages/preset/agent-preset-registry/src/definition.ts",
+   "summary": "preset 声明形状与 YAML 校验：PresetDefinition 接口（id/name/description/order/plugins），entryListProblem 递归验证 Cordis entry 列表（含嵌套 group）返回首条问题文案。",
+   "tags": [
+    "validation",
+    "declaration",
+    "schema",
+    "type-definition"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/preset/agent-preset-registry/src/definition.ts:entryListProblem",
+   "type": "function",
+   "name": "entryListProblem",
+   "filePath": "packages/preset/agent-preset-registry/src/definition.ts",
+   "lineRange": [
+    18,
+    39
+   ],
+   "summary": "校验解析后的 entry 列表：顶层必须是行列表、每行必须是带非空 name 的 map、group 行递归验 config，返回带行号标签的首个问题。",
+   "tags": [
+    "validation",
+    "recursive",
+    "diagnostics"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/preset/agent-preset-registry/src/display.ts",
+   "type": "file",
+   "name": "display.ts",
+   "filePath": "packages/preset/agent-preset-registry/src/display.ts",
+   "summary": "roster 展示文案解析（纯函数零依赖，浏览器 bundle 内联）：四个内置 preset（standard/ptc/minimal/cordis）走 locale 字典键，用户自署名元数据永不翻译，回退到声明值。",
+   "tags": [
+    "display",
+    "i18n",
+    "pure-function",
+    "shared"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/preset/agent-preset-registry/src/display.ts:isBuiltInPreset",
+   "type": "function",
+   "name": "isBuiltInPreset",
+   "filePath": "packages/preset/agent-preset-registry/src/display.ts",
+   "lineRange": [
+    53,
+    55
+   ],
+   "summary": "判断 roster 行是否为无自署 name 的内置 preset id——署了名的声明拥有自己的文案。",
+   "tags": [
+    "predicate",
+    "built-in"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/preset/agent-preset-registry/src/display.ts:presetDisplayText",
+   "type": "function",
+   "name": "presetDisplayText",
+   "filePath": "packages/preset/agent-preset-registry/src/display.ts",
+   "lineRange": [
+    63,
+    73
+   ],
+   "summary": "按活动 locale 解析 preset 展示文案：内置 preset 查字典键，其余回退声明 metadata（name 缺省用 id）。",
+   "tags": [
+    "i18n",
+    "display",
+    "fallback"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/preset/agent-preset-registry/src/index.ts",
+   "summary": "dsh-agent-preset-registry 服务入口：AgentPresetRegistry（ctx.agentPresets）管理 YAML 声明的 preset 注册、按 ScopeKey 的 revision 引用计数与回收、Agent/Session 绑定及 @Remote 面（list/read/select），并声明 agent-preset/selected 会话投影。",
+   "tags": [
+    "entry-point",
+    "service-definition",
+    "registry",
+    "typert-remote"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/preset/agent-preset-registry/src/index.ts:AgentPresetRegistry",
+   "type": "class",
+   "name": "AgentPresetRegistry",
+   "filePath": "packages/preset/agent-preset-registry/src/index.ts",
+   "lineRange": [
+    54,
+    414
+   ],
+   "summary": "preset 注册表服务（Service Definition + Provider，继承 TypertRemoteService 暴露 @Remote 面）：register 即时激活并保留失败可见；revision=scope+mount 的 Generation 按用户数回收；mount/composeFrom 把 Agent scope 经 bindScopeParent 挂到共享 mount；select 在会话首回合前经 turn 边界校验换 preset 并落 agent-preset/selected 事件。",
+   "tags": [
+    "service-definition",
+    "provider",
+    "revision-gc",
+    "typert-remote",
+    "scope-binding"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/preset/agent-preset-registry/src/mount.ts",
+   "type": "file",
+   "name": "mount.ts",
+   "filePath": "packages/preset/agent-preset-registry/src/mount.ts",
+   "summary": "preset 的运行时插件树：PresetTree 继承 EntryTree 但 no-op commit（仅内存，不持久化）；mountPreset 在 scope 内装树并审计——失败行与根 realm 服务泄漏即拒载，等待 Host 服务的行保持挂载待其自愈；leakedServices/serviceForMount 按 fiber 对象同一性判定所有权。",
+   "tags": [
+    "mount",
+    "entry-tree",
+    "audit",
+    "fiber-identity"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/preset/agent-preset-registry/src/mount.ts:PresetTree",
+   "type": "class",
+   "name": "PresetTree",
+   "filePath": "packages/preset/agent-preset-registry/src/mount.ts",
+   "lineRange": [
+    9,
+    24
+   ],
+   "summary": "内存版 Loader 树：构造时把宿主 fiber 的 subtree/subgroup 摘离，override commit 为空——preset 组合永不写回宿主 profile 配置。",
+   "tags": [
+    "entry-tree",
+    "memory-only",
+    "no-op-commit"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/preset/agent-preset-registry/src/mount.ts:leakedServices",
+   "type": "function",
+   "name": "leakedServices",
+   "filePath": "packages/preset/agent-preset-registry/src/mount.ts",
+   "lineRange": [
+    69,
+    83
+   ],
+   "summary": "列出 mounted 子树发布进根 realm 的服务名：遍历服务 store 的 symbol 槽，实现 fiber 属于该子树且符号即根 isolate 符号才算泄漏（isolate realm 私有符号天然缺席）。",
+   "tags": [
+    "isolation",
+    "leak-detection",
+    "service-store"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/preset/agent-preset-registry/src/mount.ts:serviceForMount",
+   "type": "function",
+   "name": "serviceForMount",
+   "filePath": "packages/preset/agent-preset-registry/src/mount.ts",
+   "lineRange": [
+    98,
+    112
+   ],
+   "summary": "读取一个保留 revision 拥有的服务实现（含 isolate realm）：leakedServices 的反向查询，按名字与 fiber 成员关系匹配。",
+   "tags": [
+    "service-lookup",
+    "fiber-membership"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/preset/agent-preset-registry/src/mount.ts:auditRows",
+   "type": "function",
+   "name": "auditRows",
+   "filePath": "packages/preset/agent-preset-registry/src/mount.ts",
+   "lineRange": [
+    134,
+    158
+   ],
+   "summary": "审计 mounted 子树的行：等树 settle 后报告从未启动/导入/激活失败的行（failed）与注入服务仍缺的行（pending，等 Host provider 完成后自愈）。",
+   "tags": [
+    "audit",
+    "rows",
+    "diagnostics"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/preset/agent-preset-registry/src/mount.ts:mountDetail",
+   "type": "function",
+   "name": "mountDetail",
+   "filePath": "packages/preset/agent-preset-registry/src/mount.ts",
+   "lineRange": [
+    181,
+    189
+   ],
+   "summary": "把挂载失败渲染为可报告文本：AggregateError（或 cause 链上的聚合）成员消息逐行缩进附在主消息下。",
+   "tags": [
+    "error-rendering",
+    "aggregate-error"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/preset/agent-preset-registry/src/mount.ts:mountPreset",
+   "type": "function",
+   "name": "mountPreset",
+   "filePath": "packages/preset/agent-preset-registry/src/mount.ts",
+   "lineRange": [
+    204,
+    216
+   ],
+   "summary": "在 scope 内装一个 preset revision：PresetTree + prepareProfileEntries 更新、审计失败行与根 realm 泄漏即抛错，成功返回 PresetMount（presetId/fiber/tree/key）。",
+   "tags": [
+    "mount",
+    "lifecycle",
+    "gate"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/preset/agent-preset-registry/src/preset.ts",
+   "type": "file",
+   "name": "preset.ts",
+   "filePath": "packages/preset/agent-preset-registry/src/preset.ts",
+   "summary": "纯类型模块：AgentPreset（roster 行含 broken 诊断）与 Config（default 部署默认 + selectedDefault 用户经 Settings 编辑的 volatile 默认）。",
+   "tags": [
+    "type-definition",
+    "roster",
+    "config"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/preset/agent-preset-registry/src/session.ts",
+   "type": "file",
+   "name": "session.ts",
+   "filePath": "packages/preset/agent-preset-registry/src/session.ts",
+   "summary": "session log 事实源模块：声明 log-only 事件 agent-preset/selected（会话空白期内换 preset 的记录，resume/fork 靠它重建组合而非创建头）与 agentPreset 投影定义（从 header 初始化、事件推进、wire 透出）。",
+   "tags": [
+    "session-projection",
+    "log-only-event",
+    "projection-definition"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/preset/agent-preset-registry/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/preset/agent-preset-registry/src/types.ts",
+   "summary": "client 安全载荷与事件声明：AgentPresetRow/AgentPresetRoster/AgentPresetDocument 类型，declare module 扩充 TypertRemoteErrorDetailsMap（not-found/invalid/locked 三错）、SessionProjectionMap（agentPreset）与 cordis Events（emit 型 selected 事件）。",
+   "tags": [
+    "type-definition",
+    "declaration-merging",
+    "error-details",
+    "client-safe"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/preset/agent-preset-registry/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/preset/agent-preset-registry/tsconfig.json",
+   "summary": "registry 包 tsconfig：extends tsconfig.base.json，rootDir src、outDir lib/types。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/preset/persona/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/preset/persona/README.md",
+   "summary": "dsh-persona 包文档：preset 挂载的可组合 persona 行，为单个 agent 注册 persona 前后缀 prompt 节、遮蔽部署级默认；也可让 prefix 成为完整系统提示词并关闭 runtime context。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "persona",
+    "system-prompt"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/preset/persona/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/preset/persona/package.json",
+   "summary": "@deepseek-ai/dsh-persona 清单：组合署名的部署 persona 节包，发布 locale 与 lib 产物。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "persona"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/preset/persona/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/preset/persona/src/index.ts",
+   "summary": "persona 插件入口（函数式插件 name/inject/Config/apply）：scope-only 行——preset 内挂载时为该会话遮蔽部署 persona，全局挂载会与 prompt registry 自身注册冲突而 fail loud；apply 注册 prefix/suffix 两节并可抑制 runtime context。",
+   "tags": [
+    "plugin",
+    "persona",
+    "system-prompt",
+    "scope-only"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/preset/persona/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/preset/persona/src/index.ts",
+   "lineRange": [
+    62,
+    75
+   ],
+   "summary": "按 Config 注册 persona prefix/suffix 两个 systemPrompt 节（ctx.effect 挂 disposer），complete 时让 prefix 吞掉全部其他节，并可抑制 runtime context 快照。",
+   "tags": [
+    "plugin-apply",
+    "prompt-sections",
+    "effects"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "target": "file:packages/core/scope/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "target": "file:packages/settings/settings/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "target": "file:packages/preset/agent-preset-registry/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "target": "file:packages/preset/agent-preset-registry/src/definition.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "target": "file:packages/preset/agent-preset-registry/src/preset.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "target": "file:packages/preset/agent-preset-registry/src/session.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "target": "file:packages/preset/agent-preset-registry/src/mount.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "target": "file:packages/preset/agent-preset-registry/src/composition-inventory.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/mount.ts",
+   "target": "file:packages/boot/app-boot/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/mount.ts",
+   "target": "file:packages/preset/agent-preset-registry/src/definition.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/mount.ts",
+   "target": "file:packages/core/scope/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/session.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/types.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/persona/src/index.ts",
+   "target": "file:packages/core/system-prompt/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/definition.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/definition.ts:entryListProblem",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/display.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/display.ts:isBuiltInPreset",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/display.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/display.ts:presetDisplayText",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "target": "class:packages/preset/agent-preset-registry/src/index.ts:AgentPresetRegistry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/mount.ts",
+   "target": "class:packages/preset/agent-preset-registry/src/mount.ts:PresetTree",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/mount.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/mount.ts:leakedServices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/mount.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/mount.ts:serviceForMount",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/mount.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/mount.ts:auditRows",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/mount.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/mount.ts:mountDetail",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/mount.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/mount.ts:mountPreset",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/preset/persona/src/index.ts",
+   "target": "function:packages/preset/persona/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/definition.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/definition.ts:entryListProblem",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/display.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/display.ts:isBuiltInPreset",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/display.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/display.ts:presetDisplayText",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "target": "class:packages/preset/agent-preset-registry/src/index.ts:AgentPresetRegistry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/mount.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/mount.ts:leakedServices",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/mount.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/mount.ts:serviceForMount",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/mount.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/mount.ts:auditRows",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/preset/agent-preset-registry/src/mount.ts",
+   "target": "function:packages/preset/agent-preset-registry/src/mount.ts:mountPreset",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/preset/persona/src/index.ts",
+   "target": "function:packages/preset/persona/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:packages/preset/agent-preset-registry/src/index.ts:AgentPresetRegistry",
+   "target": "class:packages/typert/protocol/src/index.ts:TypertRemoteService",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "document:packages/preset/persona/README.md",
+   "target": "file:packages/preset/persona/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/preset/persona/package.json",
+   "target": "file:packages/preset/persona/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/preset/agent-preset-registry/tsconfig.json",
+   "target": "file:packages/preset/agent-preset-registry/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  }
+ ]
+}

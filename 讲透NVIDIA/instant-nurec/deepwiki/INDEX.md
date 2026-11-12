@@ -1,0 +1,31 @@
+# DeepWiki 索引 — NVIDIA/instant-nurec
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 172907 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Contributing and Project Conventions](1.2-contributing-and-project-conventions.md)
+- [2 System Architecture](2-system-architecture.md)
+  - [2.1 CLI and Entry Points](2.1-cli-and-entry-points.md)
+  - [2.2 Configuration Schema](2.2-configuration-schema.md)
+  - [2.3 Pretrained Model Loading](2.3-pretrained-model-loading.md)
+- [3 Data Pipeline](3-data-pipeline.md)
+  - [3.1 NCore V4 Dataset Loader](3.1-ncore-v4-dataset-loader.md)
+  - [3.2 Frame Sampling and Batch Structures](3.2-frame-sampling-and-batch-structures.md)
+  - [3.3 Cuboid Tracks and Dynamic Object Handling](3.3-cuboid-tracks-and-dynamic-object-handling.md)
+- [4 Model and Inference](4-model-and-inference.md)
+  - [4.1 JIT Kelvin Adapter](4.1-jit-kelvin-adapter.md)
+  - [4.2 Predict Loop and System](4.2-predict-loop-and-system.md)
+- [5 Gaussian Primitives](5-gaussian-primitives.md)
+  - [5.1 KelvinInstantNuRecPrimitive](5.1-kelvininstantnurecprimitive.md)
+  - [5.2 Primitive Merging and Voxelization](5.2-primitive-merging-and-voxelization.md)
+  - [5.3 PLY Export](5.3-ply-export.md)
+- [6 Utility Library](6-utility-library.md)
+  - [6.1 Geometry and SE3 Math](6.1-geometry-and-se3-math.md)
+  - [6.2 Sensor Models and Ray Generation](6.2-sensor-models-and-ray-generation.md)
+  - [6.3 Trajectory and Packed Operations](6.3-trajectory-and-packed-operations.md)
+- [7 Testing](7-testing.md)
+  - [7.1 Unit Tests: Core Modules](7.1-unit-tests-core-modules.md)
+  - [7.2 Unit Tests: Data and Utility Modules](7.2-unit-tests-data-and-utility-modules.md)
+- [8 Glossary](8-glossary.md)

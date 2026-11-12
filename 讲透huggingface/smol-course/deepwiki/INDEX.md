@@ -1,0 +1,30 @@
+# DeepWiki 索引 — huggingface/smol-course
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 440328 字符
+
+- [1 Course Overview](1-course-overview.md)
+  - [1.1 Installation and Setup](1.1-installation-and-setup.md)
+- [2 Instruction Tuning](2-instruction-tuning.md)
+  - [2.1 Chat Templates](2.1-chat-templates.md)
+  - [2.2 Supervised Fine-Tuning (SFT)](2.2-supervised-fine-tuning-sft.md)
+  - [2.3 Training with Hugging Face Jobs](2.3-training-with-hugging-face-jobs.md)
+- [3 Parameter-Efficient Fine-Tuning](3-parameter-efficient-fine-tuning.md)
+  - [3.1 LoRA and Adapters](3.1-lora-and-adapters.md)
+  - [3.2 Quantization Techniques](3.2-quantization-techniques.md)
+  - [3.3 Memory Optimization Strategies](3.3-memory-optimization-strategies.md)
+- [4 Preference Alignment](4-preference-alignment.md)
+  - [4.1 Direct Preference Optimization (DPO)](4.1-direct-preference-optimization-dpo.md)
+  - [4.2 ORPO and Advanced Techniques](4.2-orpo-and-advanced-techniques.md)
+- [5 Vision-Language Models](5-vision-language-models.md)
+  - [5.1 VLM Architecture and Usage](5.1-vlm-architecture-and-usage.md)
+  - [5.2 Fine-Tuning VLMs](5.2-fine-tuning-vlms.md)
+- [6 Model Evaluation](6-model-evaluation.md)
+  - [6.1 Automatic Benchmarks](6.1-automatic-benchmarks.md)
+  - [6.2 Custom Domain Evaluation](6.2-custom-domain-evaluation.md)
+- [7 TRL Library and Training Infrastructure](7-trl-library-and-training-infrastructure.md)
+  - [7.1 SFTTrainer and DPOTrainer](7.1-sfttrainer-and-dpotrainer.md)
+  - [7.2 TRL CLI Tools](7.2-trl-cli-tools.md)
+  - [7.3 Experiment Tracking with Trackio](7.3-experiment-tracking-with-trackio.md)
+- [8 Community and Contribution](8-community-and-contribution.md)
+  - [8.1 Submitting to the Leaderboard](8.1-submitting-to-the-leaderboard.md)

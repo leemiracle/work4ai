@@ -1,0 +1,115 @@
+---
+name: contribute-adapter
+description: Add or substantially change a first-party NVIDIA NeMo Fabric adapter, including repository packaging, discovery metadata, catalogs, CI wiring, and validation.
+license: Apache-2.0
+---
+
+# Contribute a First-Party NVIDIA NeMo Fabric Adapter
+
+Use the public
+[`nemo-fabric-build-adapter`](../../../skills/nemo-fabric-build-adapter/SKILL.md)
+skill for adapter-contract semantics, descriptor design, configuration mapping,
+lifecycle behavior, and conformance evidence. This maintainer skill adds only
+the repository integration required for adapters shipped by NVIDIA NeMo
+Fabric.
+
+Do not use this skill for a consumer that selects an existing adapter. Use the
+consumer `nemo-fabric-integrate` skill instead.
+
+## Companion Guidance
+
+Use `karpathy-guidelines` to keep the change scoped, `python-tests` for test
+design, `maintain-packaging` for package or dependency changes,
+`contribute-docs` and `review-doc-style` for public text, `validate-change` for
+the validation matrix, and `prepare-pr` for review handoff.
+
+## Repository Integration
+
+Follow these repository-specific requirements after applying the public skill:
+
+1. Place a Python adapter under `adapters/python/<name>/` with
+   `LICENSE -> ../../../LICENSE`, `README.md`,
+   `<name>.fabric-adapter.json`, Python package and lock files, a source entry
+   point, and focused tests. Place TypeScript packages under
+   `adapters/typescript/<name>/` and wire them into that npm workspace.
+2. Give each Python leaf adapter a small base installation, a `harness` extra
+   for package-installable target packages, and a `full` extra for
+   package-installable integrations. The Hermes adapter is the sole source-only
+   exception and omits `harness`. Add a `relay` extra only when the adapter
+   imports NVIDIA NeMo Relay Python APIs.
+3. Add one canonical root extra that delegates to the matching leaf adapter
+   and its `harness` extra. The Hermes root extra delegates to the bare adapter
+   because users install Hermes Agent separately from source. Keep
+   `nemo-fabric-runtime` an exact-version, unconditional root dependency.
+4. Add the package to the root adapter-test dependency group,
+   `[tool.uv.sources]`, `python_projects` in `justfile`, applicable catalogs,
+   and CI enumerations. Ship its descriptor under
+   `share/nemo-fabric/adapters/<name>`.
+5. Update `examples/code_review_agent/` and `examples/harbor/calculator/` to
+   support the new adapter.
+6. If the new adapter provides a coding harness, update
+   `examples/harbor/swebench/` to support it. Skip this step for adapters with
+   non-coding harnesses.
+7. Regenerate lockfiles and inspect the root and leaf wheel metadata. Verify
+   root-to-leaf delegation and every published leaf extra.
+
+Keep descriptor claims, implementation, focused tests, public documentation,
+catalog entries, and packaged metadata synchronized. Start with the narrowest
+truthful capability set.
+
+For usage changes, verify invocation-local accounting through the adapter contract and consumer SDK, including warm-session deltas, unknown counters, cache semantics, and unsuccessful results. Keep generated schemas and language bindings in parity. Preserve the closed `fabric.adapter/v1alpha2` `AgentUsage` shape; carry detailed cache-write, reasoning, peak request, and per-model data in the descriptor-declared `usage.extensions["nemo_fabric.detailed_token_usage.v1"]` object until a new adapter contract revision negotiates those fields. Consumers treat any detailed field for an input or output dimension as selecting the detailed counters for that dimension, so require complete, internally consistent counters instead of relying on the top-level view as a fallback.
+
+For `instructions.system`, keep `config.system_instruction_modes`, planning
+behavior, direct adapter validation, and target-native composition synchronized.
+New descriptors must declare their exact `replace` and `append` support rather
+than relying on the legacy omitted-value behavior.
+
+## Repository Evidence
+
+In addition to the evidence required by the public skill, include:
+
+- A subprocess test of the packaged entry point.
+- Exact descriptor assertions for every claimed capability.
+- A credential-free fixture that exercises `plan`, `doctor`, and `run`.
+- Wheel inspection when package data, dependencies, or extras change.
+- Deterministic CI coverage; keep credentialed live-target tests opt-in.
+
+## Validation
+
+Use `validate-change` to select the complete matrix. The common adapter checks
+are:
+
+```bash
+uv sync --group adapter-tests
+uv run --no-sync pytest tests/adapters/test_<name>*.py
+just test-python
+just lock-python && just wheels
+just schemas
+cargo fmt --all -- --check && just test-rust
+just docs
+uv run pre-commit run --all-files --show-diff-on-failure
+git diff --check
+```
+
+## References
+
+- Public contract: `docs/adapter-contract/` and `schemas/adapter-contract/`.
+- Descriptor schema: `schemas/adapter-contract/adapter-descriptor.schema.json`.
+- Repository packaging: root `pyproject.toml`, `justfile`, adapter catalogs,
+  and CI workflows.
+- Shared first-party Python host patterns: `adapters/python/common/` and the
+  closest adapter with the same target boundary.
+
+## New Public npm Packages
+
+Run `python3 scripts/ci/check_npm_bootstrap.py` when introducing a public npm
+package. The check discovers the contract and public adapter workspaces from
+manifests; add the adapter to the npm workspace. Separately wire it into release
+version stamping, build/test coverage, and the publication list before enabling
+uploads. Discovery alone does not enable publication. Complete the
+npm maintainer bootstrap and authenticated trusted-publisher readback in
+[`RELEASING.md`](../../../RELEASING.md#bootstrap-npm-trusted-publishing) before
+release. Public existence alone cannot verify trusted publishing. If the PR
+check reports HTTP 404, ask an authorized npm maintainer to bootstrap the exact
+manifest name, then rerun the check. Do not add CI write tokens or manually
+publish supported versions.

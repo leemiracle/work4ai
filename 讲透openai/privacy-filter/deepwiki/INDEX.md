@@ -1,0 +1,30 @@
+# DeepWiki 索引 — openai/privacy-filter
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 156658 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Repository Structure](1.2-repository-structure.md)
+- [2 Model Architecture](2-model-architecture.md)
+  - [2.1 Transformer Implementation](2.1-transformer-implementation.md)
+  - [2.2 Triton MoE Kernels](2.2-triton-moe-kernels.md)
+  - [2.3 Checkpoint Loading and Weight Serialization](2.3-checkpoint-loading-and-weight-serialization.md)
+- [3 Inference Pipeline](3-inference-pipeline.md)
+  - [3.1 Runtime and Prediction](3.1-runtime-and-prediction.md)
+  - [3.2 Sequence Decoding](3.2-sequence-decoding.md)
+  - [3.3 Span Utilities and Character Offsets](3.3-span-utilities-and-character-offsets.md)
+- [4 Label Space and Taxonomy](4-label-space-and-taxonomy.md)
+  - [4.1 Built-in Category Versions](4.1-built-in-category-versions.md)
+  - [4.2 Custom Label Spaces](4.2-custom-label-spaces.md)
+- [5 CLI and Python API](5-cli-and-python-api.md)
+  - [5.1 CLI: Redact Mode](5.1-cli-redact-mode.md)
+  - [5.2 Python API: OPF Class](5.2-python-api-opf-class.md)
+  - [5.3 Output Schemas](5.3-output-schemas.md)
+- [6 Evaluation](6-evaluation.md)
+  - [6.1 Eval Dataset Format and Preprocessing](6.1-eval-dataset-format-and-preprocessing.md)
+  - [6.2 Metrics and Eval Modes](6.2-metrics-and-eval-modes.md)
+- [7 Fine-tuning](7-fine-tuning.md)
+  - [7.1 Training Runner](7.1-training-runner.md)
+  - [7.2 Fine-tuning Demo Examples](7.2-fine-tuning-demo-examples.md)
+- [8 Glossary](8-glossary.md)

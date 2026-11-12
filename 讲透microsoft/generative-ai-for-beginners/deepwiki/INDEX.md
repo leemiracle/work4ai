@@ -1,0 +1,33 @@
+# DeepWiki 索引 — microsoft/generative-ai-for-beginners
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 314077 字符
+
+- [1 Overview](1-overview.md)
+- [2 Course Structure and Setup](2-course-structure-and-setup.md)
+  - [2.1 Development Environment](2.1-development-environment.md)
+- [3 Core Concepts](3-core-concepts.md)
+  - [3.1 Introduction to Generative AI](3.1-introduction-to-generative-ai.md)
+  - [3.2 Prompt Engineering Fundamentals](3.2-prompt-engineering-fundamentals.md)
+  - [3.3 Advanced Prompting Techniques](3.3-advanced-prompting-techniques.md)
+  - [3.4 Responsible AI Practices](3.4-responsible-ai-practices.md)
+- [4 Building GenAI Applications](4-building-genai-applications.md)
+  - [4.1 Text Generation Applications](4.1-text-generation-applications.md)
+  - [4.2 Chat Applications](4.2-chat-applications.md)
+  - [4.3 Search Applications](4.3-search-applications.md)
+  - [4.4 Image Generation Applications](4.4-image-generation-applications.md)
+  - [4.5 Low-Code AI Applications](4.5-low-code-ai-applications.md)
+  - [4.6 Function Calling Integration](4.6-function-calling-integration.md)
+- [5 Advanced Topics](5-advanced-topics.md)
+  - [5.1 RAG and Vector Databases](5.1-rag-and-vector-databases.md)
+  - [5.2 Open Source Models](5.2-open-source-models.md)
+  - [5.3 Fine-tuning LLMs](5.3-fine-tuning-llms.md)
+  - [5.4 UX Design for AI Applications](5.4-ux-design-for-ai-applications.md)
+  - [5.5 Securing AI Applications](5.5-securing-ai-applications.md)
+- [6 Repository Structure](6-repository-structure.md)
+  - [6.1 CI/CD and GitHub Workflows](6.1-ci-cd-and-github-workflows.md)
+  - [6.2 Shared Utilities and Code Patterns](6.2-shared-utilities-and-code-patterns.md)
+- [7 Translations and Internationalization](7-translations-and-internationalization.md)
+  - [7.1 Co-op Translator System](7.1-co-op-translator-system.md)
+  - [7.2 Available Language Translations](7.2-available-language-translations.md)
+- [8 Glossary](8-glossary.md)

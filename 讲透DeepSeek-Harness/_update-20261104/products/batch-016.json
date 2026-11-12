@@ -1,0 +1,601 @@
+{
+ "nodes": [
+  {
+   "id": "file:packages/session/session-title-llm/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/session/session-title-llm/src/index.ts",
+   "summary": "标题 provider 的共享 LLM 执行模块（291 行）：executeSessionTitleLlm 在一致执行控制下跑一次辅助标题请求——输入字节上限、路由解析、deadline+取消全程有效、精确记录模型可见请求（session/title-llm-request 事件）、BlockAssembler 组装流、terminalFinish 拒绝操作性终态；resolveSessionTitleLlmConfig 提供共享配置解析。",
+   "tags": [
+    "llm-execution",
+    "title",
+    "policy-sharing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-title-llm/src/index.ts:resolveSessionTitleLlmConfig",
+   "type": "function",
+   "name": "resolveSessionTitleLlmConfig",
+   "filePath": "packages/session/session-title-llm/src/index.ts",
+   "lineRange": [
+    120,
+    148
+   ],
+   "summary": "解析校验共享标题 LLM 配置（路由/输入字节/输出 token/超时毫秒）。",
+   "tags": [
+    "config-resolution",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session/session-title-llm/src/index.ts:resolveRoute",
+   "type": "function",
+   "name": "resolveRoute",
+   "filePath": "packages/session/session-title-llm/src/index.ts",
+   "lineRange": [
+    184,
+    195
+   ],
+   "summary": "按配置与请求解析 LLM 路由（模型选择）。",
+   "tags": [
+    "routing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-title-llm/src/index.ts:terminalFinish",
+   "type": "function",
+   "name": "terminalFinish",
+   "filePath": "packages/session/session-title-llm/src/index.ts",
+   "lineRange": [
+    204,
+    219
+   ],
+   "summary": "收束组装结果为终态 finish（操作性失败映射为错误）。",
+   "tags": [
+    "finish-handling"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-title-llm/src/index.ts:executeSessionTitleLlm",
+   "type": "function",
+   "name": "executeSessionTitleLlm",
+   "filePath": "packages/session/session-title-llm/src/index.ts",
+   "lineRange": [
+    236,
+    291
+   ],
+   "summary": "57 行主执行：字节上限→路由→deadline 包装→prepareCall（含推理 effort 选择）→记录精确模型可见请求事件→流式组装→终态校验，返回 blocks/finish/route。",
+   "tags": [
+    "llm-execution",
+    "deadline",
+    "model-visible-logging"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "document:packages/session/session-turn-outline/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/session/session-turn-outline/README.md",
+   "summary": "dsh-session-turn-outline 包英文主文档：给历史客户端全会话 turn 提纲——每个已启动 turn 含有界 prompt 与已结算 response 预览；客户端可导航未加载 turn 并从加载选中 turn 所需的精确事件序列向后分页；预览排除注入上下文与工具结果。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/session/session-turn-outline/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/session/session-turn-outline/package.json",
+   "summary": "@deepseek-ai/dsh-session-turn-outline 包清单：turnOutline 全日志提纲投影单元，仅依赖 zod，peer 依赖 llm/session/session-projection/cordis。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-turn-outline/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/session/session-turn-outline/src/index.ts",
+   "summary": "Cordis 函数插件：向投影注册表注册 turnOutline 单元（effect 挂 fiber，卸载移除）。",
+   "tags": [
+    "cordis-plugin",
+    "projection-provider"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/session-turn-outline/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/session/session-turn-outline/src/index.ts",
+   "lineRange": [
+    28,
+    30
+   ],
+   "summary": "注册 turnOutline 投影单元。",
+   "tags": [
+    "cordis-plugin",
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/session-turn-outline/src/projection.ts",
+   "type": "file",
+   "name": "projection.ts",
+   "filePath": "packages/session/session-turn-outline/src/projection.ts",
+   "summary": "turnOutline 投影单元（纯 fold）：turn/start（非 prompt user/message）锚定每条目（其 seq 是跳转的加载目标——窗口回页到该 seq 即含整个 turn）；预览镜像 rail 卡片（prompt 一行 50 字、response 三行 120 字预算，空白折叠+截断省略号，逐块有界防多兆块整串）；response 在 turn/end 从最新含文本 assistant 消息草稿提交，draft-only 应用保持数组身份——身份门控变更流每 turn 至多推三次。",
+   "tags": [
+    "projection",
+    "pure-fold",
+    "navigation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session/session-turn-outline/src/projection.ts:preview",
+   "type": "function",
+   "name": "preview",
+   "filePath": "packages/session/session-turn-outline/src/projection.ts",
+   "lineRange": [
+    36,
+    59
+   ],
+   "summary": "空间连接文本块+空白折叠+limit 截断（逐块 2×limit 有界，多兆块不整串正则化），截断带尾省略号。",
+   "tags": [
+    "preview",
+    "bounded-processing"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/session/session-turn-outline/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/session/session-turn-outline/src/types.ts",
+   "summary": "turnOutline 投影公开类型：TurnOutlineEntry（turn/seq/prompt/response 预览）与 State。",
+   "tags": [
+    "type-definition",
+    "projection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/session/tool-working-directory/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/session/tool-working-directory/README.md",
+   "summary": "dsh-tool-working-directory 包英文主文档：读会话当前目录或用同一工具进入已存在目录；相对变更以当前目录为基，返回的绝对路径可传给其他工具。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/session/tool-working-directory/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/session/tool-working-directory/package.json",
+   "summary": "@deepseek-ai/dsh-tool-working-directory 包清单：读/改活动会话工作目录的工具，零依赖，peer 依赖 tools/working-directory/cordis。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/tool-working-directory/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/session/tool-working-directory/src/index.ts",
+   "summary": "Cordis 函数插件：注册 working_directory 工具——省略 cd 参数即读当前目录（ensure），带 cd 即切换（set）；无 agent Session 时拒绝执行；输出 schema 带纯文本渲染。",
+   "tags": [
+    "cordis-plugin",
+    "tool-definition",
+    "working-directory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session/tool-working-directory/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/session/tool-working-directory/src/index.ts",
+   "lineRange": [
+    19,
+    42
+   ],
+   "summary": "注册 working_directory 工具（defineTool：cd 可选参数、cwd 输出 schema、execute 委托 WorkingDirectoryService ensure/set）。",
+   "tags": [
+    "tool-definition",
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/session/tool-working-directory/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/session/tool-working-directory/tsconfig.json",
+   "summary": "包级 TS 配置：extends 仓根 base，rootDir=src、outDir=lib/types。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/session/working-directory/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/session/working-directory/README.md",
+   "summary": "dsh-working-directory 包英文主文档：改一个会话的工作目录而已有进程保留自己的；选中目录经 replay 存活并出现在用户上下文；目录缺失时若原项目目录仍可用则恢复之。",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "package-readme"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/session/working-directory/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/session/working-directory/package.json",
+   "summary": "@deepseek-ai/dsh-working-directory 包清单：会话工作目录（持久变更+模型上下文），依赖 schemastery/zod，peer 依赖 agent/fs/llm/session/session-projection/system-prompt/cordis。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "package-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session/working-directory/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/session/working-directory/src/index.ts",
+   "summary": "WorkingDirectoryService（ctx.workingDirectory，225 行）：每会话有效目录的唯一属主——declare-merge 三处（MessageSourceMap 'working-directory'/SessionEventMap 'working-directory/change'/SessionProjectionMap workingDirectory）；注册 workingDirectory 投影（init 取 header.cwd ?? null）、systemPrompt 必需上下文段 working-directory:current（assemble waterfall prepend 注入当前目录文本）、pending 去重与 operations 生命周期排水。",
+   "tags": [
+    "service-definition",
+    "working-directory",
+    "model-context",
+    "projection"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/session/working-directory/src/index.ts:WorkingDirectoryService",
+   "type": "class",
+   "name": "WorkingDirectoryService",
+   "filePath": "packages/session/working-directory/src/index.ts",
+   "lineRange": [
+    57,
+    223
+   ],
+   "summary": "167 行 Service：get/ensure/set 读写目录（set 记 working-directory/change 事件+目录校验）、contextText 供模型上下文、commit/serialize 会话级持久化，defaultDirectory 必须绝对路径。",
+   "tags": [
+    "service-definition",
+    "directory-lifecycle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:packages/session/working-directory/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/session/working-directory/tsconfig.json",
+   "summary": "包级 TS 配置：extends 仓根 base，rootDir=src、outDir=lib/types，references 覆盖投影/llm/session 等。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/session/session-title-llm/src/index.ts",
+   "target": "function:packages/session/session-title-llm/src/index.ts:resolveSessionTitleLlmConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-title-llm/src/index.ts",
+   "target": "function:packages/session/session-title-llm/src/index.ts:resolveSessionTitleLlmConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-title-llm/src/index.ts",
+   "target": "function:packages/session/session-title-llm/src/index.ts:resolveRoute",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-title-llm/src/index.ts",
+   "target": "function:packages/session/session-title-llm/src/index.ts:terminalFinish",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-title-llm/src/index.ts",
+   "target": "function:packages/session/session-title-llm/src/index.ts:executeSessionTitleLlm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-title-llm/src/index.ts",
+   "target": "function:packages/session/session-title-llm/src/index.ts:executeSessionTitleLlm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "document:packages/session/session-turn-outline/README.md",
+   "target": "file:packages/session/session-turn-outline/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/session/session-turn-outline/package.json",
+   "target": "file:packages/session/session-turn-outline/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/session/session-turn-outline/src/index.ts",
+   "target": "function:packages/session/session-turn-outline/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/session-turn-outline/src/index.ts",
+   "target": "function:packages/session/session-turn-outline/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session/session-turn-outline/src/projection.ts",
+   "target": "function:packages/session/session-turn-outline/src/projection.ts:preview",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "document:packages/session/tool-working-directory/README.md",
+   "target": "file:packages/session/tool-working-directory/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/session/tool-working-directory/package.json",
+   "target": "file:packages/session/tool-working-directory/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/session/tool-working-directory/src/index.ts",
+   "target": "function:packages/session/tool-working-directory/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/tool-working-directory/src/index.ts",
+   "target": "function:packages/session/tool-working-directory/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "config:packages/session/tool-working-directory/tsconfig.json",
+   "target": "file:packages/session/tool-working-directory/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "document:packages/session/working-directory/README.md",
+   "target": "file:packages/session/working-directory/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/session/working-directory/package.json",
+   "target": "file:packages/session/working-directory/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/session/working-directory/src/index.ts",
+   "target": "class:packages/session/working-directory/src/index.ts:WorkingDirectoryService",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session/working-directory/src/index.ts",
+   "target": "class:packages/session/working-directory/src/index.ts:WorkingDirectoryService",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "config:packages/session/working-directory/tsconfig.json",
+   "target": "file:packages/session/working-directory/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:packages/session/session-title-llm/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-title-llm/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-title-llm/src/index.ts",
+   "target": "file:packages/session/session-title/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-title-llm/src/index.ts",
+   "target": "file:packages/util/timeout/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-title-llm/src/index.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-turn-outline/src/index.ts",
+   "target": "file:packages/session/session-turn-outline/src/projection.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-turn-outline/src/index.ts",
+   "target": "file:packages/session/session-turn-outline/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-turn-outline/src/projection.ts",
+   "target": "file:packages/session/session-turn-outline/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-turn-outline/src/projection.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-turn-outline/src/projection.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-turn-outline/src/types.ts",
+   "target": "file:packages/session/session-projection/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/session-turn-outline/src/types.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/tool-working-directory/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/tool-working-directory/src/index.ts",
+   "target": "file:packages/session/working-directory/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/working-directory/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/working-directory/src/index.ts",
+   "target": "file:packages/fs/fs/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/working-directory/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/working-directory/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/working-directory/src/index.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session/working-directory/src/index.ts",
+   "target": "file:packages/core/system-prompt/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

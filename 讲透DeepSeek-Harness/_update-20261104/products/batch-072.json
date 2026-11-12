@@ -1,0 +1,3093 @@
+{
+ "nodes": [
+  {
+   "id": "file:packages/client/ui-plan/src/client/PlanPreview.tsx",
+   "type": "file",
+   "name": "PlanPreview.tsx",
+   "filePath": "packages/client/ui-plan/src/client/PlanPreview.tsx",
+   "summary": "侧栏计划预览 tab：只读 Markdown 渲染已登录计划或临时审阅文档，附标题 tab 图标组件 PlanTitle。",
+   "tags": [
+    "component",
+    "markdown",
+    "sidebar-tab"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plan/src/client/PlanPreview.tsx:PlanPreview",
+   "type": "function",
+   "name": "PlanPreview",
+   "filePath": "packages/client/ui-plan/src/client/PlanPreview.tsx",
+   "lineRange": [
+    18,
+    40
+   ],
+   "summary": "按地址区分已登录计划（resource 协议读取）与临时审阅（params 携带文档），渲染 MarkdownText 或本地化 loading/失败态。",
+   "tags": [
+    "component",
+    "resource-reader"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plan/src/client/PlanPreview.tsx:PlanTitle",
+   "type": "function",
+   "name": "PlanTitle",
+   "filePath": "packages/client/ui-plan/src/client/PlanPreview.tsx",
+   "lineRange": [
+    47,
+    54
+   ],
+   "summary": "tab 标题：文件图标+资源恢复后的计划标题，回退初始本地化标签。",
+   "tags": [
+    "component",
+    "tab-title"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-plan/src/client/failure-line.ts",
+   "type": "file",
+   "name": "failure-line.ts",
+   "filePath": "packages/client/ui-plan/src/client/failure-line.ts",
+   "summary": "计划读取失败的本地化单行说明：plan 命名错误映射词典，传输失败保留 carrier 诊断原文。",
+   "tags": [
+    "error-message",
+    "i18n",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plan/src/client/failure-line.ts:planFailureLine",
+   "type": "function",
+   "name": "planFailureLine",
+   "filePath": "packages/client/ui-plan/src/client/failure-line.ts",
+   "lineRange": [
+    11,
+    18
+   ],
+   "summary": "按 RemoteFailure.code 分派：invalid-address/not-found 用词典，其余保留原 message。",
+   "tags": [
+    "error-message",
+    "mapping"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-plan/src/client/plan-definition.ts",
+   "type": "file",
+   "name": "plan-definition.ts",
+   "filePath": "packages/client/ui-plan/src/client/plan-definition.ts",
+   "summary": "Conversation 节点定义：把 exit_plan_mode 提交（含 PTC dispatch）投影为隐藏的 submitted-plan 聊天节点，一次调用一张卡，后续 PTC 定局保留原卡位。",
+   "tags": [
+    "node-definition",
+    "conversation",
+    "projection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-plan/src/client/plan-resource.ts",
+   "type": "file",
+   "name": "plan-resource.ts",
+   "filePath": "packages/client/ui-plan/src/client/plan-resource.ts",
+   "summary": "plan 资源协议 provider：向 RemoteErrorDetailsMap/ResourceProtocolMap 声明 plan 协议，从 Session 历史页向后翻页查找精确调用的不可变计划参数。",
+   "tags": [
+    "resource-provider",
+    "paging",
+    "session-history"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-plan/src/client/plan-resource.ts:planResourceProvider",
+   "type": "function",
+   "name": "planResourceProvider",
+   "filePath": "packages/client/ui-plan/src/client/plan-resource.ts",
+   "lineRange": [
+    34,
+    77
+   ],
+   "summary": "绑定 Session Remote 的 open 生成器：首页定 cut，向后翻页匹配 callId，地址非法/未找到/读取失败分别产出三种命名 RemoteError。",
+   "tags": [
+    "resource-provider",
+    "async-iterator",
+    "paging"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/client/ui-plan/src/client/plan.ts",
+   "type": "file",
+   "name": "plan.ts",
+   "filePath": "packages/client/ui-plan/src/client/plan.ts",
+   "summary": "计划文本与资源身份核心：从不可信日志参数解析 SubmittedPlan（含 JSON.parse 失败兜底与标题提取），planAddress/parsePlanAddress 编解码不含正文的持久资源地址。",
+   "tags": [
+    "parser",
+    "address-codec",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-plan/src/client/plan.ts:submittedPlan",
+   "type": "function",
+   "name": "submittedPlan",
+   "filePath": "packages/client/ui-plan/src/client/plan.ts",
+   "lineRange": [
+    33,
+    49
+   ],
+   "summary": "识别 tool/call 与 PTC dispatch 两类事件中的 exit_plan_mode 参数，malformed 数据一律返回 undefined 留在通用工具行。",
+   "tags": [
+    "parser",
+    "untrusted-input",
+    "discriminated-union"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-plan/src/client/plan.ts:planAddress",
+   "type": "function",
+   "name": "planAddress",
+   "filePath": "packages/client/ui-plan/src/client/plan.ts",
+   "lineRange": [
+    56,
+    62
+   ],
+   "summary": "把 Session+callId 编码为 dsh-resource://plan/ 地址（subagent 五段式），布局存储不保留正文。",
+   "tags": [
+    "address-codec"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plan/src/client/plan.ts:parsePlanAddress",
+   "type": "function",
+   "name": "parsePlanAddress",
+   "filePath": "packages/client/ui-plan/src/client/plan.ts",
+   "lineRange": [
+    69,
+    87
+   ],
+   "summary": "校验并解码保存的 plan 地址：段数与 subagent mode 枚举校验，坏百分号编码返回 undefined。",
+   "tags": [
+    "address-codec",
+    "validation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-plan/src/client/review-preview.ts",
+   "type": "file",
+   "name": "review-preview.ts",
+   "filePath": "packages/client/ui-plan/src/client/review-preview.ts",
+   "summary": "临时审阅预览地址：向 SidebarRightResourceParamsMap 声明 plan-review 参数（文档只在内存导航、不持久化），提供地址构造与识别。",
+   "tags": [
+    "address-codec",
+    "sidebar",
+    "type-declaration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plan/src/client/review-preview.ts:reviewPreviewAddress",
+   "type": "function",
+   "name": "reviewPreviewAddress",
+   "filePath": "packages/client/ui-plan/src/client/review-preview.ts",
+   "lineRange": [
+    18,
+    20
+   ],
+   "summary": "构造 dsh-resource://plan-review/<session>/<requestKey> 地址用于聚焦/重开预览。",
+   "tags": [
+    "address-codec"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plan/src/client/review-preview.ts:isReviewPreviewAddress",
+   "type": "function",
+   "name": "isReviewPreviewAddress",
+   "filePath": "packages/client/ui-plan/src/client/review-preview.ts",
+   "lineRange": [
+    27,
+    29
+   ],
+   "summary": "以正则识别临时审阅地址，不解释为已登录历史。",
+   "tags": [
+    "validation",
+    "address-codec"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-plan/src/client/review-store.ts",
+   "type": "file",
+   "name": "review-store.ts",
+   "filePath": "packages/client/ui-plan/src/client/review-store.ts",
+   "summary": "Session 作用域的瞬态 store：记录待审计划是否已自动打开，让手动关闭跨组件重挂载仍然有效。",
+   "tags": [
+    "store",
+    "dedupe",
+    "session-scope"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plan/src/client/review-store.ts:createPlanReviewStore",
+   "type": "function",
+   "name": "createPlanReviewStore",
+   "filePath": "packages/client/ui-plan/src/client/review-store.ts",
+   "lineRange": [
+    16,
+    23
+   ],
+   "summary": "defineStore 工厂：opened 记录+markOpened action，实例属于 Session scope。",
+   "tags": [
+    "factory",
+    "store"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/client/ui-plan/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/client/ui-plan/tsconfig.json",
+   "summary": "client 包类型编译配置：继承 base.client.json，references 指向 store/remotes/ui-primitives/ui-slots 等依赖面。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/client/ui-plan/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/client/ui-plan/README.md",
+   "summary": "包参考文档：plan 模式状态芯片、转录计划卡片与侧栏 Markdown 预览的用户与维护者指南（英文版，中文版 README.zh.md）。",
+   "tags": [
+    "documentation",
+    "package-reference"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/client/ui-plan/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/client/ui-plan/package.json",
+   "summary": "包清单：@deepseek-ai/dsh-client-ui-plan，plan 模式控件+转录计划卡片+侧栏 Markdown 预览三件套的导出与依赖声明。",
+   "tags": [
+    "configuration",
+    "manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/client/ui-plugin-manager/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/client/ui-plugin-manager/README.md",
+   "summary": "包参考文档：Web 侧栏 Plugins 面板的用户与维护者指南——bundle 安装/开关/卸载、pnpm 输出观看、行级开关与插件配置页。",
+   "tags": [
+    "documentation",
+    "package-reference"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/client/ui-plugin-manager/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/client/ui-plugin-manager/package.json",
+   "summary": "包清单：@deepseek-ai/dsh-client-ui-plugin-manager，含 ./typert Host 导出（lib/typert.host.js）与 ./client 分发。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "plugin-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-plugin-manager/src/client/BundleDetailSection.tsx",
+   "type": "file",
+   "name": "BundleDetailSection.tsx",
+   "filePath": "packages/client/ui-plugin-manager/src/client/BundleDetailSection.tsx",
+   "summary": "bundle 详情文档区：按名称+版本+语言读取 Host 长描述，相对图片经 Host 路由解析，失败按六类 reason 映射本地化文案。",
+   "tags": [
+    "component",
+    "markdown",
+    "detail-view"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/BundleDetailSection.tsx:BundleDetailSection",
+   "type": "function",
+   "name": "BundleDetailSection",
+   "filePath": "packages/client/ui-plugin-manager/src/client/BundleDetailSection.tsx",
+   "lineRange": [
+    37,
+    56
+   ],
+   "summary": "组合 DetailDocument：load/retry 经 detail-store 控制器，images resolver 把文档内相对路径解析为认证 Host URL。",
+   "tags": [
+    "component",
+    "data-loading"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "type": "file",
+   "name": "PluginManagerPage.tsx",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "summary": "插件管理主页面（1902 行）：官方/扩展/自装 bundle 分组卡片、行级开关与配置入口、安装向导对话框（spec 检查/registry 选择/pnpm 终端折叠/构建脚本审批/GitHub 镜像恢复）、卸载确认、版本检查与更新对话框、公告 toast。",
+   "tags": [
+    "component",
+    "plugin-management",
+    "install-wizard",
+    "page"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:AddPluginMenu",
+   "type": "function",
+   "name": "AddPluginMenu",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    60,
+    97
+   ],
+   "summary": "添加插件分裂按钮：主按钮开安装对话框，菜单提供各贡献路径（plugins.add.actions slot）。",
+   "tags": [
+    "component",
+    "menu"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:partsSummary",
+   "type": "function",
+   "name": "partsSummary",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    169,
+    179
+   ],
+   "summary": "包组件计数行：总数+仅出现过的运行/关闭/失败状态。",
+   "tags": [
+    "formatting",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:PackageArtwork",
+   "type": "function",
+   "name": "PackageArtwork",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    217,
+    227
+   ],
+   "summary": "manifest 图标渲染：解码失败回退默认/子代理官方图形。",
+   "tags": [
+    "component",
+    "icon",
+    "fallback"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:RowSwitch",
+   "type": "function",
+   "name": "RowSwitch",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    230,
+    247
+   ],
+   "summary": "行开关：Host 拒绝经 profile patch 寻址时锁定并说明原因。",
+   "tags": [
+    "component",
+    "switch",
+    "locked-state"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:RowsSection",
+   "type": "function",
+   "name": "RowsSection",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    277,
+    354
+   ],
+   "summary": "包的行清单：状态点+本地化标题+配置入口+开关，超 10 行出现过滤器；元数据/运行时诊断随行展示。",
+   "tags": [
+    "component",
+    "list",
+    "filter"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:SourceSection",
+   "type": "function",
+   "name": "SourceSection",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    357,
+    391
+   ],
+   "summary": "安装来源区：依赖 spec、版本与 installTarget 的 dl 展示。",
+   "tags": [
+    "component",
+    "detail-view"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:EnableSwitch",
+   "type": "function",
+   "name": "EnableSwitch",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    397,
+    420
+   ],
+   "summary": "bundle 启用开关：进行中公告、只读原因提示与不可启用条件。",
+   "tags": [
+    "component",
+    "switch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:CardHead",
+   "type": "function",
+   "name": "CardHead",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    429,
+    452
+   ],
+   "summary": "卡片共享头：图形+可点标题+标签+一句描述+尾部控件。",
+   "tags": [
+    "component",
+    "card"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:ListSkeleton",
+   "type": "function",
+   "name": "ListSkeleton",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    455,
+    485
+   ],
+   "summary": "首读骨架屏：与核心配置组共享卡片与文本行布局。",
+   "tags": [
+    "component",
+    "skeleton"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:DetailTop",
+   "type": "function",
+   "name": "DetailTop",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    488,
+    507
+   ],
+   "summary": "详情页共享顶：返回面包屑+图标+动作区。",
+   "tags": [
+    "component",
+    "navigation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:PackageCard",
+   "type": "function",
+   "name": "PackageCard",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    533,
+    573
+   ],
+   "summary": "包卡片：beta/problem/缺失/可更新标签+启用开关+元数据错误。",
+   "tags": [
+    "component",
+    "card"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:ItemCard",
+   "type": "function",
+   "name": "ItemCard",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    579,
+    590
+   ],
+   "summary": "官方插件卡片：注册标题+slot 贡献的一句描述。",
+   "tags": [
+    "component",
+    "card"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:ItemDetail",
+   "type": "function",
+   "name": "ItemDetail",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    615,
+    647
+   ],
+   "summary": "官方插件详情页：crumb+动作+徽标+表单区（plugins.item page 视图）+贡献区。",
+   "tags": [
+    "component",
+    "detail-view"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:RowDetail",
+   "type": "function",
+   "name": "RowDetail",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    653,
+    692
+   ],
+   "summary": "行配置详情页：技术身份（rowId/moduleName）+本地化文本+行配置表单。",
+   "tags": [
+    "component",
+    "detail-view"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:PackageDetail",
+   "type": "function",
+   "name": "PackageDetail",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    702,
+    817
+   ],
+   "summary": "包详情页：版本/标签/启用/卸载/更新动作、bundle 配置、行清单、版本区、来源区与详情贡献 slot。",
+   "tags": [
+    "component",
+    "detail-view"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:terminalLabels",
+   "type": "function",
+   "name": "terminalLabels",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    823,
+    841
+   ],
+   "summary": "安装终端的显示文案适配器（TerminalBlockLabels 全量本地化）。",
+   "tags": [
+    "i18n",
+    "adapter"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:failureText",
+   "type": "function",
+   "name": "failureText",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    930,
+    950
+   ],
+   "summary": "失败屏单行文案：pnpm 分类/Host 拒绝码/归因 registry 或 spec-host/多 registry 全问等场景分派。",
+   "tags": [
+    "error-message",
+    "dispatch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:SubjectBlock",
+   "type": "function",
+   "name": "SubjectBlock",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    962,
+    971
+   ],
+   "summary": "安装对象块：名称/一句描述/版本/参考 spec。",
+   "tags": [
+    "component",
+    "display"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:SubjectCard",
+   "type": "function",
+   "name": "SubjectCard",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    974,
+    989
+   ],
+   "summary": "已确认安装对象卡：confirmed 名与版本优先，spec 作参考。",
+   "tags": [
+    "component",
+    "display"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:useInstallComposition",
+   "type": "function",
+   "name": "useInstallComposition",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    992,
+    1002
+   ],
+   "summary": "输入法组合追踪 hook：含 Safari 组合结束后 10ms Enter 窗口与 keyCode 229 判定。",
+   "tags": [
+    "hook",
+    "ime",
+    "edge-case"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:InstallDialog",
+   "type": "function",
+   "name": "InstallDialog",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    1009,
+    1510
+   ],
+   "summary": "安装向导（502 行）：spec 表单+registry 浮层（portal+Tab 循环+Escape 折叠）、GitHub 镜像恢复、已确认安装、运行/完成/失败屏、构建脚本审批、attempts 徽标与终端输出折叠。",
+   "tags": [
+    "component",
+    "install-wizard",
+    "dialog",
+    "a11y"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:ConfirmDialog",
+   "type": "function",
+   "name": "ConfirmDialog",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    1513,
+    1536
+   ],
+   "summary": "卸载确认对话框。",
+   "tags": [
+    "component",
+    "confirmation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:PluginManagerPage",
+   "type": "function",
+   "name": "PluginManagerPage",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "lineRange": [
+    1539,
+    1902
+   ],
+   "summary": "页面组装（364 行）：Installed/贡献 tab 切换、三组卡片+More 列表、安装高亮滚动定位、详情/安装/更新/确认对话框的接线与 slot 渲染。",
+   "tags": [
+    "component",
+    "page",
+    "composition"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/client/ui-plugin-manager/src/client/PluginRefreshToast.tsx",
+   "type": "file",
+   "name": "PluginRefreshToast.tsx",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginRefreshToast.tsx",
+   "summary": "Plugins 面板生命周期之外的刷新失败反馈：shell.overlay 注入的 toast，读共享控制器 notice。",
+   "tags": [
+    "component",
+    "toast",
+    "overlay"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginRefreshToast.tsx:PluginRefreshToast",
+   "type": "function",
+   "name": "PluginRefreshToast",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginRefreshToast.tsx",
+   "lineRange": [
+    21,
+    32
+   ],
+   "summary": "仅 refresh-failed 类 notice 渲染警告 toast，可 dismiss。",
+   "tags": [
+    "component",
+    "toast"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-plugin-manager/src/client/PluginsPanelIcon.tsx",
+   "type": "file",
+   "name": "PluginsPanelIcon.tsx",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginsPanelIcon.tsx",
+   "summary": "侧栏 Plugins 条目图标：侧栏自有按钮/标签/选中态，本组件只按请求尺寸渲染插件图形。",
+   "tags": [
+    "component",
+    "icon",
+    "sidebar"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/PluginsPanelIcon.tsx:PluginsPanelIcon",
+   "type": "function",
+   "name": "PluginsPanelIcon",
+   "filePath": "packages/client/ui-plugin-manager/src/client/PluginsPanelIcon.tsx",
+   "lineRange": [
+    13,
+    15
+   ],
+   "summary": "按 sidebar.panellist 图标份额渲染尺寸化的 pinwheel 图标。",
+   "tags": [
+    "component",
+    "icon"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-plugin-manager/src/client/config-ledger.ts",
+   "type": "file",
+   "name": "config-ledger.ts",
+   "filePath": "packages/client/ui-plugin-manager/src/client/config-ledger.ts",
+   "summary": "配置台账投影：把 plugins.item/bundle.config/row.config 三个 slot 台账+活动 locale 投影为单一 HostObservable（版本号缓存，台账或 locale 变更才重算）。",
+   "tags": [
+    "projection",
+    "slot-ledger",
+    "observable"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/config-ledger.ts:rowConfigKey",
+   "type": "function",
+   "name": "rowConfigKey",
+   "filePath": "packages/client/ui-plugin-manager/src/client/config-ledger.ts",
+   "lineRange": [
+    36,
+    38
+   ],
+   "summary": "行配置键：<bundle 包名>#<rowId>。",
+   "tags": [
+    "key-format",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/config-ledger.ts:configLedgerSource",
+   "type": "function",
+   "name": "configLedgerSource",
+   "filePath": "packages/client/ui-plugin-manager/src/client/config-ledger.ts",
+   "lineRange": [
+    47,
+    77
+   ],
+   "summary": "三 slot 版本+locale revision 门控的台账快照源：items（官方插件+本地化标题）、bundles、rows 三个集合。",
+   "tags": [
+    "projection",
+    "memoization"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/client/ui-plugin-manager/src/client/detail-store.ts",
+   "type": "file",
+   "name": "detail-store.ts",
+   "filePath": "packages/client/ui-plugin-manager/src/client/detail-store.ts",
+   "summary": "bundle 详情读取控制器：按名称+版本+语言键控读取 Host 长描述，序列号防迟定局，npm CDN 读取先等 registry 探测定源，reset 保留已就绪文档。",
+   "tags": [
+    "controller",
+    "cache",
+    "remote-call"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/detail-store.ts:bundleDetailKey",
+   "type": "function",
+   "name": "bundleDetailKey",
+   "filePath": "packages/client/ui-plugin-manager/src/client/detail-store.ts",
+   "lineRange": [
+    26,
+    28
+   ],
+   "summary": "详情读取键：JSON.stringify([名称, 版本|null, 语言])。",
+   "tags": [
+    "key-format",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/client/ui-plugin-manager/src/client/detail-store.ts:BundleDetailController",
+   "type": "class",
+   "name": "BundleDetailController",
+   "filePath": "packages/client/ui-plugin-manager/src/client/detail-store.ts",
+   "lineRange": [
+    38,
+    124
+   ],
+   "summary": "SnapshotStore 属主：load 幂等/retry 强制、image 把相对图片解析为认证 detail-file 路由（fromNpm 时带 npmmirror 源）、dispose 停止迟发布。",
+   "tags": [
+    "service-provider",
+    "sequence-fence",
+    "controller"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/client/ui-plugin-manager/src/client/header-scroll.ts",
+   "type": "file",
+   "name": "header-scroll.ts",
+   "filePath": "packages/client/ui-plugin-manager/src/client/header-scroll.ts",
+   "summary": "滚动联动头部几何：克隆真实头部在文档外测量 resting/compact 两种 CSS 布局，按滚动进度插值 title/intro/toolbar/tabs 的位移/宽度/裁剪，不改列表流高度；Resize/Mutation/字体加载均触发重测。",
+   "tags": [
+    "animation",
+    "dom-measurement",
+    "scroll"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/header-scroll.ts:createPluginHeaderRef",
+   "type": "function",
+   "name": "createPluginHeaderRef",
+   "filePath": "packages/client/ui-plugin-manager/src/client/header-scroll.ts",
+   "lineRange": [
+    33,
+    39
+   ],
+   "summary": "创建一次性 ref 回调：挂载 attach、卸载释放观察器。",
+   "tags": [
+    "factory",
+    "lifecycle"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/header-scroll.ts:attach",
+   "type": "function",
+   "name": "attach",
+   "filePath": "packages/client/ui-plugin-manager/src/client/header-scroll.ts",
+   "lineRange": [
+    41,
+    163
+   ],
+   "summary": "测量+滚动实现：惰性克隆测量两布局、CSS 变量发布高度/行程/scroll-padding，scroll 时按 part 进度设置 translate/width/clipPath 并将离屏 intro 置 inert。",
+   "tags": [
+    "dom-measurement",
+    "scroll",
+    "interpolation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/client/ui-plugin-manager/src/client/index.ts",
+   "summary": "插件管理浏览器半入口：向 Context 声明 pluginChanges/pluginNavigation 服务，注册词典、Plugins 侧栏条目与 main 面板（九个子 slot 声明）、刷新 toast overlay，并订阅 plugin-manager/changed、install-log/state、update-state 转发事件。",
+   "tags": [
+    "entry-point",
+    "plugin-body",
+    "slot-registration",
+    "remote-events"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/client/ui-plugin-manager/src/client/index.ts",
+   "lineRange": [
+    94,
+    175
+   ],
+   "summary": "remoteAccess.whenAccess 守卫下的组装：控制器生命周期、configLedger/tabLedger 注入 face、导航 store 单实例、面板切换时重置视图、reflect.provide 跨插件导航。",
+   "tags": [
+    "plugin-body",
+    "composition",
+    "access-gate"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "type": "file",
+   "name": "manager-store.ts",
+   "filePath": "packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "summary": "插件管理状态核心（1557 行）：PackageView/InstallState/UpdateState 等全套模型 + PluginManagerController——经 pluginManager Remote 读写 profile 的 bundle/行，处理安装请求的接受/取消/响应恢复、registry 选择与记忆、版本检查与更新、公告与高亮。",
+   "tags": [
+    "state-store",
+    "controller",
+    "install-workflow",
+    "remote-call"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:bundleBusy",
+   "type": "function",
+   "name": "bundleBusy",
+   "filePath": "packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "lineRange": [
+    53,
+    57
+   ],
+   "summary": "判定包是否有在途管理动作（busy 名单/更新/安装中）。",
+   "tags": [
+    "predicate",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:registryKey",
+   "type": "function",
+   "name": "registryKey",
+   "filePath": "packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "lineRange": [
+    166,
+    175
+   ],
+   "summary": "registry 的比较键：normalizeRegistry 归一，坏 URL 按原样比较。",
+   "tags": [
+    "normalization",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:offeredRegistries",
+   "type": "function",
+   "name": "offeredRegistries",
+   "filePath": "packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "lineRange": [
+    183,
+    193
+   ],
+   "summary": "对话框可选 registry：Host 首选+回退+pnpm 自身，按键去重。",
+   "tags": [
+    "dedupe",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:isInstallPending",
+   "type": "function",
+   "name": "isInstallPending",
+   "filePath": "packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "lineRange": [
+    303,
+    305
+   ],
+   "summary": "安装是否仍由 Host 持有（六种在途相位）。",
+   "tags": [
+    "predicate",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:githubRecoveryRegistry",
+   "type": "function",
+   "name": "githubRecoveryRegistry",
+   "filePath": "packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "lineRange": [
+    313,
+    321
+   ],
+   "summary": "GitHub 连接失败后可选的大陆镜像项：null 也是合法值，undefined 表示不适用。",
+   "tags": [
+    "recovery",
+    "registry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:asksMirror",
+   "type": "function",
+   "name": "asksMirror",
+   "filePath": "packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "lineRange": [
+    328,
+    331
+   ],
+   "summary": "当前选择是否已是 npmmirror（切镜像无意义）。",
+   "tags": [
+    "predicate",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:updateCandidate",
+   "type": "function",
+   "name": "updateCandidate",
+   "filePath": "packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "lineRange": [
+    350,
+    353
+   ],
+   "summary": "更新首选版本：声明 bundle+兼容运行版本+非弃用+非预发布。",
+   "tags": [
+    "selection",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:installable",
+   "type": "function",
+   "name": "installable",
+   "filePath": "packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "lineRange": [
+    360,
+    362
+   ],
+   "summary": "列出版本能否就地安装。",
+   "tags": [
+    "predicate",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:failureOf",
+   "type": "function",
+   "name": "failureOf",
+   "filePath": "packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "lineRange": [
+    509,
+    523
+   ],
+   "summary": "把 Host 拒绝+分类失败+阶段归并为 InstallState.failure 形状。",
+   "tags": [
+    "mapping",
+    "error-shape"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:rowKey",
+   "type": "function",
+   "name": "rowKey",
+   "filePath": "packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "lineRange": [
+    545,
+    547
+   ],
+   "summary": "行在 busy 名单中的键 row:<entryId>。",
+   "tags": [
+    "key-format",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:packageView",
+   "type": "function",
+   "name": "packageView",
+   "filePath": "packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "lineRange": [
+    555,
+    588
+   ],
+   "summary": "把 Host bundle 与插件条目 join 为页面视图（行 enabled/phase/diagnostic 对齐活条目）。",
+   "tags": [
+    "projection",
+    "join"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:sortPackages",
+   "type": "function",
+   "name": "sortPackages",
+   "filePath": "packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "lineRange": [
+    596,
+    598
+   ],
+   "summary": "按人读的短名排序，开关切换不改变卡片位置。",
+   "tags": [
+    "sorting",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/client/ui-plugin-manager/src/client/manager-store.ts:PluginManagerController",
+   "type": "class",
+   "name": "PluginManagerController",
+   "filePath": "packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "lineRange": [
+    660,
+    1552
+   ],
+   "summary": "893 行控制器：store+registryMemory（持久化 dsh.plugin-manager.install-registry）+BundleDetailController；inject() 组装 40+ 动作的面（安装全相位/registry 协调/版本检查/更新/公告），generation 栅栏丢弃迟到定局。",
+   "tags": [
+    "service-provider",
+    "controller",
+    "state-machine",
+    "install-workflow"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/client/ui-plugin-manager/src/client/navigation-store.ts",
+   "type": "file",
+   "name": "navigation-store.ts",
+   "filePath": "packages/client/ui-plugin-manager/src/client/navigation-store.ts",
+   "summary": "插件页选择 store：View（list/more/package/item/row，含 from/returnTab 来源）+当前 tab，注册侧前置创建。",
+   "tags": [
+    "store",
+    "navigation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/navigation-store.ts:createNavigationStore",
+   "type": "function",
+   "name": "createNavigationStore",
+   "filePath": "packages/client/ui-plugin-manager/src/client/navigation-store.ts",
+   "lineRange": [
+    26,
+    34
+   ],
+   "summary": "defineStore 工厂：setView/setTab 两 action。",
+   "tags": [
+    "factory",
+    "store"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "type": "file",
+   "name": "presentation.ts",
+   "filePath": "packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "summary": "管理页显示文案层：registry 命名（npm 官方/npmmirror/按 host）、14 种 Host 拒绝码的句子、包/行本地化文本解析、重启原因、公告句。",
+   "tags": [
+    "i18n",
+    "presentation",
+    "error-message"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:registryText",
+   "type": "function",
+   "name": "registryText",
+   "filePath": "packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "lineRange": [
+    29,
+    36
+   ],
+   "summary": "registry 显示名+host：pnpm 自身配置按其命名的 registry 读，不冒名 npm 官方。",
+   "tags": [
+    "i18n",
+    "registry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:managementText",
+   "type": "function",
+   "name": "managementText",
+   "filePath": "packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "lineRange": [
+    82,
+    101
+   ],
+   "summary": "Host 拒绝的完整句子：不兼容版本逐包列要求+安装/已装两种补救，operation-error 保留诊断。",
+   "tags": [
+    "error-message",
+    "i18n"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:shortName",
+   "type": "function",
+   "name": "shortName",
+   "filePath": "packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "lineRange": [
+    108,
+    111
+   ],
+   "summary": "包名压缩：去 scope 与 dsh-host-/dsh-client- 前缀。",
+   "tags": [
+    "formatting",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:packageText",
+   "type": "function",
+   "name": "packageText",
+   "filePath": "packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "lineRange": [
+    119,
+    127
+   ],
+   "summary": "包显示文本：本地化标题回退技术名+独立 beta 状态。",
+   "tags": [
+    "i18n",
+    "fallback"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:rowText",
+   "type": "function",
+   "name": "rowText",
+   "filePath": "packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "lineRange": [
+    135,
+    142
+   ],
+   "summary": "行显示文本：标题回退完整模块说明符。",
+   "tags": [
+    "i18n",
+    "fallback"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:restartText",
+   "type": "function",
+   "name": "restartText",
+   "filePath": "packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "lineRange": [
+    160,
+    163
+   ],
+   "summary": "重启提示句+五种原因的本地化。",
+   "tags": [
+    "i18n",
+    "restart"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:noticeText",
+   "type": "function",
+   "name": "noticeText",
+   "filePath": "packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "lineRange": [
+    171,
+    188
+   ],
+   "summary": "六类公告（重启/被覆盖/取消/刷新失败/安装背景/失败）的句子分派。",
+   "tags": [
+    "i18n",
+    "dispatch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/client/ui-plugin-manager/src/client/sanitize-install-input.ts",
+   "type": "file",
+   "name": "sanitize-install-input.ts",
+   "filePath": "packages/client/ui-plugin-manager/src/client/sanitize-install-input.ts",
+   "summary": "隐私安全的安装输入分类：注册表包名与纯版本保留原样，git/url/其他分别归类为占位符，不含凭据与本地路径。",
+   "tags": [
+    "privacy",
+    "sanitization",
+    "analytics"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/sanitize-install-input.ts:sanitizeInstallInput",
+   "type": "function",
+   "name": "sanitizeInstallInput",
+   "filePath": "packages/client/ui-plugin-manager/src/client/sanitize-install-input.ts",
+   "lineRange": [
+    8,
+    13
+   ],
+   "summary": "三条正则分类：包名@版本保留、git 系前缀→[git]、URL→[url]、其余→[path-or-other]。",
+   "tags": [
+    "sanitization",
+    "regex"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-plugin-manager/src/client/slot-contract.ts",
+   "type": "file",
+   "name": "slot-contract.ts",
+   "filePath": "packages/client/ui-plugin-manager/src/client/slot-contract.ts",
+   "summary": "Plugins 页对其他插件声明的九个 slot 契约（add.actions/tab/bundle.activation/item/bundle.config/row.config/detail.actions/badge/section）：注册方仅 import type 合并契约经 ctx.slots 注册，运行时不导入本包。",
+   "tags": [
+    "type-declaration",
+    "slot-contract",
+    "extension-point"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/client/ui-plugin-manager/src/client/tab-ledger.ts",
+   "type": "file",
+   "name": "tab-ledger.ts",
+   "filePath": "packages/client/ui-plugin-manager/src/client/tab-ledger.ts",
+   "summary": "plugins.tab 台账投影：贡献 tab（如 Discover）的 id+本地化标签，slot 版本+locale revision 门控缓存。",
+   "tags": [
+    "projection",
+    "slot-ledger",
+    "observable"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/tab-ledger.ts:tabLedgerSource",
+   "type": "function",
+   "name": "tabLedgerSource",
+   "filePath": "packages/client/ui-plugin-manager/src/client/tab-ledger.ts",
+   "lineRange": [
+    18,
+    42
+   ],
+   "summary": "单 slot 台账的快照源：版本变化才重映射条目。",
+   "tags": [
+    "projection",
+    "memoization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "type": "file",
+   "name": "versions.tsx",
+   "filePath": "packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "summary": "版本区与更新对话框：一行摘要（检查中/可更新/已最新/被阻塞/拒绝）展开新版列表，更新对话框跟随 Host 步骤并报告结局（含失败后重装被移除版本）。",
+   "tags": [
+    "component",
+    "version-check",
+    "update-dialog"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:summaryOf",
+   "type": "function",
+   "name": "summaryOf",
+   "filePath": "packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "lineRange": [
+    69,
+    102
+   ],
+   "summary": "版本检查的摘要行分派：五类 tone+glyph+标题+副行+可展开数。",
+   "tags": [
+    "summary",
+    "dispatch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:VersionRow",
+   "type": "function",
+   "name": "VersionRow",
+   "filePath": "packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "lineRange": [
+    105,
+    155
+   ],
+   "summary": "单版本行：版本号+标签+不可装原因+日期+更新动作。",
+   "tags": [
+    "component",
+    "list-row"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:AttemptRows",
+   "type": "function",
+   "name": "AttemptRows",
+   "filePath": "packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "lineRange": [
+    158,
+    175
+   ],
+   "summary": "registry 尝试列表（拒绝时展示问过的顺序）。",
+   "tags": [
+    "component",
+    "list"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:VersionList",
+   "type": "function",
+   "name": "VersionList",
+   "filePath": "packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "lineRange": [
+    178,
+    221
+   ],
+   "summary": "版本清单：已装行+新版行，含再次检查动作。",
+   "tags": [
+    "component",
+    "list"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:VersionSection",
+   "type": "function",
+   "name": "VersionSection",
+   "filePath": "packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "lineRange": [
+    227,
+    300
+   ],
+   "summary": "版本区组装：摘要行+可展开清单+检查/更新接线。",
+   "tags": [
+    "component",
+    "section"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:stepState",
+   "type": "function",
+   "name": "stepState",
+   "filePath": "packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "lineRange": [
+    330,
+    340
+   ],
+   "summary": "更新步骤的状态点映射（done/ongoing/error）。",
+   "tags": [
+    "mapping",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:outcomeOf",
+   "type": "function",
+   "name": "outcomeOf",
+   "filePath": "packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "lineRange": [
+    350,
+    371
+   ],
+   "summary": "更新结局摘要：成功/失败原因/丢回复时的不确定性。",
+   "tags": [
+    "summary",
+    "dispatch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:UpdateDialog",
+   "type": "function",
+   "name": "UpdateDialog",
+   "filePath": "packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "lineRange": [
+    374,
+    456
+   ],
+   "summary": "更新对话框：确认→运行步骤流→结局，pnpm 输出折叠，失败安装后重装原版本说明。",
+   "tags": [
+    "component",
+    "dialog",
+    "update-flow"
+   ],
+   "complexity": "complex"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanPreview.tsx",
+   "target": "function:packages/client/ui-plan/src/client/PlanPreview.tsx:PlanPreview",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanPreview.tsx",
+   "target": "function:packages/client/ui-plan/src/client/PlanPreview.tsx:PlanPreview",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanPreview.tsx",
+   "target": "function:packages/client/ui-plan/src/client/PlanPreview.tsx:PlanTitle",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanPreview.tsx",
+   "target": "function:packages/client/ui-plan/src/client/PlanPreview.tsx:PlanTitle",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/failure-line.ts",
+   "target": "function:packages/client/ui-plan/src/client/failure-line.ts:planFailureLine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/failure-line.ts",
+   "target": "function:packages/client/ui-plan/src/client/failure-line.ts:planFailureLine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/plan-resource.ts",
+   "target": "function:packages/client/ui-plan/src/client/plan-resource.ts:planResourceProvider",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/plan-resource.ts",
+   "target": "function:packages/client/ui-plan/src/client/plan-resource.ts:planResourceProvider",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/plan.ts",
+   "target": "function:packages/client/ui-plan/src/client/plan.ts:submittedPlan",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/plan.ts",
+   "target": "function:packages/client/ui-plan/src/client/plan.ts:submittedPlan",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/plan.ts",
+   "target": "function:packages/client/ui-plan/src/client/plan.ts:planAddress",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/plan.ts",
+   "target": "function:packages/client/ui-plan/src/client/plan.ts:planAddress",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/plan.ts",
+   "target": "function:packages/client/ui-plan/src/client/plan.ts:parsePlanAddress",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/plan.ts",
+   "target": "function:packages/client/ui-plan/src/client/plan.ts:parsePlanAddress",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/review-preview.ts",
+   "target": "function:packages/client/ui-plan/src/client/review-preview.ts:reviewPreviewAddress",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/review-preview.ts",
+   "target": "function:packages/client/ui-plan/src/client/review-preview.ts:reviewPreviewAddress",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/review-preview.ts",
+   "target": "function:packages/client/ui-plan/src/client/review-preview.ts:isReviewPreviewAddress",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/review-preview.ts",
+   "target": "function:packages/client/ui-plan/src/client/review-preview.ts:isReviewPreviewAddress",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/review-store.ts",
+   "target": "function:packages/client/ui-plan/src/client/review-store.ts:createPlanReviewStore",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/review-store.ts",
+   "target": "function:packages/client/ui-plan/src/client/review-store.ts:createPlanReviewStore",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/BundleDetailSection.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/BundleDetailSection.tsx:BundleDetailSection",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/BundleDetailSection.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/BundleDetailSection.tsx:BundleDetailSection",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:AddPluginMenu",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:partsSummary",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:PackageArtwork",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:RowSwitch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:RowsSection",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:SourceSection",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:EnableSwitch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:CardHead",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:ListSkeleton",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:DetailTop",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:PackageCard",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:ItemCard",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:ItemDetail",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:RowDetail",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:PackageDetail",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:terminalLabels",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:failureText",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:SubjectBlock",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:SubjectCard",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:useInstallComposition",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:InstallDialog",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:ConfirmDialog",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:PluginManagerPage",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:PluginManagerPage",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx:PluginManagerPage",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginRefreshToast.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginRefreshToast.tsx:PluginRefreshToast",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginRefreshToast.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginRefreshToast.tsx:PluginRefreshToast",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginsPanelIcon.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginsPanelIcon.tsx:PluginsPanelIcon",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginsPanelIcon.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/PluginsPanelIcon.tsx:PluginsPanelIcon",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/config-ledger.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/config-ledger.ts:rowConfigKey",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/config-ledger.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/config-ledger.ts:rowConfigKey",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/config-ledger.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/config-ledger.ts:configLedgerSource",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/config-ledger.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/config-ledger.ts:configLedgerSource",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/detail-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/detail-store.ts:bundleDetailKey",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/detail-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/detail-store.ts:bundleDetailKey",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/detail-store.ts",
+   "target": "class:packages/client/ui-plugin-manager/src/client/detail-store.ts:BundleDetailController",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/detail-store.ts",
+   "target": "class:packages/client/ui-plugin-manager/src/client/detail-store.ts:BundleDetailController",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/header-scroll.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/header-scroll.ts:createPluginHeaderRef",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/header-scroll.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/header-scroll.ts:attach",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:bundleBusy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:bundleBusy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:registryKey",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:registryKey",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:offeredRegistries",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:offeredRegistries",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:isInstallPending",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:isInstallPending",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:githubRecoveryRegistry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:githubRecoveryRegistry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:asksMirror",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:asksMirror",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:updateCandidate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:updateCandidate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:installable",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:installable",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:failureOf",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:failureOf",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:rowKey",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:rowKey",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:packageView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:packageView",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:sortPackages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/manager-store.ts:sortPackages",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "class:packages/client/ui-plugin-manager/src/client/manager-store.ts:PluginManagerController",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "class:packages/client/ui-plugin-manager/src/client/manager-store.ts:PluginManagerController",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/navigation-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/navigation-store.ts:createNavigationStore",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/navigation-store.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/navigation-store.ts:createNavigationStore",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:registryText",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:registryText",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:managementText",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:managementText",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:shortName",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:shortName",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:packageText",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:packageText",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:rowText",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:rowText",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:restartText",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:restartText",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:noticeText",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/presentation.ts:noticeText",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/sanitize-install-input.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/sanitize-install-input.ts:sanitizeInstallInput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/sanitize-install-input.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/sanitize-install-input.ts:sanitizeInstallInput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/tab-ledger.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/tab-ledger.ts:tabLedgerSource",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/tab-ledger.ts",
+   "target": "function:packages/client/ui-plugin-manager/src/client/tab-ledger.ts:tabLedgerSource",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:summaryOf",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:VersionRow",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:AttemptRows",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:VersionList",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:VersionSection",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:stepState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:outcomeOf",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:UpdateDialog",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:VersionSection",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:VersionSection",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:UpdateDialog",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "target": "function:packages/client/ui-plugin-manager/src/client/versions.tsx:UpdateDialog",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanPreview.tsx",
+   "target": "file:packages/client/ui-plan/src/client/failure-line.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanPreview.tsx",
+   "target": "file:packages/client/ui-plan/src/client/plan-resource.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanPreview.tsx",
+   "target": "file:packages/client/ui-plan/src/client/review-preview.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanPreview.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanPreview.tsx",
+   "target": "file:packages/client/ui-sidebar-right/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanPreview.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/failure-line.ts",
+   "target": "file:packages/client/locale/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/failure-line.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/plan-definition.ts",
+   "target": "file:packages/client/ui-plan/src/client/plan.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/plan-definition.ts",
+   "target": "file:packages/client/ui-chat/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/plan-definition.ts",
+   "target": "file:packages/client/ui-conversation/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/plan-definition.ts",
+   "target": "file:packages/core/tool-executor-ptc/src/client.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/plan-resource.ts",
+   "target": "file:packages/client/ui-plan/src/client/plan.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/plan-resource.ts",
+   "target": "file:packages/client/resources/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/plan-resource.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/plan.ts",
+   "target": "file:packages/api/session-controller/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/plan.ts",
+   "target": "file:packages/llm/llm/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/plan.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/plan.ts",
+   "target": "file:packages/core/tool-executor-ptc/src/client.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/review-preview.ts",
+   "target": "file:packages/client/ui-plan/src/client/plan.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/review-preview.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/review-store.ts",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/BundleDetailSection.tsx",
+   "target": "file:packages/client/ui-plugin-manager/src/client/detail-store.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/BundleDetailSection.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/BundleDetailSection.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "file:packages/client/ui-plugin-manager/src/client/BundleDetailSection.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "file:packages/client/ui-plugin-manager/src/client/config-ledger.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "file:packages/client/ui-plugin-manager/src/client/header-scroll.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "file:packages/client/ui-plugin-manager/src/client/locales.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "file:packages/client/ui-plugin-manager/src/client/navigation-store.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "file:packages/client/ui-plugin-manager/src/client/slot-contract.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "file:packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "file:packages/api/remotes/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "target": "file:packages/util/official-bundles/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginRefreshToast.tsx",
+   "target": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginRefreshToast.tsx",
+   "target": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginRefreshToast.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginRefreshToast.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginsPanelIcon.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginsPanelIcon.tsx",
+   "target": "file:packages/client/ui-sidebar/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/PluginsPanelIcon.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/config-ledger.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/slot-contract.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/config-ledger.ts",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/detail-store.ts",
+   "target": "file:packages/api/remotes/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/detail-store.ts",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/detail-store.ts",
+   "target": "file:packages/boot/plugin-manager/src/registry.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/PluginManagerPage.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/PluginRefreshToast.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/PluginsPanelIcon.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/config-ledger.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/header-scroll.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/locales.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/navigation-store.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/slot-contract.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/tab-ledger.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "file:packages/api/remote-access/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "file:packages/api/remotes/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "file:packages/client/locale/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "file:packages/client/product-analytics/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "file:packages/client/ui-layout/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "file:packages/client/ui-renderer/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "file:packages/client/ui-sidebar/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/index.ts",
+   "target": "file:packages/boot/plugin-manager/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/config-ledger.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/detail-store.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/sanitize-install-input.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/slot-contract.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/tab-ledger.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "file:packages/api/remotes/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "file:packages/client/locale/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "file:packages/client/product-analytics/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "file:packages/client/ui-settings/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "file:packages/util/package-manifest/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "file:packages/boot/plugin-manager/src/registry.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "target": "file:packages/util/crypto/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/navigation-store.ts",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/locales.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "target": "file:packages/api/remotes/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "target": "file:packages/util/official-bundles/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/slot-contract.ts",
+   "target": "file:packages/api/remotes/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/slot-contract.ts",
+   "target": "file:packages/client/ui-settings/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/slot-contract.ts",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/tab-ledger.ts",
+   "target": "file:packages/client/ui-plugin-manager/src/client/slot-contract.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/tab-ledger.ts",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "target": "file:packages/client/ui-plugin-manager/src/client/manager-store.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "target": "file:packages/client/ui-plugin-manager/src/client/presentation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "target": "file:packages/api/remotes/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plugin-manager/src/client/versions.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

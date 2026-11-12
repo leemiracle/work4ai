@@ -1,0 +1,30 @@
+# DeepWiki 索引 — TransformerOptimus/SuperAGI
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 361173 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 System Architecture](1.1-system-architecture.md)
+- [2 Agent System](2-agent-system.md)
+  - [2.1 Agent Creation and Configuration](2.1-agent-creation-and-configuration.md)
+  - [2.2 Agent Execution](2.2-agent-execution.md)
+  - [2.3 Agent Templates](2.3-agent-templates.md)
+- [3 User Interface](3-user-interface.md)
+  - [3.1 Agent Workspace](3.1-agent-workspace.md)
+  - [3.2 Marketplace](3.2-marketplace.md)
+  - [3.3 Settings and Configuration UI](3.3-settings-and-configuration-ui.md)
+- [4 Tools System](4-tools-system.md)
+  - [4.1 File Tools](4.1-file-tools.md)
+  - [4.2 Code Generation Tools](4.2-code-generation-tools.md)
+  - [4.3 Email and Communication Tools](4.3-email-and-communication-tools.md)
+  - [4.4 Image Generation Tools](4.4-image-generation-tools.md)
+  - [4.5 Tool Authentication](4.5-tool-authentication.md)
+- [5 Resource Management](5-resource-management.md)
+  - [5.1 File Storage](5.1-file-storage.md)
+  - [5.2 Vector Databases](5.2-vector-databases.md)
+- [6 LLM Integration](6-llm-integration.md)
+  - [6.1 Supported LLM Providers](6.1-supported-llm-providers.md)
+  - [6.2 Model Management](6.2-model-management.md)
+- [7 Deployment](7-deployment.md)
+  - [7.1 Docker Deployment](7.1-docker-deployment.md)
+  - [7.2 Configuration Options](7.2-configuration-options.md)

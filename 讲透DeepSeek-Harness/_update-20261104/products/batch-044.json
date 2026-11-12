@@ -1,0 +1,1164 @@
+{
+ "nodes": [
+  {
+   "id": "document:packages/team/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/team/README.md",
+   "summary": "team 组级 README：共享任务协调能力族——agent-team 服务（任务 DAG 与变更等待）与 tool-agent-team 模型工具。",
+   "tags": [
+    "documentation",
+    "group-index",
+    "team"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/team/agent-team/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/team/agent-team/README.md",
+   "summary": "dsh-agent-team 文档：何时选用、最小工作配置、队友即 subagent、队友间消息、任务板命令与变更等待语义。",
+   "tags": [
+    "documentation",
+    "team",
+    "task-board"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/team/agent-team/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/team/agent-team/package.json",
+   "summary": "包清单 @deepseek-ai/dsh-agent-team：subagent 树共享任务 DAG 与变更等待；依赖 agent/session/subagent/brand 等。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/team/agent-team/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/team/agent-team/tsconfig.json",
+   "summary": "包编译配置：extends tsconfig.base.json，rootDir src / outDir lib/types，引用 vendor 与工作区依赖。",
+   "tags": [
+    "configuration",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/team/agent-team/tsdown.config.ts",
+   "type": "config",
+   "name": "tsdown.config.ts",
+   "filePath": "packages/team/agent-team/tsdown.config.ts",
+   "summary": "tsdown 打包配置：产出运行时 bundle（dts 由 tsc 负责）。",
+   "tags": [
+    "configuration",
+    "build-system",
+    "tsdown"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/team/agent-team/src/client.ts",
+   "type": "file",
+   "name": "client.ts",
+   "filePath": "packages/team/agent-team/src/client.ts",
+   "summary": "client 安全 barrel：重导出 Agent Teams 任务视图类型与 agentTeam 投影词汇，无运行时代码。",
+   "tags": [
+    "barrel",
+    "client",
+    "type-reexport"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/team/agent-team/src/error.ts",
+   "type": "file",
+   "name": "error.ts",
+   "filePath": "packages/team/agent-team/src/error.ts",
+   "summary": "Agent Teams 类型化失败（TeamError，extends HarnessError，携带稳定失败码）。",
+   "tags": [
+    "error",
+    "typed-failure"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/team/agent-team/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/team/agent-team/src/index.ts",
+   "summary": "Agent Teams 服务（ctx.agentTeams）：TeamService 继承 TypertRemoteService，由 subagent 树根持有共享任务板；拒绝已移除的成员配置键（队友即 subagent），注册 team 投影并组合 TeamJournal 与 TeamTaskBoard，支持 defaultEnabled 时 agent/created 自动启用。",
+   "tags": [
+    "service-definition",
+    "team",
+    "typert-remote",
+    "task-board"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/team/agent-team/src/journal.ts",
+   "type": "file",
+   "name": "journal.ts",
+   "filePath": "packages/team/agent-team/src/journal.ts",
+   "summary": "在确切活着的 Lead Session 日志上序列化 Team 事务：TeamJournal 持有状态快照、transact 追加并冲刷事件。",
+   "tags": [
+    "journal",
+    "transactions",
+    "session-log"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/team/agent-team/src/projection.ts",
+   "type": "file",
+   "name": "projection.ts",
+   "filePath": "packages/team/agent-team/src/projection.ts",
+   "summary": "从已提交 Session 事件增量投影 Team 状态（任务/成员/消息），client 只看 durable-only 视图；zod 严格校验持久化载荷。",
+   "tags": [
+    "projection",
+    "session-events",
+    "zod"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/team/agent-team/src/task-board.ts",
+   "type": "file",
+   "name": "task-board.ts",
+   "filePath": "packages/team/agent-team/src/task-board.ts",
+   "summary": "共享 Team 任务 DAG 命令与运行时增强视图：TeamTaskBoard 提供 create/get/list/update、owner 授权（authorizeOwner 重载）、assignee 解析、写域检查与任务图断言。",
+   "tags": [
+    "task-board",
+    "dag",
+    "authorization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/team/agent-team/src/task-graph.ts",
+   "type": "file",
+   "name": "task-graph.ts",
+   "filePath": "packages/team/agent-team/src/task-graph.ts",
+   "summary": "当前 Team 任务快照的完整依赖校验：assertTaskGraphCandidate 检测环与悬空依赖（TeamTaskGraphError）。",
+   "tags": [
+    "validation",
+    "dag",
+    "cycle-detection"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/team/agent-team/src/task-view.ts",
+   "type": "file",
+   "name": "task-view.ts",
+   "filePath": "packages/team/agent-team/src/task-view.ts",
+   "summary": "任务板与 client 投影共享的纯任务视图派生：taskReady 就绪判定与 projectTaskView 投影。",
+   "tags": [
+    "view",
+    "derivation",
+    "shared"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/team/agent-team/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/team/agent-team/src/types.ts",
+   "summary": "Agent Teams 公共身份、持久记录与服务请求值：TeamId/TeamTaskId/TeamMessageId 品牌、任务与消息记录类型。",
+   "tags": [
+    "type-definition",
+    "contracts",
+    "brand"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/team/agent-team/src/validation.ts",
+   "type": "file",
+   "name": "validation.ts",
+   "filePath": "packages/team/agent-team/src/validation.ts",
+   "summary": "roster 与任务命令共享的输入规范化：requiredText 与 writeScope。",
+   "tags": [
+    "validation",
+    "normalization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/team/tool-agent-team/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/team/tool-agent-team/README.md",
+   "summary": "dsh-tool-agent-team 文档：ctx.agentTeams 之上的作用域模型工具——最小示例、模型可做什么、成功与失败形态。",
+   "tags": [
+    "documentation",
+    "tool",
+    "team"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/team/tool-agent-team/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/team/tool-agent-team/package.json",
+   "summary": "包清单 @deepseek-ai/dsh-tool-agent-team：作用域模型面向的 Agent Teams 工具。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/team/tool-agent-team/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/team/tool-agent-team/tsconfig.json",
+   "summary": "包编译配置：extends tsconfig.base.json，rootDir src / outDir lib/types。",
+   "tags": [
+    "configuration",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/team/tool-agent-team/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/team/tool-agent-team/src/index.ts",
+   "summary": "条件可用的 Agent Teams 任务板工具与指引：Team 启用时按 scope 注册 create/get/list/update 等模型工具并注入队伍协作提示上下文。",
+   "tags": [
+    "tool",
+    "team",
+    "conditional",
+    "plugin"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/team/agent-team/src/error.ts:TeamError",
+   "type": "class",
+   "name": "TeamError",
+   "filePath": "packages/team/agent-team/src/error.ts",
+   "lineRange": [
+    6,
+    11
+   ],
+   "summary": "Agent Teams 类型化错误（稳定失败码如 TEAM_INVALID_CONFIG）。",
+   "tags": [
+    "error",
+    "typed-failure"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/team/agent-team/src/index.ts:TeamService",
+   "type": "class",
+   "name": "TeamService",
+   "filePath": "packages/team/agent-team/src/index.ts",
+   "lineRange": [
+    46,
+    163
+   ],
+   "summary": "Agent Teams 服务：TypertRemoteService 子类，注册 team 投影、组合 journal 与任务板、defaultEnabled 时监听 agent/created 自动建队；移除键拒绝保证队友语义迁移到 subagent。",
+   "tags": [
+    "service-definition",
+    "team",
+    "typert-remote"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/team/agent-team/src/journal.ts:TeamJournal",
+   "type": "class",
+   "name": "TeamJournal",
+   "filePath": "packages/team/agent-team/src/journal.ts",
+   "lineRange": [
+    14,
+    75
+   ],
+   "summary": "Lead Session 日志上的事务序列化器：state 快照、transact 原子追加、appendAndFlush 冲刷。",
+   "tags": [
+    "journal",
+    "transaction"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/team/agent-team/src/projection.ts:emptyTeamState",
+   "type": "function",
+   "name": "emptyTeamState",
+   "filePath": "packages/team/agent-team/src/projection.ts",
+   "lineRange": [
+    69,
+    76
+   ],
+   "summary": "构造空 Team 投影状态。",
+   "tags": [
+    "factory",
+    "state"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/team/agent-team/src/projection.ts:applyProjectionEvent",
+   "type": "function",
+   "name": "applyProjectionEvent",
+   "filePath": "packages/team/agent-team/src/projection.ts",
+   "lineRange": [
+    104,
+    121
+   ],
+   "summary": "把一条已提交事件应用到 Team 投影状态。",
+   "tags": [
+    "projection",
+    "fold"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/team/agent-team/src/projection.ts:applyTask",
+   "type": "function",
+   "name": "applyTask",
+   "filePath": "packages/team/agent-team/src/projection.ts",
+   "lineRange": [
+    130,
+    150
+   ],
+   "summary": "应用任务记录变更（创建/更新/删除）到投影。",
+   "tags": [
+    "projection",
+    "task"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/team/agent-team/src/projection.ts:teamProjectionView",
+   "type": "function",
+   "name": "teamProjectionView",
+   "filePath": "packages/team/agent-team/src/projection.ts",
+   "lineRange": [
+    190,
+    198
+   ],
+   "summary": "从投影状态派生 durable-only 的 client 视图。",
+   "tags": [
+    "view",
+    "durable-only"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/team/agent-team/src/task-board.ts:TeamTaskBoard",
+   "type": "class",
+   "name": "TeamTaskBoard",
+   "filePath": "packages/team/agent-team/src/task-board.ts",
+   "lineRange": [
+    29,
+    278
+   ],
+   "summary": "任务 DAG 命令面：创建/查询/更新/列举、owner 授权重载、assignee 解析、依赖与写域校验，写前断言任务图无环。",
+   "tags": [
+    "task-board",
+    "dag",
+    "authorization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/team/agent-team/src/task-graph.ts:TeamTaskGraphError",
+   "type": "class",
+   "name": "TeamTaskGraphError",
+   "filePath": "packages/team/agent-team/src/task-graph.ts",
+   "lineRange": [
+    9,
+    18
+   ],
+   "summary": "任务图校验失败错误（环/悬空依赖）。",
+   "tags": [
+    "error",
+    "dag"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/team/agent-team/src/task-graph.ts:assertTaskGraphCandidate",
+   "type": "function",
+   "name": "assertTaskGraphCandidate",
+   "filePath": "packages/team/agent-team/src/task-graph.ts",
+   "lineRange": [
+    26,
+    69
+   ],
+   "summary": "对当前任务快照做完整依赖校验：DFS 访问标记检测环与未知依赖。",
+   "tags": [
+    "validation",
+    "dfs",
+    "cycle-detection"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/team/agent-team/src/task-view.ts:taskReady",
+   "type": "function",
+   "name": "taskReady",
+   "filePath": "packages/team/agent-team/src/task-view.ts",
+   "lineRange": [
+    22,
+    24
+   ],
+   "summary": "任务就绪判定（依赖满足且未被认领等）。",
+   "tags": [
+    "readiness",
+    "predicate"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/team/agent-team/src/task-view.ts:projectTaskView",
+   "type": "function",
+   "name": "projectTaskView",
+   "filePath": "packages/team/agent-team/src/task-view.ts",
+   "lineRange": [
+    35,
+    55
+   ],
+   "summary": "把持久任务记录投影为模型/client 视图。",
+   "tags": [
+    "view",
+    "projection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/team/agent-team/src/types.ts:TeamId",
+   "type": "function",
+   "name": "TeamId",
+   "filePath": "packages/team/agent-team/src/types.ts",
+   "lineRange": [
+    15,
+    17
+   ],
+   "summary": "品牌化字符串为 TeamId。",
+   "tags": [
+    "brand",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/team/agent-team/src/types.ts:TeamTaskId",
+   "type": "function",
+   "name": "TeamTaskId",
+   "filePath": "packages/team/agent-team/src/types.ts",
+   "lineRange": [
+    27,
+    29
+   ],
+   "summary": "品牌化字符串为 TeamTaskId。",
+   "tags": [
+    "brand",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/team/agent-team/src/types.ts:TeamMessageId",
+   "type": "function",
+   "name": "TeamMessageId",
+   "filePath": "packages/team/agent-team/src/types.ts",
+   "lineRange": [
+    39,
+    41
+   ],
+   "summary": "品牌化字符串为 TeamMessageId。",
+   "tags": [
+    "brand",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/team/agent-team/src/validation.ts:requiredText",
+   "type": "function",
+   "name": "requiredText",
+   "filePath": "packages/team/agent-team/src/validation.ts",
+   "lineRange": [
+    12,
+    19
+   ],
+   "summary": "必填文本规范化校验（去空白、非空）。",
+   "tags": [
+    "validation",
+    "text"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/team/agent-team/src/validation.ts:writeScope",
+   "type": "function",
+   "name": "writeScope",
+   "filePath": "packages/team/agent-team/src/validation.ts",
+   "lineRange": [
+    26,
+    34
+   ],
+   "summary": "写域值规范化校验。",
+   "tags": [
+    "validation",
+    "scope"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/team/tool-agent-team/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/team/tool-agent-team/src/index.ts",
+   "lineRange": [
+    91,
+    219
+   ],
+   "summary": "插件入口：Team 启用时按 scope 注册任务板工具与队伍协作提示上下文。",
+   "tags": [
+    "plugin-entry",
+    "registration",
+    "scope"
+   ],
+   "complexity": "complex"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/team/agent-team/src/client.ts",
+   "target": "file:packages/team/agent-team/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/error.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/index.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/index.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/index.ts",
+   "target": "file:packages/session/session-persistence/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/index.ts",
+   "target": "file:packages/team/agent-team/src/error.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/index.ts",
+   "target": "file:packages/team/agent-team/src/journal.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/index.ts",
+   "target": "file:packages/team/agent-team/src/projection.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/index.ts",
+   "target": "file:packages/team/agent-team/src/task-board.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/index.ts",
+   "target": "file:packages/team/agent-team/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/journal.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/journal.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/journal.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/journal.ts",
+   "target": "file:packages/team/agent-team/src/projection.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/journal.ts",
+   "target": "file:packages/team/agent-team/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/journal.ts",
+   "target": "file:packages/team/agent-team/src/error.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/projection.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/projection.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/projection.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/projection.ts",
+   "target": "file:packages/team/agent-team/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/projection.ts",
+   "target": "file:packages/team/agent-team/src/task-graph.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/projection.ts",
+   "target": "file:packages/team/agent-team/src/task-view.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-board.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-board.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-board.ts",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-board.ts",
+   "target": "file:packages/team/agent-team/src/error.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-board.ts",
+   "target": "file:packages/team/agent-team/src/journal.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-board.ts",
+   "target": "file:packages/team/agent-team/src/projection.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-board.ts",
+   "target": "file:packages/team/agent-team/src/task-graph.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-board.ts",
+   "target": "file:packages/team/agent-team/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-board.ts",
+   "target": "file:packages/team/agent-team/src/task-view.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-board.ts",
+   "target": "file:packages/team/agent-team/src/validation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-graph.ts",
+   "target": "file:packages/team/agent-team/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-view.ts",
+   "target": "file:packages/team/agent-team/src/projection.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-view.ts",
+   "target": "file:packages/team/agent-team/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/types.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/types.ts",
+   "target": "file:packages/llm/llm/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/types.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/validation.ts",
+   "target": "file:packages/team/agent-team/src/error.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/tool-agent-team/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/tool-agent-team/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/tool-agent-team/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/tool-agent-team/src/index.ts",
+   "target": "file:packages/team/agent-team/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/tool-agent-team/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/team/agent-team/src/error.ts",
+   "target": "class:packages/team/agent-team/src/error.ts:TeamError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/team/agent-team/src/error.ts",
+   "target": "class:packages/team/agent-team/src/error.ts:TeamError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/agent-team/src/index.ts",
+   "target": "class:packages/team/agent-team/src/index.ts:TeamService",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/team/agent-team/src/index.ts",
+   "target": "class:packages/team/agent-team/src/index.ts:TeamService",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/agent-team/src/journal.ts",
+   "target": "class:packages/team/agent-team/src/journal.ts:TeamJournal",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/team/agent-team/src/journal.ts",
+   "target": "class:packages/team/agent-team/src/journal.ts:TeamJournal",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/agent-team/src/projection.ts",
+   "target": "function:packages/team/agent-team/src/projection.ts:emptyTeamState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/team/agent-team/src/projection.ts",
+   "target": "function:packages/team/agent-team/src/projection.ts:emptyTeamState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/agent-team/src/projection.ts",
+   "target": "function:packages/team/agent-team/src/projection.ts:applyProjectionEvent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/team/agent-team/src/projection.ts",
+   "target": "function:packages/team/agent-team/src/projection.ts:applyTask",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/team/agent-team/src/projection.ts",
+   "target": "function:packages/team/agent-team/src/projection.ts:teamProjectionView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/team/agent-team/src/projection.ts",
+   "target": "function:packages/team/agent-team/src/projection.ts:teamProjectionView",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-board.ts",
+   "target": "class:packages/team/agent-team/src/task-board.ts:TeamTaskBoard",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-board.ts",
+   "target": "class:packages/team/agent-team/src/task-board.ts:TeamTaskBoard",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-graph.ts",
+   "target": "class:packages/team/agent-team/src/task-graph.ts:TeamTaskGraphError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-graph.ts",
+   "target": "class:packages/team/agent-team/src/task-graph.ts:TeamTaskGraphError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-graph.ts",
+   "target": "function:packages/team/agent-team/src/task-graph.ts:assertTaskGraphCandidate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-graph.ts",
+   "target": "function:packages/team/agent-team/src/task-graph.ts:assertTaskGraphCandidate",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-view.ts",
+   "target": "function:packages/team/agent-team/src/task-view.ts:taskReady",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-view.ts",
+   "target": "function:packages/team/agent-team/src/task-view.ts:taskReady",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-view.ts",
+   "target": "function:packages/team/agent-team/src/task-view.ts:projectTaskView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-view.ts",
+   "target": "function:packages/team/agent-team/src/task-view.ts:projectTaskView",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/agent-team/src/types.ts",
+   "target": "function:packages/team/agent-team/src/types.ts:TeamId",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/team/agent-team/src/types.ts",
+   "target": "function:packages/team/agent-team/src/types.ts:TeamId",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/agent-team/src/types.ts",
+   "target": "function:packages/team/agent-team/src/types.ts:TeamTaskId",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/team/agent-team/src/types.ts",
+   "target": "function:packages/team/agent-team/src/types.ts:TeamTaskId",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/agent-team/src/types.ts",
+   "target": "function:packages/team/agent-team/src/types.ts:TeamMessageId",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/team/agent-team/src/types.ts",
+   "target": "function:packages/team/agent-team/src/types.ts:TeamMessageId",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/agent-team/src/validation.ts",
+   "target": "function:packages/team/agent-team/src/validation.ts:requiredText",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/team/agent-team/src/validation.ts",
+   "target": "function:packages/team/agent-team/src/validation.ts:requiredText",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/agent-team/src/validation.ts",
+   "target": "function:packages/team/agent-team/src/validation.ts:writeScope",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/team/agent-team/src/validation.ts",
+   "target": "function:packages/team/agent-team/src/validation.ts:writeScope",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/tool-agent-team/src/index.ts",
+   "target": "function:packages/team/tool-agent-team/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/team/tool-agent-team/src/index.ts",
+   "target": "function:packages/team/tool-agent-team/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/agent-team/src/index.ts",
+   "target": "class:packages/team/agent-team/src/journal.ts:TeamJournal",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/agent-team/src/index.ts",
+   "target": "class:packages/team/agent-team/src/task-board.ts:TeamTaskBoard",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-board.ts",
+   "target": "class:packages/team/agent-team/src/journal.ts:TeamJournal",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/agent-team/src/task-board.ts",
+   "target": "function:packages/team/agent-team/src/task-graph.ts:assertTaskGraphCandidate",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/agent-team/src/journal.ts",
+   "target": "function:packages/team/agent-team/src/projection.ts:teamProjectionView",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/team/tool-agent-team/src/index.ts",
+   "target": "class:packages/team/agent-team/src/index.ts:TeamService",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "document:packages/team/README.md",
+   "target": "file:packages/team/agent-team/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/team/agent-team/README.md",
+   "target": "file:packages/team/agent-team/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/team/tool-agent-team/README.md",
+   "target": "file:packages/team/tool-agent-team/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  }
+ ]
+}

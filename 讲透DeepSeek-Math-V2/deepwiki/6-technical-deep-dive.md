@@ -1,342 +1,418 @@
-> 来源: [https://deepwiki.com/deepseek-ai/DeepSeek-Math-V2/6-technical-deep-dive](https://deepwiki.com/deepseek-ai/DeepSeek-Math-V2/6-technical-deep-dive)
-> DeepWiki deepseek-ai/DeepSeek-Math-V2
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/DeepSeek-Math-V2 · page 6 Technical Deep Dive · fetched 2026-10-30 -->
 
 # Technical Deep Dive
 
-  Relevant source files 
- - [DeepSeekMath_V2.pdf](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/DeepSeekMath_V2.pdf)
- - [README.md](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1)
- 
-  
+<details>
+<summary>Relevant source files</summary>
+
+The following files were used as context for generating this wiki page:
+
+- [DeepSeekMath_V2.pdf](DeepSeekMath_V2.pdf)
+- [README.md](README.md)
+
+</details>
+
+
+
 ## Purpose and Scope
 
- This page provides detailed technical information for researchers and developers working with or building upon DeepSeekMath-V2. It covers the underlying research foundations, architectural design decisions, training methodologies, and implementation details that enable self-verifiable mathematical reasoning.
+This page provides detailed technical information for researchers and developers working with or building upon DeepSeekMath-V2. It covers the underlying research foundations, architectural design decisions, training methodologies, and implementation details that enable self-verifiable mathematical reasoning.
 
- This document serves as the technical foundation for understanding how DeepSeekMath-V2 achieves gold-level performance on mathematical competitions through its verifier-generator architecture. For high-level system architecture, see [System Architecture](https://deepwiki.com/deepseek-ai/DeepSeek-Math-V2/2-system-architecture). For practical usage instructions, see [Getting Started](https://deepwiki.com/deepseek-ai/DeepSeek-Math-V2/5-getting-started). For specific subsystem details:
+This document serves as the technical foundation for understanding how DeepSeekMath-V2 achieves gold-level performance on mathematical competitions through its verifier-generator architecture. For high-level system architecture, see [System Architecture](#2). For practical usage instructions, see [Getting Started](#5). For specific subsystem details:
+- Research paper insights and findings: [Research Paper Summary](#6.1)
+- Mixture-of-Experts and architectural patterns: [Model Architecture Details](#6.2)  
+- Foundation model specifications: [Foundation Model](#6.3)
 
- 
- - Research paper insights and findings: [Research Paper Summary](https://deepwiki.com/deepseek-ai/DeepSeek-Math-V2/6.1-research-paper-summary)
- - Mixture-of-Experts and architectural patterns: [Model Architecture Details](https://deepwiki.com/deepseek-ai/DeepSeek-Math-V2/6.2-model-architecture-details)
- - Foundation model specifications: [Foundation Model](https://deepwiki.com/deepseek-ai/DeepSeek-Math-V2/6.3-foundation-model)
- 
- 
 ---
 
- 
 ## Core Technical Approach
 
- DeepSeekMath-V2 represents a fundamental shift from answer-focused reasoning to proof-focused reasoning. The system addresses two critical limitations of existing mathematical AI systems:
+DeepSeekMath-V2 represents a fundamental shift from answer-focused reasoning to proof-focused reasoning. The system addresses two critical limitations of existing mathematical AI systems:
 
- 
- - **Verification Gap**: Correct final answers do not guarantee correct reasoning paths
- - **Applicability Constraint**: Many mathematical tasks (theorem proving, formal proofs) require step-by-step derivation rather than numerical answers
- 
- The technical solution employs a **dual-model architecture** with an LLM-based verifier and a proof generator that engage in iterative self-improvement through scaled verification compute.
+1. **Verification Gap**: Correct final answers do not guarantee correct reasoning paths
+2. **Applicability Constraint**: Many mathematical tasks (theorem proving, formal proofs) require step-by-step derivation rather than numerical answers
 
- **Key Technical Innovation**: The system actively manages the generation-verification gap by scaling verification compute to automatically label hard-to-verify proofs, creating training data that allows the verifier to keep pace with generator improvements.
+The technical solution employs a **dual-model architecture** with an LLM-based verifier and a proof generator that engage in iterative self-improvement through scaled verification compute.
 
- Sources: [README.md30-45](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L30-L45)
+**Key Technical Innovation**: The system actively manages the generation-verification gap by scaling verification compute to automatically label hard-to-verify proofs, creating training data that allows the verifier to keep pace with generator improvements.
 
- 
+Sources: [README.md:30-45]()
+
 ---
 
- 
 ## Training Methodology Architecture
 
- The training process consists of three distinct stages that progressively build self-verification capabilities.
+The training process consists of three distinct stages that progressively build self-verification capabilities.
 
- 
 ### Three-Stage Training Pipeline
 
- 
+```mermaid
+graph TB
+    subgraph Stage1["Stage 1: Verifier Foundation"]
+        VD["Verification Training Data<br/>(labeled proof-quality pairs)"]
+        VT["Supervised Learning<br/>Train LLM-based Verifier"]
+        V0["Verifier v0<br/>(baseline capability)"]
+        
+        VD --> VT
+        VT --> V0
+    end
+    
+    subgraph Stage2["Stage 2: Generator Training"]
+        RL["Reinforcement Learning<br/>with Verifier Rewards"]
+        G0["Generator v0<br/>(trained on verifier feedback)"]
+        RS["Reward Signal<br/>(proof quality scores)"]
+        
+        V0 --> RS
+        RS --> RL
+        RL --> G0
+    end
+    
+    subgraph Stage3["Stage 3: Iterative Co-Improvement"]
+        GP["Hard Proofs<br/>Generated by G0"]
+        SVC["Scaled Verification Compute<br/>(process challenging cases)"]
+        AL["Automatic Labeling<br/>(create new training data)"]
+        V1["Verifier v1<br/>(improved on hard cases)"]
+        G1["Generator v1<br/>(improved with better rewards)"]
+        
+        G0 --> GP
+        GP --> SVC
+        SVC --> AL
+        AL --> V1
+        V1 --> G1
+        G1 -.->|"Iterative Loop"| GP
+    end
+    
+    Stage1 --> Stage2
+    Stage2 --> Stage3
 ```
 
-```
+**Stage 1: Verifier Foundation Training**
 
- **Stage 1: Verifier Foundation Training**
+The initial verifier is trained via supervised learning on labeled proof-quality pairs. This creates a baseline capability to assess mathematical reasoning correctness.
 
- The initial verifier is trained via supervised learning on labeled proof-quality pairs. This creates a baseline capability to assess mathematical reasoning correctness.
+**Stage 2: Generator Training with Verifier Rewards**
 
- **Stage 2: Generator Training with Verifier Rewards**
+The proof generator is trained using reinforcement learning where the verifier acts as the reward model. The generator learns to:
+- Produce step-by-step mathematical derivations
+- Identify potential issues in its own reasoning
+- Self-correct before finalizing proofs
 
- The proof generator is trained using reinforcement learning where the verifier acts as the reward model. The generator learns to:
+**Stage 3: Iterative Co-Improvement Loop**
 
- 
- - Produce step-by-step mathematical derivations
- - Identify potential issues in its own reasoning
- - Self-correct before finalizing proofs
- 
- **Stage 3: Iterative Co-Improvement Loop**
+As the generator improves, it produces increasingly sophisticated proofs that may exceed the verifier's evaluation capability. The system addresses this through:
 
- As the generator improves, it produces increasingly sophisticated proofs that may exceed the verifier's evaluation capability. The system addresses this through:
+1. **Challenge Identification**: Generator produces proofs that are difficult for the verifier to assess
+2. **Scaled Verification**: Additional computational resources are applied to properly evaluate challenging proofs
+3. **Automatic Labeling**: Challenging proofs are automatically labeled as new training data
+4. **Verifier Enhancement**: Verifier is retrained on hard cases to close the capability gap
+5. **Generator Refinement**: Improved verifier provides better reward signals for further generator training
 
- 
- - **Challenge Identification**: Generator produces proofs that are difficult for the verifier to assess
- - **Scaled Verification**: Additional computational resources are applied to properly evaluate challenging proofs
- - **Automatic Labeling**: Challenging proofs are automatically labeled as new training data
- - **Verifier Enhancement**: Verifier is retrained on hard cases to close the capability gap
- - **Generator Refinement**: Improved verifier provides better reward signals for further generator training
- 
- This creates a **virtuous cycle** where each component pushes the other toward higher performance.
+This creates a **virtuous cycle** where each component pushes the other toward higher performance.
 
- Sources: [README.md41-43](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L41-L43)
+Sources: [README.md:41-43]()
 
- 
 ---
 
- 
 ## Verifier-Generator Architecture
 
- 
 ### Component Interaction Model
 
- 
+```mermaid
+graph TB
+    subgraph Input["Problem Input"]
+        PI["Mathematical Problem<br/>(natural language)"]
+    end
+    
+    subgraph Generator["Proof Generator Component"]
+        GE["DeepSeek-V3.2-Exp-Base<br/>with Generator Fine-tuning"]
+        PS["Proof Synthesis<br/>(step-by-step derivation)"]
+        SR["Self-Resolution<br/>(identify and fix issues)"]
+        
+        GE --> PS
+        PS --> SR
+    end
+    
+    subgraph Verifier["Verifier Component"]
+        VE["DeepSeek-V3.2-Exp-Base<br/>with Verifier Fine-tuning"]
+        SS["Step-by-Step Validation<br/>(check each proof step)"]
+        QS["Quality Scoring<br/>(automatic rating)"]
+        
+        VE --> SS
+        SS --> QS
+    end
+    
+    subgraph Output["Proof Output"]
+        FP["Finalized Proof<br/>(verified solution)"]
+        AR["Automatic Rating<br/>(confidence score)"]
+    end
+    
+    subgraph Storage["Output Storage"]
+        JSONL["outputs/*.jsonl<br/>(structured results)"]
+    end
+    
+    PI --> GE
+    SR --> SS
+    QS --> SR
+    SR --> FP
+    QS --> AR
+    FP --> JSONL
+    AR --> JSONL
 ```
 
-```
-
- 
 ### Verification Loop Mechanics
 
- The verifier and generator interact through a **self-verification loop** during proof generation:
+The verifier and generator interact through a **self-verification loop** during proof generation:
 
- 
 | Phase | Generator Action | Verifier Action | Outcome |
-|---|---|---|---|
-| Initial Draft | Produces candidate proof with reasoning steps | — | Unverified proof draft |
-| Step Validation | — | Evaluates logical validity of each step | Per-step quality scores |
-| Issue Identification | Receives feedback on problematic steps | Highlights logical gaps, errors, or unclear reasoning | Issue localization |
-| Self-Correction | Revises identified issues, clarifies reasoning | — | Improved proof draft |
-| Re-Verification | — | Re-evaluates corrected steps | Updated quality scores |
-| Iteration/Finalization | Decides to iterate or finalize based on verification scores | Provides final quality assessment | Verified proof with rating |
+|-------|-----------------|-----------------|---------|
+| **Initial Draft** | Produces candidate proof with reasoning steps | — | Unverified proof draft |
+| **Step Validation** | — | Evaluates logical validity of each step | Per-step quality scores |
+| **Issue Identification** | Receives feedback on problematic steps | Highlights logical gaps, errors, or unclear reasoning | Issue localization |
+| **Self-Correction** | Revises identified issues, clarifies reasoning | — | Improved proof draft |
+| **Re-Verification** | — | Re-evaluates corrected steps | Updated quality scores |
+| **Iteration/Finalization** | Decides to iterate or finalize based on verification scores | Provides final quality assessment | Verified proof with rating |
 
- This loop continues until the generator determines the proof meets quality thresholds or iteration limits are reached.
+This loop continues until the generator determines the proof meets quality thresholds or iteration limits are reached.
 
- Sources: [README.md42](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L42-L42)
+Sources: [README.md:42]()
 
- 
 ---
 
- 
 ## Generation-Verification Gap Management
 
- A critical technical challenge is the **generation-verification capability gap**: as the generator improves through training, it may produce proofs that exceed the verifier's ability to accurately assess.
+A critical technical challenge is the **generation-verification capability gap**: as the generator improves through training, it may produce proofs that exceed the verifier's ability to accurately assess.
 
- 
 ### Gap Management Strategy
 
- 
+```mermaid
+graph LR
+    subgraph Problem["The Gap Problem"]
+        G["Strong Generator<br/>(produces sophisticated proofs)"]
+        V["Weaker Verifier<br/>(cannot accurately assess)"]
+        GAP["Capability Gap<br/>(misaligned performance)"]
+        
+        G -.->|"outpaces"| V
+        V -.->|"creates"| GAP
+    end
+    
+    subgraph Solution["The Gap Solution"]
+        HP["Hard Proofs<br/>(challenging for verifier)"]
+        SC["Scaled Compute<br/>(additional resources)"]
+        TD["Training Data<br/>(automatically labeled)"]
+        VI["Verifier Improvement<br/>(closes the gap)"]
+        
+        HP --> SC
+        SC --> TD
+        TD --> VI
+    end
+    
+    G --> HP
+    VI --> V
 ```
 
-```
-
- 
 ### Scaled Verification Compute
 
- When the generator produces proofs that are difficult for the verifier to assess:
+When the generator produces proofs that are difficult for the verifier to assess:
 
- 
- - **Detection**: System identifies proofs where the verifier has low confidence or inconsistent evaluations
- - **Resource Allocation**: Additional computational resources are applied to these challenging cases
- - **Deep Analysis**: Multiple verification passes with increased reasoning depth
- - **Automatic Labeling**: High-confidence labels are generated for these hard cases through consensus mechanisms
- - **Dataset Augmentation**: Labeled hard cases are added to verifier training data
- - **Retraining**: Verifier is retrained to handle increasingly sophisticated proofs
- 
- This approach ensures the verifier's capability grows in tandem with the generator's, maintaining effective reward signal quality throughout training.
+1. **Detection**: System identifies proofs where the verifier has low confidence or inconsistent evaluations
+2. **Resource Allocation**: Additional computational resources are applied to these challenging cases
+3. **Deep Analysis**: Multiple verification passes with increased reasoning depth
+4. **Automatic Labeling**: High-confidence labels are generated for these hard cases through consensus mechanisms
+5. **Dataset Augmentation**: Labeled hard cases are added to verifier training data
+6. **Retraining**: Verifier is retrained to handle increasingly sophisticated proofs
 
- Sources: [README.md43](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L43-L43)
+This approach ensures the verifier's capability grows in tandem with the generator's, maintaining effective reward signal quality throughout training.
 
- 
+Sources: [README.md:43]()
+
 ---
 
- 
 ## Technical Integration Points
 
- 
 ### Foundation Model Integration
 
- DeepSeekMath-V2 is built on `DeepSeek-V3.2-Exp-Base`, the foundation model that provides:
+DeepSeekMath-V2 is built on `DeepSeek-V3.2-Exp-Base`, the foundation model that provides:
+- Large-scale parameter capacity for complex mathematical reasoning
+- Pre-trained knowledge of mathematical concepts and notation
+- Transfer learning capabilities for specialized theorem-proving tasks
 
- 
- - Large-scale parameter capacity for complex mathematical reasoning
- - Pre-trained knowledge of mathematical concepts and notation
- - Transfer learning capabilities for specialized theorem-proving tasks
- 
- The foundation model serves as the initialization point for both the verifier and generator components, which are then fine-tuned for their specialized roles.
+The foundation model serves as the initialization point for both the verifier and generator components, which are then fine-tuned for their specialized roles.
 
- **Model Access**: The model is distributed via Hugging Face at `deepseek-ai/DeepSeek-Math-V2`.
+**Model Access**: The model is distributed via Hugging Face at `deepseek-ai/DeepSeek-Math-V2`.
 
- **Inference Infrastructure**: The system depends on the `DeepSeek-V3.2-Exp` repository for inference support, which provides optimized serving infrastructure for the large-scale model.
+**Inference Infrastructure**: The system depends on the `DeepSeek-V3.2-Exp` repository for inference support, which provides optimized serving infrastructure for the large-scale model.
 
- Sources: [README.md68-70](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L68-L70)
+Sources: [README.md:68-70]()
 
- 
 ### Output Data Pipeline
 
- 
+```mermaid
+graph LR
+    subgraph Problems["Problem Sources"]
+        IMO["IMO 2025 Problems"]
+        CMO["CMO 2024 Problems"]
+        PUT["Putnam 2024 Problems"]
+        PB["IMO-ProofBench"]
+    end
+    
+    subgraph Model["DeepSeekMath-V2"]
+        DSM["Model Inference"]
+    end
+    
+    subgraph Outputs["Structured Outputs"]
+        IMO_OUT["outputs/IMO2025.jsonl"]
+        CMO_OUT["outputs/CMO2024.jsonl"]
+        PUT_OUT["outputs/Putnam2024.jsonl"]
+        PB_BASIC["outputs/IMO-ProofBench-Basic.jsonl"]
+        PB_ADV["outputs/IMO-ProofBench-Advanced.jsonl"]
+    end
+    
+    IMO --> DSM
+    CMO --> DSM
+    PUT --> DSM
+    PB --> DSM
+    
+    DSM --> IMO_OUT
+    DSM --> CMO_OUT
+    DSM --> PUT_OUT
+    DSM --> PB_BASIC
+    DSM --> PB_ADV
 ```
 
-```
+All model outputs follow a standardized JSONL schema (detailed in [JSONL Schema](#4.1)) with the following structure:
 
- All model outputs follow a standardized JSONL schema (detailed in [JSONL Schema](https://deepwiki.com/deepseek-ai/DeepSeek-Math-V2/4.1-jsonl-schema)) with the following structure:
+- `question`: Original problem statement
+- `problem_idx`: Unique identifier
+- `model_prediction`: Object containing:
+  - `proof`: Step-by-step solution with LaTeX formatting
+  - `average_automatic_rating`: Verifier confidence score
+  - `human_rating`: Manual quality assessment (where available)
 
- 
- - `question`: Original problem statement
- - `problem_idx`: Unique identifier
- - `model_prediction`: Object containing: 
- - `proof`: Step-by-step solution with LaTeX formatting
- - `average_automatic_rating`: Verifier confidence score
- - `human_rating`: Manual quality assessment (where available)
- 
- Sources: [README.md50](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L50-L50)
+Sources: [README.md:50]()
 
- 
 ---
 
- 
 ## Performance Optimization Considerations
 
- 
 ### Test-Time Compute Scaling
 
- DeepSeekMath-V2 employs **scaled test-time compute** for difficult problems:
+DeepSeekMath-V2 employs **scaled test-time compute** for difficult problems:
 
- 
- - **Approach**: Allocate additional computational resources during inference for challenging problems
- - **Benefit**: Enables deeper reasoning chains and more thorough self-verification
- - **Result**: Gold-level performance on IMO 2025, CMO 2024, and 118/120 on Putnam 2024
- 
- The test-time compute scaling is particularly effective because the self-verification mechanism can utilize additional inference budget to:
+- **Approach**: Allocate additional computational resources during inference for challenging problems
+- **Benefit**: Enables deeper reasoning chains and more thorough self-verification
+- **Result**: Gold-level performance on IMO 2025, CMO 2024, and 118/120 on Putnam 2024
 
- 
- - Generate multiple proof candidates
- - Perform thorough verification of each candidate
- - Iteratively refine proofs based on verification feedback
- 
- Sources: [README.md44](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L44-L44)
+The test-time compute scaling is particularly effective because the self-verification mechanism can utilize additional inference budget to:
+1. Generate multiple proof candidates
+2. Perform thorough verification of each candidate
+3. Iteratively refine proofs based on verification feedback
 
- 
+Sources: [README.md:44]()
+
 ### Training Efficiency Techniques
 
- The iterative training loop employs several efficiency optimizations:
+The iterative training loop employs several efficiency optimizations:
 
- 
 | Technique | Purpose | Impact |
-|---|---|---|
-| Automatic Labeling | Reduce human annotation costs for hard cases | Enables continuous improvement without manual intervention |
-| Selective Retraining | Focus verifier updates on capability gaps | Maintains training efficiency as model scales |
-| Reward Model Caching | Cache verifier evaluations for common proof patterns | Reduces redundant computation during generator training |
-| Incremental Improvement | Train on progressively harder cases | Builds robust capabilities without catastrophic forgetting |
+|-----------|---------|--------|
+| **Automatic Labeling** | Reduce human annotation costs for hard cases | Enables continuous improvement without manual intervention |
+| **Selective Retraining** | Focus verifier updates on capability gaps | Maintains training efficiency as model scales |
+| **Reward Model Caching** | Cache verifier evaluations for common proof patterns | Reduces redundant computation during generator training |
+| **Incremental Improvement** | Train on progressively harder cases | Builds robust capabilities without catastrophic forgetting |
 
- Sources: [README.md43](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L43-L43)
+Sources: [README.md:43]()
 
- 
 ---
 
- 
 ## Research Foundations
 
- The technical approach of DeepSeekMath-V2 is grounded in several key research insights:
+The technical approach of DeepSeekMath-V2 is grounded in several key research insights:
 
- 
- - **Self-Verification Necessity**: For scaling test-time compute on open problems without known solutions, models must be able to verify their own reasoning.
- - **Beyond Answer Accuracy**: Correct final answers are insufficient—rigorous step-by-step derivation is essential for theorem proving and formal mathematical reasoning.
- - **Active Gap Management**: The generation-verification gap is not a problem to avoid but an opportunity to exploit for continuous improvement through scaled verification compute.
- - **Faithful Verification**: The verifier must be trained to assess comprehensive reasoning rigor, not just final answer correctness, to incentivize proper proof structure.
- 
- These foundations inform the architectural decisions and training methodologies that enable DeepSeekMath-V2's strong performance on mathematical reasoning benchmarks.
+1. **Self-Verification Necessity**: For scaling test-time compute on open problems without known solutions, models must be able to verify their own reasoning.
 
- For detailed research paper findings, see [Research Paper Summary](https://deepwiki.com/deepseek-ai/DeepSeek-Math-V2/6.1-research-paper-summary). For architectural implementation details, see [Model Architecture Details](https://deepwiki.com/deepseek-ai/DeepSeek-Math-V2/6.2-model-architecture-details).
+2. **Beyond Answer Accuracy**: Correct final answers are insufficient—rigorous step-by-step derivation is essential for theorem proving and formal mathematical reasoning.
 
- Sources: [README.md34-45](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L34-L45)
+3. **Active Gap Management**: The generation-verification gap is not a problem to avoid but an opportunity to exploit for continuous improvement through scaled verification compute.
 
- 
+4. **Faithful Verification**: The verifier must be trained to assess comprehensive reasoning rigor, not just final answer correctness, to incentivize proper proof structure.
+
+These foundations inform the architectural decisions and training methodologies that enable DeepSeekMath-V2's strong performance on mathematical reasoning benchmarks.
+
+For detailed research paper findings, see [Research Paper Summary](#6.1). For architectural implementation details, see [Model Architecture Details](#6.2).
+
+Sources: [README.md:34-45]()
+
 ---
 
- 
 ## System Dependencies and Requirements
 
- 
 ### External Dependencies
 
- 
 | Component | Purpose | Source |
-|---|---|---|
-| DeepSeek-V3.2-Exp-Base | Foundation model for verifier and generator | Hugging Face: deepseek-ai/DeepSeek-Math-V2 |
-| DeepSeek-V3.2-Exp | Inference infrastructure and serving | GitHub: deepseek-ai/DeepSeek-V3.2-Exp |
-| IMO-ProofBench | Formal theorem proving benchmark | Google DeepMind: google-deepmind/superhuman |
+|-----------|---------|--------|
+| **DeepSeek-V3.2-Exp-Base** | Foundation model for verifier and generator | Hugging Face: `deepseek-ai/DeepSeek-Math-V2` |
+| **DeepSeek-V3.2-Exp** | Inference infrastructure and serving | GitHub: `deepseek-ai/DeepSeek-V3.2-Exp` |
+| **IMO-ProofBench** | Formal theorem proving benchmark | Google DeepMind: `google-deepmind/superhuman` |
 
- 
 ### Computational Requirements
 
- The system's computational profile varies significantly between training and inference:
+The system's computational profile varies significantly between training and inference:
 
- **Training Phase**:
+**Training Phase**:
+- Large-scale GPU clusters for foundation model fine-tuning
+- Scaled verification compute for hard case labeling
+- Iterative training cycles for verifier-generator co-improvement
 
- 
- - Large-scale GPU clusters for foundation model fine-tuning
- - Scaled verification compute for hard case labeling
- - Iterative training cycles for verifier-generator co-improvement
- 
- **Inference Phase**:
+**Inference Phase**:
+- Standard large language model serving infrastructure
+- Optional: Scaled test-time compute for difficult problems
+- Memory requirements consistent with DeepSeek-V3.2-Exp-Base
 
- 
- - Standard large language model serving infrastructure
- - Optional: Scaled test-time compute for difficult problems
- - Memory requirements consistent with DeepSeek-V3.2-Exp-Base
- 
- For inference setup instructions, see [Inference Setup](https://deepwiki.com/deepseek-ai/DeepSeek-Math-V2/5.2-inference-setup).
+For inference setup instructions, see [Inference Setup](#5.2).
 
- Sources: [README.md68-70](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L68-L70)
+Sources: [README.md:68-70]()
 
- 
 ---
 
- 
 ## Implementation Considerations
 
- 
 ### Verifier Design Principles
 
- The LLM-based verifier is designed with specific architectural constraints:
+The LLM-based verifier is designed with specific architectural constraints:
 
- 
- - **Step-Level Granularity**: Evaluates individual proof steps rather than entire proofs
- - **Faithful Assessment**: Trained to reward rigorous reasoning, not just correct conclusions
- - **Confidence Calibration**: Provides calibrated confidence scores for reward signal quality
- - **Robustness**: Handles diverse mathematical notation and proof styles
- 
- 
+1. **Step-Level Granularity**: Evaluates individual proof steps rather than entire proofs
+2. **Faithful Assessment**: Trained to reward rigorous reasoning, not just correct conclusions
+3. **Confidence Calibration**: Provides calibrated confidence scores for reward signal quality
+4. **Robustness**: Handles diverse mathematical notation and proof styles
+
 ### Generator Design Principles
 
- The proof generator is optimized for:
+The proof generator is optimized for:
 
- 
- - **Self-Resolution**: Incentivized to identify and fix issues before finalization
- - **Structured Output**: Produces well-formatted proofs with clear logical flow
- - **Verification-Aware**: Understands what makes proofs verifiable by the assessment model
- - **Domain Coverage**: Handles diverse mathematical domains (geometry, number theory, combinatorics, etc.)
- 
- These design principles ensure the verifier-generator architecture works effectively in the self-verification loop.
+1. **Self-Resolution**: Incentivized to identify and fix issues before finalization
+2. **Structured Output**: Produces well-formatted proofs with clear logical flow
+3. **Verification-Aware**: Understands what makes proofs verifiable by the assessment model
+4. **Domain Coverage**: Handles diverse mathematical domains (geometry, number theory, combinatorics, etc.)
 
- Sources: [README.md41-42](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L41-L42)
+These design principles ensure the verifier-generator architecture works effectively in the self-verification loop.
 
- 
+Sources: [README.md:41-42]()
+
 ---
 
- 
 ## Future Technical Directions
 
- While DeepSeekMath-V2 demonstrates strong capabilities, the README acknowledges that "much work remains" [README.md45](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L45-L45) Potential technical improvements include:
+While DeepSeekMath-V2 demonstrates strong capabilities, the README acknowledges that "much work remains" [README.md:45](). Potential technical improvements include:
 
- 
- - **Formal Verification Integration**: Connecting to proof assistants for mechanically verified proofs
- - **Multi-Step Planning**: Enhanced reasoning for problems requiring extended derivation chains
- - **Cross-Domain Transfer**: Improving performance on mathematical domains with limited training data
- - **Efficiency Optimization**: Reducing computational requirements while maintaining quality
- - **Interactive Verification**: Supporting human-in-the-loop verification for complex proofs
- 
- These directions represent ongoing research areas in self-verifiable mathematical reasoning.
+- **Formal Verification Integration**: Connecting to proof assistants for mechanically verified proofs
+- **Multi-Step Planning**: Enhanced reasoning for problems requiring extended derivation chains
+- **Cross-Domain Transfer**: Improving performance on mathematical domains with limited training data
+- **Efficiency Optimization**: Reducing computational requirements while maintaining quality
+- **Interactive Verification**: Supporting human-in-the-loop verification for complex proofs
 
- Sources: [README.md45](https://github.com/deepseek-ai/DeepSeek-Math-V2/blob/6147f908/README.md?plain=1#L45-L45)
+These directions represent ongoing research areas in self-verifiable mathematical reasoning.
+
+Sources: [README.md:45]()
+
+---
+

@@ -1,0 +1,31 @@
+# DeepWiki 索引 — vectara/py-vectara-agentic
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 259356 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Architecture](1.1-architecture.md)
+  - [1.2 Key Concepts](1.2-key-concepts.md)
+- [2 Core Components](2-core-components.md)
+  - [2.1 Agent System](2.1-agent-system.md)
+  - [2.2 Tool Factory System](2.2-tool-factory-system.md)
+  - [2.3 Workflow Engine](2.3-workflow-engine.md)
+  - [2.4 Prompt System](2.4-prompt-system.md)
+- [3 Installation and Configuration](3-installation-and-configuration.md)
+  - [3.1 Dependencies and Setup](3.1-dependencies-and-setup.md)
+  - [3.2 Agent Configuration](3.2-agent-configuration.md)
+  - [3.3 LLM Provider Setup](3.3-llm-provider-setup.md)
+- [4 Usage Guide](4-usage-guide.md)
+  - [4.1 Basic Usage](4.1-basic-usage.md)
+  - [4.2 Available Tools](4.2-available-tools.md)
+  - [4.3 Advanced Features](4.3-advanced-features.md)
+- [5 API and Endpoints](5-api-and-endpoints.md)
+  - [5.1 REST API](5.1-rest-api.md)
+  - [5.2 OpenAI-Compatible Endpoints](5.2-openai-compatible-endpoints.md)
+- [6 Development and Testing](6-development-and-testing.md)
+  - [6.1 Testing Framework](6.1-testing-framework.md)
+  - [6.2 Development Environment](6.2-development-environment.md)
+  - [6.3 Release Process](6.3-release-process.md)
+- [7 Deployment](7-deployment.md)
+  - [7.1 Docker Deployment](7.1-docker-deployment.md)
+  - [7.2 Documentation Site](7.2-documentation-site.md)

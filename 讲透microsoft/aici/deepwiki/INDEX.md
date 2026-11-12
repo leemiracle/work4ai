@@ -1,0 +1,32 @@
+# DeepWiki 索引 — microsoft/aici
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 331773 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Key Concepts](1.1-key-concepts.md)
+  - [1.2 System Requirements](1.2-system-requirements.md)
+- [2 AICI Runtime (aicirt)](2-aici-runtime-aicirt.md)
+  - [2.1 Process Model](2.1-process-model.md)
+  - [2.2 Inter-Process Communication](2.2-inter-process-communication.md)
+  - [2.3 Module Registry](2.3-module-registry.md)
+- [3 Controllers](3-controllers.md)
+  - [3.1 Python Controller (pyctrl)](3.1-python-controller-pyctrl.md)
+  - [3.2 JavaScript Controller (jsctrl)](3.2-javascript-controller-jsctrl.md)
+  - [3.3 Declarative Controller (declctrl)](3.3-declarative-controller-declctrl.md)
+  - [3.4 LLGuidance Controller](3.4-llguidance-controller.md)
+- [4 LLM Integration](4-llm-integration.md)
+  - [4.1 vLLM Integration](4.1-vllm-integration.md)
+  - [4.2 HuggingFace Integration](4.2-huggingface-integration.md)
+  - [4.3 rLLM Integration](4.3-rllm-integration.md)
+  - [4.4 llama.cpp Integration](4.4-llama.cpp-integration.md)
+- [5 Python Interface (pyaici)](5-python-interface-pyaici.md)
+  - [5.1 Constraint System](5.1-constraint-system.md)
+  - [5.2 Async Control Flow](5.2-async-control-flow.md)
+  - [5.3 Variable Storage](5.3-variable-storage.md)
+- [6 Deployment](6-deployment.md)
+  - [6.1 Docker Deployment](6.1-docker-deployment.md)
+  - [6.2 Server Configuration](6.2-server-configuration.md)
+- [7 Testing and Benchmarking](7-testing-and-benchmarking.md)
+  - [7.1 Performance Measurement](7.1-performance-measurement.md)
+  - [7.2 Test Suite](7.2-test-suite.md)

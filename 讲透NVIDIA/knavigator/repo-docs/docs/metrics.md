@@ -1,0 +1,113 @@
+# Metrics and Dashboard
+
+Knavigator operates in tandem with the Prometheus node resource exporter, which emits metrics detailing the utilization of resources at the node level. These metrics assist in pinpointing potential bottlenecks or inefficiencies, thereby enhancing the effectiveness of the scheduling framework.
+Moreover, Knavigator's functionality relies on a Prometheus server  to execute tasks that evaluate PromQL queries.
+
+## Run Results
+
+The `-results <dir>` flag records every pod that requests `nvidia.com/gpu` while the workflows run. After the last workflow, Knavigator waits for the submitted jobs to finish (up to `-results.timeout`, default 1h) and writes three files:
+
+- `timeline.csv`: one row per pod with its job, node, GPUs, phase, and created, scheduled and finished times.
+- `results.json`: failed pods, makespan, GPU-hours, GPU utilization against allocatable GPUs, pods never scheduled, jobs started, and mean, p95 and max wait for pods and jobs.
+- `events.csv`: warning events and every eviction or preemption event (`Preempted`, `Preempting`, `Evict`, `Evicted`) since the run started, up to 10000. It shows why a scheduler left work waiting or removed pods.
+
+`results.json` also reports preemption. `pods_evicted` counts pods deleted after they were placed and before they finished. Schedulers preempt by deleting pods, and job controllers and cleanup delete pods too, so compare it with `preemption_events`, the number of `Preempted` and `Evict` events (one per removed pod). `jobs_evicted` counts jobs that lost a pod this way, and `evicted_gpu_hours` is the GPU time those pods had already used. `evictions_by_priority` groups the evicted pods by the victim's pod priority (`priority`, `pods`, `jobs`, `gpu_hours`), so you can see who a scheduler evicts. `jobs_evicted_again` counts jobs that lost more pods than they have, meaning at least one pod was evicted twice, and `max_evictions_per_job` is the most evictions any one job suffered, with a whole gang evicted at once counting once. `timeline.csv` gains a `priority` column. `binding_gap_gpu_hours` is GPU time that gang pods held while the rest of their gang had not yet been bound, so the gang could not start. `wasted_gpu_hours` is `evicted_gpu_hours` plus `binding_gap_gpu_hours`. `idle_waiting_gpu_hours` is a separate measure of unused capacity: GPU time that sat idle while pods were waiting for GPUs (at each moment, the smaller of the idle GPUs and the GPUs the waiting pods request). All three follow `-speedup`.
+
+A run counts as drained once every job has placed and finished its pods. A pod that a scheduler evicted does not count, so a job finishes only when its replacement does.
+
+`-results.stall <duration>` stops the wait when no pod has been placed or has finished for that long, in real time, so a scheduler that has stopped making progress does not hold the run until `-results.timeout`. The files are written as for a timeout, `stalled` is true in `results.json`, and the exit status is an error. It is off by default. Set it longer than your longest job, because a run of long jobs that are all still running also makes no progress.
+
+Knavigator exits with an error after writing the files if the run did not drain, any pod failed, or any job never started, so CI can gate on the exit code.
+
+`results.json` also has `jobs_by_gang_size`, one row per pods-per-job count with `submitted`, `waiting` (a pod not yet placed), `running` (all pods placed, some still running), `complete` and `wait_sec` for the jobs that have started. A pod that was preempted and replaced keeps its job running until the replacement ends.
+
+### Prometheus and Grafana
+
+`-results.pushgateway <url>` also sends the run to a [Prometheus Pushgateway](https://github.com/prometheus/pushgateway), so the run shows up next to the node metrics. Knavigator pushes the pod gauges and the summary of the run so far every `-results.push-interval` (default 10s), and the final summary when the run ends. Every series carries a `run` label, set with `-results.run` and defaulting to the start time, so separate runs stay apart. A failed push logs a warning and never fails the run.
+
+`scripts/env.sh` installs a Pushgateway with a ServiceMonitor next to the Prometheus stack. From outside the cluster, reach it with a port-forward:
+
+```bash
+kubectl -n monitoring port-forward svc/pushgateway-prometheus-pushgateway 9091 &
+./bin/knavigator -results ./out -results.pushgateway http://localhost:9091 -results.run baseline \
+  -workflow 'resources/benchmarks/gang-scheduling/workflows/{config-nodes.yaml,config-volcano.yaml,run-test.yaml}'
+```
+
+Pod gauges:
+
+- `knavigator_pods_by_state{state}`: GPU pods that are pending, running, succeeded, failed, evicted (deleted after placement) or deleted before placement.
+- `knavigator_gpus_in_use` and `knavigator_gpus_pending`: GPUs requested by running pods and by pods not yet placed.
+- `knavigator_speedup`: the factor `-speedup` compresses time by (1 without it). The summary gauges already report simulated time, while these pod gauges and the time axis are real time, so multiply any total you compute from them by this factor.
+
+Every push also carries the summary of the run so far, as one gauge per `results.json` field, named `knavigator_<field>`. The final push replaces it with the values for the whole run. Booleans become 0 or 1, and `null` and text fields are skipped. A field with `count`, `mean`, `p95` and `max` gets the label `stat`. A list whose rows have a `bucket`, `gang_size`, `priority` or `class` field gets that field as a label. For example, `job_wait_sec.p95` is `knavigator_job_wait_sec{stat="p95"}`. New `results.json` fields appear with no further change.
+
+During the run these are numbers so far. Makespan is the time since the first submission, utilization covers that span, and job wait counts only jobs that have started, so it reads low while jobs are still queued. With `-speedup`, summary values report simulated time and the pod gauges report real time.
+
+The Pushgateway keeps the last value of a run until you delete it:
+
+```bash
+curl -X DELETE http://localhost:9091/metrics/job/knavigator/run/baseline
+```
+
+[`resources/dashboards/run-results.json`](../resources/dashboards/run-results.json) charts a run: the numbers so far, a table of jobs by gang size, utilization over the selected time range (from `knavigator_gpus_in_use`), GPUs in use and waiting, pods by state, evictions (pods evicted, jobs that lost a pod, GPU-hours lost, and the scheduler's preemption events), and occupancy with wasted GPUs. The wasted GPU-hours table and pie show whole-run totals that `-results` computes, in simulated hours when the run used `-speedup`, so they do not depend on the dashboard's time range: `wasted_gpu_hours` is `evicted_gpu_hours` (work lost when a scheduler removes pods) plus `binding_gap_gpu_hours` (GPU time gang pods held while the rest of their gang was not yet bound). Idle capacity, GPUs that sit idle while pods wait, is a separate measure at the bottom of the page. The time axis is real time. The eviction tiles read the fields that `-results` reports once pods are preempted, and say "No eviction data" without them. Import it into Grafana next to `GPU-occupancy.json`, and pick the run from the `Run` variable.
+
+`resources/dashboards/GPU-occupancy.json` averages cluster occupancy over the time range as GPUs requested divided by GPUs in the cluster, so nodes that came and went during the range count for the time they existed. It also reports two GPU-hour totals over the time range shown. Wasted GPU-hours counts GPUs that sat idle while pods were waiting for GPUs: at each moment, the smaller of the idle GPUs and the GPUs requested by waiting pods. Idle GPU-hours counts GPUs that no pod requested, whether or not work was waiting. Both come from `node_resource_requests` and kube-state-metrics, so they work without `-results.pushgateway`.
+
+With `-cleanup`, Knavigator deletes the submitted objects once after the results are written, not at the end of each workflow.
+
+Pod timestamps have one second resolution, so each wait carries about a second of error.
+
+A job is one object submitted by a `SubmitObj` task whose `RegisterObj` declares `podNameFormat` and `podCount`. Job wait runs from submission until the job's last required pod is scheduled, so it includes time spent in a queue before the pods exist.
+
+`results.json` also reports whether a scheduler favors some job sizes. Footprint is a job's total GPUs (GPUs per pod times pods).
+
+- `wait_by_footprint`: job count, jobs started, wait and bounded slowdown per footprint bucket (1, 2, 3-4, 5-8, 9-16, 17+). A job that never created a pod has no footprint, so it counts in `jobs_never_admitted` but not in a bucket.
+- `footprint_wait_spearman`: rank correlation of footprint and job wait. Positive means bigger jobs wait longer.
+- `large_job_starvation_ratio`: mean wait of jobs of at least one node over mean wait of 1-GPU jobs.
+- `bsld_macro`: mean of the per-bucket mean slowdown, equal weight per bucket. Slowdown is max(1, (wait + runtime) / max(runtime, floor)), with the floor set by `-results.bsld-floor` (default 10m, in simulated time under `-speedup`). The value is null unless every job finished.
+- `jobs_never_admitted`: jobs with a pod that never got placed. `jobs_abandoned`, `abandoned_gpu_hours`: jobs fully placed but still running when the run ended, and the GPU-hours they used.
+
+Metrics that cannot be computed, such as a correlation over one job, are null.
+
+When jobs are submitted with a `class` parameter, as `SubmitTrace` does for each of its classes, `wait_by_class` has one row per class with `jobs`, `started`, `wait_sec` and `slo_attainment`. `slo_attainment` gives the share of the class's jobs that started within each wait in a fixed ladder: `1m`, `5m`, `15m`, `1h` and `4h`, in simulated time under `-speedup`. A job that never started counts as a miss, so a class that reads 0.98 at `5m` started 98% of its jobs within five minutes. Jobs without a class are left out, and the field is absent when no job has one. The ladder needs no target chosen in advance, so classes with different latency needs, such as inference and training, can be read side by side.
+
+```bash
+./bin/knavigator -results ./out \
+  -workflow 'resources/benchmarks/gang-scheduling/workflows/{config-nodes.yaml,config-volcano.yaml,run-test.yaml}'
+```
+
+### Time Compression
+
+`-speedup N` (requires `-workflow`) shrinks simulated time so long traces finish sooner. Knavigator divides every `Sleep` timeout and the `ttl` param of every `SubmitObj` task by N, and replays `SubmitTrace` arrivals and runtimes N times faster, so jobs run and arrive N times faster. `results.json` reports makespan, GPU-hours and waits in simulated seconds and records `speedup`. GPU utilization is a ratio and does not change. `timeline.csv` keeps real timestamps.
+
+```bash
+./bin/knavigator -speedup 60 -results ./out -workflow ...
+```
+
+A compressed run shows how jobs stack up and how a scheduler places them. It does not measure scheduler latency:
+
+- The scheduler and its controllers still run in real time. Leases, backoff, resync periods and rate limits do not shrink, so their effect on wait time is under-represented.
+- The scheduler sees N times more arrivals and completions per real second. A scheduler that cannot keep up queues work a real-time run would not, so a high speedup can make it look worse than it is. Check that the results stay stable as N grows.
+- Only `Sleep` timeouts, the `ttl` param and `SubmitTrace` scale. Timeouts on `CheckPod`, `CheckObj` and `Configure` tasks, `-results.timeout` and `-cleanup.timeout` stay in real time. A runtime parameter with another name, such as `duration`, does not scale.
+- Wait times measured in simulated seconds resolve to N times the real-time resolution. A difference between two configurations of a few times N seconds is not a measurement.
+
+Use a speedup to compare configurations quickly. Run at `-speedup 1` before drawing conclusions about wait or latency.
+
+### Repeated Runs
+
+One run is one sample. Kueue's mean wait, for example, can move by 10% between identical runs, so a gap of that size between two schedulers says nothing on its own. Repeat each configuration, ideally on a fresh cluster each time, and summarize the runs with `-aggregate`:
+
+```bash
+for i in 1 2 3 4 5; do
+  ./bin/knavigator -speedup 60 -results ./out/volcano-$i -workflow ...
+done
+./bin/knavigator -aggregate './out/volcano-*' > volcano.json
+```
+
+`-aggregate` reads `results.json` from every directory the glob matches and prints JSON with one entry per metric, named like the Prometheus series without the `knavigator_` prefix, such as `job_wait_sec{stat=p95}`. Each entry has:
+
+- `n`: runs that reported the metric. A null value, such as `bsld_macro` in a run that did not finish, does not count.
+- `mean`, `min`, `max`, and `sd`, the sample standard deviation, which is null for a single run.
+- `cv`: `sd` over the absolute mean, null when the mean is 0.
+- `ci95`: a 95% interval for the mean, from 4000 bootstrap resamples with a fixed seed, so the same runs always give the same interval.
+- `stable`: at least two runs, and either no variation or a `cv` of at most 5%. Treat a difference between two configurations as real only when their intervals do not overlap.

@@ -1,148 +1,209 @@
-> 来源: [https://deepwiki.com/deepseek-ai/DeepSeek-R1/1-overview](https://deepwiki.com/deepseek-ai/DeepSeek-R1/1-overview)
-> DeepWiki deepseek-ai/DeepSeek-R1
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/DeepSeek-R1 · page 1 Overview · fetched 2026-10-30 -->
 
 # Overview
 
-  Relevant source files 
- - [README.md](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1)
- - [deep_ep/__init__.py](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py)
- 
-  
-## Purpose and Scope
+<details>
+<summary>Relevant source files</summary>
 
- DeepEP (DeepEveryParallel) is a high-performance communication library tailored for modern machine learning training and inference, specifically optimized for **Mixture-of-Experts (MoE) expert parallelism**. It provides high-throughput and low-latency all-to-all GPU kernels for MoE dispatch and combine operations, supporting low-precision formats like FP8 [README.md1-5](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L1-L5)
+The following files were used as context for generating this wiki page:
 
- The library features a lightweight **Just-In-Time (JIT)** compilation system, allowing it to run without pre-compilation of CUDA kernels during installation [README.md3-5](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L3-L5) DeepEP V2 introduces a significant architectural shift from the NVSHMEM-based V1 to a more efficient **NCCL Gin backend**, achieving up to 1.3x peak performance while reducing SM occupancy by up to 4x [README.md9-57](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L9-L57)
+- [DeepSeek_R1.pdf](DeepSeek_R1.pdf)
+- [README.md](README.md)
 
- **Sources:** [README.md1-17](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L1-L17) [deep_ep/__init__.py71-84](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L71-L84)
+</details>
 
- 
----
 
- 
-## Architectural Evolution: V1 to V2
 
- DeepEP V2 represents a complete refactoring of the communication layer. The transition from V1 to V2 involves several major shifts in backend technology and resource management:
+This document provides a comprehensive technical overview of the DeepSeek-R1 repository, which contains a family of reasoning-specialized large language models. It covers the model architectures, training methodologies, deployment options, and usage guidelines.
 
- 
-| Feature | V1 (Legacy) | V2 (Elastic) |
-|---|---|---|
-| Backend | NVSHMEM (IBGDA/Symmetric Heap) | NCCL Gin (Header-only, lightweight) |
-| Interface | Buffer class | ElasticBuffer & EPHandle |
-| Resource Allocation | Manual tuning (num_sms, Config) | Analytical calculation via formulas |
-| Domain Scale | Limited scale-out | Up to EP2048 |
-| SM Occupancy | High (e.g., 24 SMs) | Low (e.g., 4-6 SMs) |
-| JIT Pipeline | Partial / Pre-compiled | Fully JIT (NVRTC-based) |
+For detailed information about specific model architectures, refer to [Model Architecture](#2). For model usage instructions, see [Model Usage](#3).
 
- **Sources:** [README.md9-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L9-L25) [README.md115-116](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L116) [deep_ep/buffers/elastic.py16-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L30)
+## Model Family
 
- 
----
+DeepSeek-R1 is a family of reasoning-specialized language models built on the DeepSeek-V3 MoE (Mixture of Experts) architecture. The family consists of two large foundation models and several distilled variants.
 
- 
-## System Architecture and Code Entities
+**Model Hierarchy Diagram**
 
- The following diagram maps the high-level system components to their corresponding code entities and files, illustrating the bridge between the Python user space and the CUDA kernel implementations.
-
- 
+```mermaid
+flowchart TD
+    BaseModel["DeepSeek-V3-Base\n(MoE Architecture)"]
+    
+    BaseModel --> R1Zero["DeepSeek-R1-Zero\n671B total / 37B activated params\nPure RL without SFT"]
+    BaseModel --> R1["DeepSeek-R1\n671B total / 37B activated params\nCold-start + RL"]
+    
+    R1 --> DistQwen["DeepSeek-R1-Distill-Qwen Models"]
+    R1 --> DistLlama["DeepSeek-R1-Distill-Llama Models"]
+    
+    DistQwen --> Qwen15B["DeepSeek-R1-Distill-Qwen-1.5B"]
+    DistQwen --> Qwen7B["DeepSeek-R1-Distill-Qwen-7B"]
+    DistQwen --> Qwen14B["DeepSeek-R1-Distill-Qwen-14B"]
+    DistQwen --> Qwen32B["DeepSeek-R1-Distill-Qwen-32B"]
+    
+    DistLlama --> Llama8B["DeepSeek-R1-Distill-Llama-8B"]
+    DistLlama --> Llama70B["DeepSeek-R1-Distill-Llama-70B"]
 ```
 
+Sources: [README.md:67-96]()
+
+### Foundation Models
+
+- **DeepSeek-R1-Zero**: A 671B parameter MoE model (37B activated parameters) trained through reinforcement learning without supervised fine-tuning
+- **DeepSeek-R1**: A 671B parameter MoE model (37B activated parameters) incorporating both cold-start data and reinforcement learning
+
+Both foundation models support a 128K token context length and are based on the DeepSeek-V3 architecture.
+
+### Distilled Models
+
+The distilled models transfer the reasoning capabilities of DeepSeek-R1 to smaller, more efficient architectures:
+
+| Model | Base Architecture | Parameters |
+|-------|------------------|------------|
+| DeepSeek-R1-Distill-Qwen-1.5B | Qwen2.5-Math-1.5B | 1.5B |
+| DeepSeek-R1-Distill-Qwen-7B | Qwen2.5-Math-7B | 7B |
+| DeepSeek-R1-Distill-Llama-8B | Llama-3.1-8B | 8B |
+| DeepSeek-R1-Distill-Qwen-14B | Qwen2.5-14B | 14B |
+| DeepSeek-R1-Distill-Qwen-32B | Qwen2.5-32B | 32B |
+| DeepSeek-R1-Distill-Llama-70B | Llama-3.3-70B-Instruct | 70B |
+
+Sources: [README.md:82-96]()
+
+## Training Methodologies
+
+The DeepSeek-R1 models employ distinctive training approaches that differentiate them from traditional language models.
+
+**Training Pipeline Diagram**
+
+```mermaid
+flowchart LR
+    subgraph DeepSeek-R1-Zero["DeepSeek-R1-Zero Development"]
+        BaseModel["DeepSeek-V3-Base"] --> |"Large-scale RL\n(No SFT)"| R1Zero["DeepSeek-R1-Zero\nEmergent CoT & Reasoning"]
+    end
+    
+    subgraph DeepSeek-R1["DeepSeek-R1 Development"]
+        Base["DeepSeek-V3-Base"] --> |"Cold-start data"| SFT1["SFT Stage 1\n(Seed for reasoning)"]
+        SFT1 --> SFT2["SFT Stage 2\n(Non-reasoning capabilities)"]
+        SFT2 --> RL1["RL Stage 1\n(Discover improved reasoning)"]
+        RL1 --> RL2["RL Stage 2\n(Align with human preferences)"]
+        RL2 --> R1Final["DeepSeek-R1\nFinal Model"]
+    end
+    
+    subgraph Distillation["Knowledge Distillation"]
+        R1Final --> |"Generate reasoning data"| DistData["Distillation Dataset\n(800k samples)"]
+        DistData --> |"Fine-tune"| QwenModels["Qwen Models\n(1.5B, 7B, 14B, 32B)"]
+        DistData --> |"Fine-tune"| LlamaModels["Llama Models\n(8B, 70B)"]
+    end
 ```
 
- **Diagram: DeepEP V2 Code Entity Mapping**
+Sources: [README.md:31-63]()
 
- **Sources:** [deep_ep/__init__.py87-97](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L87-L97) [deep_ep/buffers/elastic.py16-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L30) [README.md13-17](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L13-L17) [csrc/python_api.cpp1-39](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/python_api.cpp#L1-L39)
+### DeepSeek-R1-Zero Approach
 
- 
----
+DeepSeek-R1-Zero explores a novel training paradigm by directly applying reinforcement learning to the base model without supervised fine-tuning. This approach allowed the model to develop emergent reasoning capabilities including:
 
- 
-## Core Abstractions: ElasticBuffer and EPHandle
+- Self-verification mechanisms
+- Reflection capabilities
+- Extended chain-of-thought reasoning
 
- 
-### ElasticBuffer
+### DeepSeek-R1 Approach
 
- The `ElasticBuffer` is the primary interface in V2. It manages a single contiguous GPU buffer that serves as a symmetric memory window across the communication group [README.md115-116](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L116) It uses `NCCLSymmetricMemoryContext` to handle cross-GPU memory registration and RDMA window management [csrc/kernels/backend/nccl.cu10-50](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/kernels/backend/nccl.cu#L10-L50) It supports both standard EP operations and experimental features like PP and Engram.
+DeepSeek-R1 incorporates a more structured pipeline:
 
- 
-### EPHandle
+1. **SFT Stage 1**: Initial supervised fine-tuning to seed reasoning capabilities
+2. **SFT Stage 2**: Additional fine-tuning for non-reasoning capabilities
+3. **RL Stage 1**: Reinforcement learning to discover improved reasoning patterns
+4. **RL Stage 2**: Further reinforcement learning to align with human preferences
 
- The `EPHandle` is a metadata object produced during the dispatch phase. It caches critical routing information, including:
+This comprehensive approach addresses limitations observed in DeepSeek-R1-Zero, such as repetitive outputs, poor readability, and language mixing.
 
- 
- - **Expert Alignment**: Padding information for memory efficiency [deep_ep/buffers/elastic.py32-40](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L32-L40)
- - **Token Counts**: `psum_num_recv_tokens_per_expert` and `num_recv_tokens` [deep_ep/buffers/elastic.py45-55](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L45-L55)
- - **Routing Metadata**: `topk_idx` and `recv_src_metadata` for the combine phase [deep_ep/buffers/elastic.py42-50](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L42-L50)
- 
- This handle can be reused for subsequent `combine` operations or cached during inference decoding to eliminate redundant metadata calculation [README.md18-20](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L18-L20)
+### Distillation Process
 
- **Sources:** [deep_ep/buffers/elastic.py16-110](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L110) [README.md115-130](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L130)
+The distillation process involves:
 
- 
----
+1. Using DeepSeek-R1 to generate 800,000 high-quality reasoning samples
+2. Fine-tuning smaller foundation models (Qwen and Llama variants) on this dataset
+3. Preserving the reasoning capabilities while reducing computational requirements
 
- 
-## Supported Communication Modes
+Sources: [README.md:60-63]()
 
- DeepEP V2 provides a unified interface for several high-performance primitives, executed via the NCCL Gin backend:
+## Model Access and Deployment
 
- 
- - **EP Dispatch/Combine**: The core MoE all-to-all kernels. Supports `do_expand` for GEMM layout optimization and `expert_alignment` for memory efficiency [deep_ep/buffers/elastic.py134-210](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L134-L210)
- - **Engram (Remote Memory Access)**: Zero-SM RDMA-based remote memory fetching (e.g., for KV cache). Uses `engram_write` and `engram_fetch` (returning a hook) to access remote memory with minimal compute overhead [README.md23-31](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L23-L31)
- - **Pipeline Parallelism (PP)**: Experimental zero-SM RDMA primitives (`pp_send`, `pp_recv`) for point-to-point communication between pipeline stages [README.md24-100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L24-L100)
- - **All-Gather Reduce-Scatter (AGRS)**: Experimental primitives for data and tensor parallelism, including `all_gather` updates [README.md37-98](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L37-L98)
- 
- 
+DeepSeek-R1 models are available through multiple channels to accommodate different usage scenarios.
+
+**Deployment Options Diagram**
+
+```mermaid
+flowchart TD
+    subgraph Models["Available DeepSeek-R1 Models"]
+        R1["DeepSeek-R1"]
+        R1Zero["DeepSeek-R1-Zero"]
+        DistilledModels["Distilled Models\n(Qwen & Llama variants)"]
+    end
+    
+    subgraph AccessMethods["Access Methods"]
+        Models --> HF["Hugging Face\nModel Repositories"]
+        Models --> Web["Web Interface\nchat.deepseek.com"]
+        Models --> API["API Platform\nplatform.deepseek.com"]
+        Models --> Local["Local Deployment"]
+    end
+    
+    Web --> |"DeepThink button"| WebUse["User Interface"]
+    API --> |"OpenAI-Compatible"| APIUse["API Integration"]
+    
+    Local --> |"DeepSeek-R1"| DSV3Repo["DeepSeek-V3 Repository"]
+    Local --> |"Distilled Models"| VLLM["vLLM Deployment"]
+    Local --> |"Distilled Models"| SGLang["SGLang Deployment"]
 ```
 
-```
+Sources: [README.md:157-169](), [README.md:170-184]()
 
- **Diagram: V2 Dispatch Execution Flow**
+### Web and API Access
 
- **Sources:** [deep_ep/buffers/elastic.py113-400](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L113-L400) [README.md97-101](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L97-L101) [csrc/kernels/backend/nccl.cu60-100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/kernels/backend/nccl.cu#L60-L100)
+- **Web Interface**: Available at chat.deepseek.com with a "DeepThink" button to activate reasoning capabilities
+- **API Platform**: OpenAI-compatible API available at platform.deepseek.com
 
- 
+### Local Deployment
+
+- **DeepSeek-R1 and DeepSeek-R1-Zero**: Deployable using the DeepSeek-V3 repository
+- **Distilled Models**: Deployable using standard frameworks such as:
+  - vLLM: `vllm serve deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --tensor-parallel-size 2 --max-model-len 32768 --enforce-eager`
+  - SGLang: `python3 -m sglang.launch_server --model deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --trust-remote-code --tp 2`
+
+Sources: [README.md:170-184]()
+
+## Usage Recommendations
+
+For optimal performance with DeepSeek-R1 models, follow these technical guidelines:
+
+1. Set temperature between 0.5-0.7 (0.6 recommended) to prevent repetitions or incoherent outputs
+2. Avoid system prompts; include all instructions in the user prompt
+3. For mathematical problems, include the directive: "Please reason step by step, and put your final answer within \boxed{}"
+4. For thorough reasoning, enforce the model to start with "\<think\>\n" at the beginning of outputs
+
+The models have specific prompt templates for file uploads and web search functionality, detailed in the README.
+
+Sources: [README.md:186-254]()
+
+## Performance and Benchmarks
+
+DeepSeek-R1 models have been evaluated across multiple domains including:
+
+1. **English Language Benchmarks**: MMLU, MMLU-Redux, MMLU-Pro, DROP, IF-Eval, etc.
+2. **Code Generation**: LiveCodeBench, Codeforces, SWE Verified, etc.
+3. **Mathematical Reasoning**: AIME 2024, MATH-500, CNMO 2024
+4. **Chinese Language Benchmarks**: CLUEWSC, C-Eval, C-SimpleQA
+
+The models achieve performance comparable to OpenAI-o1 across various reasoning tasks, with the distilled DeepSeek-R1-Distill-Qwen-32B outperforming OpenAI-o1-mini.
+
+Sources: [README.md:101-153]()
+
+## License Information
+
+The DeepSeek-R1 repository, including model weights, is licensed under the MIT License, allowing commercial use and derivative works. The distilled models inherit licensing terms from their base models:
+
+- Qwen-based models: Originally under Apache 2.0 License
+- Llama-based models: Originally under Llama3.1/3.3 licenses
+
+Sources: [README.md:256-262]()
+
 ---
 
- 
-## Resource Allocation and Topology
-
- V2 eliminates the need for manual auto-tuning by using analytical formulas to determine optimal resource usage.
-
- 
-### Analytical SM Tuning
-
- The method `get_theoretical_num_sms` calculates the required SM count based on hardware performance characteristics:
-
- 
- - **Bandwidth Modeling**: Considers `sm_read_gbs`, `sm_write_gbs`, `rdma_gbs`, and `nvlink_gbs` [deep_ep/buffers/elastic.py441-450](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L441-L450)
- - **Overlap**: Adjusts counts based on the `prefer_overlap_with_compute` flag to allow communication to hide behind computation [deep_ep/buffers/elastic.py121-125](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L121-L125)
- 
- 
-### Topology Domains
-
- DeepEP models the cluster as a logical grid of ranks:
-
- 
- - **Scale-up Domain**: Communication via NVLink (Intra-node/Intra-LSA) [deep_ep/utils/envs.py10-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L10-L25)
- - **Scale-out Domain**: Communication via RDMA (Inter-node/Rail-only) [deep_ep/utils/envs.py10-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L10-L25)
- - **Hybrid Mode**: When `allow_hybrid_mode=True`, the library uses a hierarchical approach, combining NVLink and RDMA to maximize throughput in large clusters [deep_ep/buffers/elastic.py120-121](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L120-L121)
- 
- **Sources:** [deep_ep/buffers/elastic.py113-470](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L113-L470) [README.md18-22](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L18-L22) [deep_ep/utils/envs.py7-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L7-L30)
-
- 
----
-
- 
-## Hardware and Software Requirements
-
- To utilize DeepEP V2, the following environment is required:
-
- 
- - **GPU Architecture**: NVIDIA Hopper (SM90) or newer (e.g., Blackwell/SM100) [README.md63-65](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L63-L65)
- - **CUDA**: 12.3 or above for SM90 support [README.md67-68](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L67-L68)
- - **NCCL**: 2.30.4 or above (recommended via `nvidia-nccl-cu13` pip package) [README.md70-79](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L70-L79)
- - **Interconnect**: NVLink for intra-node; RDMA (InfiniBand/RoCE) for inter-node [README.md71-72](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L71-L72)
- - **Python**: 3.8+ with PyTorch 2.10+ [README.md66-69](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L66-L69)
- 
- **Sources:** [README.md63-72](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L63-L72) [deep_ep/__init__.py46-70](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L46-L70)

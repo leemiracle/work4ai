@@ -1,0 +1,4939 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py",
+   "type": "file",
+   "name": "causal_conv1d.py",
+   "filePath": "vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py",
+   "summary": "CPU 因果卷积（prefill fn 与 decode update 的纯 Torch 实现）。",
+   "tags": [
+    "cpu",
+    "causal-conv1d",
+    "mamba"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py:causal_conv1d_fn_cpu",
+   "type": "function",
+   "name": "causal_conv1d_fn_cpu",
+   "filePath": "vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py",
+   "lineRange": [
+    13,
+    84
+   ],
+   "summary": "CPU 因果卷积前向（72 行公开）。",
+   "tags": [
+    "causal-conv1d",
+    "cpu",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py:causal_conv1d_update_cpu",
+   "type": "function",
+   "name": "causal_conv1d_update_cpu",
+   "filePath": "vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py",
+   "lineRange": [
+    87,
+    116
+   ],
+   "summary": "CPU 卷积 decode 更新（30 行公开）。",
+   "tags": [
+    "causal-conv1d",
+    "update"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py:causal_conv1d_update_torch",
+   "type": "function",
+   "name": "causal_conv1d_update_torch",
+   "filePath": "vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py",
+   "lineRange": [
+    119,
+    147
+   ],
+   "summary": "纯 Torch 更新变体（29 行公开）。",
+   "tags": [
+    "causal-conv1d",
+    "torch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "type": "file",
+   "name": "gdn_attention.py",
+   "filePath": "vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "summary": "CPU GDN 注意力（830 行：ARM bf16 检测/卷积状态暂存/spec-aware 多变体与算子注册）。",
+   "tags": [
+    "cpu",
+    "gdn",
+    "attention",
+    "mamba"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:_causal_conv1d_fwd_cpu",
+   "type": "function",
+   "name": "_causal_conv1d_fwd_cpu",
+   "filePath": "vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "lineRange": [
+    52,
+    90
+   ],
+   "summary": "CPU 卷积前向 helper（39 行）。",
+   "tags": [
+    "causal-conv1d",
+    "fwd"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:_causal_conv1d_update_cpu",
+   "type": "function",
+   "name": "_causal_conv1d_update_cpu",
+   "filePath": "vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "lineRange": [
+    93,
+    128
+   ],
+   "summary": "CPU 卷积更新 helper（36 行）。",
+   "tags": [
+    "causal-conv1d",
+    "update"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:is_arm_bf16",
+   "type": "function",
+   "name": "is_arm_bf16",
+   "filePath": "vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "lineRange": [
+    131,
+    135
+   ],
+   "summary": "ARM bf16 支持判定（5 行公开）。",
+   "tags": [
+    "arm",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:cpu_gdn_attention_core",
+   "type": "function",
+   "name": "cpu_gdn_attention_core",
+   "filePath": "vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "lineRange": [
+    138,
+    204
+   ],
+   "summary": "CPU GDN 注意力核心（67 行公开）。",
+   "tags": [
+    "gdn",
+    "core",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:_cpu_gdn_attention_nonspec",
+   "type": "function",
+   "name": "_cpu_gdn_attention_nonspec",
+   "filePath": "vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "lineRange": [
+    210,
+    370
+   ],
+   "summary": "非 spec 感知 CPU GDN（161 行）。",
+   "tags": [
+    "gdn",
+    "nonspec"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:_unpacked_conv_weight",
+   "type": "function",
+   "name": "_unpacked_conv_weight",
+   "filePath": "vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "lineRange": [
+    397,
+    410
+   ],
+   "summary": "解包卷积权重。",
+   "tags": [
+    "conv",
+    "weights"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:_cpu_gdn_attention_spec_aware",
+   "type": "function",
+   "name": "_cpu_gdn_attention_spec_aware",
+   "filePath": "vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "lineRange": [
+    413,
+    491
+   ],
+   "summary": "spec 感知 CPU GDN。",
+   "tags": [
+    "gdn",
+    "spec-aware"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:_spec_forward",
+   "type": "function",
+   "name": "_spec_forward",
+   "filePath": "vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "lineRange": [
+    494,
+    601
+   ],
+   "summary": "spec 前向 helper。",
+   "tags": [
+    "spec",
+    "forward"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:_spec_aware_nonspec",
+   "type": "function",
+   "name": "_spec_aware_nonspec",
+   "filePath": "vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "lineRange": [
+    604,
+    742
+   ],
+   "summary": "spec 感知的非 spec 回退。",
+   "tags": [
+    "gdn",
+    "fallback"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:_spec_aware_nonspec_subset",
+   "type": "function",
+   "name": "_spec_aware_nonspec_subset",
+   "filePath": "vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "lineRange": [
+    745,
+    817
+   ],
+   "summary": "spec 感知子集回退。",
+   "tags": [
+    "gdn",
+    "subset"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:register_cpu_gdn_attention_ops",
+   "type": "function",
+   "name": "register_cpu_gdn_attention_ops",
+   "filePath": "vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "lineRange": [
+    820,
+    830
+   ],
+   "summary": "注册 CPU GDN 算子（公开）。",
+   "tags": [
+    "registration",
+    "ops"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "type": "file",
+   "name": "mamba_ssm.py",
+   "filePath": "vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "summary": "Mamba selective scan（SSU）主模块（857 行：launch config 缓存选择 + Triton 内核）。",
+   "tags": [
+    "mamba",
+    "ssm",
+    "selective-scan",
+    "triton"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:get_ssm_config_file_name",
+   "type": "function",
+   "name": "get_ssm_config_file_name",
+   "filePath": "vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "lineRange": [
+    42,
+    53
+   ],
+   "summary": "SSM config 文件名构造（12 行公开）。",
+   "tags": [
+    "config",
+    "filename"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:get_ssm_configs",
+   "type": "function",
+   "name": "get_ssm_configs",
+   "filePath": "vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "lineRange": [
+    67,
+    112
+   ],
+   "summary": "获取 SSM launch configs（46 行公开）。",
+   "tags": [
+    "config",
+    "launch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:_get_default_ssm_launch_config",
+   "type": "function",
+   "name": "_get_default_ssm_launch_config",
+   "filePath": "vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "lineRange": [
+    115,
+    132
+   ],
+   "summary": "默认 launch config（18 行）。",
+   "tags": [
+    "config",
+    "default"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:_try_get_optimal_ssm_config_cached",
+   "type": "function",
+   "name": "_try_get_optimal_ssm_config_cached",
+   "filePath": "vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "lineRange": [
+    136,
+    153
+   ],
+   "summary": "缓存的最优 config 探测（18 行）。",
+   "tags": [
+    "config",
+    "cached"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:override_ssm_config",
+   "type": "function",
+   "name": "override_ssm_config",
+   "filePath": "vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "lineRange": [
+    161,
+    170
+   ],
+   "summary": "覆盖 SSM config（10 行公开）。",
+   "tags": [
+    "config",
+    "override"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:try_get_optimal_ssm_config",
+   "type": "function",
+   "name": "try_get_optimal_ssm_config",
+   "filePath": "vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "lineRange": [
+    173,
+    191
+   ],
+   "summary": "最优 config 探测公开入口。",
+   "tags": [
+    "config",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:convert_rs_fp16x2",
+   "type": "function",
+   "name": "convert_rs_fp16x2",
+   "filePath": "vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "lineRange": [
+    209,
+    220
+   ],
+   "summary": "ReplaySSM fp16 成对转换（公开）。",
+   "tags": [
+    "replayssm",
+    "fp16"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:_selective_scan_update_kernel",
+   "type": "function",
+   "name": "_selective_scan_update_kernel",
+   "filePath": "vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "lineRange": [
+    240,
+    493
+   ],
+   "summary": "selective scan 更新 Triton 内核。",
+   "tags": [
+    "triton",
+    "ssu",
+    "kernel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:selective_state_update",
+   "type": "function",
+   "name": "selective_state_update",
+   "filePath": "vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "lineRange": [
+    496,
+    699
+   ],
+   "summary": "selective state update 公开入口。",
+   "tags": [
+    "ssu",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:selective_scan_fn",
+   "type": "function",
+   "name": "selective_scan_fn",
+   "filePath": "vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "lineRange": [
+    702,
+    847
+   ],
+   "summary": "selective scan 函数入口。",
+   "tags": [
+    "scan",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/ops/replayssm_config.py",
+   "type": "file",
+   "name": "replayssm_config.py",
+   "filePath": "vllm/model_executor/layers/mamba/ops/replayssm_config.py",
+   "summary": "ReplaySSM Mamba2 output_only decode 内核的 launch-config 选择（镜像 mamba_ssm.py 模式）。",
+   "tags": [
+    "replayssm",
+    "mamba2",
+    "launch-config"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/replayssm_config.py:get_replayssm_config",
+   "type": "function",
+   "name": "get_replayssm_config",
+   "filePath": "vllm/model_executor/layers/mamba/ops/replayssm_config.py",
+   "lineRange": [
+    40,
+    51
+   ],
+   "summary": "ReplaySSM config 获取（12 行公开）。",
+   "tags": [
+    "replayssm",
+    "config"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/ops/scatter_states.py",
+   "type": "file",
+   "name": "scatter_states.py",
+   "filePath": "vllm/model_executor/layers/mamba/ops/scatter_states.py",
+   "summary": "SSM 状态 scatter Triton 内核（含 warmup 输入构造）。",
+   "tags": [
+    "mamba",
+    "scatter",
+    "triton"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/scatter_states.py:_scatter_states_kernel",
+   "type": "function",
+   "name": "_scatter_states_kernel",
+   "filePath": "vllm/model_executor/layers/mamba/ops/scatter_states.py",
+   "lineRange": [
+    19,
+    41
+   ],
+   "summary": "状态 scatter Triton 内核（23 行）。",
+   "tags": [
+    "triton",
+    "scatter"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/scatter_states.py:_scatter_states_warmup_inputs",
+   "type": "function",
+   "name": "_scatter_states_warmup_inputs",
+   "filePath": "vllm/model_executor/layers/mamba/ops/scatter_states.py",
+   "lineRange": [
+    44,
+    65
+   ],
+   "summary": "warmup 输入构造（22 行）。",
+   "tags": [
+    "warmup"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/scatter_states.py:scatter_states",
+   "type": "function",
+   "name": "scatter_states",
+   "filePath": "vllm/model_executor/layers/mamba/ops/scatter_states.py",
+   "lineRange": [
+    72,
+    105
+   ],
+   "summary": "scatter states 公开入口（34 行公开）。",
+   "tags": [
+    "scatter",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/ops/ssd_bmm.py",
+   "type": "file",
+   "name": "ssd_bmm.py",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_bmm.py",
+   "summary": "SSD chunk 间 BMM Triton 内核。",
+   "tags": [
+    "ssd",
+    "bmm",
+    "triton",
+    "mamba"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssd_bmm.py:_bmm_chunk_fwd_kernel",
+   "type": "function",
+   "name": "_bmm_chunk_fwd_kernel",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_bmm.py",
+   "lineRange": [
+    66,
+    146
+   ],
+   "summary": "chunk BMM Triton 内核（81 行）。",
+   "tags": [
+    "triton",
+    "bmm",
+    "kernel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssd_bmm.py:_bmm_chunk_fwd",
+   "type": "function",
+   "name": "_bmm_chunk_fwd",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_bmm.py",
+   "lineRange": [
+    149,
+    212
+   ],
+   "summary": "chunk BMM 封装（64 行）。",
+   "tags": [
+    "bmm",
+    "wrapper"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/ops/ssd_checkpoint.py",
+   "type": "file",
+   "name": "ssd_checkpoint.py",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_checkpoint.py",
+   "summary": "SSD prefill checkpoint 存储 Triton 内核（状态快照）。",
+   "tags": [
+    "ssd",
+    "checkpoint",
+    "triton"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssd_checkpoint.py:_store_prefill_checkpoint_kernel",
+   "type": "function",
+   "name": "_store_prefill_checkpoint_kernel",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_checkpoint.py",
+   "lineRange": [
+    13,
+    61
+   ],
+   "summary": "checkpoint 存储 Triton 内核（49 行）。",
+   "tags": [
+    "triton",
+    "checkpoint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssd_checkpoint.py:store_prefill_checkpoint",
+   "type": "function",
+   "name": "store_prefill_checkpoint",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_checkpoint.py",
+   "lineRange": [
+    64,
+    118
+   ],
+   "summary": "checkpoint 存储公开入口（55 行公开）。",
+   "tags": [
+    "checkpoint",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/ops/ssd_chunk_scan.py",
+   "type": "file",
+   "name": "ssd_chunk_scan.py",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_chunk_scan.py",
+   "summary": "SSD chunk scan Triton 内核（268 行内核本体 + racy wgmma config 过滤）。",
+   "tags": [
+    "ssd",
+    "chunk-scan",
+    "triton",
+    "mamba"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssd_chunk_scan.py:_drop_racy_wgmma_configs",
+   "type": "function",
+   "name": "_drop_racy_wgmma_configs",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_chunk_scan.py",
+   "lineRange": [
+    21,
+    38
+   ],
+   "summary": "过滤 racy wgmma config（18 行公开）。",
+   "tags": [
+    "wgmma",
+    "filter"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssd_chunk_scan.py:_chunk_scan_fwd_kernel",
+   "type": "function",
+   "name": "_chunk_scan_fwd_kernel",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_chunk_scan.py",
+   "lineRange": [
+    174,
+    441
+   ],
+   "summary": "chunk scan Triton 内核（268 行）。",
+   "tags": [
+    "triton",
+    "chunk-scan",
+    "kernel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssd_chunk_scan.py:_chunk_scan_fwd",
+   "type": "function",
+   "name": "_chunk_scan_fwd",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_chunk_scan.py",
+   "lineRange": [
+    444,
+    553
+   ],
+   "summary": "chunk scan 封装（110 行）。",
+   "tags": [
+    "chunk-scan",
+    "wrapper"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py",
+   "type": "file",
+   "name": "ssd_chunk_state.py",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py",
+   "summary": "SSD chunk cumsum 与 chunk state Triton 内核对。",
+   "tags": [
+    "ssd",
+    "chunk-state",
+    "cumsum",
+    "triton"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py:_chunk_cumsum_fwd_kernel",
+   "type": "function",
+   "name": "_chunk_cumsum_fwd_kernel",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py",
+   "lineRange": [
+    32,
+    117
+   ],
+   "summary": "chunk cumsum Triton 内核（86 行）。",
+   "tags": [
+    "triton",
+    "cumsum"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py:_chunk_state_fwd_kernel",
+   "type": "function",
+   "name": "_chunk_state_fwd_kernel",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py",
+   "lineRange": [
+    199,
+    303
+   ],
+   "summary": "chunk state Triton 内核（105 行）。",
+   "tags": [
+    "triton",
+    "chunk-state"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py:_chunk_cumsum_fwd",
+   "type": "function",
+   "name": "_chunk_cumsum_fwd",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py",
+   "lineRange": [
+    306,
+    354
+   ],
+   "summary": "chunk cumsum 封装（49 行公开）。",
+   "tags": [
+    "cumsum",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py:_chunk_state_fwd",
+   "type": "function",
+   "name": "_chunk_state_fwd",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py",
+   "lineRange": [
+    357,
+    412
+   ],
+   "summary": "chunk state 封装（56 行公开）。",
+   "tags": [
+    "chunk-state",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/ops/ssd_combined.py",
+   "type": "file",
+   "name": "ssd_combined.py",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_combined.py",
+   "summary": "SSD 组合前向（_mamba_chunk_scan_combined + varlen 公开入口）。",
+   "tags": [
+    "ssd",
+    "combined",
+    "mamba"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssd_combined.py:_mamba_chunk_scan_combined_fwd",
+   "type": "function",
+   "name": "_mamba_chunk_scan_combined_fwd",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_combined.py",
+   "lineRange": [
+    26,
+    161
+   ],
+   "summary": "组合 chunk scan 前向（136 行）。",
+   "tags": [
+    "combined",
+    "fwd"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssd_combined.py:mamba_chunk_scan_combined_varlen",
+   "type": "function",
+   "name": "mamba_chunk_scan_combined_varlen",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_combined.py",
+   "lineRange": [
+    164,
+    244
+   ],
+   "summary": "varlen 公开入口（81 行公开）。",
+   "tags": [
+    "varlen",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/ops/ssd_state_passing.py",
+   "type": "file",
+   "name": "ssd_state_passing.py",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_state_passing.py",
+   "summary": "SSD 状态跨 chunk 传递 Triton 内核。",
+   "tags": [
+    "ssd",
+    "state-passing",
+    "triton"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssd_state_passing.py:_state_passing_fwd_kernel",
+   "type": "function",
+   "name": "_state_passing_fwd_kernel",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_state_passing.py",
+   "lineRange": [
+    30,
+    122
+   ],
+   "summary": "状态传递 Triton 内核（93 行）。",
+   "tags": [
+    "triton",
+    "state-passing"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssd_state_passing.py:_state_passing_fwd",
+   "type": "function",
+   "name": "_state_passing_fwd",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssd_state_passing.py",
+   "lineRange": [
+    125,
+    192
+   ],
+   "summary": "状态传递封装（68 行）。",
+   "tags": [
+    "state-passing",
+    "wrapper"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "type": "file",
+   "name": "ssu_dispatch.py",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "summary": "Mamba SSU 后端分发（701 行：Triton/FlashInfer/CPU 三后端 + ReplaySSM ring tracker 内核族）。",
+   "tags": [
+    "ssu",
+    "dispatch",
+    "replayssm",
+    "backends"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:MambaSSUBackend",
+   "type": "class",
+   "name": "MambaSSUBackend",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "lineRange": [
+    242,
+    272
+   ],
+   "summary": "SSU 后端抽象基类（31 行 3 方法）。",
+   "tags": [
+    "ssu",
+    "abstract-base"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:TritonSSUBackend",
+   "type": "class",
+   "name": "TritonSSUBackend",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "lineRange": [
+    275,
+    330
+   ],
+   "summary": "Triton SSU 后端（56 行）。",
+   "tags": [
+    "ssu",
+    "triton"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:FlashInferSSUBackend",
+   "type": "class",
+   "name": "FlashInferSSUBackend",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "lineRange": [
+    333,
+    405
+   ],
+   "summary": "FlashInfer SSU 后端（73 行）。",
+   "tags": [
+    "ssu",
+    "flashinfer"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:CPUSSUBackend",
+   "type": "class",
+   "name": "CPUSSUBackend",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "lineRange": [
+    408,
+    470
+   ],
+   "summary": "CPU SSU 后端（63 行）。",
+   "tags": [
+    "ssu",
+    "cpu"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:_update_replayssm_ring_trackers_kernel",
+   "type": "function",
+   "name": "_update_replayssm_ring_trackers_kernel",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "lineRange": [
+    31,
+    70
+   ],
+   "summary": "ring tracker 更新 Triton 内核（40 行）。",
+   "tags": [
+    "triton",
+    "ring-tracker"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:_commit_replayssm_ring_trackers_kernel",
+   "type": "function",
+   "name": "_commit_replayssm_ring_trackers_kernel",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "lineRange": [
+    77,
+    130
+   ],
+   "summary": "ring tracker 提交内核（54 行）。",
+   "tags": [
+    "triton",
+    "ring-tracker"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:update_replayssm_ring_trackers",
+   "type": "function",
+   "name": "update_replayssm_ring_trackers",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "lineRange": [
+    133,
+    172
+   ],
+   "summary": "ring tracker 更新入口（48 行公开）。",
+   "tags": [
+    "ring-tracker",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:reset_replayssm_ring_trackers",
+   "type": "function",
+   "name": "reset_replayssm_ring_trackers",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "lineRange": [
+    175,
+    189
+   ],
+   "summary": "ring tracker 重置（15 行公开）。",
+   "tags": [
+    "ring-tracker",
+    "reset"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:commit_replayssm_ring_trackers",
+   "type": "function",
+   "name": "commit_replayssm_ring_trackers",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "lineRange": [
+    192,
+    239
+   ],
+   "summary": "ring tracker 提交入口（48 行公开）。",
+   "tags": [
+    "ring-tracker",
+    "commit"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:flashinfer_replayssm_autotune_supported",
+   "type": "function",
+   "name": "flashinfer_replayssm_autotune_supported",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "lineRange": [
+    486,
+    494
+   ],
+   "summary": "FlashInfer ReplaySSM autotune 支持判定（9 行公开）。",
+   "tags": [
+    "detection",
+    "autotune"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:selective_state_update_replayssm_flashinfer",
+   "type": "function",
+   "name": "selective_state_update_replayssm_flashinfer",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "lineRange": [
+    497,
+    590
+   ],
+   "summary": "FlashInfer ReplaySSM SSU（94 行公开）。",
+   "tags": [
+    "replayssm",
+    "ssu",
+    "flashinfer"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:initialize_mamba_ssu_backend",
+   "type": "function",
+   "name": "initialize_mamba_ssu_backend",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "lineRange": [
+    593,
+    647
+   ],
+   "summary": "初始化 SSU 后端（公开）。",
+   "tags": [
+    "init",
+    "backend"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:get_mamba_ssu_backend",
+   "type": "function",
+   "name": "get_mamba_ssu_backend",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "lineRange": [
+    650,
+    657
+   ],
+   "summary": "获取当前 SSU 后端（公开）。",
+   "tags": [
+    "backend",
+    "query"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:selective_state_update",
+   "type": "function",
+   "name": "selective_state_update",
+   "filePath": "vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "lineRange": [
+    660,
+    701
+   ],
+   "summary": "SSU 统一分发入口（公开）。",
+   "tags": [
+    "ssu",
+    "dispatch",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/ops/triton_helpers.py",
+   "type": "file",
+   "name": "triton_helpers.py",
+   "filePath": "vllm/model_executor/layers/mamba/ops/triton_helpers.py",
+   "summary": "Mamba Triton 公共 helper（autotune 启动与快速 exp）。",
+   "tags": [
+    "triton",
+    "helpers",
+    "mamba"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/triton_helpers.py:launch_autotuned",
+   "type": "function",
+   "name": "launch_autotuned",
+   "filePath": "vllm/model_executor/layers/mamba/ops/triton_helpers.py",
+   "lineRange": [
+    11,
+    32
+   ],
+   "summary": "autotune 启动 helper（22 行公开）。",
+   "tags": [
+    "autotune",
+    "launch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/ops/triton_helpers.py:fast_exp",
+   "type": "function",
+   "name": "fast_exp",
+   "filePath": "vllm/model_executor/layers/mamba/ops/triton_helpers.py",
+   "lineRange": [
+    36,
+    45
+   ],
+   "summary": "快速 exp（10 行公开）。",
+   "tags": [
+    "exp",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "type": "file",
+   "name": "short_conv.py",
+   "filePath": "vllm/model_executor/layers/mamba/short_conv.py",
+   "summary": "短卷积层（ShortConv，MambaBase+PluggableLayer，325 行）。",
+   "tags": [
+    "short-conv",
+    "mamba",
+    "layer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mamba/short_conv.py:ShortConv",
+   "type": "class",
+   "name": "ShortConv",
+   "filePath": "vllm/model_executor/layers/mamba/short_conv.py",
+   "lineRange": [
+    37,
+    361
+   ],
+   "summary": "短卷积层（325 行 7 方法）。",
+   "tags": [
+    "short-conv",
+    "layer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mamba/short_conv.py:short_conv",
+   "type": "function",
+   "name": "short_conv",
+   "filePath": "vllm/model_executor/layers/mamba/short_conv.py",
+   "lineRange": [
+    365,
+    375
+   ],
+   "summary": "short_conv 入口（11 行公开）。",
+   "tags": [
+    "short-conv",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mhc.py",
+   "type": "file",
+   "name": "mhc.py",
+   "filePath": "vllm/model_executor/layers/mhc.py",
+   "summary": "mHC（多头 hyper-connection）层族（1020 行：Pre/PreDelayed/Post/HCHead/FusedPostPre 五个 CustomOp 与 TileLang/AITER 探测）。",
+   "tags": [
+    "mhc",
+    "hyper-connection",
+    "custom-op"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mhc.py:MHCPreOp",
+   "type": "class",
+   "name": "MHCPreOp",
+   "filePath": "vllm/model_executor/layers/mhc.py",
+   "lineRange": [
+    109,
+    304
+   ],
+   "summary": "mHC pre 算子（196 行 6 方法）。",
+   "tags": [
+    "mhc",
+    "pre",
+    "custom-op"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mhc.py:MHCPreDelayedOp",
+   "type": "class",
+   "name": "MHCPreDelayedOp",
+   "filePath": "vllm/model_executor/layers/mhc.py",
+   "lineRange": [
+    309,
+    559
+   ],
+   "summary": "mHC pre-delayed 算子（251 行）。",
+   "tags": [
+    "mhc",
+    "pre-delayed"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mhc.py:MHCPostOp",
+   "type": "class",
+   "name": "MHCPostOp",
+   "filePath": "vllm/model_executor/layers/mhc.py",
+   "lineRange": [
+    564,
+    644
+   ],
+   "summary": "mHC post 算子（81 行）。",
+   "tags": [
+    "mhc",
+    "post"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mhc.py:HCHeadOp",
+   "type": "class",
+   "name": "HCHeadOp",
+   "filePath": "vllm/model_executor/layers/mhc.py",
+   "lineRange": [
+    649,
+    764
+   ],
+   "summary": "HC head 算子（116 行）。",
+   "tags": [
+    "mhc",
+    "head"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mhc.py:MHCFusedPostPreOp",
+   "type": "class",
+   "name": "MHCFusedPostPreOp",
+   "filePath": "vllm/model_executor/layers/mhc.py",
+   "lineRange": [
+    769,
+    1010
+   ],
+   "summary": "融合 post+pre 算子（242 行）。",
+   "tags": [
+    "mhc",
+    "fused"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mhc.py:_has_tilelang_mhc",
+   "type": "function",
+   "name": "_has_tilelang_mhc",
+   "filePath": "vllm/model_executor/layers/mhc.py",
+   "lineRange": [
+    16,
+    27
+   ],
+   "summary": "TileLang mHC 可用判定（12 行）。",
+   "tags": [
+    "tilelang",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mhc.py:_aiter_mhc_op_accepts_norm",
+   "type": "function",
+   "name": "_aiter_mhc_op_accepts_norm",
+   "filePath": "vllm/model_executor/layers/mhc.py",
+   "lineRange": [
+    44,
+    59
+   ],
+   "summary": "AITER mHC 接受 norm 判定（16 行）。",
+   "tags": [
+    "aiter",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mhc.py:_aiter_mhc_supported",
+   "type": "function",
+   "name": "_aiter_mhc_supported",
+   "filePath": "vllm/model_executor/layers/mhc.py",
+   "lineRange": [
+    79,
+    92
+   ],
+   "summary": "AITER mHC 支持判定（14 行）。",
+   "tags": [
+    "aiter",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/mhc.py:_apply_mhc_norm",
+   "type": "function",
+   "name": "_apply_mhc_norm",
+   "filePath": "vllm/model_executor/layers/mhc.py",
+   "lineRange": [
+    95,
+    104
+   ],
+   "summary": "应用 mHC norm（10 行）。",
+   "tags": [
+    "mhc",
+    "norm"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/mla.py",
+   "type": "file",
+   "name": "mla.py",
+   "filePath": "vllm/model_executor/layers/mla.py",
+   "summary": "MLA 模块包装层（MultiHeadLatentAttentionWrapper，PluggableLayer，212 行）。",
+   "tags": [
+    "mla",
+    "wrapper",
+    "pluggable"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/mla.py:MultiHeadLatentAttentionWrapper",
+   "type": "class",
+   "name": "MultiHeadLatentAttentionWrapper",
+   "filePath": "vllm/model_executor/layers/mla.py",
+   "lineRange": [
+    44,
+    255
+   ],
+   "summary": "MLA 包装层（212 行 2 方法）。",
+   "tags": [
+    "mla",
+    "wrapper"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/model_executor/layers/quantization/__init__.py",
+   "summary": "quantization 包入口（配置注册与按名解析，207 行）。",
+   "tags": [
+    "package-init",
+    "registry",
+    "quantization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/quantization/__init__.py:register_quantization_config",
+   "type": "function",
+   "name": "register_quantization_config",
+   "filePath": "vllm/model_executor/layers/quantization/__init__.py",
+   "lineRange": [
+    61,
+    109
+   ],
+   "summary": "注册量化配置（49 行公开）。",
+   "tags": [
+    "registry",
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/quantization/__init__.py:get_quantization_config",
+   "type": "function",
+   "name": "get_quantization_config",
+   "filePath": "vllm/model_executor/layers/quantization/__init__.py",
+   "lineRange": [
+    112,
+    197
+   ],
+   "summary": "按名取量化配置（86 行公开）。",
+   "tags": [
+    "registry",
+    "resolution"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "type": "file",
+   "name": "auto_awq.py",
+   "filePath": "vllm/model_executor/layers/quantization/auto_awq.py",
+   "summary": "AutoAWQ 量化（911 行：Config/Marlin 线性/MoE/AWQ 标准格式转换）。",
+   "tags": [
+    "awq",
+    "quantization",
+    "marlin"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/auto_awq.py:AutoAWQConfig",
+   "type": "class",
+   "name": "AutoAWQConfig",
+   "filePath": "vllm/model_executor/layers/quantization/auto_awq.py",
+   "lineRange": [
+    174,
+    388
+   ],
+   "summary": "AutoAWQ 配置（215 行 11 方法）。",
+   "tags": [
+    "awq",
+    "config"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/auto_awq.py:AutoAWQMarlinLinearMethod",
+   "type": "class",
+   "name": "AutoAWQMarlinLinearMethod",
+   "filePath": "vllm/model_executor/layers/quantization/auto_awq.py",
+   "lineRange": [
+    391,
+    522
+   ],
+   "summary": "AWQ Marlin 线性方法（132 行）。",
+   "tags": [
+    "awq",
+    "marlin"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/auto_awq.py:AutoAWQMoEMethod",
+   "type": "class",
+   "name": "AutoAWQMoEMethod",
+   "filePath": "vllm/model_executor/layers/quantization/auto_awq.py",
+   "lineRange": [
+    525,
+    794
+   ],
+   "summary": "AWQ MoE 方法（270 行）。",
+   "tags": [
+    "awq",
+    "moe"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/auto_awq.py:BaseAWQLinearMethod",
+   "type": "class",
+   "name": "BaseAWQLinearMethod",
+   "filePath": "vllm/model_executor/layers/quantization/auto_awq.py",
+   "lineRange": [
+    797,
+    876
+   ],
+   "summary": "AWQ 线性基类（80 行）。",
+   "tags": [
+    "awq",
+    "base"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/auto_awq.py:AutoAWQLinearMethod",
+   "type": "class",
+   "name": "AutoAWQLinearMethod",
+   "filePath": "vllm/model_executor/layers/quantization/auto_awq.py",
+   "lineRange": [
+    879,
+    911
+   ],
+   "summary": "AWQ 线性方法（33 行）。",
+   "tags": [
+    "awq",
+    "linear"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/quantization/auto_awq.py:_replace_or_register_parameter",
+   "type": "function",
+   "name": "_replace_or_register_parameter",
+   "filePath": "vllm/model_executor/layers/quantization/auto_awq.py",
+   "lineRange": [
+    79,
+    89
+   ],
+   "summary": "替换/注册参数（11 行）。",
+   "tags": [
+    "params",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/quantization/auto_awq.py:_convert_awq_to_standard_format",
+   "type": "function",
+   "name": "_convert_awq_to_standard_format",
+   "filePath": "vllm/model_executor/layers/quantization/auto_awq.py",
+   "lineRange": [
+    92,
+    171
+   ],
+   "summary": "AWQ→标准格式转换（80 行）。",
+   "tags": [
+    "awq",
+    "convert"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "type": "file",
+   "name": "auto_gptq.py",
+   "filePath": "vllm/model_executor/layers/quantization/auto_gptq.py",
+   "summary": "AutoGPTQ 量化（783 行：Config/Linear/MoE 方法）。",
+   "tags": [
+    "gptq",
+    "quantization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/auto_gptq.py:AutoGPTQConfig",
+   "type": "class",
+   "name": "AutoGPTQConfig",
+   "filePath": "vllm/model_executor/layers/quantization/auto_gptq.py",
+   "lineRange": [
+    95,
+    298
+   ],
+   "summary": "GPTQ 配置（204 行 11 方法）。",
+   "tags": [
+    "gptq",
+    "config"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/auto_gptq.py:AutoGPTQLinearMethod",
+   "type": "class",
+   "name": "AutoGPTQLinearMethod",
+   "filePath": "vllm/model_executor/layers/quantization/auto_gptq.py",
+   "lineRange": [
+    301,
+    447
+   ],
+   "summary": "GPTQ 线性方法（147 行）。",
+   "tags": [
+    "gptq",
+    "linear"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/auto_gptq.py:AutoGPTQMoEMethod",
+   "type": "class",
+   "name": "AutoGPTQMoEMethod",
+   "filePath": "vllm/model_executor/layers/quantization/auto_gptq.py",
+   "lineRange": [
+    450,
+    783
+   ],
+   "summary": "GPTQ MoE 方法（334 行）。",
+   "tags": [
+    "gptq",
+    "moe"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/quantization/auto_gptq.py:get_moe_quant_method",
+   "type": "function",
+   "name": "get_moe_quant_method",
+   "filePath": "vllm/model_executor/layers/quantization/auto_gptq.py",
+   "lineRange": [
+    69,
+    92
+   ],
+   "summary": "MoE 量化方法获取（24 行公开）。",
+   "tags": [
+    "gptq",
+    "moe",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "type": "file",
+   "name": "base_config.py",
+   "filePath": "vllm/model_executor/layers/quantization/base_config.py",
+   "summary": "量化体系基类（QuantizeMethodBase/QuantizationConfig 184 行 14 方法 + 方法解析）。",
+   "tags": [
+    "quantization",
+    "abstract-base",
+    "contract"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/base_config.py:QuantizeMethodBase",
+   "type": "class",
+   "name": "QuantizeMethodBase",
+   "filePath": "vllm/model_executor/layers/quantization/base_config.py",
+   "lineRange": [
+    23,
+    95
+   ],
+   "summary": "量化方法抽象基类（73 行 6 方法）。",
+   "tags": [
+    "quantization",
+    "abstract-base"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/base_config.py:QuantizationConfig",
+   "type": "class",
+   "name": "QuantizationConfig",
+   "filePath": "vllm/model_executor/layers/quantization/base_config.py",
+   "lineRange": [
+    109,
+    292
+   ],
+   "summary": "量化配置抽象基类（184 行 14 方法）。",
+   "tags": [
+    "quantization",
+    "config",
+    "abstract-base"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/quantization/base_config.py:method_has_implemented_embedding",
+   "type": "function",
+   "name": "method_has_implemented_embedding",
+   "filePath": "vllm/model_executor/layers/quantization/base_config.py",
+   "lineRange": [
+    98,
+    106
+   ],
+   "summary": "方法是否实现 embedding（9 行公开）。",
+   "tags": [
+    "embedding",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/quantization/base_config.py:resolve_quant_method",
+   "type": "function",
+   "name": "resolve_quant_method",
+   "filePath": "vllm/model_executor/layers/quantization/base_config.py",
+   "lineRange": [
+    295,
+    356
+   ],
+   "summary": "解析量化方法（62 行公开）。",
+   "tags": [
+    "resolution",
+    "method"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "type": "file",
+   "name": "compressed_tensors.py",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "summary": "CompressedTensors 量化主实现（1281 行：Config 953 行 34 方法 + Linear/KVCache 方法）。",
+   "tags": [
+    "compressed-tensors",
+    "quantization",
+    "config"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py:CompressedTensorsConfig",
+   "type": "class",
+   "name": "CompressedTensorsConfig",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "lineRange": [
+    89,
+    1041
+   ],
+   "summary": "CompressedTensors 配置（953 行 34 方法）。",
+   "tags": [
+    "compressed-tensors",
+    "config"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py:CompressedTensorsLinearMethod",
+   "type": "class",
+   "name": "CompressedTensorsLinearMethod",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "lineRange": [
+    1044,
+    1090
+   ],
+   "summary": "CompressedTensors 线性方法（47 行）。",
+   "tags": [
+    "compressed-tensors",
+    "linear"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py:CompressedTensorsKVCacheMethod",
+   "type": "class",
+   "name": "CompressedTensorsKVCacheMethod",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "lineRange": [
+    1093,
+    1281
+   ],
+   "summary": "CompressedTensors KV cache 方法（189 行）。",
+   "tags": [
+    "compressed-tensors",
+    "kv-cache"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "type": "file",
+   "name": "compressed_tensors_moe.py",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "summary": "CompressedTensors MoE 方法基类（分派到具体 WxAy 格式子类）。",
+   "tags": [
+    "compressed-tensors",
+    "moe",
+    "base"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py:CompressedTensorsMoEMethod",
+   "type": "class",
+   "name": "CompressedTensorsMoEMethod",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "lineRange": [
+    26,
+    201
+   ],
+   "summary": "CompressedTensors MoE 方法基类（176 行）。",
+   "tags": [
+    "compressed-tensors",
+    "moe",
+    "base"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py",
+   "type": "file",
+   "name": "compressed_tensors_moe_w4a16_flydsl.py",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py",
+   "summary": "CompressedTensors W4A16 FlyDSL MoE（含 GPTQ int32→FlyDSL 打包转换三工具）。",
+   "tags": [
+    "compressed-tensors",
+    "w4a16",
+    "flydsl",
+    "moe"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py:CompressedTensorsW4A16FlydslMoEMethod",
+   "type": "class",
+   "name": "CompressedTensorsW4A16FlydslMoEMethod",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py",
+   "lineRange": [
+    87,
+    290
+   ],
+   "summary": "W4A16 FlyDSL MoE 方法（204 行 5 方法）。",
+   "tags": [
+    "w4a16",
+    "flydsl",
+    "moe"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py:_pack_shuffled_int8_to_packed_int4_no_perm",
+   "type": "function",
+   "name": "_pack_shuffled_int8_to_packed_int4_no_perm",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py",
+   "lineRange": [
+    29,
+    43
+   ],
+   "summary": "shuffled int8→packed int4（15 行）。",
+   "tags": [
+    "packing",
+    "int4"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py:_unpack_gptq_int32_to_signed_int4",
+   "type": "function",
+   "name": "_unpack_gptq_int32_to_signed_int4",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py",
+   "lineRange": [
+    46,
+    66
+   ],
+   "summary": "GPTQ int32→有符号 int4 解包（21 行）。",
+   "tags": [
+    "unpack",
+    "int4"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py:_gptq_int32_to_flydsl_packed",
+   "type": "function",
+   "name": "_gptq_int32_to_flydsl_packed",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py",
+   "lineRange": [
+    69,
+    84
+   ],
+   "summary": "GPTQ int32→FlyDSL 打包（16 行）。",
+   "tags": [
+    "packing",
+    "flydsl"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "type": "file",
+   "name": "compressed_tensors_moe_w4a4_mxfp4.py",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "summary": "CompressedTensors W4A4 MXFP4 MoE 方法。",
+   "tags": [
+    "compressed-tensors",
+    "w4a4",
+    "mxfp4",
+    "moe"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py:CompressedTensorsW4A4Mxfp4MoEMethod",
+   "type": "class",
+   "name": "CompressedTensorsW4A4Mxfp4MoEMethod",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "lineRange": [
+    52,
+    268
+   ],
+   "summary": "W4A4 MXFP4 MoE 方法（217 行）。",
+   "tags": [
+    "w4a4",
+    "mxfp4",
+    "moe"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_nvfp4.py",
+   "type": "file",
+   "name": "compressed_tensors_moe_w4a4_nvfp4.py",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_nvfp4.py",
+   "summary": "CompressedTensors W4A4 NVFP4 MoE 方法（292 行）。",
+   "tags": [
+    "compressed-tensors",
+    "w4a4",
+    "nvfp4",
+    "moe"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_nvfp4.py:CompressedTensorsW4A4Nvfp4MoEMethod",
+   "type": "class",
+   "name": "CompressedTensorsW4A4Nvfp4MoEMethod",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_nvfp4.py",
+   "lineRange": [
+    51,
+    342
+   ],
+   "summary": "W4A4 NVFP4 MoE 方法（292 行）。",
+   "tags": [
+    "w4a4",
+    "nvfp4",
+    "moe"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_fp8.py",
+   "type": "file",
+   "name": "compressed_tensors_moe_w4a8_fp8.py",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_fp8.py",
+   "summary": "CompressedTensors W4A8 FP8 MoE 方法。",
+   "tags": [
+    "compressed-tensors",
+    "w4a8",
+    "fp8",
+    "moe"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_fp8.py:CompressedTensorsW4A8Fp8MoEMethod",
+   "type": "class",
+   "name": "CompressedTensorsW4A8Fp8MoEMethod",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_fp8.py",
+   "lineRange": [
+    31,
+    235
+   ],
+   "summary": "W4A8 FP8 MoE 方法（205 行）。",
+   "tags": [
+    "w4a8",
+    "fp8",
+    "moe"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_int8.py",
+   "type": "file",
+   "name": "compressed_tensors_moe_w4a8_int8.py",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_int8.py",
+   "summary": "CompressedTensors W4A8 INT8 MoE 方法（278 行）。",
+   "tags": [
+    "compressed-tensors",
+    "w4a8",
+    "int8",
+    "moe"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_int8.py:CompressedTensorsW4A8Int8MoEMethod",
+   "type": "class",
+   "name": "CompressedTensorsW4A8Int8MoEMethod",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_int8.py",
+   "lineRange": [
+    38,
+    315
+   ],
+   "summary": "W4A8 INT8 MoE 方法（278 行）。",
+   "tags": [
+    "w4a8",
+    "int8",
+    "moe"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_mxfp4.py",
+   "type": "file",
+   "name": "compressed_tensors_moe_w4a8_mxfp4.py",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_mxfp4.py",
+   "summary": "CompressedTensors W4A8 MXFP4 MoE 方法（Mxfp4MoEMethod 子类薄层）。",
+   "tags": [
+    "compressed-tensors",
+    "w4a8",
+    "mxfp4",
+    "moe"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_mxfp4.py:CompressedTensorsW4A8Mxfp4MoEMethod",
+   "type": "class",
+   "name": "CompressedTensorsW4A8Mxfp4MoEMethod",
+   "filePath": "vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_mxfp4.py",
+   "lineRange": [
+    10,
+    34
+   ],
+   "summary": "W4A8 MXFP4 MoE 方法（25 行薄层）。",
+   "tags": [
+    "w4a8",
+    "mxfp4",
+    "moe"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py:causal_conv1d_fn_cpu",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py:causal_conv1d_fn_cpu",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py:causal_conv1d_update_cpu",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py:causal_conv1d_update_cpu",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py:causal_conv1d_update_torch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py:causal_conv1d_update_torch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:_causal_conv1d_fwd_cpu",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:_causal_conv1d_update_cpu",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:is_arm_bf16",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:is_arm_bf16",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:cpu_gdn_attention_core",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:cpu_gdn_attention_core",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:_cpu_gdn_attention_nonspec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:_unpacked_conv_weight",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:_cpu_gdn_attention_spec_aware",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:_spec_forward",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:_spec_aware_nonspec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:_spec_aware_nonspec_subset",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:register_cpu_gdn_attention_ops",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py:register_cpu_gdn_attention_ops",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:get_ssm_config_file_name",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:get_ssm_config_file_name",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:get_ssm_configs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:get_ssm_configs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:_get_default_ssm_launch_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:_try_get_optimal_ssm_config_cached",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:override_ssm_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:override_ssm_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:try_get_optimal_ssm_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:try_get_optimal_ssm_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:convert_rs_fp16x2",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:convert_rs_fp16x2",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:_selective_scan_update_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:selective_state_update",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:selective_state_update",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:selective_scan_fn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/mamba_ssm.py:selective_scan_fn",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/replayssm_config.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/replayssm_config.py:get_replayssm_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/replayssm_config.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/replayssm_config.py:get_replayssm_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/scatter_states.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/scatter_states.py:_scatter_states_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/scatter_states.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/scatter_states.py:_scatter_states_warmup_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/scatter_states.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/scatter_states.py:scatter_states",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/scatter_states.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/scatter_states.py:scatter_states",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_bmm.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssd_bmm.py:_bmm_chunk_fwd_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_bmm.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssd_bmm.py:_bmm_chunk_fwd",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_checkpoint.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssd_checkpoint.py:_store_prefill_checkpoint_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_checkpoint.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssd_checkpoint.py:store_prefill_checkpoint",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_checkpoint.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssd_checkpoint.py:store_prefill_checkpoint",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_chunk_scan.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssd_chunk_scan.py:_drop_racy_wgmma_configs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_chunk_scan.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssd_chunk_scan.py:_chunk_scan_fwd_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_chunk_scan.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssd_chunk_scan.py:_chunk_scan_fwd",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py:_chunk_cumsum_fwd_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py:_chunk_state_fwd_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py:_chunk_cumsum_fwd",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py:_chunk_state_fwd",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_combined.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssd_combined.py:_mamba_chunk_scan_combined_fwd",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_combined.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssd_combined.py:mamba_chunk_scan_combined_varlen",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_combined.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssd_combined.py:mamba_chunk_scan_combined_varlen",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_state_passing.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssd_state_passing.py:_state_passing_fwd_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_state_passing.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssd_state_passing.py:_state_passing_fwd",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "class:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:MambaSSUBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "class:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:MambaSSUBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "class:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:TritonSSUBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "class:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:TritonSSUBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "class:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:FlashInferSSUBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "class:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:FlashInferSSUBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "class:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:CPUSSUBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "class:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:CPUSSUBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:_update_replayssm_ring_trackers_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:_commit_replayssm_ring_trackers_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:update_replayssm_ring_trackers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:update_replayssm_ring_trackers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:reset_replayssm_ring_trackers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:reset_replayssm_ring_trackers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:commit_replayssm_ring_trackers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:commit_replayssm_ring_trackers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:flashinfer_replayssm_autotune_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:flashinfer_replayssm_autotune_supported",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:selective_state_update_replayssm_flashinfer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:selective_state_update_replayssm_flashinfer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:initialize_mamba_ssu_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:initialize_mamba_ssu_backend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:get_mamba_ssu_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:get_mamba_ssu_backend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:selective_state_update",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:selective_state_update",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/triton_helpers.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/triton_helpers.py:launch_autotuned",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/triton_helpers.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/triton_helpers.py:launch_autotuned",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/triton_helpers.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/triton_helpers.py:fast_exp",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/triton_helpers.py",
+   "target": "function:vllm/model_executor/layers/mamba/ops/triton_helpers.py:fast_exp",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "class:vllm/model_executor/layers/mamba/short_conv.py:ShortConv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "class:vllm/model_executor/layers/mamba/short_conv.py:ShortConv",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "function:vllm/model_executor/layers/mamba/short_conv.py:short_conv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "function:vllm/model_executor/layers/mamba/short_conv.py:short_conv",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "class:vllm/model_executor/layers/mhc.py:MHCPreOp",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "class:vllm/model_executor/layers/mhc.py:MHCPreOp",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "class:vllm/model_executor/layers/mhc.py:MHCPreDelayedOp",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "class:vllm/model_executor/layers/mhc.py:MHCPreDelayedOp",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "class:vllm/model_executor/layers/mhc.py:MHCPostOp",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "class:vllm/model_executor/layers/mhc.py:MHCPostOp",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "class:vllm/model_executor/layers/mhc.py:HCHeadOp",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "class:vllm/model_executor/layers/mhc.py:HCHeadOp",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "class:vllm/model_executor/layers/mhc.py:MHCFusedPostPreOp",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "class:vllm/model_executor/layers/mhc.py:MHCFusedPostPreOp",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "function:vllm/model_executor/layers/mhc.py:_has_tilelang_mhc",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "function:vllm/model_executor/layers/mhc.py:_aiter_mhc_op_accepts_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "function:vllm/model_executor/layers/mhc.py:_aiter_mhc_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "function:vllm/model_executor/layers/mhc.py:_apply_mhc_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mla.py",
+   "target": "class:vllm/model_executor/layers/mla.py:MultiHeadLatentAttentionWrapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mla.py",
+   "target": "class:vllm/model_executor/layers/mla.py:MultiHeadLatentAttentionWrapper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "function:vllm/model_executor/layers/quantization/__init__.py:register_quantization_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "function:vllm/model_executor/layers/quantization/__init__.py:register_quantization_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "function:vllm/model_executor/layers/quantization/__init__.py:get_quantization_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "function:vllm/model_executor/layers/quantization/__init__.py:get_quantization_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "class:vllm/model_executor/layers/quantization/auto_awq.py:AutoAWQConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "class:vllm/model_executor/layers/quantization/auto_awq.py:AutoAWQConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "class:vllm/model_executor/layers/quantization/auto_awq.py:AutoAWQMarlinLinearMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "class:vllm/model_executor/layers/quantization/auto_awq.py:AutoAWQMarlinLinearMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "class:vllm/model_executor/layers/quantization/auto_awq.py:AutoAWQMoEMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "class:vllm/model_executor/layers/quantization/auto_awq.py:AutoAWQMoEMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "class:vllm/model_executor/layers/quantization/auto_awq.py:BaseAWQLinearMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "class:vllm/model_executor/layers/quantization/auto_awq.py:BaseAWQLinearMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "class:vllm/model_executor/layers/quantization/auto_awq.py:AutoAWQLinearMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "class:vllm/model_executor/layers/quantization/auto_awq.py:AutoAWQLinearMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "function:vllm/model_executor/layers/quantization/auto_awq.py:_replace_or_register_parameter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "function:vllm/model_executor/layers/quantization/auto_awq.py:_convert_awq_to_standard_format",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "class:vllm/model_executor/layers/quantization/auto_gptq.py:AutoGPTQConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "class:vllm/model_executor/layers/quantization/auto_gptq.py:AutoGPTQConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "class:vllm/model_executor/layers/quantization/auto_gptq.py:AutoGPTQLinearMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "class:vllm/model_executor/layers/quantization/auto_gptq.py:AutoGPTQLinearMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "class:vllm/model_executor/layers/quantization/auto_gptq.py:AutoGPTQMoEMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "class:vllm/model_executor/layers/quantization/auto_gptq.py:AutoGPTQMoEMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "function:vllm/model_executor/layers/quantization/auto_gptq.py:get_moe_quant_method",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "function:vllm/model_executor/layers/quantization/auto_gptq.py:get_moe_quant_method",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "target": "class:vllm/model_executor/layers/quantization/base_config.py:QuantizeMethodBase",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "target": "class:vllm/model_executor/layers/quantization/base_config.py:QuantizeMethodBase",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "target": "class:vllm/model_executor/layers/quantization/base_config.py:QuantizationConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "target": "class:vllm/model_executor/layers/quantization/base_config.py:QuantizationConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "target": "function:vllm/model_executor/layers/quantization/base_config.py:method_has_implemented_embedding",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "target": "function:vllm/model_executor/layers/quantization/base_config.py:method_has_implemented_embedding",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "target": "function:vllm/model_executor/layers/quantization/base_config.py:resolve_quant_method",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "target": "function:vllm/model_executor/layers/quantization/base_config.py:resolve_quant_method",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py:CompressedTensorsConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py:CompressedTensorsConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py:CompressedTensorsLinearMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py:CompressedTensorsLinearMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py:CompressedTensorsKVCacheMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py:CompressedTensorsKVCacheMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py:CompressedTensorsMoEMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py:CompressedTensorsMoEMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py:CompressedTensorsW4A16FlydslMoEMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py:CompressedTensorsW4A16FlydslMoEMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py",
+   "target": "function:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py:_pack_shuffled_int8_to_packed_int4_no_perm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py",
+   "target": "function:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py:_unpack_gptq_int32_to_signed_int4",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py",
+   "target": "function:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py:_gptq_int32_to_flydsl_packed",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py:CompressedTensorsW4A4Mxfp4MoEMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py:CompressedTensorsW4A4Mxfp4MoEMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_nvfp4.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_nvfp4.py:CompressedTensorsW4A4Nvfp4MoEMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_nvfp4.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_nvfp4.py:CompressedTensorsW4A4Nvfp4MoEMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_fp8.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_fp8.py:CompressedTensorsW4A8Fp8MoEMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_fp8.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_fp8.py:CompressedTensorsW4A8Fp8MoEMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_int8.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_int8.py:CompressedTensorsW4A8Int8MoEMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_int8.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_int8.py:CompressedTensorsW4A8Int8MoEMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_mxfp4.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_mxfp4.py:CompressedTensorsW4A8Mxfp4MoEMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_mxfp4.py",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_mxfp4.py:CompressedTensorsW4A8Mxfp4MoEMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/cpu/gdn_attention.py",
+   "target": "file:vllm/v1/attention/backends/gdn_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/triton_helpers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "file:vllm/utils/platform_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "file:vllm/_xpu_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/cpu/mamba_ssm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/replayssm_config.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/replayssm_config.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/scatter_states.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/scatter_states.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/scatter_states.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/scatter_states.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_bmm.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/triton_helpers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_bmm.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_checkpoint.py",
+   "target": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_checkpoint.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_chunk_scan.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/triton_helpers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_chunk_scan.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_chunk_scan.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/triton_helpers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_combined.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_combined.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/ssd_bmm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_combined.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/ssd_chunk_scan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_combined.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/ssd_chunk_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_combined.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/ssd_state_passing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_combined.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_combined.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/cpu/mamba_ssm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_state_passing.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/triton_helpers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssd_state_passing.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "file:vllm/config/mamba.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/mamba_ssm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/ops/triton_helpers.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/causal_conv1d.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mamba/short_conv.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/cpu/causal_conv1d.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "file:vllm/model_executor/kernels/mhc/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mhc.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mla.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mla.py",
+   "target": "file:vllm/model_executor/custom_op.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mla.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mla.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mla.py",
+   "target": "file:vllm/models/common/ops/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mla.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/mla.py",
+   "target": "file:vllm/v1/attention/backends/mla/index_group.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/config/quantization.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/model_executor/layers/quantization/quark/quark.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/models/deepseek_v41/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/models/deepseek_v4/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/model_executor/layers/quantization/experts_int8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/model_executor/layers/quantization/fbgemm_fp8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/model_executor/layers/quantization/fp8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/model_executor/layers/quantization/fp_quant.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/model_executor/layers/quantization/humming.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/model_executor/layers/quantization/inc/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/model_executor/layers/quantization/modelopt.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/model_executor/layers/quantization/moe_wna16.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/model_executor/layers/quantization/mxfp4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/model_executor/layers/quantization/online/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "target": "file:vllm/model_executor/layers/quantization/torchao.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/oracle/int_wna16.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/marlin_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "file:vllm/model_executor/parameter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "file:vllm/scalar_type.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "file:vllm/transformers_utils/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "file:vllm/model_executor/layers/quantization/moe_wna16.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_awq.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/humming/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/oracle/int_wna16.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/gptq_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/marlin_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "file:vllm/model_executor/parameter.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "file:vllm/scalar_type.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "file:vllm/transformers_utils/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "file:vllm/utils/collection_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "file:vllm/model_executor/layers/quantization/moe_wna16.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/humming/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/auto_gptq.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "target": "file:vllm/model_executor/layers/quantization/online/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "target": "file:vllm/model_executor/layers/quantization/online/fp8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "target": "file:vllm/model_executor/layers/quantization/online/moe_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/schemes/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/transform/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "file:vllm/model_executor/layers/quantization/kv_cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/schemes/compressed_tensors_wNa16.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_mxfp4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w8a8_mxfp8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_wna16.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_nvfp4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w8a8_fp8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w8a8_int8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_fp8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_int8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/fused_flydsl_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/modular_kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/cutlass_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/marlin_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/xpu_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/flashinfer_moe_ep.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/moe_output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/oracle/mxfp4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/marlin_utils_fp4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_nvfp4.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_nvfp4.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_nvfp4.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_nvfp4.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/moe_output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_nvfp4.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/oracle/nvfp4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_nvfp4.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_nvfp4.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/nvfp4_emulation_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_nvfp4.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_nvfp4.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_fp8.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_fp8.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_fp8.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/oracle/w4a8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_fp8.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_fp8.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_int8.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_int8.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_int8.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_int8.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/oracle/w4a8_int8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_int8.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_int8.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_int8.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_mxfp4.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_mxfp4.py",
+   "target": "file:vllm/model_executor/layers/quantization/mxfp4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:TritonSSUBackend",
+   "target": "class:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:MambaSSUBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:FlashInferSSUBackend",
+   "target": "class:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:MambaSSUBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:CPUSSUBackend",
+   "target": "class:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py:MambaSSUBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/mamba/short_conv.py:ShortConv",
+   "target": "class:vllm/model_executor/layers/mamba/abstract.py:MambaBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/mamba/short_conv.py:ShortConv",
+   "target": "class:vllm/model_executor/custom_op.py:PluggableLayer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/mla.py:MultiHeadLatentAttentionWrapper",
+   "target": "class:vllm/model_executor/custom_op.py:PluggableLayer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/quantization/auto_awq.py:AutoAWQConfig",
+   "target": "class:vllm/model_executor/layers/quantization/base_config.py:QuantizationConfig",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/quantization/auto_awq.py:AutoAWQMarlinLinearMethod",
+   "target": "class:vllm/model_executor/layers/linear.py:LinearMethodBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/quantization/auto_awq.py:AutoAWQMoEMethod",
+   "target": "class:vllm/model_executor/layers/fused_moe/__init__.py:FusedMoEMethodBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/quantization/auto_awq.py:BaseAWQLinearMethod",
+   "target": "class:vllm/model_executor/layers/linear.py:LinearMethodBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/quantization/auto_awq.py:AutoAWQLinearMethod",
+   "target": "class:vllm/model_executor/layers/quantization/auto_awq.py:BaseAWQLinearMethod",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/quantization/auto_gptq.py:AutoGPTQConfig",
+   "target": "class:vllm/model_executor/layers/quantization/base_config.py:QuantizationConfig",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/quantization/auto_gptq.py:AutoGPTQLinearMethod",
+   "target": "class:vllm/model_executor/layers/linear.py:LinearMethodBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/quantization/auto_gptq.py:AutoGPTQMoEMethod",
+   "target": "class:vllm/model_executor/layers/fused_moe/__init__.py:FusedMoEMethodBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py:CompressedTensorsConfig",
+   "target": "class:vllm/model_executor/layers/quantization/base_config.py:QuantizationConfig",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py:CompressedTensorsLinearMethod",
+   "target": "class:vllm/model_executor/layers/linear.py:LinearMethodBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors.py:CompressedTensorsKVCacheMethod",
+   "target": "class:vllm/model_executor/layers/quantization/kv_cache.py:BaseKVCacheMethod",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe.py:CompressedTensorsMoEMethod",
+   "target": "class:vllm/model_executor/layers/fused_moe/__init__.py:FusedMoEMethodBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a16_flydsl.py:CompressedTensorsW4A16FlydslMoEMethod",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/__init__.py:CompressedTensorsMoEMethod",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py:CompressedTensorsW4A4Mxfp4MoEMethod",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/__init__.py:CompressedTensorsMoEMethod",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_nvfp4.py:CompressedTensorsW4A4Nvfp4MoEMethod",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/__init__.py:CompressedTensorsMoEMethod",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_fp8.py:CompressedTensorsW4A8Fp8MoEMethod",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/__init__.py:CompressedTensorsMoEMethod",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_int8.py:CompressedTensorsW4A8Int8MoEMethod",
+   "target": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/__init__.py:CompressedTensorsMoEMethod",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_mxfp4.py:CompressedTensorsW4A8Mxfp4MoEMethod",
+   "target": "class:vllm/model_executor/layers/quantization/mxfp4.py:Mxfp4MoEMethod",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

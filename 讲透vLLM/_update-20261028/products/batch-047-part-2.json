@@ -1,0 +1,1285 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/minimax_m3/amd/model.py",
+   "type": "file",
+   "name": "model.py",
+   "filePath": "vllm/models/minimax_m3/amd/model.py",
+   "summary": "MiniMax M3 ROCm 模型（1977 行）：Gemma 式 RMSNorm（(1+weight) 缩放）、SwiGLU-OAI 密集层、sigmoid 路由 MoE（路由偏差校正+共享专家）、部分 RoPE 注意力与 lightning-indexer 融合的块稀疏注意力层。",
+   "tags": [
+    "minimax-m3",
+    "rocm",
+    "sparse-attention",
+    "moe"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/model_state.py",
+   "type": "file",
+   "name": "model_state.py",
+   "filePath": "vllm/models/minimax_m3/amd/model_state.py",
+   "summary": "MiniMax M3 ROCm 的 model state（DefaultModelState 子类）。",
+   "tags": [
+    "model-state",
+    "minimax-m3",
+    "rocm"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "type": "file",
+   "name": "mtp.py",
+   "filePath": "vllm/models/minimax_m3/amd/mtp.py",
+   "summary": "MiniMax M3 ROCm MTP：多 token 预测层/预测器与 sparse indexer 上下文构建。",
+   "tags": [
+    "mtp",
+    "minimax-m3",
+    "spec-decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "type": "file",
+   "name": "index_topk.py",
+   "filePath": "vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "summary": "AMD 索引 top-k kernel 集（1641 行）：index block score、双调 top-k、decode 融合自适应 top-k（split-K launch 策略与高批特化）。",
+   "tags": [
+    "triton",
+    "top-k",
+    "indexer",
+    "split-k"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py",
+   "type": "file",
+   "name": "indexer_context_parallel.py",
+   "filePath": "vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py",
+   "summary": "索引器 CP 评分 kernel：把 score 行按 world 切 chunk 轮转，产出 [heads,tokens,ceil(blocks/world)] 布局并校验输入。",
+   "tags": [
+    "triton",
+    "context-parallel",
+    "scoring"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/model.py:MiniMAXGemmaRMSNorm",
+   "type": "class",
+   "name": "MiniMAXGemmaRMSNorm",
+   "filePath": "vllm/models/minimax_m3/amd/model.py",
+   "summary": "Gemma 式 RMSNorm（原生 ROCm，(1+weight) 缩放）。",
+   "tags": [
+    "rmsnorm",
+    "gemma",
+    "rocm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    242,
+    271
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3MLP",
+   "type": "class",
+   "name": "MiniMaxM3MLP",
+   "filePath": "vllm/models/minimax_m3/amd/model.py",
+   "summary": "稠密 SwiGLU-OAI MLP（前导 dense 层用）。",
+   "tags": [
+    "mlp",
+    "swiglu",
+    "dense"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    274,
+    324
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3MoE",
+   "type": "class",
+   "name": "MiniMaxM3MoE",
+   "filePath": "vllm/models/minimax_m3/amd/model.py",
+   "summary": "sigmoid 路由 MoE：路由偏差校正 + 共享专家。",
+   "tags": [
+    "moe",
+    "sigmoid-routing",
+    "shared-expert"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    349,
+    498
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3Attention",
+   "type": "class",
+   "name": "MiniMaxM3Attention",
+   "filePath": "vllm/models/minimax_m3/amd/model.py",
+   "summary": "稠密注意力：每头 QK norm + 部分 RoPE。",
+   "tags": [
+    "attention",
+    "qk-norm",
+    "partial-rope"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    501,
+    594
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3SparseAttention",
+   "type": "class",
+   "name": "MiniMaxM3SparseAttention",
+   "filePath": "vllm/models/minimax_m3/amd/model.py",
+   "summary": "融合块稀疏注意力层：拥有 lightning-indexer 分支（merged attention layer，9 方法）。",
+   "tags": [
+    "sparse-attention",
+    "indexer",
+    "merged-layer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    623,
+    1283
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3DecoderLayer",
+   "type": "class",
+   "name": "MiniMaxM3DecoderLayer",
+   "filePath": "vllm/models/minimax_m3/amd/model.py",
+   "summary": "单 decoder 层。",
+   "tags": [
+    "decoder-layer",
+    "minimax-m3",
+    "transformer"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1286,
+    1382
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3Model",
+   "type": "class",
+   "name": "MiniMaxM3Model",
+   "filePath": "vllm/models/minimax_m3/amd/model.py",
+   "summary": "MiniMax M3 backbone（EagleModelMixin）。",
+   "tags": [
+    "backbone",
+    "eagle-mixin",
+    "minimax-m3"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1385,
+    1701
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3SparseForCausalLM",
+   "type": "class",
+   "name": "MiniMaxM3SparseForCausalLM",
+   "filePath": "vllm/models/minimax_m3/amd/model.py",
+   "summary": "MiniMax M3 因果 LM 入口（SupportsPP）。",
+   "tags": [
+    "causal-lm",
+    "entry-point",
+    "supports-pp"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1704,
+    1762
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3SparseForConditionalGeneration",
+   "type": "class",
+   "name": "MiniMaxM3SparseForConditionalGeneration",
+   "filePath": "vllm/models/minimax_m3/amd/model.py",
+   "summary": "MiniMax M3 VL 顶层入口（共享视觉塔，文本委托）。",
+   "tags": [
+    "multimodal",
+    "vl",
+    "entry-point"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1774,
+    1976
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/model_state.py:MiniMaxM3ModelState",
+   "type": "class",
+   "name": "MiniMaxM3ModelState",
+   "filePath": "vllm/models/minimax_m3/amd/model_state.py",
+   "summary": "MiniMax M3 ROCm 的 model state。",
+   "tags": [
+    "model-state",
+    "default-model-state",
+    "rocm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    11,
+    41
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/mtp.py:MiniMaxM3MultiTokenPredictorLayer",
+   "type": "class",
+   "name": "MiniMaxM3MultiTokenPredictorLayer",
+   "filePath": "vllm/models/minimax_m3/amd/mtp.py",
+   "summary": "MTP 单层。",
+   "tags": [
+    "mtp",
+    "layer",
+    "predictor"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    136,
+    204
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/mtp.py:MiniMaxM3MultiTokenPredictor",
+   "type": "class",
+   "name": "MiniMaxM3MultiTokenPredictor",
+   "filePath": "vllm/models/minimax_m3/amd/mtp.py",
+   "summary": "MTP 预测器。",
+   "tags": [
+    "mtp",
+    "predictor",
+    "stacked"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    207,
+    264
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/amd/mtp.py:MiniMaxM3MTP",
+   "type": "class",
+   "name": "MiniMaxM3MTP",
+   "filePath": "vllm/models/minimax_m3/amd/mtp.py",
+   "summary": "MiniMax M3 MTP 模块（7 方法）。",
+   "tags": [
+    "mtp",
+    "spec-decode",
+    "module"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    267,
+    450
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/model.py:_should_skip_index_topk",
+   "type": "function",
+   "name": "_should_skip_index_topk",
+   "filePath": "vllm/models/minimax_m3/amd/model.py",
+   "summary": "ATOM index_topk_freq（跨层索引共享）判定。",
+   "tags": [
+    "index-sharing",
+    "predicate",
+    "atom"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    169,
+    190
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/model.py:_build_rotary_emb",
+   "type": "function",
+   "name": "_build_rotary_emb",
+   "filePath": "vllm/models/minimax_m3/amd/model.py",
+   "summary": "构建部分 NeoX RoPE（可选 rope_scaling）。",
+   "tags": [
+    "rope",
+    "factory",
+    "partial"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    201,
+    239
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/model.py:_aiter_moe_fused_shared_experts_enabled",
+   "type": "function",
+   "name": "_aiter_moe_fused_shared_experts_enabled",
+   "filePath": "vllm/models/minimax_m3/amd/model.py",
+   "summary": "融合共享专家是否走 aiter grouped GEMM。",
+   "tags": [
+    "aiter",
+    "shared-expert",
+    "predicate"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    327,
+    346
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/model.py:_kv_insert_operand",
+   "type": "function",
+   "name": "_kv_insert_operand",
+   "filePath": "vllm/models/minimax_m3/amd/model.py",
+   "summary": "aiter.reshape_and_cache 的 K/V 操作数（免额外拷贝视图）。",
+   "tags": [
+    "kv-cache",
+    "aiter",
+    "operand"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    601,
+    620
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/index_topk.py:_decode_index_score_balanced_kernel",
+   "type": "function",
+   "name": "_decode_index_score_balanced_kernel",
+   "filePath": "vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "summary": "decode 索引评分的负载均衡 split kernel。",
+   "tags": [
+    "triton",
+    "split-k",
+    "scoring"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    622,
+    727
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/index_topk.py:_merge_store_decode_topk",
+   "type": "function",
+   "name": "_merge_store_decode_topk",
+   "filePath": "vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "summary": "decode top-k 部分结果的合并写出。",
+   "tags": [
+    "triton",
+    "merge",
+    "top-k"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    797,
+    865
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/index_topk.py:_decode_topk_fused_kernel",
+   "type": "function",
+   "name": "_decode_topk_fused_kernel",
+   "filePath": "vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "summary": "decode 融合自适应 top-k 主 kernel（310 行）。",
+   "tags": [
+    "triton",
+    "top-k",
+    "fused-kernel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    869,
+    1179
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/index_topk.py:minimax_m3_index_score",
+   "type": "function",
+   "name": "minimax_m3_index_score",
+   "filePath": "vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "summary": "逐 token 对每个可见稀疏块的索引评分。",
+   "tags": [
+    "indexer",
+    "scoring",
+    "triton"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1186,
+    1241
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/index_topk.py:minimax_m3_index_topk",
+   "type": "function",
+   "name": "minimax_m3_index_topk",
+   "filePath": "vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "summary": "从预计算 score 张量选 index top-k。",
+   "tags": [
+    "indexer",
+    "top-k",
+    "triton"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1245,
+    1294
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/index_topk.py:minimax_m3_index_decode",
+   "type": "function",
+   "name": "minimax_m3_index_decode",
+   "filePath": "vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "summary": "decode 索引评分+融合自适应 top-k（343 行入口）。",
+   "tags": [
+    "indexer",
+    "decode",
+    "top-k"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1298,
+    1640
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py:_context_score",
+   "type": "function",
+   "name": "_context_score",
+   "filePath": "vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py",
+   "summary": "CP 上下文评分 kernel。",
+   "tags": [
+    "triton",
+    "context-parallel",
+    "scoring"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    45,
+    109
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py:check_context_score_inputs",
+   "type": "function",
+   "name": "check_context_score_inputs",
+   "filePath": "vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py",
+   "summary": "校验 indexer_context_scores 假设的布局。",
+   "tags": [
+    "validation",
+    "layout",
+    "inputs"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    112,
+    157
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py:indexer_context_scores",
+   "type": "function",
+   "name": "indexer_context_scores",
+   "filePath": "vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py",
+   "summary": "产出 [heads,tokens,ceil(blocks/world)] 的轮转切分评分。",
+   "tags": [
+    "context-parallel",
+    "layout",
+    "round-robin"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    160,
+    248
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/model_executor/layers/attention/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/model_executor/layers/attention_layer_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/model_executor/layers/fused_allreduce_gemma_rms_norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/config_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/model_executor/models/vision.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/models/minimax_m3/amd/ops/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/models/minimax_m3/amd/ops/gemma_rmsnorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/models/minimax_m3/amd/sparse_attention_msa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/models/minimax_m3/amd/specialized_decode/runtime/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/models/minimax_m3/common/encoder_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/models/minimax_m3/common/indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/models/minimax_m3/common/vision_tower.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model_state.py",
+   "target": "file:vllm/v1/worker/gpu/model_states/default.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/mtp_validation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "file:vllm/models/minimax_m3/amd/indexer_msa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "file:vllm/models/minimax_m3/amd/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "target": "file:vllm/models/minimax_m3/amd/ops/sparse_pa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "class:vllm/models/minimax_m3/amd/model.py:MiniMAXGemmaRMSNorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3MLP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3MoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3Attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3SparseAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3DecoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3Model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3SparseForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3SparseForConditionalGeneration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "function:vllm/models/minimax_m3/amd/model.py:_should_skip_index_topk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "function:vllm/models/minimax_m3/amd/model.py:_build_rotary_emb",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "function:vllm/models/minimax_m3/amd/model.py:_aiter_moe_fused_shared_experts_enabled",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "function:vllm/models/minimax_m3/amd/model.py:_kv_insert_operand",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model_state.py",
+   "target": "class:vllm/models/minimax_m3/amd/model_state.py:MiniMaxM3ModelState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "class:vllm/models/minimax_m3/amd/mtp.py:MiniMaxM3MultiTokenPredictorLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "class:vllm/models/minimax_m3/amd/mtp.py:MiniMaxM3MultiTokenPredictor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "class:vllm/models/minimax_m3/amd/mtp.py:MiniMaxM3MTP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/index_topk.py:_decode_index_score_balanced_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/index_topk.py:_merge_store_decode_topk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/index_topk.py:_decode_topk_fused_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/index_topk.py:minimax_m3_index_score",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/index_topk.py:minimax_m3_index_topk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/index_topk.py:minimax_m3_index_decode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py:_context_score",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py:check_context_score_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py:indexer_context_scores",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "class:vllm/models/minimax_m3/amd/model.py:MiniMAXGemmaRMSNorm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3MLP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3MoE",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3Attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3SparseAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3DecoderLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3Model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3SparseForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model.py",
+   "target": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3SparseForConditionalGeneration",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/model_state.py",
+   "target": "class:vllm/models/minimax_m3/amd/model_state.py:MiniMaxM3ModelState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "class:vllm/models/minimax_m3/amd/mtp.py:MiniMaxM3MultiTokenPredictorLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "class:vllm/models/minimax_m3/amd/mtp.py:MiniMaxM3MultiTokenPredictor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/mtp.py",
+   "target": "class:vllm/models/minimax_m3/amd/mtp.py:MiniMaxM3MTP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/index_topk.py:minimax_m3_index_score",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/index_topk.py:minimax_m3_index_topk",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/index_topk.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/index_topk.py:minimax_m3_index_decode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py:check_context_score_inputs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py",
+   "target": "function:vllm/models/minimax_m3/amd/ops/indexer_context_parallel.py:indexer_context_scores",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3SparseAttention",
+   "target": "function:vllm/models/minimax_m3/amd/ops/index_topk.py:minimax_m3_index_decode",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3SparseAttention",
+   "target": "function:vllm/models/minimax_m3/amd/ops/sparse_attn.py:minimax_m3_sparse_attn",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/amd/model.py:MiniMaxM3MoE",
+   "target": "function:vllm/models/minimax_m3/amd/ops/swiglu_oai.py:swiglu_oai_quantize_mxfp8",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/amd/model_state.py:MiniMaxM3ModelState",
+   "target": "class:vllm/v1/worker/gpu/model_states/default.py:DefaultModelState",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

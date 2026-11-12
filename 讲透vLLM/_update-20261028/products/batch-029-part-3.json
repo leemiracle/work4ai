@@ -1,0 +1,1277 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "type": "file",
+   "name": "data.py",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "summary": "UMBP 数据模型（18 类）：RankTopology 模型并行拓扑、KVLayoutPlanner 从 KVCacheConfig 规划确定性全层对象布局、块身份编解码、列式 BlockLoad/StoreBatch、请求跟踪与逐 key 传输作业状态。",
+   "tags": [
+    "umbp",
+    "data-model",
+    "kv-layout",
+    "transfers"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/__init__.py",
+   "summary": "UMBP runtime 包 barrel：导出运行时配置与工厂。",
+   "tags": [
+    "barrel",
+    "umbp",
+    "runtime"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py",
+   "type": "file",
+   "name": "base.py",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py",
+   "summary": "UMBP 运行时协议层：UMBPSchedulerHandle/UMBPWorkerHandle/IUMBPRuntime 三个 Protocol 定义调度器与 worker 两半的运行时接口。",
+   "tags": [
+    "umbp",
+    "runtime",
+    "protocol"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/factory.py",
+   "type": "file",
+   "name": "factory.py",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/factory.py",
+   "summary": "UMBP 运行时工厂与注册表：UMBPRuntimeConfig 共享配置，UMBPRuntimeFactory 让外部适配器（如 MORI）无需 import 进 vLLM 即可注册。",
+   "tags": [
+    "umbp",
+    "runtime",
+    "factory",
+    "registry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "type": "file",
+   "name": "scheduler.py",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "summary": "UMBP 调度器半（28 方法）：持有 vLLM 前缀匹配而运行时持有 lookup 传输——_LookupBlockPool 提供请求作用域的驻留视图驱动命中窗口算法，无运行时时既不查也不存。",
+   "tags": [
+    "umbp",
+    "scheduler",
+    "prefix-matching"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py",
+   "type": "file",
+   "name": "stats.py",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py",
+   "summary": "UMBP 指标：UMBPStoreConnectorStats 序列化区间计数器与 UMBPStorePromMetrics Prometheus 注册（传输结局计数）。",
+   "tags": [
+    "umbp",
+    "stats",
+    "prometheus"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/worker.py",
+   "type": "file",
+   "name": "worker.py",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/worker.py",
+   "summary": "UMBP worker 半（24 方法）：把共享元数据翻译为运行时的 load/store 作业并聚合跨 rank 完成回报。",
+   "tags": [
+    "umbp",
+    "worker",
+    "transfers"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/kv_transfer/kv_transfer_state.py",
+   "type": "file",
+   "name": "kv_transfer_state.py",
+   "filePath": "vllm/distributed/kv_transfer/kv_transfer_state.py",
+   "summary": "KV 传输全局状态：get/has KV 传输组、v1 connector 判别、engine_id 跨 TP 广播与初始化/关闭。",
+   "tags": [
+    "kv-transfer",
+    "global-state",
+    "lifecycle"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:RankTopology",
+   "type": "class",
+   "name": "RankTopology",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "summary": "参与一个 KV 对象的模型并行 rank 拓扑。",
+   "tags": [
+    "umbp",
+    "topology",
+    "ranks"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    52,
+    126
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:UMBPNamespace",
+   "type": "class",
+   "name": "UMBPNamespace",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "summary": "引擎外存储对象的兼容命名空间。",
+   "tags": [
+    "umbp",
+    "namespace",
+    "compatibility"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    130,
+    201
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:BlockIdentityCodec",
+   "type": "class",
+   "name": "BlockIdentityCodec",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "summary": "从 vLLM 块 hash 构建稳定的 rank 本地键。",
+   "tags": [
+    "umbp",
+    "codec",
+    "block-hash"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    212,
+    256
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:KVRegion",
+   "type": "class",
+   "name": "KVRegion",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "summary": "rank 本地 KV 对象内一个确定性区域。",
+   "tags": [
+    "umbp",
+    "region",
+    "kv-object"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    260,
+    279
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:KVLayoutDescriptor",
+   "type": "class",
+   "name": "KVLayoutDescriptor",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "summary": "rank 本地 KV 对象布局的后端中立描述。",
+   "tags": [
+    "umbp",
+    "layout",
+    "descriptor"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    283,
+    299
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:KVLayoutPlanner",
+   "type": "class",
+   "name": "KVLayoutPlanner",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "summary": "从 KVCacheConfig 创建确定性的全层对象布局（9 方法）。",
+   "tags": [
+    "umbp",
+    "layout",
+    "planner"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    302,
+    500
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:BlockTransferPlan",
+   "type": "class",
+   "name": "BlockTransferPlan",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "summary": "一个完整逻辑块传输。",
+   "tags": [
+    "umbp",
+    "transfer-plan",
+    "blocks"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    516,
+    528
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:BlockLoadBatch",
+   "type": "class",
+   "name": "BlockLoadBatch",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "summary": "整块加载批（列式 + 批内共享请求元数据）。",
+   "tags": [
+    "umbp",
+    "load-batch",
+    "columnar"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    532,
+    565
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:BlockStoreBatch",
+   "type": "class",
+   "name": "BlockStoreBatch",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "summary": "整块存储批（列式 + 共享请求元数据）。",
+   "tags": [
+    "umbp",
+    "store-batch",
+    "columnar"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    569,
+    620
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:LoadSpec",
+   "type": "class",
+   "name": "LoadSpec",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "summary": "一个外部加载前缀的调度器决策。",
+   "tags": [
+    "umbp",
+    "load-spec",
+    "scheduler-decision"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    624,
+    634
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:RequestTracker",
+   "type": "class",
+   "name": "RequestTracker",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "summary": "所有运行时模式共享的核心请求状态。",
+   "tags": [
+    "umbp",
+    "request-state",
+    "shared"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    638,
+    675
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:TransferJobState",
+   "type": "class",
+   "name": "TransferJobState",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "summary": "逐 key 完成状态：一个 key 失败不连坐兄弟 key（8 方法）。",
+   "tags": [
+    "umbp",
+    "job-state",
+    "isolation"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    687,
+    755
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:UMBPConnectorMetadata",
+   "type": "class",
+   "name": "UMBPConnectorMetadata",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "summary": "单引擎步的调度器→worker 元数据。",
+   "tags": [
+    "umbp",
+    "metadata",
+    "scheduler"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    759,
+    781
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:StoreEventResult",
+   "type": "class",
+   "name": "StoreEventResult",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "summary": "一个 store 事件完成的 worker 数。",
+   "tags": [
+    "umbp",
+    "store-result",
+    "workers"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    785,
+    793
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:UMBPConnectorWorkerMetadata",
+   "type": "class",
+   "name": "UMBPConnectorWorkerMetadata",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "summary": "跨 rank 聚合的 worker 完成元数据。",
+   "tags": [
+    "umbp",
+    "metadata",
+    "worker"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    797,
+    809
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py:UMBPSchedulerHandle",
+   "type": "class",
+   "name": "UMBPSchedulerHandle",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py",
+   "summary": "调度器半的运行时协议。",
+   "tags": [
+    "umbp",
+    "runtime",
+    "protocol"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    20,
+    28
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py:UMBPWorkerHandle",
+   "type": "class",
+   "name": "UMBPWorkerHandle",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py",
+   "summary": "worker 半的运行时协议（11 方法）。",
+   "tags": [
+    "umbp",
+    "runtime",
+    "protocol"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    31,
+    69
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py:IUMBPRuntime",
+   "type": "class",
+   "name": "IUMBPRuntime",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py",
+   "summary": "UMBP 运行时整体协议（初始化/关闭）。",
+   "tags": [
+    "umbp",
+    "runtime",
+    "interface"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    72,
+    91
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/factory.py:UMBPRuntimeConfig",
+   "type": "class",
+   "name": "UMBPRuntimeConfig",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/factory.py",
+   "summary": "传给所选运行时适配器的共享 connector 选项。",
+   "tags": [
+    "umbp",
+    "runtime",
+    "config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    17,
+    49
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/factory.py:UMBPRuntimeFactory",
+   "type": "class",
+   "name": "UMBPRuntimeFactory",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/factory.py",
+   "summary": "外部适配器注册表（不 import MORI 进 vLLM）。",
+   "tags": [
+    "umbp",
+    "factory",
+    "registry"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    55,
+    76
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py:_LookupBlockPool",
+   "type": "class",
+   "name": "_LookupBlockPool",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "summary": "请求作用域驻留视图的 BlockPool 子类，驱动核心命中窗口算法。",
+   "tags": [
+    "umbp",
+    "block-pool",
+    "lookup"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    137,
+    168
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py:UMBPStoreConnectorScheduler",
+   "type": "class",
+   "name": "UMBPStoreConnectorScheduler",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "summary": "UMBP 调度器半（28 方法）：拥有 vLLM 前缀匹配，运行时拥有 lookup 传输；无运行时则不查不存。",
+   "tags": [
+    "umbp",
+    "scheduler",
+    "prefix"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    171,
+    1460
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py:UMBPStoreConnectorStats",
+   "type": "class",
+   "name": "UMBPStoreConnectorStats",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py",
+   "summary": "各运行时共享的序列化区间计数器。",
+   "tags": [
+    "umbp",
+    "stats",
+    "counters"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    20,
+    73
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py:UMBPStorePromMetrics",
+   "type": "class",
+   "name": "UMBPStorePromMetrics",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py",
+   "summary": "UMBP 传输结局的 Prometheus 计数器。",
+   "tags": [
+    "umbp",
+    "prometheus",
+    "metrics"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    76,
+    126
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/worker.py:UMBPStoreConnectorWorker",
+   "type": "class",
+   "name": "UMBPStoreConnectorWorker",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/worker.py",
+   "summary": "UMBP worker 半（24 方法）：共享元数据→运行时 load/store 作业翻译与完成聚合。",
+   "tags": [
+    "umbp",
+    "worker",
+    "jobs"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    42,
+    388
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/kv_transfer/kv_transfer_state.py:is_v1_kv_transfer_group",
+   "type": "function",
+   "name": "is_v1_kv_transfer_group",
+   "filePath": "vllm/distributed/kv_transfer/kv_transfer_state.py",
+   "summary": "判断 KV connector 是否 v1 connector（None 时按配置判）。",
+   "tags": [
+    "kv-transfer",
+    "v1",
+    "predicate"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    30,
+    49
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/kv_transfer/kv_transfer_state.py:_sync_engine_id_across_tp",
+   "type": "function",
+   "name": "_sync_engine_id_across_tp",
+   "filePath": "vllm/distributed/kv_transfer/kv_transfer_state.py",
+   "summary": "从 TP rank 0 广播 engine_id 使多节点 TP 组一致。",
+   "tags": [
+    "kv-transfer",
+    "engine-id",
+    "broadcast"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    52,
+    70
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/kv_transfer/kv_transfer_state.py:ensure_kv_transfer_initialized",
+   "type": "function",
+   "name": "ensure_kv_transfer_initialized",
+   "filePath": "vllm/distributed/kv_transfer/kv_transfer_state.py",
+   "summary": "初始化 KV cache 传输并行组。",
+   "tags": [
+    "kv-transfer",
+    "initialization",
+    "process-group"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    73,
+    90
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/kv_transfer/kv_transfer_state.py:ensure_kv_transfer_shutdown",
+   "type": "function",
+   "name": "ensure_kv_transfer_shutdown",
+   "filePath": "vllm/distributed/kv_transfer/kv_transfer_state.py",
+   "summary": "关闭 KV 传输组。",
+   "tags": [
+    "kv-transfer",
+    "shutdown",
+    "process-group"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    93,
+    97
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/__init__.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/__init__.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/factory.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/factory.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/factory.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "target": "file:vllm/distributed/kv_events.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "target": "file:vllm/v1/core/block_pool.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "target": "file:vllm/v1/core/kv_cache_coordinator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "target": "file:vllm/v1/core/kv_cache_manager.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "target": "file:vllm/v1/core/kv_cache_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "target": "file:vllm/v1/kv_cache_spec_registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "target": "file:vllm/v1/request.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/worker.py",
+   "target": "file:vllm/distributed/kv_events.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/worker.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/worker.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/worker.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/worker.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/worker.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/worker.py",
+   "target": "file:vllm/v1/core/kv_cache_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_transfer_state.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_transfer_state.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/factory.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_transfer_state.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_transfer_state.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:RankTopology",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:UMBPNamespace",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:BlockIdentityCodec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:KVRegion",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:KVLayoutDescriptor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:KVLayoutPlanner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:BlockTransferPlan",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:BlockLoadBatch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:BlockStoreBatch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:LoadSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:RequestTracker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:TransferJobState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:UMBPConnectorMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:StoreEventResult",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:UMBPConnectorWorkerMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py:UMBPSchedulerHandle",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py:UMBPWorkerHandle",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py:IUMBPRuntime",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/factory.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/factory.py:UMBPRuntimeConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/factory.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/factory.py:UMBPRuntimeFactory",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py:_LookupBlockPool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py:UMBPStoreConnectorScheduler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py:UMBPStoreConnectorStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py:UMBPStorePromMetrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/worker.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/worker.py:UMBPStoreConnectorWorker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_transfer_state.py",
+   "target": "function:vllm/distributed/kv_transfer/kv_transfer_state.py:is_v1_kv_transfer_group",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_transfer_state.py",
+   "target": "function:vllm/distributed/kv_transfer/kv_transfer_state.py:_sync_engine_id_across_tp",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_transfer_state.py",
+   "target": "function:vllm/distributed/kv_transfer/kv_transfer_state.py:ensure_kv_transfer_initialized",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_transfer_state.py",
+   "target": "function:vllm/distributed/kv_transfer/kv_transfer_state.py:ensure_kv_transfer_shutdown",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:RankTopology",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:UMBPNamespace",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:BlockIdentityCodec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:KVRegion",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:KVLayoutDescriptor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:KVLayoutPlanner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:BlockTransferPlan",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:BlockLoadBatch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:BlockStoreBatch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:LoadSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:RequestTracker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:TransferJobState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:UMBPConnectorMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:StoreEventResult",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:UMBPConnectorWorkerMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py:UMBPSchedulerHandle",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py:UMBPWorkerHandle",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/base.py:IUMBPRuntime",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/factory.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/factory.py:UMBPRuntimeConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/factory.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/factory.py:UMBPRuntimeFactory",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py:UMBPStoreConnectorScheduler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py:UMBPStoreConnectorStats",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py:UMBPStorePromMetrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/worker.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/worker.py:UMBPStoreConnectorWorker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_transfer_state.py",
+   "target": "function:vllm/distributed/kv_transfer/kv_transfer_state.py:is_v1_kv_transfer_group",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_transfer_state.py",
+   "target": "function:vllm/distributed/kv_transfer/kv_transfer_state.py:ensure_kv_transfer_initialized",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_transfer_state.py",
+   "target": "function:vllm/distributed/kv_transfer/kv_transfer_state.py:ensure_kv_transfer_shutdown",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:UMBPConnectorMetadata",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/base.py:KVConnectorMetadata",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py:UMBPConnectorWorkerMetadata",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/base.py:KVConnectorWorkerMetadata",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py:UMBPStoreConnectorStats",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/metrics.py:KVConnectorStats",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py:UMBPStorePromMetrics",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/metrics.py:KVConnectorPromMetrics",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

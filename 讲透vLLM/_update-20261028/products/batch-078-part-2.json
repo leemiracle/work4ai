@@ -1,0 +1,1320 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "type": "file",
+   "name": "cutlass.py",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "summary": "CUTLASS scaled MM kernel（3 类）：INT8/FP8 per-tensor/FP8 block。",
+   "tags": [
+    "cutlass",
+    "scaled-mm",
+    "fp8",
+    "int8"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py",
+   "type": "file",
+   "name": "deep_gemm.py",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py",
+   "summary": "DeepGEMM FP8 block-scaled MM kernel。",
+   "tags": [
+    "deepgemm",
+    "scaled-mm",
+    "fp8-block"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "type": "file",
+   "name": "flashinfer.py",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "summary": "FlashInfer scaled MM kernel（3 类）：FP8 per-tensor/block 与 **FlashInfer/DeepGEMM 按输入 batch 条件切换**的动态 block kernel（torch.compile fake 实现齐备）。",
+   "tags": [
+    "flashinfer",
+    "scaled-mm",
+    "conditional",
+    "fake-impl"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/scaled_mm/humming.py",
+   "type": "file",
+   "name": "humming.py",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/humming.py",
+   "summary": "Humming GEMM kernel（FP8+INT8 两类）。",
+   "tags": [
+    "humming",
+    "gemm",
+    "fp8",
+    "int8"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/scaled_mm/marlin.py",
+   "type": "file",
+   "name": "marlin.py",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/marlin.py",
+   "summary": "Marlin FP8 kernel：无 FP8 硬件的 GPU 上借 Marlin 做反量化加权 GEMM。",
+   "tags": [
+    "marlin",
+    "fp8",
+    "dequant-gemm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "type": "file",
+   "name": "pytorch.py",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "summary": "Torch scaled MM kernel 族（5 类）：per-tensor/row-wise/channel-wise/block-wise 四种 scale 粒度走 torch._scaled_mm。",
+   "tags": [
+    "pytorch",
+    "scaled-mm",
+    "torch",
+    "scale-granularity"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "type": "file",
+   "name": "triton.py",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "summary": "Triton scaled MM kernel（3 类）：INT8、FP8 per-tensor、FP8 block。",
+   "tags": [
+    "triton",
+    "scaled-mm",
+    "fp8",
+    "int8"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/kernels/mhc/cpu.py",
+   "type": "file",
+   "name": "cpu.py",
+   "filePath": "vllm/model_executor/kernels/mhc/cpu.py",
+   "summary": "mHC 的 CPU 移植：pre/post 块与 HC head 融合降维。",
+   "tags": [
+    "mhc",
+    "cpu",
+    "port"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py:CutlassInt8ScaledMMLinearKernel",
+   "type": "class",
+   "name": "CutlassInt8ScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "summary": "CUTLASS INT8 scaled MM。",
+   "tags": [
+    "cutlass",
+    "int8",
+    "scaled-mm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    33,
+    154
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py:CutlassFP8ScaledMMLinearKernel",
+   "type": "class",
+   "name": "CutlassFP8ScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "summary": "CUTLASS FP8 per-tensor/row-wise。",
+   "tags": [
+    "cutlass",
+    "fp8",
+    "per-tensor"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    157,
+    264
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py:CutlassFp8BlockScaledMMKernel",
+   "type": "class",
+   "name": "CutlassFp8BlockScaledMMKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "summary": "CUTLASS FP8 block-scaled。",
+   "tags": [
+    "cutlass",
+    "fp8-block",
+    "scaled-mm"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    267,
+    318
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py:DeepGemmFp8BlockScaledMMKernel",
+   "type": "class",
+   "name": "DeepGemmFp8BlockScaledMMKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py",
+   "summary": "DeepGEMM FP8 block-scaled MM。",
+   "tags": [
+    "deepgemm",
+    "fp8-block",
+    "scaled-mm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    32,
+    126
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py:FlashInferFP8ScaledMMLinearKernel",
+   "type": "class",
+   "name": "FlashInferFP8ScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "summary": "FlashInfer FP8 per-tensor。",
+   "tags": [
+    "flashinfer",
+    "fp8",
+    "per-tensor"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    39,
+    85
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py:FlashInferFp8BlockScaledMMKernel",
+   "type": "class",
+   "name": "FlashInferFp8BlockScaledMMKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "summary": "FlashInfer FP8 block-scaled。",
+   "tags": [
+    "flashinfer",
+    "fp8-block",
+    "scaled-mm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    88,
+    146
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py:FlashInferFp8DeepGEMMDynamicBlockScaledKernel",
+   "type": "class",
+   "name": "FlashInferFp8DeepGEMMDynamicBlockScaledKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "summary": "按输入 batch 在 FlashInfer 与 DeepGEMM 间条件切换的动态 block kernel。",
+   "tags": [
+    "flashinfer",
+    "deepgemm",
+    "conditional-dispatch"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    149,
+    195
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/humming.py:HummingFP8ScaledMMLinearKernel",
+   "type": "class",
+   "name": "HummingFP8ScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/humming.py",
+   "summary": "Humming FP8 GEMM。",
+   "tags": [
+    "humming",
+    "fp8",
+    "gemm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    27,
+    115
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/humming.py:HummingInt8ScaledMMLinearKernel",
+   "type": "class",
+   "name": "HummingInt8ScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/humming.py",
+   "summary": "Humming INT8 GEMM。",
+   "tags": [
+    "humming",
+    "int8",
+    "gemm"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    118,
+    167
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/marlin.py:MarlinFP8ScaledMMLinearKernel",
+   "type": "class",
+   "name": "MarlinFP8ScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/marlin.py",
+   "summary": "无 FP8 硬件时的 Marlin 反量化加权 GEMM。",
+   "tags": [
+    "marlin",
+    "fp8",
+    "dequant"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    29,
+    114
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:TorchFP8ScaledMMLinearKernel",
+   "type": "class",
+   "name": "TorchFP8ScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "summary": "torch._scaled_mm 的 FP8 基类（子类按 scale 粒度分）。",
+   "tags": [
+    "torch",
+    "fp8",
+    "base-class"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    52,
+    79
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:PerTensorTorchFP8ScaledMMLinearKernel",
+   "type": "class",
+   "name": "PerTensorTorchFP8ScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "summary": "per-tensor 粒度。",
+   "tags": [
+    "torch",
+    "per-tensor",
+    "fp8"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    82,
+    125
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:RowWiseTorchFP8ScaledMMLinearKernel",
+   "type": "class",
+   "name": "RowWiseTorchFP8ScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "summary": "行粒度。",
+   "tags": [
+    "torch",
+    "row-wise",
+    "fp8"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    128,
+    196
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:BlockWiseTorchFP8ScaledMMLinearKernel",
+   "type": "class",
+   "name": "BlockWiseTorchFP8ScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "summary": "块粒度（torch._scaled_mm 的 block 路径）。",
+   "tags": [
+    "torch",
+    "block-wise",
+    "fp8"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    269,
+    371
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/triton.py:TritonInt8ScaledMMLinearKernel",
+   "type": "class",
+   "name": "TritonInt8ScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "summary": "Triton INT8 scaled MM。",
+   "tags": [
+    "triton",
+    "int8",
+    "scaled-mm"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    29,
+    156
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/triton.py:TritonFP8ScaledMMLinearKernel",
+   "type": "class",
+   "name": "TritonFP8ScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "summary": "Triton FP8 per-tensor。",
+   "tags": [
+    "triton",
+    "fp8",
+    "per-tensor"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    159,
+    196
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/triton.py:TritonFp8BlockScaledMMKernel",
+   "type": "class",
+   "name": "TritonFp8BlockScaledMMKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "summary": "Triton FP8 block-scaled。",
+   "tags": [
+    "triton",
+    "fp8-block",
+    "scaled-mm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    199,
+    220
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/mhc/cpu.py:mhc_pre_cpu",
+   "type": "function",
+   "name": "mhc_pre_cpu",
+   "filePath": "vllm/model_executor/kernels/mhc/cpu.py",
+   "summary": "mHC pre 块 CPU 移植。",
+   "tags": [
+    "mhc",
+    "cpu",
+    "pre"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    8,
+    53
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/mhc/cpu.py:mhc_post_cpu",
+   "type": "function",
+   "name": "mhc_post_cpu",
+   "filePath": "vllm/model_executor/kernels/mhc/cpu.py",
+   "summary": "mHC post 块 CPU 移植。",
+   "tags": [
+    "mhc",
+    "cpu",
+    "post"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    56,
+    72
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/kernels/mhc/cpu.py:hc_head_fused_cpu",
+   "type": "function",
+   "name": "hc_head_fused_cpu",
+   "filePath": "vllm/model_executor/kernels/mhc/cpu.py",
+   "summary": "HC head 融合降维 CPU 移植。",
+   "tags": [
+    "mhc",
+    "cpu",
+    "head"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    75,
+    96
+   ]
+  },
+  {
+   "id": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:ChannelWiseTorchFP8ScaledMMLinearKernel",
+   "type": "class",
+   "name": "ChannelWiseTorchFP8ScaledMMLinearKernel",
+   "filePath": "vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "lineRange": [
+    199,
+    266
+   ],
+   "summary": "torch._scaled_mm 的 per-channel 粒度 FP8 kernel。",
+   "tags": [
+    "torch",
+    "channel-wise",
+    "fp8",
+    "scaled-mm"
+   ],
+   "complexity": "complex"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/BlockScaledMMLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "target": "file:vllm/model_executor/layers/quantization/input_quant_fp8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/w8a8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/BlockScaledMMLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py",
+   "target": "file:vllm/model_executor/layers/quantization/input_quant_fp8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/fp8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py",
+   "target": "file:vllm/utils/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/BlockScaledMMLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/fp8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "target": "file:vllm/utils/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/humming.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/humming.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/humming.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/humming/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/humming.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/humming.py",
+   "target": "file:vllm/utils/humming.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/humming.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/marlin.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/marlin.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/marlin.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/fp8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/marlin.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/marlin_utils_fp8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/marlin.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/marlin.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/marlin.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/BlockScaledMMLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "target": "file:vllm/model_executor/layers/quantization/input_quant_fp8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/BlockScaledMMLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "target": "file:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "target": "file:vllm/model_executor/layers/quantization/compressed_tensors/triton_scaled_mm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/fp8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/w8a8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/mhc/cpu.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/mhc/cpu.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py:CutlassInt8ScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py:CutlassFP8ScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py:CutlassFp8BlockScaledMMKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py:DeepGemmFp8BlockScaledMMKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py:FlashInferFP8ScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py:FlashInferFp8BlockScaledMMKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py:FlashInferFp8DeepGEMMDynamicBlockScaledKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/humming.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/humming.py:HummingFP8ScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/humming.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/humming.py:HummingInt8ScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/marlin.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/marlin.py:MarlinFP8ScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:TorchFP8ScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:PerTensorTorchFP8ScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:RowWiseTorchFP8ScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:BlockWiseTorchFP8ScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/triton.py:TritonInt8ScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/triton.py:TritonFP8ScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/triton.py:TritonFp8BlockScaledMMKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/mhc/cpu.py",
+   "target": "function:vllm/model_executor/kernels/mhc/cpu.py:mhc_pre_cpu",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/mhc/cpu.py",
+   "target": "function:vllm/model_executor/kernels/mhc/cpu.py:mhc_post_cpu",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/mhc/cpu.py",
+   "target": "function:vllm/model_executor/kernels/mhc/cpu.py:hc_head_fused_cpu",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py:CutlassInt8ScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py:CutlassFP8ScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py:CutlassFp8BlockScaledMMKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py:DeepGemmFp8BlockScaledMMKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py:FlashInferFP8ScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py:FlashInferFp8BlockScaledMMKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py:FlashInferFp8DeepGEMMDynamicBlockScaledKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/humming.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/humming.py:HummingFP8ScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/humming.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/humming.py:HummingInt8ScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/marlin.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/marlin.py:MarlinFP8ScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:TorchFP8ScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:PerTensorTorchFP8ScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:RowWiseTorchFP8ScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:BlockWiseTorchFP8ScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/triton.py:TritonInt8ScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/triton.py:TritonFP8ScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/triton.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/triton.py:TritonFp8BlockScaledMMKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/mhc/cpu.py",
+   "target": "function:vllm/model_executor/kernels/mhc/cpu.py:mhc_pre_cpu",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/mhc/cpu.py",
+   "target": "function:vllm/model_executor/kernels/mhc/cpu.py:mhc_post_cpu",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/mhc/cpu.py",
+   "target": "function:vllm/model_executor/kernels/mhc/cpu.py:hc_head_fused_cpu",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py:CutlassInt8ScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py:Int8ScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py:CutlassFP8ScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py:FP8ScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py:CutlassFp8BlockScaledMMKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/BlockScaledMMLinearKernel.py:Fp8BlockScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/deep_gemm.py:DeepGemmFp8BlockScaledMMKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/BlockScaledMMLinearKernel.py:Fp8BlockScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py:FlashInferFP8ScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py:FP8ScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py:FlashInferFp8BlockScaledMMKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/BlockScaledMMLinearKernel.py:Fp8BlockScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/flashinfer.py:FlashInferFp8DeepGEMMDynamicBlockScaledKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/BlockScaledMMLinearKernel.py:Fp8BlockScaledDynamicMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/humming.py:HummingFP8ScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py:FP8ScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/humming.py:HummingInt8ScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py:Int8ScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/marlin.py:MarlinFP8ScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py:FP8ScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:PerTensorTorchFP8ScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:TorchFP8ScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:RowWiseTorchFP8ScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:TorchFP8ScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:ChannelWiseTorchFP8ScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:TorchFP8ScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:TorchFP8ScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py:FP8ScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:BlockWiseTorchFP8ScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/BlockScaledMMLinearKernel.py:Fp8BlockScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/triton.py:TritonInt8ScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/cutlass.py:CutlassInt8ScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/triton.py:TritonFP8ScaledMMLinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/ScaledMMLinearKernel.py:FP8ScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/model_executor/kernels/linear/scaled_mm/triton.py:TritonFp8BlockScaledMMKernel",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/BlockScaledMMLinearKernel.py:Fp8BlockScaledMMLinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:ChannelWiseTorchFP8ScaledMMLinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py",
+   "target": "class:vllm/model_executor/kernels/linear/scaled_mm/pytorch.py:ChannelWiseTorchFP8ScaledMMLinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

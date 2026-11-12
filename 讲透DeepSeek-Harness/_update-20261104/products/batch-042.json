@@ -1,0 +1,2050 @@
+{
+ "nodes": [
+  {
+   "id": "file:packages/subagent/subagent-acp/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/subagent/subagent-acp/src/index.ts",
+   "summary": "进程外 ACP subagent 后端插件：AcpProvider 实现 SubagentProvider.start，每个子代理独享进程/会话/模型/工具，不共享 Cordis 上下文、不广告父强制能力，交给 dsh-subagent 统一启动语义。",
+   "tags": [
+    "provider",
+    "acp",
+    "subagent",
+    "plugin"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/subagent/subagent-acp/src/run.ts",
+   "type": "file",
+   "name": "run.ts",
+   "filePath": "packages/subagent/subagent-acp/src/run.ts",
+   "summary": "新进程 ACP subagent 客户端：startAcpRun 经 @agentclientprotocol/sdk 驱动一个子会话，持有取消与静默拆卸（disposeAcpChild），ACP 停止原因/内容/权限请求映射到 subagent 词汇。",
+   "tags": [
+    "acp",
+    "run",
+    "settlement",
+    "subprocess"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "document:packages/subagent/subagent-claude-code/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/subagent/subagent-claude-code/README.md",
+   "summary": "dsh-subagent-claude-code 文档：经官方 Agent SDK 的 one-shot Claude Code provider——安装 bundle、配置、暴露工具、所得能力与故障恢复。",
+   "tags": [
+    "documentation",
+    "claude-code",
+    "subagent"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/subagent/subagent-claude-code/cordis.patch.yml",
+   "type": "config",
+   "name": "cordis.patch.yml",
+   "filePath": "packages/subagent/subagent-claude-code/cordis.patch.yml",
+   "summary": "bundle 组合补丁：插入 subagent-claude-code provider 与 tool-subagent（provider=claude-code）两个插件条目。",
+   "tags": [
+    "configuration",
+    "cordis-overlay",
+    "bundle"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/subagent/subagent-claude-code/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/subagent/subagent-claude-code/package.json",
+   "summary": "包清单 @deepseek-ai/dsh-subagent-claude-code：外部依赖 @anthropic-ai/claude-agent-sdk。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/subagent/subagent-claude-code/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/subagent/subagent-claude-code/src/index.ts",
+   "summary": "profile 命名的 Claude Code one-shot provider 插件：每次接受运行在委托 Session 工作区调用官方 Agent SDK，SDK 拉起的真实 CLI 置于共享 subprocess owner 之下。",
+   "tags": [
+    "provider",
+    "claude-code",
+    "subagent",
+    "plugin"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/subagent/subagent-claude-code/src/process.ts",
+   "type": "file",
+   "name": "process.ts",
+   "filePath": "packages/subagent/subagent-claude-code/src/process.ts",
+   "summary": "共享托管进程句柄到官方 Claude Agent SDK 自定义 spawn 进程接口的投影：环境叠加、spawn 规格与事件转发。",
+   "tags": [
+    "process",
+    "adapter",
+    "subprocess"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "type": "file",
+   "name": "run.ts",
+   "filePath": "packages/subagent/subagent-claude-code/src/run.ts",
+   "summary": "Claude Code one-shot 生命周期：调用官方 Agent SDK、把真实 CLI 进程置于共享 subprocess owner、仅严格 SDK 成功映射为完成、整区间静默拆卸。",
+   "tags": [
+    "claude-code",
+    "run",
+    "lifecycle",
+    "disposal"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "document:packages/subagent/subagent-codex/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/subagent/subagent-codex/README.md",
+   "summary": "dsh-subagent-codex 文档：经官方 app-server 协议的 one-shot Codex provider——安装、配置、暴露工具与故障恢复。",
+   "tags": [
+    "documentation",
+    "codex",
+    "subagent"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/subagent/subagent-codex/cordis.patch.yml",
+   "type": "config",
+   "name": "cordis.patch.yml",
+   "filePath": "packages/subagent/subagent-codex/cordis.patch.yml",
+   "summary": "bundle 组合补丁：插入 subagent-codex provider 与 tool-subagent（provider=codex）两个插件条目。",
+   "tags": [
+    "configuration",
+    "cordis-overlay",
+    "bundle"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/subagent/subagent-codex/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/subagent/subagent-codex/package.json",
+   "summary": "包清单 @deepseek-ai/dsh-subagent-codex：官方 app-server 协议 one-shot provider。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/subagent/subagent-codex/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/subagent/subagent-codex/src/index.ts",
+   "summary": "profile 命名的 Codex one-shot provider 插件：每次运行在委托 Session 工作区启动全新官方包本地 Codex wrapper（app-server --stdio），仅在 ephemeral thread 创建后发布。",
+   "tags": [
+    "provider",
+    "codex",
+    "subagent",
+    "plugin"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/subagent/subagent-codex/src/run.ts",
+   "type": "file",
+   "name": "run.ts",
+   "filePath": "packages/subagent/subagent-codex/src/run.ts",
+   "summary": "Codex one-shot 子代理生命周期：经 subprocess seam 拉起真实 app-server、初始化与 ephemeral thread 创建后才发布、发布后失败扁平化、整区间静默拆卸。",
+   "tags": [
+    "codex",
+    "run",
+    "lifecycle",
+    "disposal"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/subagent/subagent-codex/src/wire.ts",
+   "type": "file",
+   "name": "wire.ts",
+   "filePath": "packages/subagent/subagent-codex/src/wire.ts",
+   "summary": "Codex app-server 0.153.4 最小协议适配器：共享 JSON-RPC transport 持有帧与关联，本模块持有产品方法、thread/turn 关联、无人值守审批决策与失败信息解码（CodexAppServerWire）。",
+   "tags": [
+    "codex",
+    "wire",
+    "json-rpc",
+    "protocol"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "document:packages/subagent/subagent-dsh-sdk/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/subagent/subagent-dsh-sdk/README.md",
+   "summary": "dsh-subagent-dsh-sdk 文档：何时选 SDK 后端、配置（profile/patch/dshHome/env/拆卸时限）、所得能力与故障恢复。",
+   "tags": [
+    "documentation",
+    "dsh-sdk",
+    "subagent"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/subagent/subagent-dsh-sdk/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/subagent/subagent-dsh-sdk/package.json",
+   "summary": "包清单 @deepseek-ai/dsh-subagent-dsh-sdk：经 stdio JSON-RPC 驱动子 DeepSeek Harness 运行时的进程外后端。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/subagent/subagent-dsh-sdk/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/subagent/subagent-dsh-sdk/src/index.ts",
+   "summary": "进程外 SDK subagent 后端插件：每个子代理是完整 DeepSeek Harness 运行时（自有命名 profile 与 patch 组合、会话、模型路由与工具），经 stdio JSON-RPC 驱动；凭据擦除后的父环境叠加显式 env。",
+   "tags": [
+    "provider",
+    "dsh-sdk",
+    "subagent",
+    "plugin"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "type": "file",
+   "name": "run.ts",
+   "filePath": "packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "summary": "新进程 SDK subagent 客户端：startSdkRun 经 dsh-sdk-client 驱动子 Harness 运行时，持有取消与静默拆卸；子就绪（shutdown 交换、EOF 静默窗）后才发布，子进程出口映射为 child outcome。",
+   "tags": [
+    "dsh-sdk",
+    "run",
+    "settlement",
+    "disposal"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "document:packages/subagent/subagent-fork-in-process/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/subagent/subagent-fork-in-process/README.md",
+   "summary": "dsh-subagent-fork-in-process 文档：种子边界（父已完成 turn 的均衡前缀）、最小配置与 fork 委托语义。",
+   "tags": [
+    "documentation",
+    "fork",
+    "subagent"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/subagent/subagent-fork-in-process/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/subagent/subagent-fork-in-process/package.json",
+   "summary": "包清单 @deepseek-ai/dsh-subagent-fork-in-process：以父日志前缀为种子的进程内 fork 后端。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/subagent/subagent-fork-in-process/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/subagent/subagent-fork-in-process/src/index.ts",
+   "summary": "进程内 FORK 后端：注册 ctx.subagents provider，子 Agent 以父会话日志的已完成 turn 均衡前缀为种子（捕获一次即入子自身持久转录，冷恢复重放而非重新 fork 新历史）。",
+   "tags": [
+    "provider",
+    "fork",
+    "in-process",
+    "seed"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/subagent/subagent-fork-in-process/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/subagent/subagent-fork-in-process/tsconfig.json",
+   "summary": "包编译配置：extends tsconfig.base.json，rootDir src / outDir lib/types，引用 vendor 与 subagent 工作区依赖。",
+   "tags": [
+    "configuration",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/subagent/subagent-spawn-in-process/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/subagent/subagent-spawn-in-process/README.md",
+   "summary": "dsh-subagent-spawn-in-process 文档：何时选 spawn 后端、最小配置与 spawn 委托语义（全新子代理、零种子）。",
+   "tags": [
+    "documentation",
+    "spawn",
+    "subagent"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/subagent/subagent-spawn-in-process/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/subagent/subagent-spawn-in-process/package.json",
+   "summary": "包清单 @deepseek-ai/dsh-subagent-spawn-in-process：在 ctx.agents 上运行全新子代理的进程内后端。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/subagent/subagent-spawn-in-process/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/subagent/subagent-spawn-in-process/src/index.ts",
+   "summary": "进程内 SPAWN 后端：注册 ctx.subagents provider，子代理为同 cordis 上下文的全新 Agent（自有会话/系统提示、零种子、不继承父对话），支持全部启动期能力。",
+   "tags": [
+    "provider",
+    "spawn",
+    "in-process"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/subagent/subagent-acp/src/index.ts:AcpProvider",
+   "type": "class",
+   "name": "AcpProvider",
+   "filePath": "packages/subagent/subagent-acp/src/index.ts",
+   "lineRange": [
+    80,
+    121
+   ],
+   "summary": "ACP 后端 SubagentProvider：start 每次运行拉起全新 ACP 子进程并交由 startAcpRun 驱动。",
+   "tags": [
+    "provider",
+    "acp"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent-acp/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/subagent/subagent-acp/src/index.ts",
+   "lineRange": [
+    123,
+    129
+   ],
+   "summary": "插件入口：校验配置并向 ctx.subagents 注册 AcpProvider。",
+   "tags": [
+    "plugin-entry",
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/subagent/subagent-acp/src/run.ts:AcpRunFailure",
+   "type": "class",
+   "name": "AcpRunFailure",
+   "filePath": "packages/subagent/subagent-acp/src/run.ts",
+   "lineRange": [
+    145,
+    153
+   ],
+   "summary": "ACP 运行失败错误类型（携带诊断）。",
+   "tags": [
+    "error",
+    "acp"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent-acp/src/run.ts:failureDiagnostic",
+   "type": "function",
+   "name": "failureDiagnostic",
+   "filePath": "packages/subagent/subagent-acp/src/run.ts",
+   "lineRange": [
+    117,
+    132
+   ],
+   "summary": "从 ACP 错误提取安全诊断文本。",
+   "tags": [
+    "diagnostic",
+    "error"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent-acp/src/run.ts:acpConfigurationFailure",
+   "type": "function",
+   "name": "acpConfigurationFailure",
+   "filePath": "packages/subagent/subagent-acp/src/run.ts",
+   "lineRange": [
+    160,
+    162
+   ],
+   "summary": "构造 ACP 配置失败错误。",
+   "tags": [
+    "error",
+    "configuration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent-acp/src/run.ts:disposeAcpChild",
+   "type": "function",
+   "name": "disposeAcpChild",
+   "filePath": "packages/subagent/subagent-acp/src/run.ts",
+   "lineRange": [
+    192,
+    212
+   ],
+   "summary": "静默拆卸 ACP 子进程：有界关闭交换与 EOF 宽限。",
+   "tags": [
+    "disposal",
+    "quiescence"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent-acp/src/run.ts:acpStopReason",
+   "type": "function",
+   "name": "acpStopReason",
+   "filePath": "packages/subagent/subagent-acp/src/run.ts",
+   "lineRange": [
+    220,
+    242
+   ],
+   "summary": "把 ACP 结束原因映射为 subagent 停止原因词汇。",
+   "tags": [
+    "stop-reason",
+    "mapping"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent-acp/src/run.ts:acpContentText",
+   "type": "function",
+   "name": "acpContentText",
+   "filePath": "packages/subagent/subagent-acp/src/run.ts",
+   "lineRange": [
+    249,
+    251
+   ],
+   "summary": "提取 ACP 消息内容文本。",
+   "tags": [
+    "content",
+    "extract"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent-acp/src/run.ts:toAcpPrompt",
+   "type": "function",
+   "name": "toAcpPrompt",
+   "filePath": "packages/subagent/subagent-acp/src/run.ts",
+   "lineRange": [
+    258,
+    264
+   ],
+   "summary": "把 subagent 任务转换为 ACP prompt 载荷。",
+   "tags": [
+    "prompt",
+    "adapter"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent-acp/src/run.ts:startupFailure",
+   "type": "function",
+   "name": "startupFailure",
+   "filePath": "packages/subagent/subagent-acp/src/run.ts",
+   "lineRange": [
+    285,
+    297
+   ],
+   "summary": "归类启动期失败并渲染诊断。",
+   "tags": [
+    "error",
+    "startup"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent-acp/src/run.ts:terminalFailure",
+   "type": "function",
+   "name": "terminalFailure",
+   "filePath": "packages/subagent/subagent-acp/src/run.ts",
+   "lineRange": [
+    300,
+    322
+   ],
+   "summary": "归类终局失败（中断/超时/协议）并渲染诊断。",
+   "tags": [
+    "error",
+    "terminal"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent-acp/src/run.ts:startAcpRun",
+   "type": "function",
+   "name": "startAcpRun",
+   "filePath": "packages/subagent/subagent-acp/src/run.ts",
+   "lineRange": [
+    336,
+    618
+   ],
+   "summary": "ACP 子代理主运行循环：会话/初始化/审批流、输出收集、取消与拆卸的所有权闭环。",
+   "tags": [
+    "run",
+    "acp",
+    "lifecycle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/subagent/subagent-claude-code/src/index.ts:ClaudeCodeProvider",
+   "type": "class",
+   "name": "ClaudeCodeProvider",
+   "filePath": "packages/subagent/subagent-claude-code/src/index.ts",
+   "lineRange": [
+    73,
+    116
+   ],
+   "summary": "Claude Code 后端 SubagentProvider：start 经官方 Agent SDK 执行 one-shot 运行。",
+   "tags": [
+    "provider",
+    "claude-code"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent-claude-code/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/subagent/subagent-claude-code/src/index.ts",
+   "lineRange": [
+    123,
+    146
+   ],
+   "summary": "插件入口：校验配置并向 ctx.subagents 注册 ClaudeCodeProvider。",
+   "tags": [
+    "plugin-entry",
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/subagent/subagent-claude-code/src/process.ts:ManagedClaudeCodeProcess",
+   "type": "class",
+   "name": "ManagedClaudeCodeProcess",
+   "filePath": "packages/subagent/subagent-claude-code/src/process.ts",
+   "lineRange": [
+    67,
+    159
+   ],
+   "summary": "托管进程句柄到 Agent SDK SpawnedProcess 接口的投影：killed/exitCode/signalCode/outcome 与事件订阅。",
+   "tags": [
+    "process",
+    "adapter",
+    "subprocess"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent-claude-code/src/process.ts:sdkEnvironmentOverlay",
+   "type": "function",
+   "name": "sdkEnvironmentOverlay",
+   "filePath": "packages/subagent/subagent-claude-code/src/process.ts",
+   "lineRange": [
+    30,
+    38
+   ],
+   "summary": "构造传递给 SDK 子进程的环境叠加（擦除后叠加）。",
+   "tags": [
+    "environment",
+    "sdk"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent-claude-code/src/process.ts:claudeSpawnSpec",
+   "type": "function",
+   "name": "claudeSpawnSpec",
+   "filePath": "packages/subagent/subagent-claude-code/src/process.ts",
+   "lineRange": [
+    46,
+    61
+   ],
+   "summary": "构造官方 SDK 自定义 spawn 的命令与环境规格。",
+   "tags": [
+    "spawn",
+    "spec"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/subagent/subagent-claude-code/src/run.ts:ClaudeCodeFailure",
+   "type": "class",
+   "name": "ClaudeCodeFailure",
+   "filePath": "packages/subagent/subagent-claude-code/src/run.ts",
+   "lineRange": [
+    98,
+    109
+   ],
+   "summary": "Claude Code 运行失败错误类型（携带诊断）。",
+   "tags": [
+    "error",
+    "claude-code"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent-claude-code/src/run.ts:failureDiagnostic",
+   "type": "function",
+   "name": "failureDiagnostic",
+   "filePath": "packages/subagent/subagent-claude-code/src/run.ts",
+   "lineRange": [
+    81,
+    96
+   ],
+   "summary": "从 SDK 失败提取诊断文本。",
+   "tags": [
+    "diagnostic",
+    "error"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent-claude-code/src/run.ts:claudeCodeStartupFailure",
+   "type": "function",
+   "name": "claudeCodeStartupFailure",
+   "filePath": "packages/subagent/subagent-claude-code/src/run.ts",
+   "lineRange": [
+    131,
+    136
+   ],
+   "summary": "构造 Claude Code 启动失败错误。",
+   "tags": [
+    "error",
+    "startup"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent-claude-code/src/run.ts:textTask",
+   "type": "function",
+   "name": "textTask",
+   "filePath": "packages/subagent/subagent-claude-code/src/run.ts",
+   "lineRange": [
+    184,
+    199
+   ],
+   "summary": "把任务与上下文渲染为 SDK 文本任务。",
+   "tags": [
+    "task",
+    "render"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent-claude-code/src/run.ts:successfulResult",
+   "type": "function",
+   "name": "successfulResult",
+   "filePath": "packages/subagent/subagent-claude-code/src/run.ts",
+   "lineRange": [
+    206,
+    226
+   ],
+   "summary": "仅严格 SDK 成功结果映射为完成的子代理结果。",
+   "tags": [
+    "result",
+    "success"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent-claude-code/src/run.ts:consumeClaudeQuery",
+   "type": "function",
+   "name": "consumeClaudeQuery",
+   "filePath": "packages/subagent/subagent-claude-code/src/run.ts",
+   "lineRange": [
+    236,
+    261
+   ],
+   "summary": "消费 SDK query 流并收集子代理输出。",
+   "tags": [
+    "query",
+    "stream"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent-claude-code/src/run.ts:disposeClaudeCodeChild",
+   "type": "function",
+   "name": "disposeClaudeCodeChild",
+   "filePath": "packages/subagent/subagent-claude-code/src/run.ts",
+   "lineRange": [
+    270,
+    306
+   ],
+   "summary": "静默拆卸 Claude CLI 子进程（宽限与升级信号）。",
+   "tags": [
+    "disposal",
+    "quiescence"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent-claude-code/src/run.ts:claudeQueryOptions",
+   "type": "function",
+   "name": "claudeQueryOptions",
+   "filePath": "packages/subagent/subagent-claude-code/src/run.ts",
+   "lineRange": [
+    316,
+    377
+   ],
+   "summary": "组装 SDK query 选项（自定义 spawn、工作区、工具策略等）。",
+   "tags": [
+    "options",
+    "sdk"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent-claude-code/src/run.ts:startClaudeCodeRun",
+   "type": "function",
+   "name": "startClaudeCodeRun",
+   "filePath": "packages/subagent/subagent-claude-code/src/run.ts",
+   "lineRange": [
+    385,
+    587
+   ],
+   "summary": "Claude Code one-shot 主运行循环：SDK 调用、进程托管、取消与整区间拆卸。",
+   "tags": [
+    "run",
+    "claude-code",
+    "lifecycle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/subagent/subagent-codex/src/index.ts:CodexProvider",
+   "type": "class",
+   "name": "CodexProvider",
+   "filePath": "packages/subagent/subagent-codex/src/index.ts",
+   "lineRange": [
+    63,
+    100
+   ],
+   "summary": "Codex 后端 SubagentProvider：start 拉起全新 app-server wrapper 执行 one-shot 运行。",
+   "tags": [
+    "provider",
+    "codex"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent-codex/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/subagent/subagent-codex/src/index.ts",
+   "lineRange": [
+    107,
+    130
+   ],
+   "summary": "插件入口：校验配置并向 ctx.subagents 注册 CodexProvider。",
+   "tags": [
+    "plugin-entry",
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/subagent/subagent-codex/src/run.ts:CodexRunFailure",
+   "type": "class",
+   "name": "CodexRunFailure",
+   "filePath": "packages/subagent/subagent-codex/src/run.ts",
+   "lineRange": [
+    106,
+    117
+   ],
+   "summary": "Codex 运行失败错误类型（携带诊断）。",
+   "tags": [
+    "error",
+    "codex"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent-codex/src/run.ts:failureDiagnostic",
+   "type": "function",
+   "name": "failureDiagnostic",
+   "filePath": "packages/subagent/subagent-codex/src/run.ts",
+   "lineRange": [
+    87,
+    104
+   ],
+   "summary": "从 Codex 错误提取诊断文本。",
+   "tags": [
+    "diagnostic",
+    "error"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent-codex/src/run.ts:codexAppServerArgv",
+   "type": "function",
+   "name": "codexAppServerArgv",
+   "filePath": "packages/subagent/subagent-codex/src/run.ts",
+   "lineRange": [
+    135,
+    137
+   ],
+   "summary": "解析官方 app-server 启动 argv。",
+   "tags": [
+    "argv",
+    "codex"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent-codex/src/run.ts:textTask",
+   "type": "function",
+   "name": "textTask",
+   "filePath": "packages/subagent/subagent-codex/src/run.ts",
+   "lineRange": [
+    167,
+    182
+   ],
+   "summary": "把任务与上下文渲染为 Codex 文本任务。",
+   "tags": [
+    "task",
+    "render"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent-codex/src/run.ts:disposeCodexChild",
+   "type": "function",
+   "name": "disposeCodexChild",
+   "filePath": "packages/subagent/subagent-codex/src/run.ts",
+   "lineRange": [
+    190,
+    217
+   ],
+   "summary": "静默拆卸 Codex 子进程。",
+   "tags": [
+    "disposal",
+    "quiescence"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent-codex/src/run.ts:startCodexRun",
+   "type": "function",
+   "name": "startCodexRun",
+   "filePath": "packages/subagent/subagent-codex/src/run.ts",
+   "lineRange": [
+    225,
+    439
+   ],
+   "summary": "Codex one-shot 主运行循环：app-server 拉起、wire 初始化、ephemeral thread、turn 驱动与拆卸。",
+   "tags": [
+    "run",
+    "codex",
+    "lifecycle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/subagent/subagent-codex/src/wire.ts:CodexAppServerWire",
+   "type": "class",
+   "name": "CodexAppServerWire",
+   "filePath": "packages/subagent/subagent-codex/src/wire.ts",
+   "lineRange": [
+    192,
+    711
+   ],
+   "summary": "Codex app-server 协议适配类：initialize/startThread/runTurn/interrupt/collectOutput/close 等产品方法与 thread/turn 关联、无人值守审批决策。",
+   "tags": [
+    "wire",
+    "protocol",
+    "codex"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/subagent/subagent-codex/src/wire.ts:failureInfo",
+   "type": "function",
+   "name": "failureInfo",
+   "filePath": "packages/subagent/subagent-codex/src/wire.ts",
+   "lineRange": [
+    114,
+    148
+   ],
+   "summary": "解码 Codex 失败信息对象（error chains/HTTP 状态等）。",
+   "tags": [
+    "failure",
+    "decode"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/subagent/subagent-dsh-sdk/src/index.ts:SdkSubagentProvider",
+   "type": "class",
+   "name": "SdkSubagentProvider",
+   "filePath": "packages/subagent/subagent-dsh-sdk/src/index.ts",
+   "lineRange": [
+    124,
+    167
+   ],
+   "summary": "SDK 后端 SubagentProvider：start 拉起完整子 Harness 运行时进程执行委托任务。",
+   "tags": [
+    "provider",
+    "dsh-sdk"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent-dsh-sdk/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/subagent/subagent-dsh-sdk/src/index.ts",
+   "lineRange": [
+    169,
+    185
+   ],
+   "summary": "插件入口：解析 dshBin/patch 文件并向 ctx.subagents 注册 SdkSubagentProvider。",
+   "tags": [
+    "plugin-entry",
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/subagent/subagent-dsh-sdk/src/run.ts:SdkRunFailure",
+   "type": "class",
+   "name": "SdkRunFailure",
+   "filePath": "packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "lineRange": [
+    108,
+    113
+   ],
+   "summary": "SDK 运行失败错误类型（携带诊断）。",
+   "tags": [
+    "error",
+    "dsh-sdk"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent-dsh-sdk/src/run.ts:sdkConfigurationFailure",
+   "type": "function",
+   "name": "sdkConfigurationFailure",
+   "filePath": "packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "lineRange": [
+    125,
+    127
+   ],
+   "summary": "构造 SDK 配置失败错误。",
+   "tags": [
+    "error",
+    "configuration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent-dsh-sdk/src/run.ts:sdkChildOutcome",
+   "type": "function",
+   "name": "sdkChildOutcome",
+   "filePath": "packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "lineRange": [
+    145,
+    180
+   ],
+   "summary": "把子 Harness 进程出口映射为子代理结果。",
+   "tags": [
+    "outcome",
+    "mapping"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/subagent/subagent-dsh-sdk/src/run.ts:startSdkRun",
+   "type": "function",
+   "name": "startSdkRun",
+   "filePath": "packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "lineRange": [
+    231,
+    376
+   ],
+   "summary": "SDK 子代理主运行循环：stdio JSON-RPC 驱动、会话/关闭交换、取消与静默拆卸。",
+   "tags": [
+    "run",
+    "dsh-sdk",
+    "lifecycle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/subagent/subagent-fork-in-process/src/index.ts:ForkInProcessProvider",
+   "type": "class",
+   "name": "ForkInProcessProvider",
+   "filePath": "packages/subagent/subagent-fork-in-process/src/index.ts",
+   "lineRange": [
+    60,
+    79
+   ],
+   "summary": "FORK 后端 SubagentProvider：prepareContinuable 以父已完成 turn 前缀一次性播种子代理。",
+   "tags": [
+    "provider",
+    "fork"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent-fork-in-process/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/subagent/subagent-fork-in-process/src/index.ts",
+   "lineRange": [
+    81,
+    83
+   ],
+   "summary": "插件入口：向 ctx.subagents 注册 ForkInProcessProvider。",
+   "tags": [
+    "plugin-entry",
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/subagent/subagent-spawn-in-process/src/index.ts:SpawnInProcessProvider",
+   "type": "class",
+   "name": "SpawnInProcessProvider",
+   "filePath": "packages/subagent/subagent-spawn-in-process/src/index.ts",
+   "lineRange": [
+    38,
+    55
+   ],
+   "summary": "SPAWN 后端 SubagentProvider：prepareContinuable 返回空种子——子代理全新启动，不继承父对话。",
+   "tags": [
+    "provider",
+    "spawn"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/subagent/subagent-spawn-in-process/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/subagent/subagent-spawn-in-process/src/index.ts",
+   "lineRange": [
+    57,
+    59
+   ],
+   "summary": "插件入口：向 ctx.subagents 注册 SpawnInProcessProvider。",
+   "tags": [
+    "plugin-entry",
+    "registration"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/subagent/subagent-acp/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/index.ts",
+   "target": "file:packages/util/timeout/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/index.ts",
+   "target": "file:packages/subagent/subagent-acp/src/run.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "file:packages/subprocess/subprocess/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/index.ts",
+   "target": "file:packages/util/timeout/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/index.ts",
+   "target": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/process.ts",
+   "target": "file:packages/subprocess/subprocess/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "file:packages/subprocess/subprocess/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "file:packages/subagent/subagent-claude-code/src/process.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/index.ts",
+   "target": "file:packages/util/timeout/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/index.ts",
+   "target": "file:packages/subagent/subagent-codex/src/run.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/run.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/run.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/run.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/run.ts",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/run.ts",
+   "target": "file:packages/subprocess/subprocess/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/run.ts",
+   "target": "file:packages/subagent/subagent-codex/src/wire.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/wire.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/wire.ts",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/wire.ts",
+   "target": "file:packages/sdk/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/wire.ts",
+   "target": "file:packages/subagent/subagent-codex/src/run.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/index.ts",
+   "target": "file:packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "target": "file:packages/sdk/client/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "target": "file:packages/subprocess/subprocess/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-fork-in-process/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-fork-in-process/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-fork-in-process/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-spawn-in-process/src/index.ts",
+   "target": "file:packages/subagent/subagent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/index.ts",
+   "target": "class:packages/subagent/subagent-acp/src/index.ts:AcpProvider",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/index.ts",
+   "target": "function:packages/subagent/subagent-acp/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/index.ts",
+   "target": "function:packages/subagent/subagent-acp/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "class:packages/subagent/subagent-acp/src/run.ts:AcpRunFailure",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "function:packages/subagent/subagent-acp/src/run.ts:failureDiagnostic",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "function:packages/subagent/subagent-acp/src/run.ts:acpConfigurationFailure",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "function:packages/subagent/subagent-acp/src/run.ts:acpConfigurationFailure",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "function:packages/subagent/subagent-acp/src/run.ts:disposeAcpChild",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "function:packages/subagent/subagent-acp/src/run.ts:disposeAcpChild",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "function:packages/subagent/subagent-acp/src/run.ts:acpStopReason",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "function:packages/subagent/subagent-acp/src/run.ts:acpStopReason",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "function:packages/subagent/subagent-acp/src/run.ts:acpContentText",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "function:packages/subagent/subagent-acp/src/run.ts:acpContentText",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "function:packages/subagent/subagent-acp/src/run.ts:toAcpPrompt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "function:packages/subagent/subagent-acp/src/run.ts:toAcpPrompt",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "function:packages/subagent/subagent-acp/src/run.ts:startupFailure",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "function:packages/subagent/subagent-acp/src/run.ts:terminalFailure",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "function:packages/subagent/subagent-acp/src/run.ts:startAcpRun",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/run.ts",
+   "target": "function:packages/subagent/subagent-acp/src/run.ts:startAcpRun",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/index.ts",
+   "target": "class:packages/subagent/subagent-claude-code/src/index.ts:ClaudeCodeProvider",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/index.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/index.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/process.ts",
+   "target": "class:packages/subagent/subagent-claude-code/src/process.ts:ManagedClaudeCodeProcess",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/process.ts",
+   "target": "class:packages/subagent/subagent-claude-code/src/process.ts:ManagedClaudeCodeProcess",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/process.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/process.ts:sdkEnvironmentOverlay",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/process.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/process.ts:sdkEnvironmentOverlay",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/process.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/process.ts:claudeSpawnSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/process.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/process.ts:claudeSpawnSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "class:packages/subagent/subagent-claude-code/src/run.ts:ClaudeCodeFailure",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/run.ts:failureDiagnostic",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/run.ts:claudeCodeStartupFailure",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/run.ts:claudeCodeStartupFailure",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/run.ts:textTask",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/run.ts:textTask",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/run.ts:successfulResult",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/run.ts:successfulResult",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/run.ts:consumeClaudeQuery",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/run.ts:consumeClaudeQuery",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/run.ts:disposeClaudeCodeChild",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/run.ts:disposeClaudeCodeChild",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/run.ts:claudeQueryOptions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/run.ts:claudeQueryOptions",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/run.ts:startClaudeCodeRun",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/run.ts:startClaudeCodeRun",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/index.ts",
+   "target": "class:packages/subagent/subagent-codex/src/index.ts:CodexProvider",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/index.ts",
+   "target": "function:packages/subagent/subagent-codex/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/index.ts",
+   "target": "function:packages/subagent/subagent-codex/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/run.ts",
+   "target": "class:packages/subagent/subagent-codex/src/run.ts:CodexRunFailure",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/run.ts",
+   "target": "function:packages/subagent/subagent-codex/src/run.ts:failureDiagnostic",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/run.ts",
+   "target": "function:packages/subagent/subagent-codex/src/run.ts:codexAppServerArgv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/run.ts",
+   "target": "function:packages/subagent/subagent-codex/src/run.ts:codexAppServerArgv",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/run.ts",
+   "target": "function:packages/subagent/subagent-codex/src/run.ts:textTask",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/run.ts",
+   "target": "function:packages/subagent/subagent-codex/src/run.ts:textTask",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/run.ts",
+   "target": "function:packages/subagent/subagent-codex/src/run.ts:disposeCodexChild",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/run.ts",
+   "target": "function:packages/subagent/subagent-codex/src/run.ts:disposeCodexChild",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/run.ts",
+   "target": "function:packages/subagent/subagent-codex/src/run.ts:startCodexRun",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/run.ts",
+   "target": "function:packages/subagent/subagent-codex/src/run.ts:startCodexRun",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/wire.ts",
+   "target": "class:packages/subagent/subagent-codex/src/wire.ts:CodexAppServerWire",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/wire.ts",
+   "target": "class:packages/subagent/subagent-codex/src/wire.ts:CodexAppServerWire",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/wire.ts",
+   "target": "function:packages/subagent/subagent-codex/src/wire.ts:failureInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/index.ts",
+   "target": "class:packages/subagent/subagent-dsh-sdk/src/index.ts:SdkSubagentProvider",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/index.ts",
+   "target": "function:packages/subagent/subagent-dsh-sdk/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/index.ts",
+   "target": "function:packages/subagent/subagent-dsh-sdk/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "target": "class:packages/subagent/subagent-dsh-sdk/src/run.ts:SdkRunFailure",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "target": "function:packages/subagent/subagent-dsh-sdk/src/run.ts:sdkConfigurationFailure",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "target": "function:packages/subagent/subagent-dsh-sdk/src/run.ts:sdkConfigurationFailure",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "target": "function:packages/subagent/subagent-dsh-sdk/src/run.ts:sdkChildOutcome",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "target": "function:packages/subagent/subagent-dsh-sdk/src/run.ts:sdkChildOutcome",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "target": "function:packages/subagent/subagent-dsh-sdk/src/run.ts:startSdkRun",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/run.ts",
+   "target": "function:packages/subagent/subagent-dsh-sdk/src/run.ts:startSdkRun",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-fork-in-process/src/index.ts",
+   "target": "class:packages/subagent/subagent-fork-in-process/src/index.ts:ForkInProcessProvider",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-fork-in-process/src/index.ts",
+   "target": "function:packages/subagent/subagent-fork-in-process/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-fork-in-process/src/index.ts",
+   "target": "function:packages/subagent/subagent-fork-in-process/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-spawn-in-process/src/index.ts",
+   "target": "class:packages/subagent/subagent-spawn-in-process/src/index.ts:SpawnInProcessProvider",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-spawn-in-process/src/index.ts",
+   "target": "function:packages/subagent/subagent-spawn-in-process/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/subagent/subagent-spawn-in-process/src/index.ts",
+   "target": "function:packages/subagent/subagent-spawn-in-process/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/index.ts",
+   "target": "function:packages/subagent/subagent-acp/src/run.ts:startAcpRun",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-acp/src/index.ts",
+   "target": "class:packages/subagent/subagent/src/index.ts:SubagentRuntime",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/index.ts",
+   "target": "function:packages/subagent/subagent-claude-code/src/run.ts:startClaudeCodeRun",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/index.ts",
+   "target": "class:packages/subagent/subagent/src/index.ts:SubagentRuntime",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-claude-code/src/run.ts",
+   "target": "class:packages/subagent/subagent-claude-code/src/process.ts:ManagedClaudeCodeProcess",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/index.ts",
+   "target": "function:packages/subagent/subagent-codex/src/run.ts:startCodexRun",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/index.ts",
+   "target": "class:packages/subagent/subagent/src/index.ts:SubagentRuntime",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-codex/src/run.ts",
+   "target": "class:packages/subagent/subagent-codex/src/wire.ts:CodexAppServerWire",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/index.ts",
+   "target": "function:packages/subagent/subagent-dsh-sdk/src/run.ts:startSdkRun",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-dsh-sdk/src/index.ts",
+   "target": "class:packages/subagent/subagent/src/index.ts:SubagentRuntime",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-fork-in-process/src/index.ts",
+   "target": "class:packages/subagent/subagent/src/index.ts:SubagentRuntime",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/subagent/subagent-spawn-in-process/src/index.ts",
+   "target": "class:packages/subagent/subagent/src/index.ts:SubagentRuntime",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "document:packages/subagent/subagent-claude-code/README.md",
+   "target": "file:packages/subagent/subagent-claude-code/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/subagent/subagent-codex/README.md",
+   "target": "file:packages/subagent/subagent-codex/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/subagent/subagent-dsh-sdk/README.md",
+   "target": "file:packages/subagent/subagent-dsh-sdk/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/subagent/subagent-fork-in-process/README.md",
+   "target": "file:packages/subagent/subagent-fork-in-process/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/subagent/subagent-spawn-in-process/README.md",
+   "target": "file:packages/subagent/subagent-spawn-in-process/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/subagent/subagent-claude-code/cordis.patch.yml",
+   "target": "file:packages/subagent/subagent-claude-code/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/subagent/subagent-codex/cordis.patch.yml",
+   "target": "file:packages/subagent/subagent-codex/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  }
+ ]
+}

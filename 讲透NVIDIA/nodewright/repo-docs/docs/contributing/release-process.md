@@ -1,0 +1,765 @@
+# NodeWright Release Process
+
+Step-by-step process for releasing NodeWright components using **release branches**.
+
+## Release Branch Strategy
+
+A release branch is cut from `main` when a line is ready to stabilize: the operator/chart line at feature-freeze, the agent and CLI lines when a minor or major of that component is ready (see the table below). All release candidates and the final release for that minor version are tagged on that branch, and every later patch for the same minor line is cherry-picked back to the same branch and tagged from there. The release branch is the single source of truth for everything that ships under one minor version — once it exists, nothing for that minor goes anywhere else.
+
+There are three branch families, one per release cadence:
+
+| Branch | Tags cut on it | Cut when |
+| --- | --- | --- |
+| `release/vX.Y.x` | `operator/vX.Y.*`, `chart/vX.Y.*` | The operator minor reaches feature-freeze. The chart defines the compatible set, so it always moves with the operator. |
+| `release/agent/vX.Y.x` | `agent/vX.Y.*` | An agent minor or major is ready to ship, on its own schedule. |
+| `release/cli/vX.Y.x` | `cli/vX.Y.*` | A CLI minor or major is ready to ship, on its own schedule. |
+
+The agent gets its own family because it is versioned independently and its releases do not line up with the operator's: `agent/v7.0.0` (the Go rewrite) ships between operator minors, and neither forcing an early operator minor nor shipping a rewrite as a chart patch would have been honest. The operator and chart stay together on one branch because the chart's job is to pin a compatible set. The two families meet at the chart: a new agent version reaches users when the chart's agent pin is bumped, which is a normal chart patch on `release/vX.Y.x` (see [Agent Releases](#agent-releases)).
+
+The CLI gets its own family for the same reason, and it never meets the chart at all: users install `kubectl nodewright` themselves, upgrade it on their own schedule, and run it against any supported operator version, so a CLI release is not tied to an operator minor and needs no chart patch to reach anyone (see [CLI Releases](#cli-releases)).
+
+**Flow (one minor line):**
+
+```mermaid
+%%{init: {'gitGraph': {'mainBranchName': 'main', 'showCommitLabel': false}}}%%
+gitGraph
+   commit
+   commit
+   branch release/v0.16.x
+   checkout main
+   commit id: "X"
+   checkout release/v0.16.x
+   cherry-pick id: "X" tag: "v0.16.0-rc.1"
+   checkout main
+   commit id: "Y"
+   checkout release/v0.16.x
+   cherry-pick id: "Y" tag: "v0.16.0-rc.2"
+   commit tag: "v0.16.0"
+   checkout main
+   commit id: "Z"
+   checkout release/v0.16.x
+   cherry-pick id: "Z" tag: "v0.16.1"
+```
+
+`X`, `Y`, `Z` are fixes that land on `main` first and get cherry-picked to `release/v0.16.x`. Each RC and the final release are tagged on that branch. Patches (`v0.16.1`, …) stay on the same release branch.
+
+**Key principles:**
+
+- **Branch first, then tag.** Always cut the release branch before the first RC. Tags only live on release branches, never on `main`: operator and chart tags on `release/vX.Y.x`, agent tags on `release/agent/vX.Y.x`, CLI tags on `release/cli/vX.Y.x`.
+- **Cherry-pick from `main`.** Any fix or feature destined for a release lands on `main` first, then is cherry-picked to the release branch. The release branch is never the place to *develop* — only to *stabilize and ship*.
+  - Rare exception: a change that is genuinely release-branch-only (e.g. a `chart/Chart.yaml` version bump for that line) can be committed directly to the release branch via a feature branch and PR.
+- **RCs are the validation gate.** Cut `-rc.1`, `-rc.2`, … on the release branch until you're happy. When an RC is approved, tag the final on the one bookkeeping commit made right after it, with no code changes in between. For the operator and chart that commit is the `Chart.yaml` bump dropping the `-rc.N` suffix; for the agent it is the changelog cut (see [Agent Releases](#agent-releases)).
+- **Patches stay on the same branch.** `v0.16.1`, `v0.16.2`, … are all cut from `release/v0.16.x` — cherry-pick the fix from `main`, bump `chart/Chart.yaml`, tag. Agent and CLI patches do the same on `release/agent/vX.Y.x` and `release/cli/vX.Y.x`, with the changelog cut in place of the chart bump.
+- **Component naming:** Operator drives the `release/vX.Y.x` line; chart always gets tagged there because `Chart.yaml` (and therefore `appVersion`) moves with every release. The agent is tagged only on its own `release/agent/vX.Y.x` line, and a chart release picks up whichever agent version its `values.yaml` pins. The CLI is tagged only on its own `release/cli/vX.Y.x` line.
+- **Branch protection and CI already know all three families.** `merge-gate.yaml` runs on pull requests into any branch, so a release branch of any family gets the same CI as `main` once it carries that workflow; a branch cut before it keeps the per-workflow triggers it was cut with. The repository's `release` ruleset uses fnmatch, where neither `*` nor a bare `**` crosses a `/`, so it lists `refs/heads/release/*`, `refs/heads/release/agent/*` and `refs/heads/release/cli/*` (`refs/heads/release/**/*` would also cover all three); agent and CLI release branches get the same deletion, force-push and pull-request rules.
+
+### Major/Minor Release Workflow
+
+```bash
+# 1. Cut the release branch from main at feature-freeze.
+git checkout main && git pull origin main
+git checkout -b release/v0.16.x
+git push origin release/v0.16.x
+
+# 2. Cherry-pick anything that has merged to main since the cut but belongs in the release.
+#    Repeat throughout the stabilization period.
+git cherry-pick -x <sha-on-main>
+git push origin release/v0.16.x
+
+# 3. Prepare the chart for the RC. Edit chart/Chart.yaml:
+#    version: v0.16.0-rc.1
+#    appVersion: v0.16.0-rc.1
+git commit -am "release: prepare v0.16.0-rc.1"
+git push origin release/v0.16.x
+
+# 4. Tag the RC on the release branch.
+git tag operator/v0.16.0-rc.1
+git tag chart/v0.16.0-rc.1
+# Tag agent only if it changed since the last released agent version.
+git push origin operator/v0.16.0-rc.1 chart/v0.16.0-rc.1
+
+# 5. Validate the RC. If issues are found, cherry-pick more fixes from main,
+#    bump Chart.yaml to v0.16.0-rc.2, and tag -rc.2. Repeat until clean.
+
+# 6. Cut the final release. No code changes land after the last good RC; the
+#    only commit between it and the final tag is the Chart.yaml bump to v0.16.0
+#    (drop the -rc.N suffix).
+git commit -am "release: v0.16.0"
+git push origin release/v0.16.x
+git tag operator/v0.16.0
+git tag chart/v0.16.0
+git push origin operator/v0.16.0 chart/v0.16.0
+```
+
+**Automated:** Tests → Multi-platform build → Publish to `ghcr.io`
+
+A `chart/v*` tag push also publishes the Helm chart as an OCI artifact to `oci://ghcr.io/nvidia/nodewright/charts/nodewright`. Consumers install with:
+
+```bash
+helm install nodewright oci://ghcr.io/nvidia/nodewright/charts/nodewright --version v0.16.0
+```
+
+The packaged chart carries the Apache-2.0 `LICENSE` and `NOTICE`. `chart/LICENSE` and `chart/NOTICE` are copies of the root files, kept identical by `make chart-license-check` in Lint CI, so edit the root file and copy it into `chart/`. Release branches cut before #720 have no `NOTICE`; to include it in a chart patch from such a branch, cherry-pick the root `NOTICE` and `chart/NOTICE` along with the `chart-license-check` target (#729).
+
+### Distribution: ghcr.io only (for now)
+
+Starting with `v0.16.0`, NodeWright is distributed **exclusively via GitHub Container Registry (`ghcr.io`)**:
+
+| Artifact | Location |
+| --- | --- |
+| Operator image | `ghcr.io/nvidia/nodewright/operator` |
+| Agent image | `ghcr.io/nvidia/nodewright/agent` |
+| Helm chart (OCI) | `oci://ghcr.io/nvidia/nodewright/charts/nodewright` |
+
+`v0.16.0` is the **first release using OCI on `ghcr.io` for the Helm chart** — previously the chart was published to the NGC Helm repository (`https://helm.ngc.nvidia.com/nvidia/skyhook`). The OCI distribution removes the `helm repo add` step entirely; Helm 3.8+ pulls from `oci://` URLs directly.
+
+Distribution through `nvcr.io` / NGC is **paused** and is planned to return in a future release. Until then, the chart's image-pull defaults in `chart/values.yaml` point at `ghcr.io`. When NGC distribution resumes, the defaults and this section will be updated; users who pin to `ghcr.io` paths today won't be forced to migrate.
+
+### Release Candidate Tag Format
+
+Only two tag shapes are accepted by the release workflow per component:
+
+- `<component>/v<MAJOR>.<MINOR>.<PATCH>` — final release
+- `<component>/v<MAJOR>.<MINOR>.<PATCH>-rc.<N>` — release candidate, published as a GitHub pre-release
+
+The dot in `-rc.<N>` is required: it makes `git tag --sort=v:refname` order pre-releases correctly and matches the SemVer pre-release convention. Any other suffix (`-beta`, `-alpha`, `-rc<N>` without the dot, `-rc.1a`, etc.) is rejected by `.github/workflows/release.yml` so the tag format stays predictable.
+
+Notes:
+
+- Helm OCI accepts pre-release versions, so `chart/v0.16.0-rc.1` pushes `nodewright-v0.16.0-rc.1.tgz` to `oci://ghcr.io/nvidia/nodewright/charts`. Install with `--version v0.16.0-rc.1`.
+- An operator or agent tag always publishes its version and commit-SHA image tags, but `latest` moves only if the tag is that component's newest stable tag when the image is published. An RC, a patch on an older release line, or a re-run for a superseded release leaves `latest` where it is. A tag cut from a release branch that predates this check still moves `latest` unconditionally; see [Patch Release Workflow](#patch-release-workflow).
+- Release-notes scoping is asymmetric (see #246). A **stable** release's notes cover everything since the previous **stable** tag (rc tags are excluded as boundaries), so the stable release page is complete even after several RCs. An **RC**'s notes cover only the delta since the prior tag, which is what you want while iterating.
+
+### Patch Release Workflow
+
+Patches stay on the existing release branch. Fix on `main` first, cherry-pick to the release branch, then tag.
+
+A release branch cut before the `latest` check (#631) moves `:latest` to every operator or agent tag cut from it, including a patch to an older line after a newer minor has shipped. Cherry-pick that change onto the branch before tagging such a patch.
+
+```bash
+# 1. Land the fix on main as a normal PR (so it ships in future minors too).
+#    Note the commit SHA after it merges.
+
+# 2. Cherry-pick to the active release branch.
+git checkout release/v0.16.x
+git pull origin release/v0.16.x
+git cherry-pick -x <sha-on-main>
+
+# 3. Bump chart/Chart.yaml to the new patch version.
+#    version: v0.16.1
+#    appVersion: v0.16.1
+git commit -am "release: v0.16.1"
+git push origin release/v0.16.x
+
+# 4. Tag the components that changed and push *every* tag you created.
+#    Never tag the agent here: an agent fix ships from release/agent/vX.Y.x
+#    (see Agent Releases) and reaches this line as a values.yaml pin bump.
+#    Never tag the CLI here either: it ships from release/cli/vX.Y.x.
+git tag operator/v0.16.1    # If operator changed
+git tag chart/v0.16.1       # Chart always gets tagged
+git push origin operator/v0.16.1 chart/v0.16.1  # drop the operator tag if you didn't create it
+```
+
+If the fix is urgent enough to need its own RC cycle, repeat the RC workflow above (e.g. `operator/v0.16.1-rc.1`) before tagging `v0.16.1`.
+
+### Agent Releases
+
+The agent releases on its own branch family, `release/agent/vX.Y.x`, and reaches users through a chart patch that bumps the agent pin. The two steps are deliberately separate: the agent tag proves the image, the chart tag decides who gets it.
+
+```bash
+# 1. Cut the agent release branch from main when the agent minor/major is ready.
+git fetch origin
+git branch release/agent/v7.0.x origin/main
+git push -u origin release/agent/v7.0.x
+
+# 2. Tag the RC on that branch and push it. This publishes agent:v7.0.0-rc.1
+#    (signed, with per-platform SBOM and VEX attestations) and a GitHub
+#    pre-release; `latest` does not move for an RC.
+git tag agent/v7.0.0-rc.1 release/agent/v7.0.x
+git push origin agent/v7.0.0-rc.1
+
+# 3. Validate the RC against a real cluster. Point a NodeWright's package at it
+#    with `agentImageOverride`, or install a chart with the pin overridden:
+#    --set controllerManager.manager.agent.tag=v7.0.0-rc.1 \
+#    --set controllerManager.manager.agent.digest=<index digest>
+#    Fixes land on main first and are cherry-picked to release/agent/v7.0.x;
+#    tag -rc.2, -rc.3, ... until clean.
+
+# 4. Cut the final. No code changes land after the last good RC; the only
+#    commit between it and the final tag is the changelog cut, which does not
+#    touch the image: run `scripts/gen-changelog.sh agent v7.0.0` on the agent
+#    branch to cut the CHANGELOG section and promote RELEASE_NOTES.md to the
+#    `## agent/v7.0.0` heading release.yml prepends to the release body, commit,
+#    then tag.
+git tag agent/v7.0.0 release/agent/v7.0.x
+git push origin agent/v7.0.0
+
+# 5. Ship it in a chart. On main, bump the agent tag/digest under
+#    controllerManager.manager.agent in chart/values.yaml, then cherry-pick to
+#    the active operator/chart line and release a chart patch as usual.
+git checkout release/v0.19.x
+git cherry-pick -x <values-bump-sha-on-main>
+#    bump chart/Chart.yaml to v0.19.1
+git commit -am "release: v0.19.1 (agent v7.0.0)"
+git push origin release/v0.19.x
+git tag chart/v0.19.1
+git push origin chart/v0.19.1
+```
+
+Agent patches (`agent/v7.0.1`, ...) follow the same shape as operator patches: cherry-pick the fix from `main` onto `release/agent/v7.0.x`, cut the changelog section there, tag there, then bump the chart pin on `main` and cherry-pick that to the chart line.
+
+### CLI Releases
+
+The CLI releases on its own branch family, `release/cli/vX.Y.x`, the same way the agent does, minus the chart step: a `cli/v*` tag push runs `.github/workflows/cli-release.yaml`, which builds and publishes the `kubectl-nodewright` binaries to the GitHub Release, and users pick it up from there.
+
+```bash
+# 1. Cut the CLI release branch from main when the CLI minor/major is ready.
+git fetch origin
+git switch -c release/cli/v0.5.x origin/main
+git push -u origin release/cli/v0.5.x
+
+# 2. Tag the RC on that branch and push it. This publishes a GitHub pre-release.
+git tag cli/v0.5.0-rc.1 release/cli/v0.5.x
+git push origin cli/v0.5.0-rc.1
+
+# 3. Validate the RC against the operator versions the compatibility matrix in
+#    docs/user-guide/cli.md claims to support. Fixes land on main first and are
+#    cherry-picked to release/cli/v0.5.x; tag -rc.2, -rc.3, ... until clean.
+
+# 4. Cut the final. The only commit between the last good RC and the final tag
+#    is the changelog cut: run `scripts/gen-changelog.sh cli v0.5.0` on the CLI
+#    branch and land it through a PR into release/cli/v0.5.x (the release
+#    ruleset rejects a direct push). Once it merges, tag the merged commit.
+git fetch origin
+git tag cli/v0.5.0 origin/release/cli/v0.5.x
+git push origin cli/v0.5.0
+```
+
+CLI patches (`cli/v0.5.1`, ...) follow the same shape: cherry-pick the fix from `main` onto `release/cli/v0.5.x`, land the changelog cut there through a PR, and tag the merged commit.
+
+### Release-Branch-Only Changes (rare)
+
+If a change genuinely doesn't belong on `main` — for example, the `chart/Chart.yaml` version bump for `v0.16.1`, or a backport that doesn't apply cleanly and needs to be re-implemented for the older line — open it as a feature branch off the release branch and PR it back to the release branch. **Default to cherry-picking from `main` first; only diverge when there's a clear reason the change can't exist there.**
+
+### Legacy: Individual Component Releases (Deprecated)
+
+*The following workflows are deprecated in favor of the release branch strategy above.*
+
+<details>
+<summary>Click to expand legacy workflows</summary>
+
+#### Operator Release (Legacy)
+
+```bash
+git checkout main && git pull origin main
+git tag operator/v1.2.3
+git push origin operator/v1.2.3
+```
+
+#### Agent Release (Legacy)
+
+```bash
+git checkout main && git pull origin main
+git tag agent/v1.2.3
+git push origin agent/v1.2.3
+```
+
+#### Chart Release (Legacy)
+
+```bash
+git checkout -b release/chart-v1.2.3
+# Update Chart.yaml, create PR, merge
+git checkout main && git pull origin main
+git tag chart/v1.2.3
+git push origin chart/v1.2.3
+```
+
+</details>
+
+## Changelogs and Release Notes
+
+Each component keeps two files side by side:
+
+| File | Owner | Contents |
+| --- | --- | --- |
+| `CHANGELOG.md` | machine-generated | every release and commit, derived from git history |
+| `RELEASE_NOTES.md` | human-authored | behavior changes, breaking changes, upgrade steps, highlights |
+
+`CHANGELOG.md` carries a `DO NOT EDIT` banner and is regenerated by `scripts/gen-changelog.sh`. **Never hand-edit it**; put curated prose in the sibling `RELEASE_NOTES.md` instead (organized by `## <component>/<version>` headings that match the changelog). Files: `operator/{CHANGELOG,RELEASE_NOTES}.md`, `chart/…`, `agent/…`, `operator/cmd/cli/…`.
+
+### Attribution: committed changelogs vs. GitHub Release notes
+
+Both are rendered by git-cliff from the same `cliff.toml`, but they are rendered differently on purpose:
+
+| | Rendered by | GitHub API | Bullet looks like |
+| --- | --- | --- | --- |
+| Committed `CHANGELOG.md` | `scripts/gen-changelog.sh` (passes `--offline`) | not called | `- *(operator)* Fix the thing` |
+| GitHub Release notes | `.github/workflows/release.yml`, `.github/workflows/cli-release.yaml` | called, with `GITHUB_TOKEN` | `- *(operator)* Fix the thing by [@user](…) in [#472](…)` |
+
+The `by [@user] in [#N]` suffixes come from `commit.remote.username` and `commit.remote.pr_number`, which only git-cliff's GitHub integration populates. `--offline` disables that integration, so the same template clauses render as nothing in the committed files. Release notes are where credit belongs and are read by people who want the discussion behind a line; a committed changelog is a flat historical record and would churn on every regeneration if it embedded API-resolved data.
+
+Consequences worth knowing:
+
+- **Previewing with `scripts/gen-changelog.sh <component>` shows the uncredited form.** That is the committed-changelog rendering, not what the release page will say. To preview the credited form, run the workflow's own command with a token: `GITHUB_TOKEN=$(gh auth token) git cliff --include-path 'operator/**' --tag-pattern 'operator/v[0-9]+\.[0-9]+\.[0-9]+$' --tag <tag> <prev>..<tag> --strip all`.
+- **Bot authors are named but not linked.** The GitHub API reports bot logins with a bracketed suffix (`dependabot[bot]`, `github-actions[bot]`), and `https://github.com/dependabot[bot]` is a 404 — there is no profile page at that address. The template renders those as plain `@dependabot[bot]` text and links only human contributors.
+- **The PR link resolves only when the commit is the PR's merge commit.** Squash merges (this repo's normal path) resolve; an intermediate commit from a merge-commit-style PR, or a cherry-pick onto a release branch, gets author credit but no PR link. git-cliff matches on commit SHA, and there is no SHA to match on in those cases.
+- **Attribution is best-effort and never blocks a release.** git-cliff panics rather than degrading when the API is unavailable, so both workflows wrap the call: on failure or a 5-minute timeout they log a `::warning::` and re-render with `--offline`, producing uncredited notes instead of a failed release.
+- The `[remote.github]` block in `cliff.toml` pins the repo git-cliff resolves against, so resolution does not depend on how the runner's `origin` remote happens to be spelled.
+- **Already-published releases are not backfilled.** Attribution starts with the first tag pushed after this landed. A published release page is a point-in-time artifact, and rewriting the older bodies would notify every watcher of the repo for content they have already read.
+
+#### Why a script instead of plain `git-cliff`
+
+A single `git-cliff --include-path <c>/** --tag-pattern <c>/.*` call silently drops most release sections in this monorepo: git-cliff path-filters commits first, then looks for tags only among survivors, so a tag whose commit touches no files under the component path (a chart bump, a CI fix, a ride-along agent release) is orphaned, and release-branch-only tags are invisible from `main`. `gen-changelog.sh` takes the release boundaries from `git tag` and renders each section over an explicit `prevTag..curTag` range, which avoids all of that. (Background: orhun/git-cliff#1122, #208.)
+
+### Writing and promoting a release note
+
+Write notes as you go, under the `## Unreleased` heading at the top of the component's `RELEASE_NOTES.md`. You do not name the version: **cutting the release promotes the heading for you.** `scripts/gen-changelog.sh <component> vX.Y.Z` renames `## Unreleased` to `## <component>/vX.Y.Z - <date>` and opens a fresh empty `## Unreleased` above it.
+
+That promotion is what makes the notes reachable. The release workflows extract the release body by matching a heading that is exactly `## <tag>`; `## Unreleased` matches nothing, and an empty match is indistinguishable from the (common, legitimate) case of a release with no hand-authored notes, so unpromoted notes are dropped silently.
+
+Details worth knowing:
+
+- **An empty `## Unreleased` promotes to nothing.** Most releases have no hand-authored notes and should not gain a stub heading.
+- **Re-running a cut is safe.** If the target `## <component>/vX.Y.Z` heading already exists, the script warns and leaves both it and `## Unreleased` alone.
+- **Patches only promote on their release branch.** See below.
+- **`make release-tag` warns** if you are about to tag a final version while `## Unreleased` still holds content and no section for that tag exists.
+
+### Commands
+
+```bash
+# Regenerate a CHANGELOG.md (interactive: prompts for component + action).
+make changelog
+
+# Non-interactive forms (used by CI and release-tag.sh):
+scripts/gen-changelog.sh <operator|agent|chart|cli>            # regenerate ([Unreleased])
+scripts/gen-changelog.sh <operator|agent|chart|cli> v0.2.0     # cut a release section
+for c in operator agent chart cli; do scripts/gen-changelog.sh "$c"; done   # bulk refresh
+
+# Interactively cut a release TAG (see below).
+make release-tag
+```
+
+### Where a cut section is sourced from (patch vs. minor)
+
+When you cut a **patch** (`vX.Y.Z` whose `X.Y` already has a final tag), the new section is sourced from that line's release branch, `release/vX.Y.x` (or `release/agent/vX.Y.x` for the agent), not from your current `HEAD`. A patch ships only the fixes cherry-picked onto its release branch; `main` meanwhile carries unrelated work bound for the next minor (a breaking API change, a dependency bump, …), and ranging `prevTag..HEAD` on `main` would sweep all of that into the patch. Sourcing from the release branch gives exactly what the patch ships, and lets you run the generator from any branch.
+
+Practical consequences for a patch cut:
+
+- The release branch must already exist and already carry the cherry-picks. Order is: cherry-pick the fix onto `release/vX.Y.x` first, then run the generator. The generator prints `Patch cut: sourcing <c>/vX.Y.Z from release/vX.Y.x (...)` so you can see the source it chose.
+- If `release/vX.Y.x` (or `origin/release/vX.Y.x`) doesn't exist, it errors and tells you to create the branch and cherry-pick first.
+- If nothing new is on the release branch since the previous tag, it warns (`no <c> commits for vX.Y.Z ... cherry-picked onto ... yet?`) rather than emitting an empty section: the usual cause is forgetting the cherry-pick.
+- **`RELEASE_NOTES.md` is only promoted when you run the cut from `release/vX.Y.x` itself.** Unlike `CHANGELOG.md`, it is read from your working tree, not from the release branch. On the release branch its `## Unreleased` block is exactly the notes for the cherry-picks the patch ships; on `main` it is the *next minor's* notes, and promoting that would file them under a patch. Cutting a patch from anywhere else regenerates the CHANGELOG as normal and leaves `RELEASE_NOTES.md` untouched with a warning naming the branch to re-run from.
+
+A **minor or major** (`vX.Y.0`, no prior tag on that `X.Y`) has no backport branch to read from, so it still walks commits after the latest tag from `HEAD`. Cut it on its release branch as the workflow above describes.
+
+### Cutting a release tag (`make release-tag`)
+
+`scripts/gen-changelog.sh` writes changelogs; `scripts/release-tag.sh` (via `make release-tag`) creates the git tag. They are separate steps. The tag helper:
+
+1. Prompts for a component and a bump (major/minor/patch).
+2. Offers a release candidate; if chosen, it computes the next `-rc.N` for that version automatically.
+3. Shows the resulting `<component>/<version>` tag and the commit it will sit on, and creates it only after a `y/N` confirm.
+4. Offers, as a **separate** `y/N`, to `git push` the tag. Pushing is what triggers the CI release, so it is always a distinct, opt-in step; the default is no.
+
+The tag is created on the current `HEAD`. It does **not** edit `CHANGELOG.md`, promote `RELEASE_NOTES.md`, or bump `chart/Chart.yaml` for you: do the release commit first (bump `Chart.yaml`, cut the CHANGELOG with `make changelog` — which also promotes the `RELEASE_NOTES.md` heading — then commit), then run `make release-tag` so the tag points at that commit. The two y/N confirms (create, then push) are the safety gate; there is no separate dry-run.
+
+Before the first confirm it also warns when the component's `RELEASE_NOTES.md` still has content under `## Unreleased` and carries no section for the tag you are about to create — the signature of tagging without having cut the changelog. It is a warning, not a block: RC tags are exempt (an RC is tagged mid-stabilization, before the cut that promotes the heading), and a release may legitimately have no hand-authored notes at all.
+
+### How the GitHub release body is assembled
+
+On a `<component>/v*` tag push, the release workflow builds the release body from the commit-level range for that version (see the asymmetric RC scoping above) and **prepends the matching `## <component>/<version>` entry from `RELEASE_NOTES.md`** if one exists. The match is exact: a heading that is precisely `## <tag>` or `## <tag> <suffix>`. That heading is produced by the release cut (see [Writing and promoting a release note](#writing-and-promoting-a-release-note)); notes left under `## Unreleased` match nothing and are dropped without an error.
+
+### Tag placement
+
+Where possible, place a release tag on a commit that touches the component's own path (the `release:` changelog-bump commit does). The generator no longer *requires* it (it anchors on `git tag`, not the commit), but it keeps history tidy.
+
+## Release Checklist
+
+**Before cutting the release branch (minor / major):**
+
+- [ ] All target features/fixes merged to `main`
+- [ ] Tests passing on `main`
+- [ ] Documentation updated on `main`
+
+**Before each RC tag:**
+
+- [ ] All intended cherry-picks from `main` have landed on the release branch
+- [ ] `chart/Chart.yaml` `version` and `appVersion` match the RC tag (including the `-rc.N` suffix)
+- [ ] Tests passing on the release branch
+
+**Before the final release tag:**
+
+- [ ] The last RC validated successfully
+- [ ] `chart/Chart.yaml` bumped to the non-RC version on the same commit
+- [ ] No new commits between the validated RC and the release tag other than the `Chart.yaml` bump
+
+### Pin multi-arch image digests in the chart
+
+Starting with digest pinning, the chart references images using tag@digest (or digest-only where applicable). For each image, fetch the multi-arch manifest digest and update `chart/values.yaml` so our releases are reproducible across architectures.
+
+Prerequisites:
+
+- skopeo (`skopeo --version`)
+- jq (`jq --version`)
+
+Fetch the multi-arch (manifest list) digest (example for alpine/kubectl, used by the cleanup pre-delete jobs and the selector-migration pre-upgrade hook). The digest to pin is the sha256 of the raw manifest list:
+
+```bash
+skopeo inspect --raw docker://docker.io/alpine/kubectl:1.36.2 | skopeo manifest-digest /dev/stdin
+# sha256:01d138ce994b684abc62d9cfdff44de42a4c8996dcc12626dd0193afc3fb5a95
+# pin that value (including the sha256: prefix) in chart/values.yaml
+```
+
+Confirm it is a manifest list covering the platforms we ship (at least amd64 + arm64):
+
+```bash
+skopeo inspect --raw docker://docker.io/alpine/kubectl:1.36.2 \
+  | jq -r '.manifests[].platform | "\(.os)/\(.architecture)"'
+```
+
+`alpine/kubectl` is a maintained, versioned, multi-arch image. These short-lived maintenance jobs only run `kubectl get`/`delete` on stable core/apps resources, where kubectl's version skew is a cosmetic warning rather than a functional break, so the tag tracks a recent maintained release for current base-image fixes. Bump it as the image is maintained.
+
+Update the digest in `chart/values.yaml` for the operator, agent, and maintenance-job kubectl (`webhook.removalImage`/`removalTag`/`removalDigest`) images:
+
+Note:
+
+- Always pin the manifest-list digest (`skopeo inspect --raw` returns the list itself, so `manifest-digest` of that output is the list digest), not a single-arch child manifest digest.
+
+**After tagging:**
+
+- [ ] CI/CD pipeline completes
+- [ ] Images and chart artifacts published successfully
+- [ ] Test deployment with new version
+
+### Verify release signatures and attestations
+
+Release workflows publish keyless Sigstore signatures, CycloneDX SBOM attestations, and SLSA v1 provenance attestations for GHCR image and Helm chart release artifacts. Container images additionally carry an OpenVEX attestation.
+
+Prerequisites:
+
+- cosign v3 (`cosign version`); the release workflows install v3.1.3
+- crane (`crane version`), or Docker buildx (`docker buildx version`)
+- jq (`jq --version`)
+
+These commands assume cosign v3, where `--new-bundle-format` already defaults to `true`. On an older cosign, add `--new-bundle-format=true` to every `verify` and `verify-attestation` call below, or upgrade; the signing side passes it explicitly, so a default mismatch surfaces as a missing attestation rather than as a format error.
+
+Do not filter attestations by the `dev.sigstore.bundle.predicateType` referrer annotation on artifacts released before the v3.1.3 pin. cosign through v3.0.6 wrote that annotation as `https://sigstore.dev/cosign/sign/v1` on every attestation regardless of `--type`, so on those tags a CycloneDX SBOM and a cosign signature are indistinguishable by annotation. The signed in-toto statement always carried the correct predicate type, so the `verify-attestation --type` commands below were never affected: they decode the payload rather than reading the annotation. Artifacts released from the v3.1.3 pin onward annotate correctly, and the ones before it are not re-signed.
+
+#### Which digest carries which evidence
+
+The operator and agent images are multi-platform: the tag resolves to an index, and the index has one platform manifest per architecture (`linux/amd64`, `linux/arm64`). Evidence is attached to the subject it is true about, so the image evidence is split across two kinds of digest:
+
+| Evidence | Subject | Predicate type |
+|---|---|---|
+| Signature | Index digest | n/a (`cosign verify`) |
+| SLSA build provenance | Index digest | `https://slsa.dev/provenance/v1` |
+| CycloneDX SBOM | Each platform manifest digest | `cyclonedx` |
+| OpenVEX | Each platform manifest digest | `openvex` |
+
+A signature and a provenance statement describe the artifact as a whole, and the index is what a user pulls, so they stay on the index. An SBOM and a VEX document each describe exactly one root filesystem, and the amd64 and arm64 images do not share one, so an SBOM on the index would describe neither child truthfully. This is the same subject policy the signing action documents in `.github/actions/cosign-attest-multiplatform/action.yml`.
+
+The consequence for anyone verifying a release: **the signature does not verify against a platform digest, and the SBOM is not found on the index digest.** Both are expected. Resolve both kinds of digest and point each check at the right one.
+
+The OpenVEX document may legitimately contain zero statements. An empty `statements` array asserts that the maintainers claim no exceptions to what a scanner reports; it does not assert the image is clean. The reasoning, and why an empty projection is still worth publishing, is in the header of `.github/actions/cosign-attest-multiplatform/action.yml`.
+
+#### Resolving digests
+
+With crane:
+
+```bash
+IMAGE=ghcr.io/nvidia/nodewright/operator
+TAG=v0.19.0
+
+INDEX=$(crane digest "${IMAGE}:${TAG}")
+AMD64=$(crane digest --platform linux/amd64 "${IMAGE}@${INDEX}")
+ARM64=$(crane digest --platform linux/arm64 "${IMAGE}@${INDEX}")
+```
+
+Resolve the tag **once**, then resolve the platforms from `${IMAGE}@${INDEX}` rather than reading the tag again. A tag can be repointed between two calls, and a verification that resolves it twice can check a signature against one index and an SBOM against a child of another, passing every check while describing two different artifacts. `.github/actions/cosign-attest-multiplatform/action.yml` resolves platforms from the index digest for the same reason.
+
+Without crane, Docker buildx resolves the same values. The index digest:
+
+```bash
+INDEX=$(docker buildx imagetools inspect "${IMAGE}:${TAG}" --format '{{json .Manifest}}' | jq -r '.digest')
+```
+
+The platform manifest digests are listed under `Manifests:` in the plain `docker buildx imagetools inspect "${IMAGE}@${INDEX}"` output, one entry per `Platform:`; take the `Name:` digest of the platform you want. For scripting, read them out of the raw index:
+
+```bash
+AMD64=$(docker buildx imagetools inspect --raw "${IMAGE}@${INDEX}" \
+  | jq -r '.manifests[] | select(.platform.os == "linux" and .platform.architecture == "amd64") | .digest')
+ARM64=$(docker buildx imagetools inspect --raw "${IMAGE}@${INDEX}" \
+  | jq -r '.manifests[] | select(.platform.os == "linux" and .platform.architecture == "arm64") | .digest')
+```
+
+Verify by immutable digest, never by tag: a tag can be repointed between the moment you verify it and the moment you pull it.
+
+#### Certificate identity
+
+The expected OIDC issuer is:
+
+```bash
+https://token.actions.githubusercontent.com
+```
+
+The expected certificate identity must match the specific component release workflow identity on that component's tag refs. Each artifact is signed by the workflow that builds it, gated on its own tag family, so one pattern will not verify everything.
+
+For operator images:
+
+```bash
+^https://github.com/NVIDIA/nodewright/\.github/workflows/operator-ci\.yaml@refs/tags/operator/.*$
+```
+
+For agent images:
+
+```bash
+^https://github.com/NVIDIA/nodewright/\.github/workflows/agent-ci\.yaml@refs/tags/agent/.*$
+```
+
+For Helm chart artifacts:
+
+```bash
+^https://github.com/NVIDIA/nodewright/\.github/workflows/release\.yml@refs/tags/chart/.*$
+```
+
+#### Operator image
+
+```bash
+IMAGE=ghcr.io/nvidia/nodewright/operator
+TAG=v0.19.0
+IDENTITY='^https://github.com/NVIDIA/nodewright/\.github/workflows/operator-ci\.yaml@refs/tags/operator/.*$'
+ISSUER='https://token.actions.githubusercontent.com'
+
+INDEX=$(crane digest "${IMAGE}:${TAG}")
+
+# Signature and provenance: index digest
+cosign verify \
+  --certificate-identity-regexp "${IDENTITY}" \
+  --certificate-oidc-issuer "${ISSUER}" \
+  "${IMAGE}@${INDEX}"
+cosign verify-attestation \
+  --certificate-identity-regexp "${IDENTITY}" \
+  --certificate-oidc-issuer "${ISSUER}" \
+  --type https://slsa.dev/provenance/v1 \
+  "${IMAGE}@${INDEX}"
+
+# SBOM and VEX: one platform manifest digest per architecture
+for PLATFORM in linux/amd64 linux/arm64; do
+  PLATFORM_DIGEST=$(crane digest --platform "${PLATFORM}" "${IMAGE}@${INDEX}")
+
+  cosign verify-attestation \
+    --certificate-identity-regexp "${IDENTITY}" \
+    --certificate-oidc-issuer "${ISSUER}" \
+    --type cyclonedx \
+    "${IMAGE}@${PLATFORM_DIGEST}"
+  cosign verify-attestation \
+    --certificate-identity-regexp "${IDENTITY}" \
+    --certificate-oidc-issuer "${ISSUER}" \
+    --type openvex \
+    "${IMAGE}@${PLATFORM_DIGEST}"
+done
+```
+
+#### Agent image
+
+Identical to the operator, with the agent repository, tag family and identity:
+
+```bash
+IMAGE=ghcr.io/nvidia/nodewright/agent
+TAG=v6.4.2
+IDENTITY='^https://github.com/NVIDIA/nodewright/\.github/workflows/agent-ci\.yaml@refs/tags/agent/.*$'
+ISSUER='https://token.actions.githubusercontent.com'
+
+INDEX=$(crane digest "${IMAGE}:${TAG}")
+
+cosign verify \
+  --certificate-identity-regexp "${IDENTITY}" \
+  --certificate-oidc-issuer "${ISSUER}" \
+  "${IMAGE}@${INDEX}"
+cosign verify-attestation \
+  --certificate-identity-regexp "${IDENTITY}" \
+  --certificate-oidc-issuer "${ISSUER}" \
+  --type https://slsa.dev/provenance/v1 \
+  "${IMAGE}@${INDEX}"
+
+for PLATFORM in linux/amd64 linux/arm64; do
+  PLATFORM_DIGEST=$(crane digest --platform "${PLATFORM}" "${IMAGE}@${INDEX}")
+
+  cosign verify-attestation \
+    --certificate-identity-regexp "${IDENTITY}" \
+    --certificate-oidc-issuer "${ISSUER}" \
+    --type cyclonedx \
+    "${IMAGE}@${PLATFORM_DIGEST}"
+  cosign verify-attestation \
+    --certificate-identity-regexp "${IDENTITY}" \
+    --certificate-oidc-issuer "${ISSUER}" \
+    --type openvex \
+    "${IMAGE}@${PLATFORM_DIGEST}"
+done
+```
+
+#### Helm chart
+
+The chart keeps single-subject verification, because it is one OCI artifact with no platform children: there is nothing to split, so signature, SBOM and provenance all hang on the same digest. Do not "fix" this section to chase platform digests; the chart has none.
+
+```bash
+CHART=ghcr.io/nvidia/nodewright/charts/nodewright
+TAG=v0.19.0
+DIGEST=$(crane digest "${CHART}:${TAG}")
+SUBJECT="${CHART}@${DIGEST}"
+IDENTITY='^https://github.com/NVIDIA/nodewright/\.github/workflows/release\.yml@refs/tags/chart/.*$'
+ISSUER='https://token.actions.githubusercontent.com'
+
+cosign verify \
+  --certificate-identity-regexp "${IDENTITY}" \
+  --certificate-oidc-issuer "${ISSUER}" \
+  "${SUBJECT}"
+cosign verify-attestation \
+  --certificate-identity-regexp "${IDENTITY}" \
+  --certificate-oidc-issuer "${ISSUER}" \
+  --type cyclonedx \
+  "${SUBJECT}"
+cosign verify-attestation \
+  --certificate-identity-regexp "${IDENTITY}" \
+  --certificate-oidc-issuer "${ISSUER}" \
+  --type https://slsa.dev/provenance/v1 \
+  "${SUBJECT}"
+```
+
+#### Subjects at a glance
+
+| Artifact | Signature and provenance subject | SBOM and VEX subject |
+|----------|----------------------------------|----------------------|
+| GHCR operator image | `ghcr.io/nvidia/nodewright/operator@<index-digest>` | `ghcr.io/nvidia/nodewright/operator@<platform-digest>`, per platform |
+| GHCR agent image | `ghcr.io/nvidia/nodewright/agent@<index-digest>` | `ghcr.io/nvidia/nodewright/agent@<platform-digest>`, per platform |
+| GHCR Helm chart | `ghcr.io/nvidia/nodewright/charts/nodewright@<digest>` | same digest; no platforms, and no VEX |
+
+These are the same checks `.github/actions/cosign-verify-release` runs against each release before the workflow finishes.
+
+## Vulnerability Scanning
+
+The `Image Vulnerability Scan` workflow (`.github/workflows/vuln-scan-images.yaml`) runs [Grype](https://github.com/anchore/grype) against the published container images on a weekly cron, Thursday 09:00 UTC, plus `workflow_dispatch`.
+
+It scans two images, both by their moving `latest` tag: `ghcr.io/nvidia/nodewright/operator:latest` and `ghcr.io/nvidia/nodewright/agent:latest`. Not every released version, only whatever `latest` currently points at.
+
+Findings are uploaded as SARIF and show up as GitHub code scanning alerts in the repository Security tab, under the categories `grype-operator` and `grype-agent`. One category per image is required, not cosmetic: uploads sharing a category replace one another. Alerts dedupe across runs and close themselves once a later run stops reporting them.
+
+**The scan never fails a build.** No part of the release path is gated on a finding today; gating is deferred to #630.
+
+Run it on demand rather than waiting for Thursday:
+
+```bash
+gh workflow run "Image Vulnerability Scan" --repo NVIDIA/nodewright
+gh run list --workflow "Image Vulnerability Scan" --repo NVIDIA/nodewright --limit 3
+```
+
+### The report is not limited to HIGH+
+
+The uploaded SARIF contains every finding that has an available fix, not only HIGH and above. `severity-cutoff: high` neither filters the report nor grades it: the SARIF level is a pure function of the finding's own severity (critical and high become `error`, medium becomes `warning`, anything lower becomes `note`), and `severity-cutoff` only sets grype's `--fail-on`, which is inert because `fail-build` is false. It is kept because it is the knob #630 flips, not because it changes anything today. Grype sets a `security-severity` (CVSS) property on each rule, so GitHub grades the alerts correctly and the Security tab can filter by severity. Expect Medium and Low alerts alongside the HIGH+ ones, and filter by severity rather than reading a raw alert count.
+
+### Suppressing a finding
+
+Suppression goes in `.openvex.json`, the repository's OpenVEX document, and nowhere else. **Never dismiss a code scanning alert in the Security tab.** Grype applies the VEX document at scan time, so a correctly suppressed finding never becomes an alert at all, and #607 will publish that document as signed evidence attested onto every released image. #607 has not shipped yet, so nothing attests the document today; the rule is stated now so the habit precedes the signed artifact. Once it lands, a UI dismissal would leave the signed artifact inaccurate while looking resolved in the UI.
+
+The `ignore:` list in `.grype.yaml` is not a second suppression mechanism. It is reserved for the opposite case: a finding that is reachable in our code and has no upstream fix, accepted as risk. Read that file's header before adding an entry.
+
+Triage is driven by the [`nodewright-managing-openvex`](../../.claude/skills/nodewright-managing-openvex/SKILL.md) skill, which covers matching on the primary vulnerability ID, product PURLs, the OpenVEX v0.2.0 statement contract, and proving that a new statement actually suppresses something.
+
+### Known caveats
+
+- **A finding on `:latest` may already be fixed on `main`.** The scan deliberately targets the artifact users pull, which lags `main`. #629 is exactly that: the released operator image reports 2 HIGH that `operator/go.mod` already fixed. The remedy there is cutting a release, not writing a suppression. Check `main` before writing any VEX statement.
+- **Findings with no upstream fix are not reported at all.** The scan passes `only-fixed: true`, so a HIGH or CRITICAL with no patch available never becomes an alert. That keeps the alert list actionable, and it means an empty Security tab is not the same as no exposure.
+
+## Common Commands
+
+```bash
+# Check current tags
+git tag -l 'operator/v*' --sort=-v:refname | head -5
+git tag -l 'agent/v*' --sort=-v:refname | head -5  
+git tag -l 'chart/v*' --sort=-v:refname | head -5
+
+# See what will be included in tag
+git log --oneline $(git tag -l 'operator/v*' --sort=-v:refname | head -1)..HEAD
+
+# Delete tag if needed (before CI runs)
+git tag -d operator/v1.2.3
+git push origin :refs/tags/operator/v1.2.3
+```
+
+## Third-Party Notices
+
+NodeWright ships `THIRD_PARTY_NOTICES.md` files that list every third-party module shipped in its released artifacts, along with verbatim license text. Three files are maintained:
+
+| File | Covers | Tool |
+| --- | --- | --- |
+| `operator/THIRD_PARTY_NOTICES.md` | Operator + CLI (Go) | `go-licenses` |
+| `agent/THIRD_PARTY_NOTICES.md` | Agent (Go) | `go-licenses` |
+| `THIRD_PARTY_NOTICES.md` (repo root) | Combined rollup for `chart/` releases | Composed from the two component files |
+
+The generated files are a pure function of the dependency set and the current component tags: there is no wall-clock timestamp in them, so regenerating without changing a dependency produces a byte-identical file. That is what makes the freshness gate below possible, and it stops concurrent dependency pull requests from conflicting on a line that carries no information.
+
+**`go-licenses` v2 is required, and the pins in `operator/deps.mk` and `agent/deps.mk` are not incidental.** v1 picks a single license at random from a file that contains several, so `sigs.k8s.io/yaml`, `sigs.k8s.io/json`, `github.com/google/cel-go` and `go.opentelemetry.io/otel` were classified differently on every run and no regenerate-and-diff check could ever be stable. v2 reports the complete set every time, which is both deterministic and the more accurate disclosure. The `go-licenses` make target therefore verifies the installed binary's version rather than just its existence, because a stale v1 binary left in `operator/bin/` would otherwise produce notices that fail the gate in CI with nothing on screen to explain why. v2 also refuses to resolve standard-library packages instead of skipping them, so `license-check` and `license-report` pass the same stdlib ignore list.
+
+### What the operator pass collects
+
+The Go pass runs `go-licenses` once per released platform (`linux`, `darwin`, and `windows` crossed with `amd64` and `arm64`) and unions the results. The operator image is linux-only, but the CLI ships for all six (`cli-release-build` in `operator/Makefile`), and build-tagged sources pull different transitive dependencies per platform: `github.com/Azure/go-ansiterm` and `github.com/inconshreveable/mousetrap` are linked only on Windows.
+
+These details are easy to get wrong and are guarded in code:
+
+- **The `go-licenses --ignore` list is given full standard-library package paths, never their first path segment.** `--ignore` matches by prefix, so the bare token `go` (from `go/ast`) also matches every module under `go.opentelemetry.io`, `go.uber.org`, `golang.org/x`, `google.golang.org`, and `gopkg.in`. The ignore set is also recomputed per platform, because platform-specific standard-library packages such as `internal/syscall/windows` only exist under their own `GOOS`.
+- **Each platform saves its license files into its own cache directory, and the caches are merged on read.** `go-licenses save --force` does an `os.RemoveAll` on `--save_path` before writing, so pointing every platform at one directory leaves only the last platform's artifacts. A package present on Linux but not Windows (`golang.org/x/sys/unix`, `github.com/prometheus/procfs`) would keep its index row and lose its license text. Generation now fails outright if any indexed package has no saved text.
+- **A completeness gate runs before anything is written.** Every module reachable from `./cmd/...` must be vouched for by an index entry, compared on module identity rather than path prefix so a parent module cannot vouch for a nested submodule with a different license. Generation fails and names the uncovered modules. Widening `--ignore` to quiet it reintroduces the exact failure the gate exists to catch; if `go-licenses` cannot classify a license, fix the classification rather than hiding the module.
+- **Modules this repository replaces with one of its own directories are first-party, and only those.** An unpinned `replace` of a module under this repository's namespace (`github.com/NVIDIA/nodewright/...`) by a directory inside the repository is added to `--ignore` and left out of the completeness gate: it ships under this repository's license, and `go-licenses` in vendor mode aborts on it otherwise. That module's own third-party dependencies stay in the gate. A version-pinned replace (`replace m v1.0.0 => ../m`) and a third-party module replaced by an in-repo copy (`replace github.com/foo/bar => ./third_party/bar`) are not exempt, so a missing license for either fails generation instead of disappearing from the notices.
+
+### Regenerating locally
+
+```bash
+# All three at once:
+make notices
+
+# Or per-component:
+make notices-operator   # operator + CLI Go deps
+make notices-agent      # agent Go deps
+make notices-rollup     # root rollup (run after the two above)
+
+# Verify the committed files match a fresh generation:
+make notices-check
+
+# Unit-test the license completeness gate:
+make notices-test
+```
+
+The notice targets install `go-licenses` into `operator/bin/` and `agent/bin/` when needed. The only other prerequisite is Python 3, for the generator script itself.
+
+### When to regenerate
+
+Run `make notices` and commit the refreshed file(s) whenever you:
+
+- Bump a Go dependency (changes to `operator/go.mod`, `operator/go.sum`, or `operator/vendor/`).
+- Bump an agent Go dependency (changes to `agent/go.mod`, `agent/go.sum`, or `agent/vendor/`).
+
+The `Operator tag:` / `Agent tag:` / `Chart tag:` lines name the newest final release of each component, so they also go stale when a release is cut.
+
+Tag resolution reads the local clone, so run `git fetch --tags` before `make notices`; a clone missing a recent tag will stamp an older version. The generator considers every tag rather than only those reachable from the current branch, because agent and chart releases are tagged on release branches and so are never reachable from `main`. Prerelease tags are skipped: git ranks `v0.17.0-rc.1` above `v0.17.0` unless `versionsort.suffix` is configured, which this repo does not configure, so an open release candidate would otherwise be stamped as the shipped release.
+
+### CI behavior
+
+- **Renovate** (`.github/workflows/renovate.yaml`): Go dependency branches run `make notices` after artifact updates and commit the refreshed notice files with the dependency change.
+- **Merge gate** (`.github/workflows/merge-gate.yaml`): when Go dependency files change in a PR, the `verify-licenses` job runs `make license-check` in `operator/` and `agent/` to confirm every dep's license is on the approved list. A second job, `verify-notices`, runs `make notices-test` and `make notices-check` when Go dependencies, the generator script, or the notices files themselves change; it fails if the committed notices do not match a fresh generation. Each has a paired skip job that runs when nothing relevant changed, and `ci-gate`, the required gate check, fails if either fails; see [Gate jobs](ci-test-pools.md#gate-jobs).
+
+  A release tag changes the `Operator tag:` / `Agent tag:` / `Chart tag:` lines, so the first pull request after a release that touches these paths will see `verify-notices` fail until `make notices` is re-run and committed. That is the intended remedy, and the failure message says so.
+- **Release upload** (`.github/workflows/release.yml`): every operator/agent/chart release regenerates the notices files in CI and attaches the appropriate one as a release asset:
+  - `operator/v*` → `operator/THIRD_PARTY_NOTICES.md`
+  - `agent/v*` → `agent/THIRD_PARTY_NOTICES.md`
+  - `chart/v*` → root `THIRD_PARTY_NOTICES.md` (the combined rollup, since chart packages both images)
+
+  The workflow also attaches `checksums.txt`, the SHA-256 of that notices file keyed by its asset name, so `sha256sum -c checksums.txt` verifies the downloaded file. Releases published before the checksum step carry none. A tag push runs `release.yml` as it is at the tagged commit, so a release branch cut before the step attaches only the notices file to every tag cut from it. Cherry-pick the commit that added the step to `main` onto the branch before tagging a release that should carry `checksums.txt`.
+
+## Rollback
+
+For problematic releases:
+
+1. Tag new patch release with fixes
+2. For critical issues: Update chart `appVersion` to previous stable version
+
+See [versioning.md](../operations/versioning.md) for version strategy details. 

@@ -1,0 +1,81 @@
+# Tools
+
+Apps bundle **tool plugins** that provide **tools**, such as Network, Tweaks, or a custom feature. A tool plugin includes its Android implementation and an optional **frontend**, the tool’s UI implementation. Snap-O discovers tool plugins and displays the selected tool’s frontend in the **Tool pane**.
+
+The shared [tool host SDK](../tool-sdk/host/README.md) provides connection state, toolbar controls, and native helpers. Tool frontends live beside their Android implementations:
+
+- Network: `tools/network/frontend`
+- Tweaks: `tools/tweaks/frontend`
+
+For an end-to-end example, read [Build a tool](../docs/plugins.md).
+
+## Directory layout
+
+- `network/android/`: Network core, HTTP client integrations, and no-op variants.
+- `network/frontend/`: Network tool UI.
+- `tweaks/android/`: Tweaks core, Compose and Views integrations, overlays, and no-op variants.
+- `tweaks/frontend/`: Tweaks tool UI.
+
+Shared authoring support lives in [`tool-sdk/`](../tool-sdk/README.md). Demo apps live in [`examples/android/`](../examples/android/README.md).
+
+## Naming compatibility
+
+Tool plugins are the bundled extensions; tools are the features users interact with. Existing discovery fields and saved preference keys keep their original names. The published Android `NetworkInspector`, `NetworkInspectorConfig`, and `NetworkInspectorServer` APIs also retain their names. See the [discovery contract](../contracts/discovery/README.md#naming-compatibility) for the wire format.
+
+## Development
+
+Gradle downloads Node.js and uses its bundled npm for frontend builds and development servers. Android Studio and CI builds do not need either on `PATH`. From the repository root, start a tool's development server:
+
+```sh
+./gradlew :network:devSnapoToolFrontend
+./gradlew :tweaks-core:devSnapoToolFrontend
+```
+
+Run one command per terminal. In Snap-O, choose Develop → Use Development Server and enter the URL printed by the server. The Network server also serves `/preview.html` with synthetic request examples.
+
+To check a frontend directly, use Node.js 22.12 or later and run these commands from its `frontend/` directory:
+
+```sh
+npm ci --registry=https://openai.firewall.socket.dev/npm/
+npm run format:check
+npm run lint
+npm run typecheck
+npm test
+npm run build
+```
+
+Run the same checks from `tool-sdk/host/` for the host SDK, including `npm run build`. Install dependencies in both frontend directories before running the shared import checks. These checks resolve relative paths and TypeScript aliases. Tool frontends cannot import one another or host SDK internals.
+
+## App-provided frontends
+
+A tool plugin can include a frontend ZIP in its AAR. Its manifest descriptor references that asset. Snap-O reads the ZIP from the installed APK through ADB, without starting app code or serving frontend files over the tool endpoint. `index.html` is always the entry point. Both Network and Tweaks use this path. The Mac app contains no tool frontend. Older Android libraries without frontend metadata require an app rebuild with updated libraries, or an explicit development-server override.
+
+See the [Tool Packager Gradle Plugin](../tool-sdk/gradle-plugin/README.md) for packaging, custom builds, and development commands. App developers consuming a published AAR do not need Node.js. The frontend and Android implementation update together when the app is rebuilt.
+
+Snap-O checks the selected process identity and package revision before and after reading the archive. It caches up to four validated bundles, keyed by device, Android user, package revision, tool ID, and asset path. The host bounds compressed and expanded data to 16 MiB, limits archives to 1,024 entries, and rejects unsafe paths, symlinks, duplicate files, and invalid checksums. Files stay in memory. WebKit loads the unchanged HTML and assets under `snapo://tool/`. A document query parameter changes on reload to reject stale bridge messages.
+
+In Debug builds, **Develop → Show Web Inspector** opens the current tool's inspector in a separate window. This uses private WebKit API, which is excluded from Release builds.
+
+## WebView safeguards
+
+The macOS host installs WebKit content rules before running packaged HTML. A page can reach its Android server only through `snapo://tool/api/`. CSP response headers block remote scripts, frames, workers, forms, and other resources outside the self-contained frontend. WebKit Lockdown Mode disables WebRTC and reduces the browser's exposed features. Tool frontends must not depend on WebAssembly or JavaScript evaluation from strings.
+
+Storage is separate for each device, Android user, package, and tool. Pages without verified package metadata use temporary storage. Preferences from the former localhost origin or shared tool storage are not imported.
+
+Switching tools keeps their pages alive. A hidden page keeps its UI state, but disconnects from Android and cannot present native panels. A process replacement unloads the page and resets in-memory UI state while preserving settings for the same provider.
+
+Connection updates reach the frontend through `host.onConnection`. A known disconnect cancels API requests and delivers `null`, without reloading the page. Requests can also fail before Snap-O detects a disconnect. Stopping a page revokes API and bridge access immediately; transport cleanup does not wait for WebKit to unload it.
+
+Native messages must come from the owning WebView's current main document. The bridge bounds payload size, nesting, concurrent requests, and toolbar fields. Clipboard writes and external links require native confirmation. The color picker opens directly for the active tool. Exports use a save sheet, accept at most 64 MiB, and do not return the selected filesystem path to JavaScript. Only one native action runs at a time. File upload dialogs, JavaScript dialogs, media capture, and downloads are blocked.
+
+Develop → Use Development Server sets a loopback URL for the selected app and tool. Snap-O proxies frontend files from that server under `snapo://tool/`; `/api/...` still goes to Android. Both packaged and development frontends use relative API URLs without CORS configuration. Frontend paths stay unchanged; there is no added `/assets` prefix.
+
+Vite's hot-reload WebSocket connects directly to the selected development server. The repo’s Vite configs set an explicit HMR host and port; Snap-O does not proxy WebSockets. The override allows resources and WebSockets from that server and does not add the packaged frontend's CSP. Use it only with trusted local code.
+
+Run `sh app-macos/scripts/test-tool-selection.sh` and `sh app-macos/scripts/test-tool-recovery.sh` from the repository root. Selection, restoration, storage scopes, and bridge validation run as native tests. A small WebKit fixture checks request isolation, bridge ownership, event delivery, recovery, and page shutdown. These tests do not build or load the Network and Tweaks frontends. CI includes the selection tests in the main macOS test run.
+
+These controls do not prevent WebKit vulnerabilities, resource exhaustion, or data sent to the selected Android tool server. App-provided frontends run JavaScript supplied by the inspected APK. These restrictions are not a guarantee that untrusted code is safe.
+
+Snap-O requires macOS 26 or later. Keep macOS updated: these safeguards depend on WebKit's security fixes. Older WebKit builds ignored content rules for DNS prefetch and preconnect; the [WebKit fix](https://github.com/WebKit/WebKit/commit/ce84da3fd2d634040f3197d526b4ac914e45d2e6) landed in 2025. Tests on macOS 26.6.2 verify HTTP delivery and TCP connection attempts, including preconnect. They do not measure DNS queries or establish coverage of every supported WebKit build.
+
+The standalone [Example tool](../examples/tool/README.md) demonstrates the authoring APIs with fake data and locally staged packages.

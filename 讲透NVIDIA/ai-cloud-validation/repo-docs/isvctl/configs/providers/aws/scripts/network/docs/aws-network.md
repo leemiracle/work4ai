@@ -1,0 +1,702 @@
+# Network Validation Guide (AWS)
+
+This guide provides a complete walkthrough for validating AWS VPC networking capabilities using the AI Cloud Validation framework. These tests verify software-defined networking overlays and fabric behavior for compute-on-demand requirements.
+
+## Overview
+
+The network validation suite includes 14 comprehensive test suites:
+
+| Test Suite | Duration | Description |
+|------------|----------|-------------|
+| **VPC CRUD** | ~30s | Create, read, update, delete VPC lifecycle |
+| **Subnet Config** | ~30s | Multi-AZ subnet distribution and route tables |
+| **VPC Isolation** | ~30s | Security boundaries between separate VPCs |
+| **SG CRUD** | ~30s | Security group create, read, update rules, delete lifecycle |
+| **Security Blocking** | ~30s | SG/NACL blocking rules (negative tests) |
+| **Connectivity** | ~3 min | Instance network assignment via SSM |
+| **Traffic Validation** | ~5-7 min | Real ping tests - allowed/blocked traffic |
+| **VPC IP Config** | ~10s | DHCP options, subnet CIDRs, auto-assign IP (DDI) |
+| **DHCP IP Management** | ~3 min | DHCP lease, IP match, DNS options via SSH (DDI) |
+| **BYOIP** | ~30s | Bring-Your-Own-IP with custom CIDRs |
+| **Stable Private IP** | ~5 min | IP persistence across stop/start |
+| **Floating IP** | ~5 min | Atomic IP switch between instances (<10s) |
+| **Localized DNS** | ~60s | Custom internal domain resolution |
+| **VPC Peering** | ~30s | Cross-VPC connectivity with full bandwidth |
+
+**Total runtime**: ~25-30 minutes for all tests
+
+**Key Features:**
+
+- All tests are **SELF-CONTAINED** - they create their own VPCs and clean up after
+- **No pre-existing infrastructure required** - just AWS credentials
+- **Platform-agnostic validations** - scripts output JSON, validations check results
+- Includes **negative test cases** to verify security controls work correctly
+- **Real traffic tests** using AWS SSM to run actual ping commands
+
+## Architecture
+
+### Step-Based Execution Model
+
+```text
+┌─────────────────────────────────────────────────────────────────┐
+│                    AWS Network Validation Suite                 │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  Scripts (boto3)                Validations (JSON check)        │
+│  ┌────────────────────────┐    ┌──────────────────────────┐     │
+│  │ vpc_crud_test.py       │───▶│ VpcCrudCheck             │     │
+│  │ subnet_test.py         │───▶│ SubnetConfigCheck        │     │
+│  │ isolation_test.py      │───▶│ VpcIsolationCheck        │     │
+│  │ sg_crud_test.py        │───▶│ SgCrudCheck              │     │
+│  │ security_test.py       │───▶│ SecurityBlockingCheck    │     │
+│  │ test_connectivity.py   │───▶│ NetworkConnectivityCheck │     │
+│  │ traffic_test.py        │───▶│ TrafficFlowCheck         │     │
+│  │ vpc_ip_config_test.py  │───▶│ VpcIpConfigCheck         │     │
+│  │ dhcp_ip_test.py        │───▶│ DhcpIpManagementCheck    │     │
+│  │ byoip_test.py          │───▶│ ByoipCheck               │     │
+│  │ stable_ip_test.py      │───▶│ StablePrivateIpCheck     │     │
+│  │ floating_ip_test.py    │───▶│ FloatingIpCheck          │     │
+│  │ dns_test.py            │───▶│ LocalizedDnsCheck        │     │
+│  │ peering_test.py        │───▶│ VpcPeeringCheck          │     │
+│  └────────────────────────┘    └──────────────────────────┘     │
+│                                                                 │
+│  Platform-specific            Platform-agnostic                 │
+│  (AWS boto3 SDK)              (checks JSON output)              │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Traffic Validation Test Architecture
+
+The most comprehensive test actually sends real network traffic:
+
+```text
+┌─────────────────────────────────────────────────────────────────┐
+│                          Test VPC                               │
+│                                                                 │
+│  ┌─────────────┐   ping (ok)     ┌────────────────────────────┐ │
+│  │   Source    │ ───────────────▶│ Target (SG allows ICMP)    │ │
+│  │ (SSM agent) │                 └────────────────────────────┘ │
+│  │             │  ping (blocked) ┌────────────────────────────┐ │
+│  │             │ ───────────────▶│ Target (SG blocks ICMP)    │ │
+│  │             │                 └────────────────────────────┘ │
+│  │             │                                                │
+│  │             │ ──── ping 8.8.8.8 ────▶ Internet (ICMP) (ok)   │
+│  │             │ ── curl amazonaws ────▶ Internet (HTTPS) (ok)  │
+│  └─────────────┘                                                │
+│         │                                                       │
+│         ▼                                                       │
+│       [IGW]                                                     │
+└─────────┼───────────────────────────────────────────────────────┘
+          │
+          ▼
+      Internet
+```
+
+## Scripts
+
+All scripts are located in `isvctl/configs/providers/aws/scripts/network/`:
+
+| Script | Purpose | Output Schema |
+|--------|---------|---------------|
+| `create_vpc.py` | Create shared VPC for tests | `network` |
+| `vpc_crud_test.py` | VPC create/read/update/delete | `vpc_crud` |
+| `subnet_test.py` | Multi-AZ subnet configuration | `subnet_config` |
+| `isolation_test.py` | VPC isolation verification | `vpc_isolation` |
+| `sg_crud_test.py` | Security group CRUD lifecycle | `sg_crud` |
+| `security_test.py` | SG/NACL blocking rules | `security_blocking` |
+| `test_connectivity.py` | Instance connectivity via SSM | `connectivity_result` |
+| `traffic_test.py` | Real ping traffic tests | `traffic_flow` |
+| `vpc_ip_config_test.py` | DHCP options, subnet CIDRs, auto-assign IP | `vpc_ip_config` |
+| `dhcp_ip_test.py` | DHCP lease, IP match, DNS options via SSH | `dhcp_ip` |
+| `byoip_test.py` | Bring-Your-Own-IP with custom CIDRs | `byoip` |
+| `stable_ip_test.py` | IP persistence across stop/start | `stable_ip` |
+| `floating_ip_test.py` | Atomic IP switch between instances | `floating_ip` |
+| `dns_test.py` | Custom internal domain resolution | `localized_dns` |
+| `peering_test.py` | Cross-VPC connectivity | `vpc_peering` |
+| `teardown.py` | Clean up VPC resources | `teardown` |
+
+## Quick Start
+
+```bash
+# Run all network tests
+uv run isvctl test run -f isvctl/configs/providers/aws/config/network.yaml
+
+# Run specific test suites
+uv run isvctl test run -f isvctl/configs/providers/aws/config/network.yaml -- -k "vpc_crud"
+uv run isvctl test run -f isvctl/configs/providers/aws/config/network.yaml -- -k "isolation"
+uv run isvctl test run -f isvctl/configs/providers/aws/config/network.yaml -- -k "security"
+uv run isvctl test run -f isvctl/configs/providers/aws/config/network.yaml -- -k "traffic"
+
+# Run with verbose output
+uv run isvctl test run -f isvctl/configs/providers/aws/config/network.yaml -v
+```
+
+## Test Cases
+
+### 1. VPC CRUD Check
+
+**Script**: `vpc_crud_test.py`
+**Validation**: `VpcCrudCheck`
+
+Tests the complete VPC lifecycle:
+
+- Create VPC with specified CIDR
+- Wait for VPC to become "available"
+- Update VPC tags
+- Enable DNS hostnames and support
+- Delete VPC and verify removal
+
+**Output example**:
+
+```json
+{
+  "success": true,
+  "platform": "network",
+  "tests": {
+    "create_vpc": {"passed": true, "vpc_id": "vpc-xxx"},
+    "read_vpc": {"passed": true, "state": "available"},
+    "update_tags": {"passed": true},
+    "update_dns": {"passed": true},
+    "delete_vpc": {"passed": true}
+  }
+}
+```
+
+### 2. Subnet Configuration Check
+
+**Script**: `subnet_test.py`
+**Validations**: `SubnetConfigCheck` and `SubnetMultiAzCheck`
+
+Both validators consume the same collection step:
+
+- The baseline checks VPC/subnet creation, subnet availability, and route tables.
+- The multi-AZ check additionally requires at least two availability zones.
+- The canonical suite requires two subnets for the baseline and four for multi-AZ.
+
+Use `--exclude-label multi_az` for a single-site environment:
+
+```bash
+isvctl test run -f isvctl/configs/providers/aws/config/network.yaml --exclude-label multi_az
+```
+
+Alternatively, add `SubnetMultiAzCheck` to `tests.exclude.tests` in your provider
+configuration. The collector accepts
+`--az-count 1` to place all temporary subnets in one AZ; its default is up to three
+available AZs. Baseline success is independent of `tests.az_distribution.passed`,
+so the baseline validator can pass while the multi-AZ validator fails.
+The baseline also accepts absent AZ-distribution evidence, but all baseline
+operations must still pass.
+
+`require_multi_az: true` remains a strict legacy opt-in on `SubnetConfigCheck`.
+Remove that override to use the single-AZ baseline. `SubnetMultiAzCheck` always
+requires multi-AZ evidence.
+Prefer selecting `SubnetMultiAzCheck` explicitly for separate reporting.
+
+### 3. VPC Isolation Check
+
+**Script**: `isolation_test.py`
+**Validation**: `VpcIsolationCheck`
+
+Verifies security boundaries between VPCs:
+
+- Create two VPCs with non-overlapping CIDRs
+- Verify no VPC peering connections exist
+- Check route tables don't reference other VPC
+- Validate default security groups block cross-VPC traffic
+
+### 4. Security Group CRUD Check
+
+**Script**: `sg_crud_test.py`
+**Validation**: `SgCrudCheck`
+
+Tests the complete security group lifecycle:
+
+- Create security group with description and tags
+- Read security group attributes
+- Update security group rules (add/remove ingress and egress rules)
+- Delete security group and verify removal
+
+### 5. Security Blocking Check (Negative Tests)
+
+**Script**: `security_test.py`
+**Validation**: `SecurityBlockingCheck`
+
+Tests that security rules correctly **block** traffic:
+
+- **Empty SG default deny**: Verifies no inbound rules = default deny
+- **SG specific allow**: Creates SG allowing only SSH from specific CIDR
+- **SG denies ICMP**: Verifies ICMP is blocked when not explicitly allowed
+- **NACL explicit deny**: Creates NACL with explicit deny rule
+- **Restricted egress**: Creates SG with HTTPS-only outbound
+
+### 6. Connectivity Check
+
+**Script**: `test_connectivity.py`
+**Validation**: `NetworkConnectivityCheck`
+
+Tests instance network connectivity:
+
+- Creates IAM role for SSM access
+- Launches EC2 instances in VPC subnets
+- Waits for SSM agent to be online
+- Tests ping between instances
+- Tests internet connectivity
+
+### 7. Traffic Validation Check
+
+**Script**: `traffic_test.py`
+**Validation**: `TrafficFlowCheck`
+
+The most comprehensive test - sends real network traffic:
+
+- Creates VPC with Internet Gateway
+- Creates IAM role for SSM
+- Creates two security groups (allow ICMP / deny ICMP)
+- Launches 3 instances (source + 2 targets)
+- Tests ping to allowed target (should succeed)
+- Tests ping to blocked target (should fail)
+- Tests internet ICMP (ping 8.8.8.8)
+- Tests internet HTTPS (curl checkip.amazonaws.com)
+
+### 8. VPC IP Configuration Check (DDI)
+
+**Script**: `vpc_ip_config_test.py`
+**Validation**: `VpcIpConfigCheck`
+
+Tests IP address management configuration on the shared VPC:
+
+- Verify VPC CIDR block
+- Check subnet CIDRs and available IP counts
+- Verify auto-assign public IP settings
+- Check DHCP options set (domain name servers, domain name)
+
+### 9. DHCP IP Management Check (DDI)
+
+**Script**: `dhcp_ip_test.py`
+**Validation**: `DhcpIpManagementCheck`
+
+Tests DHCP-assigned IP management via SSH on a live instance:
+
+- Launch instance in the shared VPC
+- Verify DHCP lease is active
+- Check assigned IP matches AWS metadata
+- Verify DNS options are configured correctly
+
+### 10. BYOIP Check
+
+**Script**: `byoip_test.py`
+**Validation**: `ByoipCheck`
+
+Tests Bring-Your-Own-IP with non-standard CIDR ranges:
+
+- Create VPC with custom CIDR (e.g., `100.64.0.0/16`)
+- Create VPC with standard CIDR (e.g., `10.90.0.0/16`)
+- Verify both VPCs are functional
+- Verify subnets can be created in custom CIDR ranges
+- Clean up both VPCs
+
+### 11. Stable Private IP Check
+
+**Script**: `stable_ip_test.py`
+**Validation**: `StablePrivateIpCheck`
+
+Tests that private IPs persist across instance stop/start cycles:
+
+- Create VPC and launch instance
+- Record private IP address
+- Stop instance, then start it
+- Verify private IP is unchanged after restart
+
+### 12. Floating IP Check
+
+**Script**: `floating_ip_test.py`
+**Validation**: `FloatingIpCheck`
+
+Tests atomic IP reassignment between instances:
+
+- Create VPC and launch two instances
+- Allocate Elastic IP and associate with instance A
+- Reassociate Elastic IP to instance B
+- Verify switch completes within the `max_switch_seconds` threshold (default 10s)
+- Clean up all resources
+
+### 13. Localized DNS Check
+
+**Script**: `dns_test.py`
+**Validation**: `LocalizedDnsCheck`
+
+Tests custom internal domain resolution via Route 53 private hosted zones:
+
+- Create VPC and private hosted zone (e.g., `internal.isv.test`)
+- Create DNS records pointing to instance IPs
+- Verify forward resolution works from within the VPC
+- Clean up hosted zone and VPC
+
+### 14. VPC Peering Check
+
+**Script**: `peering_test.py`
+**Validation**: `VpcPeeringCheck`
+
+Tests cross-VPC connectivity via VPC peering:
+
+- Create two VPCs with non-overlapping CIDRs
+- Create and accept VPC peering connection
+- Update route tables in both VPCs
+- Verify connectivity between peered VPCs
+- Clean up peering connection and VPCs
+
+### Intra-tenant segment isolation (SEC30-02)
+
+`intra_tenant_boundary` runs `segment_boundary_test.py --boundary intra-tenant`
+separately from the SEC30-01 tenant-to-provider step. Both endpoints belong to
+one tenant: a disposable VPC in the current AWS account contains two distinct
+subnets and security groups. The VPC local route connects the segments; the
+target security group admits TCP/22 only from the source subnet.
+
+The source probes the target's private IP using SSM. TCP/22 must connect before
+ICMP, TCP/443, and TCP/8080 timeouts count as denied. A refusal means the packet
+reached the target and fails validation, as does a probe error. The shared
+`SegmentBoundaryDefaultDenyCheck` consumes this step's output under its own
+SEC30-02 result; inter-tenant or tenant-to-provider results cannot satisfy it.
+
+To collect evidence for this fixture alone:
+
+```bash
+uv run python isvctl/configs/providers/aws/scripts/network/segment_boundary_test.py \
+  --region us-east-2 --cidr 10.87.0.0/16 --boundary intra-tenant
+```
+
+Add `--also-allow-port 8080` for a deliberate policy violation: SEC30-02 should
+fail on the admitted prohibited flow. The script's exit status reports collection
+and cleanup success; feed its JSON to the validator for the policy verdict.
+The script creates two `t3.micro` instances, networking, and an SSM IAM profile,
+then cleans them up in `finally`, reporting any surviving resources as failure.
+It requires EC2, IAM, and SSM permissions and incurs temporary AWS usage charges.
+
+This samples one direction and three prohibited flows in a disposable fixture;
+it does not establish isolation for every segment or policy in a deployed tenant.
+Other providers must collect fresh evidence from two segments of the same tenant,
+including a working explicitly allowed flow. The my-isv template returns synthetic
+success only with `ISVCTL_DEMO_MODE=1` and fails until implemented otherwise.
+
+### Allow-rule approval (SEC30-03)
+
+**Script**: `allow_rule_approval_test.py`
+**Validation**: `AllowRuleApprovalCheck`
+
+This read-only check samples **one** effective allow rule. It does not certify
+that every rule in an account is approved. Run it for each rule in the required
+inventory when assessing the full SEC30 requirement. It checks approval records,
+not packet delivery or the separate configuration-change audit trail.
+
+The AWS collector reads a security-group rule by ID, requires its group to be on
+an `in-use` network interface, and reads the owner from the rule's `Owner` tag.
+An owner tag or CloudTrail mutation event is not an approval. Supply a separate
+JSON export from your trusted change-management system; the collector never
+creates approval records. Protect that export's provenance and access: this check
+validates its contents, not the source system's authenticity or approver authority.
+
+Configure `tests.settings.allow_rule_id` and
+`tests.settings.allow_rule_approval_file` (an absolute path accessible where the
+collector runs) in an override YAML. Missing inputs fail with a configuration
+error. For a standalone read, use:
+
+```bash
+python3 isvctl/configs/providers/aws/scripts/network/allow_rule_approval_test.py \
+  --region us-east-2 --rule-id sgr-0123456789abcdef0 --approval-file /path/to/approval.json
+```
+
+The export must contain:
+
+```json
+{
+  "record_id": "CHANGE-123",
+  "source": "https://changes.example/CHANGE-123",
+  "status": "approved",
+  "approver": "network-reviewer",
+  "approved_at": "2026-10-20T12:00:00Z",
+  "rule_id": "sgr-0123456789abcdef0",
+  "policy_id": "aws:us-east-2:123456789012:security-group/sg-0123456789abcdef0",
+  "owner": "network-team",
+  "scope": {
+    "direction": "ingress",
+    "source": "cidr:192.0.2.0/24",
+    "destination": "aws:us-east-2:123456789012:security-group/sg-0123456789abcdef0",
+    "protocol": "tcp",
+    "port_range": [443, 443]
+  }
+}
+```
+
+An optional `expires_at` must be later than the observation. Both it and
+`approved_at` must include a timezone; approvals after the observation fail.
+Unapproved/revoked records, missing ownership, mismatched rule or policy IDs, and
+changed traffic scope fail. The read-only collector may succeed in collecting a
+pending record; only the validator grades approval.
+
+The provider-neutral step output includes `success`, `platform: network`,
+`test_name: allow_rule_approval`, `observed_at`, `effective_rule`, and `approval`.
+`effective_rule` contains `rule_id`, `policy_id`, `owner`, `action: allow`,
+`effective: true`, and `scope`. A bare-metal provider can emit the same contract
+from its deployed firewall policy and independent approval system. The my-isv
+script is a scaffold; its successful records are synthetic and only emitted with
+`ISVCTL_DEMO_MODE=1`.
+
+Scopes must match **exactly**, including direction, source, destination, and
+protocol. Selectors are normalized provider identifiers (AWS CIDRs use `cidr:`;
+security groups use the account-and-region-qualified identifier above). TCP/UDP
+requires an inclusive integer `port_range`; ICMP/ICMPv6 requires `icmp_type` and
+`icmp_code` (`-1` means all). `all` and other decimal IP protocol numbers carry no
+port fields. Unknown dimensions fail instead of being ignored. A broader policy
+approval must be resolved to an explicit approved rule by the trusted provider
+adapter; the validator does not guess scope containment. AWS prefix-list rules
+fail because their mutable membership needs additional approval evidence.
+
+## Prerequisites
+
+### AWS Credentials
+
+```bash
+# Option 1: AWS CLI configuration
+aws configure
+
+# Option 2: Environment variables
+export AWS_ACCESS_KEY_ID=AKIA...
+export AWS_SECRET_ACCESS_KEY=...
+export AWS_REGION=us-west-2
+
+# Option 3: STS temporary credentials
+export AWS_ACCESS_KEY_ID=ASIA...
+export AWS_SECRET_ACCESS_KEY=...
+export AWS_SESSION_TOKEN=...
+export AWS_REGION=us-west-2
+```
+
+### Required IAM Permissions
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateVpc", "ec2:DeleteVpc", "ec2:DescribeVpcs", "ec2:ModifyVpcAttribute",
+        "ec2:CreateSubnet", "ec2:DeleteSubnet", "ec2:DescribeSubnets",
+        "ec2:CreateSecurityGroup", "ec2:DeleteSecurityGroup", "ec2:DescribeSecurityGroups",
+        "ec2:AuthorizeSecurityGroupIngress", "ec2:AuthorizeSecurityGroupEgress",
+        "ec2:RevokeSecurityGroupEgress",
+        "ec2:CreateNetworkAcl", "ec2:DeleteNetworkAcl", "ec2:DescribeNetworkAcls",
+        "ec2:CreateNetworkAclEntry",
+        "ec2:CreateInternetGateway", "ec2:DeleteInternetGateway", "ec2:AttachInternetGateway",
+        "ec2:DetachInternetGateway", "ec2:DescribeInternetGateways",
+        "ec2:CreateRouteTable", "ec2:DeleteRouteTable", "ec2:AssociateRouteTable",
+        "ec2:DisassociateRouteTable", "ec2:CreateRoute", "ec2:DescribeRouteTables",
+        "ec2:RunInstances", "ec2:TerminateInstances", "ec2:DescribeInstances",
+        "ec2:ModifySubnetAttribute",
+        "ec2:CreateTags", "ec2:DescribeTags",
+        "ec2:DescribeImages", "ec2:DescribeAvailabilityZones",
+        "ec2:DescribeVpcPeeringConnections", "ec2:DescribeVpcAttribute"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreateRole", "iam:DeleteRole", "iam:AttachRolePolicy", "iam:DetachRolePolicy",
+        "iam:CreateInstanceProfile", "iam:DeleteInstanceProfile",
+        "iam:AddRoleToInstanceProfile", "iam:RemoveRoleFromInstanceProfile",
+        "iam:PassRole"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ssm:SendCommand", "ssm:GetCommandInvocation", "ssm:DescribeInstanceInformation"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+## Configuration
+
+### network.yaml Structure
+
+The AWS provider config imports the canonical network test suite and overrides commands with boto3 scripts:
+
+```yaml
+import:
+  - ../../../../suites/network.yaml
+
+version: "1.0"
+
+commands:
+  network:
+    phases: ["setup", "test", "teardown"]
+    steps:
+      - name: create_network      # Setup: shared VPC
+        phase: setup
+        command: "python3 ../create_vpc.py"
+        args: ["--name", "isv-shared-vpc", "--region", "{{region}}", "--cidr", "10.0.0.0/16"]
+        timeout: 300
+
+      - name: vpc_crud             # Test 1: VPC CRUD (~30s)
+      - name: subnet_config        # Test 2: Subnet Config (~30s)
+      - name: vpc_isolation         # Test 3: VPC Isolation (~30s)
+      - name: sg_crud               # Test 4a: SG CRUD (~30s)
+      - name: security_blocking     # Test 4b: Security Blocking (~30s)
+      - name: connectivity_test     # Test 5: Connectivity (~3 min)
+      - name: traffic_validation    # Test 6: Traffic Validation (~5-7 min)
+      - name: vpc_ip_config         # Test 7: VPC IP Config - DDI (~10s)
+      - name: dhcp_ip_test          # Test 8: DHCP IP Management - DDI (~3 min)
+      - name: byoip_test            # Test 9: BYOIP (~30s)
+      - name: stable_ip_test        # Test 10: Stable Private IP (~5 min)
+      - name: floating_ip_test      # Test 11: Floating IP (~5 min)
+      - name: dns_test              # Test 12: Localized DNS (~60s)
+      - name: peering_test          # Test 13: VPC Peering (~30s)
+
+      - name: teardown             # Teardown: shared VPC cleanup
+        phase: teardown
+        command: "python3 ../teardown.py"
+        # ...
+
+tests:
+  cluster_name: "aws-network-validation"
+  settings:
+    region: "us-west-2"
+```
+
+See [`providers/aws/config/network.yaml`](../../../config/network.yaml) for the full config with all arguments and timeouts.
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `AWS_REGION` | AWS region for tests | `us-west-2` |
+| `AWS_ACCESS_KEY_ID` | AWS access key | From AWS config |
+| `AWS_SECRET_ACCESS_KEY` | AWS secret key | From AWS config |
+| `AWS_SESSION_TOKEN` | STS session token | None |
+| `AWS_NETWORK_SKIP_TEARDOWN` | Skip VPC teardown | `false` |
+
+## Example Output
+
+```shell
+============================================================
+ORCHESTRATION RESULTS
+============================================================
+[PASS] SETUP   : create_network: passed
+  [create_network] NetworkProvisionedCheck: PASSED - Network vpc-xxx provisioned: CIDR=10.0.0.0/16, subnets=2
+[PASS] TEST    : vpc_crud: passed; subnet_config: passed; vpc_isolation: passed; sg_crud: passed;
+                 security_blocking: passed; connectivity_test: passed; traffic_validation: passed;
+                 vpc_ip_config: passed; dhcp_ip_test: passed; byoip_test: passed;
+                 stable_ip_test: passed; floating_ip_test: passed; dns_test: passed; peering_test: passed
+  [vpc_crud] VpcCrudCheck: PASSED - All 5 CRUD tests passed
+  [subnet_config] SubnetConfigCheck: PASSED - 4 subnets across 2 AZs
+  [vpc_isolation] VpcIsolationCheck: PASSED - VPCs vpc-a and vpc-b are properly isolated
+  [sg_crud] SgCrudCheck: PASSED - All 4 SG CRUD operations passed
+  [security_blocking] SecurityBlockingCheck: PASSED - All 5 security blocking tests passed
+  [connectivity_test] NetworkConnectivityCheck: PASSED - 2 instances with network connectivity
+  [traffic_validation] TrafficFlowCheck: PASSED - All 4 traffic tests passed (latency: 0.5ms)
+  [vpc_ip_config] VpcIpConfigCheck: PASSED - CIDR, subnets, DHCP options verified
+  [dhcp_ip_test] DhcpIpManagementCheck: PASSED - DHCP lease active, IP matches metadata
+  [byoip_test] ByoipCheck: PASSED - Custom CIDR 100.64.0.0/16 and standard CIDR functional
+  [stable_ip_test] StablePrivateIpCheck: PASSED - Private IP unchanged after stop/start
+  [floating_ip_test] FloatingIpCheck: PASSED - IP switched in 1.2s (threshold: 10s)
+  [dns_test] LocalizedDnsCheck: PASSED - internal.isv.test resolves correctly
+  [peering_test] VpcPeeringCheck: PASSED - Cross-VPC connectivity verified
+[PASS] TEARDOWN: teardown: passed
+  [teardown] NetworkResourcesDeletedCheck: PASSED - StepSuccessCheck: Teardown successful
+------------------------------------------------------------
+[PASS] All phases completed successfully
+```
+
+## Troubleshooting
+
+### "VPC limit exceeded"
+
+AWS accounts have default VPC limits (5 per region). Delete unused VPCs or request a limit increase.
+
+```bash
+aws ec2 describe-vpcs --query 'length(Vpcs)'
+```
+
+### "UnauthorizedOperation"
+
+Missing IAM permissions. See [Required IAM Permissions](#required-iam-permissions).
+
+### "SSM not ready" or "InvalidInstanceId"
+
+The SSM agent takes time to register. The tests include retry logic, but if it still fails:
+
+- Ensure instances have public IP (for SSM endpoint connectivity)
+- Verify IAM role has `AmazonSSMManagedInstanceCore` policy
+- Check VPC has internet gateway and route to 0.0.0.0/0
+
+### Tests timing out
+
+Increase timeout in config:
+
+```yaml
+- name: traffic_validation
+  timeout: 1200  # 20 minutes
+```
+
+## Cost & Cleanup
+
+> **Warning**: These tests create AWS resources (VPCs, subnets, security groups,
+> internet gateways, EC2 instances) that incur costs. Resources are
+> automatically cleaned up during the teardown phase, but if teardown fails
+> or is skipped, you must manually delete them to avoid ongoing charges.
+
+```bash
+# Find VPCs tagged by isvtest
+aws ec2 describe-vpcs --filters "Name=tag:CreatedBy,Values=isvtest" \
+  --query 'Vpcs[*].[VpcId,Tags[?Key==`Name`].Value|[0],State]' --output table
+
+# Delete orphaned VPCs (must remove dependent resources first - see below)
+VPC_ID="vpc-xxx"
+```
+
+`delete-vpc` fails with `DependencyViolation` if any resources still reference
+the VPC. Remove dependencies in this order before deleting:
+
+1. Terminate EC2 instances, load balancers, RDS/EFS mount targets (`terminate-instances`)
+2. Delete NAT Gateways and VPC Endpoints (`delete-nat-gateway`, `delete-vpc-endpoints`)
+3. Detach & delete remaining ENIs and release Elastic IPs (`delete-network-interface`)
+4. Detach & delete Internet/VPN Gateways (`detach-internet-gateway`, `delete-internet-gateway`)
+5. Delete peering/VPN connections (`delete-vpc-peering-connection`)
+6. Disassociate & delete custom route tables (`disassociate-route-table`, `delete-route-table`)
+7. Delete subnets (`delete-subnet`)
+8. Delete non-default security groups and NACLs (`delete-security-group`, `delete-network-acl`)
+
+> **Key check:** there must be **zero ENIs** remaining before `delete-vpc` succeeds.
+> Verify with: `aws ec2 describe-network-interfaces --filters Name=vpc-id,Values=$VPC_ID`
+
+```bash
+# Quick manual cleanup example
+VPC_ID="vpc-xxx"
+aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances \
+  --filters "Name=vpc-id,Values=$VPC_ID" --query 'Reservations[*].Instances[*].InstanceId' --output text)
+aws ec2 detach-internet-gateway --internet-gateway-id igw-xxx --vpc-id $VPC_ID
+aws ec2 delete-internet-gateway --internet-gateway-id igw-xxx
+aws ec2 delete-subnet --subnet-id subnet-xxx
+aws ec2 delete-security-group --group-id sg-xxx
+aws ec2 delete-vpc --vpc-id $VPC_ID
+```
+
+For automated cleanup, use the suite's teardown phase which handles the full
+dependency sequence via [`teardown.py`](../teardown.py):
+
+```bash
+uv run isvctl test run -f isvctl/configs/providers/aws/config/network.yaml --phase teardown
+```
+
+## Related Documentation
+
+- [Configuration Guide](../../../../../../../docs/guides/configuration.md)
+- [isvctl Documentation](../../../../../../../docs/packages/isvctl.md)
+- [AWS EKS Validation Guide](../../eks/docs/aws-eks.md)

@@ -1,0 +1,1265 @@
+{
+ "nodes": [
+  {
+   "id": "file:rust/src/chat/src/multimodal/input.rs",
+   "type": "file",
+   "name": "input.rs",
+   "filePath": "rust/src/chat/src/multimodal/input.rs",
+   "summary": "多模态输入轻量包装：MultimodalInput 结构（id/媒体句柄），chat 请求侧的媒体容器。",
+   "tags": [
+    "multimodal",
+    "input",
+    "rust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:rust/src/chat/src/multimodal/input.rs:MultimodalInput",
+   "type": "class",
+   "name": "MultimodalInput",
+   "filePath": "rust/src/chat/src/multimodal/input.rs",
+   "lineRange": [
+    9,
+    14
+   ],
+   "summary": "多模态输入结构体（2 方法）。",
+   "tags": [
+    "multimodal",
+    "data-model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/chat/src/multimodal/models.rs",
+   "type": "file",
+   "name": "models.rs",
+   "filePath": "rust/src/chat/src/multimodal/models.rs",
+   "summary": "本地多模态 spec 注册表：模块头钉版——llm-multimodal 库尚未支持的模型在此维护（支持后随依赖升级删除）。SPECS 表挂 step3_vl/muse_spark 两个本地 spec，lookup_spec 先本地后 registry（含 model_type 别名重写）。",
+   "tags": [
+    "multimodal",
+    "registry",
+    "spec",
+    "rust"
+   ],
+   "complexity": "moderate",
+   "languageNotes": "本地 spec 是过渡机制：SPECS 静态表+MODEL_TYPE_ALIASES 别名对，最终归宿是上游 llm-multimodal。"
+  },
+  {
+   "id": "function:rust/src/chat/src/multimodal/models.rs:lookup_spec",
+   "type": "function",
+   "name": "lookup_spec",
+   "filePath": "rust/src/chat/src/multimodal/models.rs",
+   "lineRange": [
+    32,
+    52
+   ],
+   "summary": "spec 解析入口：本地 SPECS 优先，未命中走 llm-multimodal registry（可经别名重写 model_type）。",
+   "tags": [
+    "registry",
+    "dispatch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/chat/src/multimodal/models/muse_spark.rs",
+   "type": "file",
+   "name": "muse_spark.rs",
+   "filePath": "rust/src/chat/src/multimodal/models/muse_spark.rs",
+   "summary": "MuseSpark 多模态 spec（690 行，25 方法）：图像/音频/视频三模态占位符替换、模态限额、编码器字段布局与 CPU 侧保留键——Rust 端完整复刻 MuseSpark 预处理语义。",
+   "tags": [
+    "multimodal",
+    "muse-spark",
+    "spec",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:rust/src/chat/src/multimodal/models/muse_spark.rs:MuseSparkSpec",
+   "type": "class",
+   "name": "MuseSparkSpec",
+   "filePath": "rust/src/chat/src/multimodal/models/muse_spark.rs",
+   "lineRange": [
+    59,
+    59
+   ],
+   "summary": "ModelProcessorSpec 实现（25 方法覆盖 prompt 替换/token 计算/字段布局全链）。",
+   "tags": [
+    "spec",
+    "processor"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:rust/src/chat/src/multimodal/models/muse_spark.rs:video_replacements",
+   "type": "function",
+   "name": "video_replacements",
+   "filePath": "rust/src/chat/src/multimodal/models/muse_spark.rs",
+   "lineRange": [
+    140,
+    206
+   ],
+   "summary": "视频占位符替换（帧 token 展开策略）。",
+   "tags": [
+    "video",
+    "placeholder"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/chat/src/multimodal/models/muse_spark.rs:encoder_field_layouts_for",
+   "type": "function",
+   "name": "encoder_field_layouts_for",
+   "filePath": "rust/src/chat/src/multimodal/models/muse_spark.rs",
+   "lineRange": [
+    362,
+    398
+   ],
+   "summary": "编码器输入字段布局声明（批/平铺/共享三种形态）。",
+   "tags": [
+    "field-layout",
+    "encoder"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/chat/src/multimodal/models/muse_spark/audio.rs",
+   "type": "file",
+   "name": "audio.rs",
+   "filePath": "rust/src/chat/src/multimodal/models/muse_spark/audio.rs",
+   "summary": "MuseSpark 音频处理器：解码 clip 预处理（重采样/归一化/分帧）+参数配置。",
+   "tags": [
+    "audio",
+    "muse-spark",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:rust/src/chat/src/multimodal/models/muse_spark/audio.rs:MuseSparkAudioProcessor",
+   "type": "class",
+   "name": "MuseSparkAudioProcessor",
+   "filePath": "rust/src/chat/src/multimodal/models/muse_spark/audio.rs",
+   "lineRange": [
+    61,
+    63
+   ],
+   "summary": "音频处理器（4 方法）。",
+   "tags": [
+    "audio",
+    "processor"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/chat/src/multimodal/models/muse_spark/audio.rs:preprocess_decoded_clips",
+   "type": "function",
+   "name": "preprocess_decoded_clips",
+   "filePath": "rust/src/chat/src/multimodal/models/muse_spark/audio.rs",
+   "lineRange": [
+    74,
+    144
+   ],
+   "summary": "解码后音频 clip 预处理（浮点归一+分帧窗口）。",
+   "tags": [
+    "audio",
+    "preprocess"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/chat/src/multimodal/models/muse_spark/processor.rs",
+   "type": "file",
+   "name": "processor.rs",
+   "filePath": "rust/src/chat/src/multimodal/models/muse_spark/processor.rs",
+   "summary": "MuseSpark 视觉处理器（951 行）：least_distortion_fit/least_distance_fit 双保真缩放、RGB 合成平面、视频帧预处理与 token 数计算——对齐 Python 侧预处理语义。",
+   "tags": [
+    "vision",
+    "muse-spark",
+    "processor",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:rust/src/chat/src/multimodal/models/muse_spark/processor.rs:MuseSparkVisionProcessor",
+   "type": "class",
+   "name": "MuseSparkVisionProcessor",
+   "filePath": "rust/src/chat/src/multimodal/models/muse_spark/processor.rs",
+   "lineRange": [
+    386,
+    388
+   ],
+   "summary": "视觉处理器（12 方法：preprocess 图像/视频双路）。",
+   "tags": [
+    "vision",
+    "processor"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:rust/src/chat/src/multimodal/models/muse_spark/processor.rs:least_distortion_fit",
+   "type": "function",
+   "name": "least_distortion_fit",
+   "filePath": "rust/src/chat/src/multimodal/models/muse_spark/processor.rs",
+   "lineRange": [
+    178,
+    220
+   ],
+   "summary": "最小失真缩放（保持宽高比的最小形变目标）。",
+   "tags": [
+    "resize",
+    "fidelity"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/chat/src/multimodal/models/muse_spark/processor.rs:find_resize_target",
+   "type": "function",
+   "name": "find_resize_target",
+   "filePath": "rust/src/chat/src/multimodal/models/muse_spark/processor.rs",
+   "lineRange": [
+    261,
+    317
+   ],
+   "summary": "缩放目标求解（尺寸/patch 对齐约束下的最优档位）。",
+   "tags": [
+    "resize",
+    "solver"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/chat/src/multimodal/models/muse_spark/processor.rs:preprocess_video_frames",
+   "type": "function",
+   "name": "preprocess_video_frames",
+   "filePath": "rust/src/chat/src/multimodal/models/muse_spark/processor.rs",
+   "lineRange": [
+    445,
+    583
+   ],
+   "summary": "视频帧批量预处理（139 行：resize+归一化+帧间一致性）。",
+   "tags": [
+    "video",
+    "preprocess"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:rust/src/chat/src/multimodal/models/muse_spark/resample.rs",
+   "type": "file",
+   "name": "resample.rs",
+   "filePath": "rust/src/chat/src/multimodal/models/muse_spark/resample.rs",
+   "summary": "带限重采样（bandlimited_resample）：音频采样率转换的 sinc 核实现（对齐 Python scipy 语义）。",
+   "tags": [
+    "audio",
+    "resample",
+    "muse-spark",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/chat/src/multimodal/models/muse_spark/resample.rs:bandlimited_resample",
+   "type": "function",
+   "name": "bandlimited_resample",
+   "filePath": "rust/src/chat/src/multimodal/models/muse_spark/resample.rs",
+   "lineRange": [
+    15,
+    99
+   ],
+   "summary": "带限 sinc 重采样主函数（85 行）。",
+   "tags": [
+    "resample",
+    "sinc"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/chat/src/multimodal/models/muse_spark/transform.rs",
+   "type": "file",
+   "name": "transform.rs",
+   "filePath": "rust/src/chat/src/multimodal/models/muse_spark/transform.rs",
+   "summary": "PIL 兼容 Lanczos3 重采样（361 行）：pil_precompute_coeffs/h 带/v 带分离 kernel——逐位对齐 Pillow resize 输出。",
+   "tags": [
+    "image",
+    "lanczos",
+    "transform",
+    "muse-spark"
+   ],
+   "complexity": "complex",
+   "languageNotes": "Rust 端复刻 PIL Lanczos：分离 h/v 带+预计算系数表，保证与 Python Pillow 逐位一致。"
+  },
+  {
+   "id": "function:rust/src/chat/src/multimodal/models/muse_spark/transform.rs:pil_precompute_coeffs",
+   "type": "function",
+   "name": "pil_precompute_coeffs",
+   "filePath": "rust/src/chat/src/multimodal/models/muse_spark/transform.rs",
+   "lineRange": [
+    40,
+    89
+   ],
+   "summary": "Lanczos3 系数预计算（对齐 PIL 内核）。",
+   "tags": [
+    "lanczos",
+    "coefficients"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/chat/src/multimodal/models/muse_spark/transform.rs:resize_lanczos_pil_rgb",
+   "type": "function",
+   "name": "resize_lanczos_pil_rgb",
+   "filePath": "rust/src/chat/src/multimodal/models/muse_spark/transform.rs",
+   "lineRange": [
+    279,
+    300
+   ],
+   "summary": "RGB 三通道 PIL 兼容 resize 主入口。",
+   "tags": [
+    "lanczos",
+    "resize"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/chat/src/multimodal/models/step3_vl.rs",
+   "type": "file",
+   "name": "step3_vl.rs",
+   "filePath": "rust/src/chat/src/multimodal/models/step3_vl.rs",
+   "summary": "Step3-VL/Step5-VL 视觉 spec：窗口切分占位替换与字段布局（10 方法）。",
+   "tags": [
+    "multimodal",
+    "step3-vl",
+    "spec",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:rust/src/chat/src/multimodal/models/step3_vl.rs:Step3VLVisionSpec",
+   "type": "class",
+   "name": "Step3VLVisionSpec",
+   "filePath": "rust/src/chat/src/multimodal/models/step3_vl.rs",
+   "lineRange": [
+    27,
+    27
+   ],
+   "summary": "Step3-VL spec 实现（10 方法）。",
+   "tags": [
+    "spec",
+    "processor"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:rust/src/chat/src/multimodal/models/step3_vl.rs:prompt_replacements",
+   "type": "function",
+   "name": "prompt_replacements",
+   "filePath": "rust/src/chat/src/multimodal/models/step3_vl.rs",
+   "lineRange": [
+    113,
+    163
+   ],
+   "summary": "prompt 占位符替换（图像 patch token 展开）。",
+   "tags": [
+    "placeholder",
+    "prompt"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/chat/src/multimodal/models/step3_vl/processor.rs",
+   "type": "file",
+   "name": "processor.rs",
+   "filePath": "rust/src/chat/src/multimodal/models/step3_vl/processor.rs",
+   "summary": "Step3-VL 视觉处理器（625 行）：滑窗 patch（window_starts/slide_window）+裁剪维度求解+PatchedImage 批处理。",
+   "tags": [
+    "vision",
+    "step3-vl",
+    "processor",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:rust/src/chat/src/multimodal/models/step3_vl/processor.rs:Step3VLProcessor",
+   "type": "class",
+   "name": "Step3VLProcessor",
+   "filePath": "rust/src/chat/src/multimodal/models/step3_vl/processor.rs",
+   "lineRange": [
+    150,
+    156
+   ],
+   "summary": "处理器（10 方法：窗口切分+patch+批组装）。",
+   "tags": [
+    "vision",
+    "processor"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:rust/src/chat/src/multimodal/models/step3_vl/processor.rs:patch_one",
+   "type": "function",
+   "name": "patch_one",
+   "filePath": "rust/src/chat/src/multimodal/models/step3_vl/processor.rs",
+   "lineRange": [
+    212,
+    283
+   ],
+   "summary": "单图 patch 处理（滑窗+padding）。",
+   "tags": [
+    "patch",
+    "window"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/chat/src/multimodal/models/step3_vl/processor.rs:preprocess",
+   "type": "function",
+   "name": "preprocess",
+   "filePath": "rust/src/chat/src/multimodal/models/step3_vl/processor.rs",
+   "lineRange": [
+    295,
+    361
+   ],
+   "summary": "批预处理入口（多图多窗组装）。",
+   "tags": [
+    "preprocess",
+    "batch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/chat/src/multimodal/preprocessed.rs",
+   "type": "file",
+   "name": "preprocessed.rs",
+   "filePath": "rust/src/chat/src/multimodal/preprocessed.rs",
+   "summary": "预处理结果校验：validate_features/validate_kwargs/validate_value 三层校验+批一致性检查——Rust 侧对 Python 预处理器输出的防御性验证。",
+   "tags": [
+    "multimodal",
+    "validation",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/chat/src/multimodal/preprocessed.rs:validate_features",
+   "type": "function",
+   "name": "validate_features",
+   "filePath": "rust/src/chat/src/multimodal/preprocessed.rs",
+   "lineRange": [
+    21,
+    69
+   ],
+   "summary": "特征张量校验（形状/dtype/批一致性）。",
+   "tags": [
+    "validation",
+    "features"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/chat/src/multimodal/timing.rs",
+   "type": "file",
+   "name": "timing.rs",
+   "filePath": "rust/src/chat/src/multimodal/timing.rs",
+   "summary": "多模态计时工具（轻量）。",
+   "tags": [
+    "multimodal",
+    "timing",
+    "rust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/chat/src/output/structural_tag.rs",
+   "type": "file",
+   "name": "structural_tag.rs",
+   "filePath": "rust/src/chat/src/output/structural_tag.rs",
+   "summary": "结构化输出 tag：legacy 结构 tag 兼容层与 output grammar 应用（structural_tag_format/apply_output_grammar）。",
+   "tags": [
+    "structured-output",
+    "grammar",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:rust/src/chat/src/output/structural_tag.rs:apply_output_grammar",
+   "type": "function",
+   "name": "apply_output_grammar",
+   "filePath": "rust/src/chat/src/output/structural_tag.rs",
+   "lineRange": [
+    104,
+    126
+   ],
+   "summary": "把 grammar 约束附加到请求。",
+   "tags": [
+    "grammar",
+    "structured-output"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/chat/src/reasoning.rs",
+   "type": "file",
+   "name": "reasoning.rs",
+   "filePath": "rust/src/chat/src/reasoning.rs",
+   "summary": "推理控制（EffortValue 枚举+ReasoningControl 9 方法）：effort 档位（low/medium/high）与数字预算的映射、template kwargs 注入。",
+   "tags": [
+    "reasoning",
+    "effort",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:rust/src/chat/src/reasoning.rs:ReasoningControl",
+   "type": "class",
+   "name": "ReasoningControl",
+   "filePath": "rust/src/chat/src/reasoning.rs",
+   "lineRange": [
+    97,
+    104
+   ],
+   "summary": "推理控制结构（9 方法：from_kwargs/template_kwargs/effort 解析）。",
+   "tags": [
+    "reasoning",
+    "control"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:rust/src/chat/src/reasoning.rs:template_kwargs",
+   "type": "function",
+   "name": "template_kwargs",
+   "filePath": "rust/src/chat/src/reasoning.rs",
+   "lineRange": [
+    223,
+    245
+   ],
+   "summary": "模板参数注入（effort 数值预算写进 chat template 变量）。",
+   "tags": [
+    "template",
+    "effort"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/chat/src/renderer/deepseek.rs",
+   "type": "file",
+   "name": "deepseek.rs",
+   "filePath": "rust/src/chat/src/renderer/deepseek.rs",
+   "summary": "DeepSeek chat 渲染器（874 行）：media_order 媒体重排、工具 schema 渲染、developer 消息、思考模式（ThinkingMode）与 reasoning prompt——V3.x 方言的完整 prompt 组装。",
+   "tags": [
+    "renderer",
+    "deepseek",
+    "prompt",
+    "rust"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:rust/src/chat/src/renderer/deepseek.rs:DsDialect",
+   "type": "class",
+   "name": "DsDialect",
+   "filePath": "rust/src/chat/src/renderer/deepseek.rs",
+   "lineRange": [
+    52,
+    55
+   ],
+   "summary": "DeepSeek 方言配置（3 方法）。",
+   "tags": [
+    "dialect",
+    "renderer"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:rust/src/chat/src/renderer/deepseek.rs:render_request_with_media_order",
+   "type": "function",
+   "name": "render_request_with_media_order",
+   "filePath": "rust/src/chat/src/renderer/deepseek.rs",
+   "lineRange": [
+    99,
+    263
+   ],
+   "summary": "主渲染入口（165 行：媒体顺序保持+消息渲染全链）。",
+   "tags": [
+    "renderer",
+    "media-order"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:rust/src/chat/src/renderer/deepseek.rs:render_tools",
+   "type": "function",
+   "name": "render_tools",
+   "filePath": "rust/src/chat/src/renderer/deepseek.rs",
+   "lineRange": [
+    494,
+    537
+   ],
+   "summary": "工具 schema 渲染。",
+   "tags": [
+    "renderer",
+    "tools"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:rust/src/chat/src/renderer/deepseek_v41/fixtures/test_output_1.txt",
+   "type": "file",
+   "name": "test_output_1.txt",
+   "filePath": "rust/src/chat/src/renderer/deepseek_v41/fixtures/test_output_1.txt",
+   "summary": "deepseek_v41 渲染器测试基准 fixture（参考输出 1）。",
+   "tags": [
+    "test-fixture",
+    "data",
+    "deepseek"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/chat/src/renderer/deepseek_v41/fixtures/test_output_2.txt",
+   "type": "file",
+   "name": "test_output_2.txt",
+   "filePath": "rust/src/chat/src/renderer/deepseek_v41/fixtures/test_output_2.txt",
+   "summary": "deepseek_v41 渲染器测试基准 fixture（参考输出 2）。",
+   "tags": [
+    "test-fixture",
+    "data",
+    "deepseek"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/chat/src/renderer/deepseek_v41/fixtures/test_output_developer_tools.txt",
+   "type": "file",
+   "name": "test_output_developer_tools.txt",
+   "filePath": "rust/src/chat/src/renderer/deepseek_v41/fixtures/test_output_developer_tools.txt",
+   "summary": "deepseek_v41 渲染器测试基准 fixture（developer+tools 场景）。",
+   "tags": [
+    "test-fixture",
+    "data",
+    "deepseek"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/chat/src/renderer/deepseek_v41/mod.rs",
+   "type": "file",
+   "name": "mod.rs",
+   "filePath": "rust/src/chat/src/renderer/deepseek_v41/mod.rs",
+   "summary": "DeepSeek V4.1 chat 渲染器：复用 deepseek.rs 渲染原语，V4.1 特化 reference encoding 与 reasoning effort 数字预算。",
+   "tags": [
+    "renderer",
+    "deepseek-v41",
+    "rust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:rust/src/chat/src/renderer/deepseek_v41/mod.rs:DeepSeekV41ChatRenderer",
+   "type": "class",
+   "name": "DeepSeekV41ChatRenderer",
+   "filePath": "rust/src/chat/src/renderer/deepseek_v41/mod.rs",
+   "lineRange": [
+    17,
+    19
+   ],
+   "summary": "V4.1 渲染器（2 方法：render 薄层复用 V3 方言原语）。",
+   "tags": [
+    "renderer"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:rust/src/chat/src/renderer/deepseek_v41/tests.rs",
+   "type": "file",
+   "name": "tests.rs",
+   "filePath": "rust/src/chat/src/renderer/deepseek_v41/tests.rs",
+   "summary": "deepseek_v41 渲染器测试（479 行，16 个 test）：媒体顺序/effort 数字预算/developer 内容丢弃/思考前缀等语义验证，与 Python 参考输出逐字节比对。",
+   "tags": [
+    "test",
+    "renderer",
+    "deepseek-v41",
+    "rust"
+   ],
+   "complexity": "complex",
+   "languageNotes": "测试与 Python 渲染器共享 fixtures（test_output_*.txt）做跨语言一致性验证。"
+  },
+  {
+   "id": "file:rust/src/chat/src/renderer/hf/generation.rs",
+   "type": "file",
+   "name": "generation.rs",
+   "filePath": "rust/src/chat/src/renderer/hf/generation.rs",
+   "summary": "HF generation block 重写：rewrite_generation_blocks 把 HF chat template 输出的 call block 归一化（CallBlockKind 分类）。",
+   "tags": [
+    "renderer",
+    "hf",
+    "generation",
+    "rust"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:rust/src/chat/src/renderer/hf/generation.rs:rewrite_generation_blocks",
+   "type": "function",
+   "name": "rewrite_generation_blocks",
+   "filePath": "rust/src/chat/src/renderer/hf/generation.rs",
+   "lineRange": [
+    29,
+    85
+   ],
+   "summary": "call block 归一化重写。",
+   "tags": [
+    "generation",
+    "rewrite"
+   ],
+   "complexity": "moderate"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:rust/src/chat/src/multimodal/input.rs",
+   "target": "class:rust/src/chat/src/multimodal/input.rs:MultimodalInput",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/input.rs",
+   "target": "class:rust/src/chat/src/multimodal/input.rs:MultimodalInput",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models.rs",
+   "target": "function:rust/src/chat/src/multimodal/models.rs:lookup_spec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models.rs",
+   "target": "function:rust/src/chat/src/multimodal/models.rs:lookup_spec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark.rs",
+   "target": "class:rust/src/chat/src/multimodal/models/muse_spark.rs:MuseSparkSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark.rs",
+   "target": "class:rust/src/chat/src/multimodal/models/muse_spark.rs:MuseSparkSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/muse_spark.rs:video_replacements",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/muse_spark.rs:video_replacements",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/muse_spark.rs:encoder_field_layouts_for",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/muse_spark.rs:encoder_field_layouts_for",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark/audio.rs",
+   "target": "class:rust/src/chat/src/multimodal/models/muse_spark/audio.rs:MuseSparkAudioProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark/audio.rs",
+   "target": "class:rust/src/chat/src/multimodal/models/muse_spark/audio.rs:MuseSparkAudioProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark/audio.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/muse_spark/audio.rs:preprocess_decoded_clips",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark/audio.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/muse_spark/audio.rs:preprocess_decoded_clips",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark/processor.rs",
+   "target": "class:rust/src/chat/src/multimodal/models/muse_spark/processor.rs:MuseSparkVisionProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark/processor.rs",
+   "target": "class:rust/src/chat/src/multimodal/models/muse_spark/processor.rs:MuseSparkVisionProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark/processor.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/muse_spark/processor.rs:least_distortion_fit",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark/processor.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/muse_spark/processor.rs:least_distortion_fit",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark/processor.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/muse_spark/processor.rs:find_resize_target",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark/processor.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/muse_spark/processor.rs:find_resize_target",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark/processor.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/muse_spark/processor.rs:preprocess_video_frames",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark/processor.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/muse_spark/processor.rs:preprocess_video_frames",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark/resample.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/muse_spark/resample.rs:bandlimited_resample",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark/resample.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/muse_spark/resample.rs:bandlimited_resample",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark/transform.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/muse_spark/transform.rs:pil_precompute_coeffs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark/transform.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/muse_spark/transform.rs:pil_precompute_coeffs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark/transform.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/muse_spark/transform.rs:resize_lanczos_pil_rgb",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark/transform.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/muse_spark/transform.rs:resize_lanczos_pil_rgb",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/step3_vl.rs",
+   "target": "class:rust/src/chat/src/multimodal/models/step3_vl.rs:Step3VLVisionSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/step3_vl.rs",
+   "target": "class:rust/src/chat/src/multimodal/models/step3_vl.rs:Step3VLVisionSpec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/step3_vl.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/step3_vl.rs:prompt_replacements",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/step3_vl.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/step3_vl.rs:prompt_replacements",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/step3_vl/processor.rs",
+   "target": "class:rust/src/chat/src/multimodal/models/step3_vl/processor.rs:Step3VLProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/step3_vl/processor.rs",
+   "target": "class:rust/src/chat/src/multimodal/models/step3_vl/processor.rs:Step3VLProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/step3_vl/processor.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/step3_vl/processor.rs:patch_one",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/step3_vl/processor.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/step3_vl/processor.rs:patch_one",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/step3_vl/processor.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/step3_vl/processor.rs:preprocess",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/step3_vl/processor.rs",
+   "target": "function:rust/src/chat/src/multimodal/models/step3_vl/processor.rs:preprocess",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/preprocessed.rs",
+   "target": "file:rust/src/chat/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/preprocessed.rs",
+   "target": "file:rust/src/chat/src/multimodal.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/preprocessed.rs",
+   "target": "function:rust/src/chat/src/multimodal/preprocessed.rs:validate_features",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/preprocessed.rs",
+   "target": "function:rust/src/chat/src/multimodal/preprocessed.rs:validate_features",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/output/structural_tag.rs",
+   "target": "function:rust/src/chat/src/output/structural_tag.rs:apply_output_grammar",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/output/structural_tag.rs",
+   "target": "function:rust/src/chat/src/output/structural_tag.rs:apply_output_grammar",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/reasoning.rs",
+   "target": "file:rust/src/chat/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/chat/src/reasoning.rs",
+   "target": "file:rust/src/chat/src/request.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/chat/src/reasoning.rs",
+   "target": "class:rust/src/chat/src/reasoning.rs:ReasoningControl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/reasoning.rs",
+   "target": "class:rust/src/chat/src/reasoning.rs:ReasoningControl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/reasoning.rs",
+   "target": "function:rust/src/chat/src/reasoning.rs:template_kwargs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/reasoning.rs",
+   "target": "function:rust/src/chat/src/reasoning.rs:template_kwargs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/deepseek.rs",
+   "target": "file:rust/src/chat/src/error.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/deepseek.rs",
+   "target": "file:rust/src/chat/src/reasoning.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/deepseek.rs",
+   "target": "file:rust/src/chat/src/request.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/deepseek.rs",
+   "target": "class:rust/src/chat/src/renderer/deepseek.rs:DsDialect",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/deepseek.rs",
+   "target": "class:rust/src/chat/src/renderer/deepseek.rs:DsDialect",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/deepseek.rs",
+   "target": "function:rust/src/chat/src/renderer/deepseek.rs:render_request_with_media_order",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/deepseek.rs",
+   "target": "function:rust/src/chat/src/renderer/deepseek.rs:render_request_with_media_order",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/deepseek.rs",
+   "target": "function:rust/src/chat/src/renderer/deepseek.rs:render_tools",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/deepseek.rs",
+   "target": "function:rust/src/chat/src/renderer/deepseek.rs:render_tools",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/deepseek_v41/mod.rs",
+   "target": "file:rust/src/chat/src/reasoning.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/deepseek_v41/mod.rs",
+   "target": "file:rust/src/chat/src/renderer/deepseek.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/deepseek_v41/mod.rs",
+   "target": "file:rust/src/chat/src/request.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/deepseek_v41/mod.rs",
+   "target": "class:rust/src/chat/src/renderer/deepseek_v41/mod.rs:DeepSeekV41ChatRenderer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/deepseek_v41/mod.rs",
+   "target": "class:rust/src/chat/src/renderer/deepseek_v41/mod.rs:DeepSeekV41ChatRenderer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/deepseek_v41/tests.rs",
+   "target": "file:rust/src/chat/src/event.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/deepseek_v41/tests.rs",
+   "target": "file:rust/src/chat/src/renderer/test_utils.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/deepseek_v41/tests.rs",
+   "target": "file:rust/src/chat/src/request.rs",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/hf/generation.rs",
+   "target": "function:rust/src/chat/src/renderer/hf/generation.rs:rewrite_generation_blocks",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/hf/generation.rs",
+   "target": "function:rust/src/chat/src/renderer/hf/generation.rs:rewrite_generation_blocks",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models.rs",
+   "target": "file:rust/src/chat/src/multimodal/models/muse_spark.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models.rs",
+   "target": "file:rust/src/chat/src/multimodal/models/step3_vl.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark.rs",
+   "target": "file:rust/src/chat/src/multimodal/models/muse_spark/audio.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark.rs",
+   "target": "file:rust/src/chat/src/multimodal/models/muse_spark/processor.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark.rs",
+   "target": "file:rust/src/chat/src/multimodal/models/muse_spark/resample.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/muse_spark.rs",
+   "target": "file:rust/src/chat/src/multimodal/models/muse_spark/transform.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/chat/src/multimodal/models/step3_vl.rs",
+   "target": "file:rust/src/chat/src/multimodal/models/step3_vl/processor.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:rust/src/chat/src/renderer/deepseek_v41/mod.rs",
+   "target": "file:rust/src/chat/src/renderer/deepseek_v41/tests.rs",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  }
+ ]
+}

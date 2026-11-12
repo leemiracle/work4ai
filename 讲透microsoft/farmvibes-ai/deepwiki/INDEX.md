@@ -1,0 +1,32 @@
+# DeepWiki 索引 — microsoft/farmvibes-ai
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 548203 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+- [3 Architecture](3-architecture.md)
+  - [3.1 vibe_core Package](3.1-vibe-core-package.md)
+  - [3.2 Infrastructure and Deployment](3.2-infrastructure-and-deployment.md)
+  - [3.3 Data Models](3.3-data-models.md)
+  - [3.4 Client API](3.4-client-api.md)
+- [4 Workflows](4-workflows.md)
+  - [4.1 Data Ingestion Workflows](4.1-data-ingestion-workflows.md)
+  - [4.2 Data Processing Workflows](4.2-data-processing-workflows.md)
+  - [4.3 FarmAI and ML Workflows](4.3-farmai-and-ml-workflows.md)
+- [5 User Guides](5-user-guides.md)
+  - [5.1 Working with Notebooks](5.1-working-with-notebooks.md)
+  - [5.2 Running Workflows](5.2-running-workflows.md)
+  - [5.3 Monitoring and Debugging](5.3-monitoring-and-debugging.md)
+- [6 Example Notebooks](6-example-notebooks.md)
+  - [6.1 Agriculture Examples](6.1-agriculture-examples.md)
+  - [6.2 Remote Sensing Examples](6.2-remote-sensing-examples.md)
+  - [6.3 ML and Segmentation Examples](6.3-ml-and-segmentation-examples.md)
+- [7 Development](7-development.md)
+  - [7.1 Contributing and Issue Management](7.1-contributing-and-issue-management.md)
+  - [7.2 Documentation System](7.2-documentation-system.md)
+  - [7.3 Testing and Environment Setup](7.3-testing-and-environment-setup.md)
+- [8 Reference](8-reference.md)
+  - [8.1 Data Model Reference](8.1-data-model-reference.md)
+  - [8.2 Workflow Catalog](8.2-workflow-catalog.md)
+  - [8.3 Notebook Catalog](8.3-notebook-catalog.md)

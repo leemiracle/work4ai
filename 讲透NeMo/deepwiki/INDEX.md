@@ -1,0 +1,30 @@
+# DeepWiki 索引 — NVIDIA/NeMo
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-21
+> 结构 25 页 · 全文 545092 字符
+
+- [1 Introduction to NeMo](1-introduction-to-nemo.md)
+  - [1.1 Framework Overview and Installation](1.1-framework-overview-and-installation.md)
+  - [1.2 Core Model Classes and Interfaces](1.2-core-model-classes-and-interfaces.md)
+  - [1.3 Experiment Management and Training](1.3-experiment-management-and-training.md)
+- [2 Distributed Training Infrastructure](2-distributed-training-infrastructure.md)
+  - [2.1 Megatron Strategy and Model Parallelism](2.1-megatron-strategy-and-model-parallelism.md)
+  - [2.2 Distributed Optimization and Mixed Precision](2.2-distributed-optimization-and-mixed-precision.md)
+  - [2.3 Distributed Checkpointing](2.3-distributed-checkpointing.md)
+- [3 Large Language Models (LLMs)](3-large-language-models-llms.md)
+  - [3.1 LLM Model Architectures and Configurations](3.1-llm-model-architectures-and-configurations.md)
+  - [3.2 LLM Training and Fine-Tuning](3.2-llm-training-and-fine-tuning.md)
+  - [3.3 HuggingFace Integration and AutoModel](3.3-huggingface-integration-and-automodel.md)
+  - [3.4 LLM Inference and Generation](3.4-llm-inference-and-generation.md)
+- [4 Automatic Speech Recognition (ASR)](4-automatic-speech-recognition-asr.md)
+  - [4.1 ASR Model Architectures](4.1-asr-model-architectures.md)
+  - [4.2 Lhotse Data Loading and Processing](4.2-lhotse-data-loading-and-processing.md)
+  - [4.3 ASR Training, Transcription, and Streaming](4.3-asr-training-transcription-and-streaming.md)
+- [5 Natural Language Processing (NLP)](5-natural-language-processing-nlp.md)
+  - [5.1 Machine Translation](5.1-machine-translation.md)
+  - [5.2 Token and Text Classification](5.2-token-and-text-classification.md)
+- [6 Text-to-Speech (TTS)](6-text-to-speech-tts.md)
+  - [6.1 TTS Models and G2P Modules](6.1-tts-models-and-g2p-modules.md)
+- [7 Development and Infrastructure](7-development-and-infrastructure.md)
+  - [7.1 CI/CD Pipeline and Testing](7.1-ci-cd-pipeline-and-testing.md)
+  - [7.2 Dependencies and Environment Setup](7.2-dependencies-and-environment-setup.md)

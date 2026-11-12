@@ -1,0 +1,33 @@
+# DeepWiki 索引 — allenai/recoma
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 244705 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation and Setup](1.1-installation-and-setup.md)
+  - [1.2 Quick Start Guide](1.2-quick-start-guide.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 Inference Orchestration](2.1-inference-orchestration.md)
+  - [2.2 Search System](2.2-search-system.md)
+  - [2.3 Model System Architecture](2.3-model-system-architecture.md)
+  - [2.4 Dataset Reading Pipeline](2.4-dataset-reading-pipeline.md)
+- [3 Language Model Integrations](3-language-model-integrations.md)
+  - [3.1 OpenAI Integration](3.1-openai-integration.md)
+  - [3.2 LiteLLM Integration](3.2-litellm-integration.md)
+  - [3.3 Generator Base Classes](3.3-generator-base-classes.md)
+- [4 Reasoning Controllers](4-reasoning-controllers.md)
+  - [4.1 React Controller](4.1-react-controller.md)
+  - [4.2 Least-to-Most Controller](4.2-least-to-most-controller.md)
+  - [4.3 Decomposition Controller](4.3-decomposition-controller.md)
+- [5 Utility Models and Tools](5-utility-models-and-tools.md)
+  - [5.1 Mathematical Program Execution](5.1-mathematical-program-execution.md)
+  - [5.2 Prompted Language Models](5.2-prompted-language-models.md)
+  - [5.3 Answer Extraction and Formatting](5.3-answer-extraction-and-formatting.md)
+- [6 Configuration System](6-configuration-system.md)
+  - [6.1 Language Model Configurations](6.1-language-model-configurations.md)
+  - [6.2 Task-Specific Configurations](6.2-task-specific-configurations.md)
+  - [6.3 Prompt Templates](6.3-prompt-templates.md)
+- [7 Advanced Features](7-advanced-features.md)
+  - [7.1 State Visualization and Debugging](7.1-state-visualization-and-debugging.md)
+  - [7.2 Search Control and Early Stopping](7.2-search-control-and-early-stopping.md)
+  - [7.3 Extending the Framework](7.3-extending-the-framework.md)

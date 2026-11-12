@@ -1,0 +1,3582 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/deepseek_v41/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/deepseek_v41/__init__.py",
+   "summary": "DeepSeek V4.1 硬件隔离模型入口：按平台（NVIDIA/AMD）与能力选择 dspark/vl/quant_config 的具体实现 re-export。",
+   "tags": [
+    "entry-point",
+    "hardware-isolation",
+    "barrel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/deepseek_v41/amd/__init__.py",
+   "summary": "amd 子包初始化。",
+   "tags": [
+    "package"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "type": "file",
+   "name": "dspark.py",
+   "filePath": "vllm/models/deepseek_v41/amd/dspark.py",
+   "summary": "DeepSeek-V4.1 DSpark draft（AMD）：复用目标模型 attention，AMD 版 Markov 头走 fused_markov 融合算子，context KV 复用 DSV4 融合 insert。",
+   "tags": [
+    "dspark",
+    "spec-decode",
+    "amd"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/model.py",
+   "type": "file",
+   "name": "model.py",
+   "filePath": "vllm/models/deepseek_v41/amd/model.py",
+   "summary": "DeepSeek-V4.1 AMD 主模型（1448 行）：ROCm sparse-MLA 选择、Engram（ngram 哈希共享表）、DecoderReplayLayers（SWA bounded replay）、MonoDecodeLayer 集成与 EAGLE3/PP/LoRA 接口。",
+   "tags": [
+    "deepseek-v41",
+    "amd",
+    "model",
+    "engram"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "document:vllm/models/deepseek_v41/amd/mono/README.md",
+   "type": "document",
+   "name": "amd/mono/README.md",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/README.md",
+   "summary": "mono decode 层设计文档（99 行）：MI355X 上两 launch 融合整层（seam+attention front / attention back+FFN seam+MoE+all-reduce），FlyDSL 持久 kernel、epoch 标签跨 rank 同步与逐阶段复现 vLLM 数值路径的契约说明。",
+   "tags": [
+    "documentation",
+    "design",
+    "flydsl"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/__init__.py",
+   "summary": "mono 子包 barrel。",
+   "tags": [
+    "package",
+    "barrel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/attention/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/__init__.py",
+   "summary": "mono attention 子包 barrel。",
+   "tags": [
+    "package",
+    "barrel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "type": "file",
+   "name": "back.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "summary": "K2 attention back 阶段（FlyDSL emit 库）：split attention、combine+inverse RoPE、wo_a/wo_b GEMV 与 bf16 partial 推送，含 KV 记录读取与 epoch 管理。",
+   "tags": [
+    "flydsl",
+    "attention-back",
+    "emit"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/attention/device.py",
+   "type": "file",
+   "name": "device.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/device.py",
+   "summary": "设备级 emit 原语库（51 个小函数）：MFMA/permute/wave 归约/bf16-fp8 打包/自旋等待等 gfx942-gfx950 内联汇编发射器与 Mailbox 跨 CTA 同步。",
+   "tags": [
+    "flydsl",
+    "device-primitives",
+    "mfma"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "type": "file",
+   "name": "front.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "summary": "K1 attention front 阶段（FlyDSL）：wqkv GEMV、q/kv norm+KV insert、wq_b+RoPE 产 Q，含 x 半程量化与 LDS 上下文构建。",
+   "tags": [
+    "flydsl",
+    "attention-front",
+    "emit"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/attention/gemv.py",
+   "type": "file",
+   "name": "gemv.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/gemv.py",
+   "summary": "attention 共享 GEMV emit 库：分步装载与 MFMA 步进（gfx942/通用双路径）、行求和与 span 存取。",
+   "tags": [
+    "flydsl",
+    "gemv",
+    "emit"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/attention/plan.py",
+   "type": "file",
+   "name": "plan.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/plan.py",
+   "summary": "attention 平面规划：Dims 维度包、token tile/pair/byte 布局与前后阶段 scratch 尺寸计算。",
+   "tags": [
+    "plan",
+    "dims",
+    "scratch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/common/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/__init__.py",
+   "summary": "mono common 子包 barrel。",
+   "tags": [
+    "package",
+    "barrel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/common/arch.py",
+   "type": "file",
+   "name": "arch.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/arch.py",
+   "summary": "目标架构判定（GFX942 与否），全部 mono 文件的分派开关。",
+   "tags": [
+    "arch",
+    "dispatch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/common/gfx942.py",
+   "type": "file",
+   "name": "gfx942.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/gfx942.py",
+   "summary": "gfx942 专用 emit：FP8/FP4 MFMA、FNuz 转换（OCP→FNUz）、pair i64 与 acc 固定。",
+   "tags": [
+    "gfx942",
+    "emit",
+    "fp8"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/common/mx.py",
+   "type": "file",
+   "name": "mx.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/mx.py",
+   "summary": "MX（microscaling）编码 emit：E8M0 code 计算、FP4/FP8 tile 装载与缩放 MFMA。",
+   "tags": [
+    "mx",
+    "microscaling",
+    "emit"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/common/ops.py",
+   "type": "file",
+   "name": "ops.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/ops.py",
+   "summary": "通用 emit 运算库：shuffle/归约/ballot/bf16 pair/FP8 打包等 32 个原语。",
+   "tags": [
+    "emit",
+    "primitives"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/common/peer_memory.py",
+   "type": "file",
+   "name": "peer_memory.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/peer_memory.py",
+   "summary": "跨 rank 对等内存：PeerBuffer（aiter UncachedIpcHeap 对称非缓存缓冲，每 rank 持全部 peer 地址）与不支持时的异常。",
+   "tags": [
+    "peer-memory",
+    "ipc",
+    "all-reduce"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/common/plan.py",
+   "type": "file",
+   "name": "plan.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/plan.py",
+   "summary": "mono 公共规划：任务表（CTA b 跑 b, b+256, ...）、Shard 分片与 source digest。",
+   "tags": [
+    "plan",
+    "task-table",
+    "shard"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/common/sync.py",
+   "type": "file",
+   "name": "sync.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/sync.py",
+   "summary": "kernel 内同步原语：device/system 作用域地址（Space/Addr）与 Mailbox（tag 对发布/等待，epoch 轮转无需清零，graph-safe）。",
+   "tags": [
+    "sync",
+    "mailbox",
+    "epoch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/keylist.py",
+   "type": "file",
+   "name": "keylist.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/keylist.py",
+   "summary": "key 列表 Triton kernel：为 attention back 准备滑窗+topk 压缩行 key 表。",
+   "tags": [
+    "triton",
+    "keylist"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "type": "file",
+   "name": "layer.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/layer.py",
+   "summary": "mono 层组装（1150 行）：build_mono_k1/k2/ffn 三个 launch 的 FlyDSL 构建（seam→front / back→FFN seam→MoE）、scratch 布局与 run_ffn 执行。",
+   "tags": [
+    "flydsl",
+    "layer-build",
+    "orchestration"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/runner.py",
+   "type": "file",
+   "name": "runner.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/runner.py",
+   "summary": "mono 运行器：DSV41MonoLayer（对 DeepseekV4DecoderLayer.forward 的 drop-in 替身）持 AttnWeights/MonoLayerWeights 与按 shape 键控的已构建 kernel 缓存。",
+   "tags": [
+    "runner",
+    "drop-in",
+    "weights"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/sources.py",
+   "type": "file",
+   "name": "sources.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/sources.py",
+   "summary": "FlyDSL 源登记（source digest）。",
+   "tags": [
+    "sources",
+    "digest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/stages/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/__init__.py",
+   "summary": "stages 子包 barrel。",
+   "tags": [
+    "package",
+    "barrel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/stages/dims.py",
+   "type": "file",
+   "name": "dims.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/dims.py",
+   "summary": "MoE/FFN 维度包（Dims）。",
+   "tags": [
+    "dims",
+    "moe"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "type": "file",
+   "name": "gemv.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "summary": "stages 共享 GEMV emit（FP8 步进双路径与 poll 拷贝）。",
+   "tags": [
+    "flydsl",
+    "gemv",
+    "fp8"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "type": "file",
+   "name": "moe.py",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "summary": "MoE 阶段（2148 行 emit 库）：router（bf16 GEMV+sqrtsoftplus+bias top-6）、shared expert（MXFP8 clamp SiLU）、ug（MXFP4×MXFP8）、down（路由权序求和）与 rank 序精确 all-reduce。",
+   "tags": [
+    "flydsl",
+    "moe",
+    "mxfp4",
+    "router"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/dspark.py:DSparkDeepseekV4Model",
+   "type": "class",
+   "name": "DSparkDeepseekV4Model",
+   "filePath": "vllm/models/deepseek_v41/amd/dspark.py",
+   "summary": "V4.1 DSpark draft 骨干（5 个方法）。",
+   "tags": [
+    "dspark",
+    "backbone"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    65,
+    225
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/dspark.py:_insert_context_kv",
+   "type": "function",
+   "name": "_insert_context_kv",
+   "filePath": "vllm/models/deepseek_v41/amd/dspark.py",
+   "summary": "已 kv_norm 的 context KV 做 RoPE+量化+分页插入（复用 DSV4 融合 insert）。",
+   "tags": [
+    "dspark",
+    "kv-insert"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    228,
+    294
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/dspark.py:DSparkDeepseekV4ForCausalLM",
+   "type": "class",
+   "name": "DSparkDeepseekV4ForCausalLM",
+   "filePath": "vllm/models/deepseek_v41/amd/dspark.py",
+   "summary": "V4.1 DSpark 入口（16 个方法，AMD fused_markov/Markov 头）。",
+   "tags": [
+    "dspark",
+    "causal-lm",
+    "amd"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    297,
+    557
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV4MoE",
+   "type": "class",
+   "name": "DeepseekV4MoE",
+   "filePath": "vllm/models/deepseek_v41/amd/model.py",
+   "summary": "V4.1 的 MoE 层（复用 V4 AMD MoE 基座）。",
+   "tags": [
+    "moe"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    87,
+    150
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/model.py:_select_dsv4_attn_cls",
+   "type": "function",
+   "name": "_select_dsv4_attn_cls",
+   "filePath": "vllm/models/deepseek_v41/amd/model.py",
+   "summary": "为 V4.1 选择 ROCm sparse-MLA 实现。",
+   "tags": [
+    "attention",
+    "selection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    153,
+    175
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/model.py:_use_sequence_parallel",
+   "type": "function",
+   "name": "_use_sequence_parallel",
+   "filePath": "vllm/models/deepseek_v41/amd/model.py",
+   "summary": "是否启用 sequence parallel。",
+   "tags": [
+    "sequence-parallel"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    178,
+    180
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV4DecoderLayer",
+   "type": "class",
+   "name": "DeepseekV4DecoderLayer",
+   "filePath": "vllm/models/deepseek_v41/amd/model.py",
+   "summary": "V4.1 解码层（4 个方法）：mHC seam、Engram 前置、replay 层与 mono/常规路径选择。",
+   "tags": [
+    "decoder-layer",
+    "engram"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    183,
+    492
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV4Model",
+   "type": "class",
+   "name": "DeepseekV4Model",
+   "filePath": "vllm/models/deepseek_v41/amd/model.py",
+   "summary": "V4.1 骨干（12 个方法，EagleModelMixin）：层栈、Engram 哈希收集与 DBO ubatch 支持。",
+   "tags": [
+    "backbone",
+    "eagle"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    495,
+    1191
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/model.py:_linear_scale_param_name",
+   "type": "function",
+   "name": "_linear_scale_param_name",
+   "filePath": "vllm/models/deepseek_v41/amd/model.py",
+   "summary": "量化方法为权重 scale 注册的参数名（原生 MXFP8 checkpoint [32,32] 块 scale 处理）。",
+   "tags": [
+    "quantization",
+    "scales"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1194,
+    1205
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/model.py:_make_deepseek_v4_weights_mapper",
+   "type": "function",
+   "name": "_make_deepseek_v4_weights_mapper",
+   "filePath": "vllm/models/deepseek_v41/amd/model.py",
+   "summary": "V4.1 checkpoint 权重 mapper。",
+   "tags": [
+    "weights",
+    "mapper"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1208,
+    1272
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV4MixtureOfExperts",
+   "type": "class",
+   "name": "DeepseekV4MixtureOfExperts",
+   "filePath": "vllm/models/deepseek_v41/amd/model.py",
+   "summary": "MoE 能力 trait。",
+   "tags": [
+    "interface",
+    "moe"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1275,
+    1309
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV41LLMForCausalLM",
+   "type": "class",
+   "name": "DeepseekV41LLMForCausalLM",
+   "filePath": "vllm/models/deepseek_v41/amd/model.py",
+   "summary": "V4.1 主入口（13 个方法）：EAGLE3/PP/LoRA、多模态哨兵与 lm_head。",
+   "tags": [
+    "causal-lm",
+    "entry-point"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1312,
+    1448
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/mono/attention/back.py:BackBuild",
+   "type": "class",
+   "name": "BackBuild",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "summary": "attention back 阶段构建参数。",
+   "tags": [
+    "flydsl",
+    "build"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    102,
+    106
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:key_rec",
+   "type": "function",
+   "name": "key_rec",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "summary": "读取 vLLM KV 记录布局（e4m3+UE8M0/RoPE bf16，584B/行）。",
+   "tags": [
+    "kv-records",
+    "layout"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    162,
+    188
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:stage_split",
+   "type": "function",
+   "name": "stage_split",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "summary": "split attention 阶段 emit（滑窗+topk 压缩行，base-2 softmax 含 attention sink）。",
+   "tags": [
+    "flydsl",
+    "split-attention"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    240,
+    500
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:stage_combine",
+   "type": "function",
+   "name": "stage_combine",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "summary": "combine+inverse RoPE 阶段 emit。",
+   "tags": [
+    "flydsl",
+    "combine"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    509,
+    604
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:stage_woa",
+   "type": "function",
+   "name": "stage_woa",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "summary": "wo_a GEMV 阶段 emit。",
+   "tags": [
+    "flydsl",
+    "woa"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    611,
+    646
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:stage_wob",
+   "type": "function",
+   "name": "stage_wob",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "summary": "wo_b GEMV 阶段 emit（bf16 partial 推给每个 rank）。",
+   "tags": [
+    "flydsl",
+    "wob"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    664,
+    688
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:back_plan",
+   "type": "function",
+   "name": "back_plan",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "summary": "back 阶段任务表规划。",
+   "tags": [
+    "plan"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    694,
+    712
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:back_context",
+   "type": "function",
+   "name": "back_context",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "summary": "back 阶段上下文（LDS 联合布局）。",
+   "tags": [
+    "context",
+    "lds"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    737,
+    767
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:run_back",
+   "type": "function",
+   "name": "run_back",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "summary": "back launch 的 FlyDSL 主构建（K2 前半）。",
+   "tags": [
+    "flydsl",
+    "launcher"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    814,
+    925
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/mono/attention/device.py:Mailbox",
+   "type": "class",
+   "name": "Mailbox",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/device.py",
+   "summary": "跨 CTA 标签同步邮箱（tag 对发布/等待）。",
+   "tags": [
+    "sync",
+    "mailbox"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    388,
+    470
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/mono/attention/front.py:FrontBuild",
+   "type": "class",
+   "name": "FrontBuild",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "summary": "attention front 阶段构建参数。",
+   "tags": [
+    "flydsl",
+    "build"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    105,
+    110
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:stage_xq",
+   "type": "function",
+   "name": "stage_xq",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "summary": "x 查询装载阶段 emit。",
+   "tags": [
+    "flydsl",
+    "xq"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    149,
+    179
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:stage_kt",
+   "type": "function",
+   "name": "stage_kt",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "summary": "key 表装载阶段 emit。",
+   "tags": [
+    "flydsl",
+    "kt"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    186,
+    222
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:quant_x_half",
+   "type": "function",
+   "name": "quant_x_half",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "summary": "x 半程（bf16 hi+lo）MXFP8 量化 emit。",
+   "tags": [
+    "flydsl",
+    "quantization"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    245,
+    277
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:stage_wqkv",
+   "type": "function",
+   "name": "stage_wqkv",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "summary": "wqkv GEMV 阶段 emit。",
+   "tags": [
+    "flydsl",
+    "wqkv"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    281,
+    293
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:stage_qkv",
+   "type": "function",
+   "name": "stage_qkv",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "summary": "q/kv norm + KV insert + wq_b+RoPE 主阶段 emit。",
+   "tags": [
+    "flydsl",
+    "qkv",
+    "kv-insert"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    300,
+    440
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:stage_wqb",
+   "type": "function",
+   "name": "stage_wqb",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "summary": "wq_b GEMV+RoPE 阶段 emit。",
+   "tags": [
+    "flydsl",
+    "wqb"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    468,
+    499
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:front_context",
+   "type": "function",
+   "name": "front_context",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "summary": "front 阶段上下文（LDS 联合布局）。",
+   "tags": [
+    "context",
+    "lds"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    521,
+    548
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:run_front",
+   "type": "function",
+   "name": "run_front",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "summary": "front launch 的 FlyDSL 主构建（K1 后半）。",
+   "tags": [
+    "flydsl",
+    "launcher"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    552,
+    687
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/gemv.py:gemv_loads",
+   "type": "function",
+   "name": "gemv_loads",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/gemv.py",
+   "summary": "GEMV 权重装载 emit（gfx942/通用双路径）。",
+   "tags": [
+    "flydsl",
+    "gemv"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    93,
+    119
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/gemv.py:gemv_mfmas",
+   "type": "function",
+   "name": "gemv_mfmas",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/gemv.py",
+   "summary": "GEMV MFMA 步进 emit。",
+   "tags": [
+    "flydsl",
+    "gemv",
+    "mfma"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    193,
+    207
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/gemv.py:rows_loads",
+   "type": "function",
+   "name": "rows_loads",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/gemv.py",
+   "summary": "行装载 emit。",
+   "tags": [
+    "flydsl",
+    "rows"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    226,
+    268
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/mono/attention/plan.py:Dims",
+   "type": "class",
+   "name": "Dims",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/plan.py",
+   "summary": "attention 维度包（HEAD_DIM/KEYS/ROPE 等）。",
+   "tags": [
+    "dims"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    56,
+    97
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/plan.py:front_scratch",
+   "type": "function",
+   "name": "front_scratch",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/plan.py",
+   "summary": "front 阶段 scratch 尺寸。",
+   "tags": [
+    "scratch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    131,
+    144
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/attention/plan.py:back_scratch",
+   "type": "function",
+   "name": "back_scratch",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/attention/plan.py",
+   "summary": "back 阶段 scratch 尺寸。",
+   "tags": [
+    "scratch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    147,
+    167
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/common/arch.py:target_arch",
+   "type": "function",
+   "name": "target_arch",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/arch.py",
+   "summary": "目标架构判定（GFX942 开关，全 mono 分派用）。",
+   "tags": [
+    "arch",
+    "dispatch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    19,
+    22
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/common/gfx942.py:pin_acc",
+   "type": "function",
+   "name": "pin_acc",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/gfx942.py",
+   "summary": "acc 固定 emit（gfx942）。",
+   "tags": [
+    "gfx942",
+    "emit"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    60,
+    81
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/common/gfx942.py:ocp_to_fnuz",
+   "type": "function",
+   "name": "ocp_to_fnuz",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/gfx942.py",
+   "summary": "OCP→FNUz FP8 布局转换 emit。",
+   "tags": [
+    "gfx942",
+    "fp8"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    91,
+    100
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/common/gfx942.py:fp4x8_fnuz",
+   "type": "function",
+   "name": "fp4x8_fnuz",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/gfx942.py",
+   "summary": "FP4×8 FNUz 打包 emit。",
+   "tags": [
+    "gfx942",
+    "fp4"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    103,
+    117
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/mono/common/peer_memory.py:MonoUnsupported",
+   "type": "class",
+   "name": "MonoUnsupported",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/peer_memory.py",
+   "summary": "平台不支持 mono 时的异常。",
+   "tags": [
+    "exception"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    17,
+    18
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/mono/common/peer_memory.py:_DeviceBytes",
+   "type": "class",
+   "name": "_DeviceBytes",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/peer_memory.py",
+   "summary": "设备字节容器。",
+   "tags": [
+    "device-memory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    33,
+    43
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/mono/common/peer_memory.py:PeerBuffer",
+   "type": "class",
+   "name": "PeerBuffer",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/peer_memory.py",
+   "summary": "跨 rank 对称非缓存缓冲（aiter UncachedIpcHeap）：每 rank 持全部 peer 地址，push 为 system 作用域 (value,tag) 存储。",
+   "tags": [
+    "peer-memory",
+    "ipc"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    46,
+    104
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/mono/common/plan.py:ShardError",
+   "type": "class",
+   "name": "ShardError",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/plan.py",
+   "summary": "分片错误。",
+   "tags": [
+    "error"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    77,
+    78
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/mono/common/plan.py:Shard",
+   "type": "class",
+   "name": "Shard",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/plan.py",
+   "summary": "张量分片描述。",
+   "tags": [
+    "shard"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    82,
+    93
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/mono/common/sync.py:Space",
+   "type": "class",
+   "name": "Space",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/sync.py",
+   "summary": "地址作用域枚举（device/system）。",
+   "tags": [
+    "sync",
+    "scope"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    39,
+    41
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/mono/common/sync.py:Addr",
+   "type": "class",
+   "name": "Addr",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/sync.py",
+   "summary": "带作用域的地址。",
+   "tags": [
+    "sync",
+    "address"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    45,
+    52
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/mono/common/sync.py:Mailbox",
+   "type": "class",
+   "name": "Mailbox",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/common/sync.py",
+   "summary": "epoch 标签邮箱：CTA0 在全员标记完成后推进 epoch 词，步间不清零、graph 安全。",
+   "tags": [
+    "sync",
+    "epoch",
+    "graph-safe"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    70,
+    164
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/keylist.py:_keylist_kernel",
+   "type": "function",
+   "name": "_keylist_kernel",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/keylist.py",
+   "summary": "key 列表构建 Triton kernel（滑窗+topk 压缩行）。",
+   "tags": [
+    "triton",
+    "keylist"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    31,
+    77
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/keylist.py:launch",
+   "type": "function",
+   "name": "launch",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/keylist.py",
+   "summary": "keylist kernel 的启动封装。",
+   "tags": [
+    "triton",
+    "launch"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    80,
+    120
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/mono/layer.py:MonoBuild",
+   "type": "class",
+   "name": "MonoBuild",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/layer.py",
+   "summary": "mono 构建参数（shape/tp/experts/topk/ug_groups 键）。",
+   "tags": [
+    "flydsl",
+    "build"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    73,
+    91
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/layer.py:scratch_layout",
+   "type": "function",
+   "name": "scratch_layout",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/layer.py",
+   "summary": "整层 scratch 布局（各阶段联合）。",
+   "tags": [
+    "scratch"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    138,
+    173
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/layer.py:store_x8",
+   "type": "function",
+   "name": "store_x8",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/layer.py",
+   "summary": "x8（MXFP8 norm 输出）存储 emit。",
+   "tags": [
+    "flydsl",
+    "x8"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    200,
+    221
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/layer.py:build_mono_k1",
+   "type": "function",
+   "name": "build_mono_k1",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/layer.py",
+   "summary": "K1 launch 构建：seam（fold/gate/Sinkhorn/norm）+ attention front。",
+   "tags": [
+    "flydsl",
+    "k1",
+    "seam"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    234,
+    494
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/layer.py:run_ffn",
+   "type": "function",
+   "name": "run_ffn",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/layer.py",
+   "summary": "FFN launch 运行（无 attention back：push vLLM 未归约 wo_b 后走同款 seam+MoE）。",
+   "tags": [
+    "ffn",
+    "launch"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    526,
+    668
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/layer.py:build_mono_k2",
+   "type": "function",
+   "name": "build_mono_k2",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/layer.py",
+   "summary": "K2 launch 构建：attention back + FFN seam + MoE + all-reduce。",
+   "tags": [
+    "flydsl",
+    "k2"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    671,
+    983
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/layer.py:build_mono_ffn",
+   "type": "function",
+   "name": "build_mono_ffn",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/layer.py",
+   "summary": "FFN launch 构建（层外全层 kernel 的替代路径）。",
+   "tags": [
+    "flydsl",
+    "ffn"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    989,
+    1150
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/mono/runner.py:AttnWeights",
+   "type": "class",
+   "name": "AttnWeights",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/runner.py",
+   "summary": "attention 权重集合。",
+   "tags": [
+    "weights",
+    "attention"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    72,
+    106
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/mono/runner.py:MonoLayerWeights",
+   "type": "class",
+   "name": "MonoLayerWeights",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/runner.py",
+   "summary": "单层全部权重（attention+MoE）。",
+   "tags": [
+    "weights"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    110,
+    179
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/mono/runner.py:DSV41MonoLayer",
+   "type": "class",
+   "name": "DSV41MonoLayer",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/runner.py",
+   "summary": "mono 层运行器（9 个方法）：DeepseekV4DecoderLayer.forward 的 drop-in 替身，按 shape 键控缓存已构建 kernel，两 launch 执行整层。",
+   "tags": [
+    "runner",
+    "drop-in"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    182,
+    569
+   ]
+  },
+  {
+   "id": "class:vllm/models/deepseek_v41/amd/mono/stages/dims.py:Dims",
+   "type": "class",
+   "name": "Dims",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/dims.py",
+   "summary": "MoE/FFN 维度包。",
+   "tags": [
+    "dims",
+    "moe"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    24,
+    60
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/stages/gemv.py:_fp8_step_mfma_942",
+   "type": "function",
+   "name": "_fp8_step_mfma_942",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "summary": "FP8 MFMA 步进（gfx942 路径）。",
+   "tags": [
+    "flydsl",
+    "fp8",
+    "mfma"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    162,
+    211
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/stages/gemv.py:_fp8_step_mfma",
+   "type": "function",
+   "name": "_fp8_step_mfma",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "summary": "FP8 MFMA 步进（通用路径）。",
+   "tags": [
+    "flydsl",
+    "fp8",
+    "mfma"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    214,
+    269
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/stages/gemv.py:gemv_fp8_loads",
+   "type": "function",
+   "name": "gemv_fp8_loads",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "summary": "FP8 GEMV 装载 emit。",
+   "tags": [
+    "flydsl",
+    "fp8"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    291,
+    312
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/stages/gemv.py:gemv_fp8_mfmas",
+   "type": "function",
+   "name": "gemv_fp8_mfmas",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "summary": "FP8 GEMV MFMA 序列 emit。",
+   "tags": [
+    "flydsl",
+    "fp8"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    315,
+    339
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/stages/gemv.py:poll_copy",
+   "type": "function",
+   "name": "poll_copy",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "summary": "激活 poll 拷贝 emit（先发权重装载再 poll 激活）。",
+   "tags": [
+    "flydsl",
+    "poll"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    344,
+    373
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:scratch_layout",
+   "type": "function",
+   "name": "scratch_layout",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "summary": "MoE scratch 布局。",
+   "tags": [
+    "scratch"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    197,
+    227
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:stage_router",
+   "type": "function",
+   "name": "stage_router",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "summary": "router 阶段 emit（bf16 GEMV、f32 logits）。",
+   "tags": [
+    "flydsl",
+    "router"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    348,
+    388
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:stage_route",
+   "type": "function",
+   "name": "stage_route",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "summary": "route 阶段 emit（sqrtsoftplus+bias、top-6、×1.5 重归一）。",
+   "tags": [
+    "flydsl",
+    "route"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    407,
+    478
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:load_route",
+   "type": "function",
+   "name": "load_route",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "summary": "路由结果装载 emit。",
+   "tags": [
+    "flydsl",
+    "route"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    482,
+    591
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:stage_shared",
+   "type": "function",
+   "name": "stage_shared",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "summary": "shared expert 阶段 emit（MXFP8 GEMV+clamp SiLU）。",
+   "tags": [
+    "flydsl",
+    "shared-expert"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    614,
+    643
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:ug_pass",
+   "type": "function",
+   "name": "ug_pass",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "summary": "ug（gate/up，MXFP4×MXFP8）主循环 emit。",
+   "tags": [
+    "flydsl",
+    "ug"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1002,
+    1057
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:ug_epilogue",
+   "type": "function",
+   "name": "ug_epilogue",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "summary": "ug 收尾 emit。",
+   "tags": [
+    "flydsl",
+    "ug"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1102,
+    1153
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:stage_down_942",
+   "type": "function",
+   "name": "stage_down_942",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "summary": "down 阶段（gfx942 路径）。",
+   "tags": [
+    "flydsl",
+    "down",
+    "gfx942"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1499,
+    1539
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:stage_down",
+   "type": "function",
+   "name": "stage_down",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "summary": "down 阶段 emit（+路由权 top-k 序 +shared）。",
+   "tags": [
+    "flydsl",
+    "down"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1544,
+    1615
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:down_mfma",
+   "type": "function",
+   "name": "down_mfma",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "summary": "down MFMA emit。",
+   "tags": [
+    "flydsl",
+    "down",
+    "mfma"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1821,
+    1845
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:moe_smem",
+   "type": "function",
+   "name": "moe_smem",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "summary": "MoE 共享内存布局。",
+   "tags": [
+    "smem"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1928,
+    1946
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:moe_context",
+   "type": "function",
+   "name": "moe_context",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "summary": "MoE 上下文构建。",
+   "tags": [
+    "context"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1988,
+    2022
+   ]
+  },
+  {
+   "id": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:run_moe",
+   "type": "function",
+   "name": "run_moe",
+   "filePath": "vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "summary": "MoE launch 主构建（含 rank 序精确 all-reduce 收尾）。",
+   "tags": [
+    "flydsl",
+    "moe",
+    "launcher"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    2026,
+    2135
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "class:vllm/models/deepseek_v41/amd/dspark.py:DSparkDeepseekV4Model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "class:vllm/models/deepseek_v41/amd/dspark.py:DSparkDeepseekV4Model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "function:vllm/models/deepseek_v41/amd/dspark.py:_insert_context_kv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "class:vllm/models/deepseek_v41/amd/dspark.py:DSparkDeepseekV4ForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "class:vllm/models/deepseek_v41/amd/dspark.py:DSparkDeepseekV4ForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV4MoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV4MoE",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "function:vllm/models/deepseek_v41/amd/model.py:_select_dsv4_attn_cls",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "function:vllm/models/deepseek_v41/amd/model.py:_use_sequence_parallel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV4DecoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV4DecoderLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV4Model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV4Model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "function:vllm/models/deepseek_v41/amd/model.py:_linear_scale_param_name",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "function:vllm/models/deepseek_v41/amd/model.py:_make_deepseek_v4_weights_mapper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV4MixtureOfExperts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV4MixtureOfExperts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV41LLMForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV41LLMForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/attention/back.py:BackBuild",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/attention/back.py:BackBuild",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:key_rec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:key_rec",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:stage_split",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:stage_split",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:stage_combine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:stage_combine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:stage_woa",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:stage_woa",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:stage_wob",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:stage_wob",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:back_plan",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:back_plan",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:back_context",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:back_context",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:run_back",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/back.py:run_back",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/device.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/attention/device.py:Mailbox",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/device.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/attention/device.py:Mailbox",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/attention/front.py:FrontBuild",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/attention/front.py:FrontBuild",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:stage_xq",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:stage_xq",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:stage_kt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:stage_kt",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:quant_x_half",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:quant_x_half",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:stage_wqkv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:stage_wqkv",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:stage_qkv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:stage_qkv",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:stage_wqb",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:stage_wqb",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:front_context",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:front_context",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:run_front",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/front.py:run_front",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/gemv.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/gemv.py:gemv_loads",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/gemv.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/gemv.py:gemv_loads",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/gemv.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/gemv.py:gemv_mfmas",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/gemv.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/gemv.py:gemv_mfmas",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/gemv.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/gemv.py:rows_loads",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/gemv.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/gemv.py:rows_loads",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/plan.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/attention/plan.py:Dims",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/plan.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/attention/plan.py:Dims",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/plan.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/plan.py:front_scratch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/plan.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/plan.py:front_scratch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/plan.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/plan.py:back_scratch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/plan.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/attention/plan.py:back_scratch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/arch.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/common/arch.py:target_arch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/arch.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/common/arch.py:target_arch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/gfx942.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/common/gfx942.py:pin_acc",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/gfx942.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/common/gfx942.py:pin_acc",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/gfx942.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/common/gfx942.py:ocp_to_fnuz",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/gfx942.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/common/gfx942.py:ocp_to_fnuz",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/gfx942.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/common/gfx942.py:fp4x8_fnuz",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/gfx942.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/common/gfx942.py:fp4x8_fnuz",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/peer_memory.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/common/peer_memory.py:MonoUnsupported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/peer_memory.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/common/peer_memory.py:MonoUnsupported",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/peer_memory.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/common/peer_memory.py:_DeviceBytes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/peer_memory.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/common/peer_memory.py:PeerBuffer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/peer_memory.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/common/peer_memory.py:PeerBuffer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/plan.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/common/plan.py:ShardError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/plan.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/common/plan.py:ShardError",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/plan.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/common/plan.py:Shard",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/plan.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/common/plan.py:Shard",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/sync.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/common/sync.py:Space",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/sync.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/common/sync.py:Space",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/sync.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/common/sync.py:Addr",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/sync.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/common/sync.py:Addr",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/sync.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/common/sync.py:Mailbox",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/sync.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/common/sync.py:Mailbox",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/keylist.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/keylist.py:_keylist_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/keylist.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/keylist.py:launch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/keylist.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/keylist.py:launch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/layer.py:MonoBuild",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/layer.py:MonoBuild",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/layer.py:scratch_layout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/layer.py:scratch_layout",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/layer.py:store_x8",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/layer.py:store_x8",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/layer.py:build_mono_k1",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/layer.py:build_mono_k1",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/layer.py:run_ffn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/layer.py:run_ffn",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/layer.py:build_mono_k2",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/layer.py:build_mono_k2",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/layer.py:build_mono_ffn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/layer.py:build_mono_ffn",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/runner.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/runner.py:AttnWeights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/runner.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/runner.py:AttnWeights",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/runner.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/runner.py:MonoLayerWeights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/runner.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/runner.py:MonoLayerWeights",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/runner.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/runner.py:DSV41MonoLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/runner.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/runner.py:DSV41MonoLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/dims.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/stages/dims.py:Dims",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/dims.py",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/stages/dims.py:Dims",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/gemv.py:_fp8_step_mfma_942",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/gemv.py:_fp8_step_mfma",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/gemv.py:gemv_fp8_loads",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/gemv.py:gemv_fp8_loads",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/gemv.py:gemv_fp8_mfmas",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/gemv.py:gemv_fp8_mfmas",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/gemv.py:poll_copy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/gemv.py:poll_copy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:scratch_layout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:scratch_layout",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:stage_router",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:stage_router",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:stage_route",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:stage_route",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:load_route",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:load_route",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:stage_shared",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:stage_shared",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:ug_pass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:ug_pass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:ug_epilogue",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:ug_epilogue",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:stage_down_942",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:stage_down_942",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:stage_down",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:stage_down",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:down_mfma",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:down_mfma",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:moe_smem",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:moe_smem",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:moe_context",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:moe_context",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:run_moe",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/stages/moe.py:run_moe",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/__init__.py",
+   "target": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/__init__.py",
+   "target": "file:vllm/models/deepseek_v41/amd/vl_model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/__init__.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/dspark.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/__init__.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/vl_model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/__init__.py",
+   "target": "file:vllm/models/deepseek_v41/quant_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/__init__.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "file:vllm/model_executor/kernels/mhc/torch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "file:vllm/model_executor/models/qwen3_dspark.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "file:vllm/models/common/ops/sequence_parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "file:vllm/models/deepseek_v41/amd/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "file:vllm/models/deepseek_v41/amd/ops/draft_lm_head.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "file:vllm/models/deepseek_v41/amd/ops/fused_markov.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/dspark.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/dspark/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/model_executor/layers/mhc.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/models/common/ops/sequence_parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/models/deepseek_v4/amd/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/models/deepseek_v4/common/spec_decode.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono_decode.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/models/deepseek_v41/amd/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/models/deepseek_v41/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/models/deepseek_v41/common/engram.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/models/deepseek_v41/common/mm_preprocess.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/models/deepseek_v41/decoder_replay_layers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/models/deepseek_v41/nvidia/model_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/model.py",
+   "target": "file:vllm/v1/worker/ubatching.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/attention/device.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/attention/gemv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/attention/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/arch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/gfx942.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/device.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/arch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/device.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/gfx942.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/attention/device.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/attention/gemv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/attention/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/gemv.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/attention/device.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/gemv.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/arch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/gemv.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/gfx942.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/attention/plan.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/arch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/mx.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/arch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/mx.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/ops.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/arch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/ops.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/gfx942.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/ops.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/common/sync.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/keylist.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/attention/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/keylist.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/attention/back.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/attention/device.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/attention/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/mx.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/sync.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/sources.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/stages/dims.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/stages/moe_shape.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/stages/seam.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/runner.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/attention/front.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/runner.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/attention/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/runner.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/arch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/runner.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/peer_memory.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/runner.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/runner.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/keylist.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/runner.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/layer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/runner.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/stages/dims.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/runner.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/stages/moe_shape.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/sources.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/dims.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/arch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/gfx942.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/mx.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/sync.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/arch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/gfx942.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/mx.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/common/sync.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/stages/dims.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/stages/gemv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/stages/moe_plan.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/stages/moe_shape.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/stages/router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/deepseek_v41/amd/mono/stages/moe.py",
+   "target": "file:vllm/models/deepseek_v41/amd/mono/stages/seam.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV4Model",
+   "target": "class:vllm/model_executor/models/interfaces.py:EagleModelMixin",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV4MixtureOfExperts",
+   "target": "class:vllm/model_executor/models/interfaces.py:MixtureOfExperts",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV41LLMForCausalLM",
+   "target": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV4MixtureOfExperts",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV41LLMForCausalLM",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsPP",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV41LLMForCausalLM",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsEagle3",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/amd/model.py:DeepseekV41LLMForCausalLM",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/amd/mono/runner.py:DSV41MonoLayer",
+   "target": "class:vllm/models/deepseek_v41/amd/mono/layer.py:MonoBuild",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/amd/mono/runner.py:DSV41MonoLayer",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/layer.py:build_mono_k1",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/amd/mono/runner.py:DSV41MonoLayer",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/layer.py:build_mono_k2",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/deepseek_v41/amd/mono/runner.py:DSV41MonoLayer",
+   "target": "function:vllm/models/deepseek_v41/amd/mono/layer.py:build_mono_ffn",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

@@ -1,0 +1,32 @@
+# DeepWiki 索引 — Eronred/aso-skills
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 194278 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started & Installation](1.1-getting-started-installation.md)
+  - [1.2 First ASO Audit Walkthrough](1.2-first-aso-audit-walkthrough.md)
+  - [1.3 Repository Layout](1.3-repository-layout.md)
+- [2 Skill System Architecture](2-skill-system-architecture.md)
+  - [2.1 The aso-router Dispatcher](2.1-the-aso-router-dispatcher.md)
+  - [2.2 app-marketing-context: Shared State](2.2-app-marketing-context-shared-state.md)
+  - [2.3 Authoring & Validating Skills](2.3-authoring-validating-skills.md)
+- [3 ASO Core Skills](3-aso-core-skills.md)
+  - [3.1 aso-audit: Scoring Framework](3.1-aso-audit-scoring-framework.md)
+  - [3.2 keyword-research & metadata-optimization](3.2-keyword-research-metadata-optimization.md)
+  - [3.3 Competitor Analysis & Positioning](3.3-competitor-analysis-positioning.md)
+  - [3.4 Platform & Seasonal Variants](3.4-platform-seasonal-variants.md)
+- [4 Creative, Growth & Revenue Skills](4-creative-growth-revenue-skills.md)
+  - [4.1 Creative Assets](4.1-creative-assets.md)
+  - [4.2 Growth & User Acquisition](4.2-growth-user-acquisition.md)
+  - [4.3 Revenue & Retention](4.3-revenue-retention.md)
+  - [4.4 Analytics, Testing & Recovery](4.4-analytics-testing-recovery.md)
+  - [4.5 Market Intelligence](4.5-market-intelligence.md)
+- [5 Data Integrations & Tool Registry](5-data-integrations-tool-registry.md)
+  - [5.1 Appeeky MCP Server & REST Endpoints](5.1-appeeky-mcp-server-rest-endpoints.md)
+  - [5.2 App Store Connect & Appeeky Connect](5.2-app-store-connect-appeeky-connect.md)
+  - [5.3 Third-Party Integrations](5.3-third-party-integrations.md)
+- [6 Documentation Site & Guides](6-documentation-site-guides.md)
+  - [6.1 Docs Configuration & Conventions](6.1-docs-configuration-conventions.md)
+  - [6.2 Workflow Guides](6.2-workflow-guides.md)
+- [7 Glossary](7-glossary.md)

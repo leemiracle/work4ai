@@ -1,0 +1,1440 @@
+{
+ "nodes": [
+  {
+   "id": "document:packages/core/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/core/README.md",
+   "summary": "core 包组总图：session log、system-prompt 组装、tool registry、agent 词汇与默认 loop 构成产品 API 主干（package-group 地图文档）。",
+   "tags": [
+    "documentation",
+    "package-group",
+    "overview"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/core/agent/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/core/agent/README.md",
+   "summary": "dsh-agent 包参考：Agent handle、活动 registry、进程本地 initiator scope 与 agent/* 事件词汇，面向构建/扩展 agent 的插件、UI 与编排者。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "agent"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/core/agent/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/core/agent/package.json",
+   "summary": "dsh-agent 包清单：声明 cordis/schemastery peer 依赖与 dsh-scope/dsh-session 等 workspace 依赖及 exports 子路径。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/core/agent/src/archive-admission.ts",
+   "type": "file",
+   "name": "archive-admission.ts",
+   "filePath": "packages/core/agent/src/archive-admission.ts",
+   "summary": "agent 包对 Workspace registry archive admission 的 turn 家族应答：运行中 turn 上报 session-activity，session-stop 时以 user 取消该 turn（不保留 inbox）。",
+   "tags": [
+    "archive-admission",
+    "workspace",
+    "event-listener"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/core/agent/src/archive-admission.ts:installTurnArchiveAdmission",
+   "type": "function",
+   "name": "installTurnArchiveAdmission",
+   "filePath": "packages/core/agent/src/archive-admission.ts",
+   "lineRange": [
+    26,
+    38
+   ],
+   "summary": "安装 workspace archive admission：session-activity 答 turn 家族、session-stop 以 user 取消运行中 turn 且不保留 inbox（排队输入随日志 splice 丢弃）。",
+   "tags": [
+    "archive-admission",
+    "event-listener",
+    "installer"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/core/agent/src/consumed-work.ts",
+   "type": "file",
+   "name": "consumed-work.ts",
+   "filePath": "packages/core/agent/src/consumed-work.ts",
+   "summary": "agent 日志的已消费工作记账：区分进入过 step 的 turn、认领后失败/被停的 turn 与取消丢弃未跑的输入。",
+   "tags": [
+    "session-fold",
+    "accounting",
+    "pure-function"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/core/agent/src/consumed-work.ts:accountsForClaim",
+   "type": "function",
+   "name": "accountsForClaim",
+   "filePath": "packages/core/agent/src/consumed-work.ts",
+   "lineRange": [
+    42,
+    59
+   ],
+   "summary": "判定 turn 结束原因是否为已认领输入记账：completed 不算，blocked/aborted/interrupted/error 及后端新增变体一律算。",
+   "tags": [
+    "predicate",
+    "turn-reason"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/core/agent/src/consumed-work.ts:foldConsumedWork",
+   "type": "function",
+   "name": "foldConsumedWork",
+   "filePath": "packages/core/agent/src/consumed-work.ts",
+   "lineRange": [
+    69,
+    109
+   ],
+   "summary": "折叠 session 事件得到 ConsumedWork：最近一个进入过 step 或认领后异常结束的 turn/end，加上取消丢弃未跑标记。",
+   "tags": [
+    "session-fold",
+    "accounting"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/core/agent/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/core/agent/src/index.ts",
+   "summary": "dsh-agent 服务入口：AgentRegistry（ctx.agents）跟踪活动 agent、AsyncLocalStorage initiator 链归因、工厂委托创建/恢复，并 re-export 全部 agent 词汇与 dispatch/projection。",
+   "tags": [
+    "service-definition",
+    "agent-registry",
+    "entry-point",
+    "initiator-scope"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/core/agent/src/index.ts:AgentRegistry",
+   "type": "class",
+   "name": "AgentRegistry",
+   "filePath": "packages/core/agent/src/index.ts",
+   "lineRange": [
+    246,
+    677
+   ],
+   "summary": "Agent 服务（ctx.agents，Service Definition+Provider）：Map 跟踪活动 agent、AsyncLocalStorage initiator 链、工厂委托创建/恢复、typert lookup/context host 注册、initiator 排水与销毁。",
+   "tags": [
+    "service",
+    "registry",
+    "initiator-scope",
+    "typert-host"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/core/agent/src/model-selection.ts",
+   "type": "file",
+   "name": "model-selection.ts",
+   "filePath": "packages/core/agent/src/model-selection.ts",
+   "summary": "Agent 拥有的模型选择：modelSelection 持久 projection、AgentModel 读写门面与 pre-step 模型切换通知（insert 用户消息标注 assistant 代际切换）。",
+   "tags": [
+    "model-selection",
+    "projection",
+    "session-fold"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/core/agent/src/model-selection.ts:installModelSelection",
+   "type": "function",
+   "name": "installModelSelection",
+   "filePath": "packages/core/agent/src/model-selection.ts",
+   "lineRange": [
+    157,
+    174
+   ],
+   "summary": "向 agent/pre-step waterfall 挂 prepend 监听：固定路由与上次 request header 不同且将发请求时，插入模型切换通知用户消息。",
+   "tags": [
+    "pre-step",
+    "waterfall",
+    "model-switch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/core/agent/src/model-selection.ts:AgentModel",
+   "type": "class",
+   "name": "AgentModel",
+   "filePath": "packages/core/agent/src/model-selection.ts",
+   "lineRange": [
+    98,
+    121
+   ],
+   "summary": "Agent 模型选择门面（Model 接口 Consumer）：current 按 pending ?? lastUsed ?? live options 解析，select 追加 model/selection 持久事件。",
+   "tags": [
+    "model-selection",
+    "facade",
+    "session-append"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/core/agent/src/projection.ts",
+   "type": "file",
+   "name": "projection.ts",
+   "filePath": "packages/core/agent/src/projection.ts",
+   "summary": "turnBoundary 共享纯 fold：从 session 的 turn/step 事件投影当前 turn/step 边界（ProjectionDefinition，stateVersion 2）。",
+   "tags": [
+    "projection",
+    "session-fold",
+    "pure-function"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/core/agent/src/runtime-types.ts",
+   "type": "file",
+   "name": "runtime-types.ts",
+   "filePath": "packages/core/agent/src/runtime-types.ts",
+   "summary": "公开 agent 运行时类型与事件词汇：AgentOptions（provider/model/reasoningEffort 活访问器）、CancelOptions、Model 接口及 system-prompt AssembleContext 合并扩展。",
+   "tags": [
+    "type-definition",
+    "runtime-types",
+    "event-vocabulary"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/core/agent/src/types.ts",
+   "type": "file",
+   "name": "types.ts",
+   "filePath": "packages/core/agent/src/types.ts",
+   "summary": "仅类型模块：公开 live Agent handle、InboxTarget/InboxState 词汇，向 workspace 与 typert-protocol 做声明合并（SessionActivityKindMap/TypertLookupMap）。",
+   "tags": [
+    "type-definition",
+    "declaration-merging",
+    "inbox"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/core/agent/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/core/agent/tsconfig.json",
+   "summary": "dsh-agent TypeScript 叶配置：extends tsconfig.base.json，rootDir src、outDir lib/types，引用 workspace 依赖包。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/core/agent/tsdown.config.ts",
+   "type": "file",
+   "name": "tsdown.config.ts",
+   "filePath": "packages/core/agent/tsdown.config.ts",
+   "summary": "dsh-agent tsdown 打包配置（runtime bundle 构建）。",
+   "tags": [
+    "configuration",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/core/agent-default-model/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/core/agent-default-model/README.md",
+   "summary": "dsh-agent-default-model 包参考：部署级默认模型选择，面向选择/配置/调试新建 agent 初始模型的用户与维护者。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "model-selection"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/core/agent-default-model/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/core/agent-default-model/package.json",
+   "summary": "dsh-agent-default-model 包清单：workspace 依赖 dsh-agent/dsh-llm/dsh-settings/dsh-config-editor。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/core/agent-default-model/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/core/agent-default-model/src/index.ts",
+   "summary": "agentDefaultModel 服务：volatile Config 引用持有部署默认模型选择，currentSelection 读取、saveSelection 经 configEditor 按提交序串行落盘。",
+   "tags": [
+    "service-definition",
+    "model-selection",
+    "config"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/core/agent-default-model/src/index.ts:AgentDefaultModelConfig",
+   "type": "class",
+   "name": "AgentDefaultModelConfig",
+   "filePath": "packages/core/agent-default-model/src/index.ts",
+   "lineRange": [
+    48,
+    95
+   ],
+   "summary": "agentDefaultModel 服务（Service Provider）：volatile Config 引用读写部署默认模型选择，saveSelection 经 configEditor fiber entry 按提交序串行提交。",
+   "tags": [
+    "service",
+    "default-model",
+    "config-editor"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/core/agent-default-model/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/core/agent-default-model/tsconfig.json",
+   "summary": "dsh-agent-default-model TypeScript 叶配置。",
+   "tags": [
+    "configuration",
+    "typescript"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/core/agent-default-model/tsdown.config.ts",
+   "type": "file",
+   "name": "tsdown.config.ts",
+   "filePath": "packages/core/agent-default-model/tsdown.config.ts",
+   "summary": "dsh-agent-default-model tsdown 打包配置。",
+   "tags": [
+    "configuration",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/core/agent-loop/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/core/agent-loop/README.md",
+   "summary": "dsh-agent-loop 包参考：默认 agent 驱动，讲 agent 如何被创建、turn 与 step 如何运行。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "agent-loop"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/core/agent-loop/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/core/agent-loop/package.json",
+   "summary": "dsh-agent-loop 包清单：workspace 依赖 agent/session/llm/tools/system-prompt/session-projection/session-persistence 等核心面。",
+   "tags": [
+    "configuration",
+    "package-manifest"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/core/agent-loop/src/agent.ts",
+   "type": "file",
+   "name": "agent.ts",
+   "filePath": "packages/core/agent-loop/src/agent.ts",
+   "summary": "ReactLoopAgent：默认 Agent 驱动，turn/step 状态机（idle/maintenance/running），每个请求从 session log 派生——inbox 认领、prompt 组装、流式累积、工具批执行与结束记账。",
+   "tags": [
+    "agent-driver",
+    "state-machine",
+    "turn-step"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/core/agent-loop/src/agent.ts:abortedCancelCause",
+   "type": "function",
+   "name": "abortedCancelCause",
+   "filePath": "packages/core/agent-loop/src/agent.ts",
+   "lineRange": [
+    94,
+    109
+   ],
+   "summary": "读取 loop 自有 signal abort 时 cancel() 传入的 cause，拷贝为 turn/end 可记录的封闭字段集（剥离 fetch 挂上的 stack）。",
+   "tags": [
+    "abort-handling",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/core/agent-loop/src/agent.ts:ReactLoopAgent",
+   "type": "class",
+   "name": "ReactLoopAgent",
+   "filePath": "packages/core/agent-loop/src/agent.ts",
+   "lineRange": [
+    112,
+    745
+   ],
+   "summary": "默认 Agent 驱动实现：phase 状态机推进 turn/step，认领 inbox 输入、组装 prompt、驱动 LLM 流式尝试、执行工具批并把结束原因写入 session log。",
+   "tags": [
+    "agent-driver",
+    "state-machine",
+    "orchestration"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/core/agent-loop/src/assistant-stream.ts",
+   "type": "file",
+   "name": "assistant-stream.ts",
+   "filePath": "packages/core/agent-loop/src/assistant-stream.ts",
+   "summary": "AssistantStreamAttempt：一次模型尝试的进程本地流帧框架——Accumulator+BlockAssembler 折叠紧凑流并按序发布瞬态帧。",
+   "tags": [
+    "streaming",
+    "assistant",
+    "fold"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/core/agent-loop/src/assistant-stream.ts:AssistantStreamAttempt",
+   "type": "class",
+   "name": "AssistantStreamAttempt",
+   "filePath": "packages/core/agent-loop/src/assistant-stream.ts",
+   "lineRange": [
+    18,
+    140
+   ],
+   "summary": "单次模型尝试的流框架：折叠 chunk 为紧凑流记录、按序发布瞬态帧并保证终止帧唯一。",
+   "tags": [
+    "streaming",
+    "fold",
+    "assistant"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/core/agent-loop/src/inbox.ts",
+   "type": "file",
+   "name": "inbox.ts",
+   "filePath": "packages/core/agent-loop/src/inbox.ts",
+   "summary": "驱动拥有的持久 Inbox：inboxProjectionDefinition（splice 校验拒绝非法持久历史）+ ReactLoopInbox 命令门面（next-turn/next-step 双队列认领与取消记账）。",
+   "tags": [
+    "inbox",
+    "projection",
+    "session-fold"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/core/agent-loop/src/inbox.ts:ReactLoopInbox",
+   "type": "class",
+   "name": "ReactLoopInbox",
+   "filePath": "packages/core/agent-loop/src/inbox.ts",
+   "lineRange": [
+    73,
+    232
+   ],
+   "summary": "持久 Inbox 实现（InboxContract）：认领/排队/取消 next-turn 与 next-step 消息，所有变更以 agent/inbox/spliced 事件记账。",
+   "tags": [
+    "inbox",
+    "durable-state",
+    "command-facade"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/core/agent-loop/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/core/agent-loop/src/index.ts",
+   "summary": "dsh-agent-loop 服务入口：AgentLoop 插件（AgentFactory）创建/恢复 ReactLoopAgent、注册 modelSelection 与 inbox projections、装载声明式 agents 配置并拥有有序 teardown。",
+   "tags": [
+    "service-definition",
+    "agent-factory",
+    "plugin",
+    "entry-point"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/core/agent-loop/src/index.ts:raceAbort",
+   "type": "function",
+   "name": "raceAbort",
+   "filePath": "packages/core/agent-loop/src/index.ts",
+   "lineRange": [
+    112,
+    125
+   ],
+   "summary": "操作 Promise 与 abort 信号竞速，避免 unhandled rejection 并返回先到者。",
+   "tags": [
+    "abort-handling",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/core/agent-loop/src/index.ts:raceAbortCall",
+   "type": "function",
+   "name": "raceAbortCall",
+   "filePath": "packages/core/agent-loop/src/index.ts",
+   "lineRange": [
+    128,
+    149
+   ],
+   "summary": "LLM 调用与 abort 信号竞速：释放被放弃调用的资源并把 abort 归因为取消。",
+   "tags": [
+    "abort-handling",
+    "llm-call"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/core/agent-loop/src/index.ts:applyLauncherIdentities",
+   "type": "function",
+   "name": "applyLauncherIdentities",
+   "filePath": "packages/core/agent-loop/src/index.ts",
+   "lineRange": [
+    236,
+    249
+   ],
+   "summary": "给声明式 agents 配置应用 launcher 身份键，保证组合内身份唯一。",
+   "tags": [
+    "config",
+    "launcher-identity"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/core/agent-loop/src/index.ts:validateConfiguredAgents",
+   "type": "function",
+   "name": "validateConfiguredAgents",
+   "filePath": "packages/core/agent-loop/src/index.ts",
+   "lineRange": [
+    272,
+    287
+   ],
+   "summary": "校验声明式 agent 配置（sessionId 唯一等），失败即启动报错。",
+   "tags": [
+    "config",
+    "validation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/core/agent-loop/src/index.ts:FactoryOwnership",
+   "type": "class",
+   "name": "FactoryOwnership",
+   "filePath": "packages/core/agent-loop/src/index.ts",
+   "lineRange": [
+    54,
+    109
+   ],
+   "summary": "工厂级所有权：活动 agent teardown 集合+启动任务集+teardown AbortController，确保关闭时序。",
+   "tags": [
+    "ownership",
+    "teardown",
+    "lifecycle"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/core/agent-loop/src/index.ts:AgentLoop",
+   "type": "class",
+   "name": "AgentLoop",
+   "filePath": "packages/core/agent-loop/src/index.ts",
+   "lineRange": [
+    290,
+    833
+   ],
+   "summary": "agent-loop 插件服务（AgentFactory Provider）：注册 modelSelection/inbox projections、setFactory、声明式 agents 配置装载与恢复、系统提示 provider/model 变量。",
+   "tags": [
+    "service",
+    "agent-factory",
+    "plugin"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/core/agent-loop/src/runtime-context.ts",
+   "type": "file",
+   "name": "runtime-context.ts",
+   "filePath": "packages/core/agent-loop/src/runtime-context.ts",
+   "summary": "loop 拥有的两条 surface 消息投影：SystemPromptProjection 决定渲染系统提示如何上 surface（首提示保留节点 0/序列内 append 或替换），RuntimeContextProjection 维护动态运行时上下文快照。",
+   "tags": [
+    "system-prompt",
+    "projection",
+    "surface"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/core/agent-loop/src/runtime-context.ts:SystemPromptProjection",
+   "type": "class",
+   "name": "SystemPromptProjection",
+   "filePath": "packages/core/agent-loop/src/runtime-context.ts",
+   "lineRange": [
+    68,
+    116
+   ],
+   "summary": "决定渲染系统提示如何到达 surface：首提示保留节点 0、可续系列 append 变更文本、不可续路由或清除时规范化系统节点。",
+   "tags": [
+    "system-prompt",
+    "projection",
+    "surface"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/core/agent-loop/src/runtime-context.ts:RuntimeContextProjection",
+   "type": "class",
+   "name": "RuntimeContextProjection",
+   "filePath": "packages/core/agent-loop/src/runtime-context.ts",
+   "lineRange": [
+    119,
+    169
+   ],
+   "summary": "动态 runtime-context 快照用户消息的投影与清除（'Current runtime context' 系列）。",
+   "tags": [
+    "runtime-context",
+    "projection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/core/agent-loop/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/core/agent-loop/tsconfig.json",
+   "summary": "dsh-agent-loop TypeScript 叶配置。",
+   "tags": [
+    "configuration",
+    "typescript"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/core/agent/src/archive-admission.ts",
+   "target": "function:packages/core/agent/src/archive-admission.ts:installTurnArchiveAdmission",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/agent/src/archive-admission.ts",
+   "target": "function:packages/core/agent/src/archive-admission.ts:installTurnArchiveAdmission",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/agent/src/archive-admission.ts",
+   "target": "file:packages/core/agent/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/archive-admission.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/archive-admission.ts",
+   "target": "file:packages/workspace/workspace/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/consumed-work.ts",
+   "target": "function:packages/core/agent/src/consumed-work.ts:accountsForClaim",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/agent/src/consumed-work.ts",
+   "target": "function:packages/core/agent/src/consumed-work.ts:foldConsumedWork",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/agent/src/consumed-work.ts",
+   "target": "function:packages/core/agent/src/consumed-work.ts:foldConsumedWork",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/agent/src/consumed-work.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/index.ts",
+   "target": "class:packages/core/agent/src/index.ts:AgentRegistry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/agent/src/index.ts",
+   "target": "class:packages/core/agent/src/index.ts:AgentRegistry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/agent/src/index.ts",
+   "target": "file:packages/core/agent/src/archive-admission.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/index.ts",
+   "target": "file:packages/core/agent/src/consumed-work.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/index.ts",
+   "target": "file:packages/core/agent/src/dispatch.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/index.ts",
+   "target": "file:packages/core/agent/src/model-selection.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/index.ts",
+   "target": "file:packages/core/agent/src/projection.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/index.ts",
+   "target": "file:packages/core/agent/src/runtime-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/index.ts",
+   "target": "file:packages/core/agent/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/index.ts",
+   "target": "file:packages/core/scope/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/index.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/model-selection.ts",
+   "target": "function:packages/core/agent/src/model-selection.ts:installModelSelection",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/agent/src/model-selection.ts",
+   "target": "function:packages/core/agent/src/model-selection.ts:installModelSelection",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/agent/src/model-selection.ts",
+   "target": "class:packages/core/agent/src/model-selection.ts:AgentModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/agent/src/model-selection.ts",
+   "target": "class:packages/core/agent/src/model-selection.ts:AgentModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/agent/src/model-selection.ts",
+   "target": "file:packages/core/agent/src/runtime-types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/model-selection.ts",
+   "target": "file:packages/core/agent/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/model-selection.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/model-selection.ts",
+   "target": "file:packages/llm/llm/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/model-selection.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/model-selection.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/projection.ts",
+   "target": "file:packages/core/agent/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/projection.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/projection.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/projection.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/runtime-types.ts",
+   "target": "file:packages/core/agent/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/runtime-types.ts",
+   "target": "file:packages/core/scope/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/runtime-types.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/runtime-types.ts",
+   "target": "file:packages/core/system-prompt/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/runtime-types.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/types.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/types.ts",
+   "target": "file:packages/llm/llm/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/types.ts",
+   "target": "file:packages/llm/llm/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/types.ts",
+   "target": "file:packages/typert/protocol/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/types.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent/src/types.ts",
+   "target": "file:packages/workspace/workspace/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-default-model/src/index.ts",
+   "target": "class:packages/core/agent-default-model/src/index.ts:AgentDefaultModelConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/agent-default-model/src/index.ts",
+   "target": "class:packages/core/agent-default-model/src/index.ts:AgentDefaultModelConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/agent-default-model/src/index.ts",
+   "target": "file:packages/boot/config-editor/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-default-model/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-default-model/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-default-model/src/index.ts",
+   "target": "file:packages/settings/settings/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/agent.ts",
+   "target": "function:packages/core/agent-loop/src/agent.ts:abortedCancelCause",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/agent.ts",
+   "target": "class:packages/core/agent-loop/src/agent.ts:ReactLoopAgent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/agent.ts",
+   "target": "class:packages/core/agent-loop/src/agent.ts:ReactLoopAgent",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/agent.ts",
+   "target": "file:packages/core/agent-loop/src/assistant-stream.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/agent.ts",
+   "target": "file:packages/core/agent-loop/src/inbox.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/agent.ts",
+   "target": "file:packages/core/agent-loop/src/runtime-context.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/agent.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/agent.ts",
+   "target": "file:packages/core/scope/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/agent.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/agent.ts",
+   "target": "file:packages/core/system-prompt/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/agent.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/agent.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/agent.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/assistant-stream.ts",
+   "target": "class:packages/core/agent-loop/src/assistant-stream.ts:AssistantStreamAttempt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/assistant-stream.ts",
+   "target": "class:packages/core/agent-loop/src/assistant-stream.ts:AssistantStreamAttempt",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/assistant-stream.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/assistant-stream.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/assistant-stream.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/inbox.ts",
+   "target": "class:packages/core/agent-loop/src/inbox.ts:ReactLoopInbox",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/inbox.ts",
+   "target": "class:packages/core/agent-loop/src/inbox.ts:ReactLoopInbox",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/inbox.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/inbox.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/inbox.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/inbox.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/index.ts",
+   "target": "function:packages/core/agent-loop/src/index.ts:raceAbort",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/index.ts",
+   "target": "function:packages/core/agent-loop/src/index.ts:raceAbortCall",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/index.ts",
+   "target": "function:packages/core/agent-loop/src/index.ts:applyLauncherIdentities",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/index.ts",
+   "target": "function:packages/core/agent-loop/src/index.ts:validateConfiguredAgents",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/index.ts",
+   "target": "class:packages/core/agent-loop/src/index.ts:FactoryOwnership",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/index.ts",
+   "target": "class:packages/core/agent-loop/src/index.ts:AgentLoop",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/index.ts",
+   "target": "class:packages/core/agent-loop/src/index.ts:AgentLoop",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/index.ts",
+   "target": "file:packages/core/agent-loop/src/agent.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/index.ts",
+   "target": "file:packages/core/agent-loop/src/constants.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/index.ts",
+   "target": "file:packages/core/agent-loop/src/inbox.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/index.ts",
+   "target": "file:packages/core/agent-loop/src/runtime-context.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/index.ts",
+   "target": "file:packages/core/system-prompt/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/index.ts",
+   "target": "file:packages/core/tools/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/index.ts",
+   "target": "file:packages/session/session-persistence/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/index.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/index.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/runtime-context.ts",
+   "target": "class:packages/core/agent-loop/src/runtime-context.ts:SystemPromptProjection",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/runtime-context.ts",
+   "target": "class:packages/core/agent-loop/src/runtime-context.ts:SystemPromptProjection",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/runtime-context.ts",
+   "target": "class:packages/core/agent-loop/src/runtime-context.ts:RuntimeContextProjection",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/runtime-context.ts",
+   "target": "class:packages/core/agent-loop/src/runtime-context.ts:RuntimeContextProjection",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/runtime-context.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/core/agent-loop/src/runtime-context.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "document:packages/core/README.md",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/core/README.md",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/core/agent/README.md",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/core/agent-default-model/README.md",
+   "target": "file:packages/core/agent-default-model/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/core/agent-loop/README.md",
+   "target": "file:packages/core/agent-loop/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/core/agent/package.json",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/core/agent-default-model/package.json",
+   "target": "file:packages/core/agent-default-model/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/core/agent-loop/package.json",
+   "target": "file:packages/core/agent-loop/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "class:packages/core/agent-loop/src/agent.ts:ReactLoopAgent",
+   "target": "class:packages/core/agent-loop/src/inbox.ts:ReactLoopInbox",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:packages/core/agent-loop/src/agent.ts:ReactLoopAgent",
+   "target": "class:packages/core/agent-loop/src/assistant-stream.ts:AssistantStreamAttempt",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:packages/core/agent-loop/src/agent.ts:ReactLoopAgent",
+   "target": "class:packages/core/agent-loop/src/runtime-context.ts:SystemPromptProjection",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:packages/core/agent-loop/src/index.ts:AgentLoop",
+   "target": "class:packages/core/agent-loop/src/agent.ts:ReactLoopAgent",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:packages/core/agent/src/index.ts:AgentRegistry",
+   "target": "function:packages/core/agent/src/archive-admission.ts:installTurnArchiveAdmission",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

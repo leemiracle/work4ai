@@ -1,0 +1,89 @@
+<!--
+SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+SPDX-License-Identifier: Apache-2.0
+-->
+
+# NVIDIA NeMo Fabric Examples
+
+This directory holds runnable NeMo Fabric examples.
+
+New to NeMo Fabric? Start with the [onboarding notebooks](notebooks/README.md) for a
+guided, human-facing tour of the Python SDK, then come back to the runnable
+examples below.
+
+## Onboarding notebooks
+
+[`notebooks`](notebooks/README.md) is a two-notebook tour of the Python SDK:
+a quickstart (configure, plan, diagnose, run, inspect, and multi-turn) and a
+variations notebook that runs the same agent across available harnesses and
+varies its capabilities and telemetry.
+
+## Code review agent
+
+[`code_review_agent`](code_review_agent/README.md) demonstrates the
+application-facing Python SDK contract:
+
+- constructing complete `FabricConfig` values with Pydantic models;
+- creating harness, environment, capability, and telemetry variants from deep
+  copies;
+- resolving relative workspace and skill paths with `base_dir`;
+- running maintained Hermes Agent, Codex, Claude, Cline, Deep Agents, and Pi
+  adapters through the Python SDK.
+
+Complete the [code-review setup](code_review_agent/README.md#set-up), then run:
+
+```bash
+just build-all
+.venv/bin/python -m examples.code_review_agent \
+  --input "Reply with exactly: NeMo Fabric works"
+```
+
+The Pi variant supports Relay telemetry with `nemo-relay>=0.9.0,<0.11.0` and an
+explicit extension path. Pass
+`--variant pi --relay --stream --pi-relay-extension-path <PATH>` to collect
+per-invocation model-turn ATOF records for successful Relay redirects, then
+print one JSON document containing `atof_records` and the separate terminal
+`result`. Relay retains redirect-decision marks in configured ATOF artifacts, while
+Pi's startup `model_redirect` marks are not included in `atof_records`.
+
+The [OpenShell Code Review example](code_review_agent/README.md#openshell-code-review) gives an agent the sample `calculator.py` repository inside a real OpenShell sandbox. Separate SDK exec calls start a runtime, perform two review turns, and stop the runtime. The demonstration records prompts, normalized results, command timings, and a readable transcript. Its image contains OpenClaw and the current NeMo Fabric SDK, and the runtime server can manage multiple runtime IDs in one sandbox.
+
+## LangGraph Custom Agent
+
+[`langgraph_custom_agent`](langgraph_custom_agent/README.md) demonstrates how
+to build a dedicated NeMo Fabric adapter for a custom agent. It uses a small
+email-phishing agent built directly with LangGraph and keeps each responsibility
+in a separate directory:
+
+- `consumer/` configures and runs the example with `FabricConfig`.
+- `adapter/` receives `AgentConfig` and manages `start`, `invoke`, and `stop`.
+- `agent/` contains the LangGraph application without NeMo Fabric-specific
+  code.
+
+Start with the model-backed example. You can then vary its model settings, add
+a stdio MCP tool, or enable NeMo Relay telemetry.
+
+## Harbor
+
+[`harbor`](harbor/README.md) demonstrates how to evaluate NeMo Fabric agents with
+Harbor while preserving NeMo Fabric's typed configuration workflow. Harbor manages
+the task environment, retries, concurrency, verification, rewards, and result
+layout. `FabricAgent` translates Harbor inputs—including the harness, model,
+skills, MCP servers, tool policy, and telemetry—into the final `FabricConfig`.
+
+The walkthroughs include:
+
+- a calculator walkthrough with a deterministic, credential-free integration
+  smoke test and optional LLM-backed Hermes Agent and Claude runs;
+- an NVIDIA-labs Object Oriented Agents (NOOA) BenchAgent walkthrough with
+  Harbor reward, Relay ATOF/ATIF verification, and a real SWE-Bench task; and
+- a SWE-Bench workflow for running Hermes Agent, OpenCode, and Claude, comparing
+  capability variations, inspecting Relay telemetry, and verifying real coding
+  tasks.
+
+Start with the shared setup and execution model in the
+[Harbor guide](harbor/README.md).
+
+## Native System Stats
+
+[`system_stats`](system_stats/README.md) demonstrates a real temporary worker-memory spike, native sampled peak/mean/range, retained per-invocation artifacts, and Linux cgroup constraints without a model endpoint or Relay collector.

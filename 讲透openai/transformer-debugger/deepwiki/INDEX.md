@@ -1,0 +1,31 @@
+# DeepWiki 索引 — openai/transformer-debugger
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 206255 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 System Architecture](1.1-system-architecture.md)
+  - [1.2 Setup and Installation](1.2-setup-and-installation.md)
+- [2 Transformer Model System](2-transformer-model-system.md)
+  - [2.1 Autoencoder System](2.1-autoencoder-system.md)
+  - [2.2 Model Context Interface](2.2-model-context-interface.md)
+- [3 Neuron Explanation System](3-neuron-explanation-system.md)
+  - [3.1 Explainer Routes API](3.1-explainer-routes-api.md)
+  - [3.2 Neuron Simulator](3.2-neuron-simulator.md)
+  - [3.3 Attention Head Scoring](3.3-attention-head-scoring.md)
+  - [3.4 Token Activation Pair Explainer](3.4-token-activation-pair-explainer.md)
+- [4 Activation Data Management](4-activation-data-management.md)
+  - [4.1 Neuron Records and Activation Records](4.1-neuron-records-and-activation-records.md)
+  - [4.2 Derived Scalar Types](4.2-derived-scalar-types.md)
+  - [4.3 Activation Datasets](4.3-activation-datasets.md)
+- [5 Activation Server](5-activation-server.md)
+  - [5.1 Interactive Model and Inference Routes](5.1-interactive-model-and-inference-routes.md)
+  - [5.2 File Utilities and Data Access](5.2-file-utilities-and-data-access.md)
+  - [5.3 Client Integration](5.3-client-integration.md)
+- [6 Neuron Viewer Frontend](6-neuron-viewer-frontend.md)
+  - [6.1 Transformer Debugger UI](6.1-transformer-debugger-ui.md)
+  - [6.2 Neuron Viewer Pages and Panes](6.2-neuron-viewer-pages-and-panes.md)
+- [7 Testing Infrastructure](7-testing-infrastructure.md)
+  - [7.1 Backend Tests](7.1-backend-tests.md)
+  - [7.2 Code Quality and Formatting](7.2-code-quality-and-formatting.md)
+- [8 Glossary](8-glossary.md)

@@ -1,0 +1,6500 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/attention/backends/mla/prefill/aiter_flash_attn.py",
+   "type": "file",
+   "name": "aiter_flash_attn.py",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/aiter_flash_attn.py",
+   "summary": "ROCm AITER FlashAttention MLA prefill 后端：直接调用 aiter.flash_attn_varlen_func，原生支持 q/k 与 v head dim 不同（qk headdim 与 v headdim 分离）。",
+   "tags": [
+    "aiter",
+    "rocm",
+    "mla",
+    "prefill",
+    "flash-attn"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/prefill/aiter_flash_attn.py:AiterFlashAttnPrefillBackend",
+   "type": "class",
+   "name": "AiterFlashAttnPrefillBackend",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/aiter_flash_attn.py",
+   "lineRange": [
+    27,
+    140
+   ],
+   "summary": "AITER prefill 后端：调用 flash_attn_varlen_func 原生处理 qk/v head dim 分离的 MLA prefill。",
+   "tags": [
+    "impl",
+    "aiter",
+    "prefill",
+    "varlen"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/mla/prefill/base.py",
+   "type": "file",
+   "name": "base.py",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/base.py",
+   "summary": "MLA prefill 后端抽象基类：MLADimensions 维度组、能力探测钩子与 prefill 前向契约，是 prefill/ 子系统全部实现的父类。",
+   "tags": [
+    "base-class",
+    "mla",
+    "prefill",
+    "abstraction",
+    "contract"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/prefill/base.py:MLAPrefillBackend",
+   "type": "class",
+   "name": "MLAPrefillBackend",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/base.py",
+   "lineRange": [
+    37,
+    193
+   ],
+   "summary": "MLA prefill 后端抽象基类：get_name/能力探测/compute_capability 校验与 prefill 前向契约。",
+   "tags": [
+    "abstract-base",
+    "mla",
+    "prefill",
+    "contract"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/mla/prefill/flash_attn.py",
+   "type": "file",
+   "name": "flash_attn.py",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/flash_attn.py",
+   "summary": "FlashAttention MLA prefill 后端：FA4MLAPrefillKernel（CuTe DSL 包装）与 varlen 路径双实现。",
+   "tags": [
+    "flash-attention",
+    "mla",
+    "prefill",
+    "fa4",
+    "cute-dsl"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/prefill/flash_attn.py:FA4MLAPrefillKernel",
+   "type": "class",
+   "name": "FA4MLAPrefillKernel",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/flash_attn.py",
+   "lineRange": [
+    60,
+    298
+   ],
+   "summary": "FA4 MLA prefill 内核的 CuTe DSL 包装（CompileKey 缓存，torch.compile 安全）。",
+   "tags": [
+    "fa4",
+    "cute-dsl",
+    "kernel-wrapper",
+    "cached"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/prefill/flash_attn.py:FlashAttnPrefillBackend",
+   "type": "class",
+   "name": "FlashAttnPrefillBackend",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/flash_attn.py",
+   "lineRange": [
+    301,
+    507
+   ],
+   "summary": "FlashAttention MLA prefill 后端：FA4 CuTe DSL 与 flash_attn varlen 双路径分流。",
+   "tags": [
+    "impl",
+    "mla",
+    "prefill",
+    "fa4"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/mla/prefill/flashinfer.py",
+   "type": "file",
+   "name": "flashinfer.py",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/flashinfer.py",
+   "summary": "FlashInfer MLA prefill 后端：trtllm-gen ragged prefill、per-layer 参数推断与 lse base 换算。",
+   "tags": [
+    "flashinfer",
+    "mla",
+    "prefill",
+    "trtllm-gen"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/prefill/flashinfer.py:FlashInferPrefillBackend",
+   "type": "class",
+   "name": "FlashInferPrefillBackend",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/flashinfer.py",
+   "lineRange": [
+    38,
+    264
+   ],
+   "summary": "FlashInfer MLA prefill 后端：trtllm-gen ragged prefill、per-layer 参数推断与 log2 lse 换算。",
+   "tags": [
+    "impl",
+    "flashinfer",
+    "prefill",
+    "trtllm-gen"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/mla/prefill/registry.py",
+   "type": "file",
+   "name": "registry.py",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/registry.py",
+   "summary": "MLA prefill 后端注册表：枚举全部 prefill 后端的 qualname 路径，提供惰性加载与运行时注册/覆盖。",
+   "tags": [
+    "registry",
+    "mla",
+    "prefill",
+    "enum",
+    "plugin"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/prefill/registry.py:MLAPrefillBackendEnum",
+   "type": "class",
+   "name": "MLAPrefillBackendEnum",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/registry.py",
+   "lineRange": [
+    37,
+    137
+   ],
+   "summary": "MLA prefill 后端枚举：aiter/flash_attn/flashinfer/tokenspeed/trtllm 等成员的 qualname 注册与 get_class 惰性解析。",
+   "tags": [
+    "registry",
+    "enum",
+    "lazy-loading"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/prefill/registry.py:register_mla_prefill_backend",
+   "type": "function",
+   "name": "register_mla_prefill_backend",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/registry.py",
+   "lineRange": [
+    143,
+    200
+   ],
+   "summary": "注册或覆盖 MLA prefill 后端实现（装饰器/直接注册双形态）。",
+   "tags": [
+    "registry",
+    "decorator",
+    "plugin"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/mla/prefill/selector.py",
+   "type": "file",
+   "name": "selector.py",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/selector.py",
+   "summary": "MLA prefill 后端选择器：先尊重 mla_prefill_backend 显式偏好，否则按设备能力与 MLA 维度自动优先级选择。",
+   "tags": [
+    "selector",
+    "mla",
+    "prefill",
+    "auto-selection"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/prefill/selector.py:MLAPrefillSelectorConfig",
+   "type": "class",
+   "name": "MLAPrefillSelectorConfig",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/selector.py",
+   "lineRange": [
+    24,
+    43
+   ],
+   "summary": "可哈希的 prefill 后端选择配置（dtype + MLA 维度，cache 友好）。",
+   "tags": [
+    "config",
+    "namedtuple",
+    "selection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/prefill/selector.py:get_mla_prefill_backend",
+   "type": "function",
+   "name": "get_mla_prefill_backend",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/selector.py",
+   "lineRange": [
+    46,
+    109
+   ],
+   "summary": "按配置选择 MLA prefill 后端：显式偏好优先，否则走自动优先级。",
+   "tags": [
+    "selector",
+    "auto-selection"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/prefill/selector.py:_auto_select_mla_prefill_backend",
+   "type": "function",
+   "name": "_auto_select_mla_prefill_backend",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/selector.py",
+   "lineRange": [
+    113,
+    132
+   ],
+   "summary": "按设备能力与 MLA 维度的优先级自动选择 prefill 后端。",
+   "tags": [
+    "auto-selection",
+    "priority"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/mla/prefill/tokenspeed_mla.py",
+   "type": "file",
+   "name": "tokenspeed_mla.py",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/tokenspeed_mla.py",
+   "summary": "TokenSpeed CuTe DSL MLA prefill 后端（模块级说明：Blackwell 优先路径）。",
+   "tags": [
+    "tokenspeed",
+    "cute-dsl",
+    "mla",
+    "prefill"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/prefill/tokenspeed_mla.py:TokenspeedMLAPrefillBackend",
+   "type": "class",
+   "name": "TokenspeedMLAPrefillBackend",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/tokenspeed_mla.py",
+   "lineRange": [
+    22,
+    199
+   ],
+   "summary": "TokenSpeed CuTe DSL 的 MLA prefill 实现。",
+   "tags": [
+    "impl",
+    "tokenspeed",
+    "cute-dsl",
+    "prefill"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py",
+   "type": "file",
+   "name": "trtllm_ragged.py",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py",
+   "summary": "TRT-LLM ragged MLA prefill 后端：ragged tensor 布局调用 trtllm-gen 内核，附 CuTe DSL 支持探测。",
+   "tags": [
+    "trtllm",
+    "ragged",
+    "mla",
+    "prefill"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py:TrtllmRaggedPrefillBackend",
+   "type": "class",
+   "name": "TrtllmRaggedPrefillBackend",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py",
+   "lineRange": [
+    36,
+    257
+   ],
+   "summary": "TRT-LLM ragged MLA prefill 后端：ragged 布局调 trtllm-gen 内核。",
+   "tags": [
+    "impl",
+    "trtllm",
+    "ragged",
+    "prefill"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py:is_cute_dsl_mla_prefill_supported",
+   "type": "function",
+   "name": "is_cute_dsl_mla_prefill_supported",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py",
+   "lineRange": [
+    25,
+    33
+   ],
+   "summary": "探测当前环境是否支持 CuTe DSL MLA prefill。",
+   "tags": [
+    "cute-dsl",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/mla/prefill/zen_cpu_sdpa.py",
+   "type": "file",
+   "name": "zen_cpu_sdpa.py",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/zen_cpu_sdpa.py",
+   "summary": "AMD Zen CPU 的 zentorch SDPA MLA prefill 后端：用 zentorch_sdpa 替换逐请求注意力，融合 score+softmax+matmul。",
+   "tags": [
+    "zentorch",
+    "cpu",
+    "amd-zen",
+    "mla",
+    "prefill"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/prefill/zen_cpu_sdpa.py:ZenCPUSDPAMLAPrefillBackend",
+   "type": "class",
+   "name": "ZenCPUSDPAMLAPrefillBackend",
+   "filePath": "vllm/v1/attention/backends/mla/prefill/zen_cpu_sdpa.py",
+   "lineRange": [
+    22,
+    106
+   ],
+   "summary": "zentorch SDPA 变体后端：继承通用 CPU SDPA prefill 后端并替换为 zentorch_sdpa 融合内核。",
+   "tags": [
+    "impl",
+    "zentorch",
+    "cpu",
+    "sdpa"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "type": "file",
+   "name": "rocm_aiter_mla.py",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "summary": "ROCm AITER MLA 后端（体量最大的 MLA 后端）：ASM decode/Gluon small-head/segmented DCP verify/FP8 fused prefill 多路由与 DCP decode 路由选择。",
+   "tags": [
+    "aiter",
+    "rocm",
+    "mla",
+    "dcp",
+    "asm",
+    "gluon"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:AiterMLABackend",
+   "type": "class",
+   "name": "AiterMLABackend",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    499,
+    598
+   ],
+   "summary": "AITER MLA 后端声明类：FP8 fused prefill/Gluon decode/segmented verify 等能力探测。",
+   "tags": [
+    "backend",
+    "aiter",
+    "mla",
+    "rocm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:AiterMLADecodeMetadata",
+   "type": "class",
+   "name": "AiterMLADecodeMetadata",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    626,
+    663
+   ],
+   "summary": "AITER MLA decode 元数据 dataclass。",
+   "tags": [
+    "metadata",
+    "dataclass",
+    "decode"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:AiterMLAMetadataBuilder",
+   "type": "class",
+   "name": "AiterMLAMetadataBuilder",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    699,
+    1953
+   ],
+   "summary": "AITER MLA 元数据构建器（本文件核心）：decode/prefill/DCP verify 三路元数据与 persistent ASM decode 对齐处理。",
+   "tags": [
+    "metadata-builder",
+    "aiter",
+    "dcp-verify"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:AiterMLAHelper",
+   "type": "class",
+   "name": "AiterMLAHelper",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    2039,
+    2296
+   ],
+   "summary": "persistent ASM decode 的头数对齐 helper（AITER 要求 head 数为 16 的倍数，不足时 pad）。",
+   "tags": [
+    "helper",
+    "head-alignment",
+    "asm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:AiterMLAImpl",
+   "type": "class",
+   "name": "AiterMLAImpl",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    2299,
+    3264
+   ],
+   "summary": "AITER MLA 前向实现：decode 路由（ASM/Gluon/small-head）、prefill（fused FP8/分段）与 DCP verify。",
+   "tags": [
+    "impl",
+    "aiter",
+    "mla",
+    "decode-routing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_supports_fused_dcp_prefill_config",
+   "type": "function",
+   "name": "_supports_fused_dcp_prefill_config",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    70,
+    87
+   ],
+   "summary": "判定配置是否支持融合 DCP 上下文扩展 prefill。",
+   "tags": [
+    "dcp",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_segmented_mla_page_size",
+   "type": "function",
+   "name": "_segmented_mla_page_size",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    90,
+    102
+   ],
+   "summary": "取整除物理 KV 块的最大二次幂子页大小。",
+   "tags": [
+    "page-size",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_get_mla_gluon",
+   "type": "function",
+   "name": "_get_mla_gluon",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    106,
+    128
+   ],
+   "summary": "惰性加载 small-head Gluon MLA 入口。",
+   "tags": [
+    "gluon",
+    "lazy-loading"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_fp8_mla_prefill_supported",
+   "type": "function",
+   "name": "_fp8_mla_prefill_supported",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    132,
+    148
+   ],
+   "summary": "经 mla_prefill_ps_asm_fwd + mla_reduce_v1 探测 FP8 MLA prefill 可用性。",
+   "tags": [
+    "fp8",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_fused_mla_prefill_qkv_supported",
+   "type": "function",
+   "name": "_fused_mla_prefill_qkv_supported",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    152,
+    171
+   ],
+   "summary": "fused_mla_prefill_qkv_fp8 限定 CDNA4（gfx950）。",
+   "tags": [
+    "fp8",
+    "cdna4",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_aiter_mla_native_h24_reducer_supported",
+   "type": "function",
+   "name": "_aiter_mla_native_h24_reducer_supported",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    175,
+    184
+   ],
+   "summary": "判定 AITER 的 JIT reducer 是否支持原生 H24/512 形状。",
+   "tags": [
+    "aiter",
+    "h24",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_aiter_mla_native_h24_metadata_supported",
+   "type": "function",
+   "name": "_aiter_mla_native_h24_metadata_supported",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    188,
+    205
+   ],
+   "summary": "判定 AITER 快速 MLA metadata planner 是否接受原生 H24。",
+   "tags": [
+    "aiter",
+    "h24",
+    "metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_aiter_mla_non_causal_asm_kernels",
+   "type": "function",
+   "name": "_aiter_mla_non_causal_asm_kernels",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    216,
+    227
+   ],
+   "summary": "判定该架构是否带非因果 MLA decode ASM 内核。",
+   "tags": [
+    "aiter",
+    "asm",
+    "non-causal",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_gluon_mla_decode_supported",
+   "type": "function",
+   "name": "_gluon_mla_decode_supported",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    231,
+    244
+   ],
+   "summary": "small-head Gluon MLA decode 内核仅有 gfx950（CDNA4）构建的可用性探测。",
+   "tags": [
+    "gluon",
+    "gfx950",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_gluon_kv_cache_in_bounds",
+   "type": "function",
+   "name": "_gluon_kv_cache_in_bounds",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    253,
+    268
+   ],
+   "summary": "判定该层 KV cache 是否保持在 Gluon 边界检查路径内。",
+   "tags": [
+    "gluon",
+    "bounds-check"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_segmented_dcp_verify_supported",
+   "type": "function",
+   "name": "_segmented_dcp_verify_supported",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    296,
+    305
+   ],
+   "summary": "判定配置能否在 segmented MLA 上运行 DCP verify。",
+   "tags": [
+    "segmented",
+    "dcp-verify",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_segmented_mla_fits_lds",
+   "type": "function",
+   "name": "_segmented_mla_fits_lds",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    308,
+    321
+   ],
+   "summary": "判定 AITER segmented MLA 能否在该 DCP verify 形状下编译（LDS 限制）。",
+   "tags": [
+    "segmented",
+    "lds",
+    "compile-check"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_triton_dcp_verify_supported",
+   "type": "function",
+   "name": "_triton_dcp_verify_supported",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    324,
+    335
+   ],
+   "summary": "判定 gfx942 能否回退到通用 split-KV 因果 target verify。",
+   "tags": [
+    "triton",
+    "dcp-verify",
+    "fallback"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_triton_dcp_verify_num_kv_splits",
+   "type": "function",
+   "name": "_triton_dcp_verify_num_kv_splits",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    344,
+    354
+   ],
+   "summary": "计算 Triton DCP verify 的 split-KV 分数。",
+   "tags": [
+    "triton",
+    "kv-splits"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_reserve_triton_dcp_verify_workspace",
+   "type": "function",
+   "name": "_reserve_triton_dcp_verify_workspace",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    357,
+    374
+   ],
+   "summary": "在 warmup 锁定 workspace 前预留 split-KV scratch。",
+   "tags": [
+    "workspace",
+    "dcp-verify"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_select_dcp_decode_route",
+   "type": "function",
+   "name": "_select_dcp_decode_route",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    424,
+    444
+   ],
+   "summary": "为本批选择一条 DCP decode 路由（row-view/segmented/triton 回退）。",
+   "tags": [
+    "dcp",
+    "routing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_asm_dcp_verify_configured",
+   "type": "function",
+   "name": "_asm_dcp_verify_configured",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    447,
+    459
+   ],
+   "summary": "判定 asm cprr DCP verify 在本进程是否可达。",
+   "tags": [
+    "asm",
+    "dcp-verify",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_aiter_mla_small_head_mode",
+   "type": "function",
+   "name": "_aiter_mla_small_head_mode",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    462,
+    486
+   ],
+   "summary": "small-head（<16）MLA decode 内核选择。",
+   "tags": [
+    "small-head",
+    "kernel-selection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_expand_page_indices_kernel",
+   "type": "function",
+   "name": "_expand_page_indices_kernel",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "lineRange": [
+    1957,
+    2036
+   ],
+   "summary": "把块表条目展开为逐 token 平铺页索引的 Triton 内核。",
+   "tags": [
+    "triton",
+    "page-index",
+    "kernel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "type": "file",
+   "name": "rocm_aiter_mla_sparse.py",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "summary": "ROCm AITER 稀疏 MLA 后端：kpool 尾部裁剪以适配 AITER 固定 top-k 宽度、Triton 索引转换与长 BF16 prefill 回退路径。",
+   "tags": [
+    "aiter",
+    "rocm",
+    "sparse",
+    "mla",
+    "kpool",
+    "triton"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:ROCMAiterMLASparseBackend",
+   "type": "class",
+   "name": "ROCMAiterMLASparseBackend",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "lineRange": [
+    350,
+    400
+   ],
+   "summary": "ROCm AITER 稀疏 MLA 后端声明类。",
+   "tags": [
+    "backend",
+    "sparse",
+    "mla",
+    "rocm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:ROCMAiterMLASparseMetadataBuilder",
+   "type": "class",
+   "name": "ROCMAiterMLASparseMetadataBuilder",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "lineRange": [
+    438,
+    747
+   ],
+   "summary": "ROCm 稀疏 MLA 元数据构建器：kpool 裁剪、索引转换与 sparse seqlen 生成。",
+   "tags": [
+    "metadata-builder",
+    "sparse",
+    "kpool"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:ROCMAiterMLASparseImpl",
+   "type": "class",
+   "name": "ROCMAiterMLASparseImpl",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "lineRange": [
+    779,
+    1229
+   ],
+   "summary": "ROCm 稀疏 MLA 前向实现：AITER 稀疏内核调用与 BF16 Triton 回退。",
+   "tags": [
+    "impl",
+    "sparse",
+    "aiter"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:_use_rocm_sparse_triton",
+   "type": "function",
+   "name": "_use_rocm_sparse_triton",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "lineRange": [
+    51,
+    71
+   ],
+   "summary": "为 AITER 稀疏 MLA 不支持的 rope-free BF16 路径选择 Triton。",
+   "tags": [
+    "triton",
+    "fallback",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:_is_long_bf16_prefill",
+   "type": "function",
+   "name": "_is_long_bf16_prefill",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "lineRange": [
+    74,
+    83
+   ],
+   "summary": "判定是否为长 BF16 prefill（触发 Triton 回退路径）。",
+   "tags": [
+    "bf16",
+    "fallback",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:_fit_kpool_indices_kernel",
+   "type": "function",
+   "name": "_fit_kpool_indices_kernel",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "lineRange": [
+    87,
+    127
+   ],
+   "summary": "把 kpool 索引裁剪到 AITER 固定 top-k 宽度的 Triton 内核。",
+   "tags": [
+    "triton",
+    "kpool",
+    "kernel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:fit_kpool_indices_to_aiter",
+   "type": "function",
+   "name": "fit_kpool_indices_to_aiter",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "lineRange": [
+    130,
+    161
+   ],
+   "summary": "保留活跃 kpool 尾部并适配 AITER 固定 top-k 宽度。",
+   "tags": [
+    "kpool",
+    "topk",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:_convert_req_index_to_global_index_kernel",
+   "type": "function",
+   "name": "_convert_req_index_to_global_index_kernel",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "lineRange": [
+    165,
+    223
+   ],
+   "summary": "req 局部索引转全局索引的 Triton 内核。",
+   "tags": [
+    "triton",
+    "index",
+    "kernel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:triton_convert_req_index_to_global_index",
+   "type": "function",
+   "name": "triton_convert_req_index_to_global_index",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "lineRange": [
+    226,
+    291
+   ],
+   "summary": "req 局部索引转全局索引的封装入口。",
+   "tags": [
+    "triton",
+    "index-conversion"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:generate_sparse_seqlen_kernel",
+   "type": "function",
+   "name": "generate_sparse_seqlen_kernel",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "lineRange": [
+    295,
+    321
+   ],
+   "summary": "生成稀疏 seqlen 的 Triton 内核。",
+   "tags": [
+    "triton",
+    "seqlen",
+    "kernel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:generate_sparse_seqlen_triton",
+   "type": "function",
+   "name": "generate_sparse_seqlen_triton",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "lineRange": [
+    324,
+    347
+   ],
+   "summary": "生成稀疏 seqlen 的封装入口。",
+   "tags": [
+    "triton",
+    "seqlen"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:reference_mla_sparse_prefill",
+   "type": "function",
+   "name": "reference_mla_sparse_prefill",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "lineRange": [
+    752,
+    776
+   ],
+   "summary": "稀疏 MLA prefill 的参考实现（正确性对拍用）。",
+   "tags": [
+    "reference",
+    "testing",
+    "prefill"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "type": "file",
+   "name": "rocm_paged_mxfp4_indexer.py",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "summary": "ROCm 分页 MXFP4 indexer 元数据：为 aiter 的原地读 cache 的 MQA-logits 内核规划逐 chunk 计划与 gather launch，含 V4/V4.1 变体。",
+   "tags": [
+    "rocm",
+    "mxfp4",
+    "indexer",
+    "aiter",
+    "deepseek-v4"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:DeepseekV41RocmMxfp4IndexerBackend",
+   "type": "class",
+   "name": "DeepseekV41RocmMxfp4IndexerBackend",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "lineRange": [
+    288,
+    302
+   ],
+   "summary": "V4.1 的 ROCm MXFP4 indexer 变体。",
+   "tags": [
+    "backend",
+    "mxfp4",
+    "deepseek-v41"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:DeepseekV4RocmMxfp4IndexerBackend",
+   "type": "class",
+   "name": "DeepseekV4RocmMxfp4IndexerBackend",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "lineRange": [
+    305,
+    315
+   ],
+   "summary": "V4 的 ROCm MXFP4 indexer 变体。",
+   "tags": [
+    "backend",
+    "mxfp4",
+    "deepseek-v4"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:RocmMxfp4IndexerMetadataBuilder",
+   "type": "class",
+   "name": "RocmMxfp4IndexerMetadataBuilder",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "lineRange": [
+    318,
+    456
+   ],
+   "summary": "ROCm MXFP4 indexer 元数据构建器：per-chunk 计划、gather launch 规划与 native decode 调度。",
+   "tags": [
+    "metadata-builder",
+    "mxfp4",
+    "planning"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:DeepseekV41RocmMxfp4IndexerMetadataBuilder",
+   "type": "class",
+   "name": "DeepseekV41RocmMxfp4IndexerMetadataBuilder",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "lineRange": [
+    459,
+    527
+   ],
+   "summary": "V4.1 的 MXFP4 元数据构建器（继承 V4 版并适配双 ratio）。",
+   "tags": [
+    "metadata-builder",
+    "mxfp4",
+    "deepseek-v41"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:native_decode",
+   "type": "function",
+   "name": "native_decode",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "lineRange": [
+    107,
+    132
+   ],
+   "summary": "MXFP4 native decode 的调度构造。",
+   "tags": [
+    "decode",
+    "mxfp4",
+    "schedule"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:plan_prefill_chunks",
+   "type": "function",
+   "name": "plan_prefill_chunks",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "lineRange": [
+    157,
+    203
+   ],
+   "summary": "为 prefill chunk 规划 MXFP4 原地读 cache 的参数。",
+   "tags": [
+    "planning",
+    "prefill",
+    "chunk"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:split_prefill_chunks",
+   "type": "function",
+   "name": "split_prefill_chunks",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "lineRange": [
+    206,
+    239
+   ],
+   "summary": "把 prefill chunk 按内核约束切分。",
+   "tags": [
+    "chunk",
+    "splitting"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:plan_gather_launches",
+   "type": "function",
+   "name": "plan_gather_launches",
+   "filePath": "vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "lineRange": [
+    242,
+    285
+   ],
+   "summary": "规划 gather launch 的批参数。",
+   "tags": [
+    "gather",
+    "planning"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/mla/sparse_indexer.py",
+   "type": "file",
+   "name": "sparse_indexer.py",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_indexer.py",
+   "summary": "DeepSeek V4.1 稀疏 MQA indexer：候选消费层只对候选源层发布的块打分（DeepGEMM sparse MQA-logits 路径）。",
+   "tags": [
+    "deepseek-v41",
+    "sparse",
+    "indexer",
+    "mqa",
+    "deep-gemm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/sparse_indexer.py:DeepseekV41SparseIndexerBackend",
+   "type": "class",
+   "name": "DeepseekV41SparseIndexerBackend",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_indexer.py",
+   "lineRange": [
+    73,
+    80
+   ],
+   "summary": "V4.1 稀疏 indexer 变体：候选消费层只打分候选源层发布的块。",
+   "tags": [
+    "backend",
+    "sparse",
+    "indexer",
+    "deepseek-v41"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/sparse_indexer.py:DeepseekV41SparseIndexerMetadataBuilder",
+   "type": "class",
+   "name": "DeepseekV41SparseIndexerMetadataBuilder",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_indexer.py",
+   "lineRange": [
+    83,
+    228
+   ],
+   "summary": "V4.1 稀疏 indexer 元数据构建器：候选行发布/消费的双层协调。",
+   "tags": [
+    "metadata-builder",
+    "sparse",
+    "candidate-consumption"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "type": "file",
+   "name": "sparse_swa.py",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_swa.py",
+   "summary": "DeepSeek V4 SWA 稀疏注意力缓存与元数据构建：按 compress_ratio 分层类型（swaonly/c4a/c128a/c1a/c2a），含 DSpark 非因果 SWA 索引与图像可见性 Triton 内核。",
+   "tags": [
+    "deepseek-v4",
+    "swa",
+    "sparse",
+    "triton",
+    "dspark"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekV4SWACache",
+   "type": "class",
+   "name": "DeepseekV4SWACache",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_swa.py",
+   "lineRange": [
+    76,
+    152
+   ],
+   "summary": "DeepSeek V4 SWA 缓存层（Module + AttentionLayerBase）：按层类型管理 SWA 压缩 KV。",
+   "tags": [
+    "swa",
+    "cache",
+    "deepseek-v4",
+    "layer"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekSparseSWABackend",
+   "type": "class",
+   "name": "DeepseekSparseSWABackend",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_swa.py",
+   "lineRange": [
+    155,
+    186
+   ],
+   "summary": "V4 稀疏 SWA 后端声明类。",
+   "tags": [
+    "backend",
+    "swa",
+    "sparse"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekSparseSWAMetadata",
+   "type": "class",
+   "name": "DeepseekSparseSWAMetadata",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_swa.py",
+   "lineRange": [
+    190,
+    339
+   ],
+   "summary": "V4 稀疏 SWA 批级元数据 dataclass。",
+   "tags": [
+    "metadata",
+    "dataclass",
+    "swa"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/sparse_swa.py:ComputePrefillMetadataKernel",
+   "type": "class",
+   "name": "ComputePrefillMetadataKernel",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_swa.py",
+   "lineRange": [
+    342,
+    434
+   ],
+   "summary": "prefill 元数据构建的 Triton 内核封装。",
+   "tags": [
+    "triton",
+    "prefill",
+    "kernel-wrapper"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekSparseSWAMetadataBuilder",
+   "type": "class",
+   "name": "DeepseekSparseSWAMetadataBuilder",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_swa.py",
+   "lineRange": [
+    437,
+    994
+   ],
+   "summary": "V4 SWA 元数据构建器（本文件核心）：分层类型（c4a/c128a/swaonly）的 FlashMLA plan、DSpark 非因果索引与图像可见性。",
+   "tags": [
+    "metadata-builder",
+    "swa",
+    "dspark",
+    "layer-types"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/sparse_swa.py:ComputeSWAIndicesAndLensKernel",
+   "type": "class",
+   "name": "ComputeSWAIndicesAndLensKernel",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_swa.py",
+   "lineRange": [
+    1135,
+    1231
+   ],
+   "summary": "SWA 索引与长度计算的 Triton 内核封装。",
+   "tags": [
+    "triton",
+    "swa",
+    "kernel-wrapper"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/sparse_swa.py:ComputeDSparkNoncausalSWAIndicesKernel",
+   "type": "class",
+   "name": "ComputeDSparkNoncausalSWAIndicesKernel",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_swa.py",
+   "lineRange": [
+    1234,
+    1388
+   ],
+   "summary": "DSpark 非因果 SWA 索引的 Triton 内核封装。",
+   "tags": [
+    "triton",
+    "dspark",
+    "non-causal"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/sparse_swa.py:_layer_type_for",
+   "type": "function",
+   "name": "_layer_type_for",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_swa.py",
+   "lineRange": [
+    61,
+    73
+   ],
+   "summary": "按层配置返回 SWA 层类型（swaonly/c4a/c128a 等）。",
+   "tags": [
+    "layer-type",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/sparse_swa.py:_compute_image_visibility_kernel",
+   "type": "function",
+   "name": "_compute_image_visibility_kernel",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_swa.py",
+   "lineRange": [
+    998,
+    1039
+   ],
+   "summary": "逐 token 图像内可见计数的 Triton 内核（get_image_visible 移植）。",
+   "tags": [
+    "triton",
+    "image-visibility",
+    "kernel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/sparse_swa.py:_compute_swa_indices_and_lens_kernel",
+   "type": "function",
+   "name": "_compute_swa_indices_and_lens_kernel",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_swa.py",
+   "lineRange": [
+    1052,
+    1132
+   ],
+   "summary": "SWA 索引与长度计算的 Triton 内核本体。",
+   "tags": [
+    "triton",
+    "swa",
+    "kernel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "type": "file",
+   "name": "sparse_utils.py",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_utils.py",
+   "summary": "稀疏 MLA 公共工具：req→global 索引转换 Triton 内核、DCP 索引过滤、行边界/块行对齐与 safe lengths 准备。",
+   "tags": [
+    "sparse",
+    "mla",
+    "triton",
+    "index-conversion",
+    "utility"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/sparse_utils.py:ConvertReqIndexToGlobalIndexKernel",
+   "type": "class",
+   "name": "ConvertReqIndexToGlobalIndexKernel",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_utils.py",
+   "lineRange": [
+    75,
+    466
+   ],
+   "summary": "req 局部索引转全局索引的 Triton 内核封装（CompileKey 缓存，多 tile 变体）。",
+   "tags": [
+    "triton",
+    "index-conversion",
+    "kernel-wrapper"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/sparse_utils.py:request_row_bounds",
+   "type": "function",
+   "name": "request_row_bounds",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_utils.py",
+   "lineRange": [
+    29,
+    41
+   ],
+   "summary": "返回请求行在 flat KV 行视图中的边界。",
+   "tags": [
+    "row-bounds",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/sparse_utils.py:align_blocks_to_rows",
+   "type": "function",
+   "name": "align_blocks_to_rows",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_utils.py",
+   "lineRange": [
+    44,
+    47
+   ],
+   "summary": "把块索引对齐到请求行。",
+   "tags": [
+    "alignment",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/sparse_utils.py:flat_kv_row_view",
+   "type": "function",
+   "name": "flat_kv_row_view",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_utils.py",
+   "lineRange": [
+    50,
+    69
+   ],
+   "summary": "把块表展开为 flat KV 行视图（行→块映射）。",
+   "tags": [
+    "kv-layout",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/sparse_utils.py:_remap_tiling",
+   "type": "function",
+   "name": "_remap_tiling",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_utils.py",
+   "lineRange": [
+    469,
+    490
+   ],
+   "summary": "按目标 tile 布局重映射索引。",
+   "tags": [
+    "tiling",
+    "remap"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/sparse_utils.py:triton_convert_req_index_to_global_index",
+   "type": "function",
+   "name": "triton_convert_req_index_to_global_index",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_utils.py",
+   "lineRange": [
+    493,
+    637
+   ],
+   "summary": "索引转换的公开入口（含 DCP 偏移处理）。",
+   "tags": [
+    "triton",
+    "index-conversion"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/sparse_utils.py:triton_filter_and_convert_dcp_index",
+   "type": "function",
+   "name": "triton_filter_and_convert_dcp_index",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_utils.py",
+   "lineRange": [
+    640,
+    746
+   ],
+   "summary": "DCP 场景下过滤并转换索引的 Triton 入口。",
+   "tags": [
+    "triton",
+    "dcp",
+    "index"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/sparse_utils.py:sparse_mla_prepare_safe_lengths_kernel",
+   "type": "function",
+   "name": "sparse_mla_prepare_safe_lengths_kernel",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_utils.py",
+   "lineRange": [
+    753,
+    768
+   ],
+   "summary": "准备 safe lengths 的 Triton 内核（避免越界 gather）。",
+   "tags": [
+    "triton",
+    "safe-lengths",
+    "kernel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/sparse_utils.py:prepare_sparse_mla_safe_lengths",
+   "type": "function",
+   "name": "prepare_sparse_mla_safe_lengths",
+   "filePath": "vllm/v1/attention/backends/mla/sparse_utils.py",
+   "lineRange": [
+    771,
+    792
+   ],
+   "summary": "safe lengths 准备的封装入口。",
+   "tags": [
+    "safe-lengths",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "type": "file",
+   "name": "tokenspeed_mla.py",
+   "filePath": "vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "summary": "TokenSpeed CuTe DSL MLA decode 后端（Blackwell、FP8 KV cache only）。",
+   "tags": [
+    "tokenspeed",
+    "cute-dsl",
+    "mla",
+    "decode",
+    "blackwell"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/tokenspeed_mla.py:TokenspeedMLAMetadataBuilder",
+   "type": "class",
+   "name": "TokenspeedMLAMetadataBuilder",
+   "filePath": "vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "lineRange": [
+    76,
+    98
+   ],
+   "summary": "TokenSpeed 元数据构建器。",
+   "tags": [
+    "metadata-builder",
+    "tokenspeed"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/tokenspeed_mla.py:TokenspeedMLABackend",
+   "type": "class",
+   "name": "TokenspeedMLABackend",
+   "filePath": "vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "lineRange": [
+    101,
+    171
+   ],
+   "summary": "TokenSpeed MLA 后端声明类：Blackwell + FP8 KV 限定。",
+   "tags": [
+    "backend",
+    "tokenspeed",
+    "blackwell"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/tokenspeed_mla.py:TokenspeedMLAImpl",
+   "type": "class",
+   "name": "TokenspeedMLAImpl",
+   "filePath": "vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "lineRange": [
+    174,
+    362
+   ],
+   "summary": "TokenSpeed CuTe DSL MLA decode 前向实现。",
+   "tags": [
+    "impl",
+    "cute-dsl",
+    "decode",
+    "mla"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/tokenspeed_mla.py:_get_workspace",
+   "type": "function",
+   "name": "_get_workspace",
+   "filePath": "vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "lineRange": [
+    43,
+    73
+   ],
+   "summary": "获取/分配 TokenSpeed workspace buffer。",
+   "tags": [
+    "workspace",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "type": "file",
+   "name": "triton_mla.py",
+   "filePath": "vllm/v1/attention/backends/mla/triton_mla.py",
+   "summary": "Triton MLA 后端：split-KV decode（num_kv_splits 按序列长/SM 数自适应）与 decode attn logits workspace 预留。",
+   "tags": [
+    "triton",
+    "mla",
+    "decode",
+    "split-kv"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/triton_mla.py:TritonMLAMetadataBuilder",
+   "type": "class",
+   "name": "TritonMLAMetadataBuilder",
+   "filePath": "vllm/v1/attention/backends/mla/triton_mla.py",
+   "lineRange": [
+    74,
+    96
+   ],
+   "summary": "Triton MLA 元数据构建器。",
+   "tags": [
+    "metadata-builder",
+    "triton"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/triton_mla.py:TritonMLABackend",
+   "type": "class",
+   "name": "TritonMLABackend",
+   "filePath": "vllm/v1/attention/backends/mla/triton_mla.py",
+   "lineRange": [
+    99,
+    148
+   ],
+   "summary": "Triton MLA 后端声明类：能力探测与类分发。",
+   "tags": [
+    "backend",
+    "triton",
+    "mla"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/triton_mla.py:TritonMLAImpl",
+   "type": "class",
+   "name": "TritonMLAImpl",
+   "filePath": "vllm/v1/attention/backends/mla/triton_mla.py",
+   "lineRange": [
+    151,
+    345
+   ],
+   "summary": "Triton MLA 前向实现：split-KV decode 与 prefill 分流，num_kv_splits 自适应。",
+   "tags": [
+    "impl",
+    "triton",
+    "split-kv",
+    "decode"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/mla/triton_mla.py:_reserve_attn_logits_workspace",
+   "type": "function",
+   "name": "_reserve_attn_logits_workspace",
+   "filePath": "vllm/v1/attention/backends/mla/triton_mla.py",
+   "lineRange": [
+    53,
+    71
+   ],
+   "summary": "在 warmup 前预分配 decode split-KV 的 attn logits workspace。",
+   "tags": [
+    "workspace",
+    "decode"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "type": "file",
+   "name": "xpu_mla_sparse.py",
+   "filePath": "vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "summary": "Intel XPU 稀疏 MLA 后端：BF16 Triton 稀疏接口与 SharedTopkIndicesBuffer 共享 top-k 索引。",
+   "tags": [
+    "xpu",
+    "intel",
+    "sparse",
+    "mla",
+    "triton"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/xpu_mla_sparse.py:XPUMLASparseBackend",
+   "type": "class",
+   "name": "XPUMLASparseBackend",
+   "filePath": "vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "lineRange": [
+    42,
+    80
+   ],
+   "summary": "XPU 稀疏 MLA 后端声明类。",
+   "tags": [
+    "backend",
+    "xpu",
+    "sparse"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/xpu_mla_sparse.py:XPUMLASparseMetadata",
+   "type": "class",
+   "name": "XPUMLASparseMetadata",
+   "filePath": "vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "lineRange": [
+    84,
+    114
+   ],
+   "summary": "XPU 稀疏元数据 dataclass。",
+   "tags": [
+    "metadata",
+    "dataclass",
+    "xpu"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/xpu_mla_sparse.py:XPUMLASparseMetadataBuilder",
+   "type": "class",
+   "name": "XPUMLASparseMetadataBuilder",
+   "filePath": "vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "lineRange": [
+    118,
+    191
+   ],
+   "summary": "XPU 稀疏元数据构建器：共享 top-k 索引 buffer 管理。",
+   "tags": [
+    "metadata-builder",
+    "xpu",
+    "topk"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/mla/xpu_mla_sparse.py:XPUMLASparseImpl",
+   "type": "class",
+   "name": "XPUMLASparseImpl",
+   "filePath": "vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "lineRange": [
+    194,
+    282
+   ],
+   "summary": "XPU 稀疏 MLA 前向实现：调 triton_bf16_mla_sparse_interface。",
+   "tags": [
+    "impl",
+    "xpu",
+    "triton",
+    "sparse"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/registry.py",
+   "type": "file",
+   "name": "registry.py",
+   "filePath": "vllm/v1/attention/backends/registry.py",
+   "summary": "注意力后端注册表：AttentionBackendEnum（40+ 后端 qualname 字符串，含 DeepSeek V4/V4.1 与 MiniMax/Step5/Kimi 等模型驱动后端）与 Mamba 枚举，支持运行时 override 与动态注册。",
+   "tags": [
+    "registry",
+    "enum",
+    "plugin",
+    "attention",
+    "override"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/registry.py:AttentionBackendEnum",
+   "type": "class",
+   "name": "AttentionBackendEnum",
+   "filePath": "vllm/v1/attention/backends/registry.py",
+   "lineRange": [
+    34,
+    250
+   ],
+   "summary": "全部注意力后端的枚举注册表：FLASH_ATTN/FLASHINFER/TRITON_MLA/FlashMLA_SPARSE 等成员保存 qualname，支持运行时 override（get_class 尊重覆盖）。",
+   "tags": [
+    "registry",
+    "enum",
+    "qualname",
+    "override"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/registry.py:MambaAttentionBackendEnum",
+   "type": "class",
+   "name": "MambaAttentionBackendEnum",
+   "filePath": "vllm/v1/attention/backends/registry.py",
+   "lineRange": [
+    253,
+    347
+   ],
+   "summary": "Mamba/SSM 系注意力后端枚举（MAMBA1/MAMBA2/SHORT_CONV/LINEAR/GDN）。",
+   "tags": [
+    "registry",
+    "enum",
+    "mamba"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/registry.py:register_backend",
+   "type": "function",
+   "name": "register_backend",
+   "filePath": "vllm/v1/attention/backends/registry.py",
+   "lineRange": [
+    354,
+    426
+   ],
+   "summary": "注册或覆盖注意力后端实现：支持装饰器、直接注册与字符串动态枚举名。",
+   "tags": [
+    "registry",
+    "decorator",
+    "plugin"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "type": "file",
+   "name": "rocm_aiter_fa.py",
+   "filePath": "vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "summary": "ROCm AITER FlashAttention 后端：ASM 内核、chunk prefill、sliding window、KV sharing 与 FP8 KV 支持。",
+   "tags": [
+    "aiter",
+    "rocm",
+    "flash-attention",
+    "asm",
+    "backend"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/rocm_aiter_fa.py:AiterFlashAttentionMetadata",
+   "type": "class",
+   "name": "AiterFlashAttentionMetadata",
+   "filePath": "vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "lineRange": [
+    385,
+    417
+   ],
+   "summary": "AITER FlashAttention 批级元数据 dataclass。",
+   "tags": [
+    "metadata",
+    "dataclass"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/rocm_aiter_fa.py:AsmKvScaleTables",
+   "type": "class",
+   "name": "AsmKvScaleTables",
+   "filePath": "vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "lineRange": [
+    421,
+    452
+   ],
+   "summary": "ASM 内核的 KV scale 表管理。",
+   "tags": [
+    "kv-scale",
+    "asm",
+    "buffer"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/rocm_aiter_fa.py:AiterFlashAttentionMetadataBuilder",
+   "type": "class",
+   "name": "AiterFlashAttentionMetadataBuilder",
+   "filePath": "vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "lineRange": [
+    455,
+    883
+   ],
+   "summary": "AITER 元数据构建器：chunk prefill/滑窗/KV sharing 元数据。",
+   "tags": [
+    "metadata-builder",
+    "aiter",
+    "chunk"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/rocm_aiter_fa.py:AiterFlashAttentionBackend",
+   "type": "class",
+   "name": "AiterFlashAttentionBackend",
+   "filePath": "vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "lineRange": [
+    886,
+    997
+   ],
+   "summary": "AITER FlashAttention 后端声明类：ASM 内核能力与 FP8 支持。",
+   "tags": [
+    "backend",
+    "aiter",
+    "flash-attention"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/rocm_aiter_fa.py:AiterFlashAttentionImpl",
+   "type": "class",
+   "name": "AiterFlashAttentionImpl",
+   "filePath": "vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "lineRange": [
+    1000,
+    1804
+   ],
+   "summary": "AITER 前向实现：prefill/decode/chunk 分流调 AITER 内核（含 FP8 KV）。",
+   "tags": [
+    "impl",
+    "aiter",
+    "prefill",
+    "decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "type": "file",
+   "name": "rocm_aiter_unified_attn.py",
+   "filePath": "vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "summary": "ROCm AITER 统一注意力后端：AITER prefill 与 paged decode 的统一路径（继承 RocmAttention 后端族）。",
+   "tags": [
+    "aiter",
+    "rocm",
+    "unified",
+    "backend",
+    "paged"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/rocm_aiter_unified_attn.py:RocmAiterUnifiedAttentionBackend",
+   "type": "class",
+   "name": "RocmAiterUnifiedAttentionBackend",
+   "filePath": "vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "lineRange": [
+    61,
+    150
+   ],
+   "summary": "AITER 统一后端声明类：组合 AITER prefill 与 paged decode 能力。",
+   "tags": [
+    "backend",
+    "aiter",
+    "unified"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/rocm_aiter_unified_attn.py:RocmAiterUnifiedAttentionImpl",
+   "type": "class",
+   "name": "RocmAiterUnifiedAttentionImpl",
+   "filePath": "vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "lineRange": [
+    153,
+    542
+   ],
+   "summary": "AITER 统一前向实现：prefill 走 AITER、decode 走 paged 内核的统一 dispatch。",
+   "tags": [
+    "impl",
+    "aiter",
+    "unified",
+    "dispatch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "type": "file",
+   "name": "rocm_attn.py",
+   "filePath": "vllm/v1/attention/backends/rocm_attn.py",
+   "summary": "ROCm 基础注意力后端（rocm 系父类）：PagedAttention decode 与 Triton prefix prefill，被 AITER 系后端继承。",
+   "tags": [
+    "rocm",
+    "paged-attention",
+    "triton",
+    "prefill",
+    "base"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/rocm_attn.py:RocmAttentionMetadataBuilder",
+   "type": "class",
+   "name": "RocmAttentionMetadataBuilder",
+   "filePath": "vllm/v1/attention/backends/rocm_attn.py",
+   "lineRange": [
+    73,
+    134
+   ],
+   "summary": "ROCm 基础元数据构建器。",
+   "tags": [
+    "metadata-builder",
+    "rocm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/rocm_attn.py:RocmAttentionBackend",
+   "type": "class",
+   "name": "RocmAttentionBackend",
+   "filePath": "vllm/v1/attention/backends/rocm_attn.py",
+   "lineRange": [
+    137,
+    252
+   ],
+   "summary": "ROCm 基础后端声明类（rocm 系父类）：PagedAttention decode + Triton prefix prefill。",
+   "tags": [
+    "backend",
+    "rocm",
+    "paged-attention",
+    "base"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/rocm_attn.py:RocmAttentionImpl",
+   "type": "class",
+   "name": "RocmAttentionImpl",
+   "filePath": "vllm/v1/attention/backends/rocm_attn.py",
+   "lineRange": [
+    255,
+    638
+   ],
+   "summary": "ROCm 基础前向实现：Triton prefill 与 paged decode 内核调用。",
+   "tags": [
+    "impl",
+    "rocm",
+    "triton",
+    "paged"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "type": "file",
+   "name": "rocm_octave_attn.py",
+   "filePath": "vllm/v1/attention/backends/rocm_octave_attn.py",
+   "summary": "AMD Octave 注意力后端：原生 HIP/FlyDSL 内核（KV 格式定义在 ops/rocm_octave.py），kernel tier 与 capture size 自适应。",
+   "tags": [
+    "rocm",
+    "octave",
+    "hip",
+    "flydsl",
+    "attention"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/rocm_octave_attn.py:RocmOctaveAttentionBackend",
+   "type": "class",
+   "name": "RocmOctaveAttentionBackend",
+   "filePath": "vllm/v1/attention/backends/rocm_octave_attn.py",
+   "lineRange": [
+    90,
+    157
+   ],
+   "summary": "Octave 后端声明类：kernel tier（HIP/FlyDSL）与 capture size 选择。",
+   "tags": [
+    "backend",
+    "octave",
+    "kernel-tier"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/rocm_octave_attn.py:RocmOctaveMetadataBuilder",
+   "type": "class",
+   "name": "RocmOctaveMetadataBuilder",
+   "filePath": "vllm/v1/attention/backends/rocm_octave_attn.py",
+   "lineRange": [
+    176,
+    251
+   ],
+   "summary": "Octave 元数据构建器。",
+   "tags": [
+    "metadata-builder",
+    "octave"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/rocm_octave_attn.py:RocmOctaveAttentionImpl",
+   "type": "class",
+   "name": "RocmOctaveAttentionImpl",
+   "filePath": "vllm/v1/attention/backends/rocm_octave_attn.py",
+   "lineRange": [
+    254,
+    496
+   ],
+   "summary": "Octave 前向实现：原生 HIP/FlyDSL 内核调用与 mid_o 布局处理。",
+   "tags": [
+    "impl",
+    "octave",
+    "hip",
+    "flydsl"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/rocm_octave_attn.py:_kernel_tier",
+   "type": "function",
+   "name": "_kernel_tier",
+   "filePath": "vllm/v1/attention/backends/rocm_octave_attn.py",
+   "lineRange": [
+    50,
+    60
+   ],
+   "summary": "判定当前架构可用的 kernel tier（HIP native/FlyDSL）。",
+   "tags": [
+    "kernel-tier",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/rocm_octave_attn.py:_mid_o_shape",
+   "type": "function",
+   "name": "_mid_o_shape",
+   "filePath": "vllm/v1/attention/backends/rocm_octave_attn.py",
+   "lineRange": [
+    68,
+    83
+   ],
+   "summary": "计算 Octave mid-o 输出形状。",
+   "tags": [
+    "shape",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "type": "file",
+   "name": "rocm_segmented_attn.py",
+   "filePath": "vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "summary": "ROCm token-major 分段 Triton 注意力后端（面向 RDNA 消费卡）。",
+   "tags": [
+    "rocm",
+    "segmented",
+    "triton",
+    "rdna",
+    "token-major"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/rocm_segmented_attn.py:RocmSegmentedAttentionBackend",
+   "type": "class",
+   "name": "RocmSegmentedAttentionBackend",
+   "filePath": "vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "lineRange": [
+    66,
+    147
+   ],
+   "summary": "token-major 分段 Triton 后端声明类（RDNA）。",
+   "tags": [
+    "backend",
+    "segmented",
+    "rdna"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/rocm_segmented_attn.py:RocmSegmentedAttentionImpl",
+   "type": "class",
+   "name": "RocmSegmentedAttentionImpl",
+   "filePath": "vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "lineRange": [
+    150,
+    369
+   ],
+   "summary": "分段 Triton 前向实现。",
+   "tags": [
+    "impl",
+    "segmented",
+    "triton"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/v1/attention/backends/rocm_segmented_attn.py:is_rdna",
+   "type": "function",
+   "name": "is_rdna",
+   "filePath": "vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "lineRange": [
+    41,
+    46
+   ],
+   "summary": "判定当前 GPU 是否为 RDNA 架构。",
+   "tags": [
+    "rdna",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "type": "file",
+   "name": "short_conv_attn.py",
+   "filePath": "vllm/v1/attention/backends/short_conv_attn.py",
+   "summary": "短卷积注意力后端（Mamba 系）：基础三件套与 PLE 变体（MambaPrefillCheckpoint 集成）。",
+   "tags": [
+    "short-conv",
+    "mamba",
+    "ple",
+    "backend"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/short_conv_attn.py:ShortConvAttentionBackend",
+   "type": "class",
+   "name": "ShortConvAttentionBackend",
+   "filePath": "vllm/v1/attention/backends/short_conv_attn.py",
+   "lineRange": [
+    30,
+    41
+   ],
+   "summary": "短卷积后端声明类：Mamba 系三件套薄封装。",
+   "tags": [
+    "backend",
+    "short-conv",
+    "mamba"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/short_conv_attn.py:PleShortConvAttentionMetadata",
+   "type": "class",
+   "name": "PleShortConvAttentionMetadata",
+   "filePath": "vllm/v1/attention/backends/short_conv_attn.py",
+   "lineRange": [
+    56,
+    96
+   ],
+   "summary": "PLE 元数据 dataclass（含 checkpoint 相关字段）。",
+   "tags": [
+    "metadata",
+    "dataclass",
+    "ple"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/short_conv_attn.py:PleShortConvAttentionBackend",
+   "type": "class",
+   "name": "PleShortConvAttentionBackend",
+   "filePath": "vllm/v1/attention/backends/short_conv_attn.py",
+   "lineRange": [
+    99,
+    106
+   ],
+   "summary": "PLE 短卷积变体后端。",
+   "tags": [
+    "backend",
+    "ple",
+    "short-conv"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/short_conv_attn.py:PleShortConvAttentionMetadataBuilder",
+   "type": "class",
+   "name": "PleShortConvAttentionMetadataBuilder",
+   "filePath": "vllm/v1/attention/backends/short_conv_attn.py",
+   "lineRange": [
+    109,
+    534
+   ],
+   "summary": "PLE 元数据构建器：MambaPrefillCheckpoint 集成与 conv 状态 slot 管理。",
+   "tags": [
+    "metadata-builder",
+    "ple",
+    "checkpoint"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/triton_attn.py",
+   "type": "file",
+   "name": "triton_attn.py",
+   "filePath": "vllm/v1/attention/backends/triton_attn.py",
+   "summary": "纯 Triton 高性能注意力后端（不依赖 FlashAttention）：prefill/decode 内核调用与 CUDA Graph 支持。",
+   "tags": [
+    "triton",
+    "attention",
+    "backend",
+    "high-performance"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/triton_attn.py:TritonAttentionMetadata",
+   "type": "class",
+   "name": "TritonAttentionMetadata",
+   "filePath": "vllm/v1/attention/backends/triton_attn.py",
+   "lineRange": [
+    63,
+    93
+   ],
+   "summary": "Triton 后端批级元数据 dataclass。",
+   "tags": [
+    "metadata",
+    "dataclass"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/triton_attn.py:TritonAttentionMetadataBuilder",
+   "type": "class",
+   "name": "TritonAttentionMetadataBuilder",
+   "filePath": "vllm/v1/attention/backends/triton_attn.py",
+   "lineRange": [
+    96,
+    303
+   ],
+   "summary": "Triton 元数据构建器。",
+   "tags": [
+    "metadata-builder",
+    "triton"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/triton_attn.py:TritonAttentionBackend",
+   "type": "class",
+   "name": "TritonAttentionBackend",
+   "filePath": "vllm/v1/attention/backends/triton_attn.py",
+   "lineRange": [
+    306,
+    406
+   ],
+   "summary": "纯 Triton 后端声明类：16 个能力探测方法。",
+   "tags": [
+    "backend",
+    "triton",
+    "capability-detection"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/triton_attn.py:TritonAttentionImpl",
+   "type": "class",
+   "name": "TritonAttentionImpl",
+   "filePath": "vllm/v1/attention/backends/triton_attn.py",
+   "lineRange": [
+    409,
+    885
+   ],
+   "summary": "纯 Triton 前向实现：context/decode 内核调用、split-KV 与 spec-decode 支持。",
+   "tags": [
+    "impl",
+    "triton",
+    "decode",
+    "prefill"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "type": "file",
+   "name": "triton_attn_diffkv.py",
+   "filePath": "vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "summary": "Triton DiffKV 注意力后端：K/V head dim 不同，KV 布局与 FlashAttentionDiffKV 一致（末维打包）。",
+   "tags": [
+    "triton",
+    "diffkv",
+    "attention",
+    "variant"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/triton_attn_diffkv.py:TritonAttentionDiffKVMetadataBuilder",
+   "type": "class",
+   "name": "TritonAttentionDiffKVMetadataBuilder",
+   "filePath": "vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "lineRange": [
+    36,
+    65
+   ],
+   "summary": "DiffKV 元数据构建器（继承 Triton 构建器）。",
+   "tags": [
+    "metadata-builder",
+    "diffkv"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/triton_attn_diffkv.py:TritonAttentionDiffKVBackend",
+   "type": "class",
+   "name": "TritonAttentionDiffKVBackend",
+   "filePath": "vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "lineRange": [
+    68,
+    105
+   ],
+   "summary": "Triton DiffKV 后端声明类。",
+   "tags": [
+    "backend",
+    "triton",
+    "diffkv"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/triton_attn_diffkv.py:TritonAttentionDiffKVImpl",
+   "type": "class",
+   "name": "TritonAttentionDiffKVImpl",
+   "filePath": "vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "lineRange": [
+    108,
+    222
+   ],
+   "summary": "Triton DiffKV 前向实现：K/V 末维打包布局的内核调用。",
+   "tags": [
+    "impl",
+    "triton",
+    "diffkv"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/attention/backends/triton_flash_attn.py",
+   "type": "file",
+   "name": "triton_flash_attn.py",
+   "filePath": "vllm/v1/attention/backends/triton_flash_attn.py",
+   "summary": "Triton 图像掩码与 FlashAttention 因果注意力的组合后端：模块加载时经 create_composite_attention_backend 工厂生成 TritonFlashAttentionBackend。",
+   "tags": [
+    "composite",
+    "triton",
+    "flash-attention",
+    "image-mask",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/attention/backends/triton_flash_attn.py:_FABackend",
+   "type": "class",
+   "name": "_FABackend",
+   "filePath": "vllm/v1/attention/backends/triton_flash_attn.py",
+   "lineRange": [
+    19,
+    63
+   ],
+   "summary": "FlashAttention 后端的私有子类：为图像 token 定制支持能力。",
+   "tags": [
+    "backend",
+    "subclass",
+    "image"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/aiter_flash_attn.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/aiter_flash_attn.py:AiterFlashAttnPrefillBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/aiter_flash_attn.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/aiter_flash_attn.py:AiterFlashAttnPrefillBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/base.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/base.py:MLAPrefillBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/base.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/base.py:MLAPrefillBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flash_attn.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/flash_attn.py:FA4MLAPrefillKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flash_attn.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/flash_attn.py:FA4MLAPrefillKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flash_attn.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/flash_attn.py:FlashAttnPrefillBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flash_attn.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/flash_attn.py:FlashAttnPrefillBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flashinfer.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/flashinfer.py:FlashInferPrefillBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flashinfer.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/flashinfer.py:FlashInferPrefillBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/registry.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/registry.py:MLAPrefillBackendEnum",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/registry.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/registry.py:MLAPrefillBackendEnum",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/registry.py",
+   "target": "function:vllm/v1/attention/backends/mla/prefill/registry.py:register_mla_prefill_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/registry.py",
+   "target": "function:vllm/v1/attention/backends/mla/prefill/registry.py:register_mla_prefill_backend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/selector.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/selector.py:MLAPrefillSelectorConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/selector.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/selector.py:MLAPrefillSelectorConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/selector.py",
+   "target": "function:vllm/v1/attention/backends/mla/prefill/selector.py:get_mla_prefill_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/selector.py",
+   "target": "function:vllm/v1/attention/backends/mla/prefill/selector.py:get_mla_prefill_backend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/selector.py",
+   "target": "function:vllm/v1/attention/backends/mla/prefill/selector.py:_auto_select_mla_prefill_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/tokenspeed_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/tokenspeed_mla.py:TokenspeedMLAPrefillBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/tokenspeed_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/tokenspeed_mla.py:TokenspeedMLAPrefillBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py:TrtllmRaggedPrefillBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py:TrtllmRaggedPrefillBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py",
+   "target": "function:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py:is_cute_dsl_mla_prefill_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py",
+   "target": "function:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py:is_cute_dsl_mla_prefill_supported",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/zen_cpu_sdpa.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/zen_cpu_sdpa.py:ZenCPUSDPAMLAPrefillBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/zen_cpu_sdpa.py",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/zen_cpu_sdpa.py:ZenCPUSDPAMLAPrefillBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:AiterMLABackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:AiterMLABackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:AiterMLADecodeMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:AiterMLADecodeMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:AiterMLAMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:AiterMLAMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:AiterMLAHelper",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:AiterMLAHelper",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:AiterMLAImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:AiterMLAImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_supports_fused_dcp_prefill_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_segmented_mla_page_size",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_get_mla_gluon",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_fp8_mla_prefill_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_fused_mla_prefill_qkv_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_aiter_mla_native_h24_reducer_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_aiter_mla_native_h24_metadata_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_aiter_mla_non_causal_asm_kernels",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_gluon_mla_decode_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_gluon_kv_cache_in_bounds",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_segmented_dcp_verify_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_segmented_mla_fits_lds",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_triton_dcp_verify_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_triton_dcp_verify_num_kv_splits",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_reserve_triton_dcp_verify_workspace",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_select_dcp_decode_route",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_asm_dcp_verify_configured",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_aiter_mla_small_head_mode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:_expand_page_indices_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:ROCMAiterMLASparseBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:ROCMAiterMLASparseBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:ROCMAiterMLASparseMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:ROCMAiterMLASparseMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:ROCMAiterMLASparseImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:ROCMAiterMLASparseImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:_use_rocm_sparse_triton",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:_is_long_bf16_prefill",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:_fit_kpool_indices_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:fit_kpool_indices_to_aiter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:fit_kpool_indices_to_aiter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:_convert_req_index_to_global_index_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:triton_convert_req_index_to_global_index",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:triton_convert_req_index_to_global_index",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:generate_sparse_seqlen_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:generate_sparse_seqlen_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:generate_sparse_seqlen_triton",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:generate_sparse_seqlen_triton",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:reference_mla_sparse_prefill",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:reference_mla_sparse_prefill",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:DeepseekV41RocmMxfp4IndexerBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:DeepseekV41RocmMxfp4IndexerBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:DeepseekV4RocmMxfp4IndexerBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:DeepseekV4RocmMxfp4IndexerBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:RocmMxfp4IndexerMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:RocmMxfp4IndexerMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:DeepseekV41RocmMxfp4IndexerMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:DeepseekV41RocmMxfp4IndexerMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:native_decode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:native_decode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:plan_prefill_chunks",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:plan_prefill_chunks",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:split_prefill_chunks",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:split_prefill_chunks",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:plan_gather_launches",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "function:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:plan_gather_launches",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_indexer.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_indexer.py:DeepseekV41SparseIndexerBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_indexer.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_indexer.py:DeepseekV41SparseIndexerBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_indexer.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_indexer.py:DeepseekV41SparseIndexerMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_indexer.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_indexer.py:DeepseekV41SparseIndexerMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekV4SWACache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekV4SWACache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekSparseSWABackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekSparseSWABackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekSparseSWAMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekSparseSWAMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_swa.py:ComputePrefillMetadataKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_swa.py:ComputePrefillMetadataKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekSparseSWAMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekSparseSWAMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_swa.py:ComputeSWAIndicesAndLensKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_swa.py:ComputeSWAIndicesAndLensKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_swa.py:ComputeDSparkNoncausalSWAIndicesKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_swa.py:ComputeDSparkNoncausalSWAIndicesKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "function:vllm/v1/attention/backends/mla/sparse_swa.py:_layer_type_for",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "function:vllm/v1/attention/backends/mla/sparse_swa.py:_compute_image_visibility_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "function:vllm/v1/attention/backends/mla/sparse_swa.py:_compute_swa_indices_and_lens_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_utils.py:ConvertReqIndexToGlobalIndexKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "class:vllm/v1/attention/backends/mla/sparse_utils.py:ConvertReqIndexToGlobalIndexKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "function:vllm/v1/attention/backends/mla/sparse_utils.py:request_row_bounds",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "function:vllm/v1/attention/backends/mla/sparse_utils.py:request_row_bounds",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "function:vllm/v1/attention/backends/mla/sparse_utils.py:align_blocks_to_rows",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "function:vllm/v1/attention/backends/mla/sparse_utils.py:align_blocks_to_rows",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "function:vllm/v1/attention/backends/mla/sparse_utils.py:flat_kv_row_view",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "function:vllm/v1/attention/backends/mla/sparse_utils.py:flat_kv_row_view",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "function:vllm/v1/attention/backends/mla/sparse_utils.py:_remap_tiling",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "function:vllm/v1/attention/backends/mla/sparse_utils.py:triton_convert_req_index_to_global_index",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "function:vllm/v1/attention/backends/mla/sparse_utils.py:triton_convert_req_index_to_global_index",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "function:vllm/v1/attention/backends/mla/sparse_utils.py:triton_filter_and_convert_dcp_index",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "function:vllm/v1/attention/backends/mla/sparse_utils.py:triton_filter_and_convert_dcp_index",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "function:vllm/v1/attention/backends/mla/sparse_utils.py:sparse_mla_prepare_safe_lengths_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "function:vllm/v1/attention/backends/mla/sparse_utils.py:sparse_mla_prepare_safe_lengths_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "function:vllm/v1/attention/backends/mla/sparse_utils.py:prepare_sparse_mla_safe_lengths",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "function:vllm/v1/attention/backends/mla/sparse_utils.py:prepare_sparse_mla_safe_lengths",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/tokenspeed_mla.py:TokenspeedMLAMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/tokenspeed_mla.py:TokenspeedMLAMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/tokenspeed_mla.py:TokenspeedMLABackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/tokenspeed_mla.py:TokenspeedMLABackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/tokenspeed_mla.py:TokenspeedMLAImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/tokenspeed_mla.py:TokenspeedMLAImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/tokenspeed_mla.py:_get_workspace",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/triton_mla.py:TritonMLAMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/triton_mla.py:TritonMLAMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/triton_mla.py:TritonMLABackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/triton_mla.py:TritonMLABackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/triton_mla.py:TritonMLAImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "target": "class:vllm/v1/attention/backends/mla/triton_mla.py:TritonMLAImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "target": "function:vllm/v1/attention/backends/mla/triton_mla.py:_reserve_attn_logits_workspace",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "target": "class:vllm/v1/attention/backends/mla/xpu_mla_sparse.py:XPUMLASparseBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "target": "class:vllm/v1/attention/backends/mla/xpu_mla_sparse.py:XPUMLASparseBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "target": "class:vllm/v1/attention/backends/mla/xpu_mla_sparse.py:XPUMLASparseMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "target": "class:vllm/v1/attention/backends/mla/xpu_mla_sparse.py:XPUMLASparseMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "target": "class:vllm/v1/attention/backends/mla/xpu_mla_sparse.py:XPUMLASparseMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "target": "class:vllm/v1/attention/backends/mla/xpu_mla_sparse.py:XPUMLASparseMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "target": "class:vllm/v1/attention/backends/mla/xpu_mla_sparse.py:XPUMLASparseImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "target": "class:vllm/v1/attention/backends/mla/xpu_mla_sparse.py:XPUMLASparseImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "class:vllm/v1/attention/backends/registry.py:AttentionBackendEnum",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "class:vllm/v1/attention/backends/registry.py:AttentionBackendEnum",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "class:vllm/v1/attention/backends/registry.py:MambaAttentionBackendEnum",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "class:vllm/v1/attention/backends/registry.py:MambaAttentionBackendEnum",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "function:vllm/v1/attention/backends/registry.py:register_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "function:vllm/v1/attention/backends/registry.py:register_backend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "class:vllm/v1/attention/backends/rocm_aiter_fa.py:AiterFlashAttentionMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "class:vllm/v1/attention/backends/rocm_aiter_fa.py:AiterFlashAttentionMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "class:vllm/v1/attention/backends/rocm_aiter_fa.py:AsmKvScaleTables",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "class:vllm/v1/attention/backends/rocm_aiter_fa.py:AsmKvScaleTables",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "class:vllm/v1/attention/backends/rocm_aiter_fa.py:AiterFlashAttentionMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "class:vllm/v1/attention/backends/rocm_aiter_fa.py:AiterFlashAttentionMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "class:vllm/v1/attention/backends/rocm_aiter_fa.py:AiterFlashAttentionBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "class:vllm/v1/attention/backends/rocm_aiter_fa.py:AiterFlashAttentionBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "class:vllm/v1/attention/backends/rocm_aiter_fa.py:AiterFlashAttentionImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "class:vllm/v1/attention/backends/rocm_aiter_fa.py:AiterFlashAttentionImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_aiter_unified_attn.py:RocmAiterUnifiedAttentionBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_aiter_unified_attn.py:RocmAiterUnifiedAttentionBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_aiter_unified_attn.py:RocmAiterUnifiedAttentionImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_aiter_unified_attn.py:RocmAiterUnifiedAttentionImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_attn.py:RocmAttentionMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_attn.py:RocmAttentionMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_attn.py:RocmAttentionBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_attn.py:RocmAttentionBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_attn.py:RocmAttentionImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_attn.py:RocmAttentionImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_octave_attn.py:RocmOctaveAttentionBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_octave_attn.py:RocmOctaveAttentionBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_octave_attn.py:RocmOctaveMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_octave_attn.py:RocmOctaveMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_octave_attn.py:RocmOctaveAttentionImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_octave_attn.py:RocmOctaveAttentionImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "target": "function:vllm/v1/attention/backends/rocm_octave_attn.py:_kernel_tier",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "target": "function:vllm/v1/attention/backends/rocm_octave_attn.py:_mid_o_shape",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_segmented_attn.py:RocmSegmentedAttentionBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_segmented_attn.py:RocmSegmentedAttentionBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_segmented_attn.py:RocmSegmentedAttentionImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "class:vllm/v1/attention/backends/rocm_segmented_attn.py:RocmSegmentedAttentionImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "function:vllm/v1/attention/backends/rocm_segmented_attn.py:is_rdna",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "function:vllm/v1/attention/backends/rocm_segmented_attn.py:is_rdna",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "target": "class:vllm/v1/attention/backends/short_conv_attn.py:ShortConvAttentionBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "target": "class:vllm/v1/attention/backends/short_conv_attn.py:ShortConvAttentionBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "target": "class:vllm/v1/attention/backends/short_conv_attn.py:PleShortConvAttentionMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "target": "class:vllm/v1/attention/backends/short_conv_attn.py:PleShortConvAttentionMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "target": "class:vllm/v1/attention/backends/short_conv_attn.py:PleShortConvAttentionBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "target": "class:vllm/v1/attention/backends/short_conv_attn.py:PleShortConvAttentionBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "target": "class:vllm/v1/attention/backends/short_conv_attn.py:PleShortConvAttentionMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "target": "class:vllm/v1/attention/backends/short_conv_attn.py:PleShortConvAttentionMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "class:vllm/v1/attention/backends/triton_attn.py:TritonAttentionMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "class:vllm/v1/attention/backends/triton_attn.py:TritonAttentionMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "class:vllm/v1/attention/backends/triton_attn.py:TritonAttentionMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "class:vllm/v1/attention/backends/triton_attn.py:TritonAttentionMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "class:vllm/v1/attention/backends/triton_attn.py:TritonAttentionBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "class:vllm/v1/attention/backends/triton_attn.py:TritonAttentionBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "class:vllm/v1/attention/backends/triton_attn.py:TritonAttentionImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "class:vllm/v1/attention/backends/triton_attn.py:TritonAttentionImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "target": "class:vllm/v1/attention/backends/triton_attn_diffkv.py:TritonAttentionDiffKVMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "target": "class:vllm/v1/attention/backends/triton_attn_diffkv.py:TritonAttentionDiffKVMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "target": "class:vllm/v1/attention/backends/triton_attn_diffkv.py:TritonAttentionDiffKVBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "target": "class:vllm/v1/attention/backends/triton_attn_diffkv.py:TritonAttentionDiffKVBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "target": "class:vllm/v1/attention/backends/triton_attn_diffkv.py:TritonAttentionDiffKVImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "target": "class:vllm/v1/attention/backends/triton_attn_diffkv.py:TritonAttentionDiffKVImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_flash_attn.py",
+   "target": "class:vllm/v1/attention/backends/triton_flash_attn.py:_FABackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/aiter_flash_attn.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/aiter_flash_attn.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/aiter_flash_attn.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/aiter_flash_attn.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/aiter_flash_attn.py",
+   "target": "file:vllm/model_executor/layers/attention/mla_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/aiter_flash_attn.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/aiter_flash_attn.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/aiter_flash_attn.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/base.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/base.py",
+   "target": "file:vllm/model_executor/layers/attention/mla_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/base.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/base.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/base.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/selector.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flash_attn.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flash_attn.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flash_attn.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flash_attn.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flash_attn.py",
+   "target": "file:vllm/v1/attention/backends/fa_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flash_attn.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flash_attn.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flash_attn.py",
+   "target": "file:vllm/model_executor/layers/attention/mla_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flashinfer.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flashinfer.py",
+   "target": "file:vllm/utils/gpu_sync_debug.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flashinfer.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flashinfer.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flashinfer.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flashinfer.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flashinfer.py",
+   "target": "file:vllm/model_executor/layers/attention/mla_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flashinfer.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/flashinfer.py",
+   "target": "file:vllm/model_executor/layers/attention_layer_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/registry.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/registry.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/selector.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/selector.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/selector.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/selector.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/tokenspeed_mla.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/tokenspeed_mla.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/tokenspeed_mla.py",
+   "target": "file:vllm/model_executor/layers/attention/mla_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/tokenspeed_mla.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py",
+   "target": "file:vllm/model_executor/layers/attention/mla_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/zen_cpu_sdpa.py",
+   "target": "file:vllm/model_executor/kernels/linear/zentorch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/zen_cpu_sdpa.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/cpu_sdpa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/model_executor/layers/attention/mla_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/utils/gpu_sync_debug.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/v1/attention/ops/rocm_aiter_mla_merge.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/v1/attention/ops/rocm_aiter_mla_prefill.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/v1/attention/ops/triton_decode_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "file:vllm/model_executor/layers/attention/sparse_mla_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "file:vllm/utils/gpu_sync_debug.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "file:vllm/v1/attention/ops/rocm_aiter_mla_sparse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "file:vllm/v1/attention/backends/mla/indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "file:vllm/v1/attention/ops/rocm_paged_mxfp4_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_indexer.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_indexer.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_indexer.py",
+   "target": "file:vllm/model_executor/kernels/attention/dsa/sparse_mqa_logits.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_indexer.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_indexer.py",
+   "target": "file:vllm/utils/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_indexer.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_indexer.py",
+   "target": "file:vllm/v1/attention/backends/mla/indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_indexer.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "file:vllm/model_executor/layers/attention_layer_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "file:vllm/transformers_utils/deepseek_v4_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "file:vllm/v1/attention/backends/mla/compressor_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "file:vllm/v1/attention/ops/flashmla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "file:vllm/v1/attention/ops/metadata.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_swa.py",
+   "target": "file:vllm/models/deepseek_v4/cpu/cpu_mla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "target": "file:vllm/v1/worker/block_table.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "target": "file:vllm/model_executor/layers/attention/mla_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "target": "file:vllm/model_executor/layers/attention/mla_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "target": "file:vllm/v1/attention/ops/triton_decode_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "target": "file:vllm/model_executor/layers/attention/mla_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "target": "file:vllm/model_executor/layers/attention/sparse_mla_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "target": "file:vllm/v1/attention/backends/mla/sparse_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "target": "file:vllm/v1/attention/ops/xpu_mla_sparse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "file:vllm/utils/gpu_sync_debug.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "file:vllm/utils/platform_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "file:vllm/v1/attention/ops/merge_attn_states.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "target": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "target": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "target": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "file:vllm/v1/attention/ops/chunked_prefill_paged_decode.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "file:vllm/v1/attention/ops/paged_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "target": "file:vllm/v1/attention/ops/triton_prefill_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "target": "file:vllm/v1/attention/ops/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "target": "file:vllm/v1/kv_cache_layout.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "file:vllm/v1/attention/ops/segmented_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "target": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "target": "file:vllm/v1/attention/backends/mamba_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "file:vllm/v1/attention/ops/triton_prefill_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "file:vllm/v1/attention/ops/triton_unified_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "target": "file:vllm/v1/attention/backends/triton_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "target": "file:vllm/v1/attention/ops/triton_reshape_and_cache_flash.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "target": "file:vllm/v1/attention/ops/triton_unified_attention_diffkv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_flash_attn.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_flash_attn.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_flash_attn.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_flash_attn.py",
+   "target": "file:vllm/v1/attention/backends/composite.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_flash_attn.py",
+   "target": "file:vllm/v1/attention/backends/fa_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_flash_attn.py",
+   "target": "file:vllm/v1/attention/backends/flash_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_flash_attn.py",
+   "target": "file:vllm/v1/attention/backends/triton_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/prefill/aiter_flash_attn.py:AiterFlashAttnPrefillBackend",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/base.py:MLAPrefillBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/prefill/flash_attn.py:FlashAttnPrefillBackend",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/base.py:MLAPrefillBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/prefill/flashinfer.py:FlashInferPrefillBackend",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/base.py:MLAPrefillBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/prefill/tokenspeed_mla.py:TokenspeedMLAPrefillBackend",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/base.py:MLAPrefillBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py:TrtllmRaggedPrefillBackend",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/base.py:MLAPrefillBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/prefill/zen_cpu_sdpa.py:ZenCPUSDPAMLAPrefillBackend",
+   "target": "class:vllm/v1/attention/backends/mla/prefill/cpu_sdpa.py:CPUSDPAMLAPrefillBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:AiterMLABackend",
+   "target": "class:vllm/model_executor/layers/attention/mla_attention.py:MLACommonBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla.py:AiterMLADecodeMetadata",
+   "target": "class:vllm/model_executor/layers/attention/mla_attention.py:MLACommonDecodeMetadata",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py:ROCMAiterMLASparseBackend",
+   "target": "class:vllm/v1/attention/backend.py:AttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:DeepseekV41RocmMxfp4IndexerBackend",
+   "target": "class:vllm/v1/attention/backends/mla/indexer.py:DeepseekV41IndexerBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:DeepseekV4RocmMxfp4IndexerBackend",
+   "target": "class:vllm/v1/attention/backends/mla/indexer.py:DeepseekV4IndexerBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:RocmMxfp4IndexerMetadataBuilder",
+   "target": "class:vllm/v1/attention/backends/mla/indexer.py:DeepseekV32IndexerMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:DeepseekV41RocmMxfp4IndexerMetadataBuilder",
+   "target": "class:vllm/v1/attention/backends/mla/rocm_paged_mxfp4_indexer.py:RocmMxfp4IndexerMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/sparse_indexer.py:DeepseekV41SparseIndexerBackend",
+   "target": "class:vllm/v1/attention/backends/mla/indexer.py:DeepseekV41IndexerBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/sparse_indexer.py:DeepseekV41SparseIndexerMetadataBuilder",
+   "target": "class:vllm/v1/attention/backends/mla/indexer.py:DeepseekV32IndexerMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekV4SWACache",
+   "target": "class:vllm/model_executor/layers/attention_layer_base.py:AttentionLayerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekSparseSWABackend",
+   "target": "class:vllm/v1/attention/backend.py:AttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/sparse_swa.py:DeepseekSparseSWAMetadataBuilder",
+   "target": "class:vllm/v1/attention/backend.py:AttentionMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/tokenspeed_mla.py:TokenspeedMLABackend",
+   "target": "class:vllm/model_executor/layers/attention/mla_attention.py:MLACommonBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/triton_mla.py:TritonMLABackend",
+   "target": "class:vllm/model_executor/layers/attention/mla_attention.py:MLACommonBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/xpu_mla_sparse.py:XPUMLASparseBackend",
+   "target": "class:vllm/v1/attention/backend.py:AttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/xpu_mla_sparse.py:XPUMLASparseMetadata",
+   "target": "class:vllm/v1/attention/backend.py:AttentionMetadata",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/mla/xpu_mla_sparse.py:XPUMLASparseImpl",
+   "target": "class:vllm/model_executor/layers/attention/sparse_mla_attention.py:SharedTopkIndicesBuffer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/rocm_aiter_fa.py:AiterFlashAttentionBackend",
+   "target": "class:vllm/v1/attention/backend.py:AttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/rocm_aiter_fa.py:AiterFlashAttentionImpl",
+   "target": "class:vllm/v1/attention/backend.py:AttentionImpl",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/rocm_aiter_unified_attn.py:RocmAiterUnifiedAttentionBackend",
+   "target": "class:vllm/v1/attention/backends/rocm_attn.py:RocmAttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/rocm_aiter_unified_attn.py:RocmAiterUnifiedAttentionImpl",
+   "target": "class:vllm/v1/attention/backends/rocm_attn.py:RocmAttentionImpl",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/rocm_attn.py:RocmAttentionBackend",
+   "target": "class:vllm/v1/attention/backend.py:AttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/rocm_attn.py:RocmAttentionImpl",
+   "target": "class:vllm/v1/attention/backend.py:AttentionImpl",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/rocm_octave_attn.py:RocmOctaveAttentionBackend",
+   "target": "class:vllm/v1/attention/backend.py:AttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/rocm_octave_attn.py:RocmOctaveAttentionImpl",
+   "target": "class:vllm/v1/attention/backend.py:AttentionImpl",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/rocm_segmented_attn.py:RocmSegmentedAttentionBackend",
+   "target": "class:vllm/v1/attention/backends/rocm_attn.py:RocmAttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/rocm_segmented_attn.py:RocmSegmentedAttentionImpl",
+   "target": "class:vllm/v1/attention/backends/rocm_attn.py:RocmAttentionImpl",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/short_conv_attn.py:ShortConvAttentionBackend",
+   "target": "class:vllm/v1/attention/backend.py:AttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/short_conv_attn.py:PleShortConvAttentionMetadata",
+   "target": "class:vllm/v1/attention/backends/short_conv_attn.py:ShortConvAttentionMetadata",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/short_conv_attn.py:PleShortConvAttentionBackend",
+   "target": "class:vllm/v1/attention/backends/short_conv_attn.py:ShortConvAttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/short_conv_attn.py:PleShortConvAttentionMetadataBuilder",
+   "target": "class:vllm/v1/attention/backends/short_conv_attn.py:ShortConvAttentionMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/triton_attn.py:TritonAttentionBackend",
+   "target": "class:vllm/v1/attention/backend.py:AttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/triton_attn.py:TritonAttentionImpl",
+   "target": "class:vllm/v1/attention/backend.py:AttentionImpl",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/triton_attn_diffkv.py:TritonAttentionDiffKVMetadataBuilder",
+   "target": "class:vllm/v1/attention/backends/triton_attn.py:TritonAttentionMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/triton_attn_diffkv.py:TritonAttentionDiffKVBackend",
+   "target": "class:vllm/v1/attention/backends/triton_attn.py:TritonAttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/triton_attn_diffkv.py:TritonAttentionDiffKVImpl",
+   "target": "class:vllm/v1/attention/backends/triton_attn.py:TritonAttentionImpl",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/attention/backends/triton_flash_attn.py:_FABackend",
+   "target": "class:vllm/v1/attention/backends/flash_attn.py:FlashAttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/b12x.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/cpu_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/flash_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/flash_attn_diffkv.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/flashinfer.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/gdn_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/hpc_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/mamba1_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/mamba2_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/amx_mla.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/cpu_mla.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/cutlass_mla.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/flashattn_mla.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/flashattn_mla_sparse.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/flashinfer_mla.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/flashinfer_mla_sparse.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/flashinfer_mla_sparse_sm120.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/flashinfer_mla_sparse_sm90.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/flashmla.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/flashmla_sparse.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/tokenspeed_mla.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/triton_mla.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/xpu_mla_sparse.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/rocm_aiter_unified_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/rocm_octave_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/triton_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/triton_attn_diffkv.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/registry.py",
+   "target": "file:vllm/v1/attention/backends/triton_flash_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/aiter_flash_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/flash_attn.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/flashinfer.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/tokenspeed_mla.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/trtllm_ragged.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/mla/prefill/registry.py",
+   "target": "file:vllm/v1/attention/backends/mla/prefill/zen_cpu_sdpa.py",
+   "type": "depends_on",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "file:vllm/v1/attention/backends/triton_flash_attn.py",
+   "target": "file:vllm/v1/attention/backends/composite.py",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

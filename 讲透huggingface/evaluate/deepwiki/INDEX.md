@@ -1,0 +1,32 @@
+# DeepWiki 索引 — huggingface/evaluate
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 474731 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Key Concepts](1.1-key-concepts.md)
+  - [1.2 Installation and Setup](1.2-installation-and-setup.md)
+- [2 Package Structure and Entrypoints](2-package-structure-and-entrypoints.md)
+- [3 Core Architecture](3-core-architecture.md)
+  - [3.1 Module Loading System](3.1-module-loading-system.md)
+  - [3.2 Evaluation Module Base Classes](3.2-evaluation-module-base-classes.md)
+  - [3.3 Caching and Distributed Computation](3.3-caching-and-distributed-computation.md)
+- [4 Evaluator System](4-evaluator-system.md)
+  - [4.1 Task-Specific Evaluators](4.1-task-specific-evaluators.md)
+  - [4.2 Evaluation Suite](4.2-evaluation-suite.md)
+- [5 Metrics](5-metrics.md)
+  - [5.1 Classification Metrics](5.1-classification-metrics.md)
+  - [5.2 Text Generation Metrics](5.2-text-generation-metrics.md)
+  - [5.3 Sequence Labeling Metrics](5.3-sequence-labeling-metrics.md)
+  - [5.4 Question Answering Metrics](5.4-question-answering-metrics.md)
+  - [5.5 Advanced Metrics](5.5-advanced-metrics.md)
+- [6 Comparisons](6-comparisons.md)
+- [7 Measurements](7-measurements.md)
+  - [7.1 Content Quality Measurements](7.1-content-quality-measurements.md)
+  - [7.2 Text Analysis Measurements](7.2-text-analysis-measurements.md)
+- [8 Integration with ML Frameworks](8-integration-with-ml-frameworks.md)
+- [9 Command-line Interface](9-command-line-interface.md)
+- [10 Contributing & Development](10-contributing-development.md)
+  - [10.1 Creating Custom Modules](10.1-creating-custom-modules.md)
+  - [10.2 Hub Integration](10.2-hub-integration.md)
+  - [10.3 Development Tooling](10.3-development-tooling.md)

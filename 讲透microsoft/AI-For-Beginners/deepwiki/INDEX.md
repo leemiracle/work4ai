@@ -1,0 +1,40 @@
+# DeepWiki 索引 — microsoft/AI-For-Beginners
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 29 页 · 全文 459018 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Curriculum Structure](1.1-curriculum-structure.md)
+  - [1.2 Learning Approach](1.2-learning-approach.md)
+- [2 Development Environment](2-development-environment.md)
+  - [2.1 Local Development Setup](2.1-local-development-setup.md)
+  - [2.2 Cloud Development Options](2.2-cloud-development-options.md)
+  - [2.3 Dependencies and Framework Stack](2.3-dependencies-and-framework-stack.md)
+  - [2.4 Standalone Beginner Examples](2.4-standalone-beginner-examples.md)
+- [3 Curriculum Content](3-curriculum-content.md)
+  - [3.1 Introduction to AI](3.1-introduction-to-ai.md)
+  - [3.2 Symbolic AI](3.2-symbolic-ai.md)
+  - [3.3 Neural Networks Foundations](3.3-neural-networks-foundations.md)
+  - [3.4 Computer Vision](3.4-computer-vision.md)
+  - [3.5 Natural Language Processing](3.5-natural-language-processing.md)
+  - [3.6 Multimodal AI](3.6-multimodal-ai.md)
+  - [3.7 Reinforcement Learning](3.7-reinforcement-learning.md)
+  - [3.8 Other AI Techniques](3.8-other-ai-techniques.md)
+  - [3.9 AI Ethics](3.9-ai-ethics.md)
+- [4 Assessment System](4-assessment-system.md)
+  - [4.1 Quiz Application Architecture](4.1-quiz-application-architecture.md)
+  - [4.2 Quiz Content Structure](4.2-quiz-content-structure.md)
+  - [4.3 Quiz Deployment Pipeline](4.3-quiz-deployment-pipeline.md)
+- [5 Internationalization System](5-internationalization-system.md)
+  - [5.1 Translation Infrastructure](5.1-translation-infrastructure.md)
+  - [5.2 Localized Content and Language Coverage](5.2-localized-content-and-language-coverage.md)
+- [6 Repository Governance and Automation](6-repository-governance-and-automation.md)
+  - [6.1 Contributing and Issue Templates](6.1-contributing-and-issue-templates.md)
+  - [6.2 CI Workflows and Security](6.2-ci-workflows-and-security.md)
+- [7 Glossary](7-glossary.md)
+
+## 附：结构清单外的页
+- [NLP Utilities and Implementation Patterns](x1-nlp-utilities-and-implementation-patterns.md)
+- [Recurrent Networks and Language Modeling](x2-recurrent-networks-and-language-modeling.md)
+- [Text Representation and Embeddings](x3-text-representation-and-embeddings.md)
+- [Transformers and Modern NLP](x4-transformers-and-modern-nlp.md)

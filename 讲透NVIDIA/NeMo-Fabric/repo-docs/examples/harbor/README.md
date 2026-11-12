@@ -1,0 +1,177 @@
+<!--
+SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+SPDX-License-Identifier: Apache-2.0
+-->
+
+# Run NVIDIA NeMo Fabric Agents with Harbor
+
+These examples keep Harbor in control of tasks, containers, verification,
+rewards, retries, concurrency, and job layout while `FabricAgent` translates
+Harbor options into one final typed `FabricConfig`. Complete the shared host
+setup below, then use any walkthrough that matches the integration behavior
+you want to exercise.
+
+## Walkthroughs
+
+| Walkthrough | What it demonstrates |
+| --- | --- |
+| [Calculator walkthrough](calculator/README.md) | Validate the complete integration and Harbor reward with a deterministic, credential-free smoke test, then run the same task with OpenClaw, Claude, Pi, or Codex. |
+| [NVIDIA-labs Object Oriented Agents (NOOA) BenchAgent walkthrough](nooa_bench/README.md) | Run a benchmark-native custom agent through `FabricAgent`, verify the Harbor reward and Relay artifacts, and progress to a real SWE-Bench task. |
+| [SWE-Bench walkthrough](swebench/README.md) | Run Hermes Agent, OpenCode, Cline, and Claude experiments with skills, MCP servers, tool policy, Relay telemetry, and SWE-Bench verification. |
+
+The calculator's scripted run is useful for validating a new checkout or
+environment without calling an LLM. Its OpenClaw, Claude, Pi, and Codex runs exercise real model integrations on the same small task. SWE-Bench
+exercises a real coding task and supports comparisons across configuration
+variations.
+
+## Execution Model
+
+```mermaid
+flowchart LR
+    subgraph Host["<b>Harbor host process</b>"]
+        direction TB
+        Inputs["Harbor task and agent options"]:::data
+        Start["Start Harbor run"]
+        Build["FabricAgent builds<br/>final FabricConfig"]
+
+        Inputs --> Start --> Build
+    end
+
+    subgraph Container["<b>Harbor task container</b>"]
+        direction TB
+        Prepare["Prepare task environment"]
+        Invoke["Invoke NeMo Fabric runner"]
+        Resolve["Fabric.run(): resolve<br/>adapter and assets"]
+        Execute["Run selected harness<br/>in task workspace"]
+        Verify["Verify task"]
+        Result["Result and artifacts<br/>returned to host"]:::data
+        Reward["Reward"]:::data
+
+        Prepare --> Invoke --> Resolve --> Execute --> Verify --> Reward
+        Execute --> Result
+    end
+
+    Host -- "FabricConfig + RunRequest + base_dir" --> Container
+
+    classDef data fill:transparent,stroke:transparent
+    style Host stroke-width:2px
+    style Container stroke-width:2px
+```
+
+`FabricAgent` and `FabricConfig` construction run in the Harbor host process.
+The pinned NeMo Fabric package, adapter discovery, harness execution, workspace, and
+verifier run inside the isolated task container. Constructing the config does
+not read task paths; adapter and asset resolution is deferred to
+`Fabric.run()` with the task-local `base_dir`.
+
+## Install the Host and Task Environments
+
+Use the following package requirements for the two-environment model. Pin the
+host and task packages to the same NeMo Fabric release. These examples use
+version `0.6.0`.
+
+| Environment | Required Dependencies | Purpose |
+| --- | --- | --- |
+| Harbor host | `nemo-fabric[harbor]==0.6.0` | Harbor CLI, `FabricAgent`, and typed `FabricConfig` construction |
+| Claude task without Relay | `nemo-fabric[claude]==0.6.0` | NeMo Fabric runner, Claude adapter, and supported Claude harness |
+| Codex task | `nemo-fabric[codex]==0.6.0` | NeMo Fabric runner, Codex adapter, and SDK-managed app-server; the calculator image installs the local adapter source with its `harness` extra |
+| Pi task | `nemo-fabric==0.6.0`, `nemo-fabric-adapters-pi@0.6.0`, and a compatible Pi SDK harness | NeMo Fabric runner and task-local Pi adapter descriptor; the calculator image builds both from the vendored source |
+| Claude task with Relay | `nemo-fabric[claude]==0.6.0` plus a NeMo Relay CLI in the `>=0.9,<0.11` range on `PATH` | NeMo Fabric runner, Claude adapter and harness, and the adapter-managed Relay gateway and hooks |
+| Pi task with Relay | `nemo-fabric==0.6.0`, `nemo-fabric-adapters-pi@0.6.0`, a compatible Pi SDK harness, `nemo-relay-cli-bin>=0.9.0,<0.11.0` on `PATH`, and the matching Relay Pi extension | NeMo Fabric runner, Pi adapter and harness, and the adapter-managed Relay gateway and extension |
+| Hermes Agent task with Relay | Task image with a Relay 0.10-compatible Hermes Agent, `nemo-fabric==0.6.0`, `nemo-fabric-adapters-hermes==0.6.0`, and `nemo-relay>=0.10,<0.11` | NeMo Fabric runner, preinstalled Hermes Agent and adapter, and the NeMo Relay Python package |
+| OpenClaw task | Node.js 24.16+ or 26.1+, OpenClaw, `nemo-fabric==0.6.0`, and `nemo-fabric-adapters-openclaw==0.6.0` | NeMo Fabric runner, OpenClaw adapter, and the adapter-managed local OpenClaw Gateway |
+| NOOA BenchAgent task | `nemo-fabric==0.6.0` and `nemo-fabric-adapters-nooa[harness]==0.6.0` | NeMo Fabric runner, the packaged BenchAgent adapter and descriptors, and tested NOOA harness packages |
+| NOOA BenchAgent task with Relay | `nemo-fabric==0.6.0` and `nemo-fabric-adapters-nooa[full]==0.6.0` | Baseline dependencies plus compatible Relay telemetry support |
+
+The `nemo-fabric` package installs the runtime. The `relay` extra installs the
+NeMo Relay Python package, not the CLI required by Claude.
+Pi Relay configurations must set `runtime.artifacts` and
+`harness.settings.relay_extension_path`; relative extension paths resolve from
+the task's `environment.workspace`. Applications that use Pi with Relay-backed
+`Runtime.invoke_stream()` must also install `nemo-fabric[streaming]` and use the
+default embedded collector.
+
+Hermes Agent 0.20 and later is no longer installable from PyPI. Prepare Hermes
+Agent task images by following the
+[Hermes Agent installation guide](https://hermes-agent.nousresearch.com/docs/installation),
+then install the bare Hermes adapter into the same Python environment.
+
+## How Harbor Inputs Become FabricConfig
+
+`FabricAgent` starts with the selected adapter and Harbor task workspace, then
+applies every run input through typed NeMo Fabric models before crossing the task
+container boundary:
+
+| Harbor input | `FabricConfig` field |
+| --- | --- |
+| `--ak fabric_adapter_id=...` | `harness.adapter_id` |
+| `--model` | `models.default` |
+| `--skill` | `skills.paths` |
+| `--mcp-config` | `mcp.servers` |
+| `--ak fabric_telemetry=relay` | `telemetry.providers.relay` and `relay.observability` |
+| `--ak fabric_model_base_url=<url>` | `models.default.base_url` |
+| `--ak fabric_model_api_key_env=<name>` | `models.default.api_key_env` |
+| `--ak fabric_discovery_paths='["/task/adapter.fabric-adapter.json"]'` | `discovery.local_paths` for task-local descriptors such as Pi |
+| `--ak fabric_system_instruction=<text>` | `instructions.system` |
+| `--ak fabric_max_turns=<count>` | `runtime.max_turns` |
+| `--ak fabric_runtime_timeout_seconds=<seconds>` | `runtime.timeout_seconds` |
+| `--ak fabric_environment_env='{...}'` | `environment.env` |
+| `--ak fabric_blocked_tools='[...]'` | `tools.blocked` |
+| `--ak fabric_enabled_tools='[...]'` | `tools.enabled` |
+| `--ak fabric_harness_settings='{...}'` | Merged into `harness.settings`; planning rejects non-empty settings when the selected descriptor does not declare `settings_schema` |
+
+`fabric_model_api_key_env` names the environment variable the harness reads the
+model API key from inside the task container; pair it with Harbor's
+`--ae <NAME>=<value>` so the variable is present there. Adapters that require an
+explicit credential name for non-OpenAI providers (deepagents, for example) need it
+whenever `--model` is not an `openai/` model.
+Use a name recognized by Harbor's redaction policy, such as `MODEL_API_KEY`.
+The bridge rejects model credential names such as `MODEL_DSN` before tasks are
+queued because Harbor cannot scrub their values from retained trial files.
+Pass literal credentials through `--ae`, not `--ak fabric_environment_env`.
+Sensitive `fabric_environment_env` entries require host-variable references such
+as `{"MODEL_API_KEY": "${MODEL_API_KEY}"}` without inline defaults; ordinary
+non-sensitive settings can remain literals.
+
+The result is the complete `FabricConfig` uploaded with the `RunRequest` and
+task-local `base_dir`. The container-side runner deserializes that payload and
+passes it to `Fabric.run()` without adding configuration policy. The task,
+verifier, and `FabricAgent` stay fixed, so each experiment changes only the
+named Harbor input and its resulting evidence remains attributable.
+
+## Shared Host Setup
+
+Run every command from the repository root on an x86_64 Linux host with Python
+3.12, `uv`, Docker, and the Docker Compose plugin. Create the host environment
+and verify the relevant entry points:
+
+```bash
+cd "$(git rev-parse --show-toplevel)"
+uv sync --python 3.12 --extra harbor
+uv run --extra harbor harbor --version
+uv run --extra harbor python -c \
+  'from nemo_fabric.integrations.harbor import FabricAgent; print(FabricAgent.import_path())'
+docker version
+docker compose version
+```
+
+The Harbor command must report 0.24.x, and the Python command must print
+`nemo_fabric.integrations.harbor.fabric_agent:FabricAgent`.
+
+### Docker Installed with Snap
+
+The Snap build of Docker sees a private `/tmp`, while Harbor creates temporary
+Docker Compose overlays in the host temporary directory. If `command -v docker`
+prints `/snap/bin/docker`, run this in every shell used for Harbor:
+
+```bash
+mkdir -p "$HOME/harbor-tmp"
+export TMPDIR="$HOME/harbor-tmp"
+uv run --extra harbor python -c \
+  'import tempfile; print(tempfile.gettempdir())'
+```
+
+The final command must print a path under `$HOME/harbor-tmp`. Keep this shell
+open and continue with the [calculator](calculator/README.md),
+[NOOA BenchAgent](nooa_bench/README.md), or
+[SWE-Bench](swebench/README.md) guide.

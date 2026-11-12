@@ -1,201 +1,166 @@
+<!-- source: DeepWiki mcp.deepwiki.com · repo vllm-project/vllm · page 3 Engine Architecture · fetched 2026-10-28 -->
+
 # Engine Architecture
 
-> 来源: https://deepwiki.com/vllm-project/vllm/3-engine-architecture 抓取日期: 2026-09-02
-> 章节: 第 3 章 引擎架构
+<details>
+<summary>Relevant source files</summary>
+
+The following files were used as context for generating this wiki page:
+
+- [tests/entrypoints/launchers/api_server/test_api_server_process_manager.py](tests/entrypoints/launchers/api_server/test_api_server_process_manager.py)
+- [tests/entrypoints/serve/utils/test_api_utils.py](tests/entrypoints/serve/utils/test_api_utils.py)
+- [tests/v1/distributed/test_async_llm_dp.py](tests/v1/distributed/test_async_llm_dp.py)
+- [tests/v1/engine/test_core_engine_actor_manager.py](tests/v1/engine/test_core_engine_actor_manager.py)
+- [tests/v1/engine/test_dp_world_group_port.py](tests/v1/engine/test_dp_world_group_port.py)
+- [tests/v1/engine/test_engine_core.py](tests/v1/engine/test_engine_core.py)
+- [tests/v1/engine/test_engine_core_client.py](tests/v1/engine/test_engine_core_client.py)
+- [tests/v1/engine/test_startup_watch_processes.py](tests/v1/engine/test_startup_watch_processes.py)
+- [vllm/engine/protocol.py](vllm/engine/protocol.py)
+- [vllm/entrypoints/cli/serve.py](vllm/entrypoints/cli/serve.py)
+- [vllm/entrypoints/llm.py](vllm/entrypoints/llm.py)
+- [vllm/entrypoints/serve/utils/api_utils.py](vllm/entrypoints/serve/utils/api_utils.py)
+- [vllm/v1/core/sched/interface.py](vllm/v1/core/sched/interface.py)
+- [vllm/v1/engine/__init__.py](vllm/v1/engine/__init__.py)
+- [vllm/v1/engine/async_llm.py](vllm/v1/engine/async_llm.py)
+- [vllm/v1/engine/coordinator.py](vllm/v1/engine/coordinator.py)
+- [vllm/v1/engine/core.py](vllm/v1/engine/core.py)
+- [vllm/v1/engine/core_client.py](vllm/v1/engine/core_client.py)
+- [vllm/v1/engine/llm_engine.py](vllm/v1/engine/llm_engine.py)
+- [vllm/v1/engine/utils.py](vllm/v1/engine/utils.py)
+- [vllm/v1/utils.py](vllm/v1/utils.py)
+
+</details>
+
+
+
+This page provides a high-level overview of the core engine components in the vLLM v1 inference engine. It describes central abstractions such as the `EngineCore` that runs the inner model execution loop, various client API layers, the request lifecycle and scheduling mechanism, KV cache management including prefix caching, input and output processing logic, and observability features. Each subsection introduces key concepts and their interactions, linking to child pages for detailed technical documentation.
+
+Sources: [vllm/v1/engine/core.py:105-170](), [vllm/v1/engine/core_client.py:78-87]()
 
 ---
 
-Relevant source files
-
-  * [tests/config/test_config_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/config/test_config_utils.py)
-  * [tests/v1/core/test_async_scheduler.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/test_async_scheduler.py)
-  * [tests/v1/core/test_contiguous_kv_packing.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/test_contiguous_kv_packing.py)
-  * [tests/v1/core/test_kv_cache_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/test_kv_cache_utils.py)
-  * [tests/v1/core/test_prefix_caching.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/test_prefix_caching.py)
-  * [tests/v1/core/test_scheduler.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/test_scheduler.py)
-  * [tests/v1/core/test_single_type_kv_cache_manager.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/test_single_type_kv_cache_manager.py)
-  * [tests/v1/core/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/utils.py)
-  * [tests/v1/distributed/test_async_llm_dp.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/distributed/test_async_llm_dp.py)
-  * [tests/v1/engine/test_engine_args.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/engine/test_engine_args.py)
-  * [tests/v1/engine/test_engine_core_client.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/engine/test_engine_core_client.py)
-  * [tests/v1/kv_connector/unit/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/kv_connector/unit/utils.py)
-  * [tests/v1/worker/test_gpu_model_runner.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/worker/test_gpu_model_runner.py)
-  * [tests/v1/worker/test_kv_block_zeroer.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/worker/test_kv_block_zeroer.py)
-  * [vllm/engine/protocol.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/engine/protocol.py)
-  * [vllm/entrypoints/cli/serve.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/cli/serve.py)
-  * [vllm/entrypoints/llm.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/llm.py)
-  * [vllm/model_executor/warmup/qwen_triton_warmup.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/warmup/qwen_triton_warmup.py)
-  * [vllm/v1/core/block_pool.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/block_pool.py)
-  * [vllm/v1/core/kv_cache_coordinator.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/kv_cache_coordinator.py)
-  * [vllm/v1/core/kv_cache_manager.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/kv_cache_manager.py)
-  * [vllm/v1/core/kv_cache_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/kv_cache_utils.py)
-  * [vllm/v1/core/sched/async_scheduler.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/async_scheduler.py)
-  * [vllm/v1/core/sched/interface.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/interface.py)
-  * [vllm/v1/core/sched/scheduler.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py)
-  * [vllm/v1/core/single_type_kv_cache_manager.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/single_type_kv_cache_manager.py)
-  * [vllm/v1/engine/__init__.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/__init__.py)
-  * [vllm/v1/engine/async_llm.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/async_llm.py)
-  * [vllm/v1/engine/coordinator.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/coordinator.py)
-  * [vllm/v1/engine/core.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py)
-  * [vllm/v1/engine/core_client.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core_client.py)
-  * [vllm/v1/engine/input_processor.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/input_processor.py)
-  * [vllm/v1/engine/llm_engine.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/llm_engine.py)
-  * [vllm/v1/engine/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/utils.py)
-  * [vllm/v1/kv_cache_interface.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/kv_cache_interface.py)
-  * [vllm/v1/request.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/request.py)
-  * [vllm/v1/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/utils.py)
-  * [vllm/v1/worker/gpu_model_runner.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/gpu_model_runner.py)
-  * [vllm/v1/worker/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/utils.py)
+## 3.1. EngineCore and Client APIs
 
-This page describes the overall architecture of the vLLM v1 inference engine: its layered components, how they communicate, and how a request flows from API submission through GPU execution and back to the caller. Detailed documentation for each component is provided in the child pages listed below.
+The `EngineCore` component is the core inference engine that manages model execution and scheduling. It encapsulates the scheduler, resource allocation, and model runner orchestration [vllm/v1/engine/core.py:141-187](). It runs in a dedicated process (`EngineCoreProc`) when multiprocessing is enabled [vllm/v1/engine/core_client.py:55]().
 
-For configuration of these components at startup, see [Configuration and Initialization](../../../../vllm-project/vllm/2-configuration-and-initialization). For details on how model inference is executed on the GPU, see [Model Execution on GPU](../../../../vllm-project/vllm/4-model-execution-on-gpu). For the HTTP serving layer built on top of this engine, see [Serving APIs](../../../../vllm-project/vllm/6-serving-apis).
+Client-facing APIs (`LLM` for synchronous offline inference and `AsyncLLM` for asynchronous online serving) communicate with the engine core through an abstract client interface called `EngineCoreClient` [vllm/v1/engine/core_client.py:80-87](). Depending on deployment scenario, this client can be implemented as an in-process direct call (`InprocClient`) or an asynchronous multiprocess client (`AsyncMPClient`, `SyncMPClient`) using ZeroMQ (ZMQ) for IPC [vllm/v1/engine/core_client.py:117-134](). The `AsyncLLM` class, for instance, uses `EngineCoreClient` to interact with the underlying engine [vllm/v1/engine/async_llm.py:93-96]().
 
-* * *
+The engine core handles requests asynchronously and streams outputs back to clients. It interacts with other subsystems such as KV cache managers and schedulers (covered later) to efficiently multiplex multiple inference requests.
 
-## Overview
+```mermaid
+classDiagram
+    direction LR
+    class LLM {
+        +generate()
+    }
+    class AsyncLLM {
+        +generate()
+    }
+    class EngineCoreClient {
+        <<abstract>>
+        +add_request(EngineCoreRequest)
+        +get_output() EngineCoreOutputs
+        +make_client()
+    }
+    class AsyncMPClient {
+        -ZmqAsyncioSocket socket
+    }
+    class InprocClient {
+        -EngineCore engine
+    }
+    class EngineCore {
+        -SchedulerInterface scheduler
+        -Executor model_executor
+        +step()
+    }
+    class EngineCoreProc {
+        +run_engine_core()
+    }
 
-vLLM's v1 engine is organized into a multi-process, multi-layer architecture designed for high-throughput inference serving. The engine consists of:
+    LLM --|> EngineCoreClient : "uses"
+    AsyncLLM --|> EngineCoreClient : "uses"
+    EngineCoreClient <|-- AsyncMPClient : "implements"
+    EngineCoreClient <|-- InprocClient : "implements"
+    AsyncMPClient ..> EngineCoreProc : "ZMQ IPC/TCP"
+    EngineCoreProc --> EngineCore : "wraps"
+    InprocClient --> EngineCore : "direct"
+```
 
-Layer| Purpose| Key Classes| Detailed Coverage  
----|---|---|---  
-**Client API**|  Accept and return requests| `LLM`, `AsyncLLM`, `EngineCoreClient`| [EngineCore and Client APIs](../../../../vllm-project/vllm/3.1-enginecore-and-client-apis)  
-**Engine Core**|  Schedule, execute, coordinate| `EngineCore`, `EngineCoreProc`, `EngineCoreClient`| [EngineCore and Client APIs](../../../../vllm-project/vllm/3.1-enginecore-and-client-apis)  
-**Request Management**|  Track request lifecycle and state| `Request`, `RequestStatus`, `EngineCoreRequest`| [Request Lifecycle and State Management](../../../../vllm-project/vllm/3.2-request-lifecycle-and-state-management)  
-**Scheduler**|  Batch requests, allocate resources| `Scheduler`, `RequestQueue`| [Scheduler and Resource Allocation](../../../../vllm-project/vllm/3.3-scheduler-and-resource-allocation)  
-**KV Cache**|  Manage GPU memory for KV cache| `KVCacheManager`, `BlockPool`, `SingleTypeKVCacheManager`| [KV Cache Management and Prefix Caching](../../../../vllm-project/vllm/3.4-kv-cache-management-and-prefix-caching)  
-**I/O Processing**|  Tokenization, detokenization| `InputProcessor`, `OutputProcessor`| [Input and Output Processing](../../../../vllm-project/vllm/3.5-input-and-output-processing)  
-**Observability**|  Metrics, logging, monitoring| `SchedulerStats`, `KVCacheMetricsCollector`| [Metrics and Observability](../../../../vllm-project/vllm/3.6-metrics-and-observability)  
-  
-### Process Architecture
+Sources: [vllm/v1/engine/core.py:141-187](), [vllm/v1/engine/core_client.py:80-87](), [vllm/v1/engine/core_client.py:117-134](), [vllm/v1/engine/async_llm.py:93-96](), [vllm/v1/engine/core_client.py:55]()
 
-The v1 engine uses a **process-split architecture** where the client-facing layer and the GPU execution loop run in separate processes, communicating via ZMQ sockets. This design enables isolation of GPU work from HTTP/API handling and asynchronous pipelining of requests.
+---
 
-**High-level architecture diagram:**
+## 3.2. Request Lifecycle and State Management
 
-Title: vLLM V1 Process Architecture
+Incoming requests, originating as raw prompts or tokenized inputs, are converted by the `InputProcessor` into `EngineCoreRequest` objects compatible with the engine core [vllm/v1/engine/async_llm.py:169-170](). An `EngineCoreRequest` encapsulates all necessary information for processing, including prompt token IDs, sampling parameters, and multimodal features [vllm/v1/engine/__init__.py:115-163]().
 
-**Alternative in-process mode** : When using `InprocClient`, `EngineCore` runs directly in the client process without separate processes or ZMQ communication. This is simpler but less scalable.
+Each request is tracked via a `Request` object that maintains dynamic execution state, including request status transitions (waiting, running, finished), token generation progress, and prefill chunking [vllm/v1/engine/__init__.py:103-104](). This enables granular control and monitoring over the lifecycle of individual requests within the engine.
 
-Sources: [vllm/v1/engine/core.py105-170](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L105-L170) [vllm/v1/engine/core_client.py78-112](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core_client.py#L78-L112) [vllm/v1/engine/utils.py179-196](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/utils.py#L179-L196) [vllm/v1/engine/async_llm.py149-156](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/async_llm.py#L149-L156)
+The engine core schedules these requests according to global concurrency and token budget limits, efficiently multiplexing them through shared GPU resources.
 
-* * *
+For a comprehensive understanding of the request processing pipeline and state transitions, refer to the child page on [Request Lifecycle and State Management](#3.2).
 
-## Client API Layer
+Sources: [vllm/v1/engine/__init__.py:115-163](), [vllm/v1/engine/async_llm.py:169-170](), [vllm/v1/engine/__init__.py:103-104]()
 
-There are two main entry points into the engine:
+---
 
-### `LLM` — Synchronous Offline Inference
+## 3.3. Scheduler and Resource Allocation
 
-`LLM` is intended for offline batch inference. It drives the engine loop synchronously, wrapping the engine logic to process a fixed set of prompts [vllm/entrypoints/llm.py67-75](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/llm.py#L67-L75)
+The `Scheduler` governs request scheduling and resource allocation according to configurable policies. It maintains separate waiting and running queues, applies constraints such as maximum concurrently running sequences and token budgets, and supports chunked prefill for efficient prompt handling [vllm/v1/engine/core.py:168-177](). The `SchedulerInterface` defines the contract for scheduling operations [vllm/v1/core/sched/interface.py:1-10]().
 
-### `AsyncLLM` — Asynchronous Online Serving
+It outputs detailed scheduling decisions (`SchedulerOutput`) indicating which requests and tokens to process in a given iteration [vllm/v1/utils.py:35-36](). This output guides the worker group in executing model forward passes.
 
-`AsyncLLM` is the engine used by the HTTP server. It is asyncio-native and designed for concurrent request handling [vllm/v1/engine/async_llm.py72-89](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/async_llm.py#L72-L89)
+The scheduler integrates with connectors for KV cache transfer (e.g., for disaggregated serving) and handles preemption scenarios to maximize GPU utilization.
 
-  * It creates an `EngineCoreClient` (specifically `AsyncMPClient`) that communicates with `EngineCoreProc` in a background process via ZMQ [vllm/v1/engine/async_llm.py149-156](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/async_llm.py#L149-L156)
-  * It pulls `EngineCoreOutputs` from the engine core and routes them to the appropriate request streams via the `OutputProcessor` [vllm/v1/engine/async_llm.py141-146](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/async_llm.py#L141-L146)
+Both synchronous and asynchronous scheduler implementations exist to support different execution models.
 
-### `EngineCoreClient` Abstraction
+For full technical details, see [Scheduler and Resource Allocation](#3.3).
 
-`EngineCoreClient` provides a unified interface for the frontend to interact with the backend [vllm/v1/engine/core_client.py78-87](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core_client.py#L78-L87)
+Sources: [vllm/v1/engine/core.py:168-177](), [vllm/v1/utils.py:35-36](), [vllm/v1/core/sched/interface.py:1-10]()
 
-  * `SyncMPClient`: ZMQ communication for synchronous callers [vllm/v1/engine/core_client.py109-110](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core_client.py#L109-L110)
-  * `AsyncMPClient`: ZMQ asyncio sockets for high-concurrency serving [vllm/v1/engine/core_client.py116-139](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core_client.py#L116-L139)
+---
 
-Sources: [vllm/v1/engine/core_client.py78-139](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core_client.py#L78-L139) [vllm/v1/engine/utils.py144-172](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/utils.py#L144-L172) [vllm/v1/engine/async_llm.py149-156](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/async_llm.py#L149-L156)
+## 3.4. KV Cache Management and Prefix Caching
 
-* * *
+The KV cache subsystem manages intermediate key-value cache blocks that store hidden states for efficient autoregressive decoding. `KVCacheManager` and `SingleTypeKVCacheManager` allocate and recycle these blocks in coordination with a `BlockPool`, tracking references per request and block usage [vllm/v1/core/kv_cache_utils.py:50-59](). The `KVCacheConfig` defines the configuration for the KV cache [vllm/v1/kv_cache_interface.py:1-10]().
 
-## Engine Core Layer
+Prefix caching hashes token content blocks (`BlockHash`) to enable reuse of cached key-value states across requests sharing common prefix tokens, drastically reducing latency on repeated prompt patterns [vllm/v1/core/kv_cache_utils.py:50-56](). Blocks are identified with combined hash and group ID keys for efficient lookup.
 
-### `EngineCore`
+Additionally, KV event publishing facilitates observability and sync with distributed connectors managing remote KV cache offloading or sharing. The `KVEventsConfig` specifies how KV events are published [vllm/config/kv_events.py:1-10]().
 
-`EngineCore` is the inner execution loop [vllm/v1/engine/core.py105-106](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L105-L106) It is responsible for initializing the `Executor`, profiling GPU memory for the KV cache, and running the core iteration loop.
+For an in-depth explanation, see [KV Cache Management and Prefix Caching](#3.4).
 
-Key components initialized in `EngineCore`:
+Sources: [vllm/v1/core/kv_cache_utils.py:50-56](), [vllm/v1/core/kv_cache_utils.py:50-59](), [vllm/v1/kv_cache_interface.py:1-10](), [vllm/config/kv_events.py:1-10]()
 
-  * `model_executor`: The hardware abstraction (e.g., `Executor`) for model forward passes [vllm/v1/engine/core.py134-138](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L134-L138)
-  * `scheduler`: The core logic for request batching and memory allocation [vllm/v1/engine/core.py162-170](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L162-L170)
-  * `structured_output_manager`: Manages constrained decoding (e.g., JSON mode) [vllm/v1/engine/core.py146](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L146-L146)
+---
 
-### `EngineCoreProc`
+## 3.5. Input and Output Processing
 
-`EngineCoreProc` is a wrapper used to run `EngineCore` in a background process [vllm/v1/engine/utils.py179](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/utils.py#L179-L179) It handles process initialization and exposes the engine over ZMQ sockets using `MsgpackEncoder`/`MsgpackDecoder` [vllm/v1/v1/serial_utils.py91-92](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/v1/serial_utils.py#L91-L92)
+`InputProcessor` handles prompt tokenization, validation, and multimodal feature extraction to prepare `EngineCoreRequest` objects for the engine [vllm/v1/engine/async_llm.py:169-170](). It supports complex prompt types, LoRA adapters, and configuration-based parameter normalization.
 
-**Class relationship diagram:**
+On the output side, `OutputProcessor` converts raw model outputs into user-facing formats (`RequestOutput`), including streaming token generation, detokenization, logprob calculation, and structured output handling. It supports multiple rendering backends and manages output chunking and partial results streaming [vllm/v1/engine/async_llm.py:160-162](), [vllm/v1/engine/llm_engine.py:103-109](). The `BaseRenderer` abstract class defines the interface for rendering outputs [vllm/renderers/__init__.py:1-10]().
 
-Title: Engine Client and Core Entities
+This subsystem provides the interface boundary where raw engine internals meet application-level results.
 
-Sources: [vllm/v1/engine/core.py105-170](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L105-L170) [vllm/v1/engine/core_client.py78-112](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core_client.py#L78-L112) [vllm/v1/engine/utils.py144-196](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/utils.py#L144-L196)
+See [Input and Output Processing](#3.5) for more details.
 
-* * *
+Sources: [vllm/v1/engine/async_llm.py:169-170](), [vllm/v1/engine/async_llm.py:160-162](), [vllm/v1/engine/llm_engine.py:103-109](), [vllm/renderers/__init__.py:1-10]()
 
-## Scheduler and KV Cache Layer
+---
 
-### `Scheduler`
+## 3.6. Metrics and Observability
 
-`Scheduler` manages request queues and KV cache allocation [vllm/v1/core/sched/scheduler.py73-84](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L73-L84) It maintains priority queues for `waiting` and `running` requests [vllm/v1/core/sched/scheduler.py49-53](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L49-L53) The `schedule()` method produces a `SchedulerOutput` specifying token budgets and KV block assignments [vllm/v1/core/sched/output.py47-48](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/output.py#L47-L48)
+The engine integrates comprehensive metrics and tracing for monitoring inference performance and reliability. Components such as `StatLoggerManager` and plugins collect iteration statistics, scheduler metrics, and KV cache usage snapshots [vllm/v1/engine/async_llm.py:146-157](), [vllm/v1/engine/llm_engine.py:126-135]().
 
-For details, see [Scheduler and Resource Allocation](../../../../vllm-project/vllm/3.3-scheduler-and-resource-allocation).
+OpenTelemetry tracing is initialized conditionally to capture detailed spans during inference and streaming [vllm/v1/engine/async_llm.py:149-152](). These observability features support Prometheus export, runtime diagnostics, and performance tuning.
 
-### `KVCacheManager`
+For detailed instrumentation infrastructure, see [Metrics and Observability](#3.6).
 
-`KVCacheManager` manages physical GPU blocks [vllm/v1/core/kv_cache_manager.py118-135](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/kv_cache_manager.py#L118-L135) It coordinates multiple `SingleTypeKVCacheManager` instances [vllm/v1/core/single_type_kv_cache_manager.py36-55](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/single_type_kv_cache_manager.py#L36-L55) It uses a `BlockPool` for raw block accounting and prefix caching [vllm/v1/core/block_pool.py15](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/block_pool.py#L15-L15)
+Sources: [vllm/v1/engine/async_llm.py:146-157](), [vllm/v1/engine/llm_engine.py:126-135](), [vllm/v1/engine/async_llm.py:149-152]()
 
-For details, see [KV Cache Management and Prefix Caching](../../../../vllm-project/vllm/3.4-kv-cache-management-and-prefix-caching).
+---
 
-**Scheduler and KV Cache data flow:**
+This parent page links to child pages that provide technical deep dives into each core subsystem mentioned here, enabling contributors and advanced users to explore the engine internals on-demand.
 
-Title: Scheduling and Resource Allocation Flow
+---
 
-Sources: [vllm/v1/core/sched/scheduler.py73-170](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L73-L170) [vllm/v1/core/kv_cache_manager.py118-166](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/kv_cache_manager.py#L118-L166) [vllm/v1/core/single_type_kv_cache_manager.py36-55](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/single_type_kv_cache_manager.py#L36-L55)
-
-* * *
-
-## Request Lifecycle
-
-### `Request` and `RequestStatus`
-
-`Request` is the internal state container [vllm/v1/request.py64-65](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/request.py#L64-L65) It tracks generated tokens, computed token counts, and KV block hashes. Its lifecycle is managed via `RequestStatus`, transitioning from `WAITING` to `RUNNING` and eventually `FINISHED_STOPPED` or other terminal states [vllm/v1/request.py27-41](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/request.py#L27-L41)
-
-For details, see [Request Lifecycle and State Management](../../../../vllm-project/vllm/3.2-request-lifecycle-and-state-management).
-
-### End-to-End Request Flow
-
-  1. **Submission** : The frontend sends an `EngineCoreRequest` to the core via the `EngineCoreClient` [vllm/v1/engine/core_client.py82](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core_client.py#L82-L82)
-  2. **Scheduling** : `Scheduler` moves the request to `RUNNING` and allocates KV blocks [vllm/v1/core/sched/scheduler.py73](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L73-L73)
-  3. **Execution** : `Executor` runs the model on GPUs, using the allocated blocks [vllm/v1/executor/__init__.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/executor/__init__.py)
-  4. **Output** : `EngineCore` collects `ModelRunnerOutput` and produces `EngineCoreOutputs` to be sent back to the client [vllm/v1/engine/core.py64-65](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L64-L65)
-
-Sources: [vllm/v1/request.py27-64](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/request.py#L27-L64) [vllm/v1/engine/core.py55-74](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L55-L74) [vllm/v1/core/sched/scheduler.py73-170](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L73-L170)
-
-* * *
-
-## Process Architecture and Communication
-
-The engine utilizes ZMQ for inter-process communication when multiprocess mode is enabled [vllm/v1/engine/core.py21](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L21-L21)
-
-Communication is optimized using:
-
-  * **`MsgpackEncoder`** : Efficient binary serialization for ZMQ transport [vllm/v1/serial_utils.py91-92](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/serial_utils.py#L91-L92)
-  * **Handshake** : `EngineHandshakeMetadata` coordinates ZMQ addresses and parallel configuration between the client and engine processes during startup [vllm/v1/engine/utils.py102-110](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/utils.py#L102-L110)
-  * **Tensor IPC** : `TensorIpcReceiver` facilitates high-performance tensor data transfer between processes [vllm/v1/engine/core.py75](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L75-L75)
-
-Sources: [vllm/v1/engine/core.py92](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L92-L92) [vllm/v1/engine/utils.py86-110](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/utils.py#L86-L110) [vllm/v1/engine/core_client.py78-139](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core_client.py#L78-L139)
-
-* * *
-
-## Supporting Subsystems
-
-Inside `EngineCore`, several subsystems support the scheduling and execution pipeline:
-
-Component| Class| Purpose  
----|---|---  
-**Structured Output**| `StructuredOutputManager`| Manages grammars and bitmasks for guided decoding [vllm/v1/structured_output.py67](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/structured_output.py#L67-L67)  
-**Multimodal Receiver**| `mm_receiver_cache`| Manages multimodal input data receiving and caching [vllm/v1/engine/core.py181-183](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L181-L183)  
-**KV Transfer**| `KVConnectorFactory`| Handles KV cache migration for disaggregated or distributed serving [vllm/v1/core/sched/scheduler.py149-153](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L149-L153)  
-  
-For details on metrics and observability, see [Metrics and Observability](../../../../vllm-project/vllm/3.6-metrics-and-observability).
-
-Sources: [vllm/v1/engine/core.py146-183](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L146-L183) [vllm/v1/core/sched/scheduler.py134-153](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L134-L153)

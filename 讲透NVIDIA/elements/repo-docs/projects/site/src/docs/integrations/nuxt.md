@@ -1,0 +1,170 @@
+---
+{
+  title: 'Nuxt',
+  description: 'Use NVIDIA Elements in a Nuxt app: register components, configure SSR, bind native form controls with v-model, and handle custom events.',
+  layout: 'docs.11ty.js'
+}
+---
+
+# {{ title }}
+
+{% integration 'nuxt' %}
+
+{% installation 'nuxt' %}
+
+Once installed import and use Elements within [Nuxt](https://nuxt.com/) Vue SFC files. Since Nuxt builds on top of Vue, the same Vue template syntax applies.
+
+## TypeScript types
+
+To get type checking and autocomplete for Elements in templates (and to have invalid props reported by the IDE and build), add a reference to the custom-elements Vue types.
+
+Create or update `env.d.ts` in your project root:
+
+```typescript
+/// <reference path="./node_modules/@nvidia-elements/core/dist/custom-elements-vue.d.ts" />
+```
+
+Nuxt includes this file when running `nuxi typecheck`. To fail the build on type errors, run type checking before the build:
+
+```json
+// package.json
+{
+  "scripts": {
+    "build": "nuxi typecheck && nuxt build"
+  }
+}
+```
+
+## Configuration
+
+Configure `nuxt.config.ts` to recognize Elements as custom elements and set up the global theme attributes.
+
+```typescript
+// nuxt.config.ts
+export default defineNuxtConfig({
+  vue: {
+    compilerOptions: {
+      isCustomElement: tag => tag.startsWith('nve-')
+    }
+  },
+  app: {
+    head: {
+      htmlAttrs: {
+        lang: 'en',
+        'nve-theme': 'dark',
+        'nve-transition': 'auto'
+      }
+    }
+  }
+});
+```
+
+## Styles
+
+Import the Elements theme and utility styles in your `app.vue` file. This ensures styles are available globally throughout your application.
+
+```html
+<style>
+@import '@nvidia-elements/themes/fonts/inter.css';
+@import '@nvidia-elements/themes/index.css';
+@import '@nvidia-elements/themes/dark.css';
+@import '@nvidia-elements/styles/layout.css';
+@import '@nvidia-elements/styles/typography.css';
+@import '@nvidia-elements/styles/view-transitions.css';
+</style>
+```
+
+## Usage
+
+Import element definitions in the `<script setup>` block of your Vue SFC files.
+
+```typescript
+import '@nvidia-elements/core/alert/define.js';
+```
+
+Properties and events then work via the standard Vue template syntax.
+
+```typescript
+// - status - HTML attribute
+// - :closable - can update via attributes or JavaScript property binding
+// - @close - event listener binding for 'close' custom event
+```
+
+```html
+<nve-alert-group status="success">
+  <nve-alert :closable="true" @close="closeAlert">hello there!</nve-alert>
+</nve-alert-group>
+```
+
+## Form controls
+
+Place `v-model` on the nested native `<input>`, not on the `nve-input`, `nve-range`, or `nve-switch` wrapper. The native control owns the value or checked state that Vue updates.
+
+```typescript
+import { ref } from 'vue';
+import '@nvidia-elements/core/forms/define.js';
+import '@nvidia-elements/core/input/define.js';
+import '@nvidia-elements/core/range/define.js';
+import '@nvidia-elements/core/switch/define.js';
+
+const name = ref('');
+const volume = ref(50);
+const notifications = ref(false);
+```
+
+```html
+<nve-input>
+  <label>Name</label>
+  <input v-model="name" type="text" />
+</nve-input>
+
+<nve-range>
+  <label>Volume</label>
+  <input v-model.number="volume" type="range" min="0" max="100" />
+</nve-range>
+
+<nve-switch>
+  <label>Notifications</label>
+  <input v-model="notifications" type="checkbox" />
+</nve-switch>
+```
+
+## Layouts
+
+Use Elements within Nuxt layouts to create consistent page structures.
+
+```html
+<!-- layouts/default.vue -->
+<template>
+  <nve-page>
+    <nve-page-header slot="header">
+      <nve-logo slot="prefix" size="sm"></nve-logo>
+      <h2 slot="prefix">My App</h2>
+    </nve-page-header>
+    <main nve-layout="column gap:lg pad:lg">
+      <slot />
+    </main>
+  </nve-page>
+</template>
+
+<script setup lang="ts">
+import '@nvidia-elements/core/page/define.js';
+import '@nvidia-elements/core/page-header/define.js';
+import '@nvidia-elements/core/logo/define.js';
+</script>
+```
+
+## Routing
+
+Elements work seamlessly with Nuxt's built-in routing. Use `NuxtLink` within Elements components for client-side navigation.
+
+```html
+<nve-tabs>
+  <nve-tabs-item selected>
+    <NuxtLink to="/">Home</NuxtLink>
+  </nve-tabs-item>
+  <nve-tabs-item>
+    <NuxtLink to="/about">About</NuxtLink>
+  </nve-tabs-item>
+</nve-tabs>
+```

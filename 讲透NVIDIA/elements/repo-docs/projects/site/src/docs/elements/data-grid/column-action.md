@@ -1,0 +1,29 @@
+---
+{
+  title: 'Data Grid Column Action',
+  description: 'Add inline action columns to NVIDIA Elements Data Grid: per-row buttons, menus, and link cells.',
+  layout: 'docs.11ty.js',
+  tag: 'nve-grid',
+  associatedElements: ['nve-grid-header', 'nve-grid-column', 'nve-grid-row', 'nve-grid-cell'],
+  hideStatus: true
+}
+---
+
+```html
+<nve-grid>
+  <nve-grid-header>
+    <nve-grid-column>
+      Column 1 <nve-icon-button slot="actions" icon-name="more-actions" aria-label="Column actions"></nve-icon-button>
+    </nve-grid-column>
+    <nve-grid-column>Column 2</nve-grid-column>
+    <nve-grid-column>Column 3</nve-grid-column>
+    <nve-grid-column>Column 4</nve-grid-column>
+  </nve-grid-header>
+    <nve-grid-row>
+      ...
+    </nve-grid-row>
+  ...
+</nve-grid>
+```
+
+{% example '@nvidia-elements/core/grid/grid.examples.json' 'ColumnAction' %}

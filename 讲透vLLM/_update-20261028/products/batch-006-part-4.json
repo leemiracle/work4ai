@@ -1,0 +1,1471 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/worker/mamba_utils.py",
+   "type": "file",
+   "name": "mamba_utils.py",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "Mamba/混合架构状态管理：多 KV 组对齐状态索引 Triton kernel、u64 分块 memcpy、融合 pre/postprocess（align 模式）与 spec decode GPU 上下文（缓冲单属主 + 融合预拷贝资源解析）。",
+   "tags": [
+    "mamba",
+    "state-management",
+    "triton",
+    "copy"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/mm_encoder_model_runner.py",
+   "type": "file",
+   "name": "mm_encoder_model_runner.py",
+   "filePath": "vllm/v1/worker/mm_encoder_model_runner.py",
+   "summary": "仅编码器实例的 model runner（--mm-encoder-only 或编码器缓存分离的生产端）：无 KV cache/采样器/decoder graph，只编码 MM 项并经 EC connector 发布 embedding，输入缓冲用深度环形事件保护复用。",
+   "tags": [
+    "multimodal",
+    "encoder",
+    "disaggregation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/sentinel/gpu_worker_sentinel.py",
+   "type": "file",
+   "name": "gpu_worker_sentinel.py",
+   "filePath": "vllm/v1/worker/sentinel/gpu_worker_sentinel.py",
+   "summary": "容错哨兵：持有单 worker 的 FT 状态，retry 命令清理 runner 请求状态、重建无状态 DP gloo 组；要求 all2all backend 属于 FT 能力集合（deepep_low_latency/nixl_ep）。",
+   "tags": [
+    "fault-tolerance",
+    "sentinel",
+    "worker"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/worker/ubatch_utils.py",
+   "type": "file",
+   "name": "ubatch_utils.py",
+   "filePath": "vllm/v1/worker/ubatch_utils.py",
+   "summary": "微批（DBO）基础工具：UBatchSlice 切分模型、SM/CU 分配上下文（DeepEP 通信预留 + DeepGEMM 计算限制，ROCm DBO 下关闭）、token 切片生成与注意力元数据切片（跨界请求首尾修正）。",
+   "tags": [
+    "microbatching",
+    "sm-control",
+    "attention-metadata"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/ubatching.py",
+   "type": "file",
+   "name": "ubatching.py",
+   "filePath": "vllm/v1/worker/ubatching.py",
+   "summary": "微批线程同步原语：UBatchContext 用 CPU 事件 + GPU 事件协调 compute/comm stream 的单线程交替执行（yield/切换/recv hook），模块级 dbo_* API 供内核层按当前线程查上下文。",
+   "tags": [
+    "microbatching",
+    "threading",
+    "synchronization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/v1/worker/mamba_utils.py:MambaCopyBuffers",
+   "type": "class",
+   "name": "MambaCopyBuffers",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "Mamba 状态拷贝缓冲集合工厂（conv/temporal 拷贝缓冲与索引）。",
+   "tags": [
+    "mamba",
+    "buffers",
+    "gpu-memory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    721,
+    765
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/mamba_utils.py:MambaSpecDecodeGPUContext",
+   "type": "class",
+   "name": "MambaSpecDecodeGPUContext",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "Mamba spec decode GPU 侧状态拷贝上下文：融合 postprocess/precopy 路径，管理对齐状态索引与 GPU staging。",
+   "tags": [
+    "mamba",
+    "spec-decode",
+    "context"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    769,
+    1301
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/mamba_utils.py:MambaBuffers",
+   "type": "class",
+   "name": "MambaBuffers",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "Mamba runner 缓冲单属主：按不同门槛组合两个子缓冲对象。",
+   "tags": [
+    "mamba",
+    "buffers",
+    "gpu-memory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1305,
+    1342
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/mm_encoder_model_runner.py:MMEncoderModelRunner",
+   "type": "class",
+   "name": "MMEncoderModelRunner",
+   "filePath": "vllm/v1/worker/mm_encoder_model_runner.py",
+   "summary": "仅编码器 model runner：编码 MM 项并发布 embedding，环形事件保护池化输入缓冲的复用。",
+   "tags": [
+    "multimodal",
+    "encoder",
+    "model-runner"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    38,
+    175
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/sentinel/gpu_worker_sentinel.py:WorkerSentinel",
+   "type": "class",
+   "name": "WorkerSentinel",
+   "filePath": "vllm/v1/worker/sentinel/gpu_worker_sentinel.py",
+   "summary": "容错哨兵：校验 FT 能力 backend，retry 时清理 runner 状态并重建无状态 DP CPU 组。",
+   "tags": [
+    "fault-tolerance",
+    "sentinel",
+    "worker"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    29,
+    90
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/ubatch_utils.py:UBatchSlice",
+   "type": "class",
+   "name": "UBatchSlice",
+   "filePath": "vllm/v1/worker/ubatch_utils.py",
+   "summary": "微批切片 dataclass（请求 slice + token slice）及空/长度查询。",
+   "tags": [
+    "microbatching",
+    "slicing",
+    "dbo"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    21,
+    33
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/ubatch_utils.py:SMControlContextManager",
+   "type": "class",
+   "name": "SMControlContextManager",
+   "filePath": "vllm/v1/worker/ubatch_utils.py",
+   "summary": "SM 通信/计算分配上下文：进入时预留通信 SM，退出恢复全部。",
+   "tags": [
+    "sm-control",
+    "context-manager",
+    "gpu"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    39,
+    80
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/ubatching.py:UBatchContext",
+   "type": "class",
+   "name": "UBatchContext",
+   "filePath": "vllm/v1/worker/ubatching.py",
+   "summary": "微批线程同步上下文管理器：CPU 事件交替唤醒 + GPU 事件做 stream 依赖，支持 yield 与 comm/compute 同步切换。",
+   "tags": [
+    "microbatching",
+    "synchronization",
+    "threading"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    20,
+    147
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/mamba_utils.py:get_aligned_state_indices_multi_group_kernel",
+   "type": "function",
+   "name": "get_aligned_state_indices_multi_group_kernel",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "Triton kernel：多 KV 组并行列出每请求的对齐状态索引（按 seq_len 定位首状态槽）。",
+   "tags": [
+    "triton",
+    "mamba",
+    "state-indices"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    39,
+    99
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/mamba_utils.py:_memcpy_u64_tiled",
+   "type": "function",
+   "name": "_memcpy_u64_tiled",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "Triton jit 分块 u64 拷贝原语（tile 循环 + 边界掩码）。",
+   "tags": [
+    "triton",
+    "memcpy",
+    "mamba"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    103,
+    182
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/mamba_utils.py:_copy_mamba_state_block",
+   "type": "function",
+   "name": "_copy_mamba_state_block",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "Mamba 状态块拷贝 kernel：conv/temporal 两种布局分支调度到分块 memcpy。",
+   "tags": [
+    "triton",
+    "mamba",
+    "copy"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    191,
+    365
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/mamba_utils.py:postprocess_mamba_fused_kernel",
+   "type": "function",
+   "name": "postprocess_mamba_fused_kernel",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "融合后处理 kernel：解码输出写回 Mamba 状态（含 spec decode 展开槽）。",
+   "tags": [
+    "triton",
+    "mamba",
+    "postprocess"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    369,
+    499
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/mamba_utils.py:preprocess_mamba_align_fused_kernel",
+   "type": "function",
+   "name": "preprocess_mamba_align_fused_kernel",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "align 模式融合预处理 kernel。",
+   "tags": [
+    "triton",
+    "mamba",
+    "preprocess"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    503,
+    545
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/mamba_utils.py:precopy_mamba_align_fused_kernel",
+   "type": "function",
+   "name": "precopy_mamba_align_fused_kernel",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "align 模式融合预拷贝 kernel（对齐状态就位）。",
+   "tags": [
+    "triton",
+    "mamba",
+    "precopy"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    549,
+    630
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/mamba_utils.py:batch_memcpy_kernel",
+   "type": "function",
+   "name": "batch_memcpy_kernel",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "批量 memcpy Triton kernel（每程序一段拷贝）。",
+   "tags": [
+    "triton",
+    "memcpy",
+    "mamba"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    634,
+    654
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/mamba_utils.py:batch_memcpy",
+   "type": "function",
+   "name": "batch_memcpy",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "batch_memcpy_kernel 的 Python 封装。",
+   "tags": [
+    "triton",
+    "wrapper",
+    "kernel-launcher"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    657,
+    664
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/mamba_utils.py:get_mamba_groups",
+   "type": "function",
+   "name": "get_mamba_groups",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "从 KV cache 配置收集 Mamba 组。",
+   "tags": [
+    "mamba",
+    "kv-cache",
+    "groups"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    688,
+    701
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/mamba_utils.py:validate_mamba_state_copy_funcs",
+   "type": "function",
+   "name": "validate_mamba_state_copy_funcs",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "校验各 Mamba 层的状态拷贝函数齐备。",
+   "tags": [
+    "mamba",
+    "validation",
+    "state-copy"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    704,
+    717
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/mamba_utils.py:collect_mamba_copy_meta",
+   "type": "function",
+   "name": "collect_mamba_copy_meta",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "收集状态拷贝元数据（含 spec decode 展开索引计算）。",
+   "tags": [
+    "mamba",
+    "metadata",
+    "state-copy"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1345,
+    1384
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/mamba_utils.py:do_mamba_copy_block",
+   "type": "function",
+   "name": "do_mamba_copy_block",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "执行单块 Mamba 状态拷贝。",
+   "tags": [
+    "mamba",
+    "copy",
+    "state"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1387,
+    1395
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/mamba_utils.py:cleanup_mamba_state_idx",
+   "type": "function",
+   "name": "cleanup_mamba_state_idx",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "清零/重置状态索引缓冲。",
+   "tags": [
+    "mamba",
+    "cleanup",
+    "buffers"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1398,
+    1413
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/mamba_utils.py:_resolve_fused_precopy",
+   "type": "function",
+   "name": "_resolve_fused_precopy",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "解析融合 align 预拷贝资源（全部非 None 后缓存）。",
+   "tags": [
+    "mamba",
+    "lazy-init",
+    "precopy"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1425,
+    1443
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/mamba_utils.py:preprocess_mamba",
+   "type": "function",
+   "name": "preprocess_mamba",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "Mamba 预处理主入口：调度器输出到状态索引与拷贝元数据的编排。",
+   "tags": [
+    "mamba",
+    "orchestration",
+    "preprocess"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1446,
+    1549
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/mamba_utils.py:postprocess_mamba_align_gpu",
+   "type": "function",
+   "name": "postprocess_mamba_align_gpu",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "GPU 侧对齐模式后处理编排。",
+   "tags": [
+    "mamba",
+    "postprocess",
+    "align"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1552,
+    1605
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/mamba_utils.py:stage_postprocess_inputs_to_gpu",
+   "type": "function",
+   "name": "stage_postprocess_inputs_to_gpu",
+   "filePath": "vllm/v1/worker/mamba_utils.py",
+   "summary": "后处理输入 staging 到 GPU。",
+   "tags": [
+    "mamba",
+    "staging",
+    "gpu"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1608,
+    1654
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/ubatch_utils.py:create_sm_control_context",
+   "type": "function",
+   "name": "create_sm_control_context",
+   "filePath": "vllm/v1/worker/ubatch_utils.py",
+   "summary": "构建 SM 通信/计算划分上下文：DeepEP 预留通信 SM + DeepGEMM 限制计算 SM，ROCm DBO 下关闭。",
+   "tags": [
+    "sm-control",
+    "microbatching",
+    "deep-gemm"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    83,
+    126
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/ubatch_utils.py:is_last_ubatch_empty",
+   "type": "function",
+   "name": "is_last_ubatch_empty",
+   "filePath": "vllm/v1/worker/ubatch_utils.py",
+   "summary": "判断尾微批是否全部落在 padding 内。",
+   "tags": [
+    "microbatching",
+    "padding",
+    "dbo"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    129,
+    132
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/ubatch_utils.py:check_ubatch_thresholds",
+   "type": "function",
+   "name": "check_ubatch_thresholds",
+   "filePath": "vllm/v1/worker/ubatch_utils.py",
+   "summary": "按 token 数与批形态检查是否达到微批阈值。",
+   "tags": [
+    "microbatching",
+    "thresholds",
+    "config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    140,
+    148
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/ubatch_utils.py:_pad_out_ubatch_slices",
+   "type": "function",
+   "name": "_pad_out_ubatch_slices",
+   "filePath": "vllm/v1/worker/ubatch_utils.py",
+   "summary": "把尾微批切片扩到 padding 后总量（DP padding 前切分）。",
+   "tags": [
+    "microbatching",
+    "padding",
+    "dbo"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    153,
+    162
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/ubatch_utils.py:maybe_create_ubatch_slices",
+   "type": "function",
+   "name": "maybe_create_ubatch_slices",
+   "filePath": "vllm/v1/worker/ubatch_utils.py",
+   "summary": "通用微批切片生成：均分或显式 split point，跨界请求归属两侧（searchsorted 定界）。",
+   "tags": [
+    "microbatching",
+    "slicing",
+    "dbo"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    165,
+    221
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/ubatch_utils.py:slice_query_start_locs",
+   "type": "function",
+   "name": "slice_query_start_locs",
+   "filePath": "vllm/v1/worker/ubatch_utils.py",
+   "summary": "切片 query_start_loc（新张量，破坏 cudagraph 兼容）。",
+   "tags": [
+    "microbatching",
+    "slicing",
+    "dbo"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    224,
+    237
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/ubatch_utils.py:_make_metadata_with_slice",
+   "type": "function",
+   "name": "_make_metadata_with_slice",
+   "filePath": "vllm/v1/worker/ubatch_utils.py",
+   "summary": "切片注意力元数据构建：首/尾请求被拆分时平移 query_start_loc 并修正 seq_lens。",
+   "tags": [
+    "attention-metadata",
+    "microbatching",
+    "slicing"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    240,
+    340
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/ubatch_utils.py:split_attn_metadata",
+   "type": "function",
+   "name": "split_attn_metadata",
+   "filePath": "vllm/v1/worker/ubatch_utils.py",
+   "summary": "按各微批切片批量构建 CommonAttentionMetadata。",
+   "tags": [
+    "attention-metadata",
+    "microbatching",
+    "slicing"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    343,
+    356
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/ubatching.py:dbo_current_ubatch_token_offset",
+   "type": "function",
+   "name": "dbo_current_ubatch_token_offset",
+   "filePath": "vllm/v1/worker/ubatching.py",
+   "summary": "当前线程微批在父批中的行偏移（无 DBO 上下文时 0）。",
+   "tags": [
+    "microbatching",
+    "context",
+    "thread-local"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    160,
+    168
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/ubatching.py:dbo_register_recv_hook",
+   "type": "function",
+   "name": "dbo_register_recv_hook",
+   "filePath": "vllm/v1/worker/ubatching.py",
+   "summary": "向下一微批注册 recv hook。",
+   "tags": [
+    "microbatching",
+    "hooks",
+    "communication"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    197,
+    201
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/ubatching.py:dbo_get_previous_event",
+   "type": "function",
+   "name": "dbo_get_previous_event",
+   "filePath": "vllm/v1/worker/ubatching.py",
+   "summary": "在当前微批 compute stream 上执行 callable 并取事件。",
+   "tags": [
+    "microbatching",
+    "streams",
+    "events"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    204,
+    210
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/ubatching.py:make_ubatch_contexts",
+   "type": "function",
+   "name": "make_ubatch_contexts",
+   "filePath": "vllm/v1/worker/ubatching.py",
+   "summary": "创建微批上下文集合：CPU 事件环形配对 + GPU 事件 + forward context 绑定。",
+   "tags": [
+    "microbatching",
+    "factory",
+    "dbo"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    213,
+    254
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "file:vllm/utils/gpu_sync_debug.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "file:vllm/v1/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "file:vllm/v1/worker/gpu_input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mm_encoder_model_runner.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mm_encoder_model_runner.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mm_encoder_model_runner.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mm_encoder_model_runner.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mm_encoder_model_runner.py",
+   "target": "file:vllm/utils/gc_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mm_encoder_model_runner.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mm_encoder_model_runner.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mm_encoder_model_runner.py",
+   "target": "file:vllm/v1/worker/gpu/cudagraph_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mm_encoder_model_runner.py",
+   "target": "file:vllm/v1/worker/gpu/mm/lora.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mm_encoder_model_runner.py",
+   "target": "file:vllm/v1/worker/gpu/model_runner.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mm_encoder_model_runner.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/sentinel/gpu_worker_sentinel.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/sentinel/gpu_worker_sentinel.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/sentinel/gpu_worker_sentinel.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/sentinel/gpu_worker_sentinel.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/all2all_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/sentinel/gpu_worker_sentinel.py",
+   "target": "file:vllm/v1/fault_tolerance/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/sentinel/gpu_worker_sentinel.py",
+   "target": "file:vllm/v1/serial_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "file:vllm/utils/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "file:vllm/utils/platform_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatching.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatching.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatching.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatching.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "class:vllm/v1/worker/mamba_utils.py:MambaCopyBuffers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "class:vllm/v1/worker/mamba_utils.py:MambaSpecDecodeGPUContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "class:vllm/v1/worker/mamba_utils.py:MambaBuffers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:get_aligned_state_indices_multi_group_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:_memcpy_u64_tiled",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:_copy_mamba_state_block",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:postprocess_mamba_fused_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:preprocess_mamba_align_fused_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:precopy_mamba_align_fused_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:batch_memcpy_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:batch_memcpy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:get_mamba_groups",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:validate_mamba_state_copy_funcs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:collect_mamba_copy_meta",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:do_mamba_copy_block",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:cleanup_mamba_state_idx",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:_resolve_fused_precopy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:preprocess_mamba",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:postprocess_mamba_align_gpu",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:stage_postprocess_inputs_to_gpu",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mm_encoder_model_runner.py",
+   "target": "class:vllm/v1/worker/mm_encoder_model_runner.py:MMEncoderModelRunner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/sentinel/gpu_worker_sentinel.py",
+   "target": "class:vllm/v1/worker/sentinel/gpu_worker_sentinel.py:WorkerSentinel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "class:vllm/v1/worker/ubatch_utils.py:UBatchSlice",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "class:vllm/v1/worker/ubatch_utils.py:SMControlContextManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/ubatch_utils.py:create_sm_control_context",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/ubatch_utils.py:is_last_ubatch_empty",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/ubatch_utils.py:check_ubatch_thresholds",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/ubatch_utils.py:_pad_out_ubatch_slices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/ubatch_utils.py:maybe_create_ubatch_slices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/ubatch_utils.py:slice_query_start_locs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/ubatch_utils.py:_make_metadata_with_slice",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/ubatch_utils.py:split_attn_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatching.py",
+   "target": "class:vllm/v1/worker/ubatching.py:UBatchContext",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatching.py",
+   "target": "function:vllm/v1/worker/ubatching.py:dbo_current_ubatch_token_offset",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatching.py",
+   "target": "function:vllm/v1/worker/ubatching.py:dbo_register_recv_hook",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatching.py",
+   "target": "function:vllm/v1/worker/ubatching.py:dbo_get_previous_event",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatching.py",
+   "target": "function:vllm/v1/worker/ubatching.py:make_ubatch_contexts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "class:vllm/v1/worker/mamba_utils.py:MambaCopyBuffers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "class:vllm/v1/worker/mamba_utils.py:MambaSpecDecodeGPUContext",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "class:vllm/v1/worker/mamba_utils.py:MambaBuffers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:get_aligned_state_indices_multi_group_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:postprocess_mamba_fused_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:preprocess_mamba_align_fused_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:precopy_mamba_align_fused_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:batch_memcpy_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:batch_memcpy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:get_mamba_groups",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:validate_mamba_state_copy_funcs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:collect_mamba_copy_meta",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:do_mamba_copy_block",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:cleanup_mamba_state_idx",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:preprocess_mamba",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:postprocess_mamba_align_gpu",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/mamba_utils.py",
+   "target": "function:vllm/v1/worker/mamba_utils.py:stage_postprocess_inputs_to_gpu",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/mm_encoder_model_runner.py",
+   "target": "class:vllm/v1/worker/mm_encoder_model_runner.py:MMEncoderModelRunner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/sentinel/gpu_worker_sentinel.py",
+   "target": "class:vllm/v1/worker/sentinel/gpu_worker_sentinel.py:WorkerSentinel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "class:vllm/v1/worker/ubatch_utils.py:UBatchSlice",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "class:vllm/v1/worker/ubatch_utils.py:SMControlContextManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/ubatch_utils.py:create_sm_control_context",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/ubatch_utils.py:is_last_ubatch_empty",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/ubatch_utils.py:check_ubatch_thresholds",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/ubatch_utils.py:maybe_create_ubatch_slices",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/ubatch_utils.py:slice_query_start_locs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatch_utils.py",
+   "target": "function:vllm/v1/worker/ubatch_utils.py:split_attn_metadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatching.py",
+   "target": "class:vllm/v1/worker/ubatching.py:UBatchContext",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatching.py",
+   "target": "function:vllm/v1/worker/ubatching.py:dbo_current_ubatch_token_offset",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatching.py",
+   "target": "function:vllm/v1/worker/ubatching.py:dbo_register_recv_hook",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatching.py",
+   "target": "function:vllm/v1/worker/ubatching.py:dbo_get_previous_event",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/ubatching.py",
+   "target": "function:vllm/v1/worker/ubatching.py:make_ubatch_contexts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/worker/mm_encoder_model_runner.py:MMEncoderModelRunner",
+   "target": "class:vllm/v1/worker/gpu/model_runner.py:GPUModelRunnerV2",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/worker/mm_encoder_model_runner.py:MMEncoderModelRunner",
+   "target": "function:vllm/v1/worker/workspace.py:lock_workspace",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

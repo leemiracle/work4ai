@@ -1,0 +1,31 @@
+# DeepWiki 索引 — NVIDIA/l2fwd-nv
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 26 页 · 全文 153997 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Project Purpose and Architecture](1.1-project-purpose-and-architecture.md)
+  - [1.2 Getting Started: Build and System Setup](1.2-getting-started-build-and-system-setup.md)
+  - [1.3 Command-Line Interface and Runtime Options](1.3-command-line-interface-and-runtime-options.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 Pipeline Abstraction](2.1-pipeline-abstraction.md)
+  - [2.2 RX/TX Threading Model](2.2-rx-tx-threading-model.md)
+  - [2.3 Memory Management and GPU Communication](2.3-memory-management-and-gpu-communication.md)
+- [3 GPU Workload Engine](3-gpu-workload-engine.md)
+  - [3.1 Standard GPU Kernel (Per-Burst Launch)](3.1-standard-gpu-kernel-per-burst-launch.md)
+  - [3.2 Persistent Kernel Strategy](3.2-persistent-kernel-strategy.md)
+  - [3.3 CUDA Graphs Strategy](3.3-cuda-graphs-strategy.md)
+- [4 Header Files and Shared Definitions](4-header-files-and-shared-definitions.md)
+  - [4.1 common.h — Constants and Data Structures](4.1-common.h-constants-and-data-structures.md)
+  - [4.2 headers.h — Application-Wide Declarations](4.2-headers.h-application-wide-declarations.md)
+  - [4.3 pipeline.h and cuda_related.h — C++ and CUDA Abstractions](4.3-pipeline.h-and-cuda-related.h-c-and-cuda-abstractions.md)
+- [5 Build System and External Dependencies](5-build-system-and-external-dependencies.md)
+  - [5.1 CMake Build System](5.1-cmake-build-system.md)
+  - [5.2 External Submodules: DPDK and GDRCopy](5.2-external-submodules-dpdk-and-gdrcopy.md)
+- [6 Performance, Benchmarking, and Profiling](6-performance-benchmarking-and-profiling.md)
+  - [6.1 Benchmark Results and Hardware Configuration](6.1-benchmark-results-and-hardware-configuration.md)
+  - [6.2 Profiling with NVTX and Statistics Collection](6.2-profiling-with-nvtx-and-statistics-collection.md)
+- [7 Contributing and Licensing](7-contributing-and-licensing.md)
+  - [7.1 Contribution Guidelines](7.1-contribution-guidelines.md)
+  - [7.2 License](7.2-license.md)
+- [8 Glossary](8-glossary.md)

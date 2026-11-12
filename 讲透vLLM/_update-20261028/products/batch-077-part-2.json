@@ -1,0 +1,1427 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "type": "file",
+   "name": "kernel_warmup.py",
+   "filePath": "vllm/model_executor/warmup/kernel_warmup.py",
+   "summary": "kernel 预热总入口（533 行，31 导入）：router GEMM（ll_bf16/bf16x3）、gemm_rs_ar、Kimi K3 KDA、FlashInfer autotune（含缓存指纹、逐 rank 一致性检查与延迟 MoE token 数）。",
+   "tags": [
+    "warmup",
+    "kernel",
+    "entry-point",
+    "flashinfer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/warmup/kimi_k3_triton_warmup.py",
+   "type": "file",
+   "name": "kimi_k3_triton_warmup.py",
+   "filePath": "vllm/model_executor/warmup/kimi_k3_triton_warmup.py",
+   "summary": "Kimi-K3 Triton 预热：KDA 层发现、attn 残差/循环 KDA/Gluon chunk 三组 kernel。",
+   "tags": [
+    "kimi",
+    "kda",
+    "triton",
+    "warmup"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/warmup/mamba_triton_warmup.py",
+   "type": "file",
+   "name": "mamba_triton_warmup.py",
+   "filePath": "vllm/model_executor/warmup/mamba_triton_warmup.py",
+   "summary": "Mamba 前缀缓存状态拷贝 memcpy kernel 预热。",
+   "tags": [
+    "mamba",
+    "memcpy",
+    "warmup",
+    "prefix-cache"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/model_executor/warmup/qwen4_exp_qsa_warmup.py",
+   "type": "file",
+   "name": "qwen4_exp_qsa_warmup.py",
+   "filePath": "vllm/model_executor/warmup/qwen4_exp_qsa_warmup.py",
+   "summary": "Qwen4-Exp QSA 特化预热：indexer decode-query 等全部可达路径。",
+   "tags": [
+    "qwen",
+    "qsa",
+    "warmup",
+    "indexer"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "type": "file",
+   "name": "qwen_triton_warmup.py",
+   "filePath": "vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "summary": "Qwen GDN Triton 预热（400 行）：层发现/缓存拆分/配置推导 + gated rmsnorm、causal conv1d、post-conv、sigmoid gating delta rule 与 MTP decode kernel 逐组编译。",
+   "tags": [
+    "qwen",
+    "gdn",
+    "triton",
+    "warmup"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/model_executor/warmup/qwen_vl_triton_warmup.py",
+   "type": "file",
+   "name": "qwen_vl_triton_warmup.py",
+   "filePath": "vllm/model_executor/warmup/qwen_vl_triton_warmup.py",
+   "summary": "Qwen3-VL 预热：ViT kernel 与 M-RoPE。",
+   "tags": [
+    "qwen",
+    "vl",
+    "mrope",
+    "warmup"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/warmup/replayssm_warmup.py",
+   "type": "file",
+   "name": "replayssm_warmup.py",
+   "filePath": "vllm/model_executor/warmup/replayssm_warmup.py",
+   "summary": "replayssm autotune 预热：临时 autotune 状态（恢复原状态）与参数注入。",
+   "tags": [
+    "replayssm",
+    "autotune",
+    "mamba"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "type": "file",
+   "name": "rocm_segmented_attn_autotune_warmup.py",
+   "filePath": "vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "summary": "ROCm RDNA 分段注意力 autotune（1336 行，28 函数）：候选 tile/split 搜索（工作区预算内）、交错测量抗时钟漂移、TP 分片调优、胜者需稳定击败静态基线才采用、含崩溃恢复分片加载。",
+   "tags": [
+    "rocm",
+    "segmented-attention",
+    "autotune",
+    "tp-sharding"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/model_executor/warmup/qwen_triton_warmup.py:_QwenGDNWarmupConfig",
+   "type": "class",
+   "name": "_QwenGDNWarmupConfig",
+   "filePath": "vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "summary": "Qwen GDN 预热配置。",
+   "tags": [
+    "qwen",
+    "gdn",
+    "config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    36,
+    55
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/kernel_warmup.py:_warmup_ll_bf16_router_gemm",
+   "type": "function",
+   "name": "_warmup_ll_bf16_router_gemm",
+   "filePath": "vllm/model_executor/warmup/kernel_warmup.py",
+   "summary": "ll_bf16 router GEMM 预热。",
+   "tags": [
+    "router",
+    "gemm",
+    "warmup"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    82,
+    104
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/kernel_warmup.py:_warmup_bf16x3_router_gemm",
+   "type": "function",
+   "name": "_warmup_bf16x3_router_gemm",
+   "filePath": "vllm/model_executor/warmup/kernel_warmup.py",
+   "summary": "bf16x3 router GEMM 预热。",
+   "tags": [
+    "router",
+    "bf16x3",
+    "warmup"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    107,
+    142
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/kernel_warmup.py:kernel_warmup",
+   "type": "function",
+   "name": "kernel_warmup",
+   "filePath": "vllm/model_executor/warmup/kernel_warmup.py",
+   "summary": "kernel 预热总入口（router GEMM/gemm_rs_ar/Kimi K3 等）。",
+   "tags": [
+    "entry-point",
+    "kernel",
+    "warmup"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    164,
+    296
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/kernel_warmup.py:_flashinfer_deferred_moe_token_counts",
+   "type": "function",
+   "name": "_flashinfer_deferred_moe_token_counts",
+   "filePath": "vllm/model_executor/warmup/kernel_warmup.py",
+   "summary": "覆盖延迟 MoE finalize 的有界 token 数。",
+   "tags": [
+    "flashinfer",
+    "deferred-moe",
+    "tokens"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    318,
+    335
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/kernel_warmup.py:_load_shared_autotune_cache",
+   "type": "function",
+   "name": "_load_shared_autotune_cache",
+   "filePath": "vllm/model_executor/warmup/kernel_warmup.py",
+   "summary": "组内加载逐 rank autotune 缓存。",
+   "tags": [
+    "flashinfer",
+    "load",
+    "group-wide"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    408,
+    426
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/kernel_warmup.py:flashinfer_autotune",
+   "type": "function",
+   "name": "flashinfer_autotune",
+   "filePath": "vllm/model_executor/warmup/kernel_warmup.py",
+   "summary": "FlashInfer autotune 主流程（dummy run+缓存指纹+组一致性）。",
+   "tags": [
+    "flashinfer",
+    "autotune",
+    "entry-point"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    429,
+    532
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/kimi_k3_triton_warmup.py:_warm_recurrent_kda",
+   "type": "function",
+   "name": "_warm_recurrent_kda",
+   "filePath": "vllm/model_executor/warmup/kimi_k3_triton_warmup.py",
+   "summary": "循环 KDA kernel 预热。",
+   "tags": [
+    "kda",
+    "recurrent",
+    "warmup"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    98,
+    174
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/kimi_k3_triton_warmup.py:_warm_gluon_chunk_kda",
+   "type": "function",
+   "name": "_warm_gluon_chunk_kda",
+   "filePath": "vllm/model_executor/warmup/kimi_k3_triton_warmup.py",
+   "summary": "Gluon chunk KDA kernel 预热。",
+   "tags": [
+    "kda",
+    "gluon",
+    "chunk"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    177,
+    219
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/kimi_k3_triton_warmup.py:kimi_k3_triton_warmup",
+   "type": "function",
+   "name": "kimi_k3_triton_warmup",
+   "filePath": "vllm/model_executor/warmup/kimi_k3_triton_warmup.py",
+   "summary": "Kimi-K3 可达 Triton kernel 预热入口。",
+   "tags": [
+    "kimi",
+    "entry-point",
+    "warmup"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    223,
+    238
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/mamba_triton_warmup.py:mamba_triton_warmup",
+   "type": "function",
+   "name": "mamba_triton_warmup",
+   "filePath": "vllm/model_executor/warmup/mamba_triton_warmup.py",
+   "summary": "每个 Mamba 风格 KV 组的前缀缓存 memcpy 预热。",
+   "tags": [
+    "mamba",
+    "memcpy",
+    "entry-point"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    46,
+    53
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/qwen4_exp_qsa_warmup.py:qwen4_exp_qsa_triton_warmup",
+   "type": "function",
+   "name": "qwen4_exp_qsa_triton_warmup",
+   "filePath": "vllm/model_executor/warmup/qwen4_exp_qsa_warmup.py",
+   "summary": "预热全部可达 QSA 特化（indexer decode-query 等）。",
+   "tags": [
+    "qwen",
+    "qsa",
+    "entry-point"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    19,
+    88
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/qwen_triton_warmup.py:_qwen_gdn_warmup_config",
+   "type": "function",
+   "name": "_qwen_gdn_warmup_config",
+   "filePath": "vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "summary": "GDN 层预热配置推导。",
+   "tags": [
+    "qwen",
+    "gdn",
+    "config"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    103,
+    150
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/qwen_triton_warmup.py:_warm_fused_sigmoid_gating_delta_rule_update_kernel",
+   "type": "function",
+   "name": "_warm_fused_sigmoid_gating_delta_rule_update_kernel",
+   "filePath": "vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "summary": "sigmoid gating delta rule update kernel 预热。",
+   "tags": [
+    "gdn",
+    "gating",
+    "kernel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    242,
+    280
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/qwen_triton_warmup.py:_warm_fused_gdn_decode_post_conv_mtp_kernel",
+   "type": "function",
+   "name": "_warm_fused_gdn_decode_post_conv_mtp_kernel",
+   "filePath": "vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "summary": "ROCm Triton MTP decode kernel 逐 V tile 编译。",
+   "tags": [
+    "gdn",
+    "mtp",
+    "decode"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    283,
+    349
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/qwen_triton_warmup.py:qwen_triton_warmup",
+   "type": "function",
+   "name": "qwen_triton_warmup",
+   "filePath": "vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "summary": "按 JIT monitor 报告预热 Qwen GDN Triton kernel。",
+   "tags": [
+    "qwen",
+    "entry-point",
+    "jit-monitor"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    358,
+    399
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/qwen_vl_triton_warmup.py:qwen_vl_triton_warmup",
+   "type": "function",
+   "name": "qwen_vl_triton_warmup",
+   "filePath": "vllm/model_executor/warmup/qwen_vl_triton_warmup.py",
+   "summary": "SupportsMRoPE 模型的 ViT kernel 与 M-RoPE 预热。",
+   "tags": [
+    "qwen",
+    "vl",
+    "mrope",
+    "entry-point"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    111,
+    116
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/replayssm_warmup.py:_temporary_replayssm_autotune_state",
+   "type": "function",
+   "name": "_temporary_replayssm_autotune_state",
+   "filePath": "vllm/model_executor/warmup/replayssm_warmup.py",
+   "summary": "临时 autotune 状态（结束恢复）。",
+   "tags": [
+    "replayssm",
+    "temporary",
+    "autotune"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    74,
+    167
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/replayssm_warmup.py:replayssm_autotune_warmup",
+   "type": "function",
+   "name": "replayssm_autotune_warmup",
+   "filePath": "vllm/model_executor/warmup/replayssm_warmup.py",
+   "summary": "replayssm autotune 预热入口。",
+   "tags": [
+    "replayssm",
+    "entry-point",
+    "autotune"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    170,
+    182
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:_candidate_configs",
+   "type": "function",
+   "name": "_candidate_configs",
+   "filePath": "vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "summary": "工作区预算内搜索 launch tile 与 split 数。",
+   "tags": [
+    "rocm",
+    "candidates",
+    "search"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    94,
+    210
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:_measure_configs",
+   "type": "function",
+   "name": "_measure_configs",
+   "filePath": "vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "summary": "交错测候选抗时钟/热漂移。",
+   "tags": [
+    "rocm",
+    "measure",
+    "interleaved"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    459,
+    494
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:_select_tuned_winner",
+   "type": "function",
+   "name": "_select_tuned_winner",
+   "filePath": "vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "summary": "胜者须稳定击败静态基线才采用。",
+   "tags": [
+    "rocm",
+    "winner",
+    "baseline"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    504,
+    533
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:_tune_workload",
+   "type": "function",
+   "name": "_tune_workload",
+   "filePath": "vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "summary": "单个 workload 的调优流程。",
+   "tags": [
+    "rocm",
+    "tune",
+    "workload"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    579,
+    763
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:_load_records",
+   "type": "function",
+   "name": "_load_records",
+   "filePath": "vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "summary": "加载规范表与崩溃恢复 TP 分片。",
+   "tags": [
+    "rocm",
+    "records",
+    "crash-recovery"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    782,
+    806
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:_shard_workloads",
+   "type": "function",
+   "name": "_shard_workloads",
+   "filePath": "vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "summary": "按编译亲和的 (batch,query) 组在 TP rank 间均衡。",
+   "tags": [
+    "rocm",
+    "tp",
+    "sharding"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    844,
+    865
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:warmup_segmented_attention",
+   "type": "function",
+   "name": "warmup_segmented_attention",
+   "filePath": "vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "summary": "graph 捕获前调优可达分段桶。",
+   "tags": [
+    "rocm",
+    "segmented",
+    "graph-capture"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    907,
+    1184
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:get_segmented_config",
+   "type": "function",
+   "name": "get_segmented_config",
+   "filePath": "vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "summary": "返回预热过的上限桶（无则 None 走静态回退）。",
+   "tags": [
+    "rocm",
+    "config",
+    "lookup"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1187,
+    1239
+   ]
+  },
+  {
+   "id": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:rocm_segmented_attn_autotune_warmup",
+   "type": "function",
+   "name": "rocm_segmented_attn_autotune_warmup",
+   "filePath": "vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "summary": "KV 分配后、graph 捕获前的 RDNA 分段注意力 autotune 入口。",
+   "tags": [
+    "rocm",
+    "entry-point",
+    "autotune"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1280,
+    1335
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/distributed/device_communicators/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/distributed/device_communicators/flashinfer_pcie_ipc_all_reduce.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/kernels/linear/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/kernels/linear/cute_dsl/ll_bf16.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/bf16x3_router_gemm_sm100.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/gate_linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/warmup/attention_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/warmup/b12x_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/warmup/cutedsl_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/warmup/deep_gemm_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/warmup/flashinfer_autotune_cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/warmup/flashinfer_sparse_mla_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/warmup/kimi_k3_triton_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/warmup/mamba_triton_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/warmup/minimax_m3_msa_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/warmup/qwen4_exp_qsa_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/warmup/qwen_vl_triton_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/warmup/replayssm_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/warmup/step5_dsa_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/model_executor/warmup/watermark_sample_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/utils/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/utils/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "file:vllm/utils/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kimi_k3_triton_warmup.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kimi_k3_triton_warmup.py",
+   "target": "file:vllm/models/kimi_k3/amd/ops/kda_prefill.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kimi_k3_triton_warmup.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/ops/attn_res.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kimi_k3_triton_warmup.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/ops/third_party/kda/fused_recurrent.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kimi_k3_triton_warmup.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/mamba_triton_warmup.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/mamba_triton_warmup.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/mamba_triton_warmup.py",
+   "target": "file:vllm/v1/worker/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen4_exp_qsa_warmup.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen4_exp_qsa_warmup.py",
+   "target": "file:vllm/models/qwen4_exp/nvidia/ops/qsa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen4_exp_qsa_warmup.py",
+   "target": "file:vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/causal_conv1d.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/fused_gdn_decode_post_conv_mtp.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/fused_gdn_prefill_post_conv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/fused_sigmoid_gating.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/layernorm_guard.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "target": "file:vllm/utils/platform_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_vl_triton_warmup.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_vl_triton_warmup.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/mrope.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_vl_triton_warmup.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_vl_triton_warmup.py",
+   "target": "file:vllm/model_executor/models/qwen3_vl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_vl_triton_warmup.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/replayssm_warmup.py",
+   "target": "file:vllm/config/mamba.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/replayssm_warmup.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/replayssm_warmup.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_mixer2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/replayssm_warmup.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/replayssm_warmup.py",
+   "target": "file:vllm/model_executor/layers/mamba/ops/ssu_dispatch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "file:vllm/v1/attention/backends/rocm_segmented_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "file:vllm/v1/attention/ops/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "file:vllm/v1/attention/ops/segmented_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "target": "class:vllm/model_executor/warmup/qwen_triton_warmup.py:_QwenGDNWarmupConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "target": "function:vllm/model_executor/warmup/qwen_triton_warmup.py:_qwen_gdn_warmup_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "target": "function:vllm/model_executor/warmup/qwen_triton_warmup.py:_warm_fused_sigmoid_gating_delta_rule_update_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "target": "function:vllm/model_executor/warmup/qwen_triton_warmup.py:_warm_fused_gdn_decode_post_conv_mtp_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "target": "function:vllm/model_executor/warmup/qwen_triton_warmup.py:qwen_triton_warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "function:vllm/model_executor/warmup/kernel_warmup.py:_warmup_ll_bf16_router_gemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "function:vllm/model_executor/warmup/kernel_warmup.py:_warmup_bf16x3_router_gemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "function:vllm/model_executor/warmup/kernel_warmup.py:kernel_warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "function:vllm/model_executor/warmup/kernel_warmup.py:_flashinfer_deferred_moe_token_counts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "function:vllm/model_executor/warmup/kernel_warmup.py:_load_shared_autotune_cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "function:vllm/model_executor/warmup/kernel_warmup.py:flashinfer_autotune",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kimi_k3_triton_warmup.py",
+   "target": "function:vllm/model_executor/warmup/kimi_k3_triton_warmup.py:_warm_recurrent_kda",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kimi_k3_triton_warmup.py",
+   "target": "function:vllm/model_executor/warmup/kimi_k3_triton_warmup.py:_warm_gluon_chunk_kda",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kimi_k3_triton_warmup.py",
+   "target": "function:vllm/model_executor/warmup/kimi_k3_triton_warmup.py:kimi_k3_triton_warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/mamba_triton_warmup.py",
+   "target": "function:vllm/model_executor/warmup/mamba_triton_warmup.py:mamba_triton_warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen4_exp_qsa_warmup.py",
+   "target": "function:vllm/model_executor/warmup/qwen4_exp_qsa_warmup.py:qwen4_exp_qsa_triton_warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_vl_triton_warmup.py",
+   "target": "function:vllm/model_executor/warmup/qwen_vl_triton_warmup.py:qwen_vl_triton_warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/replayssm_warmup.py",
+   "target": "function:vllm/model_executor/warmup/replayssm_warmup.py:_temporary_replayssm_autotune_state",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/replayssm_warmup.py",
+   "target": "function:vllm/model_executor/warmup/replayssm_warmup.py:replayssm_autotune_warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:_candidate_configs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:_measure_configs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:_select_tuned_winner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:_tune_workload",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:_load_records",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:_shard_workloads",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:warmup_segmented_attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:get_segmented_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:rocm_segmented_attn_autotune_warmup",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_triton_warmup.py",
+   "target": "function:vllm/model_executor/warmup/qwen_triton_warmup.py:qwen_triton_warmup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "function:vllm/model_executor/warmup/kernel_warmup.py:kernel_warmup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kernel_warmup.py",
+   "target": "function:vllm/model_executor/warmup/kernel_warmup.py:flashinfer_autotune",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/kimi_k3_triton_warmup.py",
+   "target": "function:vllm/model_executor/warmup/kimi_k3_triton_warmup.py:kimi_k3_triton_warmup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/mamba_triton_warmup.py",
+   "target": "function:vllm/model_executor/warmup/mamba_triton_warmup.py:mamba_triton_warmup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen4_exp_qsa_warmup.py",
+   "target": "function:vllm/model_executor/warmup/qwen4_exp_qsa_warmup.py:qwen4_exp_qsa_triton_warmup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/qwen_vl_triton_warmup.py",
+   "target": "function:vllm/model_executor/warmup/qwen_vl_triton_warmup.py:qwen_vl_triton_warmup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/replayssm_warmup.py",
+   "target": "function:vllm/model_executor/warmup/replayssm_warmup.py:replayssm_autotune_warmup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:warmup_segmented_attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:get_segmented_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py",
+   "target": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:rocm_segmented_attn_autotune_warmup",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/warmup/kernel_warmup.py:kernel_warmup",
+   "target": "function:vllm/model_executor/warmup/attention_warmup.py:mixed_batch_attention_warmup",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/warmup/kernel_warmup.py:kernel_warmup",
+   "target": "function:vllm/model_executor/warmup/kimi_k3_triton_warmup.py:kimi_k3_triton_warmup",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/warmup/kernel_warmup.py:kernel_warmup",
+   "target": "function:vllm/model_executor/warmup/qwen_triton_warmup.py:qwen_triton_warmup",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/warmup/kernel_warmup.py:kernel_warmup",
+   "target": "function:vllm/model_executor/warmup/mamba_triton_warmup.py:mamba_triton_warmup",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/warmup/kernel_warmup.py:kernel_warmup",
+   "target": "function:vllm/model_executor/warmup/replayssm_warmup.py:replayssm_autotune_warmup",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/warmup/kernel_warmup.py:kernel_warmup",
+   "target": "function:vllm/model_executor/warmup/rocm_segmented_attn_autotune_warmup.py:rocm_segmented_attn_autotune_warmup",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/warmup/kernel_warmup.py:kernel_warmup",
+   "target": "function:vllm/model_executor/warmup/watermark_sample_warmup.py:watermark_sample_warmup",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/model_executor/warmup/kernel_warmup.py:flashinfer_autotune",
+   "target": "function:vllm/model_executor/warmup/flashinfer_autotune_cache.py:sync_flashinfer_autotune_cache",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

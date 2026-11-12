@@ -1,0 +1,33 @@
+# DeepWiki 索引 — openai/openai-realtime-agents
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 471100 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 What Are Realtime Agents?](1.1-what-are-realtime-agents.md)
+  - [1.2 Quick Start](1.2-quick-start.md)
+  - [1.3 System Architecture](1.3-system-architecture.md)
+- [2 Agent Patterns](2-agent-patterns.md)
+  - [2.1 Chat-Supervisor Pattern](2.1-chat-supervisor-pattern.md)
+  - [2.2 Sequential Handoff Pattern](2.2-sequential-handoff-pattern.md)
+  - [2.3 Agent Configuration System](2.3-agent-configuration-system.md)
+  - [2.4 Choosing a Pattern](2.4-choosing-a-pattern.md)
+- [3 Technical Implementation](3-technical-implementation.md)
+  - [3.1 Real-time Session Management](3.1-real-time-session-management.md)
+  - [3.2 Frontend Architecture](3.2-frontend-architecture.md)
+  - [3.3 API Routes and Backend](3.3-api-routes-and-backend.md)
+  - [3.4 Guardrails and Content Moderation](3.4-guardrails-and-content-moderation.md)
+  - [3.5 Type System and Data Structures](3.5-type-system-and-data-structures.md)
+- [4 Example Implementations](4-example-implementations.md)
+  - [4.1 Simple Handoff Example](4.1-simple-handoff-example.md)
+  - [4.2 Chat Supervisor Example](4.2-chat-supervisor-example.md)
+  - [4.3 Customer Service Retail Example](4.3-customer-service-retail-example.md)
+- [5 Advanced Topics](5-advanced-topics.md)
+  - [5.1 Voice Agent Prompt Engineering](5.1-voice-agent-prompt-engineering.md)
+  - [5.2 Custom Tool Development](5.2-custom-tool-development.md)
+  - [5.3 Audio Codec Configuration](5.3-audio-codec-configuration.md)
+  - [5.4 State Management Patterns](5.4-state-management-patterns.md)
+- [6 Development Guide](6-development-guide.md)
+  - [6.1 Project Setup and Dependencies](6.1-project-setup-and-dependencies.md)
+  - [6.2 Building and Running](6.2-building-and-running.md)
+  - [6.3 Contributing](6.3-contributing.md)

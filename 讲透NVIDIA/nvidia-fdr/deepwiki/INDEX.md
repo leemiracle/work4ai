@@ -1,0 +1,32 @@
+# DeepWiki 索引 — NVIDIA/nvidia-fdr
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 574568 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+  - [2.1 Building the System](2.1-building-the-system.md)
+  - [2.2 Running and Deployment](2.2-running-and-deployment.md)
+- [3 Core Concepts](3-core-concepts.md)
+  - [3.1 Platform Profile Files (PPF)](3.1-platform-profile-files-ppf.md)
+  - [3.2 Records and Data Collection](3.2-records-and-data-collection.md)
+  - [3.3 Storage Format and Protobuf](3.3-storage-format-and-protobuf.md)
+- [4 System Architecture](4-system-architecture.md)
+  - [4.1 FlightDataRecorder_c Core System](4.1-flightdatarecorder-c-core-system.md)
+  - [4.2 Data Collection Pipeline](4.2-data-collection-pipeline.md)
+  - [4.3 Event Handling and Timers](4.3-event-handling-and-timers.md)
+  - [4.4 Storage and Compaction System](4.4-storage-and-compaction-system.md)
+  - [4.5 D-Bus Integration](4.5-d-bus-integration.md)
+- [5 Platform Configuration](5-platform-configuration.md)
+  - [5.1 PPF File Structure Reference](5.1-ppf-file-structure-reference.md)
+  - [5.2 Vulcan Platform Configuration](5.2-vulcan-platform-configuration.md)
+  - [5.3 HGXB HMC Platform Configuration](5.3-hgxb-hmc-platform-configuration.md)
+- [6 Tools and Utilities](6-tools-and-utilities.md)
+  - [6.1 fdr_dump.sh Collection Script](6.1-fdr-dump.sh-collection-script.md)
+  - [6.2 nvidia-fdrtool](6.2-nvidia-fdrtool.md)
+  - [6.3 Catalog System and Decoding](6.3-catalog-system-and-decoding.md)
+- [7 Development Guide](7-development-guide.md)
+  - [7.1 Build System and Dependencies](7.1-build-system-and-dependencies.md)
+  - [7.2 Adding New Parameters](7.2-adding-new-parameters.md)
+  - [7.3 Testing and Validation](7.3-testing-and-validation.md)
+- [8 Troubleshooting and FAQ](8-troubleshooting-and-faq.md)

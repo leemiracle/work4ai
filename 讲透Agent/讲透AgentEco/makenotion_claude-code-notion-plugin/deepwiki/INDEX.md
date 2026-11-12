@@ -1,0 +1,30 @@
+# DeepWiki 索引 — makenotion/claude-code-notion-plugin
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-27
+> 结构 25 页 · 全文 353127 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+  - [2.1 Installation](2.1-installation.md)
+  - [2.2 MCP Server Configuration](2.2-mcp-server-configuration.md)
+- [3 Architecture](3-architecture.md)
+  - [3.1 Core Components](3.1-core-components.md)
+  - [3.2 Communication Protocol](3.2-communication-protocol.md)
+- [4 Task Management Workflow](4-task-management-workflow.md)
+  - [4.1 Task Board Setup](4.1-task-board-setup.md)
+  - [4.2 Planning Tasks](4.2-planning-tasks.md)
+  - [4.3 Building Tasks](4.3-building-tasks.md)
+  - [4.4 Explaining Code Changes](4.4-explaining-code-changes.md)
+- [5 Slash Commands Reference](5-slash-commands-reference.md)
+  - [5.1 Search and Discovery Commands](5.1-search-and-discovery-commands.md)
+  - [5.2 Content Creation Commands](5.2-content-creation-commands.md)
+  - [5.3 Database Query Command](5.3-database-query-command.md)
+- [6 Notion Skills](6-notion-skills.md)
+  - [6.1 Knowledge Capture Skill](6.1-knowledge-capture-skill.md)
+  - [6.2 Other Bundled Skills](6.2-other-bundled-skills.md)
+- [7 Advanced Topics](7-advanced-topics.md)
+  - [7.1 Agent Polling and Sub-Agents](7.1-agent-polling-and-sub-agents.md)
+  - [7.2 Knowledge Capture Workflows](7.2-knowledge-capture-workflows.md)
+- [8 Plugin Development](8-plugin-development.md)
+  - [8.1 Plugin Manifest Structure](8.1-plugin-manifest-structure.md)
+  - [8.2 Marketplace Distribution](8.2-marketplace-distribution.md)

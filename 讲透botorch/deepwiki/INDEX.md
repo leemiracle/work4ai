@@ -1,0 +1,32 @@
+# DeepWiki 索引 — pytorch/botorch
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-21
+> 结构 27 页 · 全文 353981 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation and Getting Started](1.1-installation-and-getting-started.md)
+  - [1.2 Key Concepts](1.2-key-concepts.md)
+  - [1.3 Tutorials and Examples](1.3-tutorials-and-examples.md)
+- [2 Models](2-models.md)
+  - [2.1 Core GP Models](2.1-core-gp-models.md)
+  - [2.2 Multi-task GP Models](2.2-multi-task-gp-models.md)
+  - [2.3 Fully Bayesian Models](2.3-fully-bayesian-models.md)
+  - [2.4 Special Purpose Models](2.4-special-purpose-models.md)
+  - [2.5 Model Fitting](2.5-model-fitting.md)
+- [3 Transforms](3-transforms.md)
+  - [3.1 Input Transforms](3.1-input-transforms.md)
+  - [3.2 Outcome Transforms](3.2-outcome-transforms.md)
+  - [3.3 Working with Transforms](3.3-working-with-transforms.md)
+- [4 Acquisition Functions](4-acquisition-functions.md)
+  - [4.1 Analytic Acquisition Functions](4.1-analytic-acquisition-functions.md)
+  - [4.2 Monte Carlo Acquisition Functions](4.2-monte-carlo-acquisition-functions.md)
+  - [4.3 Multi-Objective Acquisition Functions](4.3-multi-objective-acquisition-functions.md)
+  - [4.4 Objective Functions](4.4-objective-functions.md)
+  - [4.5 Input Constructors](4.5-input-constructors.md)
+- [5 Optimization](5-optimization.md)
+  - [5.1 Acquisition Function Optimization](5.1-acquisition-function-optimization.md)
+  - [5.2 Initializers](5.2-initializers.md)
+  - [5.3 Cross-Validation](5.3-cross-validation.md)
+- [6 Utilities](6-utilities.md)
+  - [6.1 Testing Utilities and Test Functions](6.1-testing-utilities-and-test-functions.md)
+  - [6.2 Development and Documentation](6.2-development-and-documentation.md)

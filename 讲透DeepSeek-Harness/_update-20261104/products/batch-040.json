@@ -1,0 +1,706 @@
+{
+ "nodes": [
+  {
+   "id": "document:packages/web/AGENTS.md",
+   "type": "document",
+   "name": "AGENTS.md",
+   "filePath": "packages/web/AGENTS.md",
+   "summary": "web 包组补充规约：携带凭据的 provider 请求必须拒绝重定向（HTTP client 配置为遇 redirect 即失败），回归须证明重定向目标未被联系且全部凭据 provider 启用该策略——防凭据/请求数据被自动转发到其他 origin。",
+   "tags": [
+    "documentation",
+    "security-rule",
+    "package-group-conventions"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/web/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/web/README.md",
+   "summary": "web 包组 README：web 访问能力族（search/fetch 服务、provider 后端、模型工具）的包图。",
+   "tags": [
+    "documentation",
+    "package-group",
+    "web"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/web/tool-web/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/web/tool-web/README.md",
+   "summary": "dsh-tool-web 包参考文档（294 行）：ctx.web 之上的模型可见 web_search/web_fetch 工具的启用、配置与调试指南（源码在后续批次）。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "web-tools"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:packages/web/tool-web/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/web/tool-web/package.json",
+   "summary": "@deepseek-ai/dsh-tool-web 包清单：模型可见 web 工具（web_search、web_fetch）。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "web-tools"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/web/tool-web/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/web/tool-web/tsconfig.json",
+   "summary": "包级 TypeScript 编译配置。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/web/web/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/web/web/README.md",
+   "summary": "dsh-web 包参考文档（212 行）：web 访问服务（ctx.web）的能力 seam 与 provider 注册指南（源码在后续批次）。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "web-seam"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:packages/web/web/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/web/web/package.json",
+   "summary": "@deepseek-ai/dsh-web 包清单：抽象 web 访问能力 seam（ctx.web）。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "web-seam"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/web/web/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/web/web/tsconfig.json",
+   "summary": "包级 TypeScript 编译配置。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/web/web-deepseek-api/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/web/web-deepseek-api/README.md",
+   "summary": "dsh-web-deepseek-api 包参考文档：DeepSeek Search/Fetch API provider、共享认证与传输、端点配置指南。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "deepseek-api"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/web/web-deepseek-api/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/web/web-deepseek-api/package.json",
+   "summary": "@deepseek-ai/dsh-web-deepseek-api 包清单：DeepSeek Search 与 Fetch API provider。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "deepseek-api"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/web/web-deepseek-api/src/fetch.ts",
+   "type": "file",
+   "name": "fetch.ts",
+   "filePath": "packages/web/web-deepseek-api/src/fetch.ts",
+   "summary": "DeepSeek Fetch API provider：一次直接请求取页面 Markdown、无辅助模型调用；API 不报目标状态码与最终 URL，成功即按 HTTP 200 语义返回请求页；八语种 picker description 声明服务端抓取/计费/不可达内网的属性。",
+   "tags": [
+    "web-fetch-provider",
+    "markdown-fetch",
+    "provider"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/web/web-deepseek-api/src/fetch.ts:DeepSeekFetchApiProvider",
+   "type": "class",
+   "name": "DeepSeekFetchApiProvider",
+   "filePath": "packages/web/web-deepseek-api/src/fetch.ts",
+   "lineRange": [
+    30,
+    65
+   ],
+   "summary": "implements WebFetchProvider（id deepseek-fetch-api）：available 检查凭据存在+URL 可解析；fetch 经 dispatchDeepSeekWeb POST /fetch（body 只带 url），decode 校验 content 字符串后折成 text 结果。",
+   "tags": [
+    "web-fetch-provider",
+    "provider-role",
+    "web-seam"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/web/web-deepseek-api/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/web/web-deepseek-api/src/index.ts",
+   "summary": "插件入口（name web-deepseek-api，inject ['web']）：把 deepseek-search-api/deepseek-fetch-api 注册进 ctx.web；每次操作跟随会话的 DeepSeek 凭据（最近模型请求走 deepseek-account 路由则用其 token 发往该路由 origin，否则用 API-key 路由的 key 或 DEEPSEEK_API_KEY 发官方 base；路由设置不解析则失败而非换端点）；能力自有 *BaseURL/*ApiKeyEnv 时独占该端点与 key；ready 在下次操作将无凭据时报不可用。",
+   "tags": [
+    "plugin-entry",
+    "provider-registration",
+    "credential-routing",
+    "cordis-plugin"
+   ],
+   "complexity": "complex",
+   "languageNotes": "设置经 volatile 逐操作快照读取（一次操作绝不混用两节设置）；旧字段（baseURL/apiKeyEnv/apiKey）加载不报错但无效果——迁移友好。"
+  },
+  {
+   "id": "function:packages/web/web-deepseek-api/src/index.ts:latestUserQuestion",
+   "type": "function",
+   "name": "latestUserQuestion",
+   "filePath": "packages/web/web-deepseek-api/src/index.ts",
+   "lineRange": [
+    148,
+    152
+   ],
+   "summary": "读最近一条人类 prompt（source.kind user）的拼接文本，作为触发本轮搜索的 ori_question。",
+   "tags": [
+    "session-scan",
+    "user-question",
+    "prompt-scan"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/web/web-deepseek-api/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/web/web-deepseek-api/src/index.ts",
+   "lineRange": [
+    161,
+    196
+   ],
+   "summary": "按能力解析 plan（自有端点 or 会话凭据路由）构造两个 provider，registerSearchProvider/registerFetchProvider 注册（available/ready/search|fetch 各读一次设置快照与发起会话的路由）。",
+   "tags": [
+    "plugin-apply",
+    "registration",
+    "capability-plans"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/web/web-deepseek-api/src/search.ts",
+   "type": "file",
+   "name": "search.ts",
+   "filePath": "packages/web/web-deepseek-api/src/search.ts",
+   "summary": "DeepSeek Search API provider：每次搜索一次直接请求（need_content false）；滑窗 QPS 限流（默认账户级 5 req/s，waitForRequestSlot 含首毫秒的 1 秒窗）；ori_question 截断到 128 字符；mapSearchResponse 严格校验 results 数组并保留 title/snippet/summary/date 投影。",
+   "tags": [
+    "web-search-provider",
+    "rate-limiting",
+    "response-validation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/web/web-deepseek-api/src/search.ts:mapSearchResponse",
+   "type": "function",
+   "name": "mapSearchResponse",
+   "filePath": "packages/web/web-deepseek-api/src/search.ts",
+   "lineRange": [
+    50,
+    66
+   ],
+   "summary": "校验非受信 Search 响应并投影为 WebSearchResult：逐条核对 url/title/snippet/summary/date 类型，非法即 WebError；空串字段省略。",
+   "tags": [
+    "validation",
+    "projection",
+    "untrusted-json"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/web/web-deepseek-api/src/search.ts:DeepSeekSearchApiProvider",
+   "type": "class",
+   "name": "DeepSeekSearchApiProvider",
+   "filePath": "packages/web/web-deepseek-api/src/search.ts",
+   "lineRange": [
+    72,
+    139
+   ],
+   "summary": "implements WebSearchProvider（id deepseek-search-api）：search 以 min(count, maxResults) 请求、可选 ori_question，经 dispatchDeepSeekWeb POST /search；waitForRequestSlot 以单调开始时间滑窗强制 requestsPerSecond，等待中取消抛 WEB_ABORTED。",
+   "tags": [
+    "web-search-provider",
+    "qps-window",
+    "provider-role"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/web/web-deepseek-api/src/transport.ts",
+   "type": "file",
+   "name": "transport.ts",
+   "filePath": "packages/web/web-deepseek-api/src/transport.ts",
+   "summary": "Search/Fetch 共享的认证与拒重定向传输：account token 优先（仅发往其 origin，401 时精确失效该 token 且指引重新登录而非改端点）、否则 API key/credential resolver；fetch 配置 redirect:'error'（包组 AGENTS.md 规约）；错误统一映射——中途取消永远是 WEB_ABORTED（读错误体时也不例外）、HTTP 失败带 endpoint guidance 指引用户配置。",
+   "tags": [
+    "transport",
+    "authentication",
+    "redirect-rejection",
+    "error-mapping"
+   ],
+   "complexity": "complex",
+   "languageNotes": "401+account 的失效可能取消 Session：先读完 HTTP 失败再失效；失效失败不覆盖原错误。"
+  },
+  {
+   "id": "function:packages/web/web-deepseek-api/src/transport.ts:hasDeepSeekWebCredential",
+   "type": "function",
+   "name": "hasDeepSeekWebCredential",
+   "filePath": "packages/web/web-deepseek-api/src/transport.ts",
+   "lineRange": [
+    91,
+    93
+   ],
+   "summary": "检查认证源是否存在（literal key/resolver/account），不解析凭据值。",
+   "tags": [
+    "predicate",
+    "credentials",
+    "boolean-check"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/web/web-deepseek-api/src/transport.ts:dispatchDeepSeekWeb",
+   "type": "function",
+   "name": "dispatchDeepSeekWeb",
+   "filePath": "packages/web/web-deepseek-api/src/transport.ts",
+   "lineRange": [
+    128,
+    209
+   ],
+   "summary": "一次操作的全流程：解析认证头→waitToSend 限流→recordRequest（模型输入留痕）→redirect:error 的 POST→非 2xx 读错误体（account 401 走精确失效+登录指引）→decode 校验投影；取消信号在每个阶段胜出。",
+   "tags": [
+    "dispatch",
+    "cancellation-contract",
+    "error-mapping"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/web/web-deepseek-api/src/transport.ts:searchAborted",
+   "type": "function",
+   "name": "searchAborted",
+   "filePath": "packages/web/web-deepseek-api/src/transport.ts",
+   "lineRange": [
+    365,
+    369
+   ],
+   "summary": "构造 WEB_ABORTED WebError（含可选 cause），搜索/取流取消的统一出口。",
+   "tags": [
+    "error-type",
+    "abort",
+    "cancellation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/web/web-deepseek-api/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/web/web-deepseek-api/tsconfig.json",
+   "summary": "包级 TypeScript 编译配置（56 行，references 覆盖 llm-deepseek 全家）。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/web/web-fetch-http/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/web/web-fetch-http/README.md",
+   "summary": "dsh-web-fetch-http 包参考文档：ctx.web 的匿名 HTTP(S) fetch 后端，同源限制的有界 URL 拉取（源码在后续批次）。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "http-fetch"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/web/web-fetch-http/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/web/web-fetch-http/package.json",
+   "summary": "@deepseek-ai/dsh-web-fetch-http 包清单：匿名 HTTP(S) fetch provider。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "http-fetch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/web/web-fetch-http/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/web/web-fetch-http/tsconfig.json",
+   "summary": "包级 TypeScript 编译配置。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/web/web-search-deepseek/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/web/web-search-deepseek/README.md",
+   "summary": "dsh-web-search-deepseek 包参考文档（201 行）：DeepSeek 侧原生 web_search 能力的 search provider 挂载指南（源码在后续批次）。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "native-search"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:packages/web/web-search-deepseek/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/web/web-search-deepseek/package.json",
+   "summary": "@deepseek-ai/dsh-web-search-deepseek 包清单：DeepSeek 原生 web_search provider。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "native-search"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/web/web-search-deepseek/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/web/web-search-deepseek/tsconfig.json",
+   "summary": "包级 TypeScript 编译配置。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/web/web-deepseek-api/src/fetch.ts",
+   "target": "file:packages/web/web/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/fetch.ts",
+   "target": "file:packages/web/web-deepseek-api/src/transport.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/index.ts",
+   "target": "file:packages/core/agent/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/index.ts",
+   "target": "file:packages/credentials/credentials/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/index.ts",
+   "target": "file:packages/util/launch-environment/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/index.ts",
+   "target": "file:packages/llm/llm/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek-account/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/index.ts",
+   "target": "file:packages/llm/llm-deepseek-api-key/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/index.ts",
+   "target": "file:packages/web/web/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/index.ts",
+   "target": "file:packages/web/web-deepseek-api/src/fetch.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/index.ts",
+   "target": "file:packages/web/web-deepseek-api/src/search.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/index.ts",
+   "target": "file:packages/web/web-deepseek-api/src/transport.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/search.ts",
+   "target": "file:packages/web/web/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/search.ts",
+   "target": "file:packages/web/web-deepseek-api/src/transport.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/transport.ts",
+   "target": "file:packages/credentials/credentials/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/transport.ts",
+   "target": "file:packages/web/web/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/fetch.ts",
+   "target": "class:packages/web/web-deepseek-api/src/fetch.ts:DeepSeekFetchApiProvider",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/index.ts",
+   "target": "function:packages/web/web-deepseek-api/src/index.ts:latestUserQuestion",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/index.ts",
+   "target": "function:packages/web/web-deepseek-api/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/search.ts",
+   "target": "function:packages/web/web-deepseek-api/src/search.ts:mapSearchResponse",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/search.ts",
+   "target": "class:packages/web/web-deepseek-api/src/search.ts:DeepSeekSearchApiProvider",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/transport.ts",
+   "target": "function:packages/web/web-deepseek-api/src/transport.ts:hasDeepSeekWebCredential",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/transport.ts",
+   "target": "function:packages/web/web-deepseek-api/src/transport.ts:dispatchDeepSeekWeb",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/transport.ts",
+   "target": "function:packages/web/web-deepseek-api/src/transport.ts:searchAborted",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/fetch.ts",
+   "target": "class:packages/web/web-deepseek-api/src/fetch.ts:DeepSeekFetchApiProvider",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/index.ts",
+   "target": "function:packages/web/web-deepseek-api/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/search.ts",
+   "target": "function:packages/web/web-deepseek-api/src/search.ts:mapSearchResponse",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/search.ts",
+   "target": "class:packages/web/web-deepseek-api/src/search.ts:DeepSeekSearchApiProvider",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/transport.ts",
+   "target": "function:packages/web/web-deepseek-api/src/transport.ts:hasDeepSeekWebCredential",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/transport.ts",
+   "target": "function:packages/web/web-deepseek-api/src/transport.ts:dispatchDeepSeekWeb",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/web/web-deepseek-api/src/transport.ts",
+   "target": "function:packages/web/web-deepseek-api/src/transport.ts:searchAborted",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/web/web-deepseek-api/src/index.ts:apply",
+   "target": "class:packages/web/web-deepseek-api/src/search.ts:DeepSeekSearchApiProvider",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/web/web-deepseek-api/src/index.ts:apply",
+   "target": "class:packages/web/web-deepseek-api/src/fetch.ts:DeepSeekFetchApiProvider",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:packages/web/web-deepseek-api/src/fetch.ts:DeepSeekFetchApiProvider",
+   "target": "function:packages/web/web-deepseek-api/src/transport.ts:dispatchDeepSeekWeb",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:packages/web/web-deepseek-api/src/search.ts:DeepSeekSearchApiProvider",
+   "target": "function:packages/web/web-deepseek-api/src/transport.ts:dispatchDeepSeekWeb",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "document:packages/web/README.md",
+   "target": "document:packages/web/AGENTS.md",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/web/web-deepseek-api/README.md",
+   "target": "file:packages/web/web-deepseek-api/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/web/web-deepseek-api/package.json",
+   "target": "file:packages/web/web-deepseek-api/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/web/web-deepseek-api/tsconfig.json",
+   "target": "file:packages/web/web-deepseek-api/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  }
+ ]
+}

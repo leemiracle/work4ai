@@ -1,0 +1,2301 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/spec_decode/dflash.py",
+   "type": "file",
+   "name": "dflash.py",
+   "filePath": "vllm/v1/spec_decode/dflash.py",
+   "summary": "DFlash 并行起草 proposer：单次 forward 同时产出全部 draft token（context 为 K/V、next_token_id+mask 为 query），为 CUDA graph 稳定性使用独立 context/query 缓冲区。",
+   "tags": [
+    "dflash",
+    "parallel-drafting",
+    "proposer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/spec_decode/draft_model.py",
+   "type": "file",
+   "name": "draft_model.py",
+   "filePath": "vllm/v1/spec_decode/draft_model.py",
+   "summary": "通用 draft-model proposer：加载独立小模型起草，支持异构词表（target/draft tokenizer 不同时经 VocabMapping 把 draft logits 约束到交集，保证 rejection sampling 无损）。",
+   "tags": [
+    "draft-model",
+    "proposer",
+    "heterogeneous-vocab"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/spec_decode/extract_hidden_states.py",
+   "type": "file",
+   "name": "extract_hidden_states.py",
+   "filePath": "vllm/v1/spec_decode/extract_hidden_states.py",
+   "summary": "extract_hidden_states proposer：仅支持 num_speculative_tokens=1，从 draft config 指定的 eagle_aux_hidden_state_layer_ids 抽取目标模型中间层隐藏态喂给轻量 drafter（无独立 draft attention）。",
+   "tags": [
+    "hidden-states",
+    "proposer",
+    "aux-layers"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/spec_decode/fly.py",
+   "type": "file",
+   "name": "fly.py",
+   "filePath": "vllm/v1/spec_decode/fly.py",
+   "summary": "FLy 熵门控延迟验证：draft 接下来 W 个 token 可原生接受时推迟高熵拒绝，由 ModelRunnerV1 在 pre-pass 里改写 token 实现；含熵计算与 greedy/随机接受两个 Triton kernel。",
+   "tags": [
+    "fly",
+    "entropy-gated",
+    "triton",
+    "verification"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/spec_decode/gemma4.py",
+   "type": "file",
+   "name": "gemma4.py",
+   "filePath": "vllm/v1/spec_decode/gemma4.py",
+   "summary": "Gemma4 MTP proposer：assistant 模型每 draft 步跑全部 decoder 层，其全部 attention 层经跨模型 KV 共享复用目标模型 KV；所有 draft 步从同一位置预测（constant_draft_positions）。",
+   "tags": [
+    "gemma4",
+    "mtp",
+    "kv-sharing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "type": "file",
+   "name": "llm_base_proposer.py",
+   "filePath": "vllm/v1/spec_decode/llm_base_proposer.py",
+   "summary": "SpecDecodeBaseProposer：统一 EAGLE/draft-model/并行起草（DFlash 等）的 LLM 型 proposer 基类——draft 模型加载、BreakableCUDAGraph、slot/position 管理、MLA/sparse/各 attention backend 元数据适配与 hidden-state 反馈缓冲，是 spec-decode 前沿最重的共享层。",
+   "tags": [
+    "base-proposer",
+    "spec-decode",
+    "cudagraph",
+    "shared-infra"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/spec_decode/metrics.py",
+   "type": "file",
+   "name": "metrics.py",
+   "filePath": "vllm/v1/spec_decode/metrics.py",
+   "summary": "spec decode 指标三件套：SpecDecodingStats（每步调度统计）→ SpecDecodingLogging（周期聚合日志）与 SpecDecodingProm（Prometheus，接受率经 PromQL rate 比值计算）。",
+   "tags": [
+    "metrics",
+    "logging",
+    "prometheus"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/spec_decode/ngram_proposer.py",
+   "type": "file",
+   "name": "ngram_proposer.py",
+   "filePath": "vllm/v1/spec_decode/ngram_proposer.py",
+   "summary": "CPU N-gram（prompt lookup）proposer：numba JIT 批量在 prompt/输出历史中找 [min_n,max_n] 后缀匹配并取出后续 k 个 token 作为 draft，含多线程阈值控制。",
+   "tags": [
+    "ngram",
+    "numba",
+    "prompt-lookup"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "type": "file",
+   "name": "ngram_proposer_gpu.py",
+   "filePath": "vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "summary": "GPU 加速 N-gram proposer：unroll+argmax 全向量化并行匹配（NgramGPUKernel，支持 torch.compile/CUDA graph），draft 结果全程驻留 GPU，异步 D2H 回传有效 draft 数并回写 scheduler。",
+   "tags": [
+    "ngram",
+    "gpu",
+    "vectorized",
+    "async-d2h"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/spec_decode/step3p5.py",
+   "type": "file",
+   "name": "step3p5.py",
+   "filePath": "vllm/v1/spec_decode/step3p5.py",
+   "summary": "Step3.5 MTP proposer（继承 EagleProposer）：按层选择 draft step 的 MTP 变体，处理 draft 量化配置与共享 attention 组。",
+   "tags": [
+    "step3p5",
+    "mtp",
+    "eagle-variant"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/spec_decode/suffix_decoding.py",
+   "type": "file",
+   "name": "suffix_decoding.py",
+   "filePath": "vllm/v1/spec_decode/suffix_decoding.py",
+   "summary": "Suffix Decoding proposer（arXiv:2411.04975）：懒加载 Arctic Inference 官方实现，用后缀树缓存请求输出并按概率阈值生成 spec token。",
+   "tags": [
+    "suffix-decoding",
+    "suffix-tree",
+    "proposer"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/spec_decode/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "spec decode 共享 Triton/CPU 工具集：EAGLE 自回归步与 padded 输入准备的融合 kernel、EAGLE/DFlash 输入扩展 kernel（含 JIT warmup 注册）、slot mapping 重算、query 长度扩展与无条件→条件接受率换算。",
+   "tags": [
+    "triton-kernels",
+    "eagle",
+    "dflash",
+    "utilities"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/spec_decode/vocab_mapping.py",
+   "type": "file",
+   "name": "vocab_mapping.py",
+   "filePath": "vllm/v1/spec_decode/vocab_mapping.py",
+   "summary": "异构词表映射：运行时探测 BPE('Ġ')/SentencePiece('▁') 空格前缀并归一化 token，构建 draft↔target 双向映射与交集 mask，交集外 token 落 unk/eos 保证 rejection sampling 无损。",
+   "tags": [
+    "vocab-mapping",
+    "heterogeneous-vocab",
+    "tokenizers"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/spec_decode/dflash.py:DFlashProposer",
+   "type": "class",
+   "name": "DFlashProposer",
+   "filePath": "vllm/v1/spec_decode/dflash.py",
+   "summary": "DFlash proposer（9 个方法）：并行起草——一次 forward 产出全部 draft token；context 与 query 缓冲分离以保证 CUDA graph 地址稳定，复用 _copy_and_expand_dflash_inputs 组装首趟输入。",
+   "tags": [
+    "dflash",
+    "parallel-drafting"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    23,
+    320
+   ]
+  },
+  {
+   "id": "class:vllm/v1/spec_decode/draft_model.py:DraftModelProposer",
+   "type": "class",
+   "name": "DraftModelProposer",
+   "filePath": "vllm/v1/spec_decode/draft_model.py",
+   "summary": "独立 draft 模型 proposer：校验 TP/词表一致性；异构词表时构建 VocabMapping 把 draft logits 约束到两词表交集（rejection sampling 无损）。",
+   "tags": [
+    "draft-model",
+    "vocab"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    19,
+    122
+   ]
+  },
+  {
+   "id": "class:vllm/v1/spec_decode/extract_hidden_states.py:ExtractHiddenStatesProposer",
+   "type": "class",
+   "name": "ExtractHiddenStatesProposer",
+   "filePath": "vllm/v1/spec_decode/extract_hidden_states.py",
+   "summary": "从目标模型指定辅助层抽取隐藏态的轻量 drafter（11 个方法）：仅 1 个 spec token，维护 backup_next_token_ids 与 attn metadata builder，隐藏态直接驱动小输出头。",
+   "tags": [
+    "hidden-states",
+    "aux-layers",
+    "proposer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    28,
+    406
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/fly.py:compute_fly_entropy",
+   "type": "function",
+   "name": "compute_fly_entropy",
+   "filePath": "vllm/v1/spec_decode/fly.py",
+   "summary": "从目标模型概率/logits 计算 FLy 的 top-k 熵。",
+   "tags": [
+    "entropy",
+    "fly"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    16,
+    42
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/fly.py:apply_fly_greedy_acceptance_kernel",
+   "type": "function",
+   "name": "apply_fly_greedy_acceptance_kernel",
+   "filePath": "vllm/v1/spec_decode/fly.py",
+   "summary": "FLy greedy 路线的 Triton 接受 kernel。",
+   "tags": [
+    "triton",
+    "acceptance",
+    "fly"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    47,
+    98
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/fly.py:apply_fly_random_acceptance_kernel",
+   "type": "function",
+   "name": "apply_fly_random_acceptance_kernel",
+   "filePath": "vllm/v1/spec_decode/fly.py",
+   "summary": "FLy 随机采样路线的 Triton 接受 kernel（延迟高熵拒绝的改写逻辑）。",
+   "tags": [
+    "triton",
+    "acceptance",
+    "fly"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    103,
+    188
+   ]
+  },
+  {
+   "id": "class:vllm/v1/spec_decode/gemma4.py:Gemma4Proposer",
+   "type": "class",
+   "name": "Gemma4Proposer",
+   "filePath": "vllm/v1/spec_decode/gemma4.py",
+   "summary": "Gemma4 MTP proposer（13 个方法）：跨模型 KV 共享复用目标 KV，所有 draft 步同一位置预测；支持多组 block table 与 centroids 掩码的 CUDA graph。",
+   "tags": [
+    "gemma4",
+    "mtp",
+    "kv-sharing"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    33,
+    362
+   ]
+  },
+  {
+   "id": "class:vllm/v1/spec_decode/llm_base_proposer.py:SpecDecodeBaseProposer",
+   "type": "class",
+   "name": "SpecDecodeBaseProposer",
+   "filePath": "vllm/v1/spec_decode/llm_base_proposer.py",
+   "summary": "LLM 型 proposer 统一基类（35 个方法）：draft 模型加载与 hidden-state 缓冲（含 DeepSeek V4 hc_mult 残差流扩展）、并行起草槽位规划、BreakableCUDAGraph、EAGLE/DFlash 输入准备与各 attention backend（MLA/sparse/flex/ROCm）元数据适配。",
+   "tags": [
+    "base-proposer",
+    "spec-decode",
+    "cudagraph"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    73,
+    1818
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/llm_base_proposer.py:compute_probs_and_sample_next_token",
+   "type": "function",
+   "name": "compute_probs_and_sample_next_token",
+   "filePath": "vllm/v1/spec_decode/llm_base_proposer.py",
+   "summary": "按采样元数据从 draft logits 采样下一 token 并返回 probs：greedy 直接 argmax，随机走 Gumbel 指数噪声采样（与 sampler.py 的 _SAMPLING_EPS 口径一致）。",
+   "tags": [
+    "sampling",
+    "logits"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1827,
+    1865
+   ]
+  },
+  {
+   "id": "class:vllm/v1/spec_decode/metrics.py:SpecDecodingStats",
+   "type": "class",
+   "name": "SpecDecodingStats",
+   "filePath": "vllm/v1/spec_decode/metrics.py",
+   "summary": "每步 spec decode 统计：调度器跨请求聚合后随 EngineCoreOutputs→SchedulerStats 回传前端。",
+   "tags": [
+    "stats",
+    "scheduler"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    18,
+    49
+   ]
+  },
+  {
+   "id": "class:vllm/v1/spec_decode/metrics.py:SpecDecodingLogging",
+   "type": "class",
+   "name": "SpecDecodingLogging",
+   "filePath": "vllm/v1/spec_decode/metrics.py",
+   "summary": "周期聚合并日志输出 spec decode 指标（observe 累积→log 打印→清零）。",
+   "tags": [
+    "logging",
+    "aggregation"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    52,
+    174
+   ]
+  },
+  {
+   "id": "class:vllm/v1/spec_decode/metrics.py:SpecDecodingProm",
+   "type": "class",
+   "name": "SpecDecodingProm",
+   "filePath": "vllm/v1/spec_decode/metrics.py",
+   "summary": "Prometheus 记录 spec decode 指标：接受率可由 draft/accepted token 计数的 rate 比值 PromQL 查询得到。",
+   "tags": [
+    "prometheus",
+    "metrics"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    177,
+    281
+   ]
+  },
+  {
+   "id": "class:vllm/v1/spec_decode/ngram_proposer.py:NgramProposer",
+   "type": "class",
+   "name": "NgramProposer",
+   "filePath": "vllm/v1/spec_decode/ngram_proposer.py",
+   "summary": "CPU N-gram proposer：预分配 numba 缓冲，批量在 [min_n,max_n] 范围找最长后缀匹配并取出后续 k 个 token；超 8192 token 才开多线程。",
+   "tags": [
+    "ngram",
+    "prompt-lookup"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    12,
+    177
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/ngram_proposer.py:batch_propose_numba",
+   "type": "function",
+   "name": "batch_propose_numba",
+   "filePath": "vllm/v1/spec_decode/ngram_proposer.py",
+   "summary": "numba JIT 的批量 n-gram 匹配核心（支持 prange 多线程）。",
+   "tags": [
+    "numba",
+    "batch"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    181,
+    206
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/ngram_proposer.py:_find_longest_matched_ngram_and_propose_tokens",
+   "type": "function",
+   "name": "_find_longest_matched_ngram_and_propose_tokens",
+   "filePath": "vllm/v1/spec_decode/ngram_proposer.py",
+   "summary": "单序列最长匹配：在 [min_n,max_n] 内找后缀匹配的 n-gram 并提取其后 k 个 token 作为 draft。",
+   "tags": [
+    "ngram",
+    "matching"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    210,
+    295
+   ]
+  },
+  {
+   "id": "class:vllm/v1/spec_decode/ngram_proposer_gpu.py:NgramGPUKernel",
+   "type": "class",
+   "name": "NgramGPUKernel",
+   "filePath": "vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "summary": "GPU 向量化 n-gram 匹配核（nn.Module）：unfold+argmax 并行找全序列首匹配，支持 torch.compile 与 CUDA graph。",
+   "tags": [
+    "gpu",
+    "vectorized",
+    "matching"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    27,
+    212
+   ]
+  },
+  {
+   "id": "class:vllm/v1/spec_decode/ngram_proposer_gpu.py:NgramProposerGPU",
+   "type": "class",
+   "name": "NgramProposerGPU",
+   "filePath": "vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "summary": "GPU N-gram proposer（6 个方法）：token 张量常驻 GPU 增量更新，draft 生成不经 CPU，异步 D2H 仅回传每请求有效 draft 数。",
+   "tags": [
+    "gpu",
+    "ngram",
+    "async"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    215,
+    469
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/ngram_proposer_gpu.py:update_scheduler_for_invalid_drafts",
+   "type": "function",
+   "name": "update_scheduler_for_invalid_drafts",
+   "filePath": "vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "summary": "按每请求有效 draft 数裁剪 scheduler_output 的无效 spec 槽位（D2H 完成事件后调用）。",
+   "tags": [
+    "scheduler",
+    "draft-trim"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    472,
+    513
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/ngram_proposer_gpu.py:update_ngram_gpu_tensors_incremental",
+   "type": "function",
+   "name": "update_ngram_gpu_tensors_incremental",
+   "filePath": "vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "summary": "为 GPU ngram proposer 增量维护 token_ids_gpu_tensor 与 num_tokens_no_spec_gpu。",
+   "tags": [
+    "incremental",
+    "tensors"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    516,
+    610
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/ngram_proposer_gpu.py:_sync_num_tokens",
+   "type": "function",
+   "name": "_sync_num_tokens",
+   "filePath": "vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "summary": "从 CPU 真值批量同步 GPU 序列长度张量（按活跃索引）。",
+   "tags": [
+    "sync",
+    "lengths"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    613,
+    643
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/ngram_proposer_gpu.py:copy_num_valid_draft_tokens",
+   "type": "function",
+   "name": "copy_num_valid_draft_tokens",
+   "filePath": "vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "summary": "每请求有效 draft 数的异步 D2H 拷贝。",
+   "tags": [
+    "async",
+    "d2h"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    646,
+    667
+   ]
+  },
+  {
+   "id": "class:vllm/v1/spec_decode/step3p5.py:Step3p5MTPProposer",
+   "type": "class",
+   "name": "Step3p5MTPProposer",
+   "filePath": "vllm/v1/spec_decode/step3p5.py",
+   "summary": "Step3.5 MTP proposer（12 个方法，继承 EagleProposer）：按层选择 draft step，处理 draft 量化与共享 attention 组元数据。",
+   "tags": [
+    "step3p5",
+    "mtp",
+    "eagle"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    24,
+    456
+   ]
+  },
+  {
+   "id": "class:vllm/v1/spec_decode/suffix_decoding.py:SuffixDecodingProposer",
+   "type": "class",
+   "name": "SuffixDecodingProposer",
+   "filePath": "vllm/v1/spec_decode/suffix_decoding.py",
+   "summary": "Suffix Decoding proposer：懒加载 Arctic Inference 的 SuffixDecodingCache（后缀树缓存请求输出、逐出旧请求），按 max_tree_depth/spec_factor/min_token_prob 生成 draft。",
+   "tags": [
+    "suffix-deoding",
+    "suffix-tree"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    9,
+    102
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:next_power_of_2",
+   "type": "function",
+   "name": "next_power_of_2",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "返回不小于 n 的最小 2 的幂。",
+   "tags": [
+    "math",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    25,
+    36
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:eagle_step_slot_mapping_metadata_kernel",
+   "type": "function",
+   "name": "eagle_step_slot_mapping_metadata_kernel",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "EAGLE 自回归步融合 kernel：单 kernel 更新 positions/slot_mapping/seq_lens 以减少启动开销；超出 batch 的线程写 PADDING 保 CUDA graph 兼容。",
+   "tags": [
+    "triton",
+    "eagle",
+    "fused"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    40,
+    95
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:_eagle_step_warmup_inputs",
+   "type": "function",
+   "name": "_eagle_step_warmup_inputs",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "EAGLE step kernel 的 JIT warmup 输入构造。",
+   "tags": [
+    "warmup",
+    "jit"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    98,
+    116
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:_eagle_step_slot_mapping_metadata",
+   "type": "function",
+   "name": "_eagle_step_slot_mapping_metadata",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "eagle_step kernel 的非融合包装入口。",
+   "tags": [
+    "eagle",
+    "wrapper"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    123,
+    138
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:eagle_step_update_slot_mapping_and_metadata",
+   "type": "function",
+   "name": "eagle_step_update_slot_mapping_and_metadata",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "单步 EAGLE 的 slot mapping 与元数据融合更新：就地更新 seq_lens，写出 clamp 后的 positions 与 slot_mapping。",
+   "tags": [
+    "eagle",
+    "slot-mapping"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    141,
+    187
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:eagle_prepare_inputs_padded_kernel",
+   "type": "function",
+   "name": "eagle_prepare_inputs_padded_kernel",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "EAGLE prepare_input_padded 融合 kernel：计入 draft token 数与有效采样数计算每请求应采样的 token 索引。",
+   "tags": [
+    "triton",
+    "eagle",
+    "prepare"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    191,
+    228
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:_eagle_prepare_inputs_warmup_inputs",
+   "type": "function",
+   "name": "_eagle_prepare_inputs_warmup_inputs",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "prepare_inputs kernel 的 JIT warmup 输入。",
+   "tags": [
+    "warmup",
+    "jit"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    231,
+    240
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:_eagle_prepare_inputs_padded",
+   "type": "function",
+   "name": "_eagle_prepare_inputs_padded",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "prepare_inputs 融合 kernel 的包装入口。",
+   "tags": [
+    "eagle",
+    "wrapper"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    247,
+    255
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:eagle_prepare_next_token_padded_kernel",
+   "type": "function",
+   "name": "eagle_prepare_next_token_padded_kernel",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "EAGLE prepare_next_token_ids_padded 融合 kernel：计算每请求有效 token 数（1+accepted）与下一个应采样 token。",
+   "tags": [
+    "triton",
+    "eagle",
+    "next-token"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    259,
+    317
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:_eagle_prepare_next_token_warmup_inputs",
+   "type": "function",
+   "name": "_eagle_prepare_next_token_warmup_inputs",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "prepare_next_token kernel 的 JIT warmup 输入。",
+   "tags": [
+    "warmup",
+    "jit"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    320,
+    340
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:_eagle_prepare_next_token_padded",
+   "type": "function",
+   "name": "_eagle_prepare_next_token_padded",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "prepare_next_token 融合 kernel 的包装入口。",
+   "tags": [
+    "eagle",
+    "wrapper"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    347,
+    360
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:compute_new_slot_mapping",
+   "type": "function",
+   "name": "compute_new_slot_mapping",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "批变化后重算 slot mapping。",
+   "tags": [
+    "slot-mapping",
+    "recompute"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    363,
+    392
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:extend_all_queries_by_N",
+   "type": "function",
+   "name": "extend_all_queries_by_N",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "把 CommonAttentionMetadata 的全部 query/seq 长度扩展 N：并行起草时一次前扩 N 个 draft 位置。",
+   "tags": [
+    "metadata",
+    "parallel-drafting"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    395,
+    426
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:copy_and_expand_eagle_inputs_kernel",
+   "type": "function",
+   "name": "copy_and_expand_eagle_inputs_kernel",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "把目标模型输入复制并扩展到 EAGLE drafting 缓冲的融合 kernel（处理 padding 槽与并行起草 token）。",
+   "tags": [
+    "triton",
+    "eagle",
+    "expand"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    431,
+    576
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:_copy_and_expand_eagle_warmup_inputs",
+   "type": "function",
+   "name": "_copy_and_expand_eagle_warmup_inputs",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "EAGLE 输入扩展 kernel 的 JIT warmup 输入。",
+   "tags": [
+    "warmup",
+    "jit"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    579,
+    609
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:_copy_and_expand_eagle_inputs",
+   "type": "function",
+   "name": "_copy_and_expand_eagle_inputs",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "EAGLE 输入扩展 kernel 的包装入口。",
+   "tags": [
+    "eagle",
+    "wrapper"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    616,
+    638
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:copy_and_expand_dflash_inputs_kernel",
+   "type": "function",
+   "name": "copy_and_expand_dflash_inputs_kernel",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "DFlash 首趟输入融合 kernel：复制 context positions、计算 query positions（last_target_pos+1+offset）并写输出缓冲。",
+   "tags": [
+    "triton",
+    "dflash",
+    "expand"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    642,
+    745
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:_copy_and_expand_dflash_warmup_inputs",
+   "type": "function",
+   "name": "_copy_and_expand_dflash_warmup_inputs",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "DFlash 输入扩展 kernel 的 JIT warmup 输入。",
+   "tags": [
+    "warmup",
+    "jit"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    748,
+    780
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:_copy_and_expand_dflash_inputs",
+   "type": "function",
+   "name": "_copy_and_expand_dflash_inputs",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "DFlash 输入扩展 kernel 的包装入口。",
+   "tags": [
+    "dflash",
+    "wrapper"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    787,
+    814
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/utils.py:update_num_computed_tokens_for_batch_change",
+   "type": "function",
+   "name": "update_num_computed_tokens_for_batch_change",
+   "filePath": "vllm/v1/spec_decode/utils.py",
+   "summary": "异步 spec decode 漂移修正 num_computed_tokens：有 draft 的请求用 prev_gpu+valid_count，新请求/非 draft 直接用 CPU 值。",
+   "tags": [
+    "sync",
+    "batch-change"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    818,
+    847
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/vocab_mapping.py:_detect_space_prefix",
+   "type": "function",
+   "name": "_detect_space_prefix",
+   "filePath": "vllm/v1/spec_decode/vocab_mapping.py",
+   "summary": "运行时探测词表空格前缀字符（BPE 为 'Ġ'、SentencePiece 为 '▁'），避免硬编码 tokenizer 家族差异。",
+   "tags": [
+    "tokenizer",
+    "space-prefix"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    10,
+    32
+   ]
+  },
+  {
+   "id": "function:vllm/v1/spec_decode/vocab_mapping.py:_get_unk_token_id",
+   "type": "function",
+   "name": "_get_unk_token_id",
+   "filePath": "vllm/v1/spec_decode/vocab_mapping.py",
+   "summary": "交集外 token 的安全回退 ID：unk→eos→ValueError；须用 is not None 判断（0 是常见合法 unk id）。",
+   "tags": [
+    "tokenizer",
+    "fallback"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    42,
+    65
+   ]
+  },
+  {
+   "id": "class:vllm/v1/spec_decode/vocab_mapping.py:VocabMapping",
+   "type": "class",
+   "name": "VocabMapping",
+   "filePath": "vllm/v1/spec_decode/vocab_mapping.py",
+   "summary": "异构词表映射：归一化两侧词表取交集，构建 draft→target/target→draft 张量映射与 draft 侧交集 mask，使 rejection sampling 在不同 tokenizer 下保持无损。",
+   "tags": [
+    "vocab-mapping",
+    "intersection",
+    "rejection-sampling"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    68,
+    150
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/spec_decode/dflash.py",
+   "target": "class:vllm/v1/spec_decode/dflash.py:DFlashProposer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/dflash.py",
+   "target": "class:vllm/v1/spec_decode/dflash.py:DFlashProposer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/draft_model.py",
+   "target": "class:vllm/v1/spec_decode/draft_model.py:DraftModelProposer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/draft_model.py",
+   "target": "class:vllm/v1/spec_decode/draft_model.py:DraftModelProposer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/extract_hidden_states.py",
+   "target": "class:vllm/v1/spec_decode/extract_hidden_states.py:ExtractHiddenStatesProposer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/extract_hidden_states.py",
+   "target": "class:vllm/v1/spec_decode/extract_hidden_states.py:ExtractHiddenStatesProposer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/fly.py",
+   "target": "function:vllm/v1/spec_decode/fly.py:compute_fly_entropy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/fly.py",
+   "target": "function:vllm/v1/spec_decode/fly.py:compute_fly_entropy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/fly.py",
+   "target": "function:vllm/v1/spec_decode/fly.py:apply_fly_greedy_acceptance_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/fly.py",
+   "target": "function:vllm/v1/spec_decode/fly.py:apply_fly_greedy_acceptance_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/fly.py",
+   "target": "function:vllm/v1/spec_decode/fly.py:apply_fly_random_acceptance_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/fly.py",
+   "target": "function:vllm/v1/spec_decode/fly.py:apply_fly_random_acceptance_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/gemma4.py",
+   "target": "class:vllm/v1/spec_decode/gemma4.py:Gemma4Proposer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/gemma4.py",
+   "target": "class:vllm/v1/spec_decode/gemma4.py:Gemma4Proposer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "class:vllm/v1/spec_decode/llm_base_proposer.py:SpecDecodeBaseProposer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "class:vllm/v1/spec_decode/llm_base_proposer.py:SpecDecodeBaseProposer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "function:vllm/v1/spec_decode/llm_base_proposer.py:compute_probs_and_sample_next_token",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "function:vllm/v1/spec_decode/llm_base_proposer.py:compute_probs_and_sample_next_token",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/metrics.py",
+   "target": "class:vllm/v1/spec_decode/metrics.py:SpecDecodingStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/metrics.py",
+   "target": "class:vllm/v1/spec_decode/metrics.py:SpecDecodingStats",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/metrics.py",
+   "target": "class:vllm/v1/spec_decode/metrics.py:SpecDecodingLogging",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/metrics.py",
+   "target": "class:vllm/v1/spec_decode/metrics.py:SpecDecodingLogging",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/metrics.py",
+   "target": "class:vllm/v1/spec_decode/metrics.py:SpecDecodingProm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/metrics.py",
+   "target": "class:vllm/v1/spec_decode/metrics.py:SpecDecodingProm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer.py",
+   "target": "class:vllm/v1/spec_decode/ngram_proposer.py:NgramProposer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer.py",
+   "target": "class:vllm/v1/spec_decode/ngram_proposer.py:NgramProposer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer.py",
+   "target": "function:vllm/v1/spec_decode/ngram_proposer.py:batch_propose_numba",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer.py",
+   "target": "function:vllm/v1/spec_decode/ngram_proposer.py:batch_propose_numba",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer.py",
+   "target": "function:vllm/v1/spec_decode/ngram_proposer.py:_find_longest_matched_ngram_and_propose_tokens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "target": "class:vllm/v1/spec_decode/ngram_proposer_gpu.py:NgramGPUKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "target": "class:vllm/v1/spec_decode/ngram_proposer_gpu.py:NgramGPUKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "target": "class:vllm/v1/spec_decode/ngram_proposer_gpu.py:NgramProposerGPU",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "target": "class:vllm/v1/spec_decode/ngram_proposer_gpu.py:NgramProposerGPU",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "target": "function:vllm/v1/spec_decode/ngram_proposer_gpu.py:update_scheduler_for_invalid_drafts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "target": "function:vllm/v1/spec_decode/ngram_proposer_gpu.py:update_scheduler_for_invalid_drafts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "target": "function:vllm/v1/spec_decode/ngram_proposer_gpu.py:update_ngram_gpu_tensors_incremental",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "target": "function:vllm/v1/spec_decode/ngram_proposer_gpu.py:update_ngram_gpu_tensors_incremental",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "target": "function:vllm/v1/spec_decode/ngram_proposer_gpu.py:_sync_num_tokens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "target": "function:vllm/v1/spec_decode/ngram_proposer_gpu.py:copy_num_valid_draft_tokens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "target": "function:vllm/v1/spec_decode/ngram_proposer_gpu.py:copy_num_valid_draft_tokens",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/step3p5.py",
+   "target": "class:vllm/v1/spec_decode/step3p5.py:Step3p5MTPProposer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/step3p5.py",
+   "target": "class:vllm/v1/spec_decode/step3p5.py:Step3p5MTPProposer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/suffix_decoding.py",
+   "target": "class:vllm/v1/spec_decode/suffix_decoding.py:SuffixDecodingProposer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/suffix_decoding.py",
+   "target": "class:vllm/v1/spec_decode/suffix_decoding.py:SuffixDecodingProposer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:next_power_of_2",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:next_power_of_2",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:eagle_step_slot_mapping_metadata_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:eagle_step_slot_mapping_metadata_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:_eagle_step_warmup_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:_eagle_step_slot_mapping_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:eagle_step_update_slot_mapping_and_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:eagle_step_update_slot_mapping_and_metadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:eagle_prepare_inputs_padded_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:eagle_prepare_inputs_padded_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:_eagle_prepare_inputs_warmup_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:_eagle_prepare_inputs_padded",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:eagle_prepare_next_token_padded_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:eagle_prepare_next_token_padded_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:_eagle_prepare_next_token_warmup_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:_eagle_prepare_next_token_padded",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:compute_new_slot_mapping",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:compute_new_slot_mapping",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:extend_all_queries_by_N",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:extend_all_queries_by_N",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:copy_and_expand_eagle_inputs_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:copy_and_expand_eagle_inputs_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:_copy_and_expand_eagle_warmup_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:_copy_and_expand_eagle_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:copy_and_expand_dflash_inputs_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:copy_and_expand_dflash_inputs_kernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:_copy_and_expand_dflash_warmup_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:_copy_and_expand_dflash_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:update_num_computed_tokens_for_batch_change",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "function:vllm/v1/spec_decode/utils.py:update_num_computed_tokens_for_batch_change",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/vocab_mapping.py",
+   "target": "function:vllm/v1/spec_decode/vocab_mapping.py:_detect_space_prefix",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/vocab_mapping.py",
+   "target": "function:vllm/v1/spec_decode/vocab_mapping.py:_get_unk_token_id",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/vocab_mapping.py",
+   "target": "class:vllm/v1/spec_decode/vocab_mapping.py:VocabMapping",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/vocab_mapping.py",
+   "target": "class:vllm/v1/spec_decode/vocab_mapping.py:VocabMapping",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/dflash.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/dflash.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/dflash.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/dflash.py",
+   "target": "file:vllm/model_executor/models/qwen3_dflash.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/dflash.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/dflash.py",
+   "target": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/dflash.py",
+   "target": "file:vllm/v1/spec_decode/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/draft_model.py",
+   "target": "file:vllm/compilation/backends.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/draft_model.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/draft_model.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/draft_model.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/draft_model.py",
+   "target": "file:vllm/model_executor/model_loader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/draft_model.py",
+   "target": "file:vllm/tokenizers/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/draft_model.py",
+   "target": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/draft_model.py",
+   "target": "file:vllm/v1/spec_decode/vocab_mapping.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/compilation/backends.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/distributed/eplb/eplb_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/model_executor/layers/attention_layer_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/model_executor/model_loader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/v1/cudagraph_dispatcher.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/v1/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/v1/worker/dp_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/extract_hidden_states.py",
+   "target": "file:vllm/v1/worker/gpu_input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/fly.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/gemma4.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/gemma4.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/gemma4.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/gemma4.py",
+   "target": "file:vllm/model_executor/layers/attention_layer_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/gemma4.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/gemma4.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/gemma4.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/gemma4.py",
+   "target": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/gemma4.py",
+   "target": "file:vllm/v1/worker/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/compilation/backends.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/distributed/eplb/eplb_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/model_executor/layers/attention/mla_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/model_executor/layers/attention_layer_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/model_executor/model_loader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/model_executor/model_loader/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/model_executor/models/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/model_executor/models/deepseek_eagle3.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/model_executor/models/laguna_dflash.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/model_executor/models/llama_eagle3.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/model_executor/models/qwen3_dflash.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/model_executor/models/qwen3_eagle3.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/models/deepseek_v4/amd/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/transformers_utils/deepseek_v4_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/attention/backends/flex_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/attention/backends/mla/indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/attention/backends/mla/rocm_aiter_mla_sparse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/attention/backends/rocm_aiter_fa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/attention/backends/rocm_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/attention/backends/triton_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/cudagraph_dispatcher.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/sample/metadata.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/sample/ops/topk_topp_sampler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/sample/sampler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/spec_decode/metadata.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/spec_decode/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/spec_decode/vocab_mapping.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/worker/dp_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/worker/gpu_input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/llm_base_proposer.py",
+   "target": "file:vllm/v1/worker/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/metrics.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/metrics.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/metrics.py",
+   "target": "file:vllm/v1/metrics/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "target": "file:vllm/compilation/decorators.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "target": "file:vllm/v1/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/ngram_proposer_gpu.py",
+   "target": "file:vllm/v1/worker/gpu_input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/step3p5.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/step3p5.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/step3p5.py",
+   "target": "file:vllm/model_executor/layers/attention_layer_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/step3p5.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/step3p5.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/step3p5.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/step3p5.py",
+   "target": "file:vllm/v1/sample/metadata.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/step3p5.py",
+   "target": "file:vllm/v1/spec_decode/eagle.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/step3p5.py",
+   "target": "file:vllm/v1/spec_decode/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/step3p5.py",
+   "target": "file:vllm/v1/worker/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/suffix_decoding.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/suffix_decoding.py",
+   "target": "file:vllm/v1/worker/gpu_input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/utils.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/spec_decode/vocab_mapping.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/v1/spec_decode/dflash.py:DFlashProposer",
+   "target": "class:vllm/v1/spec_decode/llm_base_proposer.py:SpecDecodeBaseProposer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/spec_decode/draft_model.py:DraftModelProposer",
+   "target": "class:vllm/v1/spec_decode/llm_base_proposer.py:SpecDecodeBaseProposer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/spec_decode/gemma4.py:Gemma4Proposer",
+   "target": "class:vllm/v1/spec_decode/llm_base_proposer.py:SpecDecodeBaseProposer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/spec_decode/step3p5.py:Step3p5MTPProposer",
+   "target": "class:vllm/v1/spec_decode/eagle.py:EagleProposer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/spec_decode/draft_model.py:DraftModelProposer",
+   "target": "class:vllm/v1/spec_decode/vocab_mapping.py:VocabMapping",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/spec_decode/dflash.py:DFlashProposer",
+   "target": "function:vllm/v1/spec_decode/utils.py:next_power_of_2",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/spec_decode/dflash.py:DFlashProposer",
+   "target": "function:vllm/v1/spec_decode/utils.py:_copy_and_expand_dflash_inputs",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/spec_decode/llm_base_proposer.py:SpecDecodeBaseProposer",
+   "target": "function:vllm/v1/spec_decode/utils.py:_copy_and_expand_eagle_inputs",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/spec_decode/llm_base_proposer.py:SpecDecodeBaseProposer",
+   "target": "function:vllm/v1/spec_decode/utils.py:_eagle_prepare_inputs_padded",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

@@ -1,0 +1,31 @@
+# DeepWiki 索引 — smixs/creative-director-skill
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-27
+> 结构 26 页 · 全文 260863 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Licensing and Attribution](1.2-licensing-and-attribution.md)
+- [2 Creative Process](2-creative-process.md)
+  - [2.1 Phase 1: Intake](2.1-phase-1-intake.md)
+  - [2.2 Phase 2: Insight Mining](2.2-phase-2-insight-mining.md)
+  - [2.3 Phase 3: Ideation](2.3-phase-3-ideation.md)
+  - [2.4 Phase 4: Evaluate & Refine](2.4-phase-4-evaluate-refine.md)
+  - [2.5 Phase 5: Articulate](2.5-phase-5-articulate.md)
+- [3 Ideation Methods Reference](3-ideation-methods-reference.md)
+  - [3.1 Methods Catalog](3.1-methods-catalog.md)
+  - [3.2 Method Selection & Rotation](3.2-method-selection-rotation.md)
+- [4 Evaluation System](4-evaluation-system.md)
+  - [4.1 Scoring Calibration](4.1-scoring-calibration.md)
+  - [4.2 Creative Constitution](4.2-creative-constitution.md)
+- [5 Legendary Campaigns Library](5-legendary-campaigns-library.md)
+  - [5.1 P01–P18 Pattern Reference](5.1-p01-p18-pattern-reference.md)
+  - [5.2 Campaign Cards by Brand](5.2-campaign-cards-by-brand.md)
+  - [5.3 Maps of Content (MOCs)](5.3-maps-of-content-mocs.md)
+- [6 Output & Narrative Formats](6-output-narrative-formats.md)
+  - [6.1 Output Templates](6.1-output-templates.md)
+  - [6.2 Storytelling Frameworks](6.2-storytelling-frameworks.md)
+- [7 System Architecture](7-system-architecture.md)
+  - [7.1 Reference Files Guide](7.1-reference-files-guide.md)
+  - [7.2 Maintenance Scripts](7.2-maintenance-scripts.md)
+- [8 Glossary](8-glossary.md)

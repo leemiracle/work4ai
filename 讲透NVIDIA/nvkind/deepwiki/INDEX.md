@@ -1,0 +1,32 @@
+# DeepWiki 索引 — NVIDIA/nvkind
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 356382 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+  - [2.1 Prerequisites and Installation](2.1-prerequisites-and-installation.md)
+  - [2.2 Quick Start Guide](2.2-quick-start-guide.md)
+- [3 User Guide](3-user-guide.md)
+  - [3.1 Creating Clusters](3.1-creating-clusters.md)
+  - [3.2 Listing Clusters](3.2-listing-clusters.md)
+  - [3.3 Viewing GPU Information](3.3-viewing-gpu-information.md)
+  - [3.4 GPU Distribution Patterns](3.4-gpu-distribution-patterns.md)
+- [4 Configuration Guide](4-configuration-guide.md)
+  - [4.1 Configuration Template System](4.1-configuration-template-system.md)
+  - [4.2 Built-in Template Examples](4.2-built-in-template-examples.md)
+  - [4.3 Creating Custom Configurations](4.3-creating-custom-configurations.md)
+- [5 Architecture](5-architecture.md)
+  - [5.1 System Overview](5.1-system-overview.md)
+  - [5.2 Core Library (pkg/nvkind)](5.2-core-library-pkg-nvkind.md)
+  - [5.3 CLI Tool (cmd/nvkind)](5.3-cli-tool-cmd-nvkind.md)
+  - [5.4 GPU Integration Mechanism](5.4-gpu-integration-mechanism.md)
+- [6 Development Guide](6-development-guide.md)
+  - [6.1 Building from Source](6.1-building-from-source.md)
+  - [6.2 Development Workflow](6.2-development-workflow.md)
+  - [6.3 CI/CD Pipeline](6.3-ci-cd-pipeline.md)
+  - [6.4 Contributing](6.4-contributing.md)
+- [7 Reference](7-reference.md)
+  - [7.1 Dependencies](7.1-dependencies.md)
+  - [7.2 Configuration Files Reference](7.2-configuration-files-reference.md)
+  - [7.3 License and Legal](7.3-license-and-legal.md)

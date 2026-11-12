@@ -1,0 +1,1386 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/flint/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/flint/__init__.py",
+   "summary": "flint 包入口：惰性 __getattr__（FlintForCausalLM 延迟导入，解析 FlintConfig 不引入 CUDA kernel）。",
+   "tags": [
+    "barrel",
+    "lazy-import",
+    "flint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/flint/configs.py",
+   "type": "file",
+   "name": "configs.py",
+   "filePath": "vllm/models/flint/configs.py",
+   "summary": "FlintConfig：decoder-only MoE transformer 配置——混合滑窗/全注意力（滑窗层 RoPE、no_rope_layer_indices 全注意力层无位置编码）、每头学习 sink logit。",
+   "tags": [
+    "config",
+    "flint",
+    "hybrid-attention"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/flint/gguf_nvfp4.py",
+   "type": "file",
+   "name": "gguf_nvfp4.py",
+   "filePath": "vllm/models/flint/gguf_nvfp4.py",
+   "summary": "GGUF NVFP4 checkpoint 读取：定位文件、重打包 [..., n/64*36] GGUF 字节为 packed uint8+scale、ModelOpt 布局反量化与 GGUF→HF 名映射的权重迭代器。",
+   "tags": [
+    "gguf",
+    "nvfp4",
+    "weights",
+    "dequantization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/flint/model.py",
+   "type": "file",
+   "name": "model.py",
+   "filePath": "vllm/models/flint/model.py",
+   "summary": "Flint 推理模型（BF16 safetensors 或 NVFP4 GGUF）：Qwen3-MoE 风格 decoder（学习 attention sink、混合滑窗/全注意力、SwiGLU MLP、sigmoid top-k 路由+重归一、无门控共享专家），SM100 单卡 kernel 路由。",
+   "tags": [
+    "model",
+    "flint",
+    "moe",
+    "sinks"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/flint/ops/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/flint/ops/__init__.py",
+   "summary": "ops 包标记文件，仅含 SPDX 头。",
+   "tags": [
+    "package-marker",
+    "ops",
+    "flint"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/flint/ops/cute_primitives.py",
+   "type": "file",
+   "name": "cute_primitives.py",
+   "filePath": "vllm/models/flint/ops/cute_primitives.py",
+   "summary": "CuTe DSL PTX 原语库（23 个）：加载/存储（smem/gmem/cluster）、MMA、SiLU-mul、BF16 舍入、NVFP4 权重行加载与 CTA/cluster 归约。",
+   "tags": [
+    "cute-dsl",
+    "ptx",
+    "primitives",
+    "smem"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/flint/ops/decode_attention.py",
+   "type": "file",
+   "name": "decode_attention.py",
+   "filePath": "vllm/models/flint/ops/decode_attention.py",
+   "summary": "Flint paged decode 注意力 kernel（Triton/CuTe）：带 sink 的单 query 解码注意力，split-KV 持久部分和与到达计数器、cluster DSMEM 归约；HND bf16 页布局假设。",
+   "tags": [
+    "attention",
+    "decode",
+    "sinks",
+    "split-kv"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/flint/ops/linear.py",
+   "type": "file",
+   "name": "linear.py",
+   "filePath": "vllm/models/flint/ops/linear.py",
+   "summary": "Flint 线性层 kernel：NVFP4 走 FlashInfer CuTe-DSL W4A16 + 小 M CuTe GEMV 快路径；BF16 小 M 走 CuTe GEMV、大 M 走 cuBLAS；含 gate_up+silu_mul 融合与 dense 层安装器。",
+   "tags": [
+    "linear",
+    "nvfp4",
+    "gemv",
+    "cublas"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/flint/configs.py:FlintConfig",
+   "type": "class",
+   "name": "FlintConfig",
+   "filePath": "vllm/models/flint/configs.py",
+   "summary": "Flint 模型配置（PreTrainedConfig）：混合滑窗/全注意力与 no-rope 层列表。",
+   "tags": [
+    "config",
+    "flint",
+    "pretrained"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    10,
+    89
+   ]
+  },
+  {
+   "id": "class:vllm/models/flint/model.py:FlintMLP",
+   "type": "class",
+   "name": "FlintMLP",
+   "filePath": "vllm/models/flint/model.py",
+   "summary": "稠密 SwiGLU MLP。",
+   "tags": [
+    "mlp",
+    "swiglu",
+    "dense"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    105,
+    137
+   ]
+  },
+  {
+   "id": "class:vllm/models/flint/model.py:FlintSparseMoeBlock",
+   "type": "class",
+   "name": "FlintSparseMoeBlock",
+   "filePath": "vllm/models/flint/model.py",
+   "summary": "MoE 块：sigmoid top-k 路由（重归一权重）+ 无门控共享专家。",
+   "tags": [
+    "moe",
+    "routing",
+    "shared-expert"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    140,
+    240
+   ]
+  },
+  {
+   "id": "class:vllm/models/flint/model.py:FlintAttention",
+   "type": "class",
+   "name": "FlintAttention",
+   "filePath": "vllm/models/flint/model.py",
+   "summary": "注意力层：学习 sink + 混合滑窗/全注意力（全注意力无 RoPE）。",
+   "tags": [
+    "attention",
+    "sinks",
+    "hybrid"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    243,
+    472
+   ]
+  },
+  {
+   "id": "class:vllm/models/flint/model.py:FlintDecoderLayer",
+   "type": "class",
+   "name": "FlintDecoderLayer",
+   "filePath": "vllm/models/flint/model.py",
+   "summary": "单 decoder 层。",
+   "tags": [
+    "decoder-layer",
+    "flint",
+    "transformer"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    475,
+    538
+   ]
+  },
+  {
+   "id": "class:vllm/models/flint/model.py:FlintModel",
+   "type": "class",
+   "name": "FlintModel",
+   "filePath": "vllm/models/flint/model.py",
+   "summary": "Flint backbone（嵌入+层栈）。",
+   "tags": [
+    "backbone",
+    "flint",
+    "embeddings"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    541,
+    596
+   ]
+  },
+  {
+   "id": "class:vllm/models/flint/model.py:FlintForCausalLM",
+   "type": "class",
+   "name": "FlintForCausalLM",
+   "filePath": "vllm/models/flint/model.py",
+   "summary": "Flint 因果 LM 入口（含 KV cache spec 与权重加载映射）。",
+   "tags": [
+    "causal-lm",
+    "flint",
+    "entry-point"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    599,
+    693
+   ]
+  },
+  {
+   "id": "class:vllm/models/flint/ops/linear.py:FlintNvFp4LinearKernel",
+   "type": "class",
+   "name": "FlintNvFp4LinearKernel",
+   "filePath": "vllm/models/flint/ops/linear.py",
+   "summary": "FlashInfer CuTe-DSL W4A16 线性 kernel + 小 M GEMV 快路径。",
+   "tags": [
+    "linear",
+    "nvfp4",
+    "cute-dsl"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    44,
+    83
+   ]
+  },
+  {
+   "id": "class:vllm/models/flint/ops/linear.py:FlintBf16LinearMethod",
+   "type": "class",
+   "name": "FlintBf16LinearMethod",
+   "filePath": "vllm/models/flint/ops/linear.py",
+   "summary": "BF16 线性方法：小 M CuTe GEMV、大 M cuBLAS。",
+   "tags": [
+    "linear",
+    "bf16",
+    "gemv"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    86,
+    114
+   ]
+  },
+  {
+   "id": "class:vllm/models/flint/ops/decode_attention.py:_FlintDecodeAttention",
+   "type": "class",
+   "name": "_FlintDecodeAttention",
+   "filePath": "vllm/models/flint/ops/decode_attention.py",
+   "summary": "带 sink 的 paged decode 注意力 kernel：grid (splits, kv heads, batch)，请求页交错分配 warp。",
+   "tags": [
+    "attention",
+    "decode",
+    "triton-kernel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    275,
+    942
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/__init__.py:__getattr__",
+   "type": "function",
+   "name": "__getattr__",
+   "filePath": "vllm/models/flint/__init__.py",
+   "summary": "惰性导出 FlintForCausalLM（避免解析 config 时引入 CUDA kernel）。",
+   "tags": [
+    "lazy-import",
+    "getattr",
+    "barrel"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    13,
+    19
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/gguf_nvfp4.py:find_gguf_file",
+   "type": "function",
+   "name": "find_gguf_file",
+   "filePath": "vllm/models/flint/gguf_nvfp4.py",
+   "summary": "定位 GGUF checkpoint 文件。",
+   "tags": [
+    "gguf",
+    "file-discovery",
+    "checkpoint"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    61,
+    82
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/gguf_nvfp4.py:_repack_nvfp4",
+   "type": "function",
+   "name": "_repack_nvfp4",
+   "filePath": "vllm/models/flint/gguf_nvfp4.py",
+   "summary": "GGUF [..., n/64*36] 字节重打包为 packed uint8 + scale 字节。",
+   "tags": [
+    "gguf",
+    "nvfp4",
+    "repack"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    85,
+    104
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/gguf_nvfp4.py:dequantize_nvfp4",
+   "type": "function",
+   "name": "dequantize_nvfp4",
+   "filePath": "vllm/models/flint/gguf_nvfp4.py",
+   "summary": "ModelOpt 布局 NVFP4 [N,K/2]→[N,K] 反量化。",
+   "tags": [
+    "nvfp4",
+    "dequantization",
+    "modelopt"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    111,
+    135
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/gguf_nvfp4.py:_map_name",
+   "type": "function",
+   "name": "_map_name",
+   "filePath": "vllm/models/flint/gguf_nvfp4.py",
+   "summary": "GGUF 张量基名→(HF 基名, 是否堆叠专家) 映射。",
+   "tags": [
+    "gguf",
+    "name-mapping",
+    "experts"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    145,
+    158
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/gguf_nvfp4.py:gguf_nvfp4_weights_iterator",
+   "type": "function",
+   "name": "gguf_nvfp4_weights_iterator",
+   "filePath": "vllm/models/flint/gguf_nvfp4.py",
+   "summary": "产出 HF 风格 (name, tensor) 对（NVFP4 张量变 .weight+.weight_scale）。",
+   "tags": [
+    "gguf",
+    "weights",
+    "iterator"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    161,
+    223
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/model.py:_flint_kernels",
+   "type": "function",
+   "name": "_flint_kernels",
+   "filePath": "vllm/models/flint/model.py",
+   "summary": "Flint kernel 在单 SM100 上服务 BF16 与 NVFP4 checkpoint 的判定。",
+   "tags": [
+    "flint",
+    "kernels",
+    "sm100"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    73,
+    87
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/model.py:_nvfp4_gguf_quant_config",
+   "type": "function",
+   "name": "_nvfp4_gguf_quant_config",
+   "filePath": "vllm/models/flint/model.py",
+   "summary": "NVFP4 GGUF 量化配置构造。",
+   "tags": [
+    "nvfp4",
+    "gguf",
+    "quant-config"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    95,
+    102
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/cute_primitives.py:ptx",
+   "type": "function",
+   "name": "ptx",
+   "filePath": "vllm/models/flint/ops/cute_primitives.py",
+   "summary": "无副作用 PTX 内联汇编 op。",
+   "tags": [
+    "ptx",
+    "inline-asm",
+    "cute-dsl"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    18,
+    43
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/cute_primitives.py:mma",
+   "type": "function",
+   "name": "mma",
+   "filePath": "vllm/models/flint/ops/cute_primitives.py",
+   "summary": "MMA 指令原语。",
+   "tags": [
+    "mma",
+    "ptx",
+    "cute-dsl"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    179,
+    191
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/cute_primitives.py:silu_mul",
+   "type": "function",
+   "name": "silu_mul",
+   "filePath": "vllm/models/flint/ops/cute_primitives.py",
+   "summary": "SiLU 乘原语。",
+   "tags": [
+    "silu",
+    "ptx",
+    "cute-dsl"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    214,
+    238
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/cute_primitives.py:load_rows",
+   "type": "function",
+   "name": "load_rows",
+   "filePath": "vllm/models/flint/ops/cute_primitives.py",
+   "summary": "CPW chunk 的 (row, row+8) NVFP4 权重字/scale 字节加载。",
+   "tags": [
+    "nvfp4",
+    "loading",
+    "cute-dsl"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    326,
+    374
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/cute_primitives.py:cta_reduce",
+   "type": "function",
+   "name": "cta_reduce",
+   "filePath": "vllm/models/flint/ops/cute_primitives.py",
+   "summary": "CTA 与 cluster 内每 lane 累加器求和。",
+   "tags": [
+    "reduction",
+    "cluster",
+    "cute-dsl"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    392,
+    428
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/decode_attention.py:_compile",
+   "type": "function",
+   "name": "_compile",
+   "filePath": "vllm/models/flint/ops/decode_attention.py",
+   "summary": "按静态批形状编译 kernel。",
+   "tags": [
+    "compile",
+    "kernel",
+    "attention"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    946,
+    985
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/decode_attention.py:_workspace",
+   "type": "function",
+   "name": "_workspace",
+   "filePath": "vllm/models/flint/ops/decode_attention.py",
+   "summary": "每设备一次分配的持久 split 部分和与到达计数器。",
+   "tags": [
+    "workspace",
+    "split-kv",
+    "allocation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    997,
+    1031
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/decode_attention.py:_launch_config",
+   "type": "function",
+   "name": "_launch_config",
+   "filePath": "vllm/models/flint/ops/decode_attention.py",
+   "summary": "静态批形状的 (splits, warps, stages, min_pages, cluster)。",
+   "tags": [
+    "launch-config",
+    "tuning",
+    "attention"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1039,
+    1049
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/decode_attention.py:_supports_kv_cache",
+   "type": "function",
+   "name": "_supports_kv_cache",
+   "filePath": "vllm/models/flint/ops/decode_attention.py",
+   "summary": "kv_cache 是否 kernel 假设的 HND bf16 页布局。",
+   "tags": [
+    "kv-cache",
+    "layout",
+    "predicate"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1052,
+    1065
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/decode_attention.py:flint_decode_attention",
+   "type": "function",
+   "name": "flint_decode_attention",
+   "filePath": "vllm/models/flint/ops/decode_attention.py",
+   "summary": "带 sink 的 paged decode 注意力入口（每请求单 query token）。",
+   "tags": [
+    "attention",
+    "decode",
+    "entry-point"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1068,
+    1134
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/linear.py:_dequant_gemm",
+   "type": "function",
+   "name": "_dequant_gemm",
+   "filePath": "vllm/models/flint/ops/linear.py",
+   "summary": "cuBLAS 路径：bf16(fp32(x @ bf16(e2m1*e4m3).T) * global)。",
+   "tags": [
+    "dequantization",
+    "gemm",
+    "cublas"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    123,
+    135
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/linear.py:_setup_gemv",
+   "type": "function",
+   "name": "_setup_gemv",
+   "filePath": "vllm/models/flint/ops/linear.py",
+   "summary": "调优表列出的形状上启用（并编译）GEMV。",
+   "tags": [
+    "gemv",
+    "setup",
+    "tuned"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    138,
+    153
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/linear.py:_use_gemv",
+   "type": "function",
+   "name": "_use_gemv",
+   "filePath": "vllm/models/flint/ops/linear.py",
+   "summary": "该 M 是否走 GEMV（查调优分发表）。",
+   "tags": [
+    "gemv",
+    "dispatch",
+    "predicate"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    161,
+    170
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/linear.py:gate_up_silu_mul",
+   "type": "function",
+   "name": "gate_up_silu_mul",
+   "filePath": "vllm/models/flint/ops/linear.py",
+   "summary": "小 M 时单 GEMV 完成 silu_and_mul(layer(x))，否则 None。",
+   "tags": [
+    "gemv",
+    "silu",
+    "fusion"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    173,
+    190
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/linear.py:install_flint_dense_kernels",
+   "type": "function",
+   "name": "install_flint_dense_kernels",
+   "filePath": "vllm/models/flint/ops/linear.py",
+   "summary": "把 model 的稠密线性路由到 Flint GEMV（该形状被调优）。",
+   "tags": [
+    "linear",
+    "gemv",
+    "installation"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    201,
+    222
+   ]
+  },
+  {
+   "id": "function:vllm/models/flint/ops/linear.py:check_merged_global_scales",
+   "type": "function",
+   "name": "check_merged_global_scales",
+   "filePath": "vllm/models/flint/ops/linear.py",
+   "summary": "NVFP4 全局 scale 不匹配时抛错。",
+   "tags": [
+    "nvfp4",
+    "validation",
+    "scales"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    234,
+    253
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/flint/__init__.py",
+   "target": "file:vllm/models/flint/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/gguf_nvfp4.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/gguf_nvfp4.py",
+   "target": "file:vllm/transformers_utils/repo_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/model_executor/layers/attention/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/model_executor/layers/quantization/modelopt.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/models/flint/configs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/models/flint/gguf_nvfp4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/models/flint/ops/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/models/flint/ops/moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/models/flint/ops/norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/models/flint/ops/qk_norm_rope.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/models/flint/ops/qkv_fused.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/decode_attention.py",
+   "target": "file:vllm/models/flint/ops/cute_primitives.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/linear.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/linear.py",
+   "target": "file:vllm/model_executor/kernels/linear/nvfp4/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/linear.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/ops/linear.py",
+   "target": "file:vllm/models/flint/ops/nvfp4_gemv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/flint/configs.py",
+   "target": "class:vllm/models/flint/configs.py:FlintConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "class:vllm/models/flint/model.py:FlintMLP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "class:vllm/models/flint/model.py:FlintSparseMoeBlock",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "class:vllm/models/flint/model.py:FlintAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "class:vllm/models/flint/model.py:FlintDecoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "class:vllm/models/flint/model.py:FlintModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "class:vllm/models/flint/model.py:FlintForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "function:vllm/models/flint/model.py:_flint_kernels",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "function:vllm/models/flint/model.py:_nvfp4_gguf_quant_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/linear.py",
+   "target": "class:vllm/models/flint/ops/linear.py:FlintNvFp4LinearKernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/linear.py",
+   "target": "class:vllm/models/flint/ops/linear.py:FlintBf16LinearMethod",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/linear.py",
+   "target": "function:vllm/models/flint/ops/linear.py:_dequant_gemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/linear.py",
+   "target": "function:vllm/models/flint/ops/linear.py:_setup_gemv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/linear.py",
+   "target": "function:vllm/models/flint/ops/linear.py:_use_gemv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/linear.py",
+   "target": "function:vllm/models/flint/ops/linear.py:gate_up_silu_mul",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/linear.py",
+   "target": "function:vllm/models/flint/ops/linear.py:install_flint_dense_kernels",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/linear.py",
+   "target": "function:vllm/models/flint/ops/linear.py:check_merged_global_scales",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/decode_attention.py",
+   "target": "class:vllm/models/flint/ops/decode_attention.py:_FlintDecodeAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/decode_attention.py",
+   "target": "function:vllm/models/flint/ops/decode_attention.py:_compile",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/decode_attention.py",
+   "target": "function:vllm/models/flint/ops/decode_attention.py:_workspace",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/decode_attention.py",
+   "target": "function:vllm/models/flint/ops/decode_attention.py:_launch_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/decode_attention.py",
+   "target": "function:vllm/models/flint/ops/decode_attention.py:_supports_kv_cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/decode_attention.py",
+   "target": "function:vllm/models/flint/ops/decode_attention.py:flint_decode_attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/__init__.py",
+   "target": "function:vllm/models/flint/__init__.py:__getattr__",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/gguf_nvfp4.py",
+   "target": "function:vllm/models/flint/gguf_nvfp4.py:find_gguf_file",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/gguf_nvfp4.py",
+   "target": "function:vllm/models/flint/gguf_nvfp4.py:_repack_nvfp4",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/gguf_nvfp4.py",
+   "target": "function:vllm/models/flint/gguf_nvfp4.py:dequantize_nvfp4",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/gguf_nvfp4.py",
+   "target": "function:vllm/models/flint/gguf_nvfp4.py:_map_name",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/gguf_nvfp4.py",
+   "target": "function:vllm/models/flint/gguf_nvfp4.py:gguf_nvfp4_weights_iterator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/cute_primitives.py",
+   "target": "function:vllm/models/flint/ops/cute_primitives.py:ptx",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/cute_primitives.py",
+   "target": "function:vllm/models/flint/ops/cute_primitives.py:mma",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/cute_primitives.py",
+   "target": "function:vllm/models/flint/ops/cute_primitives.py:silu_mul",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/cute_primitives.py",
+   "target": "function:vllm/models/flint/ops/cute_primitives.py:load_rows",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/ops/cute_primitives.py",
+   "target": "function:vllm/models/flint/ops/cute_primitives.py:cta_reduce",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/flint/configs.py",
+   "target": "class:vllm/models/flint/configs.py:FlintConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "class:vllm/models/flint/model.py:FlintMLP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "class:vllm/models/flint/model.py:FlintSparseMoeBlock",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "class:vllm/models/flint/model.py:FlintAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "class:vllm/models/flint/model.py:FlintDecoderLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "class:vllm/models/flint/model.py:FlintModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/model.py",
+   "target": "class:vllm/models/flint/model.py:FlintForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/linear.py",
+   "target": "class:vllm/models/flint/ops/linear.py:FlintNvFp4LinearKernel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/linear.py",
+   "target": "class:vllm/models/flint/ops/linear.py:FlintBf16LinearMethod",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/linear.py",
+   "target": "function:vllm/models/flint/ops/linear.py:gate_up_silu_mul",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/linear.py",
+   "target": "function:vllm/models/flint/ops/linear.py:install_flint_dense_kernels",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/linear.py",
+   "target": "function:vllm/models/flint/ops/linear.py:check_merged_global_scales",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/decode_attention.py",
+   "target": "function:vllm/models/flint/ops/decode_attention.py:flint_decode_attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/gguf_nvfp4.py",
+   "target": "function:vllm/models/flint/gguf_nvfp4.py:find_gguf_file",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/gguf_nvfp4.py",
+   "target": "function:vllm/models/flint/gguf_nvfp4.py:dequantize_nvfp4",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/gguf_nvfp4.py",
+   "target": "function:vllm/models/flint/gguf_nvfp4.py:gguf_nvfp4_weights_iterator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/cute_primitives.py",
+   "target": "function:vllm/models/flint/ops/cute_primitives.py:ptx",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/cute_primitives.py",
+   "target": "function:vllm/models/flint/ops/cute_primitives.py:mma",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/cute_primitives.py",
+   "target": "function:vllm/models/flint/ops/cute_primitives.py:silu_mul",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/cute_primitives.py",
+   "target": "function:vllm/models/flint/ops/cute_primitives.py:load_rows",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/flint/ops/cute_primitives.py",
+   "target": "function:vllm/models/flint/ops/cute_primitives.py:cta_reduce",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/flint/ops/linear.py:FlintBf16LinearMethod",
+   "target": "class:vllm/model_executor/layers/linear.py:UnquantizedLinearMethod",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/flint/model.py:FlintForCausalLM",
+   "target": "class:vllm/models/flint/model.py:FlintModel",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/flint/model.py:FlintModel",
+   "target": "class:vllm/models/flint/model.py:FlintDecoderLayer",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/flint/model.py:FlintDecoderLayer",
+   "target": "class:vllm/models/flint/model.py:FlintAttention",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/flint/model.py:FlintDecoderLayer",
+   "target": "class:vllm/models/flint/model.py:FlintSparseMoeBlock",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/flint/model.py:FlintSparseMoeBlock",
+   "target": "function:vllm/models/flint/ops/moe.py:flint_moe_ll",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/flint/model.py:FlintAttention",
+   "target": "function:vllm/models/flint/ops/decode_attention.py:flint_decode_attention",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/flint/model.py:FlintAttention",
+   "target": "function:vllm/models/flint/ops/qkv_fused.py:flint_qkv_fused",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/models/flint/ops/linear.py:install_flint_dense_kernels",
+   "target": "function:vllm/models/flint/ops/nvfp4_gemv.py:nvfp4_gemv",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/flint/ops/decode_attention.py:_FlintDecodeAttention",
+   "target": "function:vllm/models/flint/ops/decode_attention.py:_workspace",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/flint/model.py:FlintForCausalLM",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsPP",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/flint/ops/linear.py:FlintNvFp4LinearKernel",
+   "target": "class:vllm/model_executor/kernels/linear/nvfp4/flashinfer.py:FlashInferCuteDslNvFp4W4A16LinearKernel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

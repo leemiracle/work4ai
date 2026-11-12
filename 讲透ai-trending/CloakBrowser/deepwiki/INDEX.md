@@ -1,0 +1,33 @@
+# DeepWiki 索引 — CloakHQ/CloakBrowser
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-30
+> 结构 28 页 · 全文 268230 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+- [3 Python Package](3-python-package.md)
+  - [3.1 Python API Reference](3.1-python-api-reference.md)
+  - [3.2 Python Configuration Module](3.2-python-configuration-module.md)
+  - [3.3 Python Binary Management](3.3-python-binary-management.md)
+- [4 JavaScript Package](4-javascript-package.md)
+  - [4.1 JavaScript Playwright API](4.1-javascript-playwright-api.md)
+  - [4.2 JavaScript Puppeteer API](4.2-javascript-puppeteer-api.md)
+  - [4.3 JavaScript Configuration Module](4.3-javascript-configuration-module.md)
+  - [4.4 JavaScript Binary Management](4.4-javascript-binary-management.md)
+- [5 .NET Package](5-.net-package.md)
+  - [5.1 .NET API Reference](5.1-.net-api-reference.md)
+  - [5.2 .NET Configuration and Binary Management](5.2-.net-configuration-and-binary-management.md)
+  - [5.3 .NET Humanize Decorator Layer](5.3-.net-humanize-decorator-layer.md)
+- [6 Stealth System](6-stealth-system.md)
+  - [6.1 Fingerprint Flags Reference](6.1-fingerprint-flags-reference.md)
+  - [6.2 Humanize Behavioral Layer](6.2-humanize-behavioral-layer.md)
+  - [6.3 GeoIP Auto-Detection](6.3-geoip-auto-detection.md)
+- [7 Licensing and Pro Tier](7-licensing-and-pro-tier.md)
+  - [7.1 Environment Variables Reference](7.1-environment-variables-reference.md)
+  - [7.2 CLI Reference](7.2-cli-reference.md)
+- [8 Development Guide](8-development-guide.md)
+  - [8.1 Testing](8.1-testing.md)
+  - [8.2 Releasing Binaries](8.2-releasing-binaries.md)
+  - [8.3 Integration Examples](8.3-integration-examples.md)
+- [9 Widevine DRM](9-widevine-drm.md)
+- [10 Glossary](10-glossary.md)

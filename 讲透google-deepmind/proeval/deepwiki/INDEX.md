@@ -1,0 +1,33 @@
+# DeepWiki 索引 — google-deepmind/proeval
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 178910 字符
+
+- [1 ProEval Overview](1-proeval-overview.md)
+  - [1.1 Getting Started & Installation](1.1-getting-started-installation.md)
+  - [1.2 Repository Structure & Package Layout](1.2-repository-structure-package-layout.md)
+- [2 Core Architecture: Bayesian Quadrature Sampling](2-core-architecture-bayesian-quadrature-sampling.md)
+  - [2.1 BQ Samplers: BQPriorSampler & BQEncoderSampler](2.1-bq-samplers-bqpriorsampler-bqencodersampler.md)
+  - [2.2 Data Loading & Train/Test Splits](2.2-data-loading-train-test-splits.md)
+  - [2.3 Pretrain Model Selection (GMM)](2.3-pretrain-model-selection-gmm.md)
+  - [2.4 Baseline Samplers: IS, LURE & Vanilla BQ](2.4-baseline-samplers-is-lure-vanilla-bq.md)
+- [3 Neural Encoder (BQ-TPF)](3-neural-encoder-bq-tpf.md)
+  - [3.1 QuestionEncoder Architecture & Kernel Utilities](3.1-questionencoder-architecture-kernel-utilities.md)
+  - [3.2 EncoderTrainer: Cross-Benchmark Training Pipeline](3.2-encodertrainer-cross-benchmark-training-pipeline.md)
+- [4 Failure Discovery & Test Case Generation](4-failure-discovery-test-case-generation.md)
+  - [4.1 TopicAwareGenerator & SS Acquisition](4.1-topicawaregenerator-ss-acquisition.md)
+  - [4.2 Prompt Templates & Generation Schemas](4.2-prompt-templates-generation-schemas.md)
+- [5 LLM Evaluation Layer](5-llm-evaluation-layer.md)
+  - [5.1 LLMPredictor & OpenRouterClient](5.1-llmpredictor-openrouterclient.md)
+  - [5.2 UnifiedCSVManager & Dataset Configuration](5.2-unifiedcsvmanager-dataset-configuration.md)
+- [6 Benchmark Datasets](6-benchmark-datasets.md)
+  - [6.1 Predictions CSV Format & Evaluated Models](6.1-predictions-csv-format-evaluated-models.md)
+  - [6.2 Pre-computed Embeddings (.npy Files)](6.2-pre-computed-embeddings-.npy-files.md)
+- [7 Experiment Scripts](7-experiment-scripts.md)
+  - [7.1 Performance Estimation Experiments](7.1-performance-estimation-experiments.md)
+  - [7.2 Failure Discovery Experiments & Encoder Training](7.2-failure-discovery-experiments-encoder-training.md)
+- [8 Utilities & Visualization](8-utilities-visualization.md)
+  - [8.1 Metrics & Model Name Registry](8.1-metrics-model-name-registry.md)
+  - [8.2 Plotting Utilities](8.2-plotting-utilities.md)
+- [9 Contributing & Licensing](9-contributing-licensing.md)
+- [10 Glossary](10-glossary.md)

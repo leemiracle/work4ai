@@ -1,0 +1,1753 @@
+{
+ "nodes": [
+  {
+   "id": "file:packages/client/ui-open-in-app/src/client/OpenInAppAction.tsx",
+   "type": "file",
+   "name": "OpenInAppAction.tsx",
+   "filePath": "packages/client/ui-open-in-app/src/client/OpenInAppAction.tsx",
+   "summary": "会话头/文件树的\"在应用中打开\"目录适配组件：把已安装目录应用目录适配到共享 OpenTargetButton 分裂按钮，无可用应用时返回 null。",
+   "tags": [
+    "component",
+    "adapter",
+    "slot-contribution",
+    "react"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-open-in-app/src/client/OpenInAppAction.tsx:OpenInAppAction",
+   "type": "function",
+   "name": "OpenInAppAction",
+   "filePath": "packages/client/ui-open-in-app/src/client/OpenInAppAction.tsx",
+   "lineRange": [
+    34,
+    58
+   ],
+   "summary": "读取可用应用/持久化选择/启动状态三个注入快照，组装应用列表并渲染共享打开按钮，launch 成功且为显式选择时回写 choose。",
+   "tags": [
+    "component",
+    "adapter",
+    "injected-face"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx",
+   "type": "file",
+   "name": "OpenPathAction.tsx",
+   "filePath": "packages/client/ui-open-in-app/src/client/OpenPathAction.tsx",
+   "summary": "文档预览头部的文件关联打开适配器：FileOpenTarget 解析桌面可用性与文件关联（共享缓存），把 open/reveal 手势委托给共享分裂按钮。",
+   "tags": [
+    "component",
+    "adapter",
+    "file-association",
+    "react"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx:FileOpenTarget",
+   "type": "function",
+   "name": "FileOpenTarget",
+   "filePath": "packages/client/ui-open-in-app/src/client/OpenPathAction.tsx",
+   "lineRange": [
+    40,
+    58
+   ],
+   "summary": "无桌面时返回 null；用 useFileApplications 读共享关联缓存，把操作（default/application/reveal）翻译为 openPath 调用。",
+   "tags": [
+    "component",
+    "file-association",
+    "shared-state"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx:OpenPathAction",
+   "type": "function",
+   "name": "OpenPathAction",
+   "filePath": "packages/client/ui-open-in-app/src/client/OpenPathAction.tsx",
+   "lineRange": [
+    65,
+    67
+   ],
+   "summary": "文档头 slot 贡献的薄包装，把注入 props 直通 FileOpenTarget。",
+   "tags": [
+    "component",
+    "slot-contribution"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-open-in-app/src/client/OpenPathEmptyAction.tsx",
+   "type": "file",
+   "name": "OpenPathEmptyAction.tsx",
+   "filePath": "packages/client/ui-open-in-app/src/client/OpenPathEmptyAction.tsx",
+   "summary": "不可预览文档空态的文件打开贡献：复用 FileOpenTarget 并以 prominent 大按钮形态渲染。",
+   "tags": [
+    "component",
+    "empty-state",
+    "slot-contribution"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-open-in-app/src/client/OpenPathEmptyAction.tsx:OpenPathEmptyAction",
+   "type": "function",
+   "name": "OpenPathEmptyAction",
+   "filePath": "packages/client/ui-open-in-app/src/client/OpenPathEmptyAction.tsx",
+   "lineRange": [
+    19,
+    21
+   ],
+   "summary": "unpreviewable slot 的适配层，向 FileOpenTarget 传 empty 标记放大主按钮。",
+   "tags": [
+    "component",
+    "adapter"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx",
+   "type": "file",
+   "name": "OpenTargetButton.tsx",
+   "filePath": "packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx",
+   "summary": "文件/目录共享打开分裂按钮：默认动作+应用菜单+文件 reveal 常驻末位，手势串行化并把每次定局结果上报全局公告座；图标带回退、加载骨架与无障碍标注。",
+   "tags": [
+    "component",
+    "split-button",
+    "menu",
+    "a11y"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx:useOpenTargetGesture",
+   "type": "function",
+   "name": "useOpenTargetGesture",
+   "filePath": "packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx",
+   "lineRange": [
+    52,
+    69
+   ],
+   "summary": "手势串行化 hook：inFlight 引用守卫并发，execute 定局后 report 给公告座并复位 pending。",
+   "tags": [
+    "hook",
+    "serialization",
+    "gesture"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx:OpenTargetButton",
+   "type": "function",
+   "name": "OpenTargetButton",
+   "filePath": "packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx",
+   "lineRange": [
+    85,
+    161
+   ],
+   "summary": "渲染主按钮+chevron 菜单：文件优先 Host 默认应用否则 Shell 顺序第一项，仅无注册应用时把 reveal 升为默认；菜单打开前刷新关联。",
+   "tags": [
+    "component",
+    "split-button",
+    "defaulting",
+    "menu"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/client/ui-open-in-app/src/client/applications.ts",
+   "type": "file",
+   "name": "applications.ts",
+   "filePath": "packages/client/ui-open-in-app/src/client/applications.ts",
+   "summary": "可命名应用 id→本地化标签 key 的静态映射表（34 个 finder/vscode/终端/GUI），供按钮与键盘命令共享过滤。",
+   "tags": [
+    "data-model",
+    "catalog",
+    "static-map"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "type": "file",
+   "name": "context-menus.tsx",
+   "filePath": "packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "summary": "向工作区/目录/文件/URL/图片五类原生右键菜单注册动作：目录/文件 reveal 与默认应用打开、复制路径、侧栏/浮窗打开、URL 外链；全部经 ctx.effect 注册并可失败回报。",
+   "tags": [
+    "context-menu",
+    "registration",
+    "effects",
+    "clipboard"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/client/ui-open-in-app/src/client/context-menus.tsx:registerContextMenus",
+   "type": "function",
+   "name": "registerContextMenus",
+   "filePath": "packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "lineRange": [
+    25,
+    140
+   ],
+   "summary": "一次注册 5 个 contextMenus 目标：workspace/directory/file/url/image；文件菜单先经 remote.workspaceFiles.stat 解析绝对路径再组装动作，元数据失败仅禁用路径动作。",
+   "tags": [
+    "context-menu",
+    "registration",
+    "remote-call"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/client/ui-open-in-app/src/client/context-menus.tsx:ContextMenuApplicationIcon",
+   "type": "function",
+   "name": "ContextMenuApplicationIcon",
+   "filePath": "packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "lineRange": [
+    143,
+    145
+   ],
+   "summary": "contextMenu.icon slot 的应用图标渲染：有 src 用 img，否则回退原生打开图标。",
+   "tags": [
+    "component",
+    "icon"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-open-in-app/src/client/controller.ts",
+   "type": "file",
+   "name": "controller.ts",
+   "filePath": "packages/client/ui-open-in-app/src/client/controller.ts",
+   "summary": "OpenInAppController：目录应用可用性（每控制器生命周期一次读取、失败读作空表）+跨会话持久化的最后选择+launch POST，三个状态源均 uSES 安全供多个会话头共享。",
+   "tags": [
+    "controller",
+    "snapshot-store",
+    "persistence",
+    "http"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/client/ui-open-in-app/src/client/controller.ts:OpenInAppController",
+   "type": "class",
+   "name": "OpenInAppController",
+   "filePath": "packages/client/ui-open-in-app/src/client/controller.ts",
+   "lineRange": [
+    25,
+    116
+   ],
+   "summary": "可用性/选择/启动三个 SnapshotStore 的属主：load 惰性单飞，launch 忙时返回 skipped，Host 拒绝与传输失败同归 failed；构造器可注入 fetch 便于测试。",
+   "tags": [
+    "controller",
+    "service-provider",
+    "snapshot-store",
+    "single-flight"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/client/ui-open-in-app/src/client/file-applications.ts",
+   "type": "file",
+   "name": "file-applications.ts",
+   "filePath": "packages/client/ui-open-in-app/src/client/file-applications.ts",
+   "summary": "文件关联查询的进程级共享缓存：WeakMap 按 query 函数+目标路径两级键控，引用计数保留，最后释放者中止请求并丢弃条目。",
+   "tags": [
+    "cache",
+    "reference-counting",
+    "react-hook",
+    "uSES"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-open-in-app/src/client/file-applications.ts:subscribe",
+   "type": "function",
+   "name": "subscribe",
+   "filePath": "packages/client/ui-open-in-app/src/client/file-applications.ts",
+   "lineRange": [
+    22,
+    54
+   ],
+   "summary": "uSES 订阅侧：首挂即刷新，AbortController 随条目走，users 归零时中止并删除条目。",
+   "tags": [
+    "cache",
+    "subscription",
+    "abort"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-open-in-app/src/client/file-applications.ts:useFileApplications",
+   "type": "function",
+   "name": "useFileApplications",
+   "filePath": "packages/client/ui-open-in-app/src/client/file-applications.ts",
+   "lineRange": [
+    63,
+    73
+   ],
+   "summary": "同一文件+同一 reader 的挂载控件共享关联与刷新：enabled=false 时订阅空实现。",
+   "tags": [
+    "react-hook",
+    "shared-state",
+    "uSES"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/client/ui-open-in-app/src/client/index.ts",
+   "summary": "客户端插件主体：注册 8 语种词典、五个 contextMenu.icon、右键菜单、shell.overlay toast、快捷键 workspace.openLocal，以及会话头/文件树/文档动作/空态/交付物动作六个 slot 注入。",
+   "tags": [
+    "entry-point",
+    "plugin-body",
+    "slot-registration",
+    "effects"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/client/ui-open-in-app/src/client/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/client/ui-open-in-app/src/client/index.ts",
+   "lineRange": [
+    57,
+    158
+   ],
+   "summary": "组装两个控制器+公告源后逐项 ctx.slots.inject/ctx.effect 注册；快捷键按面板焦点与 retainedBy 会话解析目标目录，注入面把控制器操作适配为各 slot 的 InjectFace。",
+   "tags": [
+    "plugin-body",
+    "composition",
+    "slot-injection"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/client/ui-open-in-app/src/client/open-path.ts",
+   "type": "file",
+   "name": "open-path.ts",
+   "filePath": "packages/client/ui-open-in-app/src/client/open-path.ts",
+   "summary": "OpenInAppPathController：Host 桌面可用性（每页一次读取，失败读作无桌面）+文件 open/reveal 手势+关联刷新，全部经 Session Remote 且传输失败与 Host 拒绝同归 named failure。",
+   "tags": [
+    "controller",
+    "remote-call",
+    "snapshot-store"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/client/ui-open-in-app/src/client/open-path.ts:OpenInAppPathController",
+   "type": "class",
+   "name": "OpenInAppPathController",
+   "filePath": "packages/client/ui-open-in-app/src/client/open-path.ts",
+   "lineRange": [
+    28,
+    96
+   ],
+   "summary": "desktop SnapshotStore 属主：load 单飞；openPath 把 reveal/open 请求翻译为 SessionOpenWorkspacePathRequest；applications 失败返回 null 与空表区分。",
+   "tags": [
+    "controller",
+    "service-provider",
+    "single-flight"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/client/ui-open-in-app/src/client/open-toast.tsx",
+   "type": "file",
+   "name": "open-toast.tsx",
+   "filePath": "packages/client/ui-open-in-app/src/client/open-toast.tsx",
+   "summary": "原生打开结果的公告源与 overlay toast：createOpenInAppToastSource 持有 seq 递增的通知 store（移动端成功+全端失败），OpenInAppToast 渲染 Toast 横幅。",
+   "tags": [
+    "toast",
+    "overlay",
+    "feedback",
+    "announcement"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-open-in-app/src/client/open-toast.tsx:createOpenInAppToastSource",
+   "type": "function",
+   "name": "createOpenInAppToastSource",
+   "filePath": "packages/client/ui-open-in-app/src/client/open-toast.tsx",
+   "lineRange": [
+    31,
+    44
+   ],
+   "summary": "创建唯一结果 store：skipped 与桌面成功不上屏，seq 保证重复通知重新计时。",
+   "tags": [
+    "factory",
+    "observable",
+    "feedback"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-open-in-app/src/client/open-toast.tsx:OpenInAppToast",
+   "type": "function",
+   "name": "OpenInAppToast",
+   "filePath": "packages/client/ui-open-in-app/src/client/open-toast.tsx",
+   "lineRange": [
+    56,
+    65
+   ],
+   "summary": "shell.overlay 贡献：failed 渲染警告 toast，opened/revealed 渲染成功 toast，均可 dismiss。",
+   "tags": [
+    "component",
+    "toast"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-open-in-app/src/client/outcome.ts",
+   "type": "file",
+   "name": "outcome.ts",
+   "filePath": "packages/client/ui-open-in-app/src/client/outcome.ts",
+   "summary": "目录/路径/交付控件共享的已定局手势结果类型：OpenInAppOutcome 与 OpenInAppPathFailure 均为对 dsh-client-ui-deliverables 类型的别名再导出。",
+   "tags": [
+    "type-definition",
+    "outcome",
+    "re-export"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-open-in-app/src/client/session-reveal.tsx",
+   "type": "file",
+   "name": "session-reveal.tsx",
+   "filePath": "packages/client/ui-open-in-app/src/client/session-reveal.tsx",
+   "summary": "向 Session 结构化菜单注册原生目录 reveal 动作：观察应用目录与会话列表，finder/explorer/filemanager 可用时启用。",
+   "tags": [
+    "context-menu",
+    "registration",
+    "session"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-open-in-app/src/client/session-reveal.tsx:registerSessionReveal",
+   "type": "function",
+   "name": "registerSessionReveal",
+   "filePath": "packages/client/ui-open-in-app/src/client/session-reveal.tsx",
+   "lineRange": [
+    14,
+    37
+   ],
+   "summary": "target:session 的 contextMenus 注册，reveal 失败映射为 revealError 公告。",
+   "tags": [
+    "registration",
+    "effects"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-open-in-app/src/css-modules.d.ts",
+   "type": "file",
+   "name": "css-modules.d.ts",
+   "filePath": "packages/client/ui-open-in-app/src/css-modules.d.ts",
+   "summary": "CSS Modules 的 ambient 类型声明：*.module.css 默认导出类名 Record，裸 *.css 声明为空模块。",
+   "tags": [
+    "type-declaration",
+    "ambient",
+    "css-modules"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-open-in-app/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/client/ui-open-in-app/src/index.ts",
+   "summary": "Host 半插件入口：空 apply 仅为让插件出现在 host cordis.yml/Loader，浏览器半经 package.json 的 dsh.client 声明由 exports[\"./client\"] 分发。",
+   "tags": [
+    "entry-point",
+    "plugin-body",
+    "barrel"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-open-in-app/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/client/ui-open-in-app/src/index.ts",
+   "lineRange": [
+    10,
+    10
+   ],
+   "summary": "Host 侧无行为的空插件体（纯 UI 面插件）。",
+   "tags": [
+    "plugin-body",
+    "noop"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/client/ui-open-in-app/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/client/ui-open-in-app/tsconfig.json",
+   "summary": "client 包类型编译配置：继承 tsconfig.base.client.json，rootDir src→outDir lib/types，project references 指向 api/gateway、remotes、session-controller、host/open-in-app 与各 client 依赖包。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-open-in-app/tsdown.config.ts",
+   "type": "file",
+   "name": "tsdown.config.ts",
+   "filePath": "packages/client/ui-open-in-app/tsdown.config.ts",
+   "summary": "打包配置：复用 ../tsdown.client.ts 的 clientBundle 工厂，产物 lib/client.js 并保留 lib/types/index.js。",
+   "tags": [
+    "build-system",
+    "bundler",
+    "configuration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/client/ui-open-in-app/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/client/ui-open-in-app/README.md",
+   "summary": "包参考文档：Web \"Open In...\" 控件的用户与维护者指南，含用法、实现理解、进一步探索、模型体验与已知限制章节。",
+   "tags": [
+    "documentation",
+    "package-reference"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/client/ui-open-in-app/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/client/ui-open-in-app/package.json",
+   "summary": "包清单：@deepseek-ai/dsh-client-ui-open-in-app，dsh.client 声明 14 个注入包与 web 平台，peer 依赖 vendored cordis，devDependencies 全 workspace 协议。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "plugin-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-permission-presets/src/client/PermissionSelect.tsx",
+   "type": "file",
+   "name": "PermissionSelect.tsx",
+   "filePath": "packages/client/ui-permission-presets/src/client/PermissionSelect.tsx",
+   "summary": "会话权限预设选择器：目录菜单（含 Auto 的 EXP 徽标）+ Full/Auto 的 RiskConfirmation 风险确认，经 session projection hook 读当前值、经注入 select 写入。",
+   "tags": [
+    "component",
+    "permission",
+    "risk-confirmation",
+    "menu"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/client/ui-permission-presets/src/client/PermissionSelect.tsx:PermissionSelect",
+   "type": "function",
+   "name": "PermissionSelect",
+   "filePath": "packages/client/ui-permission-presets/src/client/PermissionSelect.tsx",
+   "lineRange": [
+    77,
+    211
+   ],
+   "summary": "catalog 变化时重置确认态；FULL_ACCESS/AUTO_REVIEW 需勾选确认后提交，其余直提；busy 期间禁用触发器，选择经 select 回调回填。",
+   "tags": [
+    "component",
+    "confirmation-flow",
+    "projection"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/client/ui-permission-presets/src/client/catalog.ts",
+   "type": "file",
+   "name": "catalog.ts",
+   "filePath": "packages/client/ui-permission-presets/src/client/catalog.ts",
+   "summary": "PermissionCatalogDirectory：进程级\"最新结果胜出\"的权限目录读取器，双失效源（permission-presets/catalog-changed 通知+连接代变更）先发布失效 tick 再重读，epoch+代际+处置三重栅栏拒绝迟到的写入。",
+   "tags": [
+    "cache",
+    "invalidation",
+    "remote-call",
+    "generation-fence"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/client/ui-permission-presets/src/client/catalog.ts:PermissionCatalogDirectory",
+   "type": "class",
+   "name": "PermissionCatalogDirectory",
+   "filePath": "packages/client/ui-permission-presets/src/client/catalog.ts",
+   "lineRange": [
+    15,
+    158
+   ],
+   "summary": "store/invalidations 两个 SnapshotStore 属主：构造即订阅双失效源关闭安装/读取竞态；load 等待在途读后返回完整目录或抛出最近失败；dispose 吊销一切迟定局。",
+   "tags": [
+    "service-provider",
+    "cache",
+    "lifecycle",
+    "epoch-fence"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "document:packages/client/ui-permission-presets/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/client/ui-permission-presets/README.md",
+   "summary": "包参考文档：权限预设双界面（General 设置默认行+/permission 当前会话选择器）的用户与维护者指南。",
+   "tags": [
+    "documentation",
+    "package-reference"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/client/ui-permission-presets/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/client/ui-permission-presets/package.json",
+   "summary": "包清单：@deepseek-ai/dsh-client-ui-permission-presets，声明 client 注入与 locale JSON 导出。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "plugin-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/client/ui-permission-presets/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/client/ui-permission-presets/tsconfig.json",
+   "summary": "client 包类型编译配置：继承 base.client.json，references 指向 conversation/store/slots 等依赖面。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/client/ui-plan/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/client/ui-plan/README.md",
+   "summary": "包参考文档：Plan mode 状态芯片与计划卡片/侧栏预览的用户与维护者指南。",
+   "tags": [
+    "documentation",
+    "package-reference"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/client/ui-plan/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/client/ui-plan/package.json",
+   "summary": "包清单：@deepseek-ai/dsh-client-ui-plan，plan 模式控件+转录计划卡片+侧栏 Markdown 预览。",
+   "tags": [
+    "configuration",
+    "manifest",
+    "plugin-metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/client/ui-plan/src/client/PlanCard.tsx",
+   "type": "file",
+   "name": "PlanCard.tsx",
+   "filePath": "packages/client/ui-plan/src/client/PlanCard.tsx",
+   "summary": "转录计划卡片与待审导航：PlanCards 渲染 Turn 尾已提交计划卡（点击打开侧栏），PlanReviewOpen 自动打开待审计划并保留手动入口而不作答。",
+   "tags": [
+    "component",
+    "plan-review",
+    "slot-contribution"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/client/ui-plan/src/client/PlanCard.tsx:PlanCards",
+   "type": "function",
+   "name": "PlanCards",
+   "filePath": "packages/client/ui-plan/src/client/PlanCard.tsx",
+   "lineRange": [
+    43,
+    60
+   ],
+   "summary": "turnTail slot 贡献：按调用序渲染该 Turn 的计划卡按钮，无计划返回 null。",
+   "tags": [
+    "component",
+    "cards"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/client/ui-plan/src/client/PlanCard.tsx:PlanReviewOpen",
+   "type": "function",
+   "name": "PlanReviewOpen",
+   "filePath": "packages/client/ui-plan/src/client/PlanCard.tsx",
+   "lineRange": [
+    72,
+    83
+   ],
+   "summary": "plan-review.actions slot 贡献：等侧栏挂载后自动打开一次（store 记 opened 防重），手动按钮可重复打开。",
+   "tags": [
+    "component",
+    "auto-open",
+    "dedupe"
+   ],
+   "complexity": "moderate"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenInAppAction.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/OpenInAppAction.tsx:OpenInAppAction",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenInAppAction.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/OpenInAppAction.tsx:OpenInAppAction",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx:FileOpenTarget",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx:FileOpenTarget",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx:OpenPathAction",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx:OpenPathAction",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenPathEmptyAction.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/OpenPathEmptyAction.tsx:OpenPathEmptyAction",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenPathEmptyAction.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/OpenPathEmptyAction.tsx:OpenPathEmptyAction",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx:useOpenTargetGesture",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx:useOpenTargetGesture",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx:OpenTargetButton",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx:OpenTargetButton",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/context-menus.tsx:registerContextMenus",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/context-menus.tsx:registerContextMenus",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/context-menus.tsx:ContextMenuApplicationIcon",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/context-menus.tsx:ContextMenuApplicationIcon",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/controller.ts",
+   "target": "class:packages/client/ui-open-in-app/src/client/controller.ts:OpenInAppController",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/controller.ts",
+   "target": "class:packages/client/ui-open-in-app/src/client/controller.ts:OpenInAppController",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/file-applications.ts",
+   "target": "function:packages/client/ui-open-in-app/src/client/file-applications.ts:subscribe",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/file-applications.ts",
+   "target": "function:packages/client/ui-open-in-app/src/client/file-applications.ts:useFileApplications",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/file-applications.ts",
+   "target": "function:packages/client/ui-open-in-app/src/client/file-applications.ts:useFileApplications",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "function:packages/client/ui-open-in-app/src/client/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "function:packages/client/ui-open-in-app/src/client/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/open-path.ts",
+   "target": "class:packages/client/ui-open-in-app/src/client/open-path.ts:OpenInAppPathController",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/open-path.ts",
+   "target": "class:packages/client/ui-open-in-app/src/client/open-path.ts:OpenInAppPathController",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/open-toast.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/open-toast.tsx:createOpenInAppToastSource",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/open-toast.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/open-toast.tsx:createOpenInAppToastSource",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/open-toast.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/open-toast.tsx:OpenInAppToast",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/open-toast.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/open-toast.tsx:OpenInAppToast",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/session-reveal.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/session-reveal.tsx:registerSessionReveal",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/session-reveal.tsx",
+   "target": "function:packages/client/ui-open-in-app/src/client/session-reveal.tsx:registerSessionReveal",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/index.ts",
+   "target": "function:packages/client/ui-open-in-app/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/index.ts",
+   "target": "function:packages/client/ui-open-in-app/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-permission-presets/src/client/PermissionSelect.tsx",
+   "target": "function:packages/client/ui-permission-presets/src/client/PermissionSelect.tsx:PermissionSelect",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-permission-presets/src/client/PermissionSelect.tsx",
+   "target": "function:packages/client/ui-permission-presets/src/client/PermissionSelect.tsx:PermissionSelect",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-permission-presets/src/client/catalog.ts",
+   "target": "class:packages/client/ui-permission-presets/src/client/catalog.ts:PermissionCatalogDirectory",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-permission-presets/src/client/catalog.ts",
+   "target": "class:packages/client/ui-permission-presets/src/client/catalog.ts:PermissionCatalogDirectory",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanCard.tsx",
+   "target": "function:packages/client/ui-plan/src/client/PlanCard.tsx:PlanCards",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanCard.tsx",
+   "target": "function:packages/client/ui-plan/src/client/PlanCard.tsx:PlanCards",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanCard.tsx",
+   "target": "function:packages/client/ui-plan/src/client/PlanCard.tsx:PlanReviewOpen",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanCard.tsx",
+   "target": "function:packages/client/ui-plan/src/client/PlanCard.tsx:PlanReviewOpen",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenInAppAction.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenInAppAction.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/applications.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenInAppAction.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/controller.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenInAppAction.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/locales.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenInAppAction.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/outcome.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenInAppAction.tsx",
+   "target": "file:packages/client/shortcuts/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenInAppAction.tsx",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenInAppAction.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/file-applications.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/locales.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/open-path.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/outcome.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx",
+   "target": "file:packages/api/session-controller/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx",
+   "target": "file:packages/client/ui-sidebar-documentpreview/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenPathEmptyAction.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenPathEmptyAction.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/locales.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenPathEmptyAction.tsx",
+   "target": "file:packages/client/ui-sidebar-documentpreview/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenPathEmptyAction.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/locales.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/outcome.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx",
+   "target": "file:packages/client/shortcuts/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/applications.ts",
+   "target": "file:packages/client/ui-open-in-app/src/client/locales.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/controller.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/locales.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/open-path.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/open-toast.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "target": "file:packages/api/workspace-files/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "target": "file:packages/client/ui-context-menu/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "target": "file:packages/client/ui-sidebar-browser/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "target": "file:packages/client/ui-sidebar-right/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "target": "file:packages/client/ui-workspace/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "target": "file:packages/util/workspace-path/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/controller.ts",
+   "target": "file:packages/client/ui-open-in-app/src/client/applications.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/controller.ts",
+   "target": "file:packages/client/ui-open-in-app/src/client/outcome.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/controller.ts",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/controller.ts",
+   "target": "file:packages/host/open-in-app/src/shared.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/file-applications.ts",
+   "target": "file:packages/api/session-controller/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/file-applications.ts",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-open-in-app/src/client/FileRouteAction.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-open-in-app/src/client/OpenInAppAction.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-open-in-app/src/client/OpenPathAction.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-open-in-app/src/client/OpenPathEmptyAction.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-open-in-app/src/client/OpenTargetButton.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-open-in-app/src/client/context-menus.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-open-in-app/src/client/controller.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-open-in-app/src/client/locales.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-open-in-app/src/client/open-path.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-open-in-app/src/client/open-toast.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-open-in-app/src/client/outcome.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-open-in-app/src/client/session-reveal.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/api/gateway/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/api/remotes/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/api/session-controller/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/locale/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/shortcuts/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-context-menu/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-conversation/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-layout/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-renderer/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-session/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-sidebar-documentpreview/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-sidebar-files/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/index.ts",
+   "target": "file:packages/host/open-in-app/src/shared.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/open-path.ts",
+   "target": "file:packages/client/ui-open-in-app/src/client/outcome.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/open-path.ts",
+   "target": "file:packages/api/remotes/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/open-path.ts",
+   "target": "file:packages/api/session-controller/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/open-path.ts",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/open-toast.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/locales.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/open-toast.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/outcome.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/open-toast.tsx",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/open-toast.tsx",
+   "target": "file:packages/client/ui-layout/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/open-toast.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/open-toast.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/outcome.ts",
+   "target": "file:packages/client/ui-deliverables/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/session-reveal.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/controller.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/session-reveal.tsx",
+   "target": "file:packages/client/ui-open-in-app/src/client/open-toast.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/src/client/session-reveal.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-open-in-app/tsdown.config.ts",
+   "target": "file:packages/client/tsdown.client.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-permission-presets/src/client/PermissionSelect.tsx",
+   "target": "file:packages/client/ui-permission-presets/src/client/catalog.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-permission-presets/src/client/PermissionSelect.tsx",
+   "target": "file:packages/client/ui-permission-presets/src/client/locales.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-permission-presets/src/client/PermissionSelect.tsx",
+   "target": "file:packages/client/ui-permission-presets/src/client/presentation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-permission-presets/src/client/PermissionSelect.tsx",
+   "target": "file:packages/client/ui-conversation/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-permission-presets/src/client/PermissionSelect.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-permission-presets/src/client/PermissionSelect.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-permission-presets/src/client/PermissionSelect.tsx",
+   "target": "file:packages/interaction/permission-presets/src/client.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-permission-presets/src/client/catalog.ts",
+   "target": "file:packages/client/connection/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-permission-presets/src/client/catalog.ts",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-permission-presets/src/client/catalog.ts",
+   "target": "file:packages/interaction/permission-presets/src/client.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanCard.tsx",
+   "target": "file:packages/client/ui-plan/src/client/plan-definition.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanCard.tsx",
+   "target": "file:packages/client/ui-plan/src/client/plan.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanCard.tsx",
+   "target": "file:packages/client/ui-plan/src/client/review-store.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanCard.tsx",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanCard.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanCard.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanCard.tsx",
+   "target": "file:packages/client/ui-user-questions/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanCard.tsx",
+   "target": "file:packages/llm/llm/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/client/ui-plan/src/client/PlanCard.tsx",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

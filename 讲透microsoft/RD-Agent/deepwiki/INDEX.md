@@ -1,0 +1,42 @@
+# DeepWiki 索引 — microsoft/RD-Agent
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 30 页 · 全文 429387 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation and Configuration](1.1-installation-and-configuration.md)
+  - [1.2 Command Line Interface](1.2-command-line-interface.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 R&D Loop Framework](2.1-r-d-loop-framework.md)
+  - [2.2 Experiment and Workspace Management](2.2-experiment-and-workspace-management.md)
+  - [2.3 Environment and Execution System](2.3-environment-and-execution-system.md)
+  - [2.4 LLM Integration and Backends](2.4-llm-integration-and-backends.md)
+- [3 Scenarios and Applications](3-scenarios-and-applications.md)
+  - [3.1 Data Science Scenario](3.1-data-science-scenario.md)
+  - [3.2 Kaggle Competitions](3.2-kaggle-competitions.md)
+  - [3.3 Quantitative Trading and Finance](3.3-quantitative-trading-and-finance.md)
+  - [3.4 LLM Fine-Tuning Scenario](3.4-llm-fine-tuning-scenario.md)
+  - [3.5 RL Post-Training Scenario](3.5-rl-post-training-scenario.md)
+- [4 Components and Implementation](4-components-and-implementation.md)
+  - [4.1 CoSTEER Framework](4.1-costeer-framework.md)
+  - [4.2 Evaluation and Feedback Systems](4.2-evaluation-and-feedback-systems.md)
+  - [4.3 Knowledge Management and RAG](4.3-knowledge-management-and-rag.md)
+  - [4.4 Prompt Templates and LLM Interactions](4.4-prompt-templates-and-llm-interactions.md)
+  - [4.5 Factor and Model Coders](4.5-factor-and-model-coders.md)
+- [5 User Interface and Monitoring](5-user-interface-and-monitoring.md)
+  - [5.1 Streamlit UI and Visualization](5.1-streamlit-ui-and-visualization.md)
+  - [5.2 Logging and Trace Management](5.2-logging-and-trace-management.md)
+  - [5.3 Web Server and Vue Frontend](5.3-web-server-and-vue-frontend.md)
+- [6 Advanced Topics](6-advanced-topics.md)
+  - [6.1 Agent Systems and MCP Integration](6.1-agent-systems-and-mcp-integration.md)
+  - [6.2 Timer and Session Management](6.2-timer-and-session-management.md)
+  - [6.3 Configuration System Architecture](6.3-configuration-system-architecture.md)
+  - [6.4 Benchmarking and CI/CD](6.4-benchmarking-and-ci-cd.md)
+- [7 Glossary](7-glossary.md)
+
+## 附：结构清单外的页
+- [Component-Based Development Pipeline](x1-component-based-development-pipeline.md)
+- [Configuration and Settings](x2-configuration-and-settings.md)
+- [DSTrace and Multi-Trace Exploration](x3-dstrace-and-multi-trace-exploration.md)
+- [Evaluation and Testing Framework](x4-evaluation-and-testing-framework.md)
+- [Hypothesis and Experiment Generation](x5-hypothesis-and-experiment-generation.md)

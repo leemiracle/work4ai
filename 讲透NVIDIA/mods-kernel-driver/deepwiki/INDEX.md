@@ -1,0 +1,32 @@
+# DeepWiki 索引 — NVIDIA/mods-kernel-driver
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 316375 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Architecture](1.1-architecture.md)
+  - [1.2 Compatibility](1.2-compatibility.md)
+- [2 IOCTL Interface](2-ioctl-interface.md)
+  - [2.1 Memory Management IOCTLs](2.1-memory-management-ioctls.md)
+  - [2.2 PCI Management IOCTLs](2.2-pci-management-ioctls.md)
+  - [2.3 Interrupt Handling IOCTLs](2.3-interrupt-handling-ioctls.md)
+  - [2.4 ACPI Method IOCTLs](2.4-acpi-method-ioctls.md)
+  - [2.5 Platform-Specific IOCTLs](2.5-platform-specific-ioctls.md)
+- [3 Core Implementation](3-core-implementation.md)
+  - [3.1 Character Device Interface](3.1-character-device-interface.md)
+  - [3.2 Client Management](3.2-client-management.md)
+  - [3.3 Access Token Management](3.3-access-token-management.md)
+- [4 Memory Management](4-memory-management.md)
+  - [4.1 Memory Allocation Types](4.1-memory-allocation-types.md)
+  - [4.2 DMA Mapping](4.2-dma-mapping.md)
+  - [4.3 Memory Caching](4.3-memory-caching.md)
+- [5 Hardware Interfaces](5-hardware-interfaces.md)
+  - [5.1 PCI Device Management](5.1-pci-device-management.md)
+  - [5.2 Interrupt Management](5.2-interrupt-management.md)
+  - [5.3 ACPI Interface](5.3-acpi-interface.md)
+  - [5.4 ARM FFA Interface](5.4-arm-ffa-interface.md)
+  - [5.5 BPMP Communication](5.5-bpmp-communication.md)
+- [6 Development and Debugging](6-development-and-debugging.md)
+  - [6.1 Building the Driver](6.1-building-the-driver.md)
+  - [6.2 Debugging Interface](6.2-debugging-interface.md)
+  - [6.3 Configuration Options](6.3-configuration-options.md)

@@ -7,7 +7,7 @@
 | 产物 | 规模 / 说明 |
 |---|---|
 | DeepWiki | 15 页（deepwiki/） |
-| 论文精读 | 无本地副本：VL2 论文（arXiv:2412.10302）在 [讲透DeepSeek-VL/paper/](../讲透DeepSeek-VL/paper/PAPER-DEEPREAD.md) 综合篇中与 V1 一并精读——**共享 VL 的 paper** |
+| 论文精读 | ✅ [paper/PAPER-DEEPREAD.md](paper/PAPER-DEEPREAD.md)（2026-11-03 新增，arXiv:2412.10302 独立精读：动态切片公式/三档架构/代码锚；此前仅 VL 综合篇覆盖） |
 | 知识图谱 | 134 节点 / 267 边 / 7 层 / 10 步导览（训练/推理代码均在，图谱较厚） |
 
 ## 论文精读要点（摘自 VL 综合篇）

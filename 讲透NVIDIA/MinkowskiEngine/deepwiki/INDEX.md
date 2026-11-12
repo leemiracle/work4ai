@@ -1,0 +1,32 @@
+# DeepWiki 索引 — NVIDIA/MinkowskiEngine
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 332380 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation and Setup](1.1-installation-and-setup.md)
+  - [1.2 Basic Concepts](1.2-basic-concepts.md)
+  - [1.3 Quick Start Guide](1.3-quick-start-guide.md)
+- [2 Core Data Structures](2-core-data-structures.md)
+  - [2.1 SparseTensor](2.1-sparsetensor.md)
+  - [2.2 TensorField](2.2-tensorfield.md)
+  - [2.3 Coordinate Management System](2.3-coordinate-management-system.md)
+  - [2.4 Quantization](2.4-quantization.md)
+- [3 Neural Network Operations](3-neural-network-operations.md)
+  - [3.1 Convolution Operations](3.1-convolution-operations.md)
+  - [3.2 Pooling Operations](3.2-pooling-operations.md)
+  - [3.3 Normalization and Nonlinearities](3.3-normalization-and-nonlinearities.md)
+  - [3.4 Other Operations](3.4-other-operations.md)
+- [4 Implementation Details](4-implementation-details.md)
+  - [4.1 Python/C++ Interface](4.1-python-c-interface.md)
+  - [4.2 CPU Implementation](4.2-cpu-implementation.md)
+  - [4.3 GPU Implementation](4.3-gpu-implementation.md)
+  - [4.4 CUDA Optimizations](4.4-cuda-optimizations.md)
+- [5 Utilities](5-utilities.md)
+  - [5.1 Data Loading and Collation](5.1-data-loading-and-collation.md)
+  - [5.2 Sparse Matrix Operations](5.2-sparse-matrix-operations.md)
+  - [5.3 Auxiliary Functions](5.3-auxiliary-functions.md)
+- [6 Examples and Use Cases](6-examples-and-use-cases.md)
+  - [6.1 Classification Networks](6.1-classification-networks.md)
+  - [6.2 Segmentation Networks](6.2-segmentation-networks.md)
+  - [6.3 Custom Network Development](6.3-custom-network-development.md)

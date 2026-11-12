@@ -1,0 +1,5356 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/muse_spark/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/muse_spark/__init__.py",
+   "summary": "Muse Spark HF 模型包入口。",
+   "tags": [
+    "muse-spark",
+    "package-init"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/amd/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/muse_spark/amd/__init__.py",
+   "summary": "MuseSpark1x 的 AMD ROCm 实现包入口。",
+   "tags": [
+    "package-init",
+    "amd"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/amd/model.py",
+   "type": "file",
+   "name": "model.py",
+   "filePath": "vllm/models/muse_spark/amd/model.py",
+   "summary": "MuseSpark1x AMD ROCm 文本模型（1201 行：MoE/Attention/DecoderLayer/Model/ForCausalLM）。",
+   "tags": [
+    "muse-spark",
+    "model",
+    "amd"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/amd/model.py:MuseSpark1xMoE",
+   "type": "class",
+   "name": "MuseSpark1xMoE",
+   "filePath": "vllm/models/muse_spark/amd/model.py",
+   "lineRange": [
+    152,
+    372
+   ],
+   "summary": "AMD 版 MoE 层（221 行 7 方法）。",
+   "tags": [
+    "moe"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/amd/model.py:MuseSpark1xAttention",
+   "type": "class",
+   "name": "MuseSpark1xAttention",
+   "filePath": "vllm/models/muse_spark/amd/model.py",
+   "lineRange": [
+    375,
+    695
+   ],
+   "summary": "AMD 版注意力层（321 行 5 方法）。",
+   "tags": [
+    "attention"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/amd/model.py:MuseSpark1xDecoderLayer",
+   "type": "class",
+   "name": "MuseSpark1xDecoderLayer",
+   "filePath": "vllm/models/muse_spark/amd/model.py",
+   "lineRange": [
+    698,
+    863
+   ],
+   "summary": "AMD 版 decoder layer（166 行）。",
+   "tags": [
+    "decoder-layer"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/amd/model.py:MuseSpark1xModel",
+   "type": "class",
+   "name": "MuseSpark1xModel",
+   "filePath": "vllm/models/muse_spark/amd/model.py",
+   "lineRange": [
+    884,
+    992
+   ],
+   "summary": "AMD 版模型骨干（继承 LlamaModel，109 行）。",
+   "tags": [
+    "model",
+    "llama-base"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/amd/model.py:MuseSpark1xForCausalLM",
+   "type": "class",
+   "name": "MuseSpark1xForCausalLM",
+   "filePath": "vllm/models/muse_spark/amd/model.py",
+   "lineRange": [
+    995,
+    1190
+   ],
+   "summary": "AMD 版 ForCausalLM（196 行 8 方法，LoRA/MoE 支持）。",
+   "tags": [
+    "causal-lm",
+    "lora"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/model.py:norm_residual_then_norm",
+   "type": "function",
+   "name": "norm_residual_then_norm",
+   "filePath": "vllm/models/muse_spark/amd/model.py",
+   "lineRange": [
+    101,
+    137
+   ],
+   "summary": "norm→残差→norm 序列（37 行）。",
+   "tags": [
+    "norm",
+    "residual"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/model.py:_drop_gate_up_stacking",
+   "type": "function",
+   "name": "_drop_gate_up_stacking",
+   "filePath": "vllm/models/muse_spark/amd/model.py",
+   "lineRange": [
+    866,
+    879
+   ],
+   "summary": "丢弃 gate/up 堆叠标记。",
+   "tags": [
+    "weights",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/amd/multimodal.py",
+   "type": "file",
+   "name": "multimodal.py",
+   "filePath": "vllm/models/muse_spark/amd/multimodal.py",
+   "summary": "AMD 版 MuseSpark Omni（共享 Omni towers 挂 ROCm 文本栈）。",
+   "tags": [
+    "multimodal",
+    "omni",
+    "amd"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "type": "file",
+   "name": "muse_moe_runner.py",
+   "filePath": "vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "summary": "MuseSpark1x 的 ROCm MoE 实现（926 行：Triton/AITER MXFP4/Quark FP8/OCP-MX 多专家后端与 TopK 归约）。",
+   "tags": [
+    "moe",
+    "rocm",
+    "experts",
+    "quantization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkTopKWeightAndReduce",
+   "type": "class",
+   "name": "MuseSparkTopKWeightAndReduce",
+   "filePath": "vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "lineRange": [
+    141,
+    291
+   ],
+   "summary": "MuseSpark 的 TopK 加权归约（151 行 4 方法）。",
+   "tags": [
+    "topk",
+    "reduce"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:_RouteOutputHandoff",
+   "type": "class",
+   "name": "_RouteOutputHandoff",
+   "filePath": "vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "lineRange": [
+    294,
+    312
+   ],
+   "summary": "路由输出交接 mixin（19 行）。",
+   "tags": [
+    "handoff",
+    "mixin"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkTritonExperts",
+   "type": "class",
+   "name": "MuseSparkTritonExperts",
+   "filePath": "vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "lineRange": [
+    315,
+    386
+   ],
+   "summary": "Triton 专家实现（72 行）。",
+   "tags": [
+    "experts",
+    "triton"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkUnquantizedFusedMoE",
+   "type": "class",
+   "name": "MuseSparkUnquantizedFusedMoE",
+   "filePath": "vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "lineRange": [
+    389,
+    411
+   ],
+   "summary": "未量化 FusedMoE 方法（23 行）。",
+   "tags": [
+    "fused-moe",
+    "unquantized"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkAiterExperts",
+   "type": "class",
+   "name": "MuseSparkAiterExperts",
+   "filePath": "vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "lineRange": [
+    414,
+    551
+   ],
+   "summary": "AITER MXFP4 专家实现（138 行）。",
+   "tags": [
+    "experts",
+    "aiter",
+    "mxfp4"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkQuarkW8A8Fp8FusedMoE",
+   "type": "class",
+   "name": "MuseSparkQuarkW8A8Fp8FusedMoE",
+   "filePath": "vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "lineRange": [
+    554,
+    595
+   ],
+   "summary": "Quark W8A8 FP8 MoE 方法（42 行）。",
+   "tags": [
+    "quark",
+    "fp8"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkQuarkOCPMXFusedMoE",
+   "type": "class",
+   "name": "MuseSparkQuarkOCPMXFusedMoE",
+   "filePath": "vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "lineRange": [
+    598,
+    647
+   ],
+   "summary": "Quark OCP-MX MoE 方法（50 行）。",
+   "tags": [
+    "quark",
+    "ocp-mx"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkOnlineMXFP4FusedMoE",
+   "type": "class",
+   "name": "MuseSparkOnlineMXFP4FusedMoE",
+   "filePath": "vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "lineRange": [
+    677,
+    724
+   ],
+   "summary": "在线 MXFP4 量化 MoE 方法。",
+   "tags": [
+    "mxfp4",
+    "online-quant"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkRoutedExperts",
+   "type": "class",
+   "name": "MuseSparkRoutedExperts",
+   "filePath": "vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "lineRange": [
+    822,
+    889
+   ],
+   "summary": "MuseSpark routed experts 装配。",
+   "tags": [
+    "experts",
+    "routed"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseMoERunner",
+   "type": "class",
+   "name": "MuseMoERunner",
+   "filePath": "vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "lineRange": [
+    892,
+    910
+   ],
+   "summary": "AMD MoE runner（路由→专家→finalize 编排）。",
+   "tags": [
+    "moe",
+    "runner"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/muse_moe_runner.py:_validate_tp_post_norm_deployment",
+   "type": "function",
+   "name": "_validate_tp_post_norm_deployment",
+   "filePath": "vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "lineRange": [
+    74,
+    98
+   ],
+   "summary": "TP post-norm 部署校验（25 行）。",
+   "tags": [
+    "validation",
+    "tp"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/muse_moe_runner.py:validate_bf16_deployment",
+   "type": "function",
+   "name": "validate_bf16_deployment",
+   "filePath": "vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "lineRange": [
+    101,
+    108
+   ],
+   "summary": "BF16 部署校验。",
+   "tags": [
+    "validation",
+    "bf16"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/muse_moe_runner.py:validate_fp8_deployment",
+   "type": "function",
+   "name": "validate_fp8_deployment",
+   "filePath": "vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "lineRange": [
+    116,
+    123
+   ],
+   "summary": "FP8 部署校验。",
+   "tags": [
+    "validation",
+    "fp8"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/muse_moe_runner.py:_quantize_experts_to_mxfp4",
+   "type": "function",
+   "name": "_quantize_experts_to_mxfp4",
+   "filePath": "vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "lineRange": [
+    650,
+    674
+   ],
+   "summary": "专家权重在线量化为 MXFP4（25 行）。",
+   "tags": [
+    "mxfp4",
+    "quantize"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/muse_moe_runner.py:_quark_expert_weight_slot",
+   "type": "function",
+   "name": "_quark_expert_weight_slot",
+   "filePath": "vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "lineRange": [
+    745,
+    755
+   ],
+   "summary": "Quark 专家权重槽位（11 行公开）。",
+   "tags": [
+    "quark",
+    "slots"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/muse_moe_runner.py:_expected_quark_expert_weight_slots",
+   "type": "function",
+   "name": "_expected_quark_expert_weight_slots",
+   "filePath": "vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "lineRange": [
+    758,
+    772
+   ],
+   "summary": "期望 Quark 权重槽位数（15 行）。",
+   "tags": [
+    "quark",
+    "slots"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/muse_moe_runner.py:_track_quark_expert_weights",
+   "type": "function",
+   "name": "_track_quark_expert_weights",
+   "filePath": "vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "lineRange": [
+    775,
+    786
+   ],
+   "summary": "跟踪 Quark 专家权重。",
+   "tags": [
+    "quark",
+    "tracking"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/muse_moe_runner.py:_validate_quark_expert_weights",
+   "type": "function",
+   "name": "_validate_quark_expert_weights",
+   "filePath": "vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "lineRange": [
+    789,
+    819
+   ],
+   "summary": "校验 Quark 专家权重。",
+   "tags": [
+    "quark",
+    "validation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/amd/ops/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/muse_spark/amd/ops/__init__.py",
+   "summary": "AMD MuseSpark ops 包入口。",
+   "tags": [
+    "package-init",
+    "ops"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/amd/ops/fused_norm_expand.py",
+   "type": "file",
+   "name": "fused_norm_expand.py",
+   "filePath": "vllm/models/muse_spark/amd/ops/fused_norm_expand.py",
+   "summary": "pre-expert RMSNorm 的展开写内核（[T*top_k,H] 布局，配合 AITER top-1 路由）。",
+   "tags": [
+    "rmsnorm",
+    "expand",
+    "triton"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/ops/fused_norm_expand.py:_rmsnorm_expand_kernel",
+   "type": "function",
+   "name": "_rmsnorm_expand_kernel",
+   "filePath": "vllm/models/muse_spark/amd/ops/fused_norm_expand.py",
+   "lineRange": [
+    15,
+    40
+   ],
+   "summary": "RMSNorm 展开写 Triton 内核（26 行）。",
+   "tags": [
+    "triton",
+    "rmsnorm"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/ops/fused_norm_expand.py:fused_rmsnorm_expand",
+   "type": "function",
+   "name": "fused_rmsnorm_expand",
+   "filePath": "vllm/models/muse_spark/amd/ops/fused_norm_expand.py",
+   "lineRange": [
+    43,
+    72
+   ],
+   "summary": "展开 RMSNorm 公开入口（30 行）。",
+   "tags": [
+    "rmsnorm",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/ops/fused_norm_expand.py:take_expanded",
+   "type": "function",
+   "name": "take_expanded",
+   "filePath": "vllm/models/muse_spark/amd/ops/fused_norm_expand.py",
+   "lineRange": [
+    75,
+    86
+   ],
+   "summary": "取展开视图（12 行公开）。",
+   "tags": [
+    "expand",
+    "view"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py",
+   "type": "file",
+   "name": "fused_qk_norm_rope_kv.py",
+   "filePath": "vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py",
+   "summary": "ROCm 版 QK-norm+RoPE+KV 插入融合（含 fake 变体）。",
+   "tags": [
+    "fused",
+    "qk-norm",
+    "rope",
+    "kv-insert"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py:rocm_fused_qk_norm_rope_kv_insert",
+   "type": "function",
+   "name": "rocm_fused_qk_norm_rope_kv_insert",
+   "filePath": "vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py",
+   "lineRange": [
+    18,
+    52
+   ],
+   "summary": "ROCm 融合入口（35 行）。",
+   "tags": [
+    "fused",
+    "rocm",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py:_muse_spark_fused_qk_norm_rope_kv_insert",
+   "type": "function",
+   "name": "_muse_spark_fused_qk_norm_rope_kv_insert",
+   "filePath": "vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py",
+   "lineRange": [
+    55,
+    76
+   ],
+   "summary": "融合实现（22 行）。",
+   "tags": [
+    "fused",
+    "impl"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py:_muse_spark_fused_qk_norm_rope_kv_insert_fake",
+   "type": "function",
+   "name": "_muse_spark_fused_qk_norm_rope_kv_insert_fake",
+   "filePath": "vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py",
+   "lineRange": [
+    79,
+    90
+   ],
+   "summary": "fake 变体。",
+   "tags": [
+    "fake-mode"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/amd/ops/router_bf16x3.py",
+   "type": "file",
+   "name": "router_bf16x3.py",
+   "filePath": "vllm/models/muse_spark/amd/ops/router_bf16x3.py",
+   "summary": "bf16 矩阵核上的 FP32 精确 router GEMM（三个 bf16 平面精确和为 fp32 权重）。",
+   "tags": [
+    "router",
+    "bf16x3",
+    "fp32-exact",
+    "gemm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/ops/router_bf16x3.py:supports_router_bf16x3",
+   "type": "function",
+   "name": "supports_router_bf16x3",
+   "filePath": "vllm/models/muse_spark/amd/ops/router_bf16x3.py",
+   "lineRange": [
+    32,
+    36
+   ],
+   "summary": "bf16x3 支持判定。",
+   "tags": [
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/ops/router_bf16x3.py:split_fp32_to_bf16x3",
+   "type": "function",
+   "name": "split_fp32_to_bf16x3",
+   "filePath": "vllm/models/muse_spark/amd/ops/router_bf16x3.py",
+   "lineRange": [
+    39,
+    46
+   ],
+   "summary": "fp32 拆为三个 bf16 平面。",
+   "tags": [
+    "split",
+    "bf16"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/ops/router_bf16x3.py:_router_bf16x3_kernel",
+   "type": "function",
+   "name": "_router_bf16x3_kernel",
+   "filePath": "vllm/models/muse_spark/amd/ops/router_bf16x3.py",
+   "lineRange": [
+    50,
+    83
+   ],
+   "summary": "bf16x3 router Triton 内核（34 行）。",
+   "tags": [
+    "triton",
+    "router"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/amd/ops/router_bf16x3.py:router_bf16x3_gemm",
+   "type": "function",
+   "name": "router_bf16x3_gemm",
+   "filePath": "vllm/models/muse_spark/amd/ops/router_bf16x3.py",
+   "lineRange": [
+    98,
+    126
+   ],
+   "summary": "bf16x3 router GEMM 公开入口（29 行）。",
+   "tags": [
+    "router",
+    "gemm",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/common/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/muse_spark/common/__init__.py",
+   "summary": "平台无关 MuseSpark 预处理包入口。",
+   "tags": [
+    "package-init",
+    "common"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/common/audio.py",
+   "type": "file",
+   "name": "audio.py",
+   "filePath": "vllm/models/muse_spark/common/audio.py",
+   "summary": "MuseSpark 原始音频的 Waveform AutoEncoder（1920 样本/patch≈80ms@24kHz 一个 latent）。",
+   "tags": [
+    "audio",
+    "autoencoder",
+    "waveform"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/audio.py:Patchifier",
+   "type": "class",
+   "name": "Patchifier",
+   "filePath": "vllm/models/muse_spark/common/audio.py",
+   "lineRange": [
+    27,
+    54
+   ],
+   "summary": "音频 patch 化模块（28 行）。",
+   "tags": [
+    "audio",
+    "patch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/audio.py:DepthwiseCausalConv",
+   "type": "class",
+   "name": "DepthwiseCausalConv",
+   "filePath": "vllm/models/muse_spark/common/audio.py",
+   "lineRange": [
+    57,
+    97
+   ],
+   "summary": "深度因果卷积（41 行）。",
+   "tags": [
+    "conv",
+    "depthwise"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/audio.py:Block",
+   "type": "class",
+   "name": "Block",
+   "filePath": "vllm/models/muse_spark/common/audio.py",
+   "lineRange": [
+    100,
+    152
+   ],
+   "summary": "AudioEncoder block（53 行）。",
+   "tags": [
+    "block",
+    "audio"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/audio.py:AutoEncoder",
+   "type": "class",
+   "name": "AutoEncoder",
+   "filePath": "vllm/models/muse_spark/common/audio.py",
+   "lineRange": [
+    155,
+    268
+   ],
+   "summary": "音频 AutoEncoder 主类（114 行 4 方法）。",
+   "tags": [
+    "autoencoder",
+    "audio"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/audio.py:patchify",
+   "type": "function",
+   "name": "patchify",
+   "filePath": "vllm/models/muse_spark/common/audio.py",
+   "lineRange": [
+    20,
+    24
+   ],
+   "summary": "patch 化入口（5 行公开）。",
+   "tags": [
+    "patch",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/common/dspark.py",
+   "type": "file",
+   "name": "dspark.py",
+   "filePath": "vllm/models/muse_spark/common/dspark.py",
+   "summary": "Muse Spark 稠密 DSpark draft 模型（CUDA/ROCm 通用）。",
+   "tags": [
+    "dspark",
+    "spec-decode",
+    "draft-model"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/dspark.py:MuseSparkDSparkDecoderLayer",
+   "type": "class",
+   "name": "MuseSparkDSparkDecoderLayer",
+   "filePath": "vllm/models/muse_spark/common/dspark.py",
+   "lineRange": [
+    47,
+    82
+   ],
+   "summary": "DSpark draft decoder layer。",
+   "tags": [
+    "dspark",
+    "layer"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/dspark.py:MuseSparkDSparkModel",
+   "type": "class",
+   "name": "MuseSparkDSparkModel",
+   "filePath": "vllm/models/muse_spark/common/dspark.py",
+   "lineRange": [
+    86,
+    275
+   ],
+   "summary": "DSpark draft 骨干（190 行，DFlashQwen3Model 子类）。",
+   "tags": [
+    "dspark",
+    "model"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/dspark.py:MuseSparkDSparkForCausalLM",
+   "type": "class",
+   "name": "MuseSparkDSparkForCausalLM",
+   "filePath": "vllm/models/muse_spark/common/dspark.py",
+   "lineRange": [
+    278,
+    380
+   ],
+   "summary": "DSpark ForCausalLM（103 行，Qwen3DSpark 子类）。",
+   "tags": [
+    "dspark",
+    "causal-lm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/common/layers.py",
+   "type": "file",
+   "name": "layers.py",
+   "filePath": "vllm/models/muse_spark/common/layers.py",
+   "summary": "平台无关 MuseSpark1x 构件（RMSNorm/门控残差连接/QKVO gate 并行线性，430 行）。",
+   "tags": [
+    "layers",
+    "rmsnorm",
+    "residual",
+    "common"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/layers.py:MuseSpark1xRMSNorm",
+   "type": "class",
+   "name": "MuseSpark1xRMSNorm",
+   "filePath": "vllm/models/muse_spark/common/layers.py",
+   "lineRange": [
+    44,
+    163
+   ],
+   "summary": "MuseSpark RMSNorm（120 行 5 方法）。",
+   "tags": [
+    "rmsnorm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/layers.py:MuseSpark1xRMSNormWithInputScale",
+   "type": "class",
+   "name": "MuseSpark1xRMSNormWithInputScale",
+   "filePath": "vllm/models/muse_spark/common/layers.py",
+   "lineRange": [
+    166,
+    194
+   ],
+   "summary": "带输入 scale 的 RMSNorm。",
+   "tags": [
+    "rmsnorm",
+    "scale"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/layers.py:MulTanhSoftCap",
+   "type": "class",
+   "name": "MulTanhSoftCap",
+   "filePath": "vllm/models/muse_spark/common/layers.py",
+   "lineRange": [
+    197,
+    214
+   ],
+   "summary": "mul-tanh softcap 模块（18 行）。",
+   "tags": [
+    "softcap",
+    "tanh"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/layers.py:MuseSpark1xNormPreservingResidualConnection",
+   "type": "class",
+   "name": "MuseSpark1xNormPreservingResidualConnection",
+   "filePath": "vllm/models/muse_spark/common/layers.py",
+   "lineRange": [
+    224,
+    286
+   ],
+   "summary": "保 norm 残差连接（63 行）。",
+   "tags": [
+    "residual",
+    "norm-preserving"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/layers.py:MuseSpark1xQKVOGateParallelLinear",
+   "type": "class",
+   "name": "MuseSpark1xQKVOGateParallelLinear",
+   "filePath": "vllm/models/muse_spark/common/layers.py",
+   "lineRange": [
+    339,
+    416
+   ],
+   "summary": "QKVO gate 并行线性层（78 行）。",
+   "tags": [
+    "linear",
+    "gate",
+    "qkvo"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/layers.py:calculate_gain_center",
+   "type": "function",
+   "name": "calculate_gain_center",
+   "filePath": "vllm/models/muse_spark/common/layers.py",
+   "lineRange": [
+    19,
+    41
+   ],
+   "summary": "增益中心计算（23 行公开）。",
+   "tags": [
+    "gain"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/layers.py:norm_then_gated_residual",
+   "type": "function",
+   "name": "norm_then_gated_residual",
+   "filePath": "vllm/models/muse_spark/common/layers.py",
+   "lineRange": [
+    299,
+    322
+   ],
+   "summary": "norm 后门控残差（24 行公开）。",
+   "tags": [
+    "residual",
+    "gate"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/layers.py:materialize_residual_path_constants",
+   "type": "function",
+   "name": "materialize_residual_path_constants",
+   "filePath": "vllm/models/muse_spark/common/layers.py",
+   "lineRange": [
+    325,
+    336
+   ],
+   "summary": "残差路径常量物化（12 行公开）。",
+   "tags": [
+    "residual",
+    "constants"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/common/moe.py",
+   "type": "file",
+   "name": "moe.py",
+   "filePath": "vllm/models/muse_spark/common/moe.py",
+   "summary": "平台无关 MuseSpark1x MoE 构件（路由/配置/专家加载）。",
+   "tags": [
+    "moe",
+    "routing",
+    "common"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/moe.py:MuseSpark1xRouter",
+   "type": "class",
+   "name": "MuseSpark1xRouter",
+   "filePath": "vllm/models/muse_spark/common/moe.py",
+   "lineRange": [
+    21,
+    111
+   ],
+   "summary": "MuseSpark 路由器（91 行 4 方法）。",
+   "tags": [
+    "router"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/moe.py:MuseSparkConsolidatedRoutedExperts",
+   "type": "class",
+   "name": "MuseSparkConsolidatedRoutedExperts",
+   "filePath": "vllm/models/muse_spark/common/moe.py",
+   "lineRange": [
+    133,
+    193
+   ],
+   "summary": "合并式 routed experts（61 行）。",
+   "tags": [
+    "experts",
+    "consolidated"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/moe.py:needs_pre_norm_all_reduce",
+   "type": "function",
+   "name": "needs_pre_norm_all_reduce",
+   "filePath": "vllm/models/muse_spark/common/moe.py",
+   "lineRange": [
+    114,
+    119
+   ],
+   "summary": "pre-norm 是否需 all-reduce。",
+   "tags": [
+    "detection",
+    "all-reduce"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/common/omni.py",
+   "type": "file",
+   "name": "omni.py",
+   "filePath": "vllm/models/muse_spark/common/omni.py",
+   "summary": "MuseSpark1x Omni：NaViT vision + waveform audio 挂 MuseSpark1x 栈（552 行 mixin）。",
+   "tags": [
+    "omni",
+    "multimodal",
+    "mixin"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/omni.py:MuseSpark1xOmniMixin",
+   "type": "class",
+   "name": "MuseSpark1xOmniMixin",
+   "filePath": "vllm/models/muse_spark/common/omni.py",
+   "lineRange": [
+    148,
+    549
+   ],
+   "summary": "Omni 多模态 mixin（402 行 12 方法：NaViT+audio tower 装配）。",
+   "tags": [
+    "omni",
+    "mixin"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/omni.py:register_omni_processor",
+   "type": "function",
+   "name": "register_omni_processor",
+   "filePath": "vllm/models/muse_spark/common/omni.py",
+   "lineRange": [
+    139,
+    145
+   ],
+   "summary": "注册 Omni processor（7 行公开）。",
+   "tags": [
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/common/ops/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/muse_spark/common/ops/__init__.py",
+   "summary": "跨平台 MuseSpark1x 算子包入口。",
+   "tags": [
+    "package-init",
+    "ops"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/common/ops/fused_finalize.py",
+   "type": "file",
+   "name": "fused_finalize.py",
+   "filePath": "vllm/models/muse_spark/common/ops/fused_finalize.py",
+   "summary": "融合 post-expert RMSNorm+路由加权+top-k 求和内核。",
+   "tags": [
+    "fused",
+    "finalize",
+    "rmsnorm",
+    "topk"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/ops/fused_finalize.py:_post_expert_finalize_kernel",
+   "type": "function",
+   "name": "_post_expert_finalize_kernel",
+   "filePath": "vllm/models/muse_spark/common/ops/fused_finalize.py",
+   "lineRange": [
+    11,
+    69
+   ],
+   "summary": "post-expert finalize Triton 内核（59 行）。",
+   "tags": [
+    "triton",
+    "finalize"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/ops/fused_finalize.py:_post_expert_finalize_loop_kernel",
+   "type": "function",
+   "name": "_post_expert_finalize_loop_kernel",
+   "filePath": "vllm/models/muse_spark/common/ops/fused_finalize.py",
+   "lineRange": [
+    73,
+    126
+   ],
+   "summary": "循环版 finalize 内核（54 行）。",
+   "tags": [
+    "triton",
+    "finalize"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/ops/fused_finalize.py:fused_post_expert_finalize",
+   "type": "function",
+   "name": "fused_post_expert_finalize",
+   "filePath": "vllm/models/muse_spark/common/ops/fused_finalize.py",
+   "lineRange": [
+    129,
+    196
+   ],
+   "summary": "finalize 公开入口（68 行）。",
+   "tags": [
+    "finalize",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py",
+   "type": "file",
+   "name": "fused_qk_norm_rope_kv.py",
+   "filePath": "vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py",
+   "summary": "QK-norm+RoPE+KV 插入单 launch（非 custom op，@invalidate_during_warmup 兼容）。",
+   "tags": [
+    "fused",
+    "qk-norm",
+    "rope",
+    "kv-insert"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py:supports_fused_kv_insert",
+   "type": "function",
+   "name": "supports_fused_kv_insert",
+   "filePath": "vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py",
+   "lineRange": [
+    23,
+    38
+   ],
+   "summary": "融合 KV 插入支持判定（16 行公开）。",
+   "tags": [
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py:fused_qk_norm_rope_kv_insert",
+   "type": "function",
+   "name": "fused_qk_norm_rope_kv_insert",
+   "filePath": "vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py",
+   "lineRange": [
+    41,
+    110
+   ],
+   "summary": "QK-norm+RoPE+KV 插入公开入口（70 行）。",
+   "tags": [
+    "fused",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "type": "file",
+   "name": "fused_rmsnorm.py",
+   "filePath": "vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "summary": "MuseSpark1x 的 Triton RMSNorm（可融合门控残差加法；norm→残差→norm 双融合变体）。",
+   "tags": [
+    "rmsnorm",
+    "triton",
+    "fused-residual"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/ops/fused_rmsnorm.py:_blend_and_store",
+   "type": "function",
+   "name": "_blend_and_store",
+   "filePath": "vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "lineRange": [
+    35,
+    66
+   ],
+   "summary": "混合存储 helper（32 行）。",
+   "tags": [
+    "blend",
+    "store"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/ops/fused_rmsnorm.py:_rmsnorm_fwd_kernel",
+   "type": "function",
+   "name": "_rmsnorm_fwd_kernel",
+   "filePath": "vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "lineRange": [
+    70,
+    205
+   ],
+   "summary": "RMSNorm 前向 Triton 内核（136 行）。",
+   "tags": [
+    "triton",
+    "rmsnorm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/ops/fused_rmsnorm.py:fused_rmsnorm_fwd",
+   "type": "function",
+   "name": "fused_rmsnorm_fwd",
+   "filePath": "vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "lineRange": [
+    208,
+    347
+   ],
+   "summary": "RMSNorm 公开入口（140 行）。",
+   "tags": [
+    "rmsnorm",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/ops/fused_rmsnorm.py:_norm_residual_norm_fwd_kernel",
+   "type": "function",
+   "name": "_norm_residual_norm_fwd_kernel",
+   "filePath": "vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "lineRange": [
+    355,
+    430
+   ],
+   "summary": "norm→残差→norm 融合内核（76 行）。",
+   "tags": [
+    "triton",
+    "fused"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/ops/fused_rmsnorm.py:supports_norm_residual_norm",
+   "type": "function",
+   "name": "supports_norm_residual_norm",
+   "filePath": "vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "lineRange": [
+    433,
+    446
+   ],
+   "summary": "双 norm 融合支持判定（14 行公开）。",
+   "tags": [
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/ops/fused_rmsnorm.py:fused_norm_residual_norm_fwd",
+   "type": "function",
+   "name": "fused_norm_residual_norm_fwd",
+   "filePath": "vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "lineRange": [
+    449,
+    554
+   ],
+   "summary": "双 norm 融合入口（106 行）。",
+   "tags": [
+    "fused",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/common/ops/fused_routing.py",
+   "type": "file",
+   "name": "fused_routing.py",
+   "filePath": "vllm/models/muse_spark/common/ops/fused_routing.py",
+   "summary": "MuseSpark1x top-k 路由 Triton 内核（每 token 一个 program）。",
+   "tags": [
+    "routing",
+    "topk",
+    "triton"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/ops/fused_routing.py:_normalized_scores",
+   "type": "function",
+   "name": "_normalized_scores",
+   "filePath": "vllm/models/muse_spark/common/ops/fused_routing.py",
+   "lineRange": [
+    12,
+    24
+   ],
+   "summary": "归一化分数计算（13 行）。",
+   "tags": [
+    "scores"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/ops/fused_routing.py:_select_one",
+   "type": "function",
+   "name": "_select_one",
+   "filePath": "vllm/models/muse_spark/common/ops/fused_routing.py",
+   "lineRange": [
+    28,
+    43
+   ],
+   "summary": "单选 helper（16 行）。",
+   "tags": [
+    "selection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/ops/fused_routing.py:_routing_kernel",
+   "type": "function",
+   "name": "_routing_kernel",
+   "filePath": "vllm/models/muse_spark/common/ops/fused_routing.py",
+   "lineRange": [
+    47,
+    129
+   ],
+   "summary": "路由 Triton 内核（83 行）。",
+   "tags": [
+    "triton",
+    "routing"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/ops/fused_routing.py:fused_musespark1x_routing",
+   "type": "function",
+   "name": "fused_musespark1x_routing",
+   "filePath": "vllm/models/muse_spark/common/ops/fused_routing.py",
+   "lineRange": [
+    137,
+    219
+   ],
+   "summary": "MuseSpark 路由公开入口（83 行）。",
+   "tags": [
+    "routing",
+    "entry"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/common/processor.py",
+   "type": "file",
+   "name": "processor.py",
+   "filePath": "vllm/models/muse_spark/common/processor.py",
+   "summary": "MuseSpark1x Omni 多模态预处理（899 行：图像/视频 resize 策略与全套 processor）。",
+   "tags": [
+    "processor",
+    "multimodal",
+    "preprocess"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/processor.py:PreprocessConfig",
+   "type": "class",
+   "name": "PreprocessConfig",
+   "filePath": "vllm/models/muse_spark/common/processor.py",
+   "lineRange": [
+    52,
+    79
+   ],
+   "summary": "预处理配置（28 行）。",
+   "tags": [
+    "config"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/processor.py:MuseSpark1xOmniVideoBackend",
+   "type": "class",
+   "name": "MuseSpark1xOmniVideoBackend",
+   "filePath": "vllm/models/muse_spark/common/processor.py",
+   "lineRange": [
+    449,
+    481
+   ],
+   "summary": "视频后端（33 行）。",
+   "tags": [
+    "video",
+    "backend"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/processor.py:MuseSpark1xOmniProcessingInfo",
+   "type": "class",
+   "name": "MuseSpark1xOmniProcessingInfo",
+   "filePath": "vllm/models/muse_spark/common/processor.py",
+   "lineRange": [
+    484,
+    568
+   ],
+   "summary": "Omni 处理信息（85 行 9 方法）。",
+   "tags": [
+    "processing-info"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/processor.py:MuseSpark1xOmniDummyInputsBuilder",
+   "type": "class",
+   "name": "MuseSpark1xOmniDummyInputsBuilder",
+   "filePath": "vllm/models/muse_spark/common/processor.py",
+   "lineRange": [
+    571,
+    623
+   ],
+   "summary": "dummy 输入构建器（53 行）。",
+   "tags": [
+    "dummy-inputs"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/processor.py:MuseSpark1xOmniMultiModalProcessor",
+   "type": "class",
+   "name": "MuseSpark1xOmniMultiModalProcessor",
+   "filePath": "vllm/models/muse_spark/common/processor.py",
+   "lineRange": [
+    626,
+    899
+   ],
+   "summary": "Omni 多模态处理器（274 行 4 方法）。",
+   "tags": [
+    "multimodal-processor"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/processor.py:_resize_frames",
+   "type": "function",
+   "name": "_resize_frames",
+   "filePath": "vllm/models/muse_spark/common/processor.py",
+   "lineRange": [
+    103,
+    113
+   ],
+   "summary": "帧 resize（11 行）。",
+   "tags": [
+    "resize",
+    "frames"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/processor.py:_normalize_pixels",
+   "type": "function",
+   "name": "_normalize_pixels",
+   "filePath": "vllm/models/muse_spark/common/processor.py",
+   "lineRange": [
+    116,
+    137
+   ],
+   "summary": "像素归一化（22 行）。",
+   "tags": [
+    "normalize",
+    "pixels"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/processor.py:_least_distortion_fit",
+   "type": "function",
+   "name": "_least_distortion_fit",
+   "filePath": "vllm/models/muse_spark/common/processor.py",
+   "lineRange": [
+    140,
+    174
+   ],
+   "summary": "最小失真 fit（35 行）。",
+   "tags": [
+    "resize",
+    "fit"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/processor.py:_least_distance_fit",
+   "type": "function",
+   "name": "_least_distance_fit",
+   "filePath": "vllm/models/muse_spark/common/processor.py",
+   "lineRange": [
+    177,
+    205
+   ],
+   "summary": "最小距离 fit（29 行）。",
+   "tags": [
+    "resize",
+    "fit"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/processor.py:find_resize_target",
+   "type": "function",
+   "name": "find_resize_target",
+   "filePath": "vllm/models/muse_spark/common/processor.py",
+   "lineRange": [
+    208,
+    242
+   ],
+   "summary": "求 resize 目标（35 行公开）。",
+   "tags": [
+    "resize",
+    "solver"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/processor.py:preprocess_image",
+   "type": "function",
+   "name": "preprocess_image",
+   "filePath": "vllm/models/muse_spark/common/processor.py",
+   "lineRange": [
+    245,
+    271
+   ],
+   "summary": "图像预处理入口（27 行公开）。",
+   "tags": [
+    "image",
+    "preprocess"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/processor.py:preprocess_video",
+   "type": "function",
+   "name": "preprocess_video",
+   "filePath": "vllm/models/muse_spark/common/processor.py",
+   "lineRange": [
+    274,
+    343
+   ],
+   "summary": "视频预处理入口（公开）。",
+   "tags": [
+    "video",
+    "preprocess"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/processor.py:compute_video_clip_metadata",
+   "type": "function",
+   "name": "compute_video_clip_metadata",
+   "filePath": "vllm/models/muse_spark/common/processor.py",
+   "lineRange": [
+    355,
+    380
+   ],
+   "summary": "视频 clip 元数据计算（公开）。",
+   "tags": [
+    "video",
+    "metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/processor.py:_video_patch_count",
+   "type": "function",
+   "name": "_video_patch_count",
+   "filePath": "vllm/models/muse_spark/common/processor.py",
+   "lineRange": [
+    383,
+    394
+   ],
+   "summary": "视频 patch 计数。",
+   "tags": [
+    "video",
+    "patch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/processor.py:_preprocess_single_video",
+   "type": "function",
+   "name": "_preprocess_single_video",
+   "filePath": "vllm/models/muse_spark/common/processor.py",
+   "lineRange": [
+    397,
+    437
+   ],
+   "summary": "单视频预处理。",
+   "tags": [
+    "video",
+    "preprocess"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/common/vision.py",
+   "type": "file",
+   "name": "vision.py",
+   "filePath": "vllm/models/muse_spark/common/vision.py",
+   "summary": "MuseSpark 的 NaViT vision 编码器（1 起始 2D RoPE 不合 get_rope，网格预计算；783 行）。",
+   "tags": [
+    "navit",
+    "vision",
+    "rope"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/vision.py:NaViTAttention",
+   "type": "class",
+   "name": "NaViTAttention",
+   "filePath": "vllm/models/muse_spark/common/vision.py",
+   "lineRange": [
+    183,
+    276
+   ],
+   "summary": "NaViT 注意力（94 行）。",
+   "tags": [
+    "attention",
+    "navit"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/vision.py:NaViTMLP",
+   "type": "class",
+   "name": "NaViTMLP",
+   "filePath": "vllm/models/muse_spark/common/vision.py",
+   "lineRange": [
+    279,
+    316
+   ],
+   "summary": "NaViT MLP（38 行）。",
+   "tags": [
+    "mlp",
+    "navit"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/vision.py:NaViTBlock",
+   "type": "class",
+   "name": "NaViTBlock",
+   "filePath": "vllm/models/muse_spark/common/vision.py",
+   "lineRange": [
+    319,
+    372
+   ],
+   "summary": "NaViT block（54 行）。",
+   "tags": [
+    "block",
+    "navit"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/vision.py:NaViTEncoder",
+   "type": "class",
+   "name": "NaViTEncoder",
+   "filePath": "vllm/models/muse_spark/common/vision.py",
+   "lineRange": [
+    385,
+    442
+   ],
+   "summary": "NaViT 编码器（58 行）。",
+   "tags": [
+    "encoder",
+    "navit"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/vision.py:NaViTAdapter",
+   "type": "class",
+   "name": "NaViTAdapter",
+   "filePath": "vllm/models/muse_spark/common/vision.py",
+   "lineRange": [
+    445,
+    477
+   ],
+   "summary": "NaViT adapter（33 行）。",
+   "tags": [
+    "adapter",
+    "navit"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/common/vision.py:NaViT",
+   "type": "class",
+   "name": "NaViT",
+   "filePath": "vllm/models/muse_spark/common/vision.py",
+   "lineRange": [
+    480,
+    755
+   ],
+   "summary": "NaViT 主类（276 行 2 方法：预计算 rope 网格与稀疏注意力 perm）。",
+   "tags": [
+    "navit",
+    "vision",
+    "core"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/vision.py:_precompute_rope_freqs_cis",
+   "type": "function",
+   "name": "_precompute_rope_freqs_cis",
+   "filePath": "vllm/models/muse_spark/common/vision.py",
+   "lineRange": [
+    32,
+    56
+   ],
+   "summary": "预计算 rope 频率（25 行）。",
+   "tags": [
+    "rope",
+    "precompute"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/vision.py:_get_pixel_shuffle_perm",
+   "type": "function",
+   "name": "_get_pixel_shuffle_perm",
+   "filePath": "vllm/models/muse_spark/common/vision.py",
+   "lineRange": [
+    59,
+    82
+   ],
+   "summary": "pixel shuffle 置换（24 行）。",
+   "tags": [
+    "pixel-shuffle",
+    "perm"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/vision.py:_downsample_pixel_shuffle",
+   "type": "function",
+   "name": "_downsample_pixel_shuffle",
+   "filePath": "vllm/models/muse_spark/common/vision.py",
+   "lineRange": [
+    85,
+    96
+   ],
+   "summary": "pixel shuffle 下采样（12 行）。",
+   "tags": [
+    "pixel-shuffle",
+    "downsample"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/vision.py:_iterate_visions",
+   "type": "function",
+   "name": "_iterate_visions",
+   "filePath": "vllm/models/muse_spark/common/vision.py",
+   "lineRange": [
+    105,
+    122
+   ],
+   "summary": "遍历 vision 尺度（18 行）。",
+   "tags": [
+    "scales",
+    "utility"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/vision.py:_get_sparse_attention_perm",
+   "type": "function",
+   "name": "_get_sparse_attention_perm",
+   "filePath": "vllm/models/muse_spark/common/vision.py",
+   "lineRange": [
+    125,
+    168
+   ],
+   "summary": "稀疏注意力置换（44 行）。",
+   "tags": [
+    "sparse",
+    "perm"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/vision.py:_seqlens_to_cu_seqlens",
+   "type": "function",
+   "name": "_seqlens_to_cu_seqlens",
+   "filePath": "vllm/models/muse_spark/common/vision.py",
+   "lineRange": [
+    171,
+    180
+   ],
+   "summary": "seqlen→cu_seqlen（10 行）。",
+   "tags": [
+    "seqlens"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/vision.py:get_navit_patch_count",
+   "type": "function",
+   "name": "get_navit_patch_count",
+   "filePath": "vllm/models/muse_spark/common/vision.py",
+   "lineRange": [
+    758,
+    766
+   ],
+   "summary": "patch 计数入口（9 行公开）。",
+   "tags": [
+    "patch",
+    "entry"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/common/vision.py:get_navit_video_patch_count",
+   "type": "function",
+   "name": "get_navit_video_patch_count",
+   "filePath": "vllm/models/muse_spark/common/vision.py",
+   "lineRange": [
+    769,
+    783
+   ],
+   "summary": "视频 patch 计数入口（公开）。",
+   "tags": [
+    "video",
+    "patch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/nvidia/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/muse_spark/nvidia/__init__.py",
+   "summary": "NVIDIA 专用 MuseSpark 实现包入口。",
+   "tags": [
+    "package-init",
+    "nvidia"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/nvidia/mega_moe.py",
+   "type": "file",
+   "name": "mega_moe.py",
+   "filePath": "vllm/models/muse_spark/nvidia/mega_moe.py",
+   "summary": "DeepGEMM BF16 与 NVFP4 MegaMoE 内核上的 MuseSpark1x routed experts（ModelOpt NVFP4 检查点映射）。",
+   "tags": [
+    "mega-moe",
+    "deep-gemm",
+    "nvfp4",
+    "experts"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/nvidia/mega_moe.py:MuseSparkMegaMoEExperts",
+   "type": "class",
+   "name": "MuseSparkMegaMoEExperts",
+   "filePath": "vllm/models/muse_spark/nvidia/mega_moe.py",
+   "lineRange": [
+    69,
+    376
+   ],
+   "summary": "MegaMoE 专家层（308 行 10 方法：DeepGEMM BF16/NVFP4）。",
+   "tags": [
+    "mega-moe",
+    "experts"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/nvidia/mega_moe.py:_get_deep_gemm",
+   "type": "function",
+   "name": "_get_deep_gemm",
+   "filePath": "vllm/models/muse_spark/nvidia/mega_moe.py",
+   "lineRange": [
+    42,
+    56
+   ],
+   "summary": "惰性获取 DeepGEMM（15 行）。",
+   "tags": [
+    "deep-gemm",
+    "lazy"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/nvidia/model.py",
+   "type": "file",
+   "name": "model.py",
+   "filePath": "vllm/models/muse_spark/nvidia/model.py",
+   "summary": "MuseSpark NVIDIA 文本 decoder（1942 行：门控 FP32 残差 + 压缩 MoE 全栈）。",
+   "tags": [
+    "muse-spark",
+    "model",
+    "nvidia"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xMoE",
+   "type": "class",
+   "name": "MuseSpark1xMoE",
+   "filePath": "vllm/models/muse_spark/nvidia/model.py",
+   "lineRange": [
+    374,
+    955
+   ],
+   "summary": "NVIDIA 版 MoE（582 行 19 方法）。",
+   "tags": [
+    "moe",
+    "nvidia"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xAttention",
+   "type": "class",
+   "name": "MuseSpark1xAttention",
+   "filePath": "vllm/models/muse_spark/nvidia/model.py",
+   "lineRange": [
+    958,
+    1300
+   ],
+   "summary": "NVIDIA 版注意力（343 行 6 方法）。",
+   "tags": [
+    "attention",
+    "nvidia"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xDecoderLayer",
+   "type": "class",
+   "name": "MuseSpark1xDecoderLayer",
+   "filePath": "vllm/models/muse_spark/nvidia/model.py",
+   "lineRange": [
+    1303,
+    1510
+   ],
+   "summary": "NVIDIA 版 decoder layer（208 行）。",
+   "tags": [
+    "decoder-layer"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xModel",
+   "type": "class",
+   "name": "MuseSpark1xModel",
+   "filePath": "vllm/models/muse_spark/nvidia/model.py",
+   "lineRange": [
+    1515,
+    1760
+   ],
+   "summary": "NVIDIA 版骨干（246 行 8 方法，LlamaModel 子类）。",
+   "tags": [
+    "model",
+    "llama-base"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xForCausalLM",
+   "type": "class",
+   "name": "MuseSpark1xForCausalLM",
+   "filePath": "vllm/models/muse_spark/nvidia/model.py",
+   "lineRange": [
+    1763,
+    1942
+   ],
+   "summary": "NVIDIA 版 ForCausalLM（180 行 6 方法）。",
+   "tags": [
+    "causal-lm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/nvidia/model.py:gather_columns",
+   "type": "function",
+   "name": "gather_columns",
+   "filePath": "vllm/models/muse_spark/nvidia/model.py",
+   "lineRange": [
+    159,
+    168
+   ],
+   "summary": "列收集（10 行公开）。",
+   "tags": [
+    "gather"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/nvidia/model.py:_uses_flashinfer_dual_norm",
+   "type": "function",
+   "name": "_uses_flashinfer_dual_norm",
+   "filePath": "vllm/models/muse_spark/nvidia/model.py",
+   "lineRange": [
+    186,
+    201
+   ],
+   "summary": "FlashInfer 双 norm 判定（16 行）。",
+   "tags": [
+    "flashinfer",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/nvidia/model.py:_all_gather_norm_residual_then_norm",
+   "type": "function",
+   "name": "_all_gather_norm_residual_then_norm",
+   "filePath": "vllm/models/muse_spark/nvidia/model.py",
+   "lineRange": [
+    215,
+    253
+   ],
+   "summary": "all-gather 版双 norm（39 行）。",
+   "tags": [
+    "all-gather",
+    "norm"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/nvidia/model.py:norm_residual_then_norm",
+   "type": "function",
+   "name": "norm_residual_then_norm",
+   "filePath": "vllm/models/muse_spark/nvidia/model.py",
+   "lineRange": [
+    256,
+    359
+   ],
+   "summary": "双 norm 序列主体（104 行）。",
+   "tags": [
+    "norm",
+    "residual"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/nvidia/model.py:is_sequence_parallel_enabled",
+   "type": "function",
+   "name": "is_sequence_parallel_enabled",
+   "filePath": "vllm/models/muse_spark/nvidia/model.py",
+   "lineRange": [
+    362,
+    371
+   ],
+   "summary": "序列并行判定（10 行公开）。",
+   "tags": [
+    "sequence-parallel",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/nvidia/multimodal.py",
+   "type": "file",
+   "name": "multimodal.py",
+   "filePath": "vllm/models/muse_spark/nvidia/multimodal.py",
+   "summary": "NVIDIA 版 MuseSpark Omni（共享 Omni towers 挂 CUDA 文本栈）。",
+   "tags": [
+    "multimodal",
+    "omni",
+    "nvidia"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "type": "file",
+   "name": "muse_moe_runner.py",
+   "filePath": "vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "summary": "MuseSpark1x NVIDIA MoE（890 行：全部专家后端止于 GEMM2，post-expert finalize 统一收尾）。",
+   "tags": [
+    "moe",
+    "nvidia",
+    "experts",
+    "finalize"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MusePostExpertFinalize",
+   "type": "class",
+   "name": "MusePostExpertFinalize",
+   "filePath": "vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "lineRange": [
+    160,
+    442
+   ],
+   "summary": "post-expert finalize（283 行 11 方法）。",
+   "tags": [
+    "finalize",
+    "post-expert"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:_MuseSparkNvFp4Scales",
+   "type": "class",
+   "name": "_MuseSparkNvFp4Scales",
+   "filePath": "vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "lineRange": [
+    462,
+    490
+   ],
+   "summary": "NVFP4 scale mixin（29 行）。",
+   "tags": [
+    "nvfp4",
+    "scales"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MuseSparkTrtLlmNvFp4Experts",
+   "type": "class",
+   "name": "MuseSparkTrtLlmNvFp4Experts",
+   "filePath": "vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "lineRange": [
+    493,
+    553
+   ],
+   "summary": "TRT-LLM NVFP4 专家（61 行）。",
+   "tags": [
+    "trtllm",
+    "nvfp4",
+    "experts"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MuseSparkModelOptNvFp4FusedMoE",
+   "type": "class",
+   "name": "MuseSparkModelOptNvFp4FusedMoE",
+   "filePath": "vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "lineRange": [
+    562,
+    737
+   ],
+   "summary": "ModelOpt NVFP4 FusedMoE（176 行）。",
+   "tags": [
+    "modelopt",
+    "nvfp4"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MuseSparkUnquantizedFusedMoE",
+   "type": "class",
+   "name": "MuseSparkUnquantizedFusedMoE",
+   "filePath": "vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "lineRange": [
+    740,
+    771
+   ],
+   "summary": "未量化 FusedMoE（32 行）。",
+   "tags": [
+    "fused-moe",
+    "unquantized"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MuseMoERunner",
+   "type": "class",
+   "name": "MuseMoERunner",
+   "filePath": "vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "lineRange": [
+    791,
+    890
+   ],
+   "summary": "NVIDIA MoE runner（100 行 5 方法）。",
+   "tags": [
+    "moe",
+    "runner"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/nvidia/muse_moe_runner.py:uses_modular_all2all",
+   "type": "function",
+   "name": "uses_modular_all2all",
+   "filePath": "vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "lineRange": [
+    98,
+    104
+   ],
+   "summary": "模块化 all2all 判定（7 行公开）。",
+   "tags": [
+    "all2all",
+    "detection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/nvidia/muse_moe_runner.py:validate_deployment",
+   "type": "function",
+   "name": "validate_deployment",
+   "filePath": "vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "lineRange": [
+    107,
+    137
+   ],
+   "summary": "部署校验（31 行公开）。",
+   "tags": [
+    "validation",
+    "deployment"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/nvidia/ops/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/__init__.py",
+   "summary": "NVIDIA MuseSpark ops 包入口。",
+   "tags": [
+    "package-init",
+    "ops"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "class:vllm/models/muse_spark/amd/model.py:MuseSpark1xMoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "class:vllm/models/muse_spark/amd/model.py:MuseSpark1xMoE",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "class:vllm/models/muse_spark/amd/model.py:MuseSpark1xAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "class:vllm/models/muse_spark/amd/model.py:MuseSpark1xAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "class:vllm/models/muse_spark/amd/model.py:MuseSpark1xDecoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "class:vllm/models/muse_spark/amd/model.py:MuseSpark1xDecoderLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "class:vllm/models/muse_spark/amd/model.py:MuseSpark1xModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "class:vllm/models/muse_spark/amd/model.py:MuseSpark1xModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "class:vllm/models/muse_spark/amd/model.py:MuseSpark1xForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "class:vllm/models/muse_spark/amd/model.py:MuseSpark1xForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "function:vllm/models/muse_spark/amd/model.py:norm_residual_then_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "function:vllm/models/muse_spark/amd/model.py:norm_residual_then_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "function:vllm/models/muse_spark/amd/model.py:_drop_gate_up_stacking",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkTopKWeightAndReduce",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkTopKWeightAndReduce",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:_RouteOutputHandoff",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkTritonExperts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkTritonExperts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkUnquantizedFusedMoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkUnquantizedFusedMoE",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkAiterExperts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkAiterExperts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkQuarkW8A8Fp8FusedMoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkQuarkW8A8Fp8FusedMoE",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkQuarkOCPMXFusedMoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkQuarkOCPMXFusedMoE",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkOnlineMXFP4FusedMoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkOnlineMXFP4FusedMoE",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkRoutedExperts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkRoutedExperts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseMoERunner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseMoERunner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "function:vllm/models/muse_spark/amd/muse_moe_runner.py:_validate_tp_post_norm_deployment",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "function:vllm/models/muse_spark/amd/muse_moe_runner.py:validate_bf16_deployment",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "function:vllm/models/muse_spark/amd/muse_moe_runner.py:validate_bf16_deployment",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "function:vllm/models/muse_spark/amd/muse_moe_runner.py:validate_fp8_deployment",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "function:vllm/models/muse_spark/amd/muse_moe_runner.py:validate_fp8_deployment",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "function:vllm/models/muse_spark/amd/muse_moe_runner.py:_quantize_experts_to_mxfp4",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "function:vllm/models/muse_spark/amd/muse_moe_runner.py:_quark_expert_weight_slot",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "function:vllm/models/muse_spark/amd/muse_moe_runner.py:_expected_quark_expert_weight_slots",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "function:vllm/models/muse_spark/amd/muse_moe_runner.py:_track_quark_expert_weights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "function:vllm/models/muse_spark/amd/muse_moe_runner.py:_validate_quark_expert_weights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/fused_norm_expand.py",
+   "target": "function:vllm/models/muse_spark/amd/ops/fused_norm_expand.py:_rmsnorm_expand_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/fused_norm_expand.py",
+   "target": "function:vllm/models/muse_spark/amd/ops/fused_norm_expand.py:fused_rmsnorm_expand",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/fused_norm_expand.py",
+   "target": "function:vllm/models/muse_spark/amd/ops/fused_norm_expand.py:fused_rmsnorm_expand",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/fused_norm_expand.py",
+   "target": "function:vllm/models/muse_spark/amd/ops/fused_norm_expand.py:take_expanded",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/fused_norm_expand.py",
+   "target": "function:vllm/models/muse_spark/amd/ops/fused_norm_expand.py:take_expanded",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py",
+   "target": "function:vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py:rocm_fused_qk_norm_rope_kv_insert",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py",
+   "target": "function:vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py:rocm_fused_qk_norm_rope_kv_insert",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py",
+   "target": "function:vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py:_muse_spark_fused_qk_norm_rope_kv_insert",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py",
+   "target": "function:vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py:_muse_spark_fused_qk_norm_rope_kv_insert_fake",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/router_bf16x3.py",
+   "target": "function:vllm/models/muse_spark/amd/ops/router_bf16x3.py:supports_router_bf16x3",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/router_bf16x3.py",
+   "target": "function:vllm/models/muse_spark/amd/ops/router_bf16x3.py:supports_router_bf16x3",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/router_bf16x3.py",
+   "target": "function:vllm/models/muse_spark/amd/ops/router_bf16x3.py:split_fp32_to_bf16x3",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/router_bf16x3.py",
+   "target": "function:vllm/models/muse_spark/amd/ops/router_bf16x3.py:split_fp32_to_bf16x3",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/router_bf16x3.py",
+   "target": "function:vllm/models/muse_spark/amd/ops/router_bf16x3.py:_router_bf16x3_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/router_bf16x3.py",
+   "target": "function:vllm/models/muse_spark/amd/ops/router_bf16x3.py:router_bf16x3_gemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/router_bf16x3.py",
+   "target": "function:vllm/models/muse_spark/amd/ops/router_bf16x3.py:router_bf16x3_gemm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/audio.py",
+   "target": "class:vllm/models/muse_spark/common/audio.py:Patchifier",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/audio.py",
+   "target": "class:vllm/models/muse_spark/common/audio.py:Patchifier",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/audio.py",
+   "target": "class:vllm/models/muse_spark/common/audio.py:DepthwiseCausalConv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/audio.py",
+   "target": "class:vllm/models/muse_spark/common/audio.py:DepthwiseCausalConv",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/audio.py",
+   "target": "class:vllm/models/muse_spark/common/audio.py:Block",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/audio.py",
+   "target": "class:vllm/models/muse_spark/common/audio.py:Block",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/audio.py",
+   "target": "class:vllm/models/muse_spark/common/audio.py:AutoEncoder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/audio.py",
+   "target": "class:vllm/models/muse_spark/common/audio.py:AutoEncoder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/audio.py",
+   "target": "function:vllm/models/muse_spark/common/audio.py:patchify",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/audio.py",
+   "target": "function:vllm/models/muse_spark/common/audio.py:patchify",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/dspark.py",
+   "target": "class:vllm/models/muse_spark/common/dspark.py:MuseSparkDSparkDecoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/dspark.py",
+   "target": "class:vllm/models/muse_spark/common/dspark.py:MuseSparkDSparkDecoderLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/dspark.py",
+   "target": "class:vllm/models/muse_spark/common/dspark.py:MuseSparkDSparkModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/dspark.py",
+   "target": "class:vllm/models/muse_spark/common/dspark.py:MuseSparkDSparkModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/dspark.py",
+   "target": "class:vllm/models/muse_spark/common/dspark.py:MuseSparkDSparkForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/dspark.py",
+   "target": "class:vllm/models/muse_spark/common/dspark.py:MuseSparkDSparkForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "class:vllm/models/muse_spark/common/layers.py:MuseSpark1xRMSNorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "class:vllm/models/muse_spark/common/layers.py:MuseSpark1xRMSNorm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "class:vllm/models/muse_spark/common/layers.py:MuseSpark1xRMSNormWithInputScale",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "class:vllm/models/muse_spark/common/layers.py:MuseSpark1xRMSNormWithInputScale",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "class:vllm/models/muse_spark/common/layers.py:MulTanhSoftCap",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "class:vllm/models/muse_spark/common/layers.py:MulTanhSoftCap",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "class:vllm/models/muse_spark/common/layers.py:MuseSpark1xNormPreservingResidualConnection",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "class:vllm/models/muse_spark/common/layers.py:MuseSpark1xNormPreservingResidualConnection",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "class:vllm/models/muse_spark/common/layers.py:MuseSpark1xQKVOGateParallelLinear",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "class:vllm/models/muse_spark/common/layers.py:MuseSpark1xQKVOGateParallelLinear",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "function:vllm/models/muse_spark/common/layers.py:calculate_gain_center",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "function:vllm/models/muse_spark/common/layers.py:calculate_gain_center",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "function:vllm/models/muse_spark/common/layers.py:norm_then_gated_residual",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "function:vllm/models/muse_spark/common/layers.py:norm_then_gated_residual",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "function:vllm/models/muse_spark/common/layers.py:materialize_residual_path_constants",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "function:vllm/models/muse_spark/common/layers.py:materialize_residual_path_constants",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/moe.py",
+   "target": "class:vllm/models/muse_spark/common/moe.py:MuseSpark1xRouter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/moe.py",
+   "target": "class:vllm/models/muse_spark/common/moe.py:MuseSpark1xRouter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/moe.py",
+   "target": "class:vllm/models/muse_spark/common/moe.py:MuseSparkConsolidatedRoutedExperts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/moe.py",
+   "target": "class:vllm/models/muse_spark/common/moe.py:MuseSparkConsolidatedRoutedExperts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/moe.py",
+   "target": "function:vllm/models/muse_spark/common/moe.py:needs_pre_norm_all_reduce",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/moe.py",
+   "target": "function:vllm/models/muse_spark/common/moe.py:needs_pre_norm_all_reduce",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/omni.py",
+   "target": "class:vllm/models/muse_spark/common/omni.py:MuseSpark1xOmniMixin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/omni.py",
+   "target": "class:vllm/models/muse_spark/common/omni.py:MuseSpark1xOmniMixin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/omni.py",
+   "target": "function:vllm/models/muse_spark/common/omni.py:register_omni_processor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/omni.py",
+   "target": "function:vllm/models/muse_spark/common/omni.py:register_omni_processor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_finalize.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_finalize.py:_post_expert_finalize_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_finalize.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_finalize.py:_post_expert_finalize_loop_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_finalize.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_finalize.py:fused_post_expert_finalize",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_finalize.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_finalize.py:fused_post_expert_finalize",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py:supports_fused_kv_insert",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py:supports_fused_kv_insert",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py:fused_qk_norm_rope_kv_insert",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py:fused_qk_norm_rope_kv_insert",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_rmsnorm.py:_blend_and_store",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_rmsnorm.py:_rmsnorm_fwd_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_rmsnorm.py:fused_rmsnorm_fwd",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_rmsnorm.py:fused_rmsnorm_fwd",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_rmsnorm.py:_norm_residual_norm_fwd_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_rmsnorm.py:supports_norm_residual_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_rmsnorm.py:supports_norm_residual_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_rmsnorm.py:fused_norm_residual_norm_fwd",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_rmsnorm.py:fused_norm_residual_norm_fwd",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_routing.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_routing.py:_normalized_scores",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_routing.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_routing.py:_select_one",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_routing.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_routing.py:_routing_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_routing.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_routing.py:fused_musespark1x_routing",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_routing.py",
+   "target": "function:vllm/models/muse_spark/common/ops/fused_routing.py:fused_musespark1x_routing",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "class:vllm/models/muse_spark/common/processor.py:PreprocessConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "class:vllm/models/muse_spark/common/processor.py:PreprocessConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "class:vllm/models/muse_spark/common/processor.py:MuseSpark1xOmniVideoBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "class:vllm/models/muse_spark/common/processor.py:MuseSpark1xOmniVideoBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "class:vllm/models/muse_spark/common/processor.py:MuseSpark1xOmniProcessingInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "class:vllm/models/muse_spark/common/processor.py:MuseSpark1xOmniProcessingInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "class:vllm/models/muse_spark/common/processor.py:MuseSpark1xOmniDummyInputsBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "class:vllm/models/muse_spark/common/processor.py:MuseSpark1xOmniDummyInputsBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "class:vllm/models/muse_spark/common/processor.py:MuseSpark1xOmniMultiModalProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "class:vllm/models/muse_spark/common/processor.py:MuseSpark1xOmniMultiModalProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "function:vllm/models/muse_spark/common/processor.py:_resize_frames",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "function:vllm/models/muse_spark/common/processor.py:_normalize_pixels",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "function:vllm/models/muse_spark/common/processor.py:_least_distortion_fit",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "function:vllm/models/muse_spark/common/processor.py:_least_distance_fit",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "function:vllm/models/muse_spark/common/processor.py:find_resize_target",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "function:vllm/models/muse_spark/common/processor.py:find_resize_target",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "function:vllm/models/muse_spark/common/processor.py:preprocess_image",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "function:vllm/models/muse_spark/common/processor.py:preprocess_image",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "function:vllm/models/muse_spark/common/processor.py:preprocess_video",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "function:vllm/models/muse_spark/common/processor.py:preprocess_video",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "function:vllm/models/muse_spark/common/processor.py:compute_video_clip_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "function:vllm/models/muse_spark/common/processor.py:compute_video_clip_metadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "function:vllm/models/muse_spark/common/processor.py:_video_patch_count",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "function:vllm/models/muse_spark/common/processor.py:_preprocess_single_video",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "class:vllm/models/muse_spark/common/vision.py:NaViTAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "class:vllm/models/muse_spark/common/vision.py:NaViTAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "class:vllm/models/muse_spark/common/vision.py:NaViTMLP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "class:vllm/models/muse_spark/common/vision.py:NaViTMLP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "class:vllm/models/muse_spark/common/vision.py:NaViTBlock",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "class:vllm/models/muse_spark/common/vision.py:NaViTBlock",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "class:vllm/models/muse_spark/common/vision.py:NaViTEncoder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "class:vllm/models/muse_spark/common/vision.py:NaViTEncoder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "class:vllm/models/muse_spark/common/vision.py:NaViTAdapter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "class:vllm/models/muse_spark/common/vision.py:NaViTAdapter",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "class:vllm/models/muse_spark/common/vision.py:NaViT",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "class:vllm/models/muse_spark/common/vision.py:NaViT",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "function:vllm/models/muse_spark/common/vision.py:_precompute_rope_freqs_cis",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "function:vllm/models/muse_spark/common/vision.py:_get_pixel_shuffle_perm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "function:vllm/models/muse_spark/common/vision.py:_downsample_pixel_shuffle",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "function:vllm/models/muse_spark/common/vision.py:_iterate_visions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "function:vllm/models/muse_spark/common/vision.py:_get_sparse_attention_perm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "function:vllm/models/muse_spark/common/vision.py:_seqlens_to_cu_seqlens",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "function:vllm/models/muse_spark/common/vision.py:get_navit_patch_count",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "function:vllm/models/muse_spark/common/vision.py:get_navit_patch_count",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "function:vllm/models/muse_spark/common/vision.py:get_navit_video_patch_count",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "function:vllm/models/muse_spark/common/vision.py:get_navit_video_patch_count",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/mega_moe.py",
+   "target": "class:vllm/models/muse_spark/nvidia/mega_moe.py:MuseSparkMegaMoEExperts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/mega_moe.py",
+   "target": "class:vllm/models/muse_spark/nvidia/mega_moe.py:MuseSparkMegaMoEExperts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/mega_moe.py",
+   "target": "function:vllm/models/muse_spark/nvidia/mega_moe.py:_get_deep_gemm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xMoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xMoE",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xDecoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xDecoderLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "function:vllm/models/muse_spark/nvidia/model.py:gather_columns",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "function:vllm/models/muse_spark/nvidia/model.py:gather_columns",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "function:vllm/models/muse_spark/nvidia/model.py:_uses_flashinfer_dual_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "function:vllm/models/muse_spark/nvidia/model.py:_all_gather_norm_residual_then_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "function:vllm/models/muse_spark/nvidia/model.py:norm_residual_then_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "function:vllm/models/muse_spark/nvidia/model.py:norm_residual_then_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "function:vllm/models/muse_spark/nvidia/model.py:is_sequence_parallel_enabled",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "function:vllm/models/muse_spark/nvidia/model.py:is_sequence_parallel_enabled",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MusePostExpertFinalize",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MusePostExpertFinalize",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:_MuseSparkNvFp4Scales",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MuseSparkTrtLlmNvFp4Experts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MuseSparkTrtLlmNvFp4Experts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MuseSparkModelOptNvFp4FusedMoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MuseSparkModelOptNvFp4FusedMoE",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MuseSparkUnquantizedFusedMoE",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MuseSparkUnquantizedFusedMoE",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MuseMoERunner",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MuseMoERunner",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "function:vllm/models/muse_spark/nvidia/muse_moe_runner.py:uses_modular_all2all",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "function:vllm/models/muse_spark/nvidia/muse_moe_runner.py:uses_modular_all2all",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "function:vllm/models/muse_spark/nvidia/muse_moe_runner.py:validate_deployment",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "function:vllm/models/muse_spark/nvidia/muse_moe_runner.py:validate_deployment",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/__init__.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/__init__.py",
+   "target": "file:vllm/models/muse_spark/nvidia/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/__init__.py",
+   "target": "file:vllm/models/muse_spark/nvidia/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/__init__.py",
+   "target": "file:vllm/models/muse_spark/amd/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/__init__.py",
+   "target": "file:vllm/models/muse_spark/amd/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/compilation/decorators.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/model_executor/layers/quantization/quark/quark.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/model_executor/models/llama.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/models/muse_spark/common/layers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/models/muse_spark/common/moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/kda.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/transformers_utils/configs/muse_spark.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/models/muse_spark/amd/ops/fused_norm_expand.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/models/muse_spark/amd/ops/router_bf16x3.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/model.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/multimodal.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/multimodal.py",
+   "target": "file:vllm/models/muse_spark/common/omni.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/multimodal.py",
+   "target": "file:vllm/models/muse_spark/amd/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/modular_kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/rocm_aiter_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/triton_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/fused_moe_method_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/oracle/fp8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/oracle/mxfp4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/oracle/unquantized.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/quantization/quark/quark.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/quantization/quark/quark_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/ocp_mx_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/quant_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/models/muse_spark/amd/ops/fused_norm_expand.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/models/muse_spark/common/layers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/models/muse_spark/common/moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/muse_moe_runner.py",
+   "target": "file:vllm/models/muse_spark/common/ops/fused_finalize.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/fused_norm_expand.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py",
+   "target": "file:vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/fused_qk_norm_rope_kv.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/amd/ops/router_bf16x3.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/audio.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/audio.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/audio.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/dspark.py",
+   "target": "file:vllm/compilation/decorators.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/dspark.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/dspark.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/dspark.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/dspark.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/dspark.py",
+   "target": "file:vllm/model_executor/models/qwen3_dflash.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/dspark.py",
+   "target": "file:vllm/model_executor/models/qwen3_dspark.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/dspark.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/dspark.py",
+   "target": "file:vllm/models/muse_spark/common/layers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/dspark.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/dspark.py",
+   "target": "file:vllm/transformers_utils/configs/muse_spark.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/dspark.py",
+   "target": "file:vllm/models/muse_spark/nvidia/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/dspark.py",
+   "target": "file:vllm/models/muse_spark/amd/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/layers.py",
+   "target": "file:vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/moe.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/moe.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/routed_experts.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/moe.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/router/base_router.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/moe.py",
+   "target": "file:vllm/models/muse_spark/common/ops/fused_routing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/omni.py",
+   "target": "file:vllm/compilation/backends.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/omni.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/omni.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/omni.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/omni.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/omni.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/omni.py",
+   "target": "file:vllm/model_executor/models/module_mapping.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/omni.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/omni.py",
+   "target": "file:vllm/model_executor/models/vision.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/omni.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/omni.py",
+   "target": "file:vllm/models/muse_spark/common/audio.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/omni.py",
+   "target": "file:vllm/models/muse_spark/common/layers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/omni.py",
+   "target": "file:vllm/models/muse_spark/common/processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/omni.py",
+   "target": "file:vllm/models/muse_spark/common/vision.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_finalize.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py",
+   "target": "file:vllm/model_executor/layers/attention/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py",
+   "target": "file:vllm/v1/attention/backends/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_routing.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/ops/fused_routing.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "file:vllm/multimodal/processing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "file:vllm/multimodal/video.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "file:vllm/multimodal/video_decoders/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/processor.py",
+   "target": "file:vllm/transformers_utils/processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "file:vllm/compilation/decorators.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "file:vllm/model_executor/models/vision.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/common/vision.py",
+   "target": "file:vllm/transformers_utils/configs/muse_spark.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/mega_moe.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/mega_moe.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/mega_moe.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/mega_moe.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/mega_moe.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/mega_moe.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/mega_moe.py",
+   "target": "file:vllm/models/common/ops/sequence_parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/mega_moe.py",
+   "target": "file:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_bf16.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/mega_moe.py",
+   "target": "file:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_nvfp4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/mega_moe.py",
+   "target": "file:vllm/utils/deep_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/mega_moe.py",
+   "target": "file:vllm/models/muse_spark/nvidia/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/compilation/decorators.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/quantization/modelopt.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/model_executor/models/llama.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/models/common/ops/sequence_parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/models/muse_spark/common/layers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/models/muse_spark/common/ops/fused_qk_norm_rope_kv.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/models/muse_spark/common/ops/fused_rmsnorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/models/muse_spark/common/ops/fused_routing.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/models/muse_spark/nvidia/mega_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/models/muse_spark/nvidia/ops/cute_dsl/qk_norm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_nvfp4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/models/muse_spark/nvidia/ops/prepare_trtllm_nvfp4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/third_party/flash_linear_attention/ops/fused_norm_gate.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/transformers_utils/configs/muse_spark.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/utils/multi_stream_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/model.py",
+   "target": "file:vllm/models/muse_spark/nvidia/ops/gemm_rs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/multimodal.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/multimodal.py",
+   "target": "file:vllm/models/muse_spark/common/omni.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/multimodal.py",
+   "target": "file:vllm/models/muse_spark/nvidia/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/marlin_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/triton_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/trtllm_bf16_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/experts/trtllm_nvfp4_moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/fused_moe_method_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/moe_output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/oracle/nvfp4.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/oracle/unquantized.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/runner/moe_runner.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/quantization/base_config.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/quantization/modelopt.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/flashinfer_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/model_executor/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/models/muse_spark/common/moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/models/muse_spark/common/ops/fused_finalize.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/models/muse_spark/nvidia/ops/cute_dsl/moe_finalize_rmsnorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/muse_moe_runner.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/models/muse_spark/amd/model.py:MuseSpark1xModel",
+   "target": "class:vllm/model_executor/models/llama.py:LlamaModel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/amd/model.py:MuseSpark1xForCausalLM",
+   "target": "class:vllm/model_executor/models/llama.py:LlamaForCausalLM",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/amd/model.py:MuseSpark1xForCausalLM",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/amd/model.py:MuseSpark1xForCausalLM",
+   "target": "class:vllm/model_executor/models/interfaces.py:MixtureOfExperts",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkTritonExperts",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:_RouteOutputHandoff",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkTritonExperts",
+   "target": "class:vllm/model_executor/layers/fused_moe/experts/triton_moe.py:TritonExperts",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkUnquantizedFusedMoE",
+   "target": "class:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py:UnquantizedFusedMoEMethod",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkAiterExperts",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:_RouteOutputHandoff",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkAiterExperts",
+   "target": "class:vllm/model_executor/layers/fused_moe/experts/rocm_aiter_moe.py:AiterMxfp4Experts",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkQuarkW8A8Fp8FusedMoE",
+   "target": "class:vllm/model_executor/layers/quantization/quark/quark_moe.py:QuarkW8A8Fp8MoEMethod",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkQuarkOCPMXFusedMoE",
+   "target": "class:vllm/model_executor/layers/quantization/quark/quark_moe.py:QuarkOCP_MX_MoEMethod",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkOnlineMXFP4FusedMoE",
+   "target": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkQuarkOCPMXFusedMoE",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseSparkRoutedExperts",
+   "target": "class:vllm/models/muse_spark/common/moe.py:MuseSparkConsolidatedRoutedExperts",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/amd/muse_moe_runner.py:MuseMoERunner",
+   "target": "class:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:MoERunner",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/common/dspark.py:MuseSparkDSparkDecoderLayer",
+   "target": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xDecoderLayer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/common/dspark.py:MuseSparkDSparkModel",
+   "target": "class:vllm/model_executor/models/qwen3_dflash.py:DFlashQwen3Model",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/common/dspark.py:MuseSparkDSparkForCausalLM",
+   "target": "class:vllm/model_executor/models/qwen3_dspark.py:Qwen3DSparkForCausalLM",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/common/layers.py:MuseSpark1xRMSNormWithInputScale",
+   "target": "class:vllm/models/muse_spark/common/layers.py:MuseSpark1xRMSNorm",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/common/layers.py:MuseSpark1xNormPreservingResidualConnection",
+   "target": "class:vllm/models/muse_spark/common/layers.py:MuseSpark1xResidualConnection",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/common/layers.py:MuseSpark1xQKVOGateParallelLinear",
+   "target": "class:vllm/model_executor/layers/linear.py:ColumnParallelLinear",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/common/moe.py:MuseSpark1xRouter",
+   "target": "class:vllm/model_executor/layers/fused_moe/router/base_router.py:BaseRouter",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/common/moe.py:MuseSparkConsolidatedRoutedExperts",
+   "target": "class:vllm/model_executor/layers/fused_moe/routed_experts.py:RoutedExperts",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/common/processor.py:MuseSpark1xOmniVideoBackend",
+   "target": "class:vllm/multimodal/video.py:VideoBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/common/processor.py:MuseSpark1xOmniProcessingInfo",
+   "target": "class:vllm/multimodal/processing/__init__.py:BaseProcessingInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xModel",
+   "target": "class:vllm/model_executor/models/llama.py:LlamaModel",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xForCausalLM",
+   "target": "class:vllm/model_executor/models/llama.py:LlamaForCausalLM",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xForCausalLM",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsLoRA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/nvidia/model.py:MuseSpark1xForCausalLM",
+   "target": "class:vllm/model_executor/models/interfaces.py:MixtureOfExperts",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MuseSparkTrtLlmNvFp4Experts",
+   "target": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:_MuseSparkNvFp4Scales",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MuseSparkTrtLlmNvFp4Experts",
+   "target": "class:vllm/model_executor/layers/fused_moe/experts/trtllm_nvfp4_moe.py:TrtLlmNvFp4ExpertsMonolithic",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MuseSparkModelOptNvFp4FusedMoE",
+   "target": "class:vllm/model_executor/layers/quantization/modelopt.py:ModelOptNvFp4FusedMoE",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MuseSparkUnquantizedFusedMoE",
+   "target": "class:vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py:UnquantizedFusedMoEMethod",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/muse_spark/nvidia/muse_moe_runner.py:MuseMoERunner",
+   "target": "class:vllm/model_executor/layers/fused_moe/runner/moe_runner.py:MoERunner",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

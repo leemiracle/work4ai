@@ -1,0 +1,461 @@
+{
+ "nodes": [
+  {
+   "id": "document:packages/extensions/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/extensions/README.md",
+   "summary": "extensions 包组总览：只读运行时 API 发现（tool-cordis）、进程本地动态包双面 runner（host=node:vm realm / client=浏览器半边）、历史生成插件卡片（ui-cordis）；持久插件一律走 Plugin Manager。",
+   "tags": [
+    "documentation",
+    "package-group",
+    "extensions",
+    "overview"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/extensions/cordis-client-runner/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/extensions/cordis-client-runner/README.md",
+   "summary": "dsh-cordis-client-runner 文档：运行进程本地动态包的浏览器半边——经批准请求或用户手势后加载定义，Host 撤回即移除，页面刷新不恢复定义。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "client-runner",
+    "dynamic-packages"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/extensions/cordis-client-runner/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/extensions/cordis-client-runner/package.json",
+   "summary": "@deepseek-ai/dsh-cordis-client-runner 清单。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "client-runner"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/extensions/cordis-client-runner/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/extensions/cordis-client-runner/tsconfig.json",
+   "summary": "cordis-client-runner 包 tsconfig（extends base，src→lib/types）。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/extensions/cordis-host-runner/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/extensions/cordis-host-runner/README.md",
+   "summary": "dsh-cordis-host-runner 文档：Host 半边暴露运行时检查并维持进程本地动态定义；定义重启即失，agent 经 tool-cordis 发现 API、经 Plugin Manager 装持久 bundle，无模型工具可创建动态定义。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "host-runner",
+    "vm-realm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/extensions/cordis-host-runner/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/extensions/cordis-host-runner/package.json",
+   "summary": "@deepseek-ai/dsh-cordis-host-runner 清单。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "host-runner"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/extensions/cordis-host-runner/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/extensions/cordis-host-runner/tsconfig.json",
+   "summary": "cordis-host-runner 包 tsconfig（extends base，src→lib/types）。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/extensions/tool-cordis/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/extensions/tool-cordis/README.md",
+   "summary": "dsh-tool-cordis 文档：写插件代码前检查 Host/Client 运行时 API 的只读工具；Host 行注册检查 provider（每进程一次），各 preset 行只读共享集；Config provider 分页列 Loader 条目并把原生 Config 投影成自包含 JSON Schema。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "inspection",
+    "read-only-tools"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/extensions/tool-cordis/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/extensions/tool-cordis/package.json",
+   "summary": "@deepseek-ai/dsh-tool-cordis 清单。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "inspection-tools"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/extensions/tool-cordis/src/config.ts",
+   "type": "file",
+   "name": "config.ts",
+   "filePath": "packages/extensions/tool-cordis/src/config.ts",
+   "summary": "Config.listConfigs 检查查询的实现：从运行中 Loader 树投影活插件 Config——无 entry 参数时分页列目录（id/patchId/name/status），有 entry 时经 profile 包查表解析 packageDir 并把原生 Schemastery Config 投成带 $defs 的 JSON Schema 2020-12 文档。",
+   "tags": [
+    "inspection",
+    "config-projection",
+    "json-schema",
+    "pagination"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/extensions/tool-cordis/src/config.ts:liveConfig",
+   "type": "function",
+   "name": "liveConfig",
+   "filePath": "packages/extensions/tool-cordis/src/config.ts",
+   "lineRange": [
+    28,
+    38
+   ],
+   "summary": "把一个 Loader entry 归类为五种 Config 状态：tree（group/include 载体）、inactive（disabled/未导入/已处置）、absent（无 Config）、unsupported（非原生 Schemastery）、schema（可投影）。",
+   "tags": [
+    "classification",
+    "entry-status"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/extensions/tool-cordis/src/config.ts:parseQuery",
+   "type": "function",
+   "name": "parseQuery",
+   "filePath": "packages/extensions/tool-cordis/src/config.ts",
+   "lineRange": [
+    55,
+    70
+   ],
+   "summary": "在工具 JSON 边界校验模型提供的查询字段：entry/name 必须非空字符串，offset 非负整数，limit 1-100（默认 25），坏值即抛错。",
+   "tags": [
+    "validation",
+    "json-boundary",
+    "query-parsing"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/extensions/tool-cordis/src/config.ts:queryLiveConfig",
+   "type": "function",
+   "name": "queryLiveConfig",
+   "filePath": "packages/extensions/tool-cordis/src/config.ts",
+   "lineRange": [
+    98,
+    120
+   ],
+   "summary": "回答 Config.listConfigs 查询：要求本 Host 由 Loader 装配，分页枚举 liveConfig 状态目录（带 total/nextOffset），或对单个 entry 附 packageDir 并用 createConfigProjector 投影自包含 JSON Schema（validator/transform 回调不执行）。",
+   "tags": [
+    "tool-implementation",
+    "inspection",
+    "json-schema",
+    "host-plane"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/extensions/tool-cordis/src/host.ts",
+   "type": "file",
+   "name": "host.ts",
+   "filePath": "packages/extensions/tool-cordis/src/host.ts",
+   "summary": "Host 面 first-party Cordis 检查 provider 注册行（函数式插件 cordis-inspect-providers）：每进程注册一次 hostInspectProviders，供各会话 tool-cordis 行共享读取。",
+   "tags": [
+    "host-plane",
+    "plugin",
+    "registration",
+    "inspect-providers"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/extensions/tool-cordis/src/host.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/extensions/tool-cordis/src/host.ts",
+   "lineRange": [
+    16,
+    20
+   ],
+   "summary": "逐个把 hostInspectProviders 经 ctx.effect 注册进 cordisInspect 注册表（重复 id 会被拒，故此行属 Host 组合）。",
+   "tags": [
+    "plugin-apply",
+    "effects",
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/extensions/tool-cordis/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/extensions/tool-cordis/tsconfig.json",
+   "summary": "tool-cordis 包 tsconfig（extends base，src→lib/types）。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/extensions/ui-cordis/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/extensions/ui-cordis/README.md",
+   "summary": "dsh-client-ui-cordis 文档：渲染历史生成插件卡片与进程本地定义的控制面板；持久化卡片重启后仍可读，新 Creator 插件应改用 Plugin Manager。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "ui-cards",
+    "legacy"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/extensions/ui-cordis/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/extensions/ui-cordis/package.json",
+   "summary": "@deepseek-ai/dsh-client-ui-cordis 清单。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "ui-plugin"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/extensions/ui-cordis/src/client/CordisPreparingRow.tsx",
+   "type": "file",
+   "name": "CordisPreparingRow.tsx",
+   "filePath": "packages/extensions/ui-cordis/src/client/CordisPreparingRow.tsx",
+   "summary": "三个 Cordis 卡片族共享的无参数工具前缀行：不可展开的 DisclosureRow（open=false/expandable=false/running），带 data-state=preparing 与 a11y 标签。",
+   "tags": [
+    "component",
+    "ui-card",
+    "shared-row",
+    "client"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/extensions/ui-cordis/src/client/CordisPreparingRow.tsx:CordisPreparingRow",
+   "type": "function",
+   "name": "CordisPreparingRow",
+   "filePath": "packages/extensions/ui-cordis/src/client/CordisPreparingRow.tsx",
+   "lineRange": [
+    23,
+    30
+   ],
+   "summary": "渲染 Cordis 准备态前缀行组件：组合 icon/title/className 于 DisclosureRow，noop 满足必填 toggle 回调（不可展开行永不触发）。",
+   "tags": [
+    "component",
+    "presentation",
+    "disclosure"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/extensions/ui-cordis/tsconfig.json",
+   "type": "config",
+   "name": "tsconfig.json",
+   "filePath": "packages/extensions/ui-cordis/tsconfig.json",
+   "summary": "ui-cordis 包 tsconfig（extends base，src→lib/types）。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "build-system"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/extensions/tool-cordis/src/config.ts",
+   "target": "file:packages/boot/app-boot/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/extensions/tool-cordis/src/config.ts",
+   "target": "file:packages/util/values/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/extensions/tool-cordis/src/host.ts",
+   "target": "file:packages/extensions/tool-cordis/src/providers.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/extensions/ui-cordis/src/client/CordisPreparingRow.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/extensions/ui-cordis/src/client/CordisPreparingRow.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/extensions/ui-cordis/src/client/CordisPreparingRow.tsx",
+   "target": "file:packages/client/ui-tool/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/extensions/tool-cordis/src/config.ts",
+   "target": "function:packages/extensions/tool-cordis/src/config.ts:liveConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/extensions/tool-cordis/src/config.ts",
+   "target": "function:packages/extensions/tool-cordis/src/config.ts:parseQuery",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/extensions/tool-cordis/src/config.ts",
+   "target": "function:packages/extensions/tool-cordis/src/config.ts:queryLiveConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/extensions/tool-cordis/src/host.ts",
+   "target": "function:packages/extensions/tool-cordis/src/host.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/extensions/ui-cordis/src/client/CordisPreparingRow.tsx",
+   "target": "function:packages/extensions/ui-cordis/src/client/CordisPreparingRow.tsx:CordisPreparingRow",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/extensions/tool-cordis/src/config.ts",
+   "target": "function:packages/extensions/tool-cordis/src/config.ts:queryLiveConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/extensions/tool-cordis/src/host.ts",
+   "target": "function:packages/extensions/tool-cordis/src/host.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/extensions/ui-cordis/src/client/CordisPreparingRow.tsx",
+   "target": "function:packages/extensions/ui-cordis/src/client/CordisPreparingRow.tsx:CordisPreparingRow",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "document:packages/extensions/tool-cordis/README.md",
+   "target": "file:packages/extensions/tool-cordis/src/config.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/extensions/tool-cordis/README.md",
+   "target": "file:packages/extensions/tool-cordis/src/host.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/extensions/ui-cordis/README.md",
+   "target": "file:packages/extensions/ui-cordis/src/client/CordisPreparingRow.tsx",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/extensions/tool-cordis/package.json",
+   "target": "file:packages/extensions/tool-cordis/src/config.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "document:packages/extensions/README.md",
+   "target": "document:packages/extensions/tool-cordis/README.md",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/extensions/README.md",
+   "target": "document:packages/extensions/cordis-host-runner/README.md",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/extensions/README.md",
+   "target": "document:packages/extensions/cordis-client-runner/README.md",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/extensions/README.md",
+   "target": "document:packages/extensions/ui-cordis/README.md",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  }
+ ]
+}

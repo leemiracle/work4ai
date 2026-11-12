@@ -1,0 +1,40 @@
+# DeepWiki 索引 — android/ai-samples
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-23
+> 结构 24 页 · 全文 240797 字符
+
+- [1 Repository Overview](1-repository-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Android Architecture Standards](1.2-android-architecture-standards.md)
+- [2 AI Sample Catalog Application](2-ai-sample-catalog-application.md)
+  - [2.1 Application Architecture](2.1-application-architecture.md)
+  - [2.2 Sample Catalog System](2.2-sample-catalog-system.md)
+- [3 AI Sample Documentation](3-ai-sample-documentation.md)
+  - [3.1 Gemini Cloud Samples](3.1-gemini-cloud-samples.md)
+  - [3.2 GenAI On-Device Samples](3.2-genai-on-device-samples.md)
+  - [3.3 Image Generation Samples](3.3-image-generation-samples.md)
+- [4 Jetpacker Application](4-jetpacker-application.md)
+  - [4.1 Jetpacker Architecture and Build System](4.1-jetpacker-architecture-and-build-system.md)
+  - [4.2 Core and Data Modules](4.2-core-and-data-modules.md)
+  - [4.3 Trip Management Features](4.3-trip-management-features.md)
+  - [4.4 On-Device AI Features](4.4-on-device-ai-features.md)
+  - [4.5 Cloud and Hybrid AI Features](4.5-cloud-and-hybrid-ai-features.md)
+  - [4.6 AppFunctions Integration](4.6-appfunctions-integration.md)
+- [5 Testing Infrastructure](5-testing-infrastructure.md)
+  - [5.1 Screenshot Testing](5.1-screenshot-testing.md)
+  - [5.2 Unit and Integration Testing](5.2-unit-and-integration-testing.md)
+- [6 Technical Architecture and Build System](6-technical-architecture-and-build-system.md)
+  - [6.1 Gradle Build Configuration](6.1-gradle-build-configuration.md)
+  - [6.2 Firebase and External Services](6.2-firebase-and-external-services.md)
+- [7 Glossary](7-glossary.md)
+
+## 附：结构清单外的页
+- [Gemini Image Chat (Nano Banana Pro)](x1-gemini-image-chat-nano-banana-pro.md)
+- [Gemini Live API To-Do App](x2-gemini-live-api-to-do-app.md)
+- [Hybrid Inference Sample](x3-hybrid-inference-sample.md)
+- [Image Description](x4-image-description.md)
+- [Magic Selfie](x5-magic-selfie.md)
+- [Multimodal Generation and Chatbot](x6-multimodal-generation-and-chatbot.md)
+- [Nanobanana Image Generation](x7-nanobanana-image-generation.md)
+- [Text Summarization and Writing Assistance](x8-text-summarization-and-writing-assistance.md)
+- [Video Analysis Samples](x9-video-analysis-samples.md)

@@ -1,0 +1,33 @@
+# DeepWiki 索引 — allenai/real-toxicity-prompts
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 464482 字符
+
+- [1 Real Toxicity Prompts: Overview](1-real-toxicity-prompts-overview.md)
+- [2 Getting Started](2-getting-started.md)
+  - [2.1 Installation and Environment Setup](2.1-installation-and-environment-setup.md)
+  - [2.2 Running Your First Experiment](2.2-running-your-first-experiment.md)
+- [3 Text Generation System](3-text-generation-system.md)
+  - [3.1 Generation Architecture and Model Interfaces](3.1-generation-architecture-and-model-interfaces.md)
+  - [3.2 Standard Language Models](3.2-standard-language-models.md)
+  - [3.3 Controllable Generation with AffectGPT2](3.3-controllable-generation-with-affectgpt2.md)
+  - [3.4 PPLM: Plug and Play Language Models](3.4-pplm-plug-and-play-language-models.md)
+- [4 Toxicity Scoring System](4-toxicity-scoring-system.md)
+  - [4.1 Perspective API Integration](4.1-perspective-api-integration.md)
+  - [4.2 Scoring Pipeline and Attributes](4.2-scoring-pipeline-and-attributes.md)
+- [5 Data Infrastructure](5-data-infrastructure.md)
+  - [5.1 Database Schema and Models](5.1-database-schema-and-models.md)
+  - [5.2 Corpus Processing and Ingestion](5.2-corpus-processing-and-ingestion.md)
+  - [5.3 Duplicate Detection with MinHash LSH](5.3-duplicate-detection-with-minhash-lsh.md)
+  - [5.4 Prompt Dataset Creation](5.4-prompt-dataset-creation.md)
+- [6 Running Experiments and Evaluation](6-running-experiments-and-evaluation.md)
+  - [6.1 Experiment Configuration and Execution](6.1-experiment-configuration-and-execution.md)
+  - [6.2 Model Evaluation on WebText](6.2-model-evaluation-on-webtext.md)
+- [7 Data Analysis and Research Findings](7-data-analysis-and-research-findings.md)
+  - [7.1 Analysis Pipeline and Notebooks](7.1-analysis-pipeline-and-notebooks.md)
+  - [7.2 Identifying Adversarial Prompts](7.2-identifying-adversarial-prompts.md)
+  - [7.3 Source Analysis and Metadata Enrichment](7.3-source-analysis-and-metadata-enrichment.md)
+  - [7.4 Language Detection and Data Cleaning](7.4-language-detection-and-data-cleaning.md)
+- [8 Utilities and Helper Modules](8-utilities-and-helper-modules.md)
+  - [8.1 Data Processing Utilities](8.1-data-processing-utilities.md)
+  - [8.2 Constants and Configuration](8.2-constants-and-configuration.md)

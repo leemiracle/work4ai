@@ -1,0 +1,110 @@
+---
+name: k8s-launch-kit-troubleshoot
+version: 1.1.4
+description: "Use this skill when the user has problems with NVIDIA Network Operator on Kubernetes, or wants to analyze a sosreport diagnostic dump. Activate for: OFED driver crashes, SR-IOV pods failing, NicClusterPolicy errors, network operator pod issues, RDMA not working, NIC configuration failures, pods stuck in CrashLoopBackOff or ContainerCreating with network annotations, VF allocation issues, or when the user mentions 'troubleshoot', 'debug', 'sosreport', 'diagnose', or describes any NVIDIA networking failure -- even if they don't explicitly ask for troubleshooting."
+metadata:
+  requires:
+    skills: ["k8s-launch-kit-shared"]
+---
+
+# l8k: Troubleshooting
+
+> **PREREQUISITE:** Read `../k8s-launch-kit-shared/SKILL.md` for install paths, global flags, and exit codes.
+
+Debug NVIDIA Network Operator issues on Kubernetes, with or without a sosreport.
+
+## l8k Troubleshooting Commands
+
+```bash
+# Show validation endpoints, planning, route-cache statistics, stage/batch
+# progress, timings, and failed RDMA evidence.
+l8k validate --kubeconfig <PATH> --deployment-files <DIR> --log-level debug
+
+# Add bounded route command output, RDMA client stdout/stderr, and server logs.
+l8k validate --kubeconfig <PATH> --deployment-files <DIR> --log-level trace --keep
+
+# Collect a diagnostic dump from the cluster
+l8k sosreport [--kubeconfig <PATH>] --output-dir ./sosreport
+```
+
+Start with `debug`. Escalate to `trace` when a route, ICMP, rping, or
+ib_write_bw failure needs command output. Trace fields are bounded; failed RDMA
+server logs are collected before cleanup. Add `--keep` only when the workload
+must remain available for follow-up `kubectl exec` inspection.
+
+`l8k sosreport` gathers cluster state, CRDs, operator logs, and per-node NIC info into a structured directory for offline analysis. Release installations include the Network Operator collection script under `share/l8k/scripts/`; the command never downloads executable code at runtime. If the script is missing, report the upstream URL and exact expected path emitted by `l8k` so the user can install it manually. Use the diagnostic commands and triage workflow below to interpret the dump.
+
+## Diagnostic Commands
+
+```bash
+# NicClusterPolicy status (check state: ready vs notReady)
+kubectl get nicclusterpolicy -o yaml
+
+# Network operator pods
+kubectl get pods -n <operator-ns> -o wide
+
+# SR-IOV node states (VF allocation)
+kubectl get sriovnetworknodestates -A -o yaml
+
+# OFED driver pod logs
+kubectl logs -n <operator-ns> -l app=mofed-<os> --tail=100
+
+# NIC configuration daemon logs
+kubectl logs -n <operator-ns> -l app=nic-configuration-daemon --tail=100
+
+# Check for pods stuck on network resources
+kubectl get pods -A -o wide | grep -E 'ContainerCreating|Init'
+```
+
+## Common Failure Patterns
+
+| Symptom | Likely Cause | Fix |
+|---------|-------------|-----|
+| NicClusterPolicy `state: notReady` | OFED driver pods failing | Check mofed pod logs, verify kernel/driver compatibility |
+| Pods stuck in `ContainerCreating` | VFs not allocated or SR-IOV policy not applied | Check `sriovnetworknodestates`, verify device plugin pods |
+| `CrashLoopBackOff` on mofed pods | Kernel module conflict | Check `thirdPartyRDMAModules`, enable `unloadThirdPartyRDMAModules` |
+| No VFs on node | SriovNetworkNodePolicy not matching | Verify `nodeSelector` labels match worker nodes |
+| RDMA not working | Missing RDMA device plugin or wrong resource name | Check `rdma-shared-dp` pods, verify resource annotations |
+| Phase 0 Helm chart download returns HTTP 401 or an image-pull-Secret error | The configured Secret is missing from the operator namespace, unreadable by the kubeconfig, or has no compatible Docker auth entry | Verify the Secret in `networkOperator.namespace`; for NGC, its `.dockerconfigjson` must contain `nvcr.io` credentials |
+| `l8k discover` daemon pods stuck (ImagePullBackOff / Pending) | Bad image tag, missing pull secret, or no Ready schedulable nodes | Re-run with `--keep-namespace` then `kubectl describe pod -n nvidia-k8s-launch-kit`. Fix `networkOperator.componentVersion`, pass `--image-pull-secrets`, or restore node readiness. NFD is not required. |
+| `l8k discover` waits for a node that has only a BlueField | The BlueField is in zero-trust (`restricted`) mode and NIC Configuration Operator will not publish a `NicDevice` | Use a Launch Kit version that excludes restricted BlueFields from the wait set; confirm the mode with `mlxprivhost -d <pci> q` in the daemon pod. |
+| `l8k validate` / `deploy` can't find Network Operator pods | Operator namespace mismatch | Verify `--network-operator-namespace` matches actual namespace (does NOT apply to `l8k discover` — it ignores the flag and uses its own `nvidia-k8s-launch-kit` namespace) |
+| IPPool not allocating | NV-IPAM subnet exhausted or misconfigured | Check `ippools` CR status, verify CIDR ranges |
+| `--for requires --node-selector` | `--for` was passed without `--node-selector` | Add `--node-selector key=val,…`. The synthesized clusterConfig has no live worker-node list; the selector identifies target nodes at apply time. |
+| `--for and --discover-cluster-config are mutually exclusive` | Both flags passed simultaneously | Pick one: `--for` skips discovery, `--discover-cluster-config` runs it. |
+| `unknown preset "X"; available: …` | `--for X` doesn't match any directory under `presets/` | Run `l8k preset list` and re-run with one of those names. |
+| `preset has no capabilities block` | Preset YAML used by `--for` is missing `capabilities.nodes.{sriov,rdma,ib}` | Add the block to the preset's `topology.yaml`. Discovery-time overlay does not require it; only `--for` does. |
+| `unknown field "productType"` in YAML | Hand-authored config still uses the old key name | Rename `productType:` to `gpuType:` (the field was renamed). |
+
+For detailed triage workflow, read `references/common-failures.md`.
+
+## sosreport Analysis
+
+If the user has a pre-collected sosreport directory (from `l8k sosreport` or manual collection):
+
+```
+sosreport/
+├── metadata/          # Cluster info, node list
+├── crds/              # NicClusterPolicy, SriovNetworkNodePolicy, IPPool, etc.
+├── operator/          # Network operator pod logs
+├── nodes/             # Per-node device info
+└── network/           # Interface config, routing tables
+```
+
+### Triage Checklist
+
+1. Read `metadata/diagnostic-summary.yaml` for overview
+2. Check pod health in `operator/pods.yaml`
+3. Inspect CRDs in `crds/` for status fields
+4. Read operator logs in `operator/logs/` for errors
+5. Check per-node NIC state in `nodes/<node>/`
+
+## See Also
+
+- [k8s-launch-kit-shared](../k8s-launch-kit-shared/SKILL.md) — Exit codes and error structure
+- [k8s-launch-kit-discover](../k8s-launch-kit-discover/SKILL.md) — Re-discover to verify hardware state
+- `references/common-failures.md` — Detailed triage workflow
+
+## OpenShift
+
+For OpenShift, check expected operator CSV/API status, SR-IOV device prefix `openshift.io`, NV-IPAM pools in the Network Operator namespace, and temporary SCC admission in the workload namespace.

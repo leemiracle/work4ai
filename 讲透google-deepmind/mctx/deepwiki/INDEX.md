@@ -1,0 +1,32 @@
+# DeepWiki 索引 — google-deepmind/mctx
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 205228 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Package Structure](1.2-package-structure.md)
+- [2 Core Concepts](2-core-concepts.md)
+  - [2.1 Monte Carlo Tree Search Basics](2.1-monte-carlo-tree-search-basics.md)
+  - [2.2 MuZero Algorithm](2.2-muzero-algorithm.md)
+  - [2.3 Gumbel MuZero](2.3-gumbel-muzero.md)
+  - [2.4 Stochastic MuZero](2.4-stochastic-muzero.md)
+- [3 API Reference](3-api-reference.md)
+  - [3.1 Search API](3.1-search-api.md)
+  - [3.2 Policy APIs](3.2-policy-apis.md)
+  - [3.3 QTransforms](3.3-qtransforms.md)
+  - [3.4 Tree Data Structure](3.4-tree-data-structure.md)
+- [4 Usage Examples](4-usage-examples.md)
+  - [4.1 Visualization Example](4.1-visualization-example.md)
+  - [4.2 Policy Improvement Example](4.2-policy-improvement-example.md)
+- [5 Implementation Details](5-implementation-details.md)
+  - [5.1 Search Implementation](5.1-search-implementation.md)
+  - [5.2 Policy Implementations](5.2-policy-implementations.md)
+  - [5.3 Action Selection Mechanisms](5.3-action-selection-mechanisms.md)
+  - [5.4 Tree Data Structure Implementation](5.4-tree-data-structure-implementation.md)
+  - [5.5 Type System](5.5-type-system.md)
+- [6 Development and Contribution](6-development-and-contribution.md)
+  - [6.1 Testing](6.1-testing.md)
+  - [6.2 Contributing Guidelines](6.2-contributing-guidelines.md)
+  - [6.3 CI and Release Pipeline](6.3-ci-and-release-pipeline.md)
+- [7 Glossary](7-glossary.md)

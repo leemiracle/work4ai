@@ -1,0 +1,32 @@
+# DeepWiki 索引 — microsoft/mattersim
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 253859 字符
+
+- [1 Overview](1-overview.md)
+- [2 Core Components](2-core-components.md)
+  - [2.1 Potential Class](2.1-potential-class.md)
+  - [2.2 MatterSimCalculator](2.2-mattersimcalculator.md)
+  - [2.3 Pre-trained Models](2.3-pre-trained-models.md)
+  - [2.4 Data Processing Pipeline](2.4-data-processing-pipeline.md)
+- [3 Installation & Setup](3-installation-setup.md)
+- [4 Usage](4-usage.md)
+  - [4.1 Basic Usage with ASE](4.1-basic-usage-with-ase.md)
+  - [4.2 Batch Processing](4.2-batch-processing.md)
+  - [4.3 Command Line Interface](4.3-command-line-interface.md)
+- [5 Training & Fine-tuning](5-training-fine-tuning.md)
+  - [5.1 Data Preparation](5.1-data-preparation.md)
+  - [5.2 Fine-tuning Process](5.2-fine-tuning-process.md)
+  - [5.3 Model Evaluation](5.3-model-evaluation.md)
+- [6 Applications](6-applications.md)
+  - [6.1 Structure Relaxation](6.1-structure-relaxation.md)
+  - [6.2 Phonon Calculations](6.2-phonon-calculations.md)
+  - [6.3 Molecular Dynamics](6.3-molecular-dynamics.md)
+  - [6.4 Single-point Calculations](6.4-single-point-calculations.md)
+- [7 Development](7-development.md)
+  - [7.1 Build System & CI/CD](7.1-build-system-ci-cd.md)
+  - [7.2 MLflow Integration](7.2-mlflow-integration.md)
+  - [7.3 Extending MatterSim](7.3-extending-mattersim.md)
+  - [7.4 Contributing Guidelines](7.4-contributing-guidelines.md)
+- [8 Documentation System](8-documentation-system.md)
+- [9 Utility Functions](9-utility-functions.md)

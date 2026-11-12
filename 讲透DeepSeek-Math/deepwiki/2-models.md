@@ -1,140 +1,141 @@
-> 来源: [https://deepwiki.com/deepseek-ai/DeepSeek-Math/2-models](https://deepwiki.com/deepseek-ai/DeepSeek-Math/2-models)
-> DeepWiki deepseek-ai/DeepSeek-Math
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/DeepSeek-Math · page 2 Models · fetched 2026-10-30 -->
 
 # Models
 
-  Relevant source files 
- - [README.md](https://github.com/deepseek-ai/DeepSeek-Coder/blob/b7ba5659/README.md?plain=1)
- 
-  This page provides an overview of the DeepSeek Coder model family, including different model sizes, variants, and their general characteristics. For detailed information about the model architecture, refer to [Architecture](https://deepwiki.com/deepseek-ai/DeepSeek-Coder/2.1-architecture). For comprehensive benchmark results and performance metrics, see [Performance and Benchmarks](https://deepwiki.com/deepseek-ai/DeepSeek-Coder/2.2-performance-and-benchmarks).
+<details>
+<summary>Relevant source files</summary>
 
- 
+The following files were used as context for generating this wiki page:
+
+- [README.md](README.md)
+
+</details>
+
+
+
+This document provides a comprehensive overview of the DeepSeek-Math model family, including their architecture, capabilities, and relationships between different model variants. For detailed information about specific model variants, see [Base Model](#2.2), [Instruct Model](#2.3), and [RL Model](#2.4). For information about the model architecture, see [Model Architecture](#2.1).
+
 ## Model Family Overview
 
- DeepSeek Coder consists of a series of transformer-based language models specifically trained for code understanding and generation. All models were trained from scratch on a massive corpus of 2 trillion tokens, with a composition of 87% code and 13% natural language (both English and Chinese).
+DeepSeek-Math consists of three specialized 7B-parameter language models developed for mathematical reasoning:
 
- The model family includes:
+1. **DeepSeekMath-Base 7B** - A foundational model pre-trained on mathematical content
+2. **DeepSeekMath-Instruct 7B** - An instruction-tuned version of the base model
+3. **DeepSeekMath-RL 7B** - A reinforcement learning-optimized version using the GRPO algorithm
 
- 
- - **Base Models** - Foundation models trained on code and related texts
- - **Instruction-tuned Models** - Enhanced versions fine-tuned on instruction data for interactive coding assistance
- 
- 
+All models share a context length of 4096 tokens and are built upon the foundation of DeepSeek-Coder-v1.5 7B with additional mathematical training.
+
+Sources: [README.md:126-134](README.md:126-134)
+
+### Model Development Flow
+
+```mermaid
+flowchart LR
+    subgraph "Model Development Pipeline"
+        DSC["deepseek-coder-7b-base-v1.5"] --> |"Continued pre-training on\n500B tokens of math,\nlanguage, and code"| BASE
+        BASE["deepseek-math-7b-base"] --> |"Instruction tuning"| INST
+        INST["deepseek-math-7b-instruct"] --> |"Reinforcement Learning\n(GRPO Algorithm)"| RL
+        RL["deepseek-math-7b-rl"]
+    end
 ```
 
+Sources: [README.md:62-64](README.md:62-64), [README.md:100-101](README.md:100-101)
+
+## Key Features and Capabilities
+
+DeepSeekMath models excel in mathematical problem-solving, with the base model achieving a 51.7% score on the MATH benchmark without external tools or voting techniques. This performance approaches that of proprietary models like Gemini-Ultra and GPT-4.
+
+### Mathematical Reasoning Capabilities
+
+| Model | Key Strength | Specialized Capabilities |
+|-------|--------------|--------------------------|
+| Base | Foundation for mathematical reasoning | Superior mathematical reasoning compared to other open-source base models |
+| Instruct | Step-by-step reasoning | Strong performance for guided mathematical problem-solving |
+| RL | Advanced tool integration | Enhanced accuracy with tool use, approaching 60% accuracy on MATH |
+
+Sources: [README.md:64](README.md:64), [README.md:93-96](README.md:93-96), [README.md:102-105](README.md:102-105)
+
+### Performance Characteristics
+
+```mermaid
+graph TD
+    subgraph "DeepSeekMath Model Capabilities"
+        MathReasoning["Mathematical Reasoning"]
+        ToolUse["Tool Integration"]
+        Programming["Programming Capabilities"]
+        
+        subgraph "Base"
+            Base_MR["Superior to open-source\nmodels by >10%"]
+            Base_TU["Effective tool use for\nmath problem solving"]
+            Base_PC["Comparable to\nDeepSeekCoder"]
+        end
+        
+        subgraph "Instruct"
+            Inst_MR["Strong step-by-step\nreasoning"]
+            Inst_TU["Enhanced tool utilization"]
+        end
+        
+        subgraph "RL"
+            RL_MR["Approaching 60% on MATH"]
+            RL_TU["Best-in-class for\nopen-source models"]
+        end
+        
+        MathReasoning --- Base_MR
+        MathReasoning --- Inst_MR
+        MathReasoning --- RL_MR
+        
+        ToolUse --- Base_TU
+        ToolUse --- Inst_TU
+        ToolUse --- RL_TU
+        
+        Programming --- Base_PC
+    end
 ```
 
- Sources: [README.md11-26](https://github.com/deepseek-ai/DeepSeek-Coder/blob/b7ba5659/README.md?plain=1#L11-L26) [README.md57-62](https://github.com/deepseek-ai/DeepSeek-Coder/blob/b7ba5659/README.md?plain=1#L57-L62)
+Sources: [README.md:93-96](README.md:93-96), [README.md:102-105](README.md:102-105)
 
- 
-## Model Size Comparison
+## Model Specifications
 
- The DeepSeek Coder family comes in various parameter sizes to suit different deployment requirements, from more efficient smaller models to higher-capability larger models.
+All DeepSeekMath models are based on the transformer architecture with the following specifications:
 
- 
-| Model | Parameters | Context Window | Variants Available |
-|---|---|---|---|
-| DeepSeek-Coder-1B | 1 billion | 16K tokens | Base |
-| DeepSeek-Coder-5.7B | 5.7 billion | 16K tokens | Base |
-| DeepSeek-Coder-6.7B | 6.7 billion | 16K tokens | Base, Instruct |
-| DeepSeek-Coder-33B | 33 billion | 16K tokens | Base, Instruct |
+| Model | Parameters | Context Length | Base Architecture |
+|-------|------------|----------------|-------------------|
+| DeepSeekMath-Base 7B | 7B | 4096 tokens | DeepSeek-Coder-v1.5 7B |
+| DeepSeekMath-Instruct 7B | 7B | 4096 tokens | DeepSeekMath-Base 7B |
+| DeepSeekMath-RL 7B | 7B | 4096 tokens | DeepSeekMath-Instruct 7B |
 
- Sources: [README.md21-22](https://github.com/deepseek-ai/DeepSeek-Coder/blob/b7ba5659/README.md?plain=1#L21-L22) [README.md25](https://github.com/deepseek-ai/DeepSeek-Coder/blob/b7ba5659/README.md?plain=1#L25-L25)
+Sources: [README.md:126-134](README.md:126-134)
 
- 
-## Training Process
+## Training Methodology
 
- The DeepSeek Coder models underwent a comprehensive multi-stage training process to develop both their general code understanding and specialized capabilities.
+DeepSeekMath models were developed through a sequential training approach:
 
- 
-```
+1. **Base Model Training**: Initialized from DeepSeek-Coder-v1.5 7B and continued pre-training on 500B tokens of math-related content from Common Crawl, along with natural language and code data.
 
-```
+2. **Instruct Model Training**: The base model was further fine-tuned with instruction data to improve its ability to follow mathematical instructions and provide step-by-step reasoning.
 
- Sources: [README.md58-62](https://github.com/deepseek-ai/DeepSeek-Coder/blob/b7ba5659/README.md?plain=1#L58-L62)
+3. **RL Model Training**: The instruct model was enhanced using the Group Relative Policy Optimization (GRPO) algorithm to optimize its mathematical problem-solving capabilities further.
 
- 
-## Supported Programming Languages
+Sources: [README.md:62-64](README.md:62-64), [README.md:100-101](README.md:100-101), [README.md:109-116](README.md:109-116)
 
- The models support a wide range of programming languages, making them versatile for various development environments and coding tasks.
+## Usage Paradigms
 
- 
-```
+The DeepSeekMath models support two primary usage paradigms:
 
-```
+1. **Text Completion** - Best suited for the base model when generating continuous mathematical content
+2. **Chat Completion** - Optimized for the instruct and RL models when interactive problem-solving is needed
 
- The models support over 80 programming languages in total, including: Ada, Agda, Alloy, ANTLR, AppleScript, Assembly, and many others. See the README for the complete list.
+For the instruct and RL models, chain-of-thought prompting is recommended to achieve optimal performance in mathematical reasoning tasks.
 
- Sources: [README.md27-28](https://github.com/deepseek-ai/DeepSeek-Coder/blob/b7ba5659/README.md?plain=1#L27-L28)
+Sources: [README.md:140-158](README.md:140-158), [README.md:160-180](README.md:160-180), [README.md:194-198](README.md:194-198)
 
- 
-## Model Capabilities
+## Model Licensing and Availability
 
- DeepSeek Coder models offer a range of capabilities that make them suitable for various coding tasks:
+All DeepSeekMath models are available for both academic and commercial use, subject to the terms outlined in the model license. The models can be accessed via Hugging Face.
 
- 
-```
+For detailed licensing information, see [Model Licensing](#2.5).
 
-```
+Sources: [README.md:126-134](README.md:126-134), [README.md:201-204](README.md:201-204)
 
- Sources: [README.md74-104](https://github.com/deepseek-ai/DeepSeek-Coder/blob/b7ba5659/README.md?plain=1#L74-L104) [README.md102-141](https://github.com/deepseek-ai/DeepSeek-Coder/blob/b7ba5659/README.md?plain=1#L102-L141) [README.md178-254](https://github.com/deepseek-ai/DeepSeek-Coder/blob/b7ba5659/README.md?plain=1#L178-L254)
+---
 
- 
-### Feature Support by Model Variant
-
- 
-| Feature | Base Models | Instruct Models |
-|---|---|---|
-| Code Completion | ✅ | ✅ |
-| Fill-in-the-Middle (FIM) | ✅ | ✅ |
-| Repository-Level Understanding | ✅ | ✅ |
-| Interactive Chat | ❌ | ✅ |
-
- Sources: [README.md74-266](https://github.com/deepseek-ai/DeepSeek-Coder/blob/b7ba5659/README.md?plain=1#L74-L266)
-
- 
-## Performance Overview
-
- DeepSeek Coder models have demonstrated strong performance across various benchmarks. The largest model, DeepSeek-Coder-Base-33B, outperforms other open-source models of similar size, while even the smaller 6.7B model achieves performance comparable to much larger models from other families.
-
- 
-| Model | HumanEval (Python) | MBPP | DS-1000 |
-|---|---|---|---|
-| DeepSeek-Coder-Base-33B | Leading performance | Leading performance | Leading performance |
-| DeepSeek-Coder-Base-6.7B | Comparable to CodeLlama-34B | Comparable to CodeLlama-34B | Comparable to CodeLlama-34B |
-| DeepSeek-Coder-Instruct-33B | Outperforms GPT3.5-turbo | Comparable to GPT3.5-turbo | - |
-
- For detailed benchmark results, please refer to [Performance and Benchmarks](https://deepwiki.com/deepseek-ai/DeepSeek-Coder/2.2-performance-and-benchmarks).
-
- Sources: [README.md30-43](https://github.com/deepseek-ai/DeepSeek-Coder/blob/b7ba5659/README.md?plain=1#L30-L43)
-
- 
-## Model Deployment Options
-
- The DeepSeek Coder models support various deployment options to accommodate different hardware and performance requirements.
-
- 
-```
-
-```
-
- Sources: [README.md333-382](https://github.com/deepseek-ai/DeepSeek-Coder/blob/b7ba5659/README.md?plain=1#L333-L382) [README.md386-417](https://github.com/deepseek-ai/DeepSeek-Coder/blob/b7ba5659/README.md?plain=1#L386-L417)
-
- 
-## Model License and Availability
-
- All DeepSeek Coder models are available for download from Hugging Face and support commercial use. The models are subject to the Model License, while the code in the repository is licensed under the MIT License.
-
- Sources: [README.md423-426](https://github.com/deepseek-ai/DeepSeek-Coder/blob/b7ba5659/README.md?plain=1#L423-L426)
-
- 
-## Conclusion
-
- DeepSeek Coder models represent a family of code language models designed specifically for software development tasks. Available in different sizes and variants, they offer state-of-the-art performance for code completion, code insertion, repository-level understanding, and interactive assistance. The models support a wide range of programming languages and can be deployed through various methods depending on hardware availability and performance requirements.
-
- For more detailed information about these models, refer to:
-
- 
- - [Architecture](https://deepwiki.com/deepseek-ai/DeepSeek-Coder/2.1-architecture) - Detailed technical architecture information
- - [Performance and Benchmarks](https://deepwiki.com/deepseek-ai/DeepSeek-Coder/2.2-performance-and-benchmarks) - Comprehensive benchmark results
- - [Usage and Inference Methods](https://deepwiki.com/deepseek-ai/DeepSeek-Coder/3-usage-and-inference-methods) - How to use the models for different tasks

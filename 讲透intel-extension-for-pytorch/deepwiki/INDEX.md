@@ -1,0 +1,32 @@
+# DeepWiki 索引 — intel/intel-extension-for-pytorch
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-21
+> 结构 27 页 · 全文 401247 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+  - [2.1 Installation](2.1-installation.md)
+  - [2.2 Basic Usage](2.2-basic-usage.md)
+- [3 Core Optimization Features](3-core-optimization-features.md)
+  - [3.1 ipex.optimize Function](3.1-ipex.optimize-function.md)
+  - [3.2 JIT Fusion System](3.2-jit-fusion-system.md)
+  - [3.3 Weight Prepacking](3.3-weight-prepacking.md)
+  - [3.4 torch.compile Integration](3.4-torch.compile-integration.md)
+  - [3.5 CPU Autocast](3.5-cpu-autocast.md)
+- [4 Quantization System](4-quantization-system.md)
+  - [4.1 Weight-Only Quantization](4.1-weight-only-quantization.md)
+  - [4.2 Static Quantization](4.2-static-quantization.md)
+  - [4.3 DeepSpeed Integration](4.3-deepspeed-integration.md)
+- [5 LLM Optimization](5-llm-optimization.md)
+  - [5.1 LLM Optimization API](5.1-llm-optimization-api.md)
+  - [5.2 Attention Mechanism Optimizations](5.2-attention-mechanism-optimizations.md)
+  - [5.3 LLM Inference Pipeline](5.3-llm-inference-pipeline.md)
+- [6 CPU Operator Optimizations](6-cpu-operator-optimizations.md)
+  - [6.1 Linear and Convolution Operators](6.1-linear-and-convolution-operators.md)
+  - [6.2 Attention and Normalization Operators](6.2-attention-and-normalization-operators.md)
+- [7 Deployment and Performance Tuning](7-deployment-and-performance-tuning.md)
+  - [7.1 CPU Launcher System](7.1-cpu-launcher-system.md)
+  - [7.2 Hardware Feature Detection](7.2-hardware-feature-detection.md)
+- [8 Developer Guide](8-developer-guide.md)
+  - [8.1 Build System](8.1-build-system.md)
+  - [8.2 Testing Framework](8.2-testing-framework.md)

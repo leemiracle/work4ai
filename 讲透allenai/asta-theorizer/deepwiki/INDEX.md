@@ -1,0 +1,32 @@
+# DeepWiki 索引 — allenai/asta-theorizer
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 458517 字符
+
+- [1 Overview](1-overview.md)
+- [2 Getting Started](2-getting-started.md)
+- [3 Theory Generation](3-theory-generation.md)
+  - [3.1 Generation Modes: Literature-Supported vs Parametric](3.1-generation-modes-literature-supported-vs-parametric.md)
+  - [3.2 Generation Objectives: Accuracy vs Novelty](3.2-generation-objectives-accuracy-vs-novelty.md)
+  - [3.3 Paper Processing Pipeline](3.3-paper-processing-pipeline.md)
+  - [3.4 Web Interface and API](3.4-web-interface-and-api.md)
+- [4 Evaluation Systems](4-evaluation-systems.md)
+  - [4.1 LLM-as-a-Judge Evaluation](4.1-llm-as-a-judge-evaluation.md)
+  - [4.2 Predictive Accuracy Evaluation](4.2-predictive-accuracy-evaluation.md)
+  - [4.3 Qualified Novelty Evaluation](4.3-qualified-novelty-evaluation.md)
+  - [4.4 Self-assessed Belief and Surprisal Evaluation](4.4-self-assessed-belief-and-surprisal-evaluation.md)
+- [5 Data Storage and Management](5-data-storage-and-management.md)
+  - [5.1 TheoryStore Structure](5.1-theorystore-structure.md)
+  - [5.2 PaperStore Structure](5.2-paperstore-structure.md)
+  - [5.3 Export and Backup](5.3-export-and-backup.md)
+- [6 Example Theories and Data](6-example-theories-and-data.md)
+  - [6.1 Theory Examples: Memory Architectures for LLM Agents](6.1-theory-examples-memory-architectures-for-llm-agents.md)
+  - [6.2 Example Evaluation Results](6.2-example-evaluation-results.md)
+- [7 External Dependencies](7-external-dependencies.md)
+  - [7.1 LLM Provider Configuration](7.1-llm-provider-configuration.md)
+  - [7.2 Semantic Scholar and Asta Paper Finder](7.2-semantic-scholar-and-asta-paper-finder.md)
+- [8 Architecture and Design](8-architecture-and-design.md)
+  - [8.1 Configuration Space and Experimental Design](8.1-configuration-space-and-experimental-design.md)
+  - [8.2 Cost Optimization Strategies](8.2-cost-optimization-strategies.md)
+- [9 Development and TODO](9-development-and-todo.md)
+- [10 License and Legal](10-license-and-legal.md)

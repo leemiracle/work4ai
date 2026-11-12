@@ -1,0 +1,1271 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py",
+   "type": "file",
+   "name": "cudagraph.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py",
+   "summary": "DFlash 并行起草查询前向的 CudaGraphManager 子类：capture 时从零构建 dummy 输入与注意力元数据（含 DCP 本地序列长度），PIECEWISE 模式跳过注意力构建。",
+   "tags": [
+    "cudagraph",
+    "spec-decode",
+    "dflash",
+    "attention-metadata"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "type": "file",
+   "name": "speculator.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "summary": "DFlash 块级并行起草 speculator：先为上下文预计算 KV（context-KV precompute），再以 1+N（anchor+mask）查询布局一次并行前向产出全部草稿 token；Triton kernel prepare_dflash_inputs 组装输入，FULL CUDA graph 覆盖整个 draft step（图前向/重放两段编排）。",
+   "tags": [
+    "spec-decode",
+    "dflash",
+    "parallel-drafting",
+    "triton",
+    "cudagraph"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/dflash/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dflash/utils.py",
+   "summary": "DFlash 草稿模型加载器：按草稿注意力需求（非因果层、专用 backend、KV dtype）派生 draft VllmConfig，复用 EAGLE 的 embed/lm_head 共享工具加载权重。",
+   "tags": [
+    "model-loading",
+    "dflash",
+    "weight-sharing"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "type": "file",
+   "name": "speculator.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "summary": "DFlash2 speculator：在 DFlash 并行骨架上加 top-K 候选树，Triton kernel 逐 slot 走候选链（gumbel 噪声 argmax 选路）并把实现的候选分数散射进 draft logits 缓存供概率化拒绝采样。",
+   "tags": [
+    "spec-decode",
+    "dflash2",
+    "candidate-tree",
+    "triton"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/dspark/speculator.py",
+   "type": "file",
+   "name": "speculator.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dspark/speculator.py",
+   "summary": "DSpark 半自回归并行起草 speculator：复用 DFlash 机制一次并行前向后，用轻量顺序 Markov 头逐 token 注入块内依赖；支持 anchor-as-first 与 1+N fill-in 两种布局、缩减词表散射、topk Markov 校正与 confidence head 自适应验证。",
+   "tags": [
+    "spec-decode",
+    "dspark",
+    "markov-head",
+    "parallel-drafting"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "summary": "DSpark 草稿模型加载与并行配置工具：解析 DeepSeek-V4 兼容注意力 backend、按 EPLB 支持度派生 draft ParallelConfig（PP=1、禁 elastic EP），加载后共享 target embed/lm_head。",
+   "tags": [
+    "model-loading",
+    "dspark",
+    "eplb",
+    "attention-backend"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "type": "file",
+   "name": "eagle3_utils.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "summary": "EAGLE3/DFlash/DSpark 辅助隐状态工具集：从 spec 配置解析 aux hidden state 层号（处理 eagle/dflash/dspark/target_layer_ids 多种语义差异），跨 PP 传播时预留 intermediate tensor 槽位并生成 relay key。",
+   "tags": [
+    "eagle3",
+    "aux-hidden-states",
+    "pipeline-parallel"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/eagle/speculator.py",
+   "type": "file",
+   "name": "speculator.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/eagle/speculator.py",
+   "summary": "EAGLE speculator 薄壳：继承 TargetDependentARSpeculator，仅提供 load_draft_model 委托 load_eagle_model 完成加载与权重共享。",
+   "tags": [
+    "spec-decode",
+    "eagle",
+    "adapter"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py:DFlashCudaGraphManager",
+   "type": "class",
+   "name": "DFlashCudaGraphManager",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py",
+   "summary": "DFlash 查询前向的 CUDA graph 管理器：capture 时从零构建 dummy 批与注意力元数据，把 prepare_forward 一起录进图。",
+   "tags": [
+    "cudagraph",
+    "dflash",
+    "capture"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    75,
+    131
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py:DFlashSpeculator",
+   "type": "class",
+   "name": "DFlashSpeculator",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "summary": "DFlash 并行起草 speculator 主体：context-KV 预计算、1+N 查询布局并行前向、FULL graph 图前向/重放两段编排与逐 KV 组 context slot 管理。",
+   "tags": [
+    "speculator",
+    "dflash",
+    "parallel-drafting"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    38,
+    638
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py:CandidateSampler",
+   "type": "class",
+   "name": "CandidateSampler",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "summary": "DFlash2/LiLiCorr 共享的候选链采样器：Triton kernel 走 top-K 候选树选路，并把实现分数缓存进 draft logits。",
+   "tags": [
+    "candidate-tree",
+    "sampling",
+    "triton"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    119,
+    204
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py:DFlash2Speculator",
+   "type": "class",
+   "name": "DFlash2Speculator",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "summary": "DFlash2 speculator：骨架前向产出 top-K 候选后由 CandidateSampler 选路，fp32/-inf draft logits 缓存让拒绝采样读到同一分布。",
+   "tags": [
+    "spec-decode",
+    "dflash2",
+    "candidates"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    207,
+    286
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/spec_decode/dspark/speculator.py:DSparkSpeculator",
+   "type": "class",
+   "name": "DSparkSpeculator",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dspark/speculator.py",
+   "summary": "DSpark speculator：并行骨架 + 顺序 Markov 头采样，支持缩减词表散射、top-k Markov 校正与 confidence head 自适应验证。",
+   "tags": [
+    "spec-decode",
+    "dspark",
+    "markov"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    40,
+    292
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/spec_decode/eagle/speculator.py:EagleSpeculator",
+   "type": "class",
+   "name": "EagleSpeculator",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/eagle/speculator.py",
+   "summary": "EAGLE speculator：仅委托 load_eagle_model 加载草稿头。",
+   "tags": [
+    "spec-decode",
+    "eagle",
+    "speculator"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    12,
+    18
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py:_prepare_dflash_inputs_to_capture",
+   "type": "function",
+   "name": "_prepare_dflash_inputs_to_capture",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py",
+   "summary": "为 CUDA graph 捕获构建 DFlash dummy 输入：dummy InputBatch/块表/slot 映射与注意力元数据（含 DCP 本地长度）。",
+   "tags": [
+    "cudagraph",
+    "dummy-inputs",
+    "dflash"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    25,
+    72
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py:_prepare_dflash_inputs_kernel",
+   "type": "function",
+   "name": "_prepare_dflash_inputs_kernel",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "summary": "Triton kernel 组装 DFlash/DSpark 查询输入：写 anchor/mask token、采样索引与位置、context KV 位置与逐组 slot 映射。",
+   "tags": [
+    "triton",
+    "input-preparation",
+    "spec-decode"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    642,
+    843
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py:prepare_dflash_inputs",
+   "type": "function",
+   "name": "prepare_dflash_inputs",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "summary": "_prepare_dflash_inputs_kernel 的 Python 封装：切 buffer 视图并发射 kernel。",
+   "tags": [
+    "triton",
+    "wrapper",
+    "kernel-launcher"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    846,
+    931
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/dflash/utils.py:load_dflash_model",
+   "type": "function",
+   "name": "load_dflash_model",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dflash/utils.py",
+   "summary": "加载 DFlash 草稿模型：派生 draft 注意力/KV 配置并共享 target embed/lm_head。",
+   "tags": [
+    "model-loading",
+    "weight-sharing",
+    "draft-model"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    16,
+    75
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py:_selector_walk_kernel",
+   "type": "function",
+   "name": "_selector_walk_kernel",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "summary": "Triton kernel 沿 top-K 候选树逐 step 选路（gumbel 噪声 argmax），记录实现分数。",
+   "tags": [
+    "triton",
+    "candidate-tree",
+    "gumbel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    17,
+    76
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py:_cache_draft_logits_kernel",
+   "type": "function",
+   "name": "_cache_draft_logits_kernel",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "summary": "把实现候选分数散射进 batch-sharded draft logits 缓存（旧列置 -inf）。",
+   "tags": [
+    "triton",
+    "logits-cache",
+    "dflash2"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    80,
+    116
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/dspark/utils.py:_resolve_dspark_attention_backend",
+   "type": "function",
+   "name": "_resolve_dspark_attention_backend",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "summary": "DeepSeek-V4(.1) 草稿层复用 target 注意力 backend，其它架构返回 None。",
+   "tags": [
+    "attention-backend",
+    "deepseek",
+    "dspark"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    16,
+    33
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/dspark/utils.py:_get_dspark_parallel_config",
+   "type": "function",
+   "name": "_get_dspark_parallel_config",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "summary": "派生 DSpark 草稿并行配置：PP=1、按 EPLB 支持度决定冗余专家与 elastic EP 配置。",
+   "tags": [
+    "parallel-config",
+    "eplb",
+    "dspark"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    36,
+    69
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/dspark/utils.py:load_dspark_model",
+   "type": "function",
+   "name": "load_dspark_model",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "summary": "加载 DSpark 草稿模型：并行配置/backend/量化 config 派生 + embed/lm_head 共享。",
+   "tags": [
+    "model-loading",
+    "weight-sharing",
+    "draft-model"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    72,
+    151
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py:requires_aux_hidden_states",
+   "type": "function",
+   "name": "requires_aux_hidden_states",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "summary": "判断 spec 方法（eagle3/dflash/dspark/extract_hidden_states）是否需要 aux hidden states。",
+   "tags": [
+    "eagle3",
+    "config",
+    "aux-hidden-states"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    15,
+    22
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py:set_eagle3_aux_hidden_state_layers",
+   "type": "function",
+   "name": "set_eagle3_aux_hidden_state_layers",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "summary": "在 EAGLE3 模型上设置 aux 层（config 优先、模型默认兜底）并跨 PP 预留槽位。",
+   "tags": [
+    "eagle3",
+    "setup",
+    "aux-hidden-states"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    25,
+    42
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py:verify_supports_aux_hidden_states_over_pp",
+   "type": "function",
+   "name": "verify_supports_aux_hidden_states_over_pp",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "summary": "校验模型内层支持 PP 下的 aux hidden states 传播，否则抛错。",
+   "tags": [
+    "pipeline-parallel",
+    "validation",
+    "aux-hidden-states"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    54,
+    60
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py:aux_hidden_state_relay_keys",
+   "type": "function",
+   "name": "aux_hidden_state_relay_keys",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "summary": "为 PP 中间 rank 生成 aux hidden state 的 relay key 元组。",
+   "tags": [
+    "pipeline-parallel",
+    "relay",
+    "aux-hidden-states"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    63,
+    73
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py:reserve_aux_intermediate_tensor_slots",
+   "type": "function",
+   "name": "reserve_aux_intermediate_tensor_slots",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "summary": "包装 make_empty_intermediate_tensors，为非首 PP rank 预留 aux 隐状态槽位。",
+   "tags": [
+    "pipeline-parallel",
+    "tensors",
+    "aux-hidden-states"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    76,
+    107
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py:get_eagle3_aux_layers_from_config",
+   "type": "function",
+   "name": "get_eagle3_aux_layers_from_config",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "summary": "从多种 config 语义（eagle_config/dflash_config/dspark/target_layer_ids/layer_ids）解析 aux 层号并做 +1 语义换算。",
+   "tags": [
+    "eagle3",
+    "config-parsing",
+    "aux-hidden-states"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    110,
+    147
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py",
+   "target": "file:vllm/v1/worker/gpu/attn_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py",
+   "target": "file:vllm/v1/worker/gpu/block_table.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py",
+   "target": "file:vllm/v1/worker/gpu/cp_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py",
+   "target": "file:vllm/v1/worker/gpu/cudagraph_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py",
+   "target": "file:vllm/v1/worker/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/attn_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/block_table.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/cp_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/dp_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/model_states/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/dflash/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "file:vllm/v1/worker/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/utils.py",
+   "target": "file:vllm/compilation/backends.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/utils.py",
+   "target": "file:vllm/model_executor/model_loader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/utils.py",
+   "target": "file:vllm/model_executor/model_loader/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/utils.py",
+   "target": "file:vllm/model_executor/models/qwen3_dflash.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/utils.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/utils.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/sample/batch_shard.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/speculator.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/speculator.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/speculator.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/sample/gumbel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "target": "file:vllm/compilation/backends.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "target": "file:vllm/model_executor/model_loader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "target": "file:vllm/model_executor/model_loader/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "target": "file:vllm/model_executor/models/qwen3_dflash.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "target": "file:vllm/models/deepseek_v4/common/eplb_util.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/eagle/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/target_dependent_ar/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py:DFlashCudaGraphManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py:_prepare_dflash_inputs_to_capture",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py:DFlashSpeculator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py:_prepare_dflash_inputs_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py:prepare_dflash_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py:CandidateSampler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py:DFlash2Speculator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py:_selector_walk_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py:_cache_draft_logits_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/dspark/speculator.py:DSparkSpeculator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/eagle/speculator.py:EagleSpeculator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/dflash/utils.py:load_dflash_model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/dspark/utils.py:_resolve_dspark_attention_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/dspark/utils.py:_get_dspark_parallel_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/dspark/utils.py:load_dspark_model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py:requires_aux_hidden_states",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py:set_eagle3_aux_hidden_state_layers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py:verify_supports_aux_hidden_states_over_pp",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py:aux_hidden_state_relay_keys",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py:reserve_aux_intermediate_tensor_slots",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py:get_eagle3_aux_layers_from_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py:DFlashCudaGraphManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py:DFlashSpeculator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py:prepare_dflash_inputs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py:CandidateSampler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py:DFlash2Speculator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/dspark/speculator.py:DSparkSpeculator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/eagle/speculator.py:EagleSpeculator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dflash/utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/dflash/utils.py:load_dflash_model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/dspark/utils.py:load_dspark_model",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py:requires_aux_hidden_states",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py:set_eagle3_aux_hidden_state_layers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py:verify_supports_aux_hidden_states_over_pp",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py:aux_hidden_state_relay_keys",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py:reserve_aux_intermediate_tensor_slots",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/eagle3_utils.py:get_eagle3_aux_layers_from_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py:DFlashSpeculator",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/speculator.py:DraftModelSpeculator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py:DFlash2Speculator",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py:DFlashSpeculator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/dspark/speculator.py:DSparkSpeculator",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py:DFlashSpeculator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/eagle/speculator.py:EagleSpeculator",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/target_dependent_ar/speculator.py:TargetDependentARSpeculator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/dflash/cudagraph.py:DFlashCudaGraphManager",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/../../gpu/cudagraph_utils.py:CudaGraphManager",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/eagle/speculator.py:EagleSpeculator",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/utils.py:load_eagle_model",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py:DFlashSpeculator",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/dflash/utils.py:load_dflash_model",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/dspark/speculator.py:DSparkSpeculator",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/dspark/utils.py:load_dspark_model",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/v1/worker/gpu/spec_decode/dflash/utils.py:load_dflash_model",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/utils.py:maybe_share_target_embed",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/v1/worker/gpu/spec_decode/dflash/utils.py:load_dflash_model",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/utils.py:_should_share",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/v1/worker/gpu/spec_decode/dspark/utils.py:load_dspark_model",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/utils.py:maybe_share_target_embed",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/v1/worker/gpu/spec_decode/dspark/utils.py:load_dspark_model",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/eagle/utils.py:get_target_lm_head",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py:DFlash2Speculator",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/dflash2/speculator.py:CandidateSampler",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

@@ -1,0 +1,33 @@
+# DeepWiki 索引 — allenai/OLMo
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 477172 字符
+
+- [1 Overview](1-overview.md)
+- [2 Model Architecture](2-model-architecture.md)
+  - [2.1 Configuration System](2.1-configuration-system.md)
+  - [2.2 Model Variants and Scaling](2.2-model-variants-and-scaling.md)
+- [3 Training Pipeline](3-training-pipeline.md)
+  - [3.1 Data Processing](3.1-data-processing.md)
+  - [3.2 Optimization](3.2-optimization.md)
+  - [3.3 Distributed Training](3.3-distributed-training.md)
+- [4 Checkpoint Management](4-checkpoint-management.md)
+  - [4.1 Checkpoint Formats and Sharding](4.1-checkpoint-formats-and-sharding.md)
+  - [4.2 Storage Management](4.2-storage-management.md)
+  - [4.3 Hugging Face Integration](4.3-hugging-face-integration.md)
+- [5 Evaluation System](5-evaluation-system.md)
+  - [5.1 Inline Evaluation](5.1-inline-evaluation.md)
+  - [5.2 Downstream Tasks](5.2-downstream-tasks.md)
+  - [5.3 External Evaluation (Catwalk)](5.3-external-evaluation-catwalk.md)
+- [6 Deployment and Inference](6-deployment-and-inference.md)
+- [7 Training Infrastructure](7-training-infrastructure.md)
+  - [7.1 Beaker Platform](7.1-beaker-platform.md)
+  - [7.2 LUMI Supercomputer](7.2-lumi-supercomputer.md)
+  - [7.3 Local Training](7.3-local-training.md)
+- [8 Development and CI/CD](8-development-and-ci-cd.md)
+  - [8.1 Development Setup](8.1-development-setup.md)
+  - [8.2 Testing](8.2-testing.md)
+  - [8.3 CI/CD Pipeline](8.3-ci-cd-pipeline.md)
+- [9 Tools and Utilities](9-tools-and-utilities.md)
+  - [9.1 Configuration Generation (ladder.py)](9.1-configuration-generation-ladder.py.md)
+  - [9.2 Storage Management Tools](9.2-storage-management-tools.md)

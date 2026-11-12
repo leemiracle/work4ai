@@ -1,0 +1,229 @@
+# sandbox-server
+
+The in-sandbox agent powering `hf sandbox` / `huggingface_hub.Sandbox` — isolated cloud
+machines built on [Hugging Face Jobs](https://huggingface.co/docs/huggingface_hub/guides/jobs).
+
+A single static binary (~671KB, x86_64 musl, zero runtime dependencies) that runs in **any**
+Docker image with `/bin/sh` — no Python, pip, or framework required. The `Sandbox` client
+injects it at job startup and talks to it through the Jobs proxy
+(`https://<job_id>--<port>.hf.jobs`).
+
+## Two modes (one binary)
+
+The same binary serves both:
+
+- **Dedicated mode** — one job *is* one sandbox. Operations hit `/v1/exec`, `/v1/processes`,
+  `/v1/files/*` directly. Full VM isolation; used for GPU / untrusted workloads.
+- **Host mode** — one job hosts *many* lightweight sandboxes (`huggingface_hub.SandboxPool`).
+  A sandbox is a dedicated uid + a private `0700` home + a per-sandbox **Landlock LSM**
+  ruleset, created server-side in ~1ms. Operations are scoped under `/v1/sandboxes/{id}/*`
+  and run as the sandbox uid, confined to its home. This packs dozens of isolated CPU
+  sandboxes into one VM with sub-second per-sandbox cold start.
+
+Host mode needs root + `CAP_SETUID/SETGID/KILL` (the Docker default on HF Jobs) and refuses to
+start if Landlock cannot deliver the documented guarantees (see `SBX_MIN_LANDLOCK_ABI`); pass
+`--allow-unconfined` to accept uid-only isolation instead. See `src/landlock.rs` for the
+confinement model (FS → own home + RO system dirs and selected `/dev` nodes; no TCP bind;
+ABI-6 abstract-socket scoping).
+
+## What it does
+
+- **Command execution** with live output streaming (NDJSON over chunked HTTP/1.1, flushed
+  per event — the HTTP layer is hand-rolled because mainstream minimal frameworks buffer
+  chunked responses until completion).
+- **Background processes**: start detached, list, and terminate (process-group kill) via a
+  small `/v1/processes` registry with server-assigned opaque ids.
+- **File API**: raw-body read/write (no base64), `offset`/`length` params for parallel
+  ranged transfers, list/stat/delete/mkdir.
+- **Keepalive pings** every 15s on all streams so proxies never kill idle connections.
+- **Idle watchdog**: exits when no request arrives and no process runs for
+  `SBX_IDLE_TIMEOUT` seconds — abandoned sandboxes stop billing.
+
+## HTTP API
+
+```
+GET  /health   no auth → {"status","protocol"}   with a valid token → adds version,
+                       uptime_ms, sandboxes, mode, auth, landlock{abi,features}
+POST /v1/exec        {cmd, shell?, env?, cwd?, timeout?, stdin?, background?, tag?}
+                     foreground → NDJSON stream: start / stdout / stderr / ping / exit
+                     background → {"id", "pid", "tag"}
+POST /v1/processes   {cmd, shell?, env?, cwd?, tag?}   → {"id", "pid", "cmd", "tag"}  (background)
+GET  /v1/processes                        → [{"id","pid","cmd","tag","running","exit_code",...}]
+DELETE /v1/processes/{id}                 → {"id","killed"}  (terminate + forget; idempotent.
+                                             `id` is the opaque id, never the OS pid)
+GET  /v1/files/read?path=&offset=&length= → raw bytes
+PUT  /v1/files/write?path=&mode=&offset=&truncate_to=  → raw body to file (parents created;
+                                             truncate_to sets the final size for ranged writes)
+GET  /v1/files/list?path=&limit=&after=   → {"entries","truncated","next"}  (paginated)
+GET  /v1/files/stat?path=
+DELETE /v1/files/delete?path=&recursive=
+POST /v1/files/mkdir?path=
+
+# host mode (many sandboxes per job)
+POST   /v1/sandboxes        {count?, env?, max_procs?, max_mem_mb?}  → {"sandboxes":[{id,token,uid,home}]}
+GET    /v1/sandboxes                                                 → live sandbox list
+DELETE /v1/sandboxes                                                 → delete all
+DELETE /v1/sandboxes/{id}                                            → delete one (frees the uid)
+GET    /v1/sandboxes/{id}/token                                      → recover its capability token
+# every dedicated route above also exists scoped to a sandbox, e.g.:
+POST   /v1/sandboxes/{id}/exec        ...   GET /v1/sandboxes/{id}/processes
+GET    /v1/sandboxes/{id}/files/read  ...   PUT /v1/sandboxes/{id}/files/write
+```
+
+`cmd` is either a string (run via `/bin/sh -c`) or an argv array. Pass `shell` (bool) to make
+that choice explicit instead of inferring it from the type: `shell=true` requires a string,
+`shell=false` requires an argv array. In host mode, file paths
+are rooted at the sandbox's private home (a leading `/` is taken relative to it) and created
+files are `chown`ed to the sandbox uid. The privileged file API resolves every component
+relative to an open home descriptor with `O_NOFOLLOW`, so it never follows a symlink out of
+the home, and it assigns ownership through the resulting descriptor rather than by path.
+
+## Configuration (env vars)
+
+| var | default | meaning |
+|---|---|---|
+| `SBX_PORT` | `8000` | listen port (the client uses 49983 to keep common dev ports free) |
+| `SBX_TOKEN` | **required** | all endpoints except `/health` require this value in the `X-Sandbox-Token` header (constant-time compare); removed from the env before any child process spawns. The server refuses to start without it, unless launched with `--allow-no-auth` (local development only — it is an argv flag, not an env var, so a Job's user-supplied env can never set it) |
+| `SBX_IDLE_TIMEOUT` | unset | seconds of inactivity (no authed request, no running process) before clean exit |
+| `SBX_CAPACITY` | `64` | host mode: max concurrent sandboxes. Refuses to start if unparseable (it used to fall back to unlimited) |
+| `SBX_MAX_CONNECTIONS` | `512` | max concurrent connections; past it the server answers 503 without spawning a worker |
+| `SBX_MIN_LANDLOCK_ABI` | `6` | host mode: minimum Landlock ABI to start with. 4 adds TCP-bind denial, 6 adds abstract-socket scoping — both are part of the documented model, so the default requires them. Lower it to accept a reduced set (`/health` reports what is in force) |
+
+## Security model
+
+The dedicated routes (`/v1/exec`, `/v1/files/*`, `/v1/processes`, `/v1/proxy`) act with the
+server's own privileges — root, unconfined, in the host's environment — so they exist **only**
+in dedicated mode, where the job *is* the sandbox. Host mode serves only `/v1/sandboxes*`,
+whose exec handlers drop to the sandbox uid and apply Landlock. File and proxy handlers
+remain privileged and use descriptor-relative paths. The two surfaces are
+mutually exclusive; the wrong one for the current mode answers 404.
+
+Two layers when running on HF Jobs:
+
+1. The Jobs proxy requires an HF token with read access to the job's namespace.
+2. `SBX_TOKEN` is delivered via encrypted job secrets; the client derives it as
+   `HMAC-SHA256(user_hf_token, nonce)` with the nonce stored in job labels — so
+   reconnection is stateless and the HF token itself never enters the sandbox.
+
+In dedicated mode the job *is* the sandbox, so `SBX_TOKEN` is already scoped to it.
+
+In host mode there are two kinds of credential:
+
+- **`SBX_TOKEN` is the host management token.** It creates, lists and deletes sandboxes, and
+  recovers their tokens. It is held by whoever runs the pool.
+- **Each sandbox gets its own random 256-bit capability token**, returned by `POST
+  /v1/sandboxes` and recoverable with `GET /v1/sandboxes/{id}/token`. It authorizes that
+  sandbox's routes and nothing else — not a sibling, not the pool. This is the credential to
+  hand to whoever operates a single sandbox, including into a browser or WebSocket client via
+  the port proxy.
+
+Per-sandbox routes, including proxies, require that sandbox's capability token. The host
+management token is never accepted there. The former SBX_COMPAT_HOST_TOKEN setting has been
+removed; setting it cannot restore the fallback. This is a breaking authentication change
+(protocol 3): upgrade clients to use scoped tokens before deploying this server. Dedicated
+sandboxes and host management/token recovery retain their existing credentials.
+
+### Known limitations
+
+Host mode packs mutually-visible tenants behind one privileged control plane. The following
+are known gaps rather than design intent, and are being worked through — treat host mode as a
+boundary between workloads inside **one** trust boundary, and use dedicated mode (one job per
+sandbox, a real VM) for mutually distrusting code.
+
+- **No aggregate resource quotas.** Per-process rlimits do not partition CPU shares,
+  total memory, disk space, inodes, or network capacity between sandboxes. Directory
+  pagination limits the response but still materializes all entries on the server.
+  API file writes have no disk quota; dedicated-mode writes to special files can block.
+- **Shared channels remain:** outbound TCP, loopback access to the control server, UDP,
+  kernel IPC, and readable process-list metadata. GPU isolation is untested in host mode.
+- **The host token remains a management capability.** It can recover every sandbox token;
+  keep it private even though it cannot be used directly on scoped routes.
+- **A hijacked proxy connection is authenticated and routed only once**, then bytes are
+  spliced until EOF. A second HTTP request written on that connection reaches the first
+  backend without new routing, depending on the upstream proxy's behaviour.
+- **A `setsid` descendant outlives a per-process `kill` or timeout** (it leaves the signalled process
+  group). Deleting the sandbox does terminate it — the uid sweep catches what a group kill
+  misses.
+
+## Build
+
+```bash
+rustup target add x86_64-unknown-linux-musl
+cargo build --release --target x86_64-unknown-linux-musl
+# → target/x86_64-unknown-linux-musl/release/sbx-server (static-pie, stripped)
+```
+
+The binary is distributed via a Hugging Face bucket and downloaded at job startup by a
+`/bin/sh` bootstrap (wget → curl → bucket-mount fallback chain), which verifies the download
+against a digest pinned in the client before making it executable.
+
+## Testing
+
+Three layers, split across two workflows so the check that gates a merge stays short.
+
+```bash
+cargo clippy --locked --all-targets -- -D warnings   # required
+cargo test --locked                                  # required
+
+# the target that actually ships, not the default gnu one
+cargo build --locked --release --target x86_64-unknown-linux-musl
+cargo test  --locked --target x86_64-unknown-linux-musl
+```
+
+`scripts/*-regression.sh` are live suites against a running server: they assert the
+isolation properties end to end (route surfaces, token scope, the Landlock denials,
+symlink confused deputies, process supervision, resource bounds). They need **root** —
+they create per-sandbox uids — and a Landlock-capable kernel, so run them in a container:
+
+```bash
+docker run --rm -v "$PWD:/src" -w /src ubuntu:24.04 sh -c \
+  'apt-get update -qq && apt-get install -y -qq curl python3 python3-pip procps
+   rm -f /usr/lib/python3*/EXTERNALLY-MANAGED   # so `pip install --user` works, as on Jobs
+   for s in scripts/*-regression.sh; do sh "$s" || exit 1; done'
+```
+
+Each suite prints `skip` for an assertion its kernel's ABI cannot support, so read the
+reported ABI before trusting a green run: below 4 there is no TCP-bind denial and below 6
+no abstract-socket scoping, and a suite that skipped them proves less than one that did not.
+
+`fuzz/` holds `cargo fuzz` targets for the two pure functions that see untrusted bytes
+first — the HTTP request-head parser and the host-mode path resolver. Both assert the
+invariant, not just the absence of a crash.
+
+```bash
+cargo +nightly fuzz run request-head fuzz/corpus/request-head fuzz/seeds/request-head \
+  -- -max_total_time=60
+```
+
+`.github/workflows/ci.yml` runs the required checks; `assurance.yml` runs the musl build,
+the root suites and the fuzz targets on pushes to `main`, nightly, and on demand;
+`audit.yml` runs `cargo audit` weekly and on any lockfile change.
+
+## Releasing
+
+`.github/workflows/publish.yml` runs on a `v*` tag (or a `workflow_dispatch` naming an
+explicit ref) and publishes the built binary under its own sha256, plus a manifest, plus the
+`sbx-server` alias. Digest-pinned clients keep using their pinned binary; older clients that
+fetch the mutable alias consume the new binary on their next launch. Updating a pinned
+client is a two-repo operation:
+
+Before the first release, configure the GitHub `production` environment with required
+reviewers and restrict the HF Trusted Publisher to that environment. Naming an environment
+in the workflow does not configure an approval gate.
+
+1. Bump `version` in `Cargo.toml`, and `PROTOCOL` in `src/main.rs` if the wire contract
+   changed in a way a client can be wrong about.
+2. Tag and push; the workflow prints the digest in its run summary.
+3. Update `SANDBOX_SERVER_SHA256` (and `SANDBOX_SERVER_VERSION`) in `huggingface_hub`'s
+   `_sandbox.py`, and its expected protocol if it moved. Until that ships, every job keeps
+   fetching and verifying the previously pinned digest.
+
+Pool hosts keep running the binary they downloaded at boot for up to 24h, so a client and a
+server from different releases *will* meet in production. That is what the `protocol` field in
+`/health` is for: the client refuses the host instead of discovering the difference on some
+later route.
+
+## Status
+
+Working prototype. See the `huggingface_hub` draft PR for the client, CLI, design notes and
+benchmarks (cold start ~6s, exec ~110ms p50, 340+ MiB/s parallel file transfer).

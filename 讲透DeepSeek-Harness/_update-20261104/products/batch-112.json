@@ -1,0 +1,36 @@
+{
+  "nodes": [
+    {
+      "id": "document:packages/identity/anonymous-user-id/README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "packages/identity/anonymous-user-id/README.md",
+      "summary": "dsh-anonymous-user-id 包文档：每个 harness home 一个随机 UUID（存于 $DSH_HOME/.anonymous-user-id，跨重启持久、删文件后重新铸造），供 telemetry 的 user.id 资源属性、feedback 回执与 DeepSeek 请求头 x-deepseek-harness-user-id 三方关联同一安装；不含任何机器或账号数据。",
+      "tags": ["documentation", "package-library", "anonymous-identity", "telemetry", "correlation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:packages/identity/anonymous-user-id/package.json",
+      "type": "config",
+      "name": "package.json",
+      "filePath": "packages/identity/anonymous-user-id/package.json",
+      "summary": "@deepseek-ai/dsh-anonymous-user-id 包清单：零运行时第三方依赖，仅 peer 依赖 dsh-brand 与 dsh-home-paths（home 目录定位）及 cordis；导出面只有包根与 ./src/*。",
+      "tags": ["configuration", "package-manifest", "dependencies", "leaf-package"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:packages/identity/anonymous-user-id/tsconfig.json",
+      "type": "config",
+      "name": "tsconfig.json",
+      "filePath": "packages/identity/anonymous-user-id/tsconfig.json",
+      "summary": "anonymous-user-id 的 TypeScript 项目引用配置：src→lib/types 输出，仅引用 util/brand 与 util/home-paths 两个上游编译目标。",
+      "tags": ["configuration", "typescript", "project-references", "build-system"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {"source": "document:packages/identity/anonymous-user-id/README.md", "target": "file:packages/identity/anonymous-user-id/src/index.ts", "type": "documents", "direction": "forward", "weight": 0.5},
+    {"source": "config:packages/identity/anonymous-user-id/package.json", "target": "file:packages/identity/anonymous-user-id/src/index.ts", "type": "configures", "direction": "forward", "weight": 0.6},
+    {"source": "config:packages/identity/anonymous-user-id/tsconfig.json", "target": "file:packages/identity/anonymous-user-id/src/index.ts", "type": "configures", "direction": "forward", "weight": 0.6}
+  ]
+}

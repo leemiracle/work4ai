@@ -1,18 +1,12 @@
-# DeepWiki 抓取覆盖率检查
+# Coverage Check
 
-- _links.txt 链接总数: 15
-- 实际 md 文件数: 15
-- 缺失页: 0
-- 空页(<= 500B): 0
+- repo: deepseek-ai/DeepSeek-VL2
+- fetched: 2026-10-30
+- 结构清单页数: 15
+- 落盘页数: 15
 
-## 结论
-**100% 覆盖**：全部链接均有对应 Markdown 文件且非空。
+- 覆盖: 15/15 (100%)
 
-## 抽查 3 页
-
-| 页面 | 大小(B) | 状态 | 检查 |
-|---|---|---|---|
-| 2-model-architecture | 6634 | 正常 | PASS |
-| 7-development-guide | 7050 | 正常 | PASS |
-| 4-inference-guide | 7881 | 正常 | PASS |
-
+## 全层级对账终判（dw_reconcile_dir.py, 2026-10-30）
+- 结构全层级 15 页 vs 落盘 15 页（结构外/三级页 extra 0）
+- 终判: TRUE_100

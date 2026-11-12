@@ -1,0 +1,30 @@
+# DeepWiki 索引 — NVIDIA/RULER
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 357703 字符
+
+- [1 Overview](1-overview.md)
+- [2 System Architecture](2-system-architecture.md)
+  - [2.1 Pipeline Overview](2.1-pipeline-overview.md)
+  - [2.2 Data Generation Pipeline](2.2-data-generation-pipeline.md)
+  - [2.3 Inference and Serving](2.3-inference-and-serving.md)
+  - [2.4 Evaluation System](2.4-evaluation-system.md)
+- [3 Benchmark Tasks](3-benchmark-tasks.md)
+  - [3.1 Task Design Principles](3.1-task-design-principles.md)
+  - [3.2 Needle-in-a-Haystack (NIAH)](3.2-needle-in-a-haystack-niah.md)
+  - [3.3 Variable Tracking](3.3-variable-tracking.md)
+  - [3.4 Common Words Extraction](3.4-common-words-extraction.md)
+  - [3.5 Frequent Words Extraction](3.5-frequent-words-extraction.md)
+  - [3.6 Question Answering](3.6-question-answering.md)
+- [4 Configuration System](4-configuration-system.md)
+  - [4.1 Model Configuration](4.1-model-configuration.md)
+  - [4.2 Task Configuration](4.2-task-configuration.md)
+  - [4.3 Templates and Tokenizers](4.3-templates-and-tokenizers.md)
+- [5 Running RULER](5-running-ruler.md)
+  - [5.1 Docker Environment](5.1-docker-environment.md)
+  - [5.2 Running Benchmarks](5.2-running-benchmarks.md)
+  - [5.3 Understanding Results](5.3-understanding-results.md)
+- [6 Extending RULER](6-extending-ruler.md)
+  - [6.1 Adding Custom Tasks](6.1-adding-custom-tasks.md)
+  - [6.2 Adding Custom Models](6.2-adding-custom-models.md)
+  - [6.3 Utility Modules](6.3-utility-modules.md)

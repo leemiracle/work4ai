@@ -1,0 +1,95 @@
+# DeepWiki · Tencent/WeKnora 全量索引（90/90 页 · 100% 覆盖）
+
+> 抓取日期 2026-09-20 · 源 https://deepwiki.com/Tencent/WeKnora · 对应仓库 commit 5c5d46d9 (v0.8.0)
+> 覆盖率检查：links=90 files=90 missing=0 empty=0（100%）
+
+- **1-weknora-overview**
+- **1.1-key-features-and-capabilities**
+  - [1.2-system-components-overview](1.2-system-components-overview.md)
+- **2-getting-started**
+- **2.1-system-requirements-and-prerequisites**
+  - [2.2-installation-and-deployment](2.2-installation-and-deployment.md)
+  - [2.3-quick-start-guide](2.3-quick-start-guide.md)
+  - [2.4-system-initialization-and-configuration](2.4-system-initialization-and-configuration.md)
+- **3-system-architecture**
+- **3.1-service-architecture-and-container-orchestration**
+  - [3.2-rag-pipeline-architecture](3.2-rag-pipeline-architecture.md)
+  - [3.3-agent-system-and-react-engine](3.3-agent-system-and-react-engine.md)
+  - [3.4-storage-and-database-layer](3.4-storage-and-database-layer.md)
+  - [3.5-security-and-multi-tenancy](3.5-security-and-multi-tenancy.md)
+  - [3.6-dependency-injection-and-service-layer](3.6-dependency-injection-and-service-layer.md)
+  - [3.7-event-driven-architecture-and-chat-pipeline](3.7-event-driven-architecture-and-chat-pipeline.md)
+- **4-knowledge-base-management**
+- **4.1-knowledge-base-creation-and-configuration**
+  - [4.2-document-upload-and-processing](4.2-document-upload-and-processing.md)
+  - [4.3-faq-management](4.3-faq-management.md)
+  - [4.4-chunk-management-and-vector-indexing](4.4-chunk-management-and-vector-indexing.md)
+  - [4.5-tag-management-and-organization](4.5-tag-management-and-organization.md)
+- **5-chat-and-query-system**
+- **5.1-chat-interface-and-user-experience**
+  - [5.2-knowledge-qa-mode](5.2-knowledge-qa-mode.md)
+  - [5.3-agent-mode-and-tool-integration](5.3-agent-mode-and-tool-integration.md)
+  - [5.4-session-management-and-context](5.4-session-management-and-context.md)
+  - [5.5-mcp-tool-integration](5.5-mcp-tool-integration.md)
+  - [5.6-web-search-integration](5.6-web-search-integration.md)
+  - [5.7-embedded-chat-channels](5.7-embedded-chat-channels.md)
+- **6-api-reference**
+- **6.1-authentication-and-authorization**
+  - [6.2-knowledge-base-management-apis](6.2-knowledge-base-management-apis.md)
+  - [6.3-knowledge-and-document-apis](6.3-knowledge-and-document-apis.md)
+  - [6.4-chat-and-query-apis](6.4-chat-and-query-apis.md)
+  - [6.5-model-and-configuration-apis](6.5-model-and-configuration-apis.md)
+  - [6.6-faq-and-chunk-apis](6.6-faq-and-chunk-apis.md)
+- **7-frontend-application**
+- **7.1-navigation-and-menu-system**
+  - [7.2-knowledge-base-interface](7.2-knowledge-base-interface.md)
+  - [7.3-chat-interface-and-agent-display](7.3-chat-interface-and-agent-display.md)
+  - [7.4-settings-and-configuration-interface](7.4-settings-and-configuration-interface.md)
+  - [7.5-state-management-and-api-integration](7.5-state-management-and-api-integration.md)
+  - [7.6-internationalization-system](7.6-internationalization-system.md)
+  - [7.7-frontend-security-and-markdown-sanitization](7.7-frontend-security-and-markdown-sanitization.md)
+- **8-configuration-reference**
+- **8.1-environment-variables**
+  - [8.2-agent-and-conversation-configuration](8.2-agent-and-conversation-configuration.md)
+  - [8.3-model-configuration-and-integration](8.3-model-configuration-and-integration.md)
+  - [8.4-document-processing-configuration](8.4-document-processing-configuration.md)
+  - [8.5-retrieval-engine-configuration](8.5-retrieval-engine-configuration.md)
+- **9-deployment-and-operations**
+- **9.1-docker-deployment**
+  - [9.2-production-setup-and-best-practices](9.2-production-setup-and-best-practices.md)
+  - [9.3-database-migrations-and-maintenance](9.3-database-migrations-and-maintenance.md)
+  - [9.4-monitoring-and-troubleshooting](9.4-monitoring-and-troubleshooting.md)
+- **10-development-guide**
+- **10.1-development-environment-setup**
+  - [10.2-build-system-and-cicd](10.2-build-system-and-cicd.md)
+  - [10.3-code-organization-and-patterns](10.3-code-organization-and-patterns.md)
+  - [10.4-testing-and-quality-assurance](10.4-testing-and-quality-assurance.md)
+  - [10.5-cli-tool](10.5-cli-tool.md)
+  - [10.5.1-cli-authentication-and-profiles](10.5.1-cli-authentication-and-profiles.md)
+  - [10.5.2-cli-document-kb-and-chat-commands](10.5.2-cli-document-kb-and-chat-commands.md)
+  - [10.6-client-sdk-and-mcp-server](10.6-client-sdk-and-mcp-server.md)
+  - [10.7-documentation-site-(website-docs)](10.7-documentation-site-(website-docs).md)
+- **11-advanced-topics**
+- **11.1-knowledge-graph-and-graphrag**
+  - [11.2-async-task-processing-with-asynq](11.2-async-task-processing-with-asynq.md)
+  - [11.3-event-driven-architecture-and-streaming](11.3-event-driven-architecture-and-streaming.md)
+  - [11.4-mcp-server-integration](11.4-mcp-server-integration.md)
+  - [11.5-multimodal-document-processing](11.5-multimodal-document-processing.md)
+  - [11.6-hybrid-retrieval-strategies](11.6-hybrid-retrieval-strategies.md)
+  - [11.7-wiki-mode-and-auto-wiki-generation](11.7-wiki-mode-and-auto-wiki-generation.md)
+  - [11.8-desktop-application-(wails)](11.8-desktop-application-(wails).md)
+  - [11.9-skills-and-sandbox-execution](11.9-skills-and-sandbox-execution.md)
+  - [11.9.1-sandbox-runtimes-and-configuration](11.9.1-sandbox-runtimes-and-configuration.md)
+  - [11.9.2-tenant-skill-catalog-and-installation](11.9.2-tenant-skill-catalog-and-installation.md)
+  - [11.9.3-sandbox-tools-and-artifacts](11.9.3-sandbox-tools-and-artifacts.md)
+  - [11.10-long-term-memory-and-browser-skill](11.10-long-term-memory-and-browser-skill.md)
+- **12-organization-and-collaboration**
+- **12.1-organization-management**
+  - [12.2-resource-sharing](12.2-resource-sharing.md)
+- **13-instant-messaging-integrations**
+- **13.1-im-integration-architecture**
+  - [13.2-platform-specific-adapters](13.2-platform-specific-adapters.md)
+- **14-data-sources-and-connectors**
+- **14.1-data-source-configuration**
+  - [14.2-connector-reference](14.2-connector-reference.md)
+- **15-glossary**

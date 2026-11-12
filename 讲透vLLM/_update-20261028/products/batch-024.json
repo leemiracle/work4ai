@@ -1,0 +1,3220 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/distributed/device_communicators/aiter_custom_all_reduce.py",
+   "type": "file",
+   "name": "aiter_custom_all_reduce.py",
+   "filePath": "vllm/distributed/device_communicators/aiter_custom_all_reduce.py",
+   "summary": "vLLM 自有的 AITER CustomAllreduce 包装：CudaCommunicator 持有为 aiter_ar_comm（VLLM_ROCM_USE_AITER_CUSTOM_AR），让 plain allreduce 与 fused allreduce+RMSNorm 走同一句柄。",
+   "tags": [
+    "rocm",
+    "allreduce",
+    "aiter"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/distributed/device_communicators/all2all.py",
+   "type": "file",
+   "name": "all2all.py",
+   "filePath": "vllm/distributed/device_communicators/all2all.py",
+   "summary": "EP all2all 管理器大全（1200 行、11 个实现）：passthrough/AgRs(all-gather+reduce-scatter)/DeepEP HT·LL·V2/NIXL(弹性 EP)/FlashInfer NVLink 单双侧/Mori/MoonEP（负载完全均衡规划），全部实现 All2AllManagerBase。",
+   "tags": [
+    "all2all",
+    "expert-parallel",
+    "moe"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "type": "file",
+   "name": "all_reduce_utils.py",
+   "filePath": "vllm/distributed/device_communicators/all_reduce_utils.py",
+   "summary": "allreduce 决策与 P2P 探测工具：NCCL symm mem 启用判定（H100/GB200 基准口径）、生产者/消费者回调与真实 P2P 能力探测（绕过驱动误报）。",
+   "tags": [
+    "allreduce",
+    "p2p",
+    "heuristics"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/device_communicators/base_device_communicator.py",
+   "type": "file",
+   "name": "base_device_communicator.py",
+   "filePath": "vllm/distributed/device_communicators/base_device_communicator.py",
+   "summary": "设备通信器基座：DeviceCommunicatorBase（23 个方法：reduce/all_gather/broadcast/all2all 分派与组管理）、All2AllManagerBase（all2all 公共协议）与组级 Cache。",
+   "tags": [
+    "base",
+    "communicator",
+    "abc"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/device_communicators/cpu_communicator.py",
+   "type": "file",
+   "name": "cpu_communicator.py",
+   "filePath": "vllm/distributed/device_communicators/cpu_communicator.py",
+   "summary": "CPU 设备通信器：X86/ARM/POWERPC/S390X 上 TP/PP 组可换用 _CPUSHMDistributed（torch C 扩展 SHM 后端），all2all 走 AgRs。",
+   "tags": [
+    "cpu",
+    "communicator",
+    "shm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "type": "file",
+   "name": "cuda_communicator.py",
+   "filePath": "vllm/distributed/device_communicators/cuda_communicator.py",
+   "summary": "CUDA 设备通信器（1090 行）：组合 PyNccl/torch symm_mem/FlashInfer/CustomAllreduce/QuickAllReduce/AiterAR 六路 allreduce 后端（TP 专属、batch-invariant 约束）与 11 种 all2all 管理器的按配置选择。",
+   "tags": [
+    "cuda",
+    "communicator",
+    "allreduce",
+    "all2all"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/device_communicators/cuda_wrapper.py",
+   "type": "file",
+   "name": "cuda_wrapper.py",
+   "filePath": "vllm/distributed/device_communicators/cuda_wrapper.py",
+   "summary": "cudart 纯 Python ctypes 包装（免编译 so）：CudaRTLibrary 暴露 cudaHostRegister/Unregister、IPC 句柄与驱动 API 查找。",
+   "tags": [
+    "cudart",
+    "ctypes",
+    "wrapper"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/distributed/device_communicators/custom_all_reduce.py",
+   "type": "file",
+   "name": "custom_all_reduce.py",
+   "filePath": "vllm/distributed/device_communicators/custom_all_reduce.py",
+   "summary": "vLLM 经典自研 allreduce（C++ kernel 经 _custom_ops）：IPC barrier+三阶段协议，支持 2/4/6/8/16 卡、MNNVL 跨节点 multicast（Blackwell）与 all-gather/reduce-scatter 变体。",
+   "tags": [
+    "allreduce",
+    "custom-kernel",
+    "mnnvl"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "type": "file",
+   "name": "flashinfer_all_reduce.py",
+   "filePath": "vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "summary": "FlashInfer/TRT-LLM allreduce 集成：工作区按 group 惰性创建与 checkpoint 保存/恢复，quant 与非 quant 两类工作区，backend 按 MNNVL/单机自动解析。",
+   "tags": [
+    "flashinfer",
+    "allreduce",
+    "workspace"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/device_communicators/mnnvl_compat.py",
+   "type": "file",
+   "name": "mnnvl_compat.py",
+   "filePath": "vllm/distributed/device_communicators/mnnvl_compat.py",
+   "summary": "MNNVL 兼容层：继承 torch CommBackend 的 CustomCommunicator，桥接 vLLM group 语义到 symmetric memory communicator。",
+   "tags": [
+    "mnnvl",
+    "compatibility",
+    "symmetric-memory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/distributed/device_communicators/pynccl.py",
+   "type": "file",
+   "name": "pynccl.py",
+   "filePath": "vllm/distributed/device_communicators/pynccl.py",
+   "summary": "PyNcclCommunicator：NCCL 的 Python 封装（22 个方法），含 ROCm 延迟 warmup（避免与活引擎并建死锁）与 symmetric memory 算子注册。",
+   "tags": [
+    "nccl",
+    "communicator",
+    "symmetric-memory"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/device_communicators/pynccl_allocator.py",
+   "type": "file",
+   "name": "pynccl_allocator.py",
+   "filePath": "vllm/distributed/device_communicators/pynccl_allocator.py",
+   "summary": "NCCL symmetric memory 分配器：编译 nccl_mem_alloc/free 插件进 torch CUDAPluggableAllocator、窗口注册与 nccl_symm_mem_context 上下文（把 tensor 切入 symm mem pool）。",
+   "tags": [
+    "nccl",
+    "allocator",
+    "symmetric-memory"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "type": "file",
+   "name": "pynccl_wrapper.py",
+   "filePath": "vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "summary": "NCCL 库的 ctypes 加载器：NCCLLibrary 声明式导出全部所需 nccl 符号（含 symmetric memory 系）与 datatype/reduction 枚举。",
+   "tags": [
+    "nccl",
+    "ctypes",
+    "loader"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/device_communicators/quick_all_reduce.py",
+   "type": "file",
+   "name": "quick_all_reduce.py",
+   "filePath": "vllm/distributed/device_communicators/quick_all_reduce.py",
+   "summary": "QuickAllReduce：量化 allreduce（FP/INT8/6/4/3 按 world size 与 dtype 的尺寸阈值表选档），CUDA 与 ROCm MI300 可用。",
+   "tags": [
+    "allreduce",
+    "quantization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "type": "file",
+   "name": "shm_broadcast.py",
+   "filePath": "vllm/distributed/device_communicators/shm_broadcast.py",
+   "summary": "跨进程消息广播 MessageQueue（1160 行）：本地 reader 走 SHM 环形缓冲+SpinCondition，远端走 ZMQ XPUB/SUB；大 CPU tensor 经 PickleBuffer 带外或 ShmTensorArena 零拷贝。",
+   "tags": [
+    "shared-memory",
+    "broadcast",
+    "zmq"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/device_communicators/shm_object_storage.py",
+   "type": "file",
+   "name": "shm_object_storage.py",
+   "filePath": "vllm/distributed/device_communicators/shm_object_storage.py",
+   "summary": "单写多读 SHM 对象存储：SingleWriterShmRingBuffer 环形缓冲 + MsgpackSerde，提供 KV 式对象存储与自动内存管理（多模态特征跨进程传递）。",
+   "tags": [
+    "shared-memory",
+    "object-storage",
+    "msgpack"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/device_communicators/shm_tensor_arena.py",
+   "type": "file",
+   "name": "shm_tensor_arena.py",
+   "filePath": "vllm/distributed/device_communicators/shm_tensor_arena.py",
+   "summary": "大 CPU tensor 零拷贝 SHM arena（多模态快路径）：slot 布局+元数据区、_ArenaPickler 把合规 tensor 改道 arena、unpickle hook 重建零拷贝视图与 Parameter。",
+   "tags": [
+    "shared-memory",
+    "zero-copy",
+    "arena"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/device_communicators/xpu_communicator.py",
+   "type": "file",
+   "name": "xpu_communicator.py",
+   "filePath": "vllm/distributed/device_communicators/xpu_communicator.py",
+   "summary": "XPU 设备通信器：all2all 回退 AgRs 管理器（其余 all2all 后端不支持 XPU），gloo/NCCL 类集语义。",
+   "tags": [
+    "xpu",
+    "communicator"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/aiter_custom_all_reduce.py:AiterCustomAllreduce",
+   "type": "class",
+   "name": "AiterCustomAllreduce",
+   "filePath": "vllm/distributed/device_communicators/aiter_custom_all_reduce.py",
+   "summary": "AITER CustomAllreduce 的 vLLM 包装（17 个方法）：plain allreduce 与 fused allreduce+RMSNorm 共用同一句柄，gfx1250 门控。",
+   "tags": [
+    "rocm",
+    "allreduce"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    19,
+    160
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/all2all.py:PassThroughAll2AllManager",
+   "type": "class",
+   "name": "PassThroughAll2AllManager",
+   "filePath": "vllm/distributed/device_communicators/all2all.py",
+   "summary": "passthrough 占位：MoE 后端自行 dispatch/combine，无 all2all 可管理。",
+   "tags": [
+    "all2all",
+    "passthrough"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    41,
+    52
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/all2all.py:AgRsAll2AllManager",
+   "type": "class",
+   "name": "AgRsAll2AllManager",
+   "filePath": "vllm/distributed/device_communicators/all2all.py",
+   "summary": "基于 all-gather(dispatch)+reduce-scatter(combine) 的 all2all 实现。",
+   "tags": [
+    "all2all",
+    "allgather-reducescatter"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    55,
+    200
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/all2all.py:DeepEPAll2AllManagerBase",
+   "type": "class",
+   "name": "DeepEPAll2AllManagerBase",
+   "filePath": "vllm/distributed/device_communicators/all2all.py",
+   "summary": "DeepEP 内核族公共基类：句柄管理与前向上下文协作。",
+   "tags": [
+    "all2all",
+    "deepep",
+    "base"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    203,
+    252
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/all2all.py:DeepEPHTAll2AllManager",
+   "type": "class",
+   "name": "DeepEPHTAll2AllManager",
+   "filePath": "vllm/distributed/device_communicators/all2all.py",
+   "summary": "DeepEP High-Throughput 内核的 all2all（prefill/prompt 档）。",
+   "tags": [
+    "all2all",
+    "deepep",
+    "high-throughput"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    255,
+    311
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/all2all.py:DeepEPLLAll2AllManager",
+   "type": "class",
+   "name": "DeepEPLLAll2AllManager",
+   "filePath": "vllm/distributed/device_communicators/all2all.py",
+   "summary": "DeepEP Low-Latency 内核的 all2all（decode 档，RDMA 缓冲布局）。",
+   "tags": [
+    "all2all",
+    "deepep",
+    "low-latency"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    314,
+    413
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/all2all.py:NixlEPAll2AllManager",
+   "type": "class",
+   "name": "NixlEPAll2AllManager",
+   "filePath": "vllm/distributed/device_communicators/all2all.py",
+   "summary": "NIXL EP 内核的 all2all：支持弹性 EP 的动态 rank 接入/断开（18 个方法）。",
+   "tags": [
+    "all2all",
+    "nixl",
+    "elastic-ep"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    424,
+    647
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/all2all.py:FlashInferNVLinkTwoSidedManager",
+   "type": "class",
+   "name": "FlashInferNVLinkTwoSidedManager",
+   "filePath": "vllm/distributed/device_communicators/all2all.py",
+   "summary": "FlashInfer all2allv 双侧 NVLink 内核管理器。",
+   "tags": [
+    "all2all",
+    "flashinfer",
+    "nvlink"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    650,
+    756
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/all2all.py:FlashInferNVLinkOneSidedManager",
+   "type": "class",
+   "name": "FlashInferNVLinkOneSidedManager",
+   "filePath": "vllm/distributed/device_communicators/all2all.py",
+   "summary": "FlashInfer NVLink 单侧包装的 MoE EP 通信。",
+   "tags": [
+    "all2all",
+    "flashinfer",
+    "one-sided"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    759,
+    919
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/all2all.py:MoriAll2AllManager",
+   "type": "class",
+   "name": "MoriAll2AllManager",
+   "filePath": "vllm/distributed/device_communicators/all2all.py",
+   "summary": "Mori all2all 后端管理器。",
+   "tags": [
+    "all2all",
+    "mori"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    922,
+    1037
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/all2all.py:DeepEPV2All2AllManager",
+   "type": "class",
+   "name": "DeepEPV2All2AllManager",
+   "filePath": "vllm/distributed/device_communicators/all2all.py",
+   "summary": "DeepEP v2 ElasticBuffer 统一 API：NCCL Gin 后端+解析式 SM 计算。",
+   "tags": [
+    "all2all",
+    "deepep",
+    "v2"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1040,
+    1128
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/all2all.py:MoonEPAll2AllManager",
+   "type": "class",
+   "name": "MoonEPAll2AllManager",
+   "filePath": "vllm/distributed/device_communicators/all2all.py",
+   "summary": "MoonEP all2all：跨 EP rank 规划保持 token 负载完全均衡。",
+   "tags": [
+    "all2all",
+    "moonep",
+    "load-balance"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1131,
+    1196
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/all_reduce_utils.py:should_nccl_symm_mem_allreduce",
+   "type": "function",
+   "name": "should_nccl_symm_mem_allreduce",
+   "filePath": "vllm/distributed/device_communicators/all_reduce_utils.py",
+   "summary": "按 H100/GB200 基准判定是否用 NCCL symmetric memory allreduce（尺寸/拓扑门控）。",
+   "tags": [
+    "symmetric-memory",
+    "heuristics"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    123,
+    156
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/all_reduce_utils.py:should_nccl_symm_mem_ag_rs",
+   "type": "function",
+   "name": "should_nccl_symm_mem_ag_rs",
+   "filePath": "vllm/distributed/device_communicators/all_reduce_utils.py",
+   "summary": "NCCL symm mem 是否用于 AllGather/ReduceScatter。",
+   "tags": [
+    "symmetric-memory",
+    "heuristics"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    159,
+    168
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/all_reduce_utils.py:producer",
+   "type": "function",
+   "name": "producer",
+   "filePath": "vllm/distributed/device_communicators/all_reduce_utils.py",
+   "summary": "symm mem 生产者侧回调。",
+   "tags": [
+    "symmetric-memory",
+    "callback"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    171,
+    202
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/all_reduce_utils.py:consumer",
+   "type": "function",
+   "name": "consumer",
+   "filePath": "vllm/distributed/device_communicators/all_reduce_utils.py",
+   "summary": "symm mem 消费者侧回调。",
+   "tags": [
+    "symmetric-memory",
+    "callback"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    205,
+    243
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/all_reduce_utils.py:can_actually_p2p",
+   "type": "function",
+   "name": "can_actually_p2p",
+   "filePath": "vllm/distributed/device_communicators/all_reduce_utils.py",
+   "summary": "真实 P2P 能力检测：驱动 may 报可访问但实际失败，需实测（含子进程探测与结果缓存）。",
+   "tags": [
+    "p2p",
+    "detection"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    246,
+    328
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/all_reduce_utils.py:gpu_p2p_access_check",
+   "type": "function",
+   "name": "gpu_p2p_access_check",
+   "filePath": "vllm/distributed/device_communicators/all_reduce_utils.py",
+   "summary": "检测 GPU src 能否访问 GPU tgt（can_actually_p2p 的对外入口）。",
+   "tags": [
+    "p2p",
+    "detection"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    346,
+    433
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/base_device_communicator.py:Cache",
+   "type": "class",
+   "name": "Cache",
+   "filePath": "vllm/distributed/device_communicators/base_device_communicator.py",
+   "summary": "组级缓存（避免重复探测/初始化）。",
+   "tags": [
+    "cache"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    17,
+    31
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/base_device_communicator.py:All2AllManagerBase",
+   "type": "class",
+   "name": "All2AllManagerBase",
+   "filePath": "vllm/distributed/device_communicators/base_device_communicator.py",
+   "summary": "all2all 管理器基类（18 个方法）：rank/world_size 计算、ep 组（dp+tp 合并）协作与 dispatch/combine 公共协议。",
+   "tags": [
+    "all2all",
+    "base"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    34,
+    189
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/base_device_communicator.py:DeviceCommunicatorBase",
+   "type": "class",
+   "name": "DeviceCommunicatorBase",
+   "filePath": "vllm/distributed/device_communicators/base_device_communicator.py",
+   "summary": "设备通信器 ABC（23 个方法）：reduce/all_reduce/all_gather/broadcast/all2all 统一入口、后端能力协商与组管理。",
+   "tags": [
+    "abc",
+    "communicator"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    192,
+    476
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/cpu_communicator.py:CpuCommunicator",
+   "type": "class",
+   "name": "CpuCommunicator",
+   "filePath": "vllm/distributed/device_communicators/cpu_communicator.py",
+   "summary": "CPU 通信器：X86/ARM/POWERPC/S390X 且 TP/PP 同节点同 SHM 组名时切换 _CPUSHMDistributed；all2all 走 AgRs。",
+   "tags": [
+    "cpu",
+    "communicator"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    20,
+    225
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/cpu_communicator.py:_CPUSHMDistributed",
+   "type": "class",
+   "name": "_CPUSHMDistributed",
+   "filePath": "vllm/distributed/device_communicators/cpu_communicator.py",
+   "summary": "torch.distributed 的 SHM 替身（8 个方法）：把 collectives 路由到 torch.ops._C SHM manager。",
+   "tags": [
+    "shm",
+    "backend"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    228,
+    339
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/cuda_communicator.py:CudaCommunicator",
+   "type": "class",
+   "name": "CudaCommunicator",
+   "filePath": "vllm/distributed/device_communicators/cuda_communicator.py",
+   "summary": "CUDA 通信器枢纽（31 个方法）：TP 组专属启用 custom allreduce/torch symm mem/FlashInfer(含 PCIE IPC)/AiterAR/QuickReduce，组合 PyNccl 与 11 种 all2all 管理器按 env/硬件/batch-invariant 约束选择。",
+   "tags": [
+    "cuda",
+    "communicator",
+    "backend-hub"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    35,
+    1088
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/cuda_wrapper.py:CudaRTLibrary",
+   "type": "class",
+   "name": "CudaRTLibrary",
+   "filePath": "vllm/distributed/device_communicators/cuda_wrapper.py",
+   "summary": "cudart 的 ctypes 直连（15 个方法）：HostRegister/Unregister、IPC mem handle、库/驱动查找，无需编译扩展。",
+   "tags": [
+    "cudart",
+    "ctypes"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    41,
+    213
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/custom_all_reduce.py:_has_local_multicast_support",
+   "type": "function",
+   "name": "_has_local_multicast_support",
+   "filePath": "vllm/distributed/device_communicators/custom_all_reduce.py",
+   "summary": "本 CUDA 设备能否分配 multicast 内存。",
+   "tags": [
+    "mnnvl",
+    "multicast"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    39,
+    56
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/custom_all_reduce.py:_group_can_attempt_mnnvl",
+   "type": "function",
+   "name": "_group_can_attempt_mnnvl",
+   "filePath": "vllm/distributed/device_communicators/custom_all_reduce.py",
+   "summary": "全 rank 是否可走跨节点 MNNVL 路径（仅 Blackwell 级+本地 multicast 支持）。",
+   "tags": [
+    "mnnvl",
+    "blackwell"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    65,
+    83
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/custom_all_reduce.py:_can_p2p",
+   "type": "function",
+   "name": "_can_p2p",
+   "filePath": "vllm/distributed/device_communicators/custom_all_reduce.py",
+   "summary": "组内两两 P2P 可达判定（含驱动误报实测）。",
+   "tags": [
+    "p2p",
+    "detection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    86,
+    100
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/custom_all_reduce.py:_supports_mnnvl_multimem_reduce_scatter",
+   "type": "function",
+   "name": "_supports_mnnvl_multimem_reduce_scatter",
+   "filePath": "vllm/distributed/device_communicators/custom_all_reduce.py",
+   "summary": "MNNVL multimem reduce-scatter 支持检测。",
+   "tags": [
+    "mnnvl",
+    "detection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    103,
+    111
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/custom_all_reduce.py:CustomAllreduce",
+   "type": "class",
+   "name": "CustomAllreduce",
+   "filePath": "vllm/distributed/device_communicators/custom_all_reduce.py",
+   "summary": "自研 allreduce（19 个方法）：IPC barrier+三阶段 kernel，支持 2/4/6/8/16 卡、MNNVL 跨节点与 all-gather/reduce-scatter/multimem 变体及尺寸上限表。",
+   "tags": [
+    "allreduce",
+    "custom-kernel"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    117,
+    761
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:_get_tuned_standalone_max_size",
+   "type": "function",
+   "name": "_get_tuned_standalone_max_size",
+   "filePath": "vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "summary": "读调优的 standalone allreduce 最大尺寸。",
+   "tags": [
+    "flashinfer",
+    "tuning"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    56,
+    69
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:_create_workspace",
+   "type": "function",
+   "name": "_create_workspace",
+   "filePath": "vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "summary": "创建 flashinfer allreduce 工作区（失败返回 None）。",
+   "tags": [
+    "flashinfer",
+    "workspace"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    72,
+    139
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:_resolve_fi_ar_backend",
+   "type": "function",
+   "name": "_resolve_fi_ar_backend",
+   "filePath": "vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "summary": "解析当前环境的 flashinfer allreduce 后端（MNNVL/单机）与 trtllm 回退许可。",
+   "tags": [
+    "flashinfer",
+    "backend-resolution"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    142,
+    177
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:get_fi_ar_workspace",
+   "type": "function",
+   "name": "get_fi_ar_workspace",
+   "filePath": "vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "summary": "取非 quant 模式 allreduce 工作区（惰性初始化，AllReduceFusionPass 与通信器共用）。",
+   "tags": [
+    "flashinfer",
+    "workspace"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    180,
+    246
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:get_fi_ar_quant_workspace",
+   "type": "function",
+   "name": "get_fi_ar_quant_workspace",
+   "filePath": "vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "summary": "取 quant 模式工作区（VLLM_FLASHINFER_ALLREDUCE_BACKEND 控制）。",
+   "tags": [
+    "flashinfer",
+    "workspace",
+    "quantization"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    249,
+    323
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:destroy_fi_ar_workspace",
+   "type": "function",
+   "name": "destroy_fi_ar_workspace",
+   "filePath": "vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "summary": "销毁工作区。",
+   "tags": [
+    "flashinfer",
+    "cleanup"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    329,
+    342
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:checkpoint_prepare_fi_ar_workspaces",
+   "type": "function",
+   "name": "checkpoint_prepare_fi_ar_workspaces",
+   "filePath": "vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "summary": "checkpoint 前准备工作区（CUDA graph 场景）。",
+   "tags": [
+    "flashinfer",
+    "checkpoint"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    364,
+    376
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:checkpoint_restore_fi_ar_workspaces",
+   "type": "function",
+   "name": "checkpoint_restore_fi_ar_workspaces",
+   "filePath": "vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "summary": "checkpoint 后恢复工作区。",
+   "tags": [
+    "flashinfer",
+    "checkpoint"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    379,
+    387
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/flashinfer_all_reduce.py:FlashInferAllReduce",
+   "type": "class",
+   "name": "FlashInferAllReduce",
+   "filePath": "vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "summary": "FlashInfer allreduce 通信器（5 个方法）：TRT-LLM 风格 kernel 封装与 should_custom_ar 尺寸判定。",
+   "tags": [
+    "flashinfer",
+    "allreduce"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    393,
+    541
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/mnnvl_compat.py:CustomCommunicator",
+   "type": "class",
+   "name": "CustomCommunicator",
+   "filePath": "vllm/distributed/device_communicators/mnnvl_compat.py",
+   "summary": "继承 torch CommBackend 的 MNNVL 兼容通信器（7 个方法）。",
+   "tags": [
+    "mnnvl",
+    "compatibility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    9,
+    34
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/pynccl.py:defer_comm_warmup_on_rocm",
+   "type": "function",
+   "name": "defer_comm_warmup_on_rocm",
+   "filePath": "vllm/distributed/device_communicators/pynccl.py",
+   "summary": "ROCm 上建 communicator 但不 warmup（与活引擎并建会死锁）。",
+   "tags": [
+    "nccl",
+    "rocm"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    38,
+    54
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/pynccl.py:register_nccl_symmetric_ops",
+   "type": "function",
+   "name": "register_nccl_symmetric_ops",
+   "filePath": "vllm/distributed/device_communicators/pynccl.py",
+   "summary": "注册 NCCL symmetric memory 算子（window 系）。",
+   "tags": [
+    "nccl",
+    "symmetric-memory"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    62,
+    88
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/pynccl.py:PyNcclCommunicator",
+   "type": "class",
+   "name": "PyNcclCommunicator",
+   "filePath": "vllm/distributed/device_communicators/pynccl.py",
+   "summary": "NCCL 通信器封装（22 个方法）：comm 生命周期、all_reduce/all_gather/broadcast、错误处理与 symm mem window 集成。",
+   "tags": [
+    "nccl",
+    "communicator"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    91,
+    622
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/pynccl_allocator.py:is_symmetric_memory_tensor",
+   "type": "function",
+   "name": "is_symmetric_memory_tensor",
+   "filePath": "vllm/distributed/device_communicators/pynccl_allocator.py",
+   "summary": "tensor 是否落在 NCCL symm mem 池（按池快照地址比对）。",
+   "tags": [
+    "symmetric-memory",
+    "detection"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    54,
+    61
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/pynccl_allocator.py:compile_nccl_allocator",
+   "type": "function",
+   "name": "compile_nccl_allocator",
+   "filePath": "vllm/distributed/device_communicators/pynccl_allocator.py",
+   "summary": "编译 nccl_mem_alloc/free 插件为 CUDAPluggableAllocator。",
+   "tags": [
+    "allocator",
+    "compile"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    69,
+    108
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/pynccl_allocator.py:get_nccl_mem_pool",
+   "type": "function",
+   "name": "get_nccl_mem_pool",
+   "filePath": "vllm/distributed/device_communicators/pynccl_allocator.py",
+   "summary": "取（惰性建）NCCL 专用 CUDA mem pool。",
+   "tags": [
+    "allocator",
+    "memory-pool"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    111,
+    117
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/pynccl_allocator.py:nccl_symm_mem_context",
+   "type": "class",
+   "name": "nccl_symm_mem_context",
+   "filePath": "vllm/distributed/device_communicators/pynccl_allocator.py",
+   "summary": "把通信切进 symm mem 池的上下文管理器（world_size/平台/torch 版本门控，失败自动降级禁用）。",
+   "tags": [
+    "symmetric-memory",
+    "context-manager"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    134,
+    199
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/pynccl_wrapper.py:ncclCommProperties",
+   "type": "class",
+   "name": "ncclCommProperties",
+   "filePath": "vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "summary": "ncclCommProperties 的 ctypes 结构。",
+   "tags": [
+    "nccl",
+    "ctypes"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    66,
+    87
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/pynccl_wrapper.py:ncclDataTypeEnum",
+   "type": "class",
+   "name": "ncclDataTypeEnum",
+   "filePath": "vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "summary": "NCCL 数据类型枚举与 tensor dtype 映射。",
+   "tags": [
+    "nccl",
+    "enums"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    96,
+    147
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/pynccl_wrapper.py:ncclRedOpTypeEnum",
+   "type": "class",
+   "name": "ncclRedOpTypeEnum",
+   "filePath": "vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "summary": "NCCL 归约算子枚举。",
+   "tags": [
+    "nccl",
+    "enums"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    153,
+    173
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/pynccl_wrapper.py:NCCLLibrary",
+   "type": "class",
+   "name": "NCCLLibrary",
+   "filePath": "vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "summary": "NCCL 动态库 ctypes 加载器（25 个方法）：声明式导出全部所需 nccl 符号（含 symmetric memory window 系）并处理库查找。",
+   "tags": [
+    "nccl",
+    "ctypes",
+    "loader"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    183,
+    660
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/quick_all_reduce.py:QuickReduceRegime",
+   "type": "class",
+   "name": "QuickReduceRegime",
+   "filePath": "vllm/distributed/device_communicators/quick_all_reduce.py",
+   "summary": "量化档位枚举（FP/INT8/6/4/3，id 对齐 csrc 头文件）。",
+   "tags": [
+    "allreduce",
+    "quantization"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    32,
+    39
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/quick_all_reduce.py:QuickAllReduce",
+   "type": "class",
+   "name": "QuickAllReduce",
+   "filePath": "vllm/distributed/device_communicators/quick_all_reduce.py",
+   "summary": "量化 allreduce（14 个方法）：按 (dtype, world_size) 的尺寸阈值表选档，CUDA 与 ROCm MI300 可用，无固定归约序。",
+   "tags": [
+    "allreduce",
+    "quantization"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    46,
+    419
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/shm_broadcast.py:memory_fence",
+   "type": "function",
+   "name": "memory_fence",
+   "filePath": "vllm/distributed/device_communicators/shm_broadcast.py",
+   "summary": "SHM 同步的全内存屏障：保证先前写对其他进程可见。",
+   "tags": [
+    "shared-memory",
+    "sync"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    87,
+    104
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/shm_broadcast.py:check_shm_free_space",
+   "type": "function",
+   "name": "check_shm_free_space",
+   "filePath": "vllm/distributed/device_communicators/shm_broadcast.py",
+   "summary": "SHM 放不下目标段时抛错并记录 cgroup 余量。",
+   "tags": [
+    "shared-memory",
+    "validation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    242,
+    274
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/shm_broadcast.py:SpinCondition",
+   "type": "class",
+   "name": "SpinCondition",
+   "filePath": "vllm/distributed/device_communicators/shm_broadcast.py",
+   "summary": "threading.Condition 风格的自旋条件变量：写者通知读者从 SHM 环形缓冲取数（跨进程）。",
+   "tags": [
+    "shared-memory",
+    "sync"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    120,
+    236
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/shm_broadcast.py:ShmRingBuffer",
+   "type": "class",
+   "name": "ShmRingBuffer",
+   "filePath": "vllm/distributed/device_communicators/shm_broadcast.py",
+   "summary": "SHM 环形缓冲：定长 chunk 槽+读写游标，本地 reader 共享。",
+   "tags": [
+    "shared-memory",
+    "ring-buffer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    277,
+    413
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/shm_broadcast.py:_reduce_tensor",
+   "type": "function",
+   "name": "_reduce_tensor",
+   "filePath": "vllm/distributed/device_communicators/shm_broadcast.py",
+   "summary": "把 CPU tensor 缩减为 PickleBuffer 带外 pickling（避免 torch 默认 pickle 的整块拷贝）。",
+   "tags": [
+    "pickle",
+    "tensors"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    445,
+    474
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/device_communicators/shm_broadcast.py:_rebuild_tensor",
+   "type": "function",
+   "name": "_rebuild_tensor",
+   "filePath": "vllm/distributed/device_communicators/shm_broadcast.py",
+   "summary": "_reduce_tensor 的对侧：从带外 buffer 重建 tensor。",
+   "tags": [
+    "pickle",
+    "tensors"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    416,
+    442
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/shm_broadcast.py:MessageQueue",
+   "type": "class",
+   "name": "MessageQueue",
+   "filePath": "vllm/distributed/device_communicators/shm_broadcast.py",
+   "summary": "跨进程广播队列（15 个方法）：本地 reader 走 SHM 环形+XPUB/SUB 大件，远端走 ZMQ；可选 ShmTensorArena 零拷贝大 tensor；支持优雅关闭与读者缺席恢复。",
+   "tags": [
+    "broadcast",
+    "shared-memory",
+    "zmq"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    495,
+    1160
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/shm_object_storage.py:SingleWriterShmRingBuffer",
+   "type": "class",
+   "name": "SingleWriterShmRingBuffer",
+   "filePath": "vllm/distributed/device_communicators/shm_object_storage.py",
+   "summary": "单写多读 SHM 环形缓冲（12 个方法）：线程安全、自动内存管理。",
+   "tags": [
+    "shared-memory",
+    "ring-buffer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    25,
+    364
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/shm_object_storage.py:ObjectSerde",
+   "type": "class",
+   "name": "ObjectSerde",
+   "filePath": "vllm/distributed/device_communicators/shm_object_storage.py",
+   "summary": "对象序列化器 ABC（serialize/deserialize）。",
+   "tags": [
+    "abc",
+    "serialization"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    367,
+    376
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/shm_object_storage.py:MsgpackSerde",
+   "type": "class",
+   "name": "MsgpackSerde",
+   "filePath": "vllm/distributed/device_communicators/shm_object_storage.py",
+   "summary": "msgpack 序列化实现（含 MultiModalKwargsItem 支持）。",
+   "tags": [
+    "serialization",
+    "msgpack"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    379,
+    435
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/shm_object_storage.py:SingleWriterShmObjectStorage",
+   "type": "class",
+   "name": "SingleWriterShmObjectStorage",
+   "filePath": "vllm/distributed/device_communicators/shm_object_storage.py",
+   "summary": "单写多读 KV 对象存储（21 个方法）：建立在 SHM 环形缓冲上，自动内存管理与多读者游标。",
+   "tags": [
+    "shared-memory",
+    "object-storage"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    447,
+    827
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/shm_tensor_arena.py:ShmTensorArena",
+   "type": "class",
+   "name": "ShmTensorArena",
+   "filePath": "vllm/distributed/device_communicators/shm_tensor_arena.py",
+   "summary": "大 CPU tensor 零拷贝 arena（12 个方法）：slot+meta 布局、单写 n 读、分配/释放与 pickle 集成。",
+   "tags": [
+    "shared-memory",
+    "arena",
+    "zero-copy"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    74,
+    330
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/shm_tensor_arena.py:_ArenaPickler",
+   "type": "class",
+   "name": "_ArenaPickler",
+   "filePath": "vllm/distributed/device_communicators/shm_tensor_arena.py",
+   "summary": "reducer_override 挑选合规大 tensor 改道 arena 的 Pickler（Parameter 共享存储）。",
+   "tags": [
+    "pickle",
+    "arena"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    355,
+    397
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/device_communicators/xpu_communicator.py:XpuCommunicator",
+   "type": "class",
+   "name": "XpuCommunicator",
+   "filePath": "vllm/distributed/device_communicators/xpu_communicator.py",
+   "summary": "XPU 通信器（11 个方法）：all2all 仅支持 AgRs（其余后端自动回退并告警）。",
+   "tags": [
+    "xpu",
+    "communicator"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    17,
+    296
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/distributed/device_communicators/aiter_custom_all_reduce.py",
+   "target": "class:vllm/distributed/device_communicators/aiter_custom_all_reduce.py:AiterCustomAllreduce",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/aiter_custom_all_reduce.py",
+   "target": "class:vllm/distributed/device_communicators/aiter_custom_all_reduce.py:AiterCustomAllreduce",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:PassThroughAll2AllManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:PassThroughAll2AllManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:AgRsAll2AllManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:AgRsAll2AllManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:DeepEPAll2AllManagerBase",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:DeepEPAll2AllManagerBase",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:DeepEPHTAll2AllManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:DeepEPHTAll2AllManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:DeepEPLLAll2AllManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:DeepEPLLAll2AllManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:NixlEPAll2AllManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:NixlEPAll2AllManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:FlashInferNVLinkTwoSidedManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:FlashInferNVLinkTwoSidedManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:FlashInferNVLinkOneSidedManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:FlashInferNVLinkOneSidedManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:MoriAll2AllManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:MoriAll2AllManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:DeepEPV2All2AllManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:DeepEPV2All2AllManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:MoonEPAll2AllManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:MoonEPAll2AllManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "function:vllm/distributed/device_communicators/all_reduce_utils.py:should_nccl_symm_mem_allreduce",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "function:vllm/distributed/device_communicators/all_reduce_utils.py:should_nccl_symm_mem_allreduce",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "function:vllm/distributed/device_communicators/all_reduce_utils.py:should_nccl_symm_mem_ag_rs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "function:vllm/distributed/device_communicators/all_reduce_utils.py:should_nccl_symm_mem_ag_rs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "function:vllm/distributed/device_communicators/all_reduce_utils.py:producer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "function:vllm/distributed/device_communicators/all_reduce_utils.py:producer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "function:vllm/distributed/device_communicators/all_reduce_utils.py:consumer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "function:vllm/distributed/device_communicators/all_reduce_utils.py:consumer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "function:vllm/distributed/device_communicators/all_reduce_utils.py:can_actually_p2p",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "function:vllm/distributed/device_communicators/all_reduce_utils.py:can_actually_p2p",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "function:vllm/distributed/device_communicators/all_reduce_utils.py:gpu_p2p_access_check",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "function:vllm/distributed/device_communicators/all_reduce_utils.py:gpu_p2p_access_check",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/base_device_communicator.py",
+   "target": "class:vllm/distributed/device_communicators/base_device_communicator.py:Cache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/base_device_communicator.py",
+   "target": "class:vllm/distributed/device_communicators/base_device_communicator.py:Cache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/base_device_communicator.py",
+   "target": "class:vllm/distributed/device_communicators/base_device_communicator.py:All2AllManagerBase",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/base_device_communicator.py",
+   "target": "class:vllm/distributed/device_communicators/base_device_communicator.py:All2AllManagerBase",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/base_device_communicator.py",
+   "target": "class:vllm/distributed/device_communicators/base_device_communicator.py:DeviceCommunicatorBase",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/base_device_communicator.py",
+   "target": "class:vllm/distributed/device_communicators/base_device_communicator.py:DeviceCommunicatorBase",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cpu_communicator.py",
+   "target": "class:vllm/distributed/device_communicators/cpu_communicator.py:CpuCommunicator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cpu_communicator.py",
+   "target": "class:vllm/distributed/device_communicators/cpu_communicator.py:CpuCommunicator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cpu_communicator.py",
+   "target": "class:vllm/distributed/device_communicators/cpu_communicator.py:_CPUSHMDistributed",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "class:vllm/distributed/device_communicators/cuda_communicator.py:CudaCommunicator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "class:vllm/distributed/device_communicators/cuda_communicator.py:CudaCommunicator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_wrapper.py",
+   "target": "class:vllm/distributed/device_communicators/cuda_wrapper.py:CudaRTLibrary",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_wrapper.py",
+   "target": "class:vllm/distributed/device_communicators/cuda_wrapper.py:CudaRTLibrary",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/custom_all_reduce.py",
+   "target": "function:vllm/distributed/device_communicators/custom_all_reduce.py:_has_local_multicast_support",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/custom_all_reduce.py",
+   "target": "function:vllm/distributed/device_communicators/custom_all_reduce.py:_group_can_attempt_mnnvl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/custom_all_reduce.py",
+   "target": "function:vllm/distributed/device_communicators/custom_all_reduce.py:_can_p2p",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/custom_all_reduce.py",
+   "target": "function:vllm/distributed/device_communicators/custom_all_reduce.py:_supports_mnnvl_multimem_reduce_scatter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/custom_all_reduce.py",
+   "target": "class:vllm/distributed/device_communicators/custom_all_reduce.py:CustomAllreduce",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/custom_all_reduce.py",
+   "target": "class:vllm/distributed/device_communicators/custom_all_reduce.py:CustomAllreduce",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:_get_tuned_standalone_max_size",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:_create_workspace",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:_resolve_fi_ar_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:get_fi_ar_workspace",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:get_fi_ar_workspace",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:get_fi_ar_quant_workspace",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:get_fi_ar_quant_workspace",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:destroy_fi_ar_workspace",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:destroy_fi_ar_workspace",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:checkpoint_prepare_fi_ar_workspaces",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:checkpoint_prepare_fi_ar_workspaces",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:checkpoint_restore_fi_ar_workspaces",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "function:vllm/distributed/device_communicators/flashinfer_all_reduce.py:checkpoint_restore_fi_ar_workspaces",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "class:vllm/distributed/device_communicators/flashinfer_all_reduce.py:FlashInferAllReduce",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "class:vllm/distributed/device_communicators/flashinfer_all_reduce.py:FlashInferAllReduce",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/mnnvl_compat.py",
+   "target": "class:vllm/distributed/device_communicators/mnnvl_compat.py:CustomCommunicator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/mnnvl_compat.py",
+   "target": "class:vllm/distributed/device_communicators/mnnvl_compat.py:CustomCommunicator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl.py",
+   "target": "function:vllm/distributed/device_communicators/pynccl.py:defer_comm_warmup_on_rocm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl.py",
+   "target": "function:vllm/distributed/device_communicators/pynccl.py:defer_comm_warmup_on_rocm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl.py",
+   "target": "function:vllm/distributed/device_communicators/pynccl.py:register_nccl_symmetric_ops",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl.py",
+   "target": "function:vllm/distributed/device_communicators/pynccl.py:register_nccl_symmetric_ops",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl.py",
+   "target": "class:vllm/distributed/device_communicators/pynccl.py:PyNcclCommunicator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl.py",
+   "target": "class:vllm/distributed/device_communicators/pynccl.py:PyNcclCommunicator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_allocator.py",
+   "target": "function:vllm/distributed/device_communicators/pynccl_allocator.py:is_symmetric_memory_tensor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_allocator.py",
+   "target": "function:vllm/distributed/device_communicators/pynccl_allocator.py:is_symmetric_memory_tensor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_allocator.py",
+   "target": "function:vllm/distributed/device_communicators/pynccl_allocator.py:compile_nccl_allocator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_allocator.py",
+   "target": "function:vllm/distributed/device_communicators/pynccl_allocator.py:compile_nccl_allocator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_allocator.py",
+   "target": "function:vllm/distributed/device_communicators/pynccl_allocator.py:get_nccl_mem_pool",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_allocator.py",
+   "target": "function:vllm/distributed/device_communicators/pynccl_allocator.py:get_nccl_mem_pool",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_allocator.py",
+   "target": "class:vllm/distributed/device_communicators/pynccl_allocator.py:nccl_symm_mem_context",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_allocator.py",
+   "target": "class:vllm/distributed/device_communicators/pynccl_allocator.py:nccl_symm_mem_context",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "target": "class:vllm/distributed/device_communicators/pynccl_wrapper.py:ncclCommProperties",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "target": "class:vllm/distributed/device_communicators/pynccl_wrapper.py:ncclCommProperties",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "target": "class:vllm/distributed/device_communicators/pynccl_wrapper.py:ncclDataTypeEnum",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "target": "class:vllm/distributed/device_communicators/pynccl_wrapper.py:ncclDataTypeEnum",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "target": "class:vllm/distributed/device_communicators/pynccl_wrapper.py:ncclRedOpTypeEnum",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "target": "class:vllm/distributed/device_communicators/pynccl_wrapper.py:ncclRedOpTypeEnum",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "target": "class:vllm/distributed/device_communicators/pynccl_wrapper.py:NCCLLibrary",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "target": "class:vllm/distributed/device_communicators/pynccl_wrapper.py:NCCLLibrary",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/quick_all_reduce.py",
+   "target": "class:vllm/distributed/device_communicators/quick_all_reduce.py:QuickReduceRegime",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/quick_all_reduce.py",
+   "target": "class:vllm/distributed/device_communicators/quick_all_reduce.py:QuickReduceRegime",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/quick_all_reduce.py",
+   "target": "class:vllm/distributed/device_communicators/quick_all_reduce.py:QuickAllReduce",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/quick_all_reduce.py",
+   "target": "class:vllm/distributed/device_communicators/quick_all_reduce.py:QuickAllReduce",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "function:vllm/distributed/device_communicators/shm_broadcast.py:memory_fence",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "function:vllm/distributed/device_communicators/shm_broadcast.py:memory_fence",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "function:vllm/distributed/device_communicators/shm_broadcast.py:check_shm_free_space",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "function:vllm/distributed/device_communicators/shm_broadcast.py:check_shm_free_space",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "class:vllm/distributed/device_communicators/shm_broadcast.py:SpinCondition",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "class:vllm/distributed/device_communicators/shm_broadcast.py:SpinCondition",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "class:vllm/distributed/device_communicators/shm_broadcast.py:ShmRingBuffer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "class:vllm/distributed/device_communicators/shm_broadcast.py:ShmRingBuffer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "function:vllm/distributed/device_communicators/shm_broadcast.py:_reduce_tensor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "function:vllm/distributed/device_communicators/shm_broadcast.py:_rebuild_tensor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "class:vllm/distributed/device_communicators/shm_broadcast.py:MessageQueue",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "class:vllm/distributed/device_communicators/shm_broadcast.py:MessageQueue",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_object_storage.py",
+   "target": "class:vllm/distributed/device_communicators/shm_object_storage.py:SingleWriterShmRingBuffer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_object_storage.py",
+   "target": "class:vllm/distributed/device_communicators/shm_object_storage.py:SingleWriterShmRingBuffer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_object_storage.py",
+   "target": "class:vllm/distributed/device_communicators/shm_object_storage.py:ObjectSerde",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_object_storage.py",
+   "target": "class:vllm/distributed/device_communicators/shm_object_storage.py:ObjectSerde",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_object_storage.py",
+   "target": "class:vllm/distributed/device_communicators/shm_object_storage.py:MsgpackSerde",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_object_storage.py",
+   "target": "class:vllm/distributed/device_communicators/shm_object_storage.py:MsgpackSerde",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_object_storage.py",
+   "target": "class:vllm/distributed/device_communicators/shm_object_storage.py:SingleWriterShmObjectStorage",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_object_storage.py",
+   "target": "class:vllm/distributed/device_communicators/shm_object_storage.py:SingleWriterShmObjectStorage",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_tensor_arena.py",
+   "target": "class:vllm/distributed/device_communicators/shm_tensor_arena.py:ShmTensorArena",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_tensor_arena.py",
+   "target": "class:vllm/distributed/device_communicators/shm_tensor_arena.py:ShmTensorArena",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_tensor_arena.py",
+   "target": "class:vllm/distributed/device_communicators/shm_tensor_arena.py:_ArenaPickler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/xpu_communicator.py",
+   "target": "class:vllm/distributed/device_communicators/xpu_communicator.py:XpuCommunicator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/xpu_communicator.py",
+   "target": "class:vllm/distributed/device_communicators/xpu_communicator.py:XpuCommunicator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/aiter_custom_all_reduce.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/aiter_custom_all_reduce.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "file:vllm/distributed/device_communicators/base_device_communicator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "file:vllm/distributed/device_communicators/mnnvl_compat.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/prepare_finalize/moonep.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "file:vllm/platforms/rocm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "file:vllm/utils/flashinfer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all2all.py",
+   "target": "file:vllm/utils/nccl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "file:vllm/distributed/device_communicators/cuda_wrapper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "file:vllm/distributed/device_communicators/pynccl_allocator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "target": "file:vllm/utils/system_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/base_device_communicator.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/base_device_communicator.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/base_device_communicator.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cpu_communicator.py",
+   "target": "file:vllm/distributed/device_communicators/all2all.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cpu_communicator.py",
+   "target": "file:vllm/distributed/device_communicators/base_device_communicator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cpu_communicator.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cpu_communicator.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cpu_communicator.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cpu_communicator.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/distributed/device_communicators/aiter_custom_all_reduce.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/distributed/device_communicators/all2all.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/distributed/device_communicators/base_device_communicator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/distributed/device_communicators/custom_all_reduce.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/distributed/device_communicators/flashinfer_pcie_ipc_all_reduce.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/distributed/device_communicators/pynccl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/distributed/device_communicators/pynccl_allocator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/distributed/device_communicators/quick_all_reduce.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/distributed/device_communicators/symm_mem.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/model_executor/determinism/batch_invariant.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_communicator.py",
+   "target": "file:vllm/v1/worker/ubatching.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_wrapper.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_wrapper.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_wrapper.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/cuda_wrapper.py",
+   "target": "file:vllm/utils/system_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/custom_all_reduce.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/custom_all_reduce.py",
+   "target": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/custom_all_reduce.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/custom_all_reduce.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/custom_all_reduce.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/custom_all_reduce.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/custom_all_reduce.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "file:vllm/config/compilation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "file:vllm/distributed/device_communicators/all_reduce_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/flashinfer_all_reduce.py",
+   "target": "file:vllm/utils/gpu_sync_debug.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl.py",
+   "target": "file:vllm/distributed/device_communicators/pynccl_allocator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl.py",
+   "target": "file:vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_allocator.py",
+   "target": "file:vllm/distributed/device_communicators/pynccl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_allocator.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_allocator.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_allocator.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_allocator.py",
+   "target": "file:vllm/utils/nccl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/pynccl_wrapper.py",
+   "target": "file:vllm/utils/nccl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/quick_all_reduce.py",
+   "target": "file:vllm/_aiter_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/quick_all_reduce.py",
+   "target": "file:vllm/_custom_ops.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/quick_all_reduce.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/quick_all_reduce.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/quick_all_reduce.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/quick_all_reduce.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/quick_all_reduce.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/quick_all_reduce.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "file:vllm/distributed/device_communicators/shm_tensor_arena.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "file:vllm/utils/cpu_resource_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "target": "file:vllm/utils/network_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_object_storage.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_object_storage.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_object_storage.py",
+   "target": "file:vllm/v1/serial_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_tensor_arena.py",
+   "target": "file:vllm/distributed/device_communicators/shm_broadcast.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_tensor_arena.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/shm_tensor_arena.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/xpu_communicator.py",
+   "target": "file:vllm/distributed/device_communicators/all2all.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/xpu_communicator.py",
+   "target": "file:vllm/distributed/device_communicators/base_device_communicator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/xpu_communicator.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/device_communicators/xpu_communicator.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/all2all.py:PassThroughAll2AllManager",
+   "target": "class:vllm/distributed/device_communicators/base_device_communicator.py:All2AllManagerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/all2all.py:AgRsAll2AllManager",
+   "target": "class:vllm/distributed/device_communicators/base_device_communicator.py:All2AllManagerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/all2all.py:DeepEPAll2AllManagerBase",
+   "target": "class:vllm/distributed/device_communicators/base_device_communicator.py:All2AllManagerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/all2all.py:DeepEPHTAll2AllManager",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:DeepEPAll2AllManagerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/all2all.py:DeepEPLLAll2AllManager",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:DeepEPAll2AllManagerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/all2all.py:NixlEPAll2AllManager",
+   "target": "class:vllm/distributed/device_communicators/base_device_communicator.py:All2AllManagerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/all2all.py:FlashInferNVLinkTwoSidedManager",
+   "target": "class:vllm/distributed/device_communicators/base_device_communicator.py:All2AllManagerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/all2all.py:FlashInferNVLinkOneSidedManager",
+   "target": "class:vllm/distributed/device_communicators/base_device_communicator.py:All2AllManagerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/all2all.py:MoriAll2AllManager",
+   "target": "class:vllm/distributed/device_communicators/base_device_communicator.py:All2AllManagerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/all2all.py:DeepEPV2All2AllManager",
+   "target": "class:vllm/distributed/device_communicators/base_device_communicator.py:All2AllManagerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/all2all.py:MoonEPAll2AllManager",
+   "target": "class:vllm/distributed/device_communicators/base_device_communicator.py:All2AllManagerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/cpu_communicator.py:CpuCommunicator",
+   "target": "class:vllm/distributed/device_communicators/base_device_communicator.py:DeviceCommunicatorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/cuda_communicator.py:CudaCommunicator",
+   "target": "class:vllm/distributed/device_communicators/base_device_communicator.py:DeviceCommunicatorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/xpu_communicator.py:XpuCommunicator",
+   "target": "class:vllm/distributed/device_communicators/base_device_communicator.py:DeviceCommunicatorBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/shm_object_storage.py:MsgpackSerde",
+   "target": "class:vllm/distributed/device_communicators/shm_object_storage.py:ObjectSerde",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/cuda_communicator.py:CudaCommunicator",
+   "target": "class:vllm/distributed/device_communicators/pynccl.py:PyNcclCommunicator",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/cuda_communicator.py:CudaCommunicator",
+   "target": "class:vllm/distributed/device_communicators/symm_mem.py:SymmMemCommunicator",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/cuda_communicator.py:CudaCommunicator",
+   "target": "class:vllm/distributed/device_communicators/flashinfer_all_reduce.py:FlashInferAllReduce",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/cuda_communicator.py:CudaCommunicator",
+   "target": "class:vllm/distributed/device_communicators/aiter_custom_all_reduce.py:AiterCustomAllreduce",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/cuda_communicator.py:CudaCommunicator",
+   "target": "class:vllm/distributed/device_communicators/custom_all_reduce.py:CustomAllreduce",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/cuda_communicator.py:CudaCommunicator",
+   "target": "class:vllm/distributed/device_communicators/quick_all_reduce.py:QuickAllReduce",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/cuda_communicator.py:CudaCommunicator",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:AgRsAll2AllManager",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/cuda_communicator.py:CudaCommunicator",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:DeepEPHTAll2AllManager",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/cuda_communicator.py:CudaCommunicator",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:DeepEPLLAll2AllManager",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/cuda_communicator.py:CudaCommunicator",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:MoriAll2AllManager",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/cuda_communicator.py:CudaCommunicator",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:DeepEPV2All2AllManager",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/cuda_communicator.py:CudaCommunicator",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:MoonEPAll2AllManager",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/cuda_communicator.py:CudaCommunicator",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:NixlEPAll2AllManager",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/cuda_communicator.py:CudaCommunicator",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:FlashInferNVLinkTwoSidedManager",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/cuda_communicator.py:CudaCommunicator",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:FlashInferNVLinkOneSidedManager",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/cpu_communicator.py:CpuCommunicator",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:AgRsAll2AllManager",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/xpu_communicator.py:XpuCommunicator",
+   "target": "class:vllm/distributed/device_communicators/all2all.py:AgRsAll2AllManager",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/device_communicators/shm_broadcast.py:MessageQueue",
+   "target": "class:vllm/distributed/device_communicators/shm_tensor_arena.py:ShmTensorArena",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

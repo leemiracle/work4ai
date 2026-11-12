@@ -1,0 +1,24 @@
+### L1 物理层 —— 链路/速率/收发计数（l1probe.py + ioctl SIOCETHTOOL）
+== L1 探测: eth0 ==
+  总线/驱动: 无 PCI device（虚拟接口特征——veth/环回的典型表现）
+  speed       = 10000   名义速率(Mb/s)
+  duplex      = full   双工
+  mtu         = 1500   最大传输单元(字节, IP 层)
+  carrier     = 1   载波(物理链路在否)
+  operstate   = up   内核链路状态机
+  ifindex     = 18   接口编号(内核)
+  tx_queue_len= 0   发送队列长度
+  ioctl GLINK = ioctl 不支持([Errno 95] Operation not supported)
+  == 收发计数器（/sys .../statistics，自接口创建起累计）==
+    rx_packets  = 104
+    tx_packets  = 88
+    rx_bytes    = 7755
+    tx_bytes    = 9079
+    rx_errors   = 0
+    tx_errors   = 0
+    rx_dropped  = 0
+    tx_dropped  = 0
+    collisions  = 0
+  == 对照: lo（回环）——无载波概念，永远 UP，MTU 65536 ==
+    mtu=65536 operstate=unknown
+    rx_bytes==tx_bytes 恒等（发即收）: 1293 == 1293

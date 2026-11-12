@@ -1,0 +1,32 @@
+# DeepWiki 索引 — NVIDIA/NeMo-Agent-Toolkit-Examples
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 27 页 · 全文 189457 字符
+
+- [1 Repository Overview](1-repository-overview.md)
+  - [1.1 Getting Started & Installation](1.1-getting-started-installation.md)
+  - [1.2 Contributing a New Example](1.2-contributing-a-new-example.md)
+- [2 Core Concepts & Architecture](2-core-concepts-architecture.md)
+  - [2.1 Plugin & Registration System](2.1-plugin-registration-system.md)
+  - [2.2 YAML Configuration System](2.2-yaml-configuration-system.md)
+  - [2.3 Protocol Integrations: MCP and A2A](2.3-protocol-integrations-mcp-and-a2a.md)
+- [3 Example: Sandbox Agent](3-example-sandbox-agent.md)
+  - [3.1 Sandbox Infrastructure (Docker & Daytona)](3.1-sandbox-infrastructure-docker-daytona.md)
+  - [3.2 Sandbox Agent Tools & GAIA Evaluation](3.2-sandbox-agent-tools-gaia-evaluation.md)
+- [4 Example: Kubernetes Infrastructure Monitor](4-example-kubernetes-infrastructure-monitor.md)
+  - [4.1 K8s Monitor Diagnostic Tools](4.1-k8s-monitor-diagnostic-tools.md)
+  - [4.2 K8s Monitor Workflow, Data & Evaluation](4.2-k8s-monitor-workflow-data-evaluation.md)
+- [5 Example: MCP RAG Demo](5-example-mcp-rag-demo.md)
+  - [5.1 MCP RAG Server & Tool Registration](5.1-mcp-rag-server-tool-registration.md)
+  - [5.2 MCP RAG Data Pipeline & Milvus Integration](5.2-mcp-rag-data-pipeline-milvus-integration.md)
+- [6 Example: Kaggle MCP Integration](6-example-kaggle-mcp-integration.md)
+- [7 Example: Currency Agent A2A](7-example-currency-agent-a2a.md)
+- [8 Example: x402 Payment Tool](8-example-x402-payment-tool.md)
+  - [8.1 x402 Payment Negotiation & Spending Policy](8.1-x402-payment-negotiation-spending-policy.md)
+  - [8.2 Wallet Signer Architecture](8.2-wallet-signer-architecture.md)
+- [9 Example: Agent Identity Tool](9-example-agent-identity-tool.md)
+- [10 Example: Profiler Agent](10-example-profiler-agent.md)
+- [11 CI/CD & Repository Governance](11-ci-cd-repository-governance.md)
+  - [11.1 CI Scripts & Code Quality Checks](11.1-ci-scripts-code-quality-checks.md)
+  - [11.2 GitHub Workflows & Community Templates](11.2-github-workflows-community-templates.md)
+- [12 Glossary](12-glossary.md)

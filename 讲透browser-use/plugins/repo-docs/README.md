@@ -1,0 +1,50 @@
+# Browser Use plugins
+
+The [Browser Use](https://browser-use.com) plugin marketplace for **Claude Code**, **Grok Build**, **Cursor**, and **Kimi Code**.
+
+This repo is a catalog of Browser Use plugins for Claude Code and Grok Build, and doubles as the Browser Use plugin for Cursor (see [`cursor/`](./cursor)) and for Kimi Code CLI (see [`.kimi-plugin/`](./.kimi-plugin)). The plugins are self-sufficient: they install the CLI they run through on first use. Support for other hosts (Codex, …) will be added later.
+
+## Plugins
+
+| Plugin | What it does | How it works |
+|---|---|---|
+| **browser-use** | Give Claude a real browser — your Chrome or a Browser Use Cloud browser. Use it whenever a task involves a website or web app: browsing, scraping and data extraction, filling forms, testing sites, taking screenshots, automating web workflows. | MCP server (`uvx browser-use@latest --cli-mcp`) exposing the [Browser Use CLI 3.0](https://github.com/browser-use/browser-use#-cli) surface: `browser_exec` + `browser_screenshot`, with usage instructions served by the release itself — self-installing via uv, always current, nothing here to sync. |
+| **qa** | QA-test a website or app and return a 1–5 quality score with evidence. Drives a Browser Use cloud browser and tunnels localhost automatically. Run as `/qa <url-or-localhost-port>`. | Colocated skill ([`qa/`](./qa)); runs through the `browser-harness` CLI and installs it itself if missing. |
+
+## Install
+
+Claude Code:
+
+```bash
+claude plugin marketplace add browser-use/plugins
+claude plugin install browser-use@browser-use      # browser control (MCP server, self-installs via uvx)
+claude plugin install qa@browser-use               # adds /qa
+```
+
+Grok Build:
+
+```bash
+grok plugin marketplace add browser-use/plugins
+grok plugin install browser-use@browser-use       # Browser Use (MCP server + skill)
+```
+
+Or open `/plugins` in the TUI and install from the Marketplace tab.
+
+Cursor: search for **Browser Use** in the [Cursor Marketplace](https://cursor.com/marketplace) (or symlink [`cursor/`](./cursor) into `~/.cursor/plugins/local/` for local development).
+
+Kimi Code (inside the TUI):
+
+```text
+/plugins install https://github.com/browser-use/plugins
+/reload
+```
+
+## Layout
+
+`.claude-plugin/marketplace.json` — the Claude Code catalog. Each plugin is a colocated subdirectory (`source: ./<dir>`).
+
+`.grok-plugin/marketplace.json` — the Grok Build catalog. Lists the colocated [`grok/`](./grok) plugin (MCP server plus a skill at [`grok/skills/browser-use/`](./grok/skills/browser-use)). Grok is kept in its own directory rather than sharing [`browser-use/`](./browser-use) because it needs the standard `{"mcpServers": {…}}` wrapper in `.mcp.json` and the `when-to-use` frontmatter key, neither of which matches the Claude plugin as written. Submitted to the [xAI plugin marketplace](https://github.com/xai-org/plugin-marketplace) as a url source pinned to a commit SHA, with `source.path` set to `grok`.
+
+`.cursor-plugin/marketplace.json` — the Cursor catalog, pointing at the colocated [`cursor/`](./cursor) plugin (same MCP server plus a skill at [`cursor/skills/browser-use/`](./cursor/skills/browser-use)). Submitted to the [Cursor Marketplace](https://cursor.com/marketplace) via cursor.com/marketplace/publish.
+
+`.kimi-plugin/plugin.json` — the Kimi Code plugin manifest (Kimi installs one plugin per repo, resolved from the repo root). Declares the same `uvx --python 3.12 browser-use@latest --cli-mcp` MCP server plus a skill at [`.kimi-plugin/skills/browser-use/`](./.kimi-plugin/skills/browser-use).

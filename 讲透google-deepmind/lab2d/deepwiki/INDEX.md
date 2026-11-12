@@ -1,0 +1,33 @@
+# DeepWiki 索引 — google-deepmind/lab2d
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 187074 字符
+
+- [1 DeepMind Lab2D: Overview](1-deepmind-lab2d-overview.md)
+  - [1.1 Getting Started: Installation and Quick Start](1.1-getting-started-installation-and-quick-start.md)
+  - [1.2 Repository Layout and Key Concepts](1.2-repository-layout-and-key-concepts.md)
+- [2 Python API](2-python-api.md)
+  - [2.1 dmlab2d.Environment: The dm_env Interface](2.1-dmlab2d.environment-the-dm-env-interface.md)
+  - [2.2 C++/Python Bridge: dmlab2d_pybind](2.2-c-python-bridge-dmlab2d-pybind.md)
+  - [2.3 Python Utilities: settings_helper and runfiles_helper](2.3-python-utilities-settings-helper-and-runfiles-helper.md)
+- [3 Lua Levels API](3-lua-levels-api.md)
+  - [3.1 Level Lifecycle and Callback API](3.1-level-lifecycle-and-callback-api.md)
+  - [3.2 Common Lua Libraries (game_scripts/common)](3.2-common-lua-libraries-game-scripts-common.md)
+  - [3.3 Built-in Levels](3.3-built-in-levels.md)
+- [4 C++ Core Engine](4-c-core-engine.md)
+  - [4.1 EnvLuaApi: C++ to Lua Bridge](4.1-envluaapi-c-to-lua-bridge.md)
+  - [4.2 Lua VM Wrapper](4.2-lua-vm-wrapper.md)
+  - [4.3 env_c_api: The RL Environment C Interface](4.3-env-c-api-the-rl-environment-c-interface.md)
+- [5 System Libraries (Lua-accessible C++ Modules)](5-system-libraries-lua-accessible-c-modules.md)
+  - [5.1 system.grid_world: Grid World Engine](5.1-system.grid-world-grid-world-engine.md)
+  - [5.2 system.tensor: Tensor Library](5.2-system.tensor-tensor-library.md)
+  - [5.3 system.tile: Sprite Rendering](5.3-system.tile-sprite-rendering.md)
+  - [5.4 Other System Modules: image, random, file_system, generators](5.4-other-system-modules-image-random-file-system-generators.md)
+- [6 Build System and Infrastructure](6-build-system-and-infrastructure.md)
+  - [6.1 Bazel Build Configuration](6.1-bazel-build-configuration.md)
+  - [6.2 External Dependencies](6.2-external-dependencies.md)
+  - [6.3 CI/CD: Precommit Checks and Wheel Release](6.3-ci-cd-precommit-checks-and-wheel-release.md)
+- [7 Testing Infrastructure](7-testing-infrastructure.md)
+  - [7.1 C++ Testing Patterns](7.1-c-testing-patterns.md)
+  - [7.2 Lua Testing Patterns](7.2-lua-testing-patterns.md)
+- [8 Glossary](8-glossary.md)

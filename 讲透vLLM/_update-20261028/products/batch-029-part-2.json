@@ -1,0 +1,1382 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/distributed/eplb/eplb_state.py",
+   "type": "file",
+   "name": "eplb_state.py",
+   "filePath": "vllm/distributed/eplb/eplb_state.py",
+   "summary": "EPLB 状态核心（含逻辑/物理/冗余专家术语表）：EplbStats 负载统计、EplbModelState 指标、EplbState（21 方法）驱动重均衡决策与 logical↔physical 映射提交，异步 worker 与通信器协作。",
+   "tags": [
+    "eplb",
+    "load-balancing",
+    "state",
+    "experts"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/eplb/eplb_utils.py",
+   "type": "file",
+   "name": "eplb_utils.py",
+   "filePath": "vllm/distributed/eplb/eplb_utils.py",
+   "summary": "EPLB 工具：平台无关 device_stream 上下文、CpuGpuEvent（CUDA 事件+CPU 线程事件保证跨线程 record→wait 顺序）与环境变量覆写。",
+   "tags": [
+    "eplb",
+    "utilities",
+    "events"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/distributed/eplb/migration_scheduler.py",
+   "type": "file",
+   "name": "migration_scheduler.py",
+   "filePath": "vllm/distributed/eplb/migration_scheduler.py",
+   "summary": "专家迁移调度器：按 (src,dst) rank 对聚合 flow，贪心放入首个不冲突的批——每 rank 每批只与一个 peer 通信，独立 rank 对并发。",
+   "tags": [
+    "eplb",
+    "migration",
+    "scheduling",
+    "contention-free"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/distributed/eplb/policy/abstract.py",
+   "type": "file",
+   "name": "abstract.py",
+   "filePath": "vllm/distributed/eplb/policy/abstract.py",
+   "summary": "EPLB 策略抽象基类 AbstractEplbPolicy：输入负载统计与冗余度，输出新的 logical→physical 映射。",
+   "tags": [
+    "eplb",
+    "policy",
+    "abstract"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/distributed/eplb/policy/default.py",
+   "type": "file",
+   "name": "default.py",
+   "filePath": "vllm/distributed/eplb/policy/default.py",
+   "summary": "默认 EPLB 策略：DefaultEplbPolicy 按物理专家负载贪婪重分配逻辑专家（含冗余专家放置）。",
+   "tags": [
+    "eplb",
+    "policy",
+    "greedy"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "type": "file",
+   "name": "rebalance_execute.py",
+   "filePath": "vllm/distributed/eplb/rebalance_execute.py",
+   "summary": "EPLB 重均衡执行：迁移批执行、专家权重 move_to_buffer/move_from_buffer 缓冲重排与就地 rearrange（新旧全局索引映射），由无竞争调度器分批驱动。",
+   "tags": [
+    "eplb",
+    "rebalancing",
+    "weights",
+    "execution"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/__init__.py",
+   "summary": "UMBP（Unified Memory Block Pool）connector 包 barrel：导出 connector/布局规划/传输计划/运行时工厂等 20 个公共符号。",
+   "tags": [
+    "barrel",
+    "umbp",
+    "kv-connector"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "type": "file",
+   "name": "connector.py",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "summary": "UMBP vLLM 侧 connector：UMBPStoreConnector（34 方法）混入 KVConnectorBase_V1 与 SupportsHMA，持有 scheduler/worker 两半与运行时工厂，统一各运行时模式的生命周期；UMBPStoreKVEvents 做有序去重的事件发布。",
+   "tags": [
+    "umbp",
+    "kv-connector",
+    "lifecycle"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/distributed/eplb/eplb_state.py:EplbStats",
+   "type": "class",
+   "name": "EplbStats",
+   "filePath": "vllm/distributed/eplb/eplb_state.py",
+   "summary": "重均衡算法输入的模型负载统计。",
+   "tags": [
+    "eplb",
+    "stats",
+    "load"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    75,
+    98
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/eplb/eplb_state.py:EplbModelState",
+   "type": "class",
+   "name": "EplbModelState",
+   "filePath": "vllm/distributed/eplb/eplb_state.py",
+   "summary": "EPLB 指标（逐层物理专家负载等）。",
+   "tags": [
+    "eplb",
+    "metrics",
+    "model"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    102,
+    231
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/eplb/eplb_state.py:EplbState",
+   "type": "class",
+   "name": "EplbState",
+   "filePath": "vllm/distributed/eplb/eplb_state.py",
+   "summary": "EPLB 状态主体（21 方法）：负载统计聚合、策略执行、logical↔physical 映射提交与异步重均衡编排。",
+   "tags": [
+    "eplb",
+    "state",
+    "rebalancing"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    234,
+    1188
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/eplb/eplb_state.py:EplbLayerState",
+   "type": "class",
+   "name": "EplbLayerState",
+   "filePath": "vllm/distributed/eplb/eplb_state.py",
+   "summary": "MoE 层内存储的运行时 EPLB 数据。",
+   "tags": [
+    "eplb",
+    "layer-state",
+    "runtime"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    1192,
+    1224
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/eplb/eplb_utils.py:CpuGpuEvent",
+   "type": "class",
+   "name": "CpuGpuEvent",
+   "filePath": "vllm/distributed/eplb/eplb_utils.py",
+   "summary": "CUDA 事件 + CPU 线程事件的组合：保证恰好两线程间 record→wait 顺序（未记录的 CUDA 事件 wait 是 no-op）。",
+   "tags": [
+    "eplb",
+    "events",
+    "synchronization"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    33,
+    75
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/eplb/migration_scheduler.py:MigrationFlow",
+   "type": "class",
+   "name": "MigrationFlow",
+   "filePath": "vllm/distributed/eplb/migration_scheduler.py",
+   "summary": "一个有向 rank 对之间的专家迁移流。",
+   "tags": [
+    "eplb",
+    "migration",
+    "flow"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    11,
+    17
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/eplb/policy/abstract.py:AbstractEplbPolicy",
+   "type": "class",
+   "name": "AbstractEplbPolicy",
+   "filePath": "vllm/distributed/eplb/policy/abstract.py",
+   "summary": "EPLB 策略抽象：负载统计与冗余度→新 logical→physical 映射。",
+   "tags": [
+    "eplb",
+    "policy",
+    "abstract"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    9,
+    40
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/eplb/policy/default.py:DefaultEplbPolicy",
+   "type": "class",
+   "name": "DefaultEplbPolicy",
+   "filePath": "vllm/distributed/eplb/policy/default.py",
+   "summary": "默认策略：按物理专家负载贪婪重分配逻辑专家与冗余副本。",
+   "tags": [
+    "eplb",
+    "policy",
+    "greedy"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    20,
+    332
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/eplb/rebalance_execute.py:TransferMetadata",
+   "type": "class",
+   "name": "TransferMetadata",
+   "filePath": "vllm/distributed/eplb/rebalance_execute.py",
+   "summary": "一次完成的 EPLB 缓冲传输元数据。",
+   "tags": [
+    "eplb",
+    "transfer",
+    "metadata"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    28,
+    42
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/eplb/rebalance_execute.py:AsyncEplbLayerResult",
+   "type": "class",
+   "name": "AsyncEplbLayerResult",
+   "filePath": "vllm/distributed/eplb/rebalance_execute.py",
+   "summary": "单层异步 EPLB 传输完成结果。",
+   "tags": [
+    "eplb",
+    "async",
+    "result"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    46,
+    64
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py:UMBPStoreKVEvents",
+   "type": "class",
+   "name": "UMBPStoreKVEvents",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "summary": "有序去重的 UMBP 事件（同引擎步内合并重复 worker 上报）。",
+   "tags": [
+    "umbp",
+    "events",
+    "dedup"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    51,
+    96
+   ]
+  },
+  {
+   "id": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py:UMBPStoreConnector",
+   "type": "class",
+   "name": "UMBPStoreConnector",
+   "filePath": "vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "summary": "UMBP connector 主体（34 方法）：混入 KVConnectorBase_V1+SupportsHMA，衔接 scheduler/worker 两半与运行时，覆盖全部 vLLM connector 生命周期钩子。",
+   "tags": [
+    "umbp",
+    "kv-connector",
+    "lifecycle"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    99,
+    424
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/eplb_state.py:_node_count_with_rank_mapping",
+   "type": "function",
+   "name": "_node_count_with_rank_mapping",
+   "filePath": "vllm/distributed/eplb/eplb_state.py",
+   "summary": "按 rank 映射计算节点数。",
+   "tags": [
+    "eplb",
+    "topology",
+    "nodes"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1227,
+    1261
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/eplb_state.py:compute_logical_maps",
+   "type": "function",
+   "name": "compute_logical_maps",
+   "filePath": "vllm/distributed/eplb/eplb_state.py",
+   "summary": "从 physical_to_logical 推导 logical_to_physical_map 与 logical_replica_count。",
+   "tags": [
+    "eplb",
+    "mapping",
+    "logical-physical"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    1264,
+    1340
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/eplb_state.py:_commit_eplb_maps_for_layer",
+   "type": "function",
+   "name": "_commit_eplb_maps_for_layer",
+   "filePath": "vllm/distributed/eplb/eplb_state.py",
+   "summary": "单层版映射提交（EPLB worker 同步段使用）。",
+   "tags": [
+    "eplb",
+    "commit",
+    "layer"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1352,
+    1385
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/eplb_state.py:_commit_eplb_maps",
+   "type": "function",
+   "name": "_commit_eplb_maps",
+   "filePath": "vllm/distributed/eplb/eplb_state.py",
+   "summary": "把全部 new_* 映射拷入 model_state（完成后交换生效）。",
+   "tags": [
+    "eplb",
+    "commit",
+    "maps"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1388,
+    1423
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/eplb_state.py:_move_to_workspace",
+   "type": "function",
+   "name": "_move_to_workspace",
+   "filePath": "vllm/distributed/eplb/eplb_state.py",
+   "summary": "把重均衡工作数据移入共享 workspace。",
+   "tags": [
+    "eplb",
+    "workspace",
+    "transfer"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1426,
+    1451
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/eplb_utils.py:device_stream",
+   "type": "function",
+   "name": "device_stream",
+   "filePath": "vllm/distributed/eplb/eplb_utils.py",
+   "summary": "平台无关地把 stream 设为当前加速器流的上下文。",
+   "tags": [
+    "eplb",
+    "stream",
+    "context-manager"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    18,
+    30
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/eplb_utils.py:override_envs_for_eplb",
+   "type": "function",
+   "name": "override_envs_for_eplb",
+   "filePath": "vllm/distributed/eplb/eplb_utils.py",
+   "summary": "特定条件下覆写 EPLB 相关环境变量。",
+   "tags": [
+    "eplb",
+    "env-override",
+    "configuration"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    78,
+    123
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/migration_scheduler.py:schedule_migration_batches",
+   "type": "function",
+   "name": "schedule_migration_batches",
+   "filePath": "vllm/distributed/eplb/migration_scheduler.py",
+   "summary": "把专家迁移按 rank 对分批，保证每批内 rank 只与一个 peer 通信。",
+   "tags": [
+    "eplb",
+    "scheduling",
+    "batching"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    20,
+    103
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/migration_scheduler.py:schedule_migration_batches_for_layers",
+   "type": "function",
+   "name": "schedule_migration_batches_for_layers",
+   "filePath": "vllm/distributed/eplb/migration_scheduler.py",
+   "summary": "预计算每个 MoE 层的独立迁移调度。",
+   "tags": [
+    "eplb",
+    "scheduling",
+    "layers"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    106,
+    122
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/rebalance_execute.py:get_ep_ranks_with_experts_batch",
+   "type": "function",
+   "name": "get_ep_ranks_with_experts_batch",
+   "filePath": "vllm/distributed/eplb/rebalance_execute.py",
+   "summary": "计算需要交换的专家所在 rank。",
+   "tags": [
+    "eplb",
+    "experts",
+    "ranks"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    67,
+    171
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/rebalance_execute.py:_execute_migration_batch",
+   "type": "function",
+   "name": "_execute_migration_batch",
+   "filePath": "vllm/distributed/eplb/rebalance_execute.py",
+   "summary": "执行一批 rank 对不相交的专家传输。",
+   "tags": [
+    "eplb",
+    "migration",
+    "batch"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    174,
+    210
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/rebalance_execute.py:_execute_migration_batches",
+   "type": "function",
+   "name": "_execute_migration_batches",
+   "filePath": "vllm/distributed/eplb/rebalance_execute.py",
+   "summary": "逐批执行一层的全部无竞争迁移。",
+   "tags": [
+    "eplb",
+    "migration",
+    "batches"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    213,
+    252
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/rebalance_execute.py:_get_migration_row",
+   "type": "function",
+   "name": "_get_migration_row",
+   "filePath": "vllm/distributed/eplb/rebalance_execute.py",
+   "summary": "取一行的迁移行数据。",
+   "tags": [
+    "eplb",
+    "migration",
+    "row"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    255,
+    272
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/rebalance_execute.py:move_to_buffer",
+   "type": "function",
+   "name": "move_to_buffer",
+   "filePath": "vllm/distributed/eplb/rebalance_execute.py",
+   "summary": "重均衡期间把专家权重重排进通信缓冲。",
+   "tags": [
+    "eplb",
+    "weights",
+    "buffer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    275,
+    471
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/rebalance_execute.py:move_from_buffer",
+   "type": "function",
+   "name": "move_from_buffer",
+   "filePath": "vllm/distributed/eplb/rebalance_execute.py",
+   "summary": "把专家权重从通信缓冲拷回目标权重张量。",
+   "tags": [
+    "eplb",
+    "weights",
+    "buffer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    474,
+    548
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/rebalance_execute.py:transfer_layer",
+   "type": "function",
+   "name": "transfer_layer",
+   "filePath": "vllm/distributed/eplb/rebalance_execute.py",
+   "summary": "按新专家索引就地重排一层权重（传输路径）。",
+   "tags": [
+    "eplb",
+    "rearrange",
+    "layer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    551,
+    639
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/rebalance_execute.py:rearrange_expert_weights_inplace",
+   "type": "function",
+   "name": "rearrange_expert_weights_inplace",
+   "filePath": "vllm/distributed/eplb/rebalance_execute.py",
+   "summary": "按新专家索引就地重排权重（本地路径）。",
+   "tags": [
+    "eplb",
+    "rearrange",
+    "inplace"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    642,
+    749
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/rebalance_execute.py:_map_old_expert_indices_with_rank_mapping",
+   "type": "function",
+   "name": "_map_old_expert_indices_with_rank_mapping",
+   "filePath": "vllm/distributed/eplb/rebalance_execute.py",
+   "summary": "旧全局专家索引→新全局索引映射（含 rank 映射）。",
+   "tags": [
+    "eplb",
+    "index-mapping",
+    "old"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    752,
+    802
+   ]
+  },
+  {
+   "id": "function:vllm/distributed/eplb/rebalance_execute.py:_map_new_expert_indices_with_rank_mapping",
+   "type": "function",
+   "name": "_map_new_expert_indices_with_rank_mapping",
+   "filePath": "vllm/distributed/eplb/rebalance_execute.py",
+   "summary": "新全局专家索引→rank 映射。",
+   "tags": [
+    "eplb",
+    "index-mapping",
+    "new"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    805,
+    837
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "file:vllm/config/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "file:vllm/distributed/eplb/async_worker.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "file:vllm/distributed/eplb/eplb_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "file:vllm/distributed/eplb/policy/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "file:vllm/distributed/stateless_coordinator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "file:vllm/distributed/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "file:vllm/utils/gpu_sync_debug.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/policy/default.py",
+   "target": "file:vllm/distributed/eplb/policy/abstract.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "file:vllm/distributed/eplb/eplb_communicator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "file:vllm/distributed/eplb/eplb_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "file:vllm/distributed/eplb/migration_scheduler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "file:vllm/utils/gpu_sync_debug.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/__init__.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/__init__.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/__init__.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/__init__.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "target": "file:vllm/distributed/kv_events.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/metrics.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/data.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/runtime/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/stats.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "target": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/worker.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "target": "file:vllm/v1/core/sched/output.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "class:vllm/distributed/eplb/eplb_state.py:EplbStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "class:vllm/distributed/eplb/eplb_state.py:EplbModelState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "class:vllm/distributed/eplb/eplb_state.py:EplbState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "class:vllm/distributed/eplb/eplb_state.py:EplbLayerState",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "function:vllm/distributed/eplb/eplb_state.py:_node_count_with_rank_mapping",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "function:vllm/distributed/eplb/eplb_state.py:compute_logical_maps",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "function:vllm/distributed/eplb/eplb_state.py:_commit_eplb_maps_for_layer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "function:vllm/distributed/eplb/eplb_state.py:_commit_eplb_maps",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "function:vllm/distributed/eplb/eplb_state.py:_move_to_workspace",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_utils.py",
+   "target": "class:vllm/distributed/eplb/eplb_utils.py:CpuGpuEvent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_utils.py",
+   "target": "function:vllm/distributed/eplb/eplb_utils.py:device_stream",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_utils.py",
+   "target": "function:vllm/distributed/eplb/eplb_utils.py:override_envs_for_eplb",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/migration_scheduler.py",
+   "target": "class:vllm/distributed/eplb/migration_scheduler.py:MigrationFlow",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/migration_scheduler.py",
+   "target": "function:vllm/distributed/eplb/migration_scheduler.py:schedule_migration_batches",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/migration_scheduler.py",
+   "target": "function:vllm/distributed/eplb/migration_scheduler.py:schedule_migration_batches_for_layers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/policy/abstract.py",
+   "target": "class:vllm/distributed/eplb/policy/abstract.py:AbstractEplbPolicy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/policy/default.py",
+   "target": "class:vllm/distributed/eplb/policy/default.py:DefaultEplbPolicy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "class:vllm/distributed/eplb/rebalance_execute.py:TransferMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "class:vllm/distributed/eplb/rebalance_execute.py:AsyncEplbLayerResult",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:get_ep_ranks_with_experts_batch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:_execute_migration_batch",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:_execute_migration_batches",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:_get_migration_row",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:move_to_buffer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:move_from_buffer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:transfer_layer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:rearrange_expert_weights_inplace",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:_map_old_expert_indices_with_rank_mapping",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:_map_new_expert_indices_with_rank_mapping",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py:UMBPStoreKVEvents",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py:UMBPStoreConnector",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "class:vllm/distributed/eplb/eplb_state.py:EplbStats",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "class:vllm/distributed/eplb/eplb_state.py:EplbModelState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "class:vllm/distributed/eplb/eplb_state.py:EplbState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "class:vllm/distributed/eplb/eplb_state.py:EplbLayerState",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_state.py",
+   "target": "function:vllm/distributed/eplb/eplb_state.py:compute_logical_maps",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_utils.py",
+   "target": "class:vllm/distributed/eplb/eplb_utils.py:CpuGpuEvent",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_utils.py",
+   "target": "function:vllm/distributed/eplb/eplb_utils.py:device_stream",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/eplb_utils.py",
+   "target": "function:vllm/distributed/eplb/eplb_utils.py:override_envs_for_eplb",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/migration_scheduler.py",
+   "target": "class:vllm/distributed/eplb/migration_scheduler.py:MigrationFlow",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/migration_scheduler.py",
+   "target": "function:vllm/distributed/eplb/migration_scheduler.py:schedule_migration_batches",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/migration_scheduler.py",
+   "target": "function:vllm/distributed/eplb/migration_scheduler.py:schedule_migration_batches_for_layers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/policy/abstract.py",
+   "target": "class:vllm/distributed/eplb/policy/abstract.py:AbstractEplbPolicy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/policy/default.py",
+   "target": "class:vllm/distributed/eplb/policy/default.py:DefaultEplbPolicy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "class:vllm/distributed/eplb/rebalance_execute.py:TransferMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "class:vllm/distributed/eplb/rebalance_execute.py:AsyncEplbLayerResult",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:get_ep_ranks_with_experts_batch",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:move_to_buffer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:move_from_buffer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:transfer_layer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/eplb/rebalance_execute.py",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:rearrange_expert_weights_inplace",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py:UMBPStoreKVEvents",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py:UMBPStoreConnector",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/eplb/policy/default.py:DefaultEplbPolicy",
+   "target": "class:vllm/distributed/eplb/policy/abstract.py:AbstractEplbPolicy",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py:UMBPStoreConnector",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/base.py:KVConnectorBase_V1",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py:UMBPStoreConnector",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/base.py:SupportsHMA",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py:UMBPStoreKVEvents",
+   "target": "class:vllm/distributed/kv_events.py:KVConnectorKVEvents",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/distributed/eplb/eplb_state.py:EplbState",
+   "target": "function:vllm/distributed/eplb/async_worker.py:start_async_worker",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/eplb/eplb_state.py:EplbState",
+   "target": "function:vllm/distributed/eplb/eplb_communicator.py:create_eplb_communicator",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/eplb/eplb_state.py:EplbState",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:rearrange_expert_weights_inplace",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/eplb/eplb_state.py:EplbState",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:move_from_buffer",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/distributed/eplb/rebalance_execute.py:_execute_migration_batches",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:_execute_migration_batch",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/distributed/eplb/rebalance_execute.py:_execute_migration_batch",
+   "target": "function:vllm/distributed/eplb/migration_scheduler.py:schedule_migration_batches",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/distributed/eplb/rebalance_execute.py:transfer_layer",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:move_to_buffer",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/distributed/eplb/rebalance_execute.py:transfer_layer",
+   "target": "function:vllm/distributed/eplb/rebalance_execute.py:move_from_buffer",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py:UMBPStoreConnector",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/scheduler.py:UMBPStoreConnectorScheduler",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/connector.py:UMBPStoreConnector",
+   "target": "class:vllm/distributed/kv_transfer/kv_connector/v1/umbp/worker.py:UMBPStoreConnectorWorker",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

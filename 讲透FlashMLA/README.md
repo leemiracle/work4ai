@@ -1,5 +1,7 @@
 # 讲透 FlashMLA
 
+> ⬆ 2026-09-30 breaking 已刷新：见 [refresh-20260930.md](refresh-20260930.md)（弃 Hopper/前代模型、FP8/FP4 KV 新格式、V4.1 kernel、Ascend 950）
+
 > DeepSeek Multi-head Latent Attention 优化内核库：驱动 DeepSeek-V3 / V3.2-Exp 的 MLA 与 DSA（稀疏注意力）解码 · commit `15f13e5`（2026-07-28）· 产物生成 2026-09-04/05
 
 ## 产物清单

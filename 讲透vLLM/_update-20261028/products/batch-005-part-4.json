@@ -1,0 +1,503 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/utils.py",
+   "summary": "spec_decode 通用工具：解析 DeepSeek V4 风格 HC residual 隐状态、PP 安全的 draft load config（fastsafetensors 降级）、结构化输出草稿 token 异步回传 CPU（DraftTokensHandler）与并行起草 mask token id 解析。",
+   "tags": [
+    "spec-decode",
+    "utilities",
+    "structured-output",
+    "hidden-states"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/xpress/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/xpress/__init__.py",
+   "summary": "xpress speculator 包标记文件，仅含 SPDX 头。",
+   "tags": [
+    "package-marker",
+    "spec-decode",
+    "python-package"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "type": "file",
+   "name": "kernels.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "summary": "XPress Jacobi 精炼 Triton kernel 集：latent 阶段单 kernel 完成一次 Jacobi 迭代的 gather/latent/readout，两段式 fused add-argmax（chunk 归约+按 slot 写回）与 top-C 候选 argmax，全部不物化 [rows,V] 求和矩阵。",
+   "tags": [
+    "triton",
+    "jacobi",
+    "argmax",
+    "spec-decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/v1/worker/gpu/spec_decode/xpress/speculator.py",
+   "type": "file",
+   "name": "speculator.py",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/xpress/speculator.py",
+   "summary": "XPress speculator：复用 DFlash fill-in 布局与 DSpark 加载器，骨架并行前向后跑 K 次 Jacobi 精炼 pass（latent + 融合 argmax readout），整个 draft step 定形可整体 CUDA graph 捕获。",
+   "tags": [
+    "spec-decode",
+    "xpress",
+    "jacobi",
+    "parallel-drafting"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/spec_decode/utils.py:DraftTokensHandler",
+   "type": "class",
+   "name": "DraftTokensHandler",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/utils.py",
+   "summary": "结构化输出场景草稿 token 异步拷贝处理器：side stream + record_stream 防内存重用，阻塞事件同步。",
+   "tags": [
+    "structured-output",
+    "async-copy",
+    "handler"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    48,
+    89
+   ]
+  },
+  {
+   "id": "class:vllm/v1/worker/gpu/spec_decode/xpress/speculator.py:XPressSpeculator",
+   "type": "class",
+   "name": "XPressSpeculator",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/xpress/speculator.py",
+   "summary": "XPress speculator：K 次 Jacobi 精炼 pass 填充草稿槽。",
+   "tags": [
+    "spec-decode",
+    "xpress",
+    "jacobi"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    17,
+    96
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/utils.py:get_drafter_hidden_states",
+   "type": "function",
+   "name": "get_drafter_hidden_states",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/utils.py",
+   "summary": "取喂给草稿的隐状态：target 实现 get_mtp_target_hidden_states 时（DeepSeek V4 HC residual）返回该缓冲。",
+   "tags": [
+    "hidden-states",
+    "deepseek",
+    "spec-decode"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    16,
+    32
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/utils.py:get_pp_safe_draft_load_config",
+   "type": "function",
+   "name": "get_pp_safe_draft_load_config",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/utils.py",
+   "summary": "PP>1 且 fastsafetensors 时降级为 auto 加载器，避免无草稿 rank 参与集合通信。",
+   "tags": [
+    "load-config",
+    "pipeline-parallel",
+    "draft-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    35,
+    45
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/utils.py:get_parallel_drafting_token_id",
+   "type": "function",
+   "name": "get_parallel_drafting_token_id",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/utils.py",
+   "summary": "按优先级解析并行起草 mask token id（dflash_config.mask_token_id/mask_token_id/dspark_noise/pard/ptd）。",
+   "tags": [
+    "config-parsing",
+    "parallel-drafting",
+    "mask-token"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    92,
+    114
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py:_xpress_add_argmax_partial_kernel",
+   "type": "function",
+   "name": "_xpress_add_argmax_partial_kernel",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "summary": "融合 argmax 第一段：每 (行, vocab chunk) 计算带 bias 的局部最大及其索引。",
+   "tags": [
+    "triton",
+    "argmax",
+    "rejection-sampling"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    25,
+    69
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py:_xpress_latent_kernel",
+   "type": "function",
+   "name": "_xpress_latent_kernel",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "summary": "XPress Jacobi latent 阶段 kernel：单 program 完成整块的 gather/latent/readout 融合。",
+   "tags": [
+    "triton",
+    "jacobi",
+    "latent"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    73,
+    186
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py:xpress_latent_pass",
+   "type": "function",
+   "name": "xpress_latent_pass",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "summary": "latent kernel 的网格封装：按块数发射。",
+   "tags": [
+    "triton",
+    "wrapper",
+    "kernel-launcher"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    189,
+    233
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py:_xpress_add_argmax_reduce_to_blk_kernel",
+   "type": "function",
+   "name": "_xpress_add_argmax_reduce_to_blk_kernel",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "summary": "融合 argmax 第二段：把行内各 chunk 最大值归约写入对应 draft slot。",
+   "tags": [
+    "triton",
+    "argmax",
+    "reduction"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    237,
+    269
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py:fused_add_argmax_to_blk",
+   "type": "function",
+   "name": "fused_add_argmax_to_blk",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "summary": "两段融合 add+argmax：base+bias 的 [rows,V] 求和从不物化，chunk 归约直接写 blk。",
+   "tags": [
+    "triton",
+    "fused-argmax",
+    "xpress"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    272,
+    320
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py:_xpress_topc_argmax_to_blk_kernel",
+   "type": "function",
+   "name": "_xpress_topc_argmax_to_blk_kernel",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "summary": "top-C 候选轴 argmax 直接写回 token id 到 draft slot。",
+   "tags": [
+    "triton",
+    "argmax",
+    "topc"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    324,
+    365
+   ]
+  },
+  {
+   "id": "function:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py:fused_topc_argmax_to_blk",
+   "type": "function",
+   "name": "fused_topc_argmax_to_blk",
+   "filePath": "vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "summary": "topc argmax kernel 的 Python 封装。",
+   "tags": [
+    "triton",
+    "wrapper",
+    "kernel-launcher"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    368,
+    382
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/utils.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/utils.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/utils.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/utils.py",
+   "target": "file:vllm/v1/worker/gpu/async_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/utils.py",
+   "target": "file:vllm/v1/worker/gpu/input_batch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/xpress/speculator.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/xpress/speculator.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/xpress/speculator.py",
+   "target": "file:vllm/v1/cudagraph_dispatcher.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/xpress/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/xpress/speculator.py",
+   "target": "file:vllm/v1/worker/gpu/spec_decode/dspark/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/utils.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/utils.py:DraftTokensHandler",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/utils.py:get_drafter_hidden_states",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/utils.py:get_pp_safe_draft_load_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/utils.py:get_parallel_drafting_token_id",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/xpress/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/xpress/speculator.py:XPressSpeculator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py:_xpress_add_argmax_partial_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py:_xpress_latent_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py:xpress_latent_pass",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py:_xpress_add_argmax_reduce_to_blk_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py:fused_add_argmax_to_blk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py:_xpress_topc_argmax_to_blk_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py:fused_topc_argmax_to_blk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/utils.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/utils.py:DraftTokensHandler",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/utils.py:get_drafter_hidden_states",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/utils.py:get_pp_safe_draft_load_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/utils.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/utils.py:get_parallel_drafting_token_id",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/xpress/speculator.py",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/xpress/speculator.py:XPressSpeculator",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py:xpress_latent_pass",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py:fused_add_argmax_to_blk",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/xpress/kernels.py:fused_topc_argmax_to_blk",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/xpress/speculator.py:XPressSpeculator",
+   "target": "class:vllm/v1/worker/gpu/spec_decode/dflash/speculator.py:DFlashSpeculator",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/v1/worker/gpu/spec_decode/xpress/speculator.py:XPressSpeculator",
+   "target": "function:vllm/v1/worker/gpu/spec_decode/dspark/utils.py:load_dspark_model",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

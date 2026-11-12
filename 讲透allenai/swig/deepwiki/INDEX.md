@@ -1,0 +1,30 @@
+# DeepWiki 索引 — allenai/swig
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 142276 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Task and Dataset: SWiG](1.2-task-and-dataset-swig.md)
+- [2 JSL Model Architecture](2-jsl-model-architecture.md)
+  - [2.1 Verb Classifier](2.1-verb-classifier.md)
+  - [2.2 GSR Model: ResNet-RetinaNet-RNN](2.2-gsr-model-resnet-retinanet-rnn.md)
+  - [2.3 Anchor Generation](2.3-anchor-generation.md)
+- [3 Training Pipeline](3-training-pipeline.md)
+  - [3.1 Verb Classifier Training](3.1-verb-classifier-training.md)
+  - [3.2 GSR Module Training](3.2-gsr-module-training.md)
+  - [3.3 Loss Functions](3.3-loss-functions.md)
+- [4 Data Pipeline](4-data-pipeline.md)
+  - [4.1 GSR Data Loader (CSVDataset)](4.1-gsr-data-loader-csvdataset.md)
+  - [4.2 Image Transforms and Collation](4.2-image-transforms-and-collation.md)
+  - [4.3 Verb Dataset (imSituDatasetGood)](4.3-verb-dataset-imsitudatasetgood.md)
+- [5 Inference Pipeline](5-inference-pipeline.md)
+  - [5.1 Stage 1: Verb Prediction](5.1-stage-1-verb-prediction.md)
+  - [5.2 Stage 2: Noun and Bounding Box Prediction](5.2-stage-2-noun-and-bounding-box-prediction.md)
+- [6 Evaluation and Metrics](6-evaluation-and-metrics.md)
+  - [6.1 BboxEval: Metric Computation](6.1-bboxeval-metric-computation.md)
+  - [6.2 Evaluation During Training](6.2-evaluation-during-training.md)
+- [7 Global Utilities](7-global-utilities.md)
+  - [7.1 Bounding Box Utilities](7.1-bounding-box-utilities.md)
+  - [7.2 Format and Experiment Utilities](7.2-format-and-experiment-utilities.md)
+- [8 Glossary](8-glossary.md)

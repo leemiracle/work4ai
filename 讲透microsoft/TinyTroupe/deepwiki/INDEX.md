@@ -1,0 +1,33 @@
+# DeepWiki 索引 — microsoft/TinyTroupe
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 216833 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Installation and Setup](1.1-installation-and-setup.md)
+  - [1.2 Configuration Options](1.2-configuration-options.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 Simulation Control](2.1-simulation-control.md)
+  - [2.2 OpenAI Integration](2.2-openai-integration.md)
+- [3 TinyPerson](3-tinyperson.md)
+  - [3.1 Creating Agents](3.1-creating-agents.md)
+  - [3.2 Mental Faculties](3.2-mental-faculties.md)
+  - [3.3 Memory Systems](3.3-memory-systems.md)
+  - [3.4 Action Generation](3.4-action-generation.md)
+- [4 TinyWorld](4-tinyworld.md)
+  - [4.1 TinySocialNetwork](4.1-tinysocialnetwork.md)
+- [5 Using TinyTroupe](5-using-tinytroupe.md)
+  - [5.1 Market Research](5.1-market-research.md)
+  - [5.2 Advertisement Evaluation](5.2-advertisement-evaluation.md)
+  - [5.3 Brainstorming Sessions](5.3-brainstorming-sessions.md)
+  - [5.4 Synthetic Data Generation](5.4-synthetic-data-generation.md)
+- [6 Results Extraction](6-results-extraction.md)
+- [7 Advanced Topics](7-advanced-topics.md)
+  - [7.1 Knowledge Grounding](7.1-knowledge-grounding.md)
+  - [7.2 Interventions and Experimentation](7.2-interventions-and-experimentation.md)
+  - [7.3 Story Generation and Enrichment](7.3-story-generation-and-enrichment.md)
+  - [7.4 Agent Validation](7.4-agent-validation.md)
+- [8 Development Guide](8-development-guide.md)
+  - [8.1 Testing](8.1-testing.md)
+  - [8.2 CI/CD and Security](8.2-ci-cd-and-security.md)
+- [9 Glossary](9-glossary.md)

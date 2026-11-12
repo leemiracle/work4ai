@@ -1,0 +1,2489 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py",
+   "type": "file",
+   "name": "tail_runtime.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py",
+   "summary": "Kimi K3 专用解码 MoE tail 的 CuteDSL 运行时：MoeTailBox/Weights/PreparedTail 管理专家输出的 twoshot 归约尾段（早批/UMMA 批分批 + resident cluster 共享），compile_tail/compile_push 预编译 kernel。",
+   "tags": [
+    "cutedsl",
+    "moe",
+    "specialized-decode",
+    "tail"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py:MoeTailBox",
+   "type": "class",
+   "name": "MoeTailBox",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py",
+   "lineRange": [
+    80,
+    106
+   ],
+   "summary": "MoE tail 的 scratch box（共享缓冲容器）。",
+   "tags": [
+    "cutedsl",
+    "scratch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py:MoeTailWeights",
+   "type": "class",
+   "name": "MoeTailWeights",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py",
+   "lineRange": [
+    150,
+    207
+   ],
+   "summary": "tail 权重容器（归约系数等常量张量）。",
+   "tags": [
+    "cutedsl",
+    "weights"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py:PreparedTail",
+   "type": "class",
+   "name": "PreparedTail",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py",
+   "lineRange": [
+    210,
+    241
+   ],
+   "summary": "预编译的 tail 执行体（3 方法：run/push 等入口）。",
+   "tags": [
+    "cutedsl",
+    "prepared"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py:compile_tail",
+   "type": "function",
+   "name": "compile_tail",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py",
+   "lineRange": [
+    110,
+    138
+   ],
+   "summary": "按批形/批数编译 tail kernel（产出 PreparedTail）。",
+   "tags": [
+    "compile",
+    "factory"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/__init__.py",
+   "summary": "oproj 子包入口（空占位）。",
+   "tags": [
+    "barrel",
+    "package-init"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/consumer.py",
+   "type": "file",
+   "name": "consumer.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/consumer.py",
+   "summary": "oproj 消费端（423 行）：OprojConsumer（14 方法）在注意力残差 kernel 侧消费 producer 发来的 O 投影部分积，含 reduce_scatter 与 pair/dot8 原语；OprojFused 为融合形态。",
+   "tags": [
+    "cutedsl",
+    "oproj",
+    "consumer",
+    "pipeline"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/consumer.py:OprojConsumer",
+   "type": "class",
+   "name": "OprojConsumer",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/consumer.py",
+   "lineRange": [
+    107,
+    386
+   ],
+   "summary": "O 投影部分积消费者：mailbox 接收+reduce_scatter+与注意力输出合并。",
+   "tags": [
+    "cutedsl",
+    "consumer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/consumer.py:OprojFused",
+   "type": "class",
+   "name": "OprojFused",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/consumer.py",
+   "lineRange": [
+    389,
+    423
+   ],
+   "summary": "融合版消费端（投影与残差合并执行）。",
+   "tags": [
+    "cutedsl",
+    "fused"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py",
+   "type": "file",
+   "name": "prepared.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py",
+   "summary": "oproj 预编译装配层：OprojMailbox（生产-消费邮箱）+ PreparedOproj（组合 producer/consumer 的执行体），compile_oproj 一次编译两侧。",
+   "tags": [
+    "cutedsl",
+    "oproj",
+    "prepared",
+    "mailbox"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py:OprojMailbox",
+   "type": "class",
+   "name": "OprojMailbox",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py",
+   "lineRange": [
+    26,
+    44
+   ],
+   "summary": "producer→consumer 的共享邮箱（缓冲与标志位）。",
+   "tags": [
+    "mailbox",
+    "pipeline"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py:PreparedOproj",
+   "type": "class",
+   "name": "PreparedOproj",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py",
+   "lineRange": [
+    107,
+    162
+   ],
+   "summary": "预编译 O 投影执行体：持 mailbox+producer+consumer 统一入口。",
+   "tags": [
+    "cutedsl",
+    "prepared"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py:compile_oproj",
+   "type": "function",
+   "name": "compile_oproj",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py",
+   "lineRange": [
+    79,
+    104
+   ],
+   "summary": "编译两侧 O 投影 kernel 并装配 mailbox。",
+   "tags": [
+    "compile",
+    "factory"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/producer.py",
+   "type": "file",
+   "name": "producer.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/producer.py",
+   "summary": "oproj 生产端（443 行）：OprojProducer（12 方法）计算 O 投影部分积并推入 mailbox（tree_reduce 归约原语），OprojUmma 为 UMMA 张量核形态。",
+   "tags": [
+    "cutedsl",
+    "oproj",
+    "producer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/producer.py:OprojProducer",
+   "type": "class",
+   "name": "OprojProducer",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/producer.py",
+   "lineRange": [
+    62,
+    301
+   ],
+   "summary": "O 投影部分积生产者：pack8+tree_reduce 后发布到 mailbox。",
+   "tags": [
+    "cutedsl",
+    "producer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/producer.py:OprojUmma",
+   "type": "class",
+   "name": "OprojUmma",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/producer.py",
+   "lineRange": [
+    304,
+    443
+   ],
+   "summary": "UMMA（tcgen05 张量核）版 producer。",
+   "tags": [
+    "cutedsl",
+    "umma"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/runtime/__init__.py",
+   "summary": "specialized_decode 运行时入口：specialized_decode_config 从 vllm_config 推导 DecodeConfig，unsupported 列明不支持组合的报错文案。",
+   "tags": [
+    "entry-point",
+    "configuration",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/__init__.py:specialized_decode_config",
+   "type": "function",
+   "name": "specialized_decode_config",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/runtime/__init__.py",
+   "lineRange": [
+    19,
+    40
+   ],
+   "summary": "从 VllmConfig 推导 DecodeConfig（含 KDA dtype 选择），不可用返回 None。",
+   "tags": [
+    "configuration",
+    "factory"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/__init__.py:unsupported",
+   "type": "function",
+   "name": "unsupported",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/runtime/__init__.py",
+   "lineRange": [
+    55,
+    135
+   ],
+   "summary": "逐条件产出不支持原因（eager/量化/TP 组合等），供配置降级诊断。",
+   "tags": [
+    "validation",
+    "diagnostics"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "type": "file",
+   "name": "decode.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "summary": "Kimi K3 专用解码执行器（280 行）：SpecializedDecode 在 stock 主干外接管 decode 步——每步一次路由决策，然后单循环跑完每层预编译 provider（MLA/KDA/MoE/oproj/embedding），Step NamedTuple 携带每层元数据。",
+   "tags": [
+    "specialized-decode",
+    "executor",
+    "cudagraph",
+    "kimi"
+   ],
+   "complexity": "complex",
+   "languageNotes": "模块头钉版：one routing decision per step, then every layer's prepared providers in one loop——整步进 CUDA graph 的专用解码路径。"
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py:Step",
+   "type": "class",
+   "name": "Step",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "lineRange": [
+    32,
+    35
+   ],
+   "summary": "单步数据（q/b/metadata/slot_mapping）。",
+   "tags": [
+    "data-model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py:SpecializedDecode",
+   "type": "class",
+   "name": "SpecializedDecode",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "lineRange": [
+    73,
+    280
+   ],
+   "summary": "专用解码执行器（7 方法）：uniform verify 判定、逐层 provider 循环、TP allreduce 与步级 CUDA graph 协同。",
+   "tags": [
+    "executor",
+    "specialized-decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/prefetch.py",
+   "type": "file",
+   "name": "prefetch.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/runtime/prefetch.py",
+   "summary": "权重预取控制器：PreparedWeightRanges 声明各层权重区间，PrefetchController 在 decode 步间隙用 copy engine 预取下一层权重（隐藏 HBM 延迟）。",
+   "tags": [
+    "prefetch",
+    "memory",
+    "optimization"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/prefetch.py:PreparedWeightRanges",
+   "type": "class",
+   "name": "PreparedWeightRanges",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/runtime/prefetch.py",
+   "lineRange": [
+    62,
+    116
+   ],
+   "summary": "预编译的权重区间表（层→[start,end)）。",
+   "tags": [
+    "prefetch",
+    "data-model"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/prefetch.py:PrefetchController",
+   "type": "class",
+   "name": "PrefetchController",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/runtime/prefetch.py",
+   "lineRange": [
+    119,
+    180
+   ],
+   "summary": "预取调度器（5 方法）：按层进度提前发起权重拷贝。",
+   "tags": [
+    "prefetch",
+    "scheduler"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py",
+   "type": "file",
+   "name": "providers.py",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py",
+   "summary": "层 provider 装配：Attention（MLA/KDA/DCP provider 组合）、SkinnyProjection（skinny GEMM 投影）与 projection_policies 策略表，为 decode 执行器提供逐层预编译件。",
+   "tags": [
+    "providers",
+    "factory",
+    "specialized-decode"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py:projection_policies",
+   "type": "function",
+   "name": "projection_policies",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py",
+   "lineRange": [
+    28,
+    39
+   ],
+   "summary": "按 TP/形状返回投影实现策略表。",
+   "tags": [
+    "policy",
+    "dispatch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py:SkinnyProjection",
+   "type": "class",
+   "name": "SkinnyProjection",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py",
+   "lineRange": [
+    42,
+    56
+   ],
+   "summary": "瘦批（m=1/2/4）投影 provider（CuteDSL skinny GEMM）。",
+   "tags": [
+    "provider",
+    "skinny-gemm"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py:Attention",
+   "type": "class",
+   "name": "Attention",
+   "filePath": "vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py",
+   "lineRange": [
+    65,
+    147
+   ],
+   "summary": "注意力层 provider：组合 MLA/KDA/DCP 预编译件并暴露 run 接口。",
+   "tags": [
+    "provider",
+    "attention"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/nvidia/ops/cute_dsl/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/cute_dsl/__init__.py",
+   "summary": "muse_spark CuteDSL ops 子包入口（空占位）。",
+   "tags": [
+    "barrel",
+    "package-init"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/nvidia/ops/cute_dsl/moe_finalize_rmsnorm.py",
+   "type": "file",
+   "name": "moe_finalize_rmsnorm.py",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/cute_dsl/moe_finalize_rmsnorm.py",
+   "summary": "MoE finalize+RMSNorm 融合 CuteDSL kernel（463 行）：专家输出加权聚合与最终 norm 单 kernel 完成（moe_finalize_with_rmsnorm 入口+supports 判定）。",
+   "tags": [
+    "cutedsl",
+    "moe",
+    "rmsnorm",
+    "fusion"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/nvidia/ops/cute_dsl/moe_finalize_rmsnorm.py:moe_finalize_with_rmsnorm",
+   "type": "function",
+   "name": "moe_finalize_with_rmsnorm",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/cute_dsl/moe_finalize_rmsnorm.py",
+   "lineRange": [
+    385,
+    456
+   ],
+   "summary": "融合入口：路由权重加权求和专家输出并做 RMS norm。",
+   "tags": [
+    "cutedsl",
+    "moe",
+    "entry-point"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/nvidia/ops/cute_dsl/moe_finalize_rmsnorm.py:supports_moe_finalize",
+   "type": "function",
+   "name": "supports_moe_finalize",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/cute_dsl/moe_finalize_rmsnorm.py",
+   "lineRange": [
+    459,
+    463
+   ],
+   "summary": "平台/形状支持判定。",
+   "tags": [
+    "capability"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/nvidia/ops/cute_dsl/qk_norm.py",
+   "type": "file",
+   "name": "qk_norm.py",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/cute_dsl/qk_norm.py",
+   "summary": "QK-Norm CuteDSL kernel（252 行）：per-head RMS norm 的 CuteDSL 实现（qk_norm 入口+supports 判定）。",
+   "tags": [
+    "cutedsl",
+    "qk-norm",
+    "rmsnorm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/nvidia/ops/cute_dsl/qk_norm.py:qk_norm",
+   "type": "function",
+   "name": "qk_norm",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/cute_dsl/qk_norm.py",
+   "lineRange": [
+    209,
+    241
+   ],
+   "summary": "per-head Q/K RMS norm 入口。",
+   "tags": [
+    "cutedsl",
+    "qk-norm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/nvidia/ops/gemm_rs.py",
+   "type": "file",
+   "name": "gemm_rs.py",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/gemm_rs.py",
+   "summary": "Muse-Spark 的 GEMM+ReduceScatter 组合（118 行）：MuseSparkGemmRs 包装通用 gemm_rs_ar kernel 并按 TP/形状适配，maybe_create_gemm_rs 工厂。",
+   "tags": [
+    "gemm",
+    "reduce-scatter",
+    "mnnvl"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/muse_spark/nvidia/ops/gemm_rs.py:MuseSparkGemmRs",
+   "type": "class",
+   "name": "MuseSparkGemmRs",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/gemm_rs.py",
+   "lineRange": [
+    23,
+    59
+   ],
+   "summary": "模型侧 GEMM+RS 包装（4 方法）：权重预处理与调用入口。",
+   "tags": [
+    "gemm",
+    "wrapper"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/nvidia/ops/gemm_rs.py:maybe_create_gemm_rs",
+   "type": "function",
+   "name": "maybe_create_gemm_rs",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/gemm_rs.py",
+   "lineRange": [
+    62,
+    118
+   ],
+   "summary": "按配置/形状判定并构造（不可用返回 None）。",
+   "tags": [
+    "factory",
+    "capability"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py",
+   "type": "file",
+   "name": "mnnvl_fusions.py",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py",
+   "summary": "MNNVL（NVLink 网络多节点）融合算子工厂集：跨节点 TP 判定（tp_group_spans_nodes）后按需创建 all-gather+dual-norm、all-gather+norm+quant、MoE finalize+all-reduce 三种融合（全部 TP rank 一致创建）。",
+   "tags": [
+    "mnnvl",
+    "fusion",
+    "all-gather",
+    "factory"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py:tp_group_spans_nodes",
+   "type": "function",
+   "name": "tp_group_spans_nodes",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py",
+   "lineRange": [
+    21,
+    23
+   ],
+   "summary": "判定 TP group 是否跨物理节点（MNNVL 前提）。",
+   "tags": [
+    "topology",
+    "mnnvl"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py:maybe_create_all_gather_dual_norm",
+   "type": "function",
+   "name": "maybe_create_all_gather_dual_norm",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py",
+   "lineRange": [
+    61,
+    82
+   ],
+   "summary": "all-gather+双 norm 融合算子工厂。",
+   "tags": [
+    "mnnvl",
+    "fusion",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py:maybe_create_moe_finalize_all_reduce",
+   "type": "function",
+   "name": "maybe_create_moe_finalize_all_reduce",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py",
+   "lineRange": [
+    105,
+    126
+   ],
+   "summary": "MoE finalize+all-reduce 融合算子工厂。",
+   "tags": [
+    "mnnvl",
+    "moe",
+    "factory"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_bf16.py",
+   "type": "file",
+   "name": "prepare_megamoe_bf16.py",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/prepare_megamoe_bf16.py",
+   "summary": "MegaMoE BF16 输入预处理 triton kernel：路由/topk 结果到 MegaMoE kernel 期望布局的组装。",
+   "tags": [
+    "triton",
+    "moe",
+    "preparation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_bf16.py:prepare_megamoe_bf16_inputs",
+   "type": "function",
+   "name": "prepare_megamoe_bf16_inputs",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/prepare_megamoe_bf16.py",
+   "lineRange": [
+    43,
+    81
+   ],
+   "summary": "BF16 MegaMoE 输入组装启动器。",
+   "tags": [
+    "triton",
+    "moe"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_nvfp4.py",
+   "type": "file",
+   "name": "prepare_megamoe_nvfp4.py",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/prepare_megamoe_nvfp4.py",
+   "summary": "MegaMoE NVFP4 输入预处理（307 行）：量化+布局组装两路（普通输入与 norm+quant 融合变体，含 JIT warmup 输入）。",
+   "tags": [
+    "triton",
+    "moe",
+    "nvfp4",
+    "quantization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_nvfp4.py:prepare_megamoe_nvfp4_inputs",
+   "type": "function",
+   "name": "prepare_megamoe_nvfp4_inputs",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/prepare_megamoe_nvfp4.py",
+   "lineRange": [
+    135,
+    197
+   ],
+   "summary": "NVFP4 MegaMoE 输入组装（量化+路由布局）。",
+   "tags": [
+    "triton",
+    "nvfp4"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_nvfp4.py:prepare_megamoe_nvfp4_with_norm",
+   "type": "function",
+   "name": "prepare_megamoe_nvfp4_with_norm",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/prepare_megamoe_nvfp4.py",
+   "lineRange": [
+    272,
+    307
+   ],
+   "summary": "norm+量化融合变体（RMS norm 后直接量化组包）。",
+   "tags": [
+    "triton",
+    "nvfp4",
+    "fusion"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/muse_spark/nvidia/ops/prepare_trtllm_nvfp4.py",
+   "type": "file",
+   "name": "prepare_trtllm_nvfp4.py",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/prepare_trtllm_nvfp4.py",
+   "summary": "TRT-LLM NVFP4 norm+量化 triton kernel（155 行）：global scale 量化路径+rcp 近似，norm_quant_trtllm_nvfp4 单入口。",
+   "tags": [
+    "triton",
+    "nvfp4",
+    "quantization",
+    "trtllm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/muse_spark/nvidia/ops/prepare_trtllm_nvfp4.py:norm_quant_trtllm_nvfp4",
+   "type": "function",
+   "name": "norm_quant_trtllm_nvfp4",
+   "filePath": "vllm/models/muse_spark/nvidia/ops/prepare_trtllm_nvfp4.py",
+   "lineRange": [
+    113,
+    155
+   ],
+   "summary": "RMS norm+NVFP4 全局 scale 量化启动器（PDL 可选）。",
+   "tags": [
+    "triton",
+    "nvfp4"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/qwen4_exp/nvidia/ops/hc.py",
+   "type": "file",
+   "name": "hc.py",
+   "filePath": "vllm/models/qwen4_exp/nvidia/ops/hc.py",
+   "summary": "Qwen4-Exp 超连接（HC）triton kernel 家族（400 行）：grouped_gemma_rmsnorm（Gemma 式 +1 均值修正的分组 norm）、hc_silu、hc_gate_mix、hc_combine、hc_combine_norm——HC 残差通道运算全套。",
+   "tags": [
+    "triton",
+    "hyper-connections",
+    "rmsnorm",
+    "gemma"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/qwen4_exp/nvidia/ops/hc.py:grouped_gemma_rmsnorm",
+   "type": "function",
+   "name": "grouped_gemma_rmsnorm",
+   "filePath": "vllm/models/qwen4_exp/nvidia/ops/hc.py",
+   "lineRange": [
+    54,
+    77
+   ],
+   "summary": "分组 Gemma RMSNorm 启动器（per-group 权重）。",
+   "tags": [
+    "triton",
+    "rmsnorm"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/qwen4_exp/nvidia/ops/hc.py:hc_gate_mix",
+   "type": "function",
+   "name": "hc_gate_mix",
+   "filePath": "vllm/models/qwen4_exp/nvidia/ops/hc.py",
+   "lineRange": [
+    162,
+    184
+   ],
+   "summary": "HC 门控混合 kernel（通道间门控系数乘加）。",
+   "tags": [
+    "triton",
+    "gate"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/qwen4_exp/nvidia/ops/hc.py:hc_combine_norm",
+   "type": "function",
+   "name": "hc_combine_norm",
+   "filePath": "vllm/models/qwen4_exp/nvidia/ops/hc.py",
+   "lineRange": [
+    347,
+    391
+   ],
+   "summary": "通道合并+norm 融合 kernel（最复杂的 HC 收尾）。",
+   "tags": [
+    "triton",
+    "combine",
+    "fusion"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/qwen4_exp/nvidia/ops/qsa.py",
+   "type": "file",
+   "name": "qsa.py",
+   "filePath": "vllm/models/qwen4_exp/nvidia/ops/qsa.py",
+   "summary": "QSA（Query-Sparse Attention）稀疏分页注意力 triton kernel（1116 行）：split-K 分块 GQA kernel+merge、SM80/90/120 三档配置选择器（_select_config）、行存储与组压缩 kernel、显式 warmup 接口。",
+   "tags": [
+    "triton",
+    "sparse-attention",
+    "splitk",
+    "qsa"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/qwen4_exp/nvidia/ops/qsa.py:qsa_sparse_paged_attention",
+   "type": "function",
+   "name": "qsa_sparse_paged_attention",
+   "filePath": "vllm/models/qwen4_exp/nvidia/ops/qsa.py",
+   "lineRange": [
+    637,
+    808
+   ],
+   "summary": "QSA 稀疏分页注意力主入口（候选块 gather+split-K 计算+merge）。",
+   "tags": [
+    "triton",
+    "sparse-attention",
+    "entry-point"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/qwen4_exp/nvidia/ops/qsa.py:warmup_qsa_sparse_paged_attention",
+   "type": "function",
+   "name": "warmup_qsa_sparse_paged_attention",
+   "filePath": "vllm/models/qwen4_exp/nvidia/ops/qsa.py",
+   "lineRange": [
+    811,
+    957
+   ],
+   "summary": "按配置枚举预热 kernel 编译（JIT warmup 注册）。",
+   "tags": [
+    "warmup",
+    "jit"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/qwen4_exp/nvidia/ops/qsa.py:qsa_compress_groups_with_ratio",
+   "type": "function",
+   "name": "qsa_compress_groups_with_ratio",
+   "filePath": "vllm/models/qwen4_exp/nvidia/ops/qsa.py",
+   "lineRange": [
+    998,
+    1108
+   ],
+   "summary": "按压缩比把 token 级 KV 组压缩（QSA cache 降容）。",
+   "tags": [
+    "triton",
+    "compression"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py",
+   "type": "file",
+   "name": "qsa_indexer.py",
+   "filePath": "vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py",
+   "summary": "QSA 索引器 triton kernel（660 行）：MQA 分页 logits（decode/prefill 双 kernel）、块索引展开、topk 与 select 入口（decode/prefill 两路），配 warmup profile。",
+   "tags": [
+    "triton",
+    "indexer",
+    "sparse-attention",
+    "qsa"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py:qsa_select_paged_decode",
+   "type": "function",
+   "name": "qsa_select_paged_decode",
+   "filePath": "vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py",
+   "lineRange": [
+    508,
+    576
+   ],
+   "summary": "decode 路径：MQA logits+topk 选出候选块。",
+   "tags": [
+    "triton",
+    "decode",
+    "topk"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py:qsa_select_paged_prefill",
+   "type": "function",
+   "name": "qsa_select_paged_prefill",
+   "filePath": "vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py",
+   "lineRange": [
+    579,
+    652
+   ],
+   "summary": "prefill 路径：分块 logits+因果掩码+topk。",
+   "tags": [
+    "triton",
+    "prefill",
+    "topk"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py:expand_qsa_block_indices",
+   "type": "function",
+   "name": "expand_qsa_block_indices",
+   "filePath": "vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py",
+   "lineRange": [
+    443,
+    474
+   ],
+   "summary": "块索引展开为 token 级稀疏行索引。",
+   "tags": [
+    "triton",
+    "expansion"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/models/qwen4_exp/nvidia/ops/qsa_prepare.py",
+   "type": "file",
+   "name": "qsa_prepare.py",
+   "filePath": "vllm/models/qwen4_exp/nvidia/ops/qsa_prepare.py",
+   "summary": "QSA KV 预备 triton kernel（650 行）：单 kernel（390 行 _qsa_prepare_kernel）完成 norm+rope 旋转+按 dtype 存储+组压缩布局——QSA cache 写入前的全部准备。",
+   "tags": [
+    "triton",
+    "qsa",
+    "rope",
+    "kv-cache"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/qwen4_exp/nvidia/ops/qsa_prepare.py:qsa_prepare",
+   "type": "function",
+   "name": "qsa_prepare",
+   "filePath": "vllm/models/qwen4_exp/nvidia/ops/qsa_prepare.py",
+   "lineRange": [
+    504,
+    647
+   ],
+   "summary": "预备入口：目标 dtype 分派+kernel 启动。",
+   "tags": [
+    "triton",
+    "entry-point"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "type": "file",
+   "name": "ple_layer.py",
+   "filePath": "vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "summary": "Qwen4-Exp PLE（Position-Learning Enhancement）层（490 行）：GPU 常驻的 n-gram 位置嵌入层（MambaBase 混入），n-gram embedding 查表+conv/gate（ple_conv/ple_gate）+short-conv attention 元数据，MambaSpec 状态缓存与 prefill checkpoint。",
+   "tags": [
+    "ple",
+    "ngram",
+    "linear-attention",
+    "state",
+    "qwen"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/qwen4_exp/nvidia/ple_layer.py:Qwen4ExpPLEGroupedNorm",
+   "type": "class",
+   "name": "Qwen4ExpPLEGroupedNorm",
+   "filePath": "vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "lineRange": [
+    41,
+    71
+   ],
+   "summary": "PLE 分组 norm 模块。",
+   "tags": [
+    "ple",
+    "norm"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/qwen4_exp/nvidia/ple_layer.py:Qwen4ExpPLELayer",
+   "type": "class",
+   "name": "Qwen4ExpPLELayer",
+   "filePath": "vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "lineRange": [
+    74,
+    484
+   ],
+   "summary": "PLE 层主体（13 方法）：n-gram embedding、conv/gate 前向、状态缓存管理与 SP 切分。",
+   "tags": [
+    "ple",
+    "ngram",
+    "layer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "type": "file",
+   "name": "qsa.py",
+   "filePath": "vllm/models/qwen4_exp/nvidia/qsa.py",
+   "summary": "QSA 注意力模块与后端（707 行）：Qwen4ExpQSAAttention（Qwen3NextAttention+AttentionLayerBase 双继承）持 QKV 索引器线性层与 M-RoPE；配套 FlashAttention 后端/实现/元数据构造器子类（QSA 版）与 cache dtype 决策。",
+   "tags": [
+    "qsa",
+    "attention",
+    "flash-attention",
+    "backend"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/qwen4_exp/nvidia/qsa.py:Qwen4ExpQSAQKVIndexerLinear",
+   "type": "class",
+   "name": "Qwen4ExpQSAQKVIndexerLinear",
+   "filePath": "vllm/models/qwen4_exp/nvidia/qsa.py",
+   "lineRange": [
+    70,
+    133
+   ],
+   "summary": "QKV+索引器合并投影线性层（MergedColumnParallelLinear 子类，权重加载适配）。",
+   "tags": [
+    "linear",
+    "merged",
+    "qsa"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/qwen4_exp/nvidia/qsa.py:Qwen4ExpQSAFlashAttentionBackend",
+   "type": "class",
+   "name": "Qwen4ExpQSAFlashAttentionBackend",
+   "filePath": "vllm/models/qwen4_exp/nvidia/qsa.py",
+   "lineRange": [
+    149,
+    209
+   ],
+   "summary": "QSA 版 FlashAttention 后端（8 方法：元数据/graph 支持判定）。",
+   "tags": [
+    "backend",
+    "flash-attention"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/qwen4_exp/nvidia/qsa.py:Qwen4ExpQSAFlashAttentionImpl",
+   "type": "class",
+   "name": "Qwen4ExpQSAFlashAttentionImpl",
+   "filePath": "vllm/models/qwen4_exp/nvidia/qsa.py",
+   "lineRange": [
+    212,
+    337
+   ],
+   "summary": "QSA 版 FA 实现：调 qsa ops 的 kernel 跑稀疏分页注意力。",
+   "tags": [
+    "impl",
+    "flash-attention"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/qwen4_exp/nvidia/qsa.py:Qwen4ExpQSAAttention",
+   "type": "class",
+   "name": "Qwen4ExpQSAAttention",
+   "filePath": "vllm/models/qwen4_exp/nvidia/qsa.py",
+   "lineRange": [
+    340,
+    699
+   ],
+   "summary": "QSA 注意力模块（6 方法）：QKV 索引器投影+M-RoPE+后端绑定+权重加载。",
+   "tags": [
+    "attention",
+    "qsa",
+    "module"
+   ],
+   "complexity": "complex"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/common/host.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/common/policy.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/common/twoshot.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py:MoeTailBox",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py:MoeTailWeights",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py:PreparedTail",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py:compile_tail",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py:PreparedTail",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py:MoeTailBox",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/consumer.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/attn_res/kernel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/consumer.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/common/mailbox.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/consumer.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/common/primitives.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/consumer.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/common/twoshot.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/consumer.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/producer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/consumer.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/consumer.py:OprojConsumer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/consumer.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/consumer.py:OprojFused",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/consumer.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/consumer.py:OprojConsumer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/common/host.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/common/policy.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/consumer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/producer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py:OprojMailbox",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py:PreparedOproj",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py:compile_oproj",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py:PreparedOproj",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py:OprojMailbox",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/producer.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/common/primitives.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/producer.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/common/twoshot.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/producer.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/producer.py:OprojProducer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/producer.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/producer.py:OprojUmma",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/producer.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/producer.py:OprojProducer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/producer.py:OprojUmma",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/producer.py:OprojProducer",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/__init__.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/__init__.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/__init__.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/__init__.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/__init__.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/__init__.py:specialized_decode_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/__init__.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/__init__.py:unsupported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/__init__.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/__init__.py:specialized_decode_config",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/attn_res/prepared.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/common/embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/common/twoshot.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/dense.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/experts_runtime.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/front.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/prepared.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/small_batch/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/moe/tail_runtime.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/prefetch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py:Step",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py:SpecializedDecode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/decode.py:SpecializedDecode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/prefetch.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/ops/cute_dsl/latent_moe_tail/primitives.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/prefetch.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/common/host.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/prefetch.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/common/policy.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/prefetch.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/common/prefetch.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/prefetch.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/prefetch.py:PreparedWeightRanges",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/prefetch.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/prefetch.py:PrefetchController",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/prefetch.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/prefetch.py:PrefetchController",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py",
+   "target": "file:vllm/model_executor/kernels/linear/cute_dsl/skinny_gemm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/gemm/projection.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/kda/prepared.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/mla/dcp.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/mla/prepared.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py",
+   "target": "file:vllm/models/kimi_k3/nvidia/specialized_decode/cutedsl/oproj/prepared.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py",
+   "target": "function:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py:projection_policies",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py:SkinnyProjection",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py:Attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py",
+   "target": "class:vllm/models/kimi_k3/nvidia/specialized_decode/runtime/providers.py:Attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/cute_dsl/moe_finalize_rmsnorm.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/cute_dsl/moe_finalize_rmsnorm.py",
+   "target": "function:vllm/models/muse_spark/nvidia/ops/cute_dsl/moe_finalize_rmsnorm.py:moe_finalize_with_rmsnorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/cute_dsl/moe_finalize_rmsnorm.py",
+   "target": "function:vllm/models/muse_spark/nvidia/ops/cute_dsl/moe_finalize_rmsnorm.py:supports_moe_finalize",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/cute_dsl/moe_finalize_rmsnorm.py",
+   "target": "function:vllm/models/muse_spark/nvidia/ops/cute_dsl/moe_finalize_rmsnorm.py:moe_finalize_with_rmsnorm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/cute_dsl/qk_norm.py",
+   "target": "function:vllm/models/muse_spark/nvidia/ops/cute_dsl/qk_norm.py:qk_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/cute_dsl/qk_norm.py",
+   "target": "function:vllm/models/muse_spark/nvidia/ops/cute_dsl/qk_norm.py:qk_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/gemm_rs.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/gemm_rs.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/gemm_rs.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/gemm_rs.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/gemm_rs.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/gemm_rs.py",
+   "target": "file:vllm/models/common/ops/gemm_rs_ar.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/gemm_rs.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/gemm_rs.py",
+   "target": "class:vllm/models/muse_spark/nvidia/ops/gemm_rs.py:MuseSparkGemmRs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/gemm_rs.py",
+   "target": "function:vllm/models/muse_spark/nvidia/ops/gemm_rs.py:maybe_create_gemm_rs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/gemm_rs.py",
+   "target": "class:vllm/models/muse_spark/nvidia/ops/gemm_rs.py:MuseSparkGemmRs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py",
+   "target": "file:vllm/distributed/parallel_state.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py",
+   "target": "function:vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py:tp_group_spans_nodes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py",
+   "target": "function:vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py:maybe_create_all_gather_dual_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py",
+   "target": "function:vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py:maybe_create_moe_finalize_all_reduce",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py",
+   "target": "function:vllm/models/muse_spark/nvidia/ops/mnnvl_fusions.py:maybe_create_all_gather_dual_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_bf16.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_bf16.py",
+   "target": "function:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_bf16.py:prepare_megamoe_bf16_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_bf16.py",
+   "target": "function:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_bf16.py:prepare_megamoe_bf16_inputs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_nvfp4.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_nvfp4.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_nvfp4.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_nvfp4.py",
+   "target": "function:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_nvfp4.py:prepare_megamoe_nvfp4_inputs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_nvfp4.py",
+   "target": "function:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_nvfp4.py:prepare_megamoe_nvfp4_with_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_nvfp4.py",
+   "target": "function:vllm/models/muse_spark/nvidia/ops/prepare_megamoe_nvfp4.py:prepare_megamoe_nvfp4_inputs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/prepare_trtllm_nvfp4.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/prepare_trtllm_nvfp4.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/prepare_trtllm_nvfp4.py",
+   "target": "function:vllm/models/muse_spark/nvidia/ops/prepare_trtllm_nvfp4.py:norm_quant_trtllm_nvfp4",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/muse_spark/nvidia/ops/prepare_trtllm_nvfp4.py",
+   "target": "function:vllm/models/muse_spark/nvidia/ops/prepare_trtllm_nvfp4.py:norm_quant_trtllm_nvfp4",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/hc.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/hc.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/hc.py",
+   "target": "function:vllm/models/qwen4_exp/nvidia/ops/hc.py:grouped_gemma_rmsnorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/hc.py",
+   "target": "function:vllm/models/qwen4_exp/nvidia/ops/hc.py:hc_gate_mix",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/hc.py",
+   "target": "function:vllm/models/qwen4_exp/nvidia/ops/hc.py:hc_combine_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/hc.py",
+   "target": "function:vllm/models/qwen4_exp/nvidia/ops/hc.py:grouped_gemma_rmsnorm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/hc.py",
+   "target": "function:vllm/models/qwen4_exp/nvidia/ops/hc.py:hc_combine_norm",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/qsa.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/qsa.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/qsa.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/qsa.py",
+   "target": "function:vllm/models/qwen4_exp/nvidia/ops/qsa.py:qsa_sparse_paged_attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/qsa.py",
+   "target": "function:vllm/models/qwen4_exp/nvidia/ops/qsa.py:warmup_qsa_sparse_paged_attention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/qsa.py",
+   "target": "function:vllm/models/qwen4_exp/nvidia/ops/qsa.py:qsa_compress_groups_with_ratio",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/qsa.py",
+   "target": "function:vllm/models/qwen4_exp/nvidia/ops/qsa.py:qsa_sparse_paged_attention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py",
+   "target": "file:vllm/model_executor/warmup/jit_warmup_triton_helper.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py",
+   "target": "function:vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py:qsa_select_paged_decode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py",
+   "target": "function:vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py:qsa_select_paged_prefill",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py",
+   "target": "function:vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py:expand_qsa_block_indices",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py",
+   "target": "function:vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py:qsa_select_paged_decode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/qsa_prepare.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/qsa_prepare.py",
+   "target": "function:vllm/models/qwen4_exp/nvidia/ops/qsa_prepare.py:qsa_prepare",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ops/qsa_prepare.py",
+   "target": "function:vllm/models/qwen4_exp/nvidia/ops/qsa_prepare.py:qsa_prepare",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "target": "file:vllm/model_executor/layers/mamba/abstract.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "target": "file:vllm/model_executor/layers/mamba/checkpoint.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "target": "file:vllm/model_executor/layers/mamba/mamba_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "target": "file:vllm/models/common/ops/sequence_parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "target": "file:vllm/models/qwen4_exp/common/ops/ple.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "target": "file:vllm/models/qwen4_exp/nvidia/ngram_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "target": "file:vllm/v1/attention/backends/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "target": "file:vllm/v1/attention/backends/short_conv_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "target": "class:vllm/models/qwen4_exp/nvidia/ple_layer.py:Qwen4ExpPLEGroupedNorm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "target": "class:vllm/models/qwen4_exp/nvidia/ple_layer.py:Qwen4ExpPLELayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/ple_layer.py",
+   "target": "class:vllm/models/qwen4_exp/nvidia/ple_layer.py:Qwen4ExpPLELayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/qwen4_exp/nvidia/ple_layer.py:Qwen4ExpPLELayer",
+   "target": "class:vllm/model_executor/layers/mamba/abstract.py:MambaBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/model_executor/layers/attention/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/model_executor/layers/attention_layer_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/model_executor/models/qwen3_next.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/model_executor/models/qwen3_vl.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/models/qwen4_exp/common/qsa_cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/models/qwen4_exp/nvidia/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/models/qwen4_exp/nvidia/indexer_qsa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/models/qwen4_exp/nvidia/ops/qsa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/models/qwen4_exp/nvidia/ops/qsa_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/platforms/interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/v1/attention/backends/fa_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/v1/attention/backends/flash_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "class:vllm/models/qwen4_exp/nvidia/qsa.py:Qwen4ExpQSAQKVIndexerLinear",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "class:vllm/models/qwen4_exp/nvidia/qsa.py:Qwen4ExpQSAFlashAttentionBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "class:vllm/models/qwen4_exp/nvidia/qsa.py:Qwen4ExpQSAFlashAttentionImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "class:vllm/models/qwen4_exp/nvidia/qsa.py:Qwen4ExpQSAAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/qwen4_exp/nvidia/qsa.py",
+   "target": "class:vllm/models/qwen4_exp/nvidia/qsa.py:Qwen4ExpQSAAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/qwen4_exp/nvidia/qsa.py:Qwen4ExpQSAQKVIndexerLinear",
+   "target": "class:vllm/model_executor/layers/linear.py:MergedColumnParallelLinear",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/qwen4_exp/nvidia/qsa.py:Qwen4ExpQSAFlashAttentionBackend",
+   "target": "class:vllm/v1/attention/backends/flash_attn.py:FlashAttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/qwen4_exp/nvidia/qsa.py:Qwen4ExpQSAFlashAttentionImpl",
+   "target": "class:vllm/v1/attention/backends/flash_attn.py:FlashAttentionImpl",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/qwen4_exp/nvidia/qsa.py:Qwen4ExpQSAAttention",
+   "target": "class:vllm/model_executor/models/qwen3_next.py:Qwen3NextAttention",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/qwen4_exp/nvidia/qsa.py:Qwen4ExpQSAAttention",
+   "target": "class:vllm/model_executor/layers/attention_layer_base.py:AttentionLayerBase",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

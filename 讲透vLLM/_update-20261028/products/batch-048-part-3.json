@@ -1,0 +1,879 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "type": "file",
+   "name": "msa_cutlass_sparse_decode.py",
+   "filePath": "vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "summary": "CUTLASS MSA 稀疏 decode：fmha_sm100 计划缓存（cudagraph 稳定地址）、NVFP4 KV 页视图/槽位、运行时元数据就地更新 kernel 与支持性判定。",
+   "tags": [
+    "cutlass",
+    "sparse-decode",
+    "nvfp4",
+    "plan-cache"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/nvidia/mtp.py",
+   "type": "file",
+   "name": "mtp.py",
+   "filePath": "vllm/models/minimax_m3/nvidia/mtp.py",
+   "summary": "MiniMax M3 NVIDIA MTP：多 token 预测层/预测器/MTP 模块（NVIDIA 路径）。",
+   "tags": [
+    "mtp",
+    "spec-decode",
+    "nvidia",
+    "minimax-m3"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/nvidia/ops/sparse_prefill.py",
+   "type": "file",
+   "name": "sparse_prefill.py",
+   "filePath": "vllm/models/minimax_m3/nvidia/ops/sparse_prefill.py",
+   "summary": "Hopper query-tiled GQA 稀疏 prefill kernel。",
+   "tags": [
+    "triton",
+    "sparse-attention",
+    "prefill",
+    "hopper"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "type": "file",
+   "name": "sparse_attention_msa.py",
+   "filePath": "vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "summary": "MSA（SM100/Blackwell）块稀疏注意力：fmha_sm100 prefill（build_k2q_csr+sparse_atten_func）、Triton split-K decode 默认 + 可选 CUTLASS 正常 decode/投机验证；NVFP4 KV 直接读 vLLM 打包页。",
+   "tags": [
+    "msa",
+    "sm100",
+    "sparse-attention",
+    "nvfp4"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:MSACutlassDecodePlanCache",
+   "type": "class",
+   "name": "MSACutlassDecodePlanCache",
+   "filePath": "vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "summary": "可复用计划缓存（可变张量保持 cudagraph 稳定地址）。",
+   "tags": [
+    "plan-cache",
+    "cutlass",
+    "cudagraph"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    87,
+    228
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/mtp.py:MiniMaxM3MultiTokenPredictorLayer",
+   "type": "class",
+   "name": "MiniMaxM3MultiTokenPredictorLayer",
+   "filePath": "vllm/models/minimax_m3/nvidia/mtp.py",
+   "summary": "MTP 单层。",
+   "tags": [
+    "mtp",
+    "layer",
+    "predictor"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    41,
+    97
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/mtp.py:MiniMaxM3MultiTokenPredictor",
+   "type": "class",
+   "name": "MiniMaxM3MultiTokenPredictor",
+   "filePath": "vllm/models/minimax_m3/nvidia/mtp.py",
+   "summary": "MTP 预测器。",
+   "tags": [
+    "mtp",
+    "predictor",
+    "stacked"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    100,
+    143
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/mtp.py:MiniMaxM3MTP",
+   "type": "class",
+   "name": "MiniMaxM3MTP",
+   "filePath": "vllm/models/minimax_m3/nvidia/mtp.py",
+   "summary": "MTP 模块（7 方法）。",
+   "tags": [
+    "mtp",
+    "spec-decode",
+    "module"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    146,
+    329
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSABackend",
+   "type": "class",
+   "name": "MiniMaxM3SparseMSABackend",
+   "filePath": "vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "summary": "带 NVIDIA MSA decode 元数据的稀疏后端。",
+   "tags": [
+    "msa",
+    "backend",
+    "sparse-attention"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    68,
+    73
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSANvfp4Backend",
+   "type": "class",
+   "name": "MiniMaxM3SparseMSANvfp4Backend",
+   "filePath": "vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "summary": "HND NVFP4 KV 页（每头 K/V 槽）上的 MSA 后端。",
+   "tags": [
+    "msa",
+    "nvfp4",
+    "backend"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    76,
+    97
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseCutlassBackend",
+   "type": "class",
+   "name": "MiniMaxM3SparseCutlassBackend",
+   "filePath": "vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "summary": "选 CUTLASS MSA sparse decode 的后端别名。",
+   "tags": [
+    "cutlass",
+    "backend",
+    "alias"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    100,
+    105
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseTritonBackend",
+   "type": "class",
+   "name": "MiniMaxM3SparseTritonBackend",
+   "filePath": "vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "summary": "选 Triton MSA sparse decode 的后端别名。",
+   "tags": [
+    "triton",
+    "backend",
+    "alias"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    108,
+    113
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSADecodeMetadata",
+   "type": "class",
+   "name": "MiniMaxM3SparseMSADecodeMetadata",
+   "filePath": "vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "summary": "MSA decode 元数据标记。",
+   "tags": [
+    "metadata",
+    "decode",
+    "msa"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    117,
+    118
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSAMetadataBuilder",
+   "type": "class",
+   "name": "MiniMaxM3SparseMSAMetadataBuilder",
+   "filePath": "vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "summary": "只为 fmha_sm100 支持的 decode 形状准备 MSA 计划。",
+   "tags": [
+    "metadata-builder",
+    "msa",
+    "plans"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    121,
+    190
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSAImpl",
+   "type": "class",
+   "name": "MiniMaxM3SparseMSAImpl",
+   "filePath": "vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "summary": "带守护 CUTLASS sparse decode 的 MSA 块稀疏注意力实现。",
+   "tags": [
+    "msa",
+    "impl",
+    "guarded-cutlass"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    193,
+    414
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:nvfp4_kv_cache_views",
+   "type": "function",
+   "name": "nvfp4_kv_cache_views",
+   "filePath": "vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "summary": "NVFP4 缓存的 K 数据/K scale/V 数据/V scale 视图。",
+   "tags": [
+    "nvfp4",
+    "views",
+    "kv-cache"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    36,
+    48
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:supports_cutlass_sparse_decode",
+   "type": "function",
+   "name": "supports_cutlass_sparse_decode",
+   "filePath": "vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "summary": "静态模型几何是否支持 CUTLASS 稀疏 decode。",
+   "tags": [
+    "cutlass",
+    "predicate",
+    "support"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    255,
+    274
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:should_prepare_decode_metadata",
+   "type": "function",
+   "name": "should_prepare_decode_metadata",
+   "filePath": "vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "summary": "该 graph 形状能否走 CUTLASS decode 路径。",
+   "tags": [
+    "cutlass",
+    "graph-shape",
+    "predicate"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    277,
+    307
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:prepare_decode_metadata",
+   "type": "function",
+   "name": "prepare_decode_metadata",
+   "filePath": "vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "summary": "为一个稀疏 decode 步准备 graph 稳定运行时元数据。",
+   "tags": [
+    "cutlass",
+    "metadata",
+    "preparation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    311,
+    334
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:msa_cutlass_sparse_decode",
+   "type": "function",
+   "name": "msa_cutlass_sparse_decode",
+   "filePath": "vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "summary": "运行 CUTLASS 稀疏 decode（MSA 准备的元数据）。",
+   "tags": [
+    "cutlass",
+    "decode",
+    "entry-point"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    338,
+    383
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/nvidia/ops/sparse_prefill.py:_gqa_sparse_fwd_tiled_kernel",
+   "type": "function",
+   "name": "_gqa_sparse_fwd_tiled_kernel",
+   "filePath": "vllm/models/minimax_m3/nvidia/ops/sparse_prefill.py",
+   "summary": "Hopper query-tiled GQA 稀疏 prefill kernel。",
+   "tags": [
+    "triton",
+    "tiled",
+    "prefill"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    27,
+    200
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/nvidia/ops/sparse_prefill.py:minimax_m3_sparse_attn",
+   "type": "function",
+   "name": "minimax_m3_sparse_attn",
+   "filePath": "vllm/models/minimax_m3/nvidia/ops/sparse_prefill.py",
+   "summary": "选定块上的 Hopper query-tiled 稀疏 prefill 入口。",
+   "tags": [
+    "sparse-attention",
+    "prefill",
+    "hopper"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    204,
+    279
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "target": "file:vllm/config/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/mtp.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/mtp.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/mtp_validation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/mtp.py",
+   "target": "file:vllm/models/minimax_m3/nvidia/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/mtp.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/ops/sparse_prefill.py",
+   "target": "file:vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/ops/sparse_prefill.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "file:vllm/config/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "file:vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "file:vllm/models/minimax_m3/common/sparse_attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "file:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:MSACutlassDecodePlanCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "target": "function:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:nvfp4_kv_cache_views",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "target": "function:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:supports_cutlass_sparse_decode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "target": "function:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:should_prepare_decode_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "target": "function:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:prepare_decode_metadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "target": "function:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:msa_cutlass_sparse_decode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/mtp.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/mtp.py:MiniMaxM3MultiTokenPredictorLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/mtp.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/mtp.py:MiniMaxM3MultiTokenPredictor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/mtp.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/mtp.py:MiniMaxM3MTP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSABackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSANvfp4Backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseCutlassBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseTritonBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSADecodeMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSAMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSAImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/ops/sparse_prefill.py",
+   "target": "function:vllm/models/minimax_m3/nvidia/ops/sparse_prefill.py:_gqa_sparse_fwd_tiled_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/ops/sparse_prefill.py",
+   "target": "function:vllm/models/minimax_m3/nvidia/ops/sparse_prefill.py:minimax_m3_sparse_attn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:MSACutlassDecodePlanCache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "target": "function:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:nvfp4_kv_cache_views",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "target": "function:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:supports_cutlass_sparse_decode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "target": "function:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:should_prepare_decode_metadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "target": "function:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:prepare_decode_metadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py",
+   "target": "function:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:msa_cutlass_sparse_decode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/mtp.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/mtp.py:MiniMaxM3MultiTokenPredictorLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/mtp.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/mtp.py:MiniMaxM3MultiTokenPredictor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/mtp.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/mtp.py:MiniMaxM3MTP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSABackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSANvfp4Backend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseCutlassBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseTritonBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSADecodeMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSAMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py",
+   "target": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSAImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/nvidia/ops/sparse_prefill.py",
+   "target": "function:vllm/models/minimax_m3/nvidia/ops/sparse_prefill.py:minimax_m3_sparse_attn",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSABackend",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSANvfp4Backend",
+   "target": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSABackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseCutlassBackend",
+   "target": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSABackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseTritonBackend",
+   "target": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSABackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSADecodeMetadata",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseDecodeMetadata",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSAMetadataBuilder",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSAImpl",
+   "target": "class:vllm/models/minimax_m3/common/sparse_attention.py:MiniMaxM3SparseImpl",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSAImpl",
+   "target": "function:vllm/models/minimax_m3/common/ops/sparse_attn.py:minimax_m3_sparse_attn_decode",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/nvidia/sparse_attention_msa.py:MiniMaxM3SparseMSAImpl",
+   "target": "function:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:msa_cutlass_sparse_decode",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:msa_cutlass_sparse_decode",
+   "target": "class:vllm/models/minimax_m3/nvidia/msa_cutlass_sparse_decode.py:MSACutlassDecodePlanCache",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

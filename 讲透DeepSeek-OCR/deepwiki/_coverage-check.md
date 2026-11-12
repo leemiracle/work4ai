@@ -1,18 +1,17 @@
-# DeepWiki 抓取覆盖率检查
+# Coverage Check
 
-- _links.txt 链接总数: 38
-- 实际 md 文件数: 38
-- 缺失页: 0
-- 空页(<= 500B): 0
+- repo: deepseek-ai/DeepSeek-OCR
+- fetched: 2026-10-30
+- 结构清单页数: 32
+- 落盘页数: 38
 
-## 结论
-**100% 覆盖**：全部链接均有对应 Markdown 文件且非空。
+- 结构外页: 6
+- 覆盖: 38/32 (INCOMPLETE)
 
-## 抽查 3 页
+## 全层级对账终判（dw_reconcile_dir.py, 2026-10-30）
+- 结构全层级 38 页 vs 落盘 38 页（结构外/三级页 extra 0）
+- 终判: TRUE_100
 
-| 页面 | 大小(B) | 状态 | 检查 |
-|---|---|---|---|
-| 8-contributing | 9980 | 正常 | PASS |
-| 5.2-custom-logits-processors | 11266 | 正常 | PASS |
-| 5.3-custom-projector-architectures | 12322 | 正常 | PASS |
-
+## 全层级对账终判（dw_reconcile_dir.py, 2026-10-30）
+- 结构全层级 38 页 vs 落盘 38 页（结构外/三级页 extra 0）
+- 终判: TRUE_100

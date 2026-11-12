@@ -1,0 +1,3709 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/renderers/chat_utils/__init__.py",
+   "summary": "chat_utils 包入口：将聊天消息解析（chat_message）、聊天模板加载（chat_template）、多模态内容解析（content_parser）、多模态条目追踪（item_tracker）、工具调用 ID 生成（tool_call）与类型定义（types）汇聚为统一公共 API。",
+   "tags": [
+    "entry-point",
+    "barrel",
+    "chat-rendering",
+    "multimodal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/renderers/chat_utils/chat_message.py",
+   "type": "file",
+   "name": "chat_message.py",
+   "filePath": "vllm/renderers/chat_utils/chat_message.py",
+   "summary": "OpenAI ChatCompletion 消息到模型对话格式的核心解析器：逐 content part 分发解析（文本/图像/音频/视频/嵌入/thinking/tool_reference），组装多模态占位符文本，处理 tool_calls 与 reasoning 兼容，并提供同步/异步两套批量入口。",
+   "tags": [
+    "chat-rendering",
+    "multimodal",
+    "parser",
+    "openai-api"
+   ],
+   "complexity": "complex",
+   "languageNotes": "MM_PARSER_MAP 用 partial(cast,...)/TypeAdapter 把各 content part 类型的解析统一成查表分发；含 Claude Code billing header 剥离以保住 prefix cache。"
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/chat_message.py:_get_interleaved_text_prompt",
+   "type": "function",
+   "name": "_get_interleaved_text_prompt",
+   "filePath": "vllm/renderers/chat_utils/chat_message.py",
+   "summary": "把占位符槽位按出现顺序回填进文本片段并拼接，占位符多于数据项时报错。",
+   "tags": [
+    "multimodal",
+    "placeholder",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    124,
+    137
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/chat_message.py:get_full_multimodal_text_prompt",
+   "type": "function",
+   "name": "get_full_multimodal_text_prompt",
+   "filePath": "vllm/renderers/chat_utils/chat_message.py",
+   "summary": "合成多模态最终提示文本：按 interleave_strings 决定交错回填还是前置缺失占位符，并校验占位符数量不超载。",
+   "tags": [
+    "multimodal",
+    "prompt-assembly",
+    "validation"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    142,
+    196
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/chat_message.py:_collect_known_content_part_fields",
+   "type": "function",
+   "name": "_collect_known_content_part_fields",
+   "filePath": "vllm/renderers/chat_utils/chat_message.py",
+   "summary": "遍历 ChatCompletionContentPartParam 联合类型，收集全部已知 content part 字段名，用于甄别用户传入的额外字段。",
+   "tags": [
+    "type-introspection",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    199,
+    208
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/chat_message.py:parse_chat_message_content_mm_part",
+   "type": "function",
+   "name": "parse_chat_message_content_mm_part",
+   "filePath": "vllm/renderers/chat_utils/chat_message.py",
+   "summary": "按 type 字段查 MM_PARSER_MAP 解析单个多模态 content part，返回 (part_type, content) 并拒绝未知类型。",
+   "tags": [
+    "chat-rendering",
+    "multimodal",
+    "dispatcher"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    218,
+    333
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/chat_message.py:has_non_text_content",
+   "type": "function",
+   "name": "has_non_text_content",
+   "filePath": "vllm/renderers/chat_utils/chat_message.py",
+   "summary": "判断消息列表中是否存在非文本内容（媒体 part 或 prompt_embeds reasoning），不消耗一次性迭代器。",
+   "tags": [
+    "validation",
+    "multimodal",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    351,
+    378
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/chat_message.py:parse_chat_message_content_parts",
+   "type": "function",
+   "name": "parse_chat_message_content_parts",
+   "filePath": "vllm/renderers/chat_utils/chat_message.py",
+   "summary": "解析一条消息的全部 content part：创建 mm parser 逐项解析，再按 wrap_dicts 决定输出交错字典还是拼成带占位符的字符串。",
+   "tags": [
+    "chat-rendering",
+    "multimodal",
+    "orchestration"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    381,
+    421
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/chat_message.py:_reject_reserved_placeholder_in_text",
+   "type": "function",
+   "name": "_reject_reserved_placeholder_in_text",
+   "filePath": "vllm/renderers/chat_utils/chat_message.py",
+   "summary": "安全检查：拒绝用户文本中出现 prompt_embeds 保留占位符哨兵，防止调用方通过纯文本注入拼接点。",
+   "tags": [
+    "security",
+    "validation",
+    "prompt-embeds"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    424,
+    440
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/chat_message.py:parse_chat_message_content_part",
+   "type": "function",
+   "name": "parse_chat_message_content_part",
+   "filePath": "vllm/renderers/chat_utils/chat_message.py",
+   "summary": "解析单个 content part 并把媒体项登记进 mm_parser：覆盖 image/image_embeds/audio/audio_embeds/video/video_embeds/prompt_embeds/thinking 等全部模态。",
+   "tags": [
+    "chat-rendering",
+    "multimodal",
+    "parser"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    443,
+    572
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/chat_message.py:_strip_claude_code_billing_header",
+   "type": "function",
+   "name": "_strip_claude_code_billing_header",
+   "filePath": "vllm/renderers/chat_utils/chat_message.py",
+   "summary": "剥掉 Claude Code 系统消息里的 x-anthropic-billing-header 行：其 cch 值每请求都变，保留会破坏 prefix cache。",
+   "tags": [
+    "prefix-cache",
+    "chat-rendering",
+    "claude-code"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    578,
+    607
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/chat_message.py:parse_chat_message_content",
+   "type": "function",
+   "name": "parse_chat_message_content",
+   "filePath": "vllm/renderers/chat_utils/chat_message.py",
+   "summary": "解析单条消息（含 reasoning/prompt_embeds、assistant tool_calls、tool 消息内容数组归一化为字符串、developer tools 透传），产出 ConversationMessage 列表。",
+   "tags": [
+    "chat-rendering",
+    "openai-api",
+    "core"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    610,
+    696
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/chat_message.py:_postprocess_messages",
+   "type": "function",
+   "name": "_postprocess_messages",
+   "filePath": "vllm/renderers/chat_utils/chat_message.py",
+   "summary": "解析后处理：按 Transformers 规范把 tool_calls.arguments 在 string 与 dict 之间归一化。",
+   "tags": [
+    "post-processing",
+    "tool-calls",
+    "validation"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    699,
+    771
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/chat_message.py:parse_chat_messages",
+   "type": "function",
+   "name": "parse_chat_messages",
+   "filePath": "vllm/renderers/chat_utils/chat_message.py",
+   "summary": "同步批量入口：逐条解析消息、后处理对话，再用 MultiModalItemTracker.resolve_items 物化 mm_data/mm_uuids。",
+   "tags": [
+    "chat-rendering",
+    "entry-point",
+    "multimodal"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    774,
+    810
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/chat_message.py:parse_chat_messages_async",
+   "type": "function",
+   "name": "parse_chat_messages_async",
+   "filePath": "vllm/renderers/chat_utils/chat_message.py",
+   "summary": "异步批量入口：与 parse_chat_messages 同构，改用 AsyncMultiModalItemTracker 以 asyncio.gather 并发拉取媒体。",
+   "tags": [
+    "chat-rendering",
+    "async",
+    "multimodal"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    813,
+    849
+   ]
+  },
+  {
+   "id": "file:vllm/renderers/chat_utils/chat_template.py",
+   "type": "file",
+   "name": "chat_template.py",
+   "filePath": "vllm/renderers/chat_utils/chat_template.py",
+   "summary": "聊天模板的配置与加载：ChatTemplateConfig 数据类，validate/load 支持 Jinja 字面量、文件路径与内置模板目录（registry）三态解析，lru_cache 缓存读取结果。",
+   "tags": [
+    "chat-template",
+    "configuration",
+    "loader"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/renderers/chat_utils/chat_template.py:ChatTemplateConfig",
+   "type": "class",
+   "name": "ChatTemplateConfig",
+   "filePath": "vllm/renderers/chat_utils/chat_template.py",
+   "summary": "聊天模板配置数据类：模板内容、content_format（auto/openai/string）、是否信任请求自带的 chat_template 与 mm_kwargs。",
+   "tags": [
+    "data-model",
+    "chat-template",
+    "configuration"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    14,
+    18
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/chat_template.py:validate_chat_template",
+   "type": "function",
+   "name": "validate_chat_template",
+   "filePath": "vllm/renderers/chat_utils/chat_template.py",
+   "summary": "校验模板输入：路径须存在、字符串须含 Jinja 字符或能命中内置模板目录，否则抛 VLLMValidationError。",
+   "tags": [
+    "validation",
+    "chat-template"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    21,
+    53
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/chat_template.py:_load_chat_template",
+   "type": "function",
+   "name": "_load_chat_template",
+   "filePath": "vllm/renderers/chat_utils/chat_template.py",
+   "summary": "读取模板内容：literal 模式直接返回字符串，否则依次尝试用户路径与内置模板目录，失败后回退按字面量解码。",
+   "tags": [
+    "loader",
+    "chat-template",
+    "fallback"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    56,
+    101
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/chat_template.py:load_chat_template",
+   "type": "function",
+   "name": "load_chat_template",
+   "filePath": "vllm/renderers/chat_utils/chat_template.py",
+   "summary": "lru_cache 包装的模板读取公共入口，避免重复磁盘 IO。",
+   "tags": [
+    "loader",
+    "caching",
+    "chat-template"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    107,
+    112
+   ]
+  },
+  {
+   "id": "file:vllm/renderers/chat_utils/content_parser.py",
+   "type": "file",
+   "name": "content_parser.py",
+   "filePath": "vllm/renderers/chat_utils/content_parser.py",
+   "summary": "多模态 content part 的媒体解码器：Base/MultiModal/Async 三层解析器把 image/audio/video/embeds 各模态的 URL、base64、PIL 对象解码后登记进 item tracker，统一走 MediaConnector 连接器并受 media_io_kwargs/allowed 路径约束。",
+   "tags": [
+    "multimodal",
+    "parser",
+    "media-loading",
+    "async"
+   ],
+   "complexity": "complex",
+   "languageNotes": "MediaConnector 经 cached_property 延迟创建，纯文本请求不会因 VLLM_MEDIA_CACHE 探测而阻塞；同步与异步解析器成对实现。"
+  },
+  {
+   "id": "class:vllm/renderers/chat_utils/content_parser.py:BaseMultiModalContentParser",
+   "type": "class",
+   "name": "BaseMultiModalContentParser",
+   "filePath": "vllm/renderers/chat_utils/content_parser.py",
+   "summary": "解析器抽象基类：维护按模态分组的项列表与占位符存储，声明 parse_image/parse_audio/parse_video/parse_prompt_embeds 等抽象入口。",
+   "tags": [
+    "abstract-base",
+    "multimodal",
+    "parser"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    57,
+    134
+   ]
+  },
+  {
+   "id": "class:vllm/renderers/chat_utils/content_parser.py:MultiModalContentParser",
+   "type": "class",
+   "name": "MultiModalContentParser",
+   "filePath": "vllm/renderers/chat_utils/content_parser.py",
+   "summary": "同步解析器：经 MediaConnector 拉取并解码各模态媒体（URL/base64/PIL），prompt_embeds 解码为张量并生成占位符哨兵后登记 tracker。",
+   "tags": [
+    "multimodal",
+    "media-loading",
+    "sync"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    137,
+    324
+   ]
+  },
+  {
+   "id": "class:vllm/renderers/chat_utils/content_parser.py:AsyncMultiModalContentParser",
+   "type": "class",
+   "name": "AsyncMultiModalContentParser",
+   "filePath": "vllm/renderers/chat_utils/content_parser.py",
+   "summary": "异步解析器：把每个媒体项包装成 awaitable 延迟任务交由 tracker 并发 gather，接口与同步版对齐。",
+   "tags": [
+    "multimodal",
+    "media-loading",
+    "async"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    327,
+    566
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/content_parser.py:make_prompt_embeds_placeholder",
+   "type": "function",
+   "name": "make_prompt_embeds_placeholder",
+   "filePath": "vllm/renderers/chat_utils/content_parser.py",
+   "summary": "为第 index 个 prompt_embeds 拼接项生成唯一占位符哨兵字符串（<prompt_embeds>__vllm_prompt_embed_N__）。",
+   "tags": [
+    "prompt-embeds",
+    "placeholder",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    48,
+    49
+   ]
+  },
+  {
+   "id": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "type": "file",
+   "name": "item_tracker.py",
+   "filePath": "vllm/renderers/chat_utils/item_tracker.py",
+   "summary": "多模态条目追踪器：按请求登记各模态媒体项、执行限额与预算（decoded/download budget）校验，resolve_items 时把条目物化为 MultiModalDataDict/UUIDDict（含 vision_chunk 统一模态与 embeds 合并），同步/异步两套实现。",
+   "tags": [
+    "multimodal",
+    "item-tracking",
+    "validation",
+    "async"
+   ],
+   "complexity": "complex",
+   "languageNotes": "torch/transformers 用 LazyLoader 延迟导入；异步版把每个条目存成 awaitable 用 asyncio.gather 并发解析并保留原始顺序。"
+  },
+  {
+   "id": "class:vllm/renderers/chat_utils/item_tracker.py:BaseMultiModalItemTracker",
+   "type": "class",
+   "name": "BaseMultiModalItemTracker",
+   "filePath": "vllm/renderers/chat_utils/item_tracker.py",
+   "summary": "追踪器抽象基类：按模态分组登记条目、缓存 model_cls/mm_processor、暴露 media_io_kwargs 与 allowed 路径属性、add 时做数量限额校验并创建解析器。",
+   "tags": [
+    "abstract-base",
+    "multimodal",
+    "validation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    200,
+    340
+   ]
+  },
+  {
+   "id": "class:vllm/renderers/chat_utils/item_tracker.py:MultiModalItemTracker",
+   "type": "class",
+   "name": "MultiModalItemTracker",
+   "filePath": "vllm/renderers/chat_utils/item_tracker.py",
+   "summary": "同步追踪器：resolve_items 直接把已物化的条目交给 _resolve_items 生成 mm_data/mm_uuids（纯文本模型的 prompt_embeds 无需 processor）。",
+   "tags": [
+    "multimodal",
+    "sync",
+    "resolver"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    494,
+    516
+   ]
+  },
+  {
+   "id": "class:vllm/renderers/chat_utils/item_tracker.py:AsyncMultiModalItemTracker",
+   "type": "class",
+   "name": "AsyncMultiModalItemTracker",
+   "filePath": "vllm/renderers/chat_utils/item_tracker.py",
+   "summary": "异步追踪器：resolve_items 用 asyncio.gather 并发等待全部条目任务（return_exceptions 保证在飞任务完成后再抛错），再按原顺序重建结果。",
+   "tags": [
+    "multimodal",
+    "async",
+    "resolver"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    519,
+    565
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/item_tracker.py:_detect_field",
+   "type": "function",
+   "name": "_detect_field",
+   "filePath": "vllm/renderers/chat_utils/item_tracker.py",
+   "summary": "在批处理/共享/扁平三种多模态字段形态中自动识别实际存储形态（长度与元素结构探测）。",
+   "tags": [
+    "multimodal",
+    "type-detection",
+    "utility"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    72,
+    100
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/item_tracker.py:_merge_embeds",
+   "type": "function",
+   "name": "_merge_embeds",
+   "filePath": "vllm/renderers/chat_utils/item_tracker.py",
+   "summary": "把多条 embeds 输入（张量/数值列表/JSON 元数据数组）按维度合并成统一批结构，供 prompt_embeds 拼接。",
+   "tags": [
+    "prompt-embeds",
+    "merge",
+    "multimodal"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    103,
+    151
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/item_tracker.py:_parse_metadata_array",
+   "type": "function",
+   "name": "_parse_metadata_array",
+   "filePath": "vllm/renderers/chat_utils/item_tracker.py",
+   "summary": "把 JSON 数组形态的 embeds 元数据解析为数值列表。",
+   "tags": [
+    "prompt-embeds",
+    "parsing",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    154,
+    163
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/item_tracker.py:_get_embeds_data",
+   "type": "function",
+   "name": "_get_embeds_data",
+   "filePath": "vllm/renderers/chat_utils/item_tracker.py",
+   "summary": "校验 prompt_embeds 数据结构并提取 (张量, 占位符) 对：支持纯 base64 与 dict 载荷两种形态。",
+   "tags": [
+    "prompt-embeds",
+    "validation",
+    "extraction"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    166,
+    197
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/item_tracker.py:_resolve_vision_chunk_items",
+   "type": "function",
+   "name": "_resolve_vision_chunk_items",
+   "filePath": "vllm/renderers/chat_utils/item_tracker.py",
+   "summary": "把 image/video 条目解析为统一 vision_chunk 模态（当模型启用 use_unified_vision_chunk），保留原始模态顺序。",
+   "tags": [
+    "vision-chunk",
+    "multimodal",
+    "resolver"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    343,
+    402
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/item_tracker.py:_resolve_items",
+   "type": "function",
+   "name": "_resolve_items",
+   "filePath": "vllm/renderers/chat_utils/item_tracker.py",
+   "summary": "核心物化函数：校验原始媒体与 embeds 不可混用、逐模态组装 MultiModalDataDict/UUIDDict，无 processor 时仅放行 prompt_embeds。",
+   "tags": [
+    "multimodal",
+    "resolver",
+    "validation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    405,
+    491
+   ]
+  },
+  {
+   "id": "file:vllm/renderers/chat_utils/tool_call.py",
+   "type": "file",
+   "name": "tool_call.py",
+   "filePath": "vllm/renderers/chat_utils/tool_call.py",
+   "summary": "工具调用 ID 生成工具：按模型类型决定 ID 形态——Kimi 系模型用 functions.<name>:<idx> 格式，其余生成随机 chatcmpl-tool-<uuid>。",
+   "tags": [
+    "tool-calls",
+    "utility",
+    "model-specific"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/tool_call.py:get_tool_call_id_type",
+   "type": "function",
+   "name": "get_tool_call_id_type",
+   "filePath": "vllm/renderers/chat_utils/tool_call.py",
+   "summary": "依据 model_config（hf_config/hf_text_config/hf_overrides 的 model_type）判断是否使用 kimi_k2 风格的工具调用 ID。",
+   "tags": [
+    "tool-calls",
+    "model-detection",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    10,
+    24
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/chat_utils/tool_call.py:make_tool_call_id",
+   "type": "function",
+   "name": "make_tool_call_id",
+   "filePath": "vllm/renderers/chat_utils/tool_call.py",
+   "summary": "按 id_type 生成工具调用 ID：kimi_k2 用函数名+序号，默认随机 UUID。",
+   "tags": [
+    "tool-calls",
+    "id-generation",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    27,
+    32
+   ]
+  },
+  {
+   "id": "file:vllm/renderers/chat_utils/types.py",
+   "type": "file",
+   "name": "types.py",
+   "filePath": "vllm/renderers/chat_utils/types.py",
+   "summary": "聊天渲染类型层：基于 openai SDK 类型扩展的 TypedDict 集合——音视频 URL、image/audio/video/prompt_embeds 各模态 embeds part、PIL 图像、thinking、tool_reference、自定义消息联合类型与 ConversationMessage，全部再经 __all__ 导出。",
+   "tags": [
+    "type-definition",
+    "chat-rendering",
+    "multimodal",
+    "data-model"
+   ],
+   "complexity": "moderate",
+   "languageNotes": "17 个 TypedDict/BaseModel 定义，借助 typing_extensions.TypedDict 保证 pydantic 兼容；MultiModalEmbedsPayload 支持 base64 串或张量字典两种载荷。"
+  },
+  {
+   "id": "class:vllm/renderers/chat_utils/types.py:ChatCompletionContentPartPromptEmbedsParam",
+   "type": "class",
+   "name": "ChatCompletionContentPartPromptEmbedsParam",
+   "filePath": "vllm/renderers/chat_utils/types.py",
+   "summary": "prompt_embeds content part 类型：data 字段承载 base64 张量字节，是 enable_prompt_embeds 特性的输入契约。",
+   "tags": [
+    "type-definition",
+    "prompt-embeds",
+    "chat-rendering"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    124,
+    132
+   ]
+  },
+  {
+   "id": "class:vllm/renderers/chat_utils/types.py:CustomThinkCompletionContentParam",
+   "type": "class",
+   "name": "CustomThinkCompletionContentParam",
+   "filePath": "vllm/renderers/chat_utils/types.py",
+   "summary": "thinking content part 类型：承载思维链文本，供交错思考（interleaved thinking）模板渲染。",
+   "tags": [
+    "type-definition",
+    "thinking",
+    "chat-rendering"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    224,
+    243
+   ]
+  },
+  {
+   "id": "class:vllm/renderers/chat_utils/types.py:CustomChatCompletionMessageParam",
+   "type": "class",
+   "name": "CustomChatCompletionMessageParam",
+   "filePath": "vllm/renderers/chat_utils/types.py",
+   "summary": "vLLM 自定义消息联合类型：OpenAI 消息类型之上叠加 PIL 图像、简单音视频、thinking、tool_reference 等扩展 part。",
+   "tags": [
+    "type-definition",
+    "chat-rendering",
+    "union-type"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    284,
+    313
+   ]
+  },
+  {
+   "id": "class:vllm/renderers/chat_utils/types.py:ConversationMessage",
+   "type": "class",
+   "name": "ConversationMessage",
+   "filePath": "vllm/renderers/chat_utils/types.py",
+   "summary": "标准化后的对话消息类型：聊天模板渲染的直接输入（content 可为字符串或交错 part 列表）。",
+   "tags": [
+    "type-definition",
+    "conversation",
+    "data-model"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    324,
+    350
+   ]
+  },
+  {
+   "id": "file:vllm/renderers/inputs/preprocess.py",
+   "type": "file",
+   "name": "preprocess.py",
+   "filePath": "vllm/renderers/inputs/preprocess.py",
+   "summary": "提示词预处理层：把任意 PromptType 归一化为字典形态（decoder-only / encoder-decoder），并提供 prompt↔seq 转换、按 model_config 分发解析、提取 text/token_ids/embeds 三元组件与提示长度。",
+   "tags": [
+    "preprocessing",
+    "prompt",
+    "type-normalization",
+    "encoder-decoder"
+   ],
+   "complexity": "complex",
+   "languageNotes": "prompt_to_seq 用 4 个 @overload 签名覆盖 str/TokensPrompt/EmbedsPrompt/bytes 及序列形态。"
+  },
+  {
+   "id": "function:vllm/renderers/inputs/preprocess.py:prompt_to_seq",
+   "type": "function",
+   "name": "prompt_to_seq",
+   "filePath": "vllm/renderers/inputs/preprocess.py",
+   "summary": "重载族：把单条 prompt（str/TokensPrompt/EmbedsPrompt/bytes）归一化为 TokensPrompt 或 EmbedsPrompt，序列输入则逐项转换。",
+   "tags": [
+    "prompt",
+    "normalization",
+    "overloads"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    28,
+    54
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/inputs/preprocess.py:conversation_to_seq",
+   "type": "function",
+   "name": "conversation_to_seq",
+   "filePath": "vllm/renderers/inputs/preprocess.py",
+   "summary": "把带聊天模板渲染后的字符串提示转换为 token 序列提示。",
+   "tags": [
+    "prompt",
+    "normalization",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    57,
+    66
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/inputs/preprocess.py:_validate_prompt_dict",
+   "type": "function",
+   "name": "_validate_prompt_dict",
+   "filePath": "vllm/renderers/inputs/preprocess.py",
+   "summary": "字典提示前置校验：prompt 文本必须是字符串、prompt_token_ids/embeds 与 prompt 三者取一。",
+   "tags": [
+    "validation",
+    "prompt"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    116,
+    126
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/inputs/preprocess.py:parse_dec_only_prompt",
+   "type": "function",
+   "name": "parse_dec_only_prompt",
+   "filePath": "vllm/renderers/inputs/preprocess.py",
+   "summary": "把 decoder-only 模型的提示归一化为 DecoderOnlyDictPrompt（字符串/prompt_token_ids/prompt_embeds/multi 格式互转）。",
+   "tags": [
+    "prompt",
+    "normalization",
+    "decoder-only"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    129,
+    155
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/inputs/preprocess.py:_parse_enc_prompt",
+   "type": "function",
+   "name": "_parse_enc_prompt",
+   "filePath": "vllm/renderers/inputs/preprocess.py",
+   "summary": "解析 encoder-decoder 模型的 encoder 侧提示为字典形态。",
+   "tags": [
+    "prompt",
+    "normalization",
+    "encoder-decoder"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    158,
+    179
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/inputs/preprocess.py:_parse_dec_prompt",
+   "type": "function",
+   "name": "_parse_dec_prompt",
+   "filePath": "vllm/renderers/inputs/preprocess.py",
+   "summary": "解析 encoder-decoder 模型的 decoder 侧提示（允许 None），归一化为字典或 None。",
+   "tags": [
+    "prompt",
+    "normalization",
+    "encoder-decoder"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    182,
+    210
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/inputs/preprocess.py:parse_enc_dec_prompt",
+   "type": "function",
+   "name": "parse_enc_dec_prompt",
+   "filePath": "vllm/renderers/inputs/preprocess.py",
+   "summary": "把 encoder-decoder 提示整体归一化为 EncoderDecoderDictPrompt（encoder + 可选 decoder）。",
+   "tags": [
+    "prompt",
+    "normalization",
+    "encoder-decoder"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    213,
+    225
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/inputs/preprocess.py:parse_model_prompt",
+   "type": "function",
+   "name": "parse_model_prompt",
+   "filePath": "vllm/renderers/inputs/preprocess.py",
+   "summary": "按 model_config.is_encoder_decoder 分发到 enc-dec 或 dec-only 的提示解析入口。",
+   "tags": [
+    "prompt",
+    "dispatcher",
+    "entry-point"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    228,
+    232
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/inputs/preprocess.py:extract_prompt_components",
+   "type": "function",
+   "name": "extract_prompt_components",
+   "filePath": "vllm/renderers/inputs/preprocess.py",
+   "summary": "从任意提示中提取 (text, token_ids, embeds) 三元组件，供渲染/tokenize 阶段取用。",
+   "tags": [
+    "prompt",
+    "extraction",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    249,
+    259
+   ]
+  },
+  {
+   "id": "function:vllm/renderers/inputs/preprocess.py:extract_prompt_len",
+   "type": "function",
+   "name": "extract_prompt_len",
+   "filePath": "vllm/renderers/inputs/preprocess.py",
+   "summary": "从提示的 token_ids 或 embeds 第一维计算提示长度。",
+   "tags": [
+    "prompt",
+    "length",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    262,
+    271
+   ]
+  },
+  {
+   "id": "file:vllm/renderers/inputs/tokenize.py",
+   "type": "file",
+   "name": "tokenize.py",
+   "filePath": "vllm/renderers/inputs/tokenize.py",
+   "summary": "tokenize 阶段的类型层：定义 token 化后的提示别名（DecoderOnlyTokPrompt/EncoderTokPrompt/DecoderTokPrompt/SingletonTokPrompt/TokPrompt）与 EncoderDecoderTokPrompt TypedDict。",
+   "tags": [
+    "type-definition",
+    "tokenization",
+    "prompt"
+   ],
+   "complexity": "simple",
+   "languageNotes": "纯 TypeAlias + TypedDict 文件，docstring 交叉引用 preprocess.py 中对应的未 tokenize 字典类型。"
+  },
+  {
+   "id": "class:vllm/renderers/inputs/tokenize.py:EncoderDecoderTokPrompt",
+   "type": "class",
+   "name": "EncoderDecoderTokPrompt",
+   "filePath": "vllm/renderers/inputs/tokenize.py",
+   "summary": "encoder-decoder 提示 token 化后的 TypedDict：encoder_prompt 为 TokensPrompt，decoder_prompt 可空。",
+   "tags": [
+    "type-definition",
+    "tokenization",
+    "encoder-decoder"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    30,
+    38
+   ]
+  },
+  {
+   "id": "file:vllm/sampling_params.py",
+   "type": "file",
+   "name": "sampling_params.py",
+   "filePath": "vllm/sampling_params.py",
+   "summary": "采样参数中枢：SamplingParams 改用 msgspec.Struct + PydanticMsgspecMixin 实现（omit_defaults 序列化），涵盖 OpenAI 采样语义、beam search、structured_outputs 四后端（xgrammar/guidance/outlines/lm-format-enforcer）请求期校验、repetition 检测与 thinking token budget 验证。",
+   "tags": [
+    "sampling",
+    "request-params",
+    "validation",
+    "structured-output"
+   ],
+   "complexity": "complex",
+   "languageNotes": "MAX_LOGPROB_TOKEN_IDS/MAX_STRUCTURED_OUTPUT_JSON_NESTING 等上限常量与 sampler 的 LogprobTokenIdsState 行宽对齐；structured outputs 各后端在 __post_init__ 内做请求期早失败校验。"
+  },
+  {
+   "id": "class:vllm/sampling_params.py:StructuredOutputsParams",
+   "type": "class",
+   "name": "StructuredOutputsParams",
+   "filePath": "vllm/sampling_params.py",
+   "summary": "结构化输出参数（json/json_schema/regex/grammar/structural_tag/后端选择/allowed/stop_token_ids 等），并校验约束互斥与取值合法。",
+   "tags": [
+    "structured-output",
+    "data-model",
+    "validation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    102,
+    168
+   ]
+  },
+  {
+   "id": "class:vllm/sampling_params.py:RepetitionDetectionParams",
+   "type": "class",
+   "name": "RepetitionDetectionParams",
+   "filePath": "vllm/sampling_params.py",
+   "summary": "重复检测参数（窗口/阈值/范围），__post_init__ 校验范围枚举合法。",
+   "tags": [
+    "sampling",
+    "repetition",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    172,
+    205
+   ]
+  },
+  {
+   "id": "class:vllm/sampling_params.py:RequestOutputKind",
+   "type": "class",
+   "name": "RequestOutputKind",
+   "filePath": "vllm/sampling_params.py",
+   "summary": "请求输出形态枚举：CUMULATIVE 累积 / DELTA 增量 / FINAL_ONLY 仅终态。",
+   "tags": [
+    "output",
+    "enum",
+    "api"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    208,
+    214
+   ]
+  },
+  {
+   "id": "class:vllm/sampling_params.py:SamplingParams",
+   "type": "class",
+   "name": "SamplingParams",
+   "filePath": "vllm/sampling_params.py",
+   "summary": "核心采样参数结构体：n/温度/top_p/top_k/惩罚/logprobs/stop/seed/beam 等全量字段，__post_init__ 做贪采互斥、结构化输出后端校验（含 JSON 嵌套深度与 NUL regex 早拒绝），并支持从 generation config 与 tokenizer 更新。",
+   "tags": [
+    "sampling",
+    "core",
+    "request-params",
+    "validation"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    271,
+    1500
+   ]
+  },
+  {
+   "id": "class:vllm/sampling_params.py:BeamSearchParams",
+   "type": "class",
+   "name": "BeamSearchParams",
+   "filePath": "vllm/sampling_params.py",
+   "summary": "离线 beam search 专用采样参数（beam_width/序列簇结构），configure_logprobs 为输出配置 logprobs。",
+   "tags": [
+    "beam-search",
+    "sampling",
+    "offline-api"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    1503,
+    1554
+   ]
+  },
+  {
+   "id": "function:vllm/sampling_params.py:_verify_num_sequences",
+   "type": "function",
+   "name": "_verify_num_sequences",
+   "filePath": "vllm/sampling_params.py",
+   "summary": "校验 n/beam_width 等序列数参数为正整数且不超过 VLLM_MAX_N_SEQUENCES 上限。",
+   "tags": [
+    "validation",
+    "limits"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    49,
+    62
+   ]
+  },
+  {
+   "id": "function:vllm/sampling_params.py:validate_thinking_token_budget",
+   "type": "function",
+   "name": "validate_thinking_token_budget",
+   "filePath": "vllm/sampling_params.py",
+   "summary": "校验 thinking_token_budget 为非负整数或 -1（不限），返回规范化后的值。",
+   "tags": [
+    "validation",
+    "thinking"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    65,
+    85
+   ]
+  },
+  {
+   "id": "function:vllm/sampling_params.py:_exceeds_json_nesting",
+   "type": "function",
+   "name": "_exceeds_json_nesting",
+   "filePath": "vllm/sampling_params.py",
+   "summary": "宽度优先遍历 JSON 文档判断对象/数组嵌套是否超过 limit（含递归爆栈防护）。",
+   "tags": [
+    "json",
+    "validation",
+    "utility"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    217,
+    239
+   ]
+  },
+  {
+   "id": "function:vllm/sampling_params.py:check_json_nesting",
+   "type": "function",
+   "name": "check_json_nesting",
+   "filePath": "vllm/sampling_params.py",
+   "summary": "拒绝嵌套超过 64 层的 JSON schema（structural tag 额外放宽 16 层包装），防语法转换成本爆炸。",
+   "tags": [
+    "structured-output",
+    "validation",
+    "json"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    242,
+    260
+   ]
+  },
+  {
+   "id": "file:vllm/scalar_type.py",
+   "type": "file",
+   "name": "scalar_type.py",
+   "filePath": "vllm/scalar_type.py",
+   "summary": "子字节标量类型系统：ScalarType 与 csrc/core/scalar_type.hpp 平行实现，可表达 torch.dtype 不支持的 sub-byte 浮点/整型与带偏置量化类型，scalar_types 命名空间预定义 fp4/fp6/fp8/GPTQ 系全部常用类型。",
+   "tags": [
+    "quantization",
+    "dtype",
+    "type-system",
+    "data-model"
+   ],
+   "complexity": "complex",
+   "languageNotes": "frozen dataclass + functools 缓存；与 C++ 侧用相同 id 位编码（exponent/mantissa/signed/bias）保持同步。"
+  },
+  {
+   "id": "class:vllm/scalar_type.py:ScalarType",
+   "type": "class",
+   "name": "ScalarType",
+   "filePath": "vllm/scalar_type.py",
+   "summary": "标量类型描述：指数/尾数位宽、符号、偏置、有限值与 NaN 表示，提供 uint/int_/float_ 工厂与 min/max/size_bits 等数值界计算。",
+   "tags": [
+    "quantization",
+    "dtype",
+    "data-model"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    23,
+    303
+   ]
+  },
+  {
+   "id": "class:vllm/scalar_type.py:scalar_types",
+   "type": "class",
+   "name": "scalar_types",
+   "filePath": "vllm/scalar_type.py",
+   "summary": "预定义类型命名空间：uint2-uint8、float8_e4m3fn/e5m2/e8m0fnu、fp6/fp4、GPTQ 带 bias 整型及 bfloat16/float16 俗名。",
+   "tags": [
+    "quantization",
+    "dtype",
+    "registry"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    318,
+    354
+   ]
+  },
+  {
+   "id": "file:vllm/snapshot/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/snapshot/__init__.py",
+   "summary": "snapshot 包入口：声明『创建与恢复显式兼容的 vLLM 引擎快照』这一子系统的包级 docstring，无运行时代码。",
+   "tags": [
+    "entry-point",
+    "snapshot",
+    "package-doc"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/snapshot/controller.py",
+   "type": "file",
+   "name": "controller.py",
+   "filePath": "vllm/snapshot/controller.py",
+   "summary": "快照事务编排层：create_snapshot 执行 preflight→启动子进程→等待 oracle→盘点进程树→CRIU dump→发布 manifest 的事务（失败即清理半成品），restore_snapshot 校验身份→恢复→起监听→oracle 比对。",
+   "tags": [
+    "snapshot",
+    "orchestration",
+    "transaction",
+    "cli"
+   ],
+   "complexity": "complex",
+   "languageNotes": "_child_engine_argv 从三种 argv 来源择一构建子进程命令行，剥离快照选项并强制追加 --enable-sleep-mode。"
+  },
+  {
+   "id": "function:vllm/snapshot/controller.py:_child_engine_argv",
+   "type": "function",
+   "name": "_child_engine_argv",
+   "filePath": "vllm/snapshot/controller.py",
+   "summary": "构建子引擎 argv：优先显式参数，其次 `vllm snapshot create` 的进程 argv 尾部，最后裸模型名；统一剥离快照选项并追加 --enable-sleep-mode。",
+   "tags": [
+    "snapshot",
+    "cli",
+    "argv"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    24,
+    55
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/controller.py:create_snapshot",
+   "type": "function",
+   "name": "create_snapshot",
+   "filePath": "vllm/snapshot/controller.py",
+   "summary": "创建快照事务：0700 目录与安全校验、launch_child、wait_ready 取 oracle、inventory 进程树、dump、verify_dead、写 manifest 发布；任何异常回滚删除目标目录。",
+   "tags": [
+    "snapshot",
+    "transaction",
+    "criu"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    58,
+    93
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/controller.py:restore_snapshot",
+   "type": "function",
+   "name": "restore_snapshot",
+   "filePath": "vllm/snapshot/controller.py",
+   "summary": "恢复快照事务：读 manifest 并校验运行时身份、restore 进程树、release 起 API 监听、请求 oracle 与 manifest 记录精确比对（logprob 容差 1e-3），失败时清理。",
+   "tags": [
+    "snapshot",
+    "transaction",
+    "restore"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    96,
+    132
+   ]
+  },
+  {
+   "id": "file:vllm/snapshot/manifest.py",
+   "type": "file",
+   "name": "manifest.py",
+   "filePath": "vllm/snapshot/manifest.py",
+   "summary": "快照清单与安全校验：SnapshotRuntimeIdentity/SnapshotManifest pydantic 严格模型（版本/驱动/CRIU/GPU/环境指纹）、ready/release 标记原子读写，validate_artifact_root 防符号链接与非属主路径替换。",
+   "tags": [
+    "snapshot",
+    "manifest",
+    "security",
+    "validation"
+   ],
+   "complexity": "complex",
+   "languageNotes": "_write_json_atomic 用 O_EXCL|O_NOFOLLOW + fsync(文件+目录) 实现 JSON 原子落盘；pydantic ConfigDict(extra=forbid, frozen=True, strict=True)。"
+  },
+  {
+   "id": "class:vllm/snapshot/manifest.py:SnapshotRuntimeIdentity",
+   "type": "class",
+   "name": "SnapshotRuntimeIdentity",
+   "filePath": "vllm/snapshot/manifest.py",
+   "summary": "运行时身份指纹模型：vllm/python/torch/cuda/driver/criu 版本、kernel、host_id、GPU 名称与 UUID、环境变量元组。",
+   "tags": [
+    "snapshot",
+    "identity",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    37,
+    51
+   ]
+  },
+  {
+   "id": "class:vllm/snapshot/manifest.py:SnapshotManifest",
+   "type": "class",
+   "name": "SnapshotManifest",
+   "filePath": "vllm/snapshot/manifest.py",
+   "summary": "快照清单：继承运行时身份并附 schema_version/boundary（post-engine-init-reloadable-state-released）/创建时间/模型/oracle 记录/进程清单，内置多层校验器。",
+   "tags": [
+    "snapshot",
+    "manifest",
+    "data-model"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    54,
+    95
+   ]
+  },
+  {
+   "id": "class:vllm/snapshot/manifest.py:ReleaseMarker",
+   "type": "class",
+   "name": "ReleaseMarker",
+   "filePath": "vllm/snapshot/manifest.py",
+   "summary": "恢复阶段 release 标记（host/port），要求 JSON 布尔字段严格为 true。",
+   "tags": [
+    "snapshot",
+    "marker",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    98,
+    111
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/manifest.py:validate_identity",
+   "type": "function",
+   "name": "validate_identity",
+   "filePath": "vllm/snapshot/manifest.py",
+   "summary": "比对快照记录身份与当前运行时身份，差异字段汇成 SnapshotCompatibilityError。",
+   "tags": [
+    "snapshot",
+    "validation",
+    "compatibility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    122,
+    136
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/manifest.py:validate_artifact_root",
+   "type": "function",
+   "name": "validate_artifact_root",
+   "filePath": "vllm/snapshot/manifest.py",
+   "summary": "安全校验快照路径：拒绝符号链接、非 root/当前用户属主的祖先、组/全局可写目录（sticky 除外），目标目录必须 0700 属主自有。",
+   "tags": [
+    "security",
+    "snapshot",
+    "path-validation"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    157,
+    194
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/manifest.py:_write_json_atomic",
+   "type": "function",
+   "name": "_write_json_atomic",
+   "filePath": "vllm/snapshot/manifest.py",
+   "summary": "原子写 JSON：临时文件 O_EXCL|O_NOFOLLOW 创建、fsync 后 os.replace，再 fsync 父目录保证崩溃一致。",
+   "tags": [
+    "atomic-write",
+    "io",
+    "snapshot"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    213,
+    232
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/manifest.py:write_manifest_atomic",
+   "type": "function",
+   "name": "write_manifest_atomic",
+   "filePath": "vllm/snapshot/manifest.py",
+   "summary": "把 SnapshotManifest 序列化（排序键+紧凑分隔）后原子落盘为 manifest.json。",
+   "tags": [
+    "snapshot",
+    "manifest",
+    "atomic-write"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    235,
+    245
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/manifest.py:read_manifest",
+   "type": "function",
+   "name": "read_manifest",
+   "filePath": "vllm/snapshot/manifest.py",
+   "summary": "读取并严格解析 manifest.json 为 SnapshotManifest，pydantic 校验错误转换为带路径信息的快照兼容错误。",
+   "tags": [
+    "snapshot",
+    "manifest",
+    "loader"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    248,
+    272
+   ]
+  },
+  {
+   "id": "file:vllm/snapshot/runtime.py",
+   "type": "file",
+   "name": "runtime.py",
+   "filePath": "vllm/snapshot/runtime.py",
+   "summary": "快照底层工具集：LocalSnapshotTools 封装 CRIU + cuda-checkpoint 的主机侧实现——preflight 依赖检查、子进程生命周期、进程树/TCP 连接/描述符盘点、外部缓存指纹、dump/restore、link-remap 回滚与 oracle HTTP 探测。",
+   "tags": [
+    "snapshot",
+    "criu",
+    "cuda-checkpoint",
+    "process-management"
+   ],
+   "complexity": "complex",
+   "languageNotes": "54 个方法的宿主类；非 root 时统一经 sudo -n 提权执行 criu/cuda-checkpoint；用 pidfd 等待恢复进程退出事件。"
+  },
+  {
+   "id": "class:vllm/snapshot/runtime.py:LocalSnapshotTools",
+   "type": "class",
+   "name": "LocalSnapshotTools",
+   "filePath": "vllm/snapshot/runtime.py",
+   "summary": "CRIU/cuda-checkpoint 操作门面：preflight 校验 Linux x86_64 与依赖、launch_child/wait_ready 驱动子引擎、inventory 盘点进程树与 TCP/描述符/缓存指纹、dump/restore/publish/cleanup 全事务方法。",
+   "tags": [
+    "snapshot",
+    "criu",
+    "orchestration"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    186,
+    1318
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/runtime.py:_generated_cache_prefixes",
+   "type": "function",
+   "name": "_generated_cache_prefixes",
+   "filePath": "vllm/snapshot/runtime.py",
+   "summary": "枚举引擎进程持有的生成式缓存（编译缓存等）路径前缀，供清单记录与恢复校验。",
+   "tags": [
+    "snapshot",
+    "cache",
+    "utility"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    78,
+    104
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/runtime.py:_decode_endpoint",
+   "type": "function",
+   "name": "_decode_endpoint",
+   "filePath": "vllm/snapshot/runtime.py",
+   "summary": "解码 /proc/net/tcp 行的本地地址端口（hex 转换），用于 TCP 连接盘点。",
+   "tags": [
+    "snapshot",
+    "procfs",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    142,
+    156
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/runtime.py:_validate_tcp_connections",
+   "type": "function",
+   "name": "_validate_tcp_connections",
+   "filePath": "vllm/snapshot/runtime.py",
+   "summary": "校验快照时刻进程树没有残留的对外 TCP 连接（对照 /proc/net/tcp 表），保证可安全冻结。",
+   "tags": [
+    "snapshot",
+    "validation",
+    "tcp"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    159,
+    183
+   ]
+  },
+  {
+   "id": "file:vllm/snapshot/server.py",
+   "type": "file",
+   "name": "server.py",
+   "filePath": "vllm/snapshot/server.py",
+   "summary": "快照子进程主体（python -m vllm.snapshot.server）：在引擎初始化后运行 canary 生成 oracle、sleep(2) 释放权重/KV 后彩排比对、再释放并等待 release 标记，恢复后 setup_server 提供正式 API 服务。",
+   "tags": [
+    "snapshot",
+    "child-process",
+    "entry-point",
+    "sleep-mode"
+   ],
+   "complexity": "complex",
+   "languageNotes": "uvloop 驱动；ready/release 双文件握手协议 + 超时；detach_snapshot_streams 把 stdout/stderr 指向 /dev/null 使进程镜像可复用。"
+  },
+  {
+   "id": "function:vllm/snapshot/server.py:write_ready_atomic",
+   "type": "function",
+   "name": "write_ready_atomic",
+   "filePath": "vllm/snapshot/server.py",
+   "summary": "原子写 ready.json：向控制器报告 canary oracle（token/text/logprob）。",
+   "tags": [
+    "snapshot",
+    "atomic-write",
+    "handshake"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    43,
+    51
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/server.py:read_release_marker",
+   "type": "function",
+   "name": "read_release_marker",
+   "filePath": "vllm/snapshot/server.py",
+   "summary": "读取并校验 release.json 标记，返回恢复阶段的监听 host/port。",
+   "tags": [
+    "snapshot",
+    "handshake",
+    "loader"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    54,
+    69
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/server.py:parse_control_args",
+   "type": "function",
+   "name": "parse_control_args",
+   "filePath": "vllm/snapshot/server.py",
+   "summary": "解析子进程控制参数（--ready-file/--release-file/--release-timeout-s 与 -- 分隔的引擎 argv）。",
+   "tags": [
+    "cli",
+    "parsing",
+    "snapshot"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    72,
+    89
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/server.py:oracle_from_request_output",
+   "type": "function",
+   "name": "oracle_from_request_output",
+   "filePath": "vllm/snapshot/server.py",
+   "summary": "从 canary 请求输出提取 Oracle：恰好一个 token、文本与有限 logprob，缺失即 SnapshotCanaryError。",
+   "tags": [
+    "snapshot",
+    "oracle",
+    "validation"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    104,
+    121
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/server.py:run_engine_canary",
+   "type": "function",
+   "name": "run_engine_canary",
+   "filePath": "vllm/snapshot/server.py",
+   "summary": "以 temperature=0/max_tokens=1/seed=0 运行固定提示词 'The capital of France is' 生成 canary oracle。",
+   "tags": [
+    "snapshot",
+    "oracle",
+    "canary"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    124,
+    143
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/server.py:detach_snapshot_streams",
+   "type": "function",
+   "name": "detach_snapshot_streams",
+   "filePath": "vllm/snapshot/server.py",
+   "summary": "把 stdout/stderr dup2 到 /dev/null，剥离启动日志描述符使冻结的进程镜像可复用。",
+   "tags": [
+    "snapshot",
+    "process-image",
+    "io"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    146,
+    155
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/server.py:wait_for_release_marker",
+   "type": "function",
+   "name": "wait_for_release_marker",
+   "filePath": "vllm/snapshot/server.py",
+   "summary": "轮询等待 release 标记文件出现（带超时），返回监听配置。",
+   "tags": [
+    "snapshot",
+    "handshake",
+    "waiting"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    158,
+    175
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/server.py:parse_vllm_args",
+   "type": "function",
+   "name": "parse_vllm_args",
+   "filePath": "vllm/snapshot/server.py",
+   "summary": "用 vLLM CLI 参数解析器解析剩余 argv 为引擎/服务器参数。",
+   "tags": [
+    "cli",
+    "parsing",
+    "snapshot"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    178,
+    195
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/server.py:run_vllm_snapshot_child",
+   "type": "function",
+   "name": "run_vllm_snapshot_child",
+   "filePath": "vllm/snapshot/server.py",
+   "summary": "子进程主流程：建引擎→canary→sleep(2)/wake_up 彩排比对→再释放→ready 握手→等待 release→恢复状态→setup_server 正式服务。",
+   "tags": [
+    "snapshot",
+    "orchestration",
+    "entry-point"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    198,
+    240
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/server.py:main",
+   "type": "function",
+   "name": "main",
+   "filePath": "vllm/snapshot/server.py",
+   "summary": "模块入口：解析控制参数与 vLLM 参数后 uvloop.run 驱动子进程主流程。",
+   "tags": [
+    "entry-point",
+    "cli",
+    "snapshot"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    243,
+    248
+   ]
+  },
+  {
+   "id": "file:vllm/snapshot/types.py",
+   "type": "file",
+   "name": "types.py",
+   "filePath": "vllm/snapshot/types.py",
+   "summary": "快照类型层：Oracle（canary 采样记录：单 token + 文本 + 有限 logprob）与 oracles_match 精确比对（logprob 绝对容差 1e-3）。",
+   "tags": [
+    "snapshot",
+    "type-definition",
+    "oracle"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/snapshot/types.py:Oracle",
+   "type": "class",
+   "name": "Oracle",
+   "filePath": "vllm/snapshot/types.py",
+   "summary": "canary 采样记录：恰好一个 token_id、解码文本与有限 logprob，__post_init__ 强制校验并归一为 float。",
+   "tags": [
+    "snapshot",
+    "oracle",
+    "data-model"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    9,
+    24
+   ]
+  },
+  {
+   "id": "function:vllm/snapshot/types.py:oracles_match",
+   "type": "function",
+   "name": "oracles_match",
+   "filePath": "vllm/snapshot/types.py",
+   "summary": "比对期望与实际 oracle：token/文本全等且 logprob 在 1e-3 绝对容差内一致。",
+   "tags": [
+    "snapshot",
+    "oracle",
+    "comparison"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    27,
+    37
+   ]
+  },
+  {
+   "id": "file:vllm/tracing/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/tracing/__init__.py",
+   "summary": "tracing 包门面：以注册表模式（当前唯一后端 otel）暴露 init_tracer/instrument/instrument_manual/is_tracing_available 等 API，后端不可用时优雅降级为透传。",
+   "tags": [
+    "tracing",
+    "entry-point",
+    "facade",
+    "otel"
+   ],
+   "complexity": "moderate",
+   "languageNotes": "_REGISTERED_TRACING_BACKENDS 用五元组（可用性/初始化/worker 初始化/装饰/手动）注册后端，为未来多后端预留。"
+  },
+  {
+   "id": "function:vllm/tracing/__init__.py:init_tracer",
+   "type": "function",
+   "name": "init_tracer",
+   "filePath": "vllm/tracing/__init__.py",
+   "summary": "初始化主进程 tracer：后端可用则转发 init_otel_tracer（模块名/OTLP endpoint/附加属性）。",
+   "tags": [
+    "tracing",
+    "initialization"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    66,
+    75
+   ]
+  },
+  {
+   "id": "function:vllm/tracing/__init__.py:maybe_init_worker_tracer",
+   "type": "function",
+   "name": "maybe_init_worker_tracer",
+   "filePath": "vllm/tracing/__init__.py",
+   "summary": "按进程类型/名称初始化 worker 侧 tracer（后端可用时）。",
+   "tags": [
+    "tracing",
+    "worker",
+    "initialization"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    78,
+    87
+   ]
+  },
+  {
+   "id": "function:vllm/tracing/__init__.py:instrument",
+   "type": "function",
+   "name": "instrument",
+   "filePath": "vllm/tracing/__init__.py",
+   "summary": "通用函数追踪装饰器（支持 partial 风格传参）：后端可用时用 instrument_otel 包装，否则原样返回。",
+   "tags": [
+    "tracing",
+    "decorator",
+    "instrumentation"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    90,
+    116
+   ]
+  },
+  {
+   "id": "function:vllm/tracing/__init__.py:instrument_manual",
+   "type": "function",
+   "name": "instrument_manual",
+   "filePath": "vllm/tracing/__init__.py",
+   "summary": "以显式时间戳手动创建 span（供异步/跨进程补录），后端不可用返回 None。",
+   "tags": [
+    "tracing",
+    "span",
+    "manual"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    119,
+    144
+   ]
+  },
+  {
+   "id": "function:vllm/tracing/__init__.py:is_tracing_available",
+   "type": "function",
+   "name": "is_tracing_available",
+   "filePath": "vllm/tracing/__init__.py",
+   "summary": "任一追踪后端可用即 True，供主代码守卫昂贵追踪逻辑。",
+   "tags": [
+    "tracing",
+    "availability",
+    "utility"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    147,
+    155
+   ]
+  },
+  {
+   "id": "file:vllm/tracing/otel.py",
+   "type": "file",
+   "name": "otel.py",
+   "filePath": "vllm/tracing/otel.py",
+   "summary": "OpenTelemetry 追踪实现：tracer/OTLP exporter（gRPC 或 HTTP 按 OTEL_EXPORTER_OTLP_TRACES_PROTOCOL 选择）初始化、同步/异步函数装饰 span、W3C traceparent 上下文经环境变量向子进程传播。",
+   "tags": [
+    "tracing",
+    "opentelemetry",
+    "instrumentation",
+    "context-propagation"
+   ],
+   "complexity": "complex",
+   "languageNotes": "otel 依赖 try-import，缺失时以 _IS_OTEL_AVAILABLE=False 优雅降级并保留 import_error_traceback。"
+  },
+  {
+   "id": "function:vllm/tracing/otel.py:init_otel_tracer",
+   "type": "function",
+   "name": "init_otel_tracer",
+   "filePath": "vllm/tracing/otel.py",
+   "summary": "初始化 OTel TracerProvider：构建 Resource 服务名、按协议选 gRPC/HTTP OTLP exporter、挂 BatchSpanProcessor 并注册为全局 provider（atexit 关停）。",
+   "tags": [
+    "tracing",
+    "otel",
+    "initialization"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    60,
+    91
+   ]
+  },
+  {
+   "id": "function:vllm/tracing/otel.py:get_span_exporter",
+   "type": "function",
+   "name": "get_span_exporter",
+   "filePath": "vllm/tracing/otel.py",
+   "summary": "按 OTEL_EXPORTER_OTLP_TRACES_PROTOCOL 环境变量选择 OTLP gRPC 或 HTTP span exporter。",
+   "tags": [
+    "tracing",
+    "otel",
+    "exporter"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    94,
+    102
+   ]
+  },
+  {
+   "id": "function:vllm/tracing/otel.py:init_otel_worker_tracer",
+   "type": "function",
+   "name": "init_otel_worker_tracer",
+   "filePath": "vllm/tracing/otel.py",
+   "summary": "为 worker 进程初始化带进程后缀服务名的 tracer（复用主 provider 或新建）。",
+   "tags": [
+    "tracing",
+    "otel",
+    "worker"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    105,
+    122
+   ]
+  },
+  {
+   "id": "function:vllm/tracing/otel.py:instrument_otel",
+   "type": "function",
+   "name": "instrument_otel",
+   "filePath": "vllm/tracing/otel.py",
+   "summary": "同步/异步函数包装器：预计算 code.* 静态属性，start_as_current_span 内执行原函数并配合 propagate_trace_to_env 让子进程继承 traceparent。",
+   "tags": [
+    "tracing",
+    "decorator",
+    "span"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    132,
+    177
+   ]
+  },
+  {
+   "id": "function:vllm/tracing/otel.py:manual_instrument_otel",
+   "type": "function",
+   "name": "manual_instrument_otel",
+   "filePath": "vllm/tracing/otel.py",
+   "summary": "以显式起止时间戳手动构建并导出 span（供 scheduler 等内部计时点补录）。",
+   "tags": [
+    "tracing",
+    "span",
+    "manual"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    180,
+    210
+   ]
+  },
+  {
+   "id": "function:vllm/tracing/otel.py:_get_smart_context",
+   "type": "function",
+   "name": "_get_smart_context",
+   "filePath": "vllm/tracing/otel.py",
+   "summary": "智能父上下文：当前 span 有效则用之，否则从环境变量（大小写兼容）或全量 environ 提取 traceparent/tracestate。",
+   "tags": [
+    "tracing",
+    "context",
+    "propagation"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    213,
+    233
+   ]
+  },
+  {
+   "id": "function:vllm/tracing/otel.py:propagate_trace_to_env",
+   "type": "function",
+   "name": "propagate_trace_to_env",
+   "filePath": "vllm/tracing/otel.py",
+   "summary": "上下文管理器：临时把当前 OTel 上下文 inject 进 os.environ 使子进程（worker）继承正确 traceparent，退出时恢复原值。",
+   "tags": [
+    "tracing",
+    "propagation",
+    "subprocess"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    237,
+    260
+   ]
+  },
+  {
+   "id": "file:vllm/tracing/utils.py",
+   "type": "file",
+   "name": "utils.py",
+   "filePath": "vllm/tracing/utils.py",
+   "summary": "追踪通用工具：W3C traceparent/tracestate 头部常量、OTel 语义约定属性（gen_ai.* 用量/延迟/模型 + code.* 代码定位）与追踪头提取/存在性判断。",
+   "tags": [
+    "tracing",
+    "span-attributes",
+    "utility",
+    "semantic-conventions"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/tracing/utils.py:SpanAttributes",
+   "type": "class",
+   "name": "SpanAttributes",
+   "filePath": "vllm/tracing/utils.py",
+   "summary": "标准 span 属性常量集：gen_ai 用量/请求/响应/延迟（TTFT、队列、模型前向/预填/解码分解），与 OTel 语义约定对齐。",
+   "tags": [
+    "tracing",
+    "attributes",
+    "semantic-conventions"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    15,
+    44
+   ]
+  },
+  {
+   "id": "class:vllm/tracing/utils.py:LoadingSpanAttributes",
+   "type": "class",
+   "name": "LoadingSpanAttributes",
+   "filePath": "vllm/tracing/utils.py",
+   "summary": "代码级追踪属性：code.namespace/function/filepath/lineno。",
+   "tags": [
+    "tracing",
+    "attributes",
+    "code-location"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    47,
+    53
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/renderers/chat_utils/__init__.py",
+   "target": "file:vllm/renderers/chat_utils/chat_message.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/__init__.py",
+   "target": "file:vllm/renderers/chat_utils/chat_template.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/__init__.py",
+   "target": "file:vllm/renderers/chat_utils/content_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/__init__.py",
+   "target": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/__init__.py",
+   "target": "file:vllm/renderers/chat_utils/tool_call.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/__init__.py",
+   "target": "file:vllm/renderers/chat_utils/types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "function:vllm/renderers/chat_utils/chat_message.py:_get_interleaved_text_prompt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "function:vllm/renderers/chat_utils/chat_message.py:get_full_multimodal_text_prompt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "function:vllm/renderers/chat_utils/chat_message.py:_collect_known_content_part_fields",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "function:vllm/renderers/chat_utils/chat_message.py:parse_chat_message_content_mm_part",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "function:vllm/renderers/chat_utils/chat_message.py:has_non_text_content",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "function:vllm/renderers/chat_utils/chat_message.py:parse_chat_message_content_parts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "function:vllm/renderers/chat_utils/chat_message.py:_reject_reserved_placeholder_in_text",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "function:vllm/renderers/chat_utils/chat_message.py:parse_chat_message_content_part",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "function:vllm/renderers/chat_utils/chat_message.py:_strip_claude_code_billing_header",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "function:vllm/renderers/chat_utils/chat_message.py:parse_chat_message_content",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "function:vllm/renderers/chat_utils/chat_message.py:_postprocess_messages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "function:vllm/renderers/chat_utils/chat_message.py:parse_chat_messages",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "function:vllm/renderers/chat_utils/chat_message.py:parse_chat_messages_async",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "function:vllm/renderers/chat_utils/chat_message.py:parse_chat_message_content",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "function:vllm/renderers/chat_utils/chat_message.py:parse_chat_message_content_parts",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "function:vllm/renderers/chat_utils/chat_message.py:parse_chat_messages",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "function:vllm/renderers/chat_utils/chat_message.py:parse_chat_messages_async",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "function:vllm/renderers/chat_utils/chat_message.py:has_non_text_content",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "file:vllm/renderers/chat_utils/content_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_message.py",
+   "target": "file:vllm/renderers/chat_utils/types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "function:vllm/renderers/chat_utils/chat_message.py:parse_chat_messages",
+   "target": "class:vllm/renderers/chat_utils/item_tracker.py:MultiModalItemTracker",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/renderers/chat_utils/chat_message.py:parse_chat_messages_async",
+   "target": "class:vllm/renderers/chat_utils/item_tracker.py:AsyncMultiModalItemTracker",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_template.py",
+   "target": "class:vllm/renderers/chat_utils/chat_template.py:ChatTemplateConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_template.py",
+   "target": "function:vllm/renderers/chat_utils/chat_template.py:validate_chat_template",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_template.py",
+   "target": "function:vllm/renderers/chat_utils/chat_template.py:_load_chat_template",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_template.py",
+   "target": "function:vllm/renderers/chat_utils/chat_template.py:load_chat_template",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_template.py",
+   "target": "class:vllm/renderers/chat_utils/chat_template.py:ChatTemplateConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_template.py",
+   "target": "function:vllm/renderers/chat_utils/chat_template.py:validate_chat_template",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_template.py",
+   "target": "function:vllm/renderers/chat_utils/chat_template.py:load_chat_template",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_template.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_template.py",
+   "target": "file:vllm/renderers/chat_utils/types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/chat_template.py",
+   "target": "file:vllm/transformers_utils/chat_templates/registry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/content_parser.py",
+   "target": "class:vllm/renderers/chat_utils/content_parser.py:BaseMultiModalContentParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/content_parser.py",
+   "target": "class:vllm/renderers/chat_utils/content_parser.py:MultiModalContentParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/content_parser.py",
+   "target": "class:vllm/renderers/chat_utils/content_parser.py:AsyncMultiModalContentParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/content_parser.py",
+   "target": "function:vllm/renderers/chat_utils/content_parser.py:make_prompt_embeds_placeholder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/content_parser.py",
+   "target": "class:vllm/renderers/chat_utils/content_parser.py:BaseMultiModalContentParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/content_parser.py",
+   "target": "class:vllm/renderers/chat_utils/content_parser.py:MultiModalContentParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/content_parser.py",
+   "target": "class:vllm/renderers/chat_utils/content_parser.py:AsyncMultiModalContentParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/content_parser.py",
+   "target": "function:vllm/renderers/chat_utils/content_parser.py:make_prompt_embeds_placeholder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/renderers/chat_utils/content_parser.py:MultiModalContentParser",
+   "target": "class:vllm/renderers/chat_utils/content_parser.py:BaseMultiModalContentParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/renderers/chat_utils/content_parser.py:AsyncMultiModalContentParser",
+   "target": "class:vllm/renderers/chat_utils/content_parser.py:BaseMultiModalContentParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/content_parser.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/content_parser.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/content_parser.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/content_parser.py",
+   "target": "file:vllm/multimodal/media/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/content_parser.py",
+   "target": "file:vllm/renderers/embed_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/content_parser.py",
+   "target": "file:vllm/renderers/chat_utils/types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/content_parser.py",
+   "target": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/content_parser.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "function:vllm/renderers/chat_utils/item_tracker.py:_detect_field",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "function:vllm/renderers/chat_utils/item_tracker.py:_merge_embeds",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "function:vllm/renderers/chat_utils/item_tracker.py:_parse_metadata_array",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "function:vllm/renderers/chat_utils/item_tracker.py:_get_embeds_data",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "function:vllm/renderers/chat_utils/item_tracker.py:_resolve_vision_chunk_items",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "function:vllm/renderers/chat_utils/item_tracker.py:_resolve_items",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "class:vllm/renderers/chat_utils/item_tracker.py:BaseMultiModalItemTracker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "class:vllm/renderers/chat_utils/item_tracker.py:BaseMultiModalItemTracker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "class:vllm/renderers/chat_utils/item_tracker.py:MultiModalItemTracker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "class:vllm/renderers/chat_utils/item_tracker.py:MultiModalItemTracker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "class:vllm/renderers/chat_utils/item_tracker.py:AsyncMultiModalItemTracker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "class:vllm/renderers/chat_utils/item_tracker.py:AsyncMultiModalItemTracker",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/renderers/chat_utils/item_tracker.py:MultiModalItemTracker",
+   "target": "class:vllm/renderers/chat_utils/item_tracker.py:BaseMultiModalItemTracker",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/renderers/chat_utils/item_tracker.py:AsyncMultiModalItemTracker",
+   "target": "class:vllm/renderers/chat_utils/item_tracker.py:BaseMultiModalItemTracker",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "file:vllm/model_executor/models/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "file:vllm/multimodal/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "file:vllm/multimodal/media/base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "file:vllm/multimodal/processing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "file:vllm/transformers_utils/processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "file:vllm/utils/collection_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "file:vllm/connections.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "file:vllm/renderers/chat_utils/content_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "file:vllm/renderers/chat_utils/types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/item_tracker.py",
+   "target": "file:vllm/model_executor/model_loader/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/tool_call.py",
+   "target": "function:vllm/renderers/chat_utils/tool_call.py:get_tool_call_id_type",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/tool_call.py",
+   "target": "function:vllm/renderers/chat_utils/tool_call.py:get_tool_call_id_type",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/tool_call.py",
+   "target": "function:vllm/renderers/chat_utils/tool_call.py:make_tool_call_id",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/tool_call.py",
+   "target": "function:vllm/renderers/chat_utils/tool_call.py:make_tool_call_id",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/tool_call.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/tool_call.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/types.py",
+   "target": "class:vllm/renderers/chat_utils/types.py:ChatCompletionContentPartPromptEmbedsParam",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/types.py",
+   "target": "class:vllm/renderers/chat_utils/types.py:ChatCompletionContentPartPromptEmbedsParam",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/types.py",
+   "target": "class:vllm/renderers/chat_utils/types.py:CustomThinkCompletionContentParam",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/types.py",
+   "target": "class:vllm/renderers/chat_utils/types.py:CustomThinkCompletionContentParam",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/types.py",
+   "target": "class:vllm/renderers/chat_utils/types.py:CustomChatCompletionMessageParam",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/types.py",
+   "target": "class:vllm/renderers/chat_utils/types.py:CustomChatCompletionMessageParam",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/types.py",
+   "target": "class:vllm/renderers/chat_utils/types.py:ConversationMessage",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/chat_utils/types.py",
+   "target": "class:vllm/renderers/chat_utils/types.py:ConversationMessage",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "function:vllm/renderers/inputs/preprocess.py:prompt_to_seq",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "function:vllm/renderers/inputs/preprocess.py:conversation_to_seq",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "function:vllm/renderers/inputs/preprocess.py:_validate_prompt_dict",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "function:vllm/renderers/inputs/preprocess.py:parse_dec_only_prompt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "function:vllm/renderers/inputs/preprocess.py:_parse_enc_prompt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "function:vllm/renderers/inputs/preprocess.py:_parse_dec_prompt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "function:vllm/renderers/inputs/preprocess.py:parse_enc_dec_prompt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "function:vllm/renderers/inputs/preprocess.py:parse_model_prompt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "function:vllm/renderers/inputs/preprocess.py:extract_prompt_components",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "function:vllm/renderers/inputs/preprocess.py:extract_prompt_len",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "function:vllm/renderers/inputs/preprocess.py:prompt_to_seq",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "function:vllm/renderers/inputs/preprocess.py:conversation_to_seq",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "function:vllm/renderers/inputs/preprocess.py:parse_dec_only_prompt",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "function:vllm/renderers/inputs/preprocess.py:parse_enc_dec_prompt",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "function:vllm/renderers/inputs/preprocess.py:parse_model_prompt",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "function:vllm/renderers/inputs/preprocess.py:extract_prompt_components",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "function:vllm/renderers/inputs/preprocess.py:extract_prompt_len",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "file:vllm/utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "file:vllm/utils/collection_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/inputs/preprocess.py",
+   "target": "file:vllm/renderers/chat_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/renderers/inputs/tokenize.py",
+   "target": "class:vllm/renderers/inputs/tokenize.py:EncoderDecoderTokPrompt",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/renderers/inputs/tokenize.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "class:vllm/sampling_params.py:StructuredOutputsParams",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "class:vllm/sampling_params.py:RepetitionDetectionParams",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "class:vllm/sampling_params.py:RequestOutputKind",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "class:vllm/sampling_params.py:SamplingParams",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "class:vllm/sampling_params.py:BeamSearchParams",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "function:vllm/sampling_params.py:_verify_num_sequences",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "function:vllm/sampling_params.py:validate_thinking_token_budget",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "function:vllm/sampling_params.py:_exceeds_json_nesting",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "function:vllm/sampling_params.py:check_json_nesting",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "class:vllm/sampling_params.py:StructuredOutputsParams",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "class:vllm/sampling_params.py:RequestOutputKind",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "class:vllm/sampling_params.py:SamplingParams",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "class:vllm/sampling_params.py:BeamSearchParams",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "function:vllm/sampling_params.py:validate_thinking_token_budget",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "file:vllm/exceptions.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "file:vllm/utils/mistral.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "file:vllm/utils/torch_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "file:vllm/v1/serial_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "file:vllm/v1/structured_output/backend_guidance.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "file:vllm/v1/structured_output/backend_lm_format_enforcer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "file:vllm/v1/structured_output/backend_outlines.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "file:vllm/v1/structured_output/backend_xgrammar.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/sampling_params.py",
+   "target": "file:vllm/v1/structured_output/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/scalar_type.py",
+   "target": "class:vllm/scalar_type.py:ScalarType",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/scalar_type.py",
+   "target": "class:vllm/scalar_type.py:ScalarType",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/scalar_type.py",
+   "target": "class:vllm/scalar_type.py:scalar_types",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/scalar_type.py",
+   "target": "class:vllm/scalar_type.py:scalar_types",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/snapshot/controller.py",
+   "target": "function:vllm/snapshot/controller.py:_child_engine_argv",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/controller.py",
+   "target": "function:vllm/snapshot/controller.py:create_snapshot",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/controller.py",
+   "target": "function:vllm/snapshot/controller.py:restore_snapshot",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/controller.py",
+   "target": "function:vllm/snapshot/controller.py:create_snapshot",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/snapshot/controller.py",
+   "target": "function:vllm/snapshot/controller.py:restore_snapshot",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/snapshot/controller.py:create_snapshot",
+   "target": "class:vllm/snapshot/runtime.py:LocalSnapshotTools",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/snapshot/controller.py:restore_snapshot",
+   "target": "class:vllm/snapshot/runtime.py:LocalSnapshotTools",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/snapshot/controller.py",
+   "target": "file:vllm/snapshot/manifest.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/snapshot/controller.py",
+   "target": "file:vllm/snapshot/runtime.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/snapshot/controller.py",
+   "target": "file:vllm/snapshot/types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/snapshot/manifest.py",
+   "target": "class:vllm/snapshot/manifest.py:SnapshotRuntimeIdentity",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/manifest.py",
+   "target": "class:vllm/snapshot/manifest.py:SnapshotManifest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/manifest.py",
+   "target": "class:vllm/snapshot/manifest.py:ReleaseMarker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/manifest.py",
+   "target": "function:vllm/snapshot/manifest.py:validate_identity",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/manifest.py",
+   "target": "function:vllm/snapshot/manifest.py:validate_artifact_root",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/manifest.py",
+   "target": "function:vllm/snapshot/manifest.py:_write_json_atomic",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/manifest.py",
+   "target": "function:vllm/snapshot/manifest.py:write_manifest_atomic",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/manifest.py",
+   "target": "function:vllm/snapshot/manifest.py:read_manifest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/manifest.py",
+   "target": "class:vllm/snapshot/manifest.py:SnapshotRuntimeIdentity",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/snapshot/manifest.py",
+   "target": "class:vllm/snapshot/manifest.py:SnapshotManifest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/snapshot/manifest.py",
+   "target": "function:vllm/snapshot/manifest.py:write_manifest_atomic",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/snapshot/manifest.py",
+   "target": "function:vllm/snapshot/manifest.py:read_manifest",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/snapshot/manifest.py:SnapshotManifest",
+   "target": "class:vllm/snapshot/manifest.py:SnapshotRuntimeIdentity",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/snapshot/runtime.py",
+   "target": "class:vllm/snapshot/runtime.py:LocalSnapshotTools",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/runtime.py",
+   "target": "function:vllm/snapshot/runtime.py:_generated_cache_prefixes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/runtime.py",
+   "target": "function:vllm/snapshot/runtime.py:_decode_endpoint",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/runtime.py",
+   "target": "function:vllm/snapshot/runtime.py:_validate_tcp_connections",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/runtime.py",
+   "target": "class:vllm/snapshot/runtime.py:LocalSnapshotTools",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/snapshot/runtime.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/snapshot/runtime.py",
+   "target": "file:vllm/snapshot/manifest.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/snapshot/runtime.py",
+   "target": "file:vllm/snapshot/types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/snapshot/runtime.py",
+   "target": "file:vllm/envs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/snapshot/runtime.py",
+   "target": "file:vllm/config/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/snapshot/server.py",
+   "target": "function:vllm/snapshot/server.py:write_ready_atomic",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/server.py",
+   "target": "function:vllm/snapshot/server.py:read_release_marker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/server.py",
+   "target": "function:vllm/snapshot/server.py:parse_control_args",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/server.py",
+   "target": "function:vllm/snapshot/server.py:oracle_from_request_output",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/server.py",
+   "target": "function:vllm/snapshot/server.py:run_engine_canary",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/server.py",
+   "target": "function:vllm/snapshot/server.py:detach_snapshot_streams",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/server.py",
+   "target": "function:vllm/snapshot/server.py:wait_for_release_marker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/server.py",
+   "target": "function:vllm/snapshot/server.py:parse_vllm_args",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/server.py",
+   "target": "function:vllm/snapshot/server.py:run_vllm_snapshot_child",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/server.py",
+   "target": "function:vllm/snapshot/server.py:main",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/server.py",
+   "target": "function:vllm/snapshot/server.py:main",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/snapshot/server.py",
+   "target": "function:vllm/snapshot/server.py:run_vllm_snapshot_child",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/snapshot/server.py",
+   "target": "file:vllm/snapshot/manifest.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/snapshot/server.py",
+   "target": "file:vllm/snapshot/types.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/snapshot/server.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/snapshot/server.py",
+   "target": "file:vllm/entrypoints/common/cli_args.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/snapshot/server.py",
+   "target": "file:vllm/utils/argparse_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/snapshot/server.py",
+   "target": "file:vllm/entrypoints/launchers/api_server/entry.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/snapshot/server.py",
+   "target": "file:vllm/entrypoints/launchers/launcher.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/snapshot/types.py",
+   "target": "class:vllm/snapshot/types.py:Oracle",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/types.py",
+   "target": "function:vllm/snapshot/types.py:oracles_match",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/snapshot/types.py",
+   "target": "class:vllm/snapshot/types.py:Oracle",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/snapshot/types.py",
+   "target": "function:vllm/snapshot/types.py:oracles_match",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/tracing/__init__.py",
+   "target": "function:vllm/tracing/__init__.py:init_tracer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/tracing/__init__.py",
+   "target": "function:vllm/tracing/__init__.py:init_tracer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/tracing/__init__.py",
+   "target": "function:vllm/tracing/__init__.py:maybe_init_worker_tracer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/tracing/__init__.py",
+   "target": "function:vllm/tracing/__init__.py:maybe_init_worker_tracer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/tracing/__init__.py",
+   "target": "function:vllm/tracing/__init__.py:instrument",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/tracing/__init__.py",
+   "target": "function:vllm/tracing/__init__.py:instrument",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/tracing/__init__.py",
+   "target": "function:vllm/tracing/__init__.py:instrument_manual",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/tracing/__init__.py",
+   "target": "function:vllm/tracing/__init__.py:instrument_manual",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/tracing/__init__.py",
+   "target": "function:vllm/tracing/__init__.py:is_tracing_available",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/tracing/__init__.py",
+   "target": "function:vllm/tracing/__init__.py:is_tracing_available",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/tracing/__init__.py",
+   "target": "file:vllm/tracing/otel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/tracing/__init__.py",
+   "target": "file:vllm/tracing/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "function:vllm/tracing/__init__.py:init_tracer",
+   "target": "function:vllm/tracing/otel.py:init_otel_tracer",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/tracing/__init__.py:maybe_init_worker_tracer",
+   "target": "function:vllm/tracing/otel.py:init_otel_worker_tracer",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/tracing/__init__.py:instrument",
+   "target": "function:vllm/tracing/otel.py:instrument_otel",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/tracing/__init__.py:instrument_manual",
+   "target": "function:vllm/tracing/otel.py:manual_instrument_otel",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/tracing/otel.py",
+   "target": "function:vllm/tracing/otel.py:init_otel_tracer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/tracing/otel.py",
+   "target": "function:vllm/tracing/otel.py:get_span_exporter",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/tracing/otel.py",
+   "target": "function:vllm/tracing/otel.py:init_otel_worker_tracer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/tracing/otel.py",
+   "target": "function:vllm/tracing/otel.py:instrument_otel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/tracing/otel.py",
+   "target": "function:vllm/tracing/otel.py:manual_instrument_otel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/tracing/otel.py",
+   "target": "function:vllm/tracing/otel.py:_get_smart_context",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/tracing/otel.py",
+   "target": "function:vllm/tracing/otel.py:propagate_trace_to_env",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/tracing/otel.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/tracing/otel.py",
+   "target": "file:vllm/tracing/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/tracing/utils.py",
+   "target": "class:vllm/tracing/utils.py:SpanAttributes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/tracing/utils.py",
+   "target": "class:vllm/tracing/utils.py:SpanAttributes",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/tracing/utils.py",
+   "target": "class:vllm/tracing/utils.py:LoadingSpanAttributes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/tracing/utils.py",
+   "target": "class:vllm/tracing/utils.py:LoadingSpanAttributes",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/tracing/utils.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/tracing/utils.py",
+   "target": "file:vllm/utils/func_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

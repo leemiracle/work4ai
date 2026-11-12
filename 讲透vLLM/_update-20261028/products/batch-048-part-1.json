@@ -1,0 +1,1110 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/minimax_m3/common/encoder_cudagraph.py",
+   "type": "file",
+   "name": "encoder_cudagraph.py",
+   "filePath": "vllm/models/minimax_m3/common/encoder_cudagraph.py",
+   "summary": "MiniMax M3 编码器 CUDA graph mixin：有 vision_tower 的宿主接入 SupportsEncoderCudaGraph（捕获/重放编码器前向）。",
+   "tags": [
+    "encoder",
+    "cuda-graph",
+    "multimodal",
+    "mixin"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/common/indexer.py",
+   "type": "file",
+   "name": "indexer.py",
+   "filePath": "vllm/models/minimax_m3/common/indexer.py",
+   "summary": "MiniMax M3 lightning indexer 公共层（镜像 DeepSeek V4 的独立 indexer 设计）：key-only 侧缓存（每 token 一个索引键向量）、prefill/decode 元数据、抽象 impl 与 Triton 实现、按平台/top-k/缓存类型选择 impl。",
+   "tags": [
+    "indexer",
+    "side-cache",
+    "metadata",
+    "platform-selection"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "type": "file",
+   "name": "mm_preprocess.py",
+   "filePath": "vllm/models/minimax_m3/common/mm_preprocess.py",
+   "summary": "MiniMax M3 VL 多模态预处理：ProcessingInfo（15 方法）、dummy 输入构建、多模态处理器与视频后端。",
+   "tags": [
+    "multimodal",
+    "preprocessing",
+    "video",
+    "processor"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/common/ops/index_topk.py",
+   "type": "file",
+   "name": "index_topk.py",
+   "filePath": "vllm/models/minimax_m3/common/ops/index_topk.py",
+   "summary": "公共索引 top-k kernel 集（1022 行）：双调 top-k、index block score、split-K cudagraph 安全的 decode 评分（部分+合并两段）。",
+   "tags": [
+    "triton",
+    "top-k",
+    "indexer",
+    "split-k"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "type": "file",
+   "name": "sparse_attn.py",
+   "filePath": "vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "summary": "公共块稀疏注意力 kernel：GQA prefill/decode（split-K over top-k 块）、top-k 输出合并与 KV scale 参数适配。",
+   "tags": [
+    "triton",
+    "sparse-attention",
+    "gqa",
+    "split-k"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/encoder_cudagraph.py:MiniMaxM3EncoderCudaGraphMixin",
+   "type": "class",
+   "name": "MiniMaxM3EncoderCudaGraphMixin",
+   "filePath": "vllm/models/minimax_m3/common/encoder_cudagraph.py",
+   "summary": "vision_tower 宿主的编码器 CUDA graph mixin（10 方法）。",
+   "tags": [
+    "encoder",
+    "cuda-graph",
+    "mixin"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    30,
+    281
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerBackend",
+   "type": "class",
+   "name": "MiniMaxM3IndexerBackend",
+   "filePath": "vllm/models/minimax_m3/common/indexer.py",
+   "summary": "索引器侧缓存后端（key-only，6 方法）。",
+   "tags": [
+    "indexer",
+    "backend",
+    "key-only"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    64,
+    99
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerCache",
+   "type": "class",
+   "name": "MiniMaxM3IndexerCache",
+   "filePath": "vllm/models/minimax_m3/common/indexer.py",
+   "summary": "索引键侧 KV 缓存（每 token 一键，自注册静态 forward context）。",
+   "tags": [
+    "indexer",
+    "side-cache",
+    "forward-context"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    102,
+    158
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerMetadata",
+   "type": "class",
+   "name": "MiniMaxM3IndexerMetadata",
+   "filePath": "vllm/models/minimax_m3/common/indexer.py",
+   "summary": "索引器元数据（prefill/decode 两个子元数据）。",
+   "tags": [
+    "indexer",
+    "metadata",
+    "split"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    186,
+    202
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerMetadataBuilder",
+   "type": "class",
+   "name": "MiniMaxM3IndexerMetadataBuilder",
+   "filePath": "vllm/models/minimax_m3/common/indexer.py",
+   "summary": "抽象构建器基类（Triton/MSA 平行子类各自拥有完整构建）。",
+   "tags": [
+    "metadata-builder",
+    "abstract",
+    "indexer"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    205,
+    252
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerTritonMetadataBuilder",
+   "type": "class",
+   "name": "MiniMaxM3IndexerTritonMetadataBuilder",
+   "filePath": "vllm/models/minimax_m3/common/indexer.py",
+   "summary": "Triton 索引器元数据（无 SM100 fmha_sm100 计划）。",
+   "tags": [
+    "metadata-builder",
+    "triton",
+    "metadata-builder-x"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    255,
+    328
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerImpl",
+   "type": "class",
+   "name": "MiniMaxM3IndexerImpl",
+   "filePath": "vllm/models/minimax_m3/common/indexer.py",
+   "summary": "索引器 kernel 实现抽象基类（各自拥有侧缓存）。",
+   "tags": [
+    "indexer",
+    "abstract",
+    "impl"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    331,
+    400
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerTritonImpl",
+   "type": "class",
+   "name": "MiniMaxM3IndexerTritonImpl",
+   "filePath": "vllm/models/minimax_m3/common/indexer.py",
+   "summary": "Triton 索引器 score + top-k（prefill/decode）。",
+   "tags": [
+    "indexer",
+    "triton",
+    "impl"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    403,
+    492
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3Indexer",
+   "type": "class",
+   "name": "MiniMaxM3Indexer",
+   "filePath": "vllm/models/minimax_m3/common/indexer.py",
+   "summary": "注意力层持有的索引器模块（__init__ 选 impl，4 方法）。",
+   "tags": [
+    "indexer",
+    "module",
+    "selection"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    578,
+    673
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/mm_preprocess.py:MiniMaxM3VLProcessingInfo",
+   "type": "class",
+   "name": "MiniMaxM3VLProcessingInfo",
+   "filePath": "vllm/models/minimax_m3/common/mm_preprocess.py",
+   "summary": "VL 处理信息（15 方法）。",
+   "tags": [
+    "processing-info",
+    "multimodal",
+    "processing-info-x"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    63,
+    269
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/mm_preprocess.py:MiniMaxM3VLDummyInputsBuilder",
+   "type": "class",
+   "name": "MiniMaxM3VLDummyInputsBuilder",
+   "filePath": "vllm/models/minimax_m3/common/mm_preprocess.py",
+   "summary": "VL dummy 输入构建器。",
+   "tags": [
+    "dummy-inputs",
+    "multimodal",
+    "dummy-inputs-x"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    272,
+    303
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/mm_preprocess.py:MiniMaxM3VLMultiModalProcessor",
+   "type": "class",
+   "name": "MiniMaxM3VLMultiModalProcessor",
+   "filePath": "vllm/models/minimax_m3/common/mm_preprocess.py",
+   "summary": "VL 多模态处理器。",
+   "tags": [
+    "processor",
+    "multimodal",
+    "vl"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    306,
+    470
+   ]
+  },
+  {
+   "id": "class:vllm/models/minimax_m3/common/mm_preprocess.py:MiniMaxM3VideoBackend",
+   "type": "class",
+   "name": "MiniMaxM3VideoBackend",
+   "filePath": "vllm/models/minimax_m3/common/mm_preprocess.py",
+   "summary": "视频后端。",
+   "tags": [
+    "video",
+    "backend",
+    "video-x"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    477,
+    531
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/common/indexer.py:select_indexer_impl_cls",
+   "type": "function",
+   "name": "select_indexer_impl_cls",
+   "filePath": "vllm/models/minimax_m3/common/indexer.py",
+   "summary": "按平台/top-k 数/缓存类型选索引器 impl。",
+   "tags": [
+    "selection",
+    "factory",
+    "indexer"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    495,
+    575
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/common/ops/index_topk.py:_topk_index_partial_kernel",
+   "type": "function",
+   "name": "_topk_index_partial_kernel",
+   "filePath": "vllm/models/minimax_m3/common/ops/index_topk.py",
+   "summary": "split-K top-k 部分核。",
+   "tags": [
+    "triton",
+    "top-k",
+    "partial"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    435,
+    563
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/common/ops/index_topk.py:_topk_index_merge_kernel",
+   "type": "function",
+   "name": "_topk_index_merge_kernel",
+   "filePath": "vllm/models/minimax_m3/common/ops/index_topk.py",
+   "summary": "split-K top-k 合并核。",
+   "tags": [
+    "triton",
+    "top-k",
+    "merge"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    575,
+    667
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/common/ops/index_topk.py:minimax_m3_index_score",
+   "type": "function",
+   "name": "minimax_m3_index_score",
+   "filePath": "vllm/models/minimax_m3/common/ops/index_topk.py",
+   "summary": "逐 token 可见稀疏块评分。",
+   "tags": [
+    "indexer",
+    "scoring",
+    "triton"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    674,
+    740
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/common/ops/index_topk.py:minimax_m3_index_topk",
+   "type": "function",
+   "name": "minimax_m3_index_topk",
+   "filePath": "vllm/models/minimax_m3/common/ops/index_topk.py",
+   "summary": "预计算 score 的 top-k 选择。",
+   "tags": [
+    "indexer",
+    "top-k",
+    "triton"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    744,
+    793
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/common/ops/index_topk.py:minimax_m3_index_decode_score",
+   "type": "function",
+   "name": "minimax_m3_index_decode_score",
+   "filePath": "vllm/models/minimax_m3/common/ops/index_topk.py",
+   "summary": "decode 索引评分（split-K，cudagraph 安全，无 top-k）。",
+   "tags": [
+    "indexer",
+    "decode",
+    "split-k"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    797,
+    891
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/common/ops/index_topk.py:minimax_m3_index_decode",
+   "type": "function",
+   "name": "minimax_m3_index_decode",
+   "filePath": "vllm/models/minimax_m3/common/ops/index_topk.py",
+   "summary": "decode 评分+top-k（双 split-K，cudagraph 安全）。",
+   "tags": [
+    "indexer",
+    "decode",
+    "top-k"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    895,
+    1021
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/common/ops/sparse_attn.py:_gqa_sparse_fwd_kernel",
+   "type": "function",
+   "name": "_gqa_sparse_fwd_kernel",
+   "filePath": "vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "summary": "GQA 块稀疏 prefill kernel。",
+   "tags": [
+    "triton",
+    "prefill",
+    "gqa"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    53,
+    221
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/common/ops/sparse_attn.py:_gqa_sparse_decode_kernel",
+   "type": "function",
+   "name": "_gqa_sparse_decode_kernel",
+   "filePath": "vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "summary": "GQA 块稀疏 decode kernel（split-K over top-k 块）。",
+   "tags": [
+    "triton",
+    "decode",
+    "split-k"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    241,
+    428
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/common/ops/sparse_attn.py:_merge_topk_attn_out_kernel",
+   "type": "function",
+   "name": "_merge_topk_attn_out_kernel",
+   "filePath": "vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "summary": "top-k 注意力输出合并。",
+   "tags": [
+    "triton",
+    "merge",
+    "top-k"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    435,
+    481
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/common/ops/sparse_attn.py:minimax_m3_sparse_attn",
+   "type": "function",
+   "name": "minimax_m3_sparse_attn",
+   "filePath": "vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "summary": "选定块的 GQA 块稀疏注意力入口。",
+   "tags": [
+    "sparse-attention",
+    "entry-point",
+    "gqa"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    530,
+    613
+   ]
+  },
+  {
+   "id": "function:vllm/models/minimax_m3/common/ops/sparse_attn.py:minimax_m3_sparse_attn_decode",
+   "type": "function",
+   "name": "minimax_m3_sparse_attn_decode",
+   "filePath": "vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "summary": "decode 块稀疏注意力入口（split-K+合并）。",
+   "tags": [
+    "sparse-attention",
+    "decode",
+    "entry-point"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    617,
+    738
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/minimax_m3/common/encoder_cudagraph.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "file:vllm/config/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "file:vllm/forward_context.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "file:vllm/model_executor/layers/attention_layer_base.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "file:vllm/models/minimax_m3/amd/indexer_context_parallel.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "file:vllm/models/minimax_m3/nvidia/indexer_msa.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "file:vllm/v1/attention/backends/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "file:vllm/v1/kv_cache_interface.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "target": "file:vllm/config/multimodal.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "target": "file:vllm/inputs/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "target": "file:vllm/multimodal/inputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "target": "file:vllm/multimodal/parse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "target": "file:vllm/multimodal/processing/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "target": "file:vllm/multimodal/processing/processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "target": "file:vllm/multimodal/video.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "target": "file:vllm/transformers_utils/configs/minimax_m3.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "target": "file:vllm/transformers_utils/processors/minimax_m3.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/index_topk.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/index_topk.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/index_topk.py",
+   "target": "file:vllm/utils/math_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/encoder_cudagraph.py",
+   "target": "class:vllm/models/minimax_m3/common/encoder_cudagraph.py:MiniMaxM3EncoderCudaGraphMixin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerCache",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerMetadata",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerTritonMetadataBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerTritonImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3Indexer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "function:vllm/models/minimax_m3/common/indexer.py:select_indexer_impl_cls",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "target": "class:vllm/models/minimax_m3/common/mm_preprocess.py:MiniMaxM3VLProcessingInfo",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "target": "class:vllm/models/minimax_m3/common/mm_preprocess.py:MiniMaxM3VLDummyInputsBuilder",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "target": "class:vllm/models/minimax_m3/common/mm_preprocess.py:MiniMaxM3VLMultiModalProcessor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "target": "class:vllm/models/minimax_m3/common/mm_preprocess.py:MiniMaxM3VideoBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/index_topk.py",
+   "target": "function:vllm/models/minimax_m3/common/ops/index_topk.py:_topk_index_partial_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/index_topk.py",
+   "target": "function:vllm/models/minimax_m3/common/ops/index_topk.py:_topk_index_merge_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/index_topk.py",
+   "target": "function:vllm/models/minimax_m3/common/ops/index_topk.py:minimax_m3_index_score",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/index_topk.py",
+   "target": "function:vllm/models/minimax_m3/common/ops/index_topk.py:minimax_m3_index_topk",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/index_topk.py",
+   "target": "function:vllm/models/minimax_m3/common/ops/index_topk.py:minimax_m3_index_decode_score",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/index_topk.py",
+   "target": "function:vllm/models/minimax_m3/common/ops/index_topk.py:minimax_m3_index_decode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "target": "function:vllm/models/minimax_m3/common/ops/sparse_attn.py:_gqa_sparse_fwd_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "target": "function:vllm/models/minimax_m3/common/ops/sparse_attn.py:_gqa_sparse_decode_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "target": "function:vllm/models/minimax_m3/common/ops/sparse_attn.py:_merge_topk_attn_out_kernel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "target": "function:vllm/models/minimax_m3/common/ops/sparse_attn.py:minimax_m3_sparse_attn",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "target": "function:vllm/models/minimax_m3/common/ops/sparse_attn.py:minimax_m3_sparse_attn_decode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/encoder_cudagraph.py",
+   "target": "class:vllm/models/minimax_m3/common/encoder_cudagraph.py:MiniMaxM3EncoderCudaGraphMixin",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerCache",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerMetadata",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerTritonMetadataBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerTritonImpl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3Indexer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/indexer.py",
+   "target": "function:vllm/models/minimax_m3/common/indexer.py:select_indexer_impl_cls",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "target": "class:vllm/models/minimax_m3/common/mm_preprocess.py:MiniMaxM3VLProcessingInfo",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "target": "class:vllm/models/minimax_m3/common/mm_preprocess.py:MiniMaxM3VLDummyInputsBuilder",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "target": "class:vllm/models/minimax_m3/common/mm_preprocess.py:MiniMaxM3VLMultiModalProcessor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/mm_preprocess.py",
+   "target": "class:vllm/models/minimax_m3/common/mm_preprocess.py:MiniMaxM3VideoBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/index_topk.py",
+   "target": "function:vllm/models/minimax_m3/common/ops/index_topk.py:minimax_m3_index_score",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/index_topk.py",
+   "target": "function:vllm/models/minimax_m3/common/ops/index_topk.py:minimax_m3_index_topk",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/index_topk.py",
+   "target": "function:vllm/models/minimax_m3/common/ops/index_topk.py:minimax_m3_index_decode_score",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/index_topk.py",
+   "target": "function:vllm/models/minimax_m3/common/ops/index_topk.py:minimax_m3_index_decode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "target": "function:vllm/models/minimax_m3/common/ops/sparse_attn.py:minimax_m3_sparse_attn",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/minimax_m3/common/ops/sparse_attn.py",
+   "target": "function:vllm/models/minimax_m3/common/ops/sparse_attn.py:minimax_m3_sparse_attn_decode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerTritonMetadataBuilder",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerTritonImpl",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerImpl",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerBackend",
+   "target": "class:vllm/v1/attention/backend.py:AttentionBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerMetadata",
+   "target": "class:vllm/v1/attention/backend.py:AttentionMetadata",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerMetadataBuilder",
+   "target": "class:vllm/v1/attention/backend.py:AttentionMetadataBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/common/mm_preprocess.py:MiniMaxM3VideoBackend",
+   "target": "class:vllm/multimodal/video.py:VideoBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/common/encoder_cudagraph.py:MiniMaxM3EncoderCudaGraphMixin",
+   "target": "class:vllm/model_executor/models/interfaces.py:SupportsEncoderCudaGraph",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "function:vllm/models/minimax_m3/common/indexer.py:select_indexer_impl_cls",
+   "target": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerTritonImpl",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/models/minimax_m3/common/ops/sparse_attn.py:minimax_m3_sparse_attn_decode",
+   "target": "function:vllm/models/minimax_m3/common/ops/sparse_attn.py:_gqa_sparse_decode_kernel",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/models/minimax_m3/common/ops/index_topk.py:minimax_m3_index_decode",
+   "target": "function:vllm/models/minimax_m3/common/ops/index_topk.py:_topk_index_merge_kernel",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/common/indexer.py:MiniMaxM3IndexerTritonImpl",
+   "target": "function:vllm/models/minimax_m3/common/ops/index_topk.py:minimax_m3_index_decode",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/common/mm_preprocess.py:MiniMaxM3VLProcessingInfo",
+   "target": "class:vllm/multimodal/processing/context.py:BaseProcessingInfo",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/common/mm_preprocess.py:MiniMaxM3VLDummyInputsBuilder",
+   "target": "class:vllm/multimodal/processing/dummy_inputs.py:BaseDummyInputsBuilder",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/minimax_m3/common/mm_preprocess.py:MiniMaxM3VLMultiModalProcessor",
+   "target": "class:vllm/multimodal/processing/processor.py:BaseMultiModalProcessor",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}

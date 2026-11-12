@@ -1,0 +1,130 @@
+# Android Tool Core
+
+Shared Android infrastructure for Snap-O tools. Network and Tweaks depend on this library. It has no frontend, discovery entry, content provider, or automatic startup of its own.
+
+The core library provides:
+
+- HTTP routes, request/response helpers, and coroutine-scoped SSE sessions.
+- An abstract Unix socket server with bounded connections, request read timeouts, and shutdown cleanup.
+- HTTP request parsing with configurable body limits and body methods.
+- Host and Origin validation, CORS headers, and HTTP response writing.
+- A common debuggable-app and explicit release opt-in check.
+- SSE event framing and automatic heartbeat comments.
+
+Each tool owns its routes, JSON payloads, startup provider, release metadata key, and event delivery policy. Network retains its ordered event queue and replay history. Tweaks retains its latest-snapshot publisher and main-thread updates.
+
+## Use in this build
+
+```kotlin
+dependencies {
+    implementation(project(":tool-core"))
+}
+```
+
+Apply the [Tool Packager Gradle Plugin](../gradle-plugin/README.md) separately to package the frontend and discovery metadata. The Tool Packager Gradle Plugin generates `SnapOTool` in the Android namespace. Use `SnapOTool.ID` for the socket server. Each tool defines its own HTTP API and any compatibility checks needed by independent clients.
+
+This module uses the repository's Maven publishing convention. Consumers of Network or Tweaks receive it transitively. A new release must publish the core library alongside the tool libraries that depend on it.
+
+## Serve a tool
+
+Use `ToolServer` for normal HTTP tools. Keep the server for the tool's lifetime and close it when that lifetime ends. Startup remains in the tool's existing provider or explicit initialization function.
+
+```kotlin
+val server = ToolServer(SnapOTool.ID) {
+    get("/snapshot") {
+        respondJson("""{"fake":true}""")
+    }
+    post("/reset") {
+        example.reset()
+        respondNoContent()
+    }
+    sse("/events") {
+        example.events.collect { json ->
+            send(data = json, event = "sample")
+        }
+    }
+}
+server.start()
+```
+
+`start()` is idempotent and throws if binding fails. The server owns parsing, Host/Origin checks, CORS, preflight, response framing, and connection cleanup. Unknown routes return 404; unsupported methods return 405 with an `Allow` header. Handlers that return without responding produce 204.
+
+### Requests and responses
+
+Register `get`, `post`, `put`, `patch`, or `delete` routes. `route(method, path)` supports other methods; `OPTIONS` is handled by the server. Routes match the path without query parameters. Register specific routes before overlapping parameter routes.
+
+```kotlin
+get("/items/{id}") {
+    val id = pathParameters.getValue("id")
+    val filters = request.queryParameters["filter"].orEmpty()
+    respondJson(items.read(id, filters))
+}
+post("/items") {
+    val json = request.bodyText()
+    respondJson(items.create(json), statusCode = 201)
+}
+```
+
+Path parameters are percent-decoded without converting `+` to a space. Query parameters retain repeated values. `request.requestTarget` preserves the original target, including its query. `request.path` is the encoded path without the query; encoded slashes remain part of their segment. `request.queryParameters` contains decoded names and values. Header names are lowercase. `request.body` provides bounded bytes; `bodyText()` validates UTF-8.
+
+`respondJson` accepts already-serialized JSON. The server does not select a serialization library. `respondText` returns plain text. For custom status, content type, or headers, use `respond(ToolHttpResponse(...))`. The response owns its headers. `ToolHttpResponse.error` and `ToolHttpException` also accept headers, such as `mapOf("Retry-After" to "1")`.
+
+Return an expected error with `respond(ToolHttpResponse.error(409, "An update is already running."))`. The body is a JSON object with an `error` field. A helper can instead throw `ToolHttpException(409, "An update is already running.")` to stop the handler with an HTTP error.
+
+The server accepts HTTP/1.1 and caps bodies at 64 KiB by default. Set `requestPolicy` to change the body limit or methods that accept bodies. Route handlers validate content types and parse bodies. Preflight requests return 204, and responses use `Cache-Control: no-store`. Handle expected domain errors in routes or shared helpers. Unexpected handler failures are logged and return a generic 500. Malformed HTTP requests return 400, and request-read timeouts return 408. Once a response starts, failures close the connection without appending another HTTP response.
+
+### Streaming
+
+SSE handlers run in a coroutine scope. `send(data, event, id)` frames an event. The server sends a `: keep-alive` comment every 30 seconds automatically, including while the producer waits for data. Writes are serialized with events, and comments do not become frontend message events.
+
+Both `sse` and `respondSse` accept `heartbeatInterval`. Use a positive, finite Kotlin `Duration` to override the interval, or `null` to disable automatic heartbeats. `heartbeat()` still writes one immediate comment when needed:
+
+```kotlin
+sse("/events", heartbeatInterval = 15.seconds) {
+    example.events.collect { send(it, event = "sample") }
+}
+sse("/manual-events", heartbeatInterval = null) {
+    example.events.collect { send(it, event = "sample") }
+}
+```
+
+The tool chooses event sources, buffering, and replay policies. Cancelling the server or disconnecting the client closes the socket and cancels the producer, heartbeat job, and other child coroutines. They also end when the handler returns. Use suspending operations or `runInterruptible` for blocking event sources. Network, Tweaks, and Example all use the shared 30-second default; none schedules its own heartbeat loop.
+
+Use `respondSse` inside an ordinary route when streaming depends on request headers or setup can fail before sending response headers. It supports status and headers such as Network's interception `Location`. Streaming responses use chunked HTTP/1.1 framing. `ToolSseSession.write` sends an already-framed SSE event for tools that queue encoded bytes.
+
+For finite streams such as NDJSON history, use `respondStream(contentType) { write(bytes) }`. The server writes chunk boundaries and the terminating chunk.
+
+Connections use a five-second request read timeout, a thirty-second finite-request deadline, and a five-second blocked-write limit checked once per second. SSE disables the finite-request deadline. The default is 32 concurrent connections per tool/process; Network retains its existing override of 128 and separate limit of 16 event streams. Excess socket connections close immediately.
+
+### Advanced transport and testing
+
+`ToolServer.serve(connection)` handles and closes an externally supplied `ToolConnection`. This lets tests exercise the real parser, router, and response writer using memory or loopback TCP streams. Normal tools only call `start()` and `close()`.
+
+Handlers receive a `ToolHttpRequest`; its construction and HTTP parsing are internal. Use `ToolHttpResponse` for custom responses and `ToolSse.event` for pre-encoded event queues. Socket management and response framing stay internal. Use `ToolServer.startIfAllowed(context)` from the tool's initializer to check startup policy and log socket binding failures. Its default release metadata key is `snapo.<tool-id>.allow_release`; pass an existing key when needed. The server does not add a provider or depend on AndroidX Startup. See the [startup guide](../../docs/plugins.md#startup) for a complete initializer.
+
+## Compatibility
+
+Network uses protocol 2 and Tweaks uses protocol 6. Both use HTTP/1.1 and chunked streaming responses. Each tool owns its protocol version and content-type checks. See the [Network](../../contracts/network/README.md) and [Tweaks](../../docs/tweaks-protocol.md) protocol references.
+
+Both tools now use the same bounded ASCII/CRLF header parser. Tweaks no longer accepts malformed header names, duplicate headers, or LF-only request headers. Excess connections close at the shared server's limit. The first-party clients use the accepted request forms.
+
+## Validation
+
+From the repository root:
+
+```sh
+./gradlew :tool-core:apiCheck
+./gradlew :tool-core:testDebugUnitTest :network:testDebugUnitTest :tweaks-core:testDebugUnitTest
+./gradlew :tool-core:lintDebug :network:lintDebug :tweaks-core:lintDebug
+./gradlew assembleDebug validateMavenCentralRelease
+```
+
+Core tests use memory and loopback TCP streams to exercise routing, framing, browser access, and disconnect cancellation without an Android device. Production uses only Android abstract Unix sockets. Existing Network tests cover history, SSE subscriptions, interception, and browser preflight behavior.
+
+### Public API baseline
+
+[`api/tool-core.api`](api/tool-core.api) records the compiled public API. JetBrains' binary compatibility validator compares the release classes against this baseline. Both `:tool-core:check` and Android CI run `:tool-core:apiCheck`.
+
+The check reports any API difference, including additions. For an intentional compatible change, run `./gradlew :tool-core:apiDump` and include the reviewed baseline diff with the source change. Do not regenerate the baseline just to silence a failure. Preserve existing signatures: even adding a parameter with a default value can break already-compiled tools.
+
+This check covers binary signatures, not behavior or every source compatibility rule. Keep the routing, streaming, and consumer tests. AGP 9 uses built-in Kotlin, which the validator does not detect yet, so this module registers the validator's tasks explicitly.

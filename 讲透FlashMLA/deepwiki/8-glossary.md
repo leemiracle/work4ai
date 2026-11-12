@@ -1,128 +1,153 @@
-> 来源: [https://deepwiki.com/deepseek-ai/FlashMLA/8-glossary](https://deepwiki.com/deepseek-ai/FlashMLA/8-glossary)
-> DeepWiki deepseek-ai/FlashMLA
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/FlashMLA · page 8 Glossary · fetched 2026-10-30 -->
 
 # Glossary
 
-  Relevant source files 
- - [README.md](https://github.com/deepseek-ai/DualPipe/blob/030ce432/README.md?plain=1)
- - [dualpipe/comm.py](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/comm.py)
- - [dualpipe/dualpipe.py](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/dualpipe.py)
- - [dualpipe/dualpipev.py](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/dualpipev.py)
- - [dualpipe/utils.py](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/utils.py)
- - [examples/example_dualpipe.py](https://github.com/deepseek-ai/DualPipe/blob/030ce432/examples/example_dualpipe.py)
- - [examples/example_dualpipev.py](https://github.com/deepseek-ai/DualPipe/blob/030ce432/examples/example_dualpipev.py)
- 
-  This page provides definitions for the specialized terminology, architectural concepts, and internal code abstractions used in the DualPipe library. It serves as a reference for engineers to understand the mapping between pipeline parallelism theory and the implementation details found in the codebase.
+<details>
+<summary>Relevant source files</summary>
 
- 
-## Pipeline Scheduling Terminology
+The following files were used as context for generating this wiki page:
 
- 
-### F, B, and W Phases
+- [README.md](README.md)
+- [csrc/api/common.h](csrc/api/common.h)
+- [tests/quant.py](tests/quant.py)
 
- In the context of DualPipe, computation is broken down into three distinct phases for each micro-batch.
+</details>
 
- 
- - **F (Forward)**: The forward pass computation [README.md34](https://github.com/deepseek-ai/DualPipe/blob/030ce432/README.md?plain=1#L34-L34)
- - **B (Backward for Input)**: The backward pass to calculate gradients with respect to the inputs (activation gradients) [README.md34](https://github.com/deepseek-ai/DualPipe/blob/030ce432/README.md?plain=1#L34-L34)
- - **W (Backward for Weights)**: The backward pass to calculate gradients with respect to the model parameters (weight gradients) [README.md35](https://github.com/deepseek-ai/DualPipe/blob/030ce432/README.md?plain=1#L35-L35)
- 
- In traditional schedules like 1F1B, B and W are often combined into a single backward step. DualPipe separates them to enable the **ZB1P** (Zero Bubble 1 Pipe) style optimization where W is deferred to overlap with other F/B chunks [README.md29-30](https://github.com/deepseek-ai/DualPipe/blob/030ce432/README.md?plain=1#L29-L30)
 
- 
-### Pipeline Bubble
 
- The idle time on a device where no useful computation is occurring, typically at the start (warm-up) or end (cool-down) of a pipeline execution [README.md3-4](https://github.com/deepseek-ai/DualPipe/blob/030ce432/README.md?plain=1#L3-L4) DualPipe significantly reduces this bubble compared to 1F1B by using bidirectional scheduling and F/B overlap [README.md26-31](https://github.com/deepseek-ai/DualPipe/blob/030ce432/README.md?plain=1#L26-L31)
+This glossary defines technical terms, hardware-specific jargon, and codebase entities used within FlashMLA. It serves as a reference for engineers to map domain concepts (like Multi-head Latent Attention or FP8/FP4 Quantization) to specific implementation details and code locations across NVIDIA SM100/SM103 GPUs and Huawei Ascend 950 NPUs.
 
- 
-### Bidirectional Scheduling
+## Core Concepts
 
- A scheduling strategy where micro-batches are processed in two symmetric directions simultaneously (forward and reverse). In `DualPipe`, this is implemented by assigning two modules to each rank and managing two symmetric "phases" of computation [dualpipe/dualpipe.py11-22](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/dualpipe.py#L11-L22)
+### MLA (Multi-head Latent Attention)
+A variant of attention used in DeepSeek-V4.1 models to compress KV cache memory pressure. In FlashMLA, MLA decoding and prefill operate by projecting keys and values into a shared latent space [README.md:5-8]().
+*   **Head Dimensions**: Total head dimension $d = 512$, partitioned into $d_{\text{nope}} = 448$ (non-position-encoded latent features) and $d_{\text{rope}} = 64$ (rotary position embedding components) [tests/quant.py:15-16]().
+*   **Compute-Bound Nature**: Decoding and prefill are heavily optimized to saturate Tensor Cores on SM100/SM103 and AI Cores on Ascend 950 [README.md:13-26]().
 
- **Sources:** [README.md26-36](https://github.com/deepseek-ai/DualPipe/blob/030ce432/README.md?plain=1#L26-L36) [dualpipe/dualpipe.py11-22](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/dualpipe.py#L11-L22)
+### DSA (DeepSeek Sparse Attention)
+A token-level sparse attention mechanism where each query attends only to a restricted subset of KV tokens determined by a runtime `indices` tensor [README.md:7]().
+*   **Implementation**: Sparse prefill and decoding kernels leverage these index tensors to skip inactive KV blocks and optimize sparse block loading via TMA or Ascend C memory management [README.md:13-26]().
 
- 
+### FP8 and FP4 KV Cache Formats (V4.1)
+Compressed KV cache layouts introduced in DeepSeek-V4.1 to reduce memory bandwidth bottlenecks:
+*   **`V41_FP8Sparse`**: Occupies 528 bytes per token ($448$ bytes of `float8_e4m3` NoPE data, $64$ bytes of `bfloat16`/`float16` RoPE data, and $16$ bytes of `e8m0` tile scale factors per 32-element tile) [tests/quant.py:15]().
+*   **`V41_FP4Sparse`**: Occupies 288 bytes per token ($224$ bytes of `float4_e2m1` packed data plus $32$ bytes of `e4m3` scale factors per 16-element tile) [tests/quant.py:16]().
+*   **Reference Quantization**: Implemented in `quantize_k_cache` and `_quantize_to_e2m1` [tests/quant.py:31-96]().
+
+### NoPE / RoPE Split
+The structural separation of attention keys into non-position-encoded latent vectors (`NoPE`, dimension 448) and rotary position-embedded components (`RoPE`, dimension 64), which are quantized and processed differently within FlashMLA kernels [tests/quant.py:15-16]().
+
+Sources: [README.md:5-28](), [tests/quant.py:8-96]()
+
 ---
 
- 
-## Code Abstractions and Entities
+## Hardware Primitives & System Jargon
 
- 
-### DualPipe vs. DualPipeV
+### TMA (Tensor Memory Accelerator)
+A hardware mechanism in NVIDIA Hopper and Blackwell (SM100/SM103) architectures for asynchronous multidimensional data transfer between Global Memory and Shared Memory [README.md:79-80]().
 
- 
- - **DualPipe**: The original bidirectional algorithm. It requires $PP$ physical devices for $PP$ stages [README.md30](https://github.com/deepseek-ai/DualPipe/blob/030ce432/README.md?plain=1#L30-L30)
- - **DualPipeV**: A V-shape variant that executes $PP$ stages on $PP/2$ physical devices by folding the pipeline [README.md31](https://github.com/deepseek-ai/DualPipe/blob/030ce432/README.md?plain=1#L31-L31) In the code, this is reflected by `DualPipeV` managing a V-shape rank topology [dualpipe/dualpipev.py36-41](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/dualpipev.py#L36-L41)
- 
- 
-### Overlapped Forward-Backward (`overlapped_forward_backward`)
+### DSM (Distributed Shared Memory)
+A hardware capability allowing thread blocks (CTAs) within the same thread block cluster to directly access each other's shared memory, used for cooperative data sharing and crossover reductions [README.md:79-80]().
 
- A specialized execution mode where a forward chunk and a backward chunk are executed concurrently to hide communication latency.
+### Seesaw Scheduling
+A ping-pong warpgroup scheduling strategy used in decoding and prefill kernels to interleave Tensor Core (MMA) and CUDA Core (softmax/scaling) operations over shared register allocations [README.md:25-29]().
 
- 
- - **Logic**: Users must implement this in their `PipelineStage` class [examples/example_dualpipe.py55-83](https://github.com/deepseek-ai/DualPipe/blob/030ce432/examples/example_dualpipe.py#L55-L83)
- - **Internal Call**: The library triggers this via `_forward_backward_compute_chunk` [dualpipe/dualpipe.py121-169](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/dualpipe.py#L121-L169)
- 
- 
-### WeightGradStore
+### TMEM (Transposed Memory)
+A dedicated memory hierarchy level in NVIDIA SM100/SM103 Blackwell GPUs designed to store intermediate GEMM and reduction accumulator results [README.md:79-80]().
 
- A global utility class used to manage the separation of weight gradient computation ($W$) from input gradient computation ($B$).
+### CANN / Bisheng
+The software toolkit and compiler infrastructure (`bisheng`) provided by Huawei for compiling and executing Ascend C kernels on Ascend 950 NPUs [README.md:85-88]().
 
- 
- - **`enabled`**: A flag that, when `True`, redirects weight gradient calculations into a cache rather than executing them immediately [dualpipe/utils.py10](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/utils.py#L10-L10) [examples/example_dualpipe.py29-32](https://github.com/deepseek-ai/DualPipe/blob/030ce432/examples/example_dualpipe.py#L29-L32)
- - **`put`**: Stores a gradient calculation function (closure) [dualpipe/utils.py15-16](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/utils.py#L15-L16)
- - **`flush` / `pop`**: Used to commit cached functions to a queue and execute them during the pipeline's "bubble" or overlapped sections [dualpipe/utils.py19-29](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/utils.py#L19-L29)
- 
- **Sources:** [dualpipe/dualpipe.py121-169](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/dualpipe.py#L121-L169) [dualpipe/utils.py8-35](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/utils.py#L8-L35) [examples/example_dualpipe.py55-83](https://github.com/deepseek-ai/DualPipe/blob/030ce432/examples/example_dualpipe.py#L55-L83)
+### kerutils
+A submodule providing supplemental C++ utilities, memory helpers, and PyTorch tensor wrappers (`<kerutils/supplemental/torch_tensors.h>`) [csrc/api/common.h:13]().
 
- 
+Sources: [README.md:75-88](), [csrc/api/common.h:13-57]()
+
 ---
 
- 
+## Codebase Entities & Classes
+
+### `ImplBase`
+The base dispatcher class in the C++ API layer responsible for selecting appropriate backend implementations based on compile-time and runtime configurations [README.md:5-28]().
+
+### `FlashMLASchedMeta`
+A metadata structure generated by Python scheduling utilities to coordinate tile distribution, batch partitioning, and split-KV work assignment across hardware units [README.md:5-28]().
+
+### `Arch`
+A helper struct encapsulating GPU architecture properties, including major/minor compute capability version checks (`is_sm100f()`) and multiprocessor counts (`num_sms`) [csrc/api/common.h:40-57]().
+
+### `KVCacheLayout`
+An enumeration defining supported sparse KV cache layout modes (`V41_FP8Sparse`, `V41_FP4Sparse`) and supplying metadata such as head dimensions, tile sizes, and bytes-per-token calculations [tests/quant.py:8-24]().
+
+Sources: [README.md:5-28](), [csrc/api/common.h:40-57](), [tests/quant.py:8-24]()
+
+---
+
 ## System Mapping Diagrams
 
- 
-### Concept to Code Entity Mapping
+### Diagram 1: KV Cache Format Detection and Dispatch Flow
+This diagram maps natural language KV cache layout concepts to their corresponding C++ and Python code structures.
 
- The following diagram maps high-level pipeline concepts to the specific classes and functions that implement them in the `DualPipe` repository.
+```mermaid
+graph TD
+    subgraph "NaturalLanguageSpace"
+        NL1["V4.1 FP8 Sparse Cache"]
+        NL2["V4.1 FP4 Sparse Cache"]
+    end
 
- **Diagram: Architectural Mapping**
+    subgraph "CodeEntitySpace"
+        NL1 --> EN1["KVCacheLayout.V41_FP8Sparse"]
+        NL2 --> EN2["KVCacheLayout.V41_FP4Sparse"]
+        EN1 --> FN1["detect_kv_cache_format_for_headdim_512"]
+        EN2 --> FN1
+        FN1 --> FN2["dispatch_kv_formats"]
+    end
 
- 
+    subgraph "ExecutionLayer"
+        FN2 --> EX1["ModelType::V41"]
+        FN2 --> EX2["ModelType::V41_FP4"]
+    end
 ```
+**Sources:** [tests/quant.py:8-17](), [csrc/api/common.h:170-186]()
 
+### Diagram 2: Hardware Platform and Stream Abstraction
+This diagram connects hardware abstraction concepts to platform-specific runtime classes and functions.
+
+```mermaid
+graph TD
+    subgraph "NaturalLanguageSpace"
+        HW1["NVIDIA SM100/SM103 GPU"]
+        HW2["Huawei Ascend 950 NPU"]
+    end
+
+    subgraph "CodeEntitySpace"
+        HW1 --> EN3["Arch struct"]
+        EN3 --> FN3["get_num_sms"]
+        HW1 --> FN4["get_current_stream (CUDA)"]
+        HW2 --> FN5["get_current_stream (Ascend)"]
+        FN3 --> UTIL["kerutils & common.h"]
+    end
+
+    subgraph "RuntimeContext"
+        FN4 --> RT1["at::cuda::getCurrentCUDAStream"]
+        FN5 --> RT2["c10_npu::getCurrentNPUStream"]
+    end
 ```
+**Sources:** [csrc/api/common.h:13-87]()
 
- **Sources:** [dualpipe/dualpipe.py11-22](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/dualpipe.py#L11-L22) [dualpipe/dualpipev.py11-22](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/dualpipev.py#L11-L22) [dualpipe/comm.py1-38](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/comm.py#L1-L38) [dualpipe/utils.py8-12](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/utils.py#L8-L12) [dualpipe/utils.py62-80](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/utils.py#L62-L80)
-
- 
-### Computation Phase Data Flow
-
- This diagram illustrates how the `WeightGradStore` intercepts the standard PyTorch backward flow to implement the $B$ and $W$ separation required for DualPipe's efficiency.
-
- **Diagram: Gradient Management Flow**
-
- 
-```
-
-```
-
- **Sources:** [dualpipe/utils.py8-35](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/utils.py#L8-L35) [examples/example_dualpipe.py13-35](https://github.com/deepseek-ai/DualPipe/blob/030ce432/examples/example_dualpipe.py#L13-L35)
-
- 
 ---
 
- 
-## Technical Jargon and Abbreviations
+## Technical Terminology Table
 
- 
-| Term | Definition | Code Pointer |
-|---|---|---|
-| PP Rank | The logical position of a process in the pipeline (0 to N-1). | self.rank in dualpipe/dualpipe.py36 |
-| Phase | Refers to one of the two symmetric directions in the bidirectional schedule (Phase 0 or Phase 1). | phase arg in dualpipe/dualpipe.py67 |
-| Chunk ID | The index of a micro-batch within the total num_chunks. | chunk_id in dualpipe/dualpipe.py69 |
-| P2POp | A point-to-point communication operation (send or receive) managed by NCCL. | dist.P2POp in dualpipe/comm.py30 |
-| ZB | Zero Bubble. Refers to the optimization where weight gradients are calculated during communication/forward phases. | enable_zb in dualpipe/dualpipe.py87 |
-| Rank Mapping | The translation between a process's global MPI/NCCL rank and its position in the pipeline. | rank_mapping in dualpipe/dualpipe.py28-36 |
+| Term | Definition | Code Reference |
+| :--- | :--- | :--- |
+| **`ImplBase`** | Base class for kernel dispatching and feature validation across backend implementations. | [README.md:5-28]() |
+| **`FlashMLASchedMeta`** | Scheduler metadata structure managing tile partitioning and split-KV work distribution. | [README.md:5-28]() |
+| **`Arch`** | Hardware capability detection structure tracking device properties, major version, and SM count. | [csrc/api/common.h:40-57]() |
+| **`KVCacheLayout`** | Enum defining quantization formats (`V41_FP8Sparse`, `V41_FP4Sparse`) and metadata properties. | [tests/quant.py:8-24]() |
+| **`e4m3 / e8m0 / e2m1`** | Quantized floating-point data types used for compressed KV cache values and scale factors. | [tests/quant.py:15-28]() |
+| **`split-KV`** | Strategy dividing long KV sequences across multiple compute units, followed by a combine reduction. | [README.md:13-28]() |
+| **`CANN / Bisheng`** | Toolchain and compiler suite required for building and executing kernels on Ascend NPUs. | [README.md:85-88]() |
+| **`kerutils`** | External submodule providing supplemental C++ utilities and tensor helper functions. | [csrc/api/common.h:13]() |
 
- **Sources:** [dualpipe/dualpipe.py28-87](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/dualpipe.py#L28-L87) [dualpipe/comm.py25-38](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/comm.py#L25-L38) [dualpipe/utils.py8-35](https://github.com/deepseek-ai/DualPipe/blob/030ce432/dualpipe/utils.py#L8-L35)
+Sources: [README.md:5-88](), [csrc/api/common.h:13-57](), [tests/quant.py:8-28]()

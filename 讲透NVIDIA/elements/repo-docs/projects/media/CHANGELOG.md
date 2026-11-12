@@ -1,0 +1,123 @@
+## [1.2.0](https://github.com/NVIDIA/elements/compare/@nvidia-elements/media-v1.1.0...@nvidia-elements/media-v1.2.0) (2026-10-13)
+
+### Features
+
+* **media:** picture in picture button ([edeec60](https://github.com/NVIDIA/elements/commit/edeec60309675c977da136ef92d1b2ab8333774f))
+* **monaco:** upgrade monaco editor to 0.57.0 ([4d86c93](https://github.com/NVIDIA/elements/commit/4d86c930ad22a142cf426591b6850ef63c04540a))
+* **viewport:** add zoom range ([37040c9](https://github.com/NVIDIA/elements/commit/37040c91170e82d105b0e48b05b06879086566b8))
+* **viewport:** init ([ac4651d](https://github.com/NVIDIA/elements/commit/ac4651df3bacfc68807eff2ec38e89dde0511b67))
+* **viewport:** simplify viewport navigation with invoker commands ([51e95fe](https://github.com/NVIDIA/elements/commit/51e95fe78d5b544b8cdff2066d85418d1d65e23a))
+
+### Bug Fixes
+
+* **core:**  add visual tests for label truncation and max-width constraints ([4f2e6d4](https://github.com/NVIDIA/elements/commit/4f2e6d4bc0eabddc269ccc8f48ec193278cefcb8))
+* **core:** add pip i18n strings ([9b1b755](https://github.com/NVIDIA/elements/commit/9b1b755bff25aee35c0206972858301285821621))
+* **core:** migrate viewport to new package ([2ea0a3f](https://github.com/NVIDIA/elements/commit/2ea0a3f809f7b63d09c87227d56f7addc02ed544))
+* **docs:** match lighthouse reports by exact component tag ([16c4570](https://github.com/NVIDIA/elements/commit/16c45703a01bd6318765969dc8d5550fa7dc09bd))
+* **lint:** add invoker trigger element reference ([89daf8a](https://github.com/NVIDIA/elements/commit/89daf8a3b5930f64b2f12d2d5d6a31b9d601cd26))
+* **lint:** recognize command-only invoker controls ([e8d47e2](https://github.com/NVIDIA/elements/commit/e8d47e2b48bccbe69fd3835827a0841049ade4c1))
+
+## [1.1.0](https://github.com/NVIDIA/elements/compare/@nvidia-elements/media-v1.0.1...@nvidia-elements/media-v1.1.0) (2026-10-09)
+
+### Features
+
+* **code:** support code element slot content ([25486f5](https://github.com/NVIDIA/elements/commit/25486f52fa95ac2cb865a20748467d4d5729e673))
+* **core:** add configurable viewport zoom stops ([ff741ea](https://github.com/NVIDIA/elements/commit/ff741eac903e2543c0fa3b9fefc8ef28a5e82d90))
+* **core:** add dot and cross patterns to viewport gridlines ([2693005](https://github.com/NVIDIA/elements/commit/26930057a5e4da4a0c2fb0d9fcfebf95c3dd9bc3))
+* **core:** add viewport ([0e9e892](https://github.com/NVIDIA/elements/commit/0e9e892de5d41c2a64d1e9adcfaa7a9df2c4deef))
+* **core:** add viewport minimap ([c3cc189](https://github.com/NVIDIA/elements/commit/c3cc1891132f6ae6ab27c94fcdfe79d38b592230))
+* **core:** drag handle ([cc6d5b1](https://github.com/NVIDIA/elements/commit/cc6d5b17aac74e65163d581d8525897762d714c2))
+* **core:** menu group ([d9a24e9](https://github.com/NVIDIA/elements/commit/d9a24e961e1c5394367e7ae9bf931d9e1e2d58b0))
+* **core:** tag slots ([c4e0edd](https://github.com/NVIDIA/elements/commit/c4e0edd7b5bdd8c619ca969fd537352466fc759a))
+* **core:** tree node prefix and suffix ([bc0f2f1](https://github.com/NVIDIA/elements/commit/bc0f2f13bbc4119b1941a8102d09e3eba41f278b))
+* **lint:** improve slotted element checks ([0e1985d](https://github.com/NVIDIA/elements/commit/0e1985deb9edba09cbcbd9eec121e445d3559624))
+* **media:** add media loop button ([791c76b](https://github.com/NVIDIA/elements/commit/791c76b2ae06c108a8a0b3c2e60b3fe0c4e8c72c))
+* **pi:** pi extension ([88dea55](https://github.com/NVIDIA/elements/commit/88dea552fd28da8a31c95ff713218bda73d64e64))
+
+### Bug Fixes
+
+* **ci:** ignore test runner artifacts in knip cache ([7415260](https://github.com/NVIDIA/elements/commit/74152608703345d5507ba5f64e5f1535f98b36e3))
+* **ci:** preserve authored contents in example metadata ([0ea8618](https://github.com/NVIDIA/elements/commit/0ea86182b4c654c4d8301bad7fbc06f0d3b11187))
+* **cli:** mcp app rendering and schema tools ([5cf5f51](https://github.com/NVIDIA/elements/commit/5cf5f51e8b77468451024a9a31f247ac0beb5373))
+* **cli:** ui resources ([166a537](https://github.com/NVIDIA/elements/commit/166a5374c9aa022a2cc86c262d5165acdee7112e))
+* **cli:** update @inquirer/prompts to 8.7.2 ([b6984b5](https://github.com/NVIDIA/elements/commit/b6984b58a80a666b7a83aac1e109337e90c469d1))
+* **cli:** update bun to 1.4.2 ([0e84e28](https://github.com/NVIDIA/elements/commit/0e84e2880ca5ff09405d0d88d16ef12d9341623e))
+* **cli:** update dependencies ([2a84274](https://github.com/NVIDIA/elements/commit/2a842746f3cd4055ab53414dd263511d74bad10f))
+* **cli:** update marked to 18.0.14 ([b24d6cb](https://github.com/NVIDIA/elements/commit/b24d6cb07ee47cf392214e0a934f1caee31eb510))
+* **core:** add i18n strings ([676f543](https://github.com/NVIDIA/elements/commit/676f5434c494301ea4df09cd4dd632c7fb9ce0f1))
+* **core:** clean up combobox option observers across connections ([3af4742](https://github.com/NVIDIA/elements/commit/3af4742f53a3d6c09b59b0ac445da9bb268de73e))
+* **core:** debounce scroll tracking state updates ([ce5b688](https://github.com/NVIDIA/elements/commit/ce5b688310d13dcc51e26bd0434599fecc610e4b))
+* **core:** enhance gesture recognizer ([0be2399](https://github.com/NVIDIA/elements/commit/0be2399b37982fde94c061ed811c280b29e3a3ae))
+* **core:** nested background styles ([66d44e7](https://github.com/NVIDIA/elements/commit/66d44e7549f25f096d71c5fc662d805b4267bc72))
+* **core:** preserve accessors during property observation ([37c137d](https://github.com/NVIDIA/elements/commit/37c137d305273cbf4382908cd00d0ca2dd273036))
+* **core:** resolve page panel stacking and visibility ([3bd2fc9](https://github.com/NVIDIA/elements/commit/3bd2fc9d2e3fa9ba740a486cd7a826bb17ffcaa2))
+* **core:** textarea slots ([0f8fb33](https://github.com/NVIDIA/elements/commit/0f8fb33a38c60a08aaf37e774a92338cf5416401))
+* **docs:** correct example api mapping and summary fallback ([f0dd837](https://github.com/NVIDIA/elements/commit/f0dd837756f44f05f1c115384d18e02a40cff32d))
+* **docs:** preserve example content through html processing ([7055d3c](https://github.com/NVIDIA/elements/commit/7055d3ce12a10b0e494da9c73c8f34fce62b9884))
+* **docs:** preserve example source during development reloads ([162082b](https://github.com/NVIDIA/elements/commit/162082b8bead05283646ae68ad3ecd391be8c962))
+* **docs:** prevent runtime errors when loading examples pages in dev ([1d57c69](https://github.com/NVIDIA/elements/commit/1d57c690819c009a1abac037b00f631d18db076a))
+* **forms:** form state restore callback types ([8a060db](https://github.com/NVIDIA/elements/commit/8a060db7366b54ec22e8163a36ee18613a0c479c))
+* **forms:** missing key event check ([3854d5f](https://github.com/NVIDIA/elements/commit/3854d5fb614912eb225612bcdf308badc832093d))
+* **lint:** add invoker trigger elements ([417fb63](https://github.com/NVIDIA/elements/commit/417fb6304d5722fa7bb07a91886ab26da603c630))
+* **lint:** skip generated eleventy vite directories in eslint ([92e5d50](https://github.com/NVIDIA/elements/commit/92e5d506fe0a951c354641a1aad2b1a9dd75a212))
+* **lint:** update eslint ([2a3ad12](https://github.com/NVIDIA/elements/commit/2a3ad1217db5aadfdef4a89f796f96348dc0f330))
+* **pi:** update to pi.dev 1.0.0 ([3d44c15](https://github.com/NVIDIA/elements/commit/3d44c159c4c45b38789aa96615faaf0f97e798f6))
+
+## [1.0.1](https://github.com/NVIDIA/elements/compare/@nvidia-elements/media-v1.0.0...@nvidia-elements/media-v1.0.1) (2026-09-16)
+
+### Features
+
+* **cli:** improve validation commands ([0a9586b](https://github.com/NVIDIA/elements/commit/0a9586be9b6ae1ca3d08ea1cfecefcae26d2af22))
+* **core:** add format-truncate ([d6c0f2e](https://github.com/NVIDIA/elements/commit/d6c0f2e4ac9b27185a4ccbef511e9165b063aecf))
+* **core:** add icon appearances ([d20ccf3](https://github.com/NVIDIA/elements/commit/d20ccf3c621d91e61988435c2ffaeb039f913c17))
+* **core:** add internal gesture and key navigation controllers ([3b46234](https://github.com/NVIDIA/elements/commit/3b46234bab24edc46f906e76cbc7ed95a6197a26))
+* **core:** format-bytes ([bfd2e5e](https://github.com/NVIDIA/elements/commit/bfd2e5e32648a8a8678badc729ce892716168664))
+* **core:** swap reviewed icon svgs ([f5f232e](https://github.com/NVIDIA/elements/commit/f5f232ec2377d25d520873bb0378364f3d7fe397))
+* **lint:** add additional icon alias deprecations ([a574e85](https://github.com/NVIDIA/elements/commit/a574e85010a928714a88e8ae136095172cab0701))
+* **lint:** add css rules ([c876f89](https://github.com/NVIDIA/elements/commit/c876f89879814536abbb4f7fb0d65e255d018292))
+* **lint:** support markdown linting ([652e751](https://github.com/NVIDIA/elements/commit/652e7517bb9c0f17a2e4cc1a4760206f414b24d2))
+
+### Bug Fixes
+
+* **ci:** pin conventionalcommits preset for release notes ([6c93057](https://github.com/NVIDIA/elements/commit/6c93057adec0a1d8fb22335a84af1bb4b9be41ae))
+* **ci:** stabilize monaco worker bundle lighthouse checks ([0f18d6c](https://github.com/NVIDIA/elements/commit/0f18d6c5ef2364d4b7cecd2119e6902633c22fc1))
+* **cli:** improve skill tool call and creation steps ([b30455c](https://github.com/NVIDIA/elements/commit/b30455cad0deab646ad20ccd18bdafda39056860))
+* **cli:** update dependencies ([ff596a1](https://github.com/NVIDIA/elements/commit/ff596a1d484954a575f16a3fe389758388f87bda))
+* **cli:** update dependencies and migration skill ([932ffce](https://github.com/NVIDIA/elements/commit/932ffce3fc8ce5d5df1dd09cf5b856b261427fc6))
+* **cli:** update marked to 18.0.11 ([cb9a5e3](https://github.com/NVIDIA/elements/commit/cb9a5e3e521ecbd87aacb724da9c1f14119f7fc7))
+* **code:** bundle side effects ([13f6528](https://github.com/NVIDIA/elements/commit/13f652860adf0b7e7ef96477d1ac1a5d87652e32))
+* **code:** bundle treeshaking ([cf6beb7](https://github.com/NVIDIA/elements/commit/cf6beb71e6e805f6241e6e0c36100f00611d6c71))
+* **core:** add initial selected item focus handling for tabs ([9d617f4](https://github.com/NVIDIA/elements/commit/9d617f44c43f577f21bcdaa3ba14c6397ed1fc17))
+* **core:** bundle side effects ([d29d5e6](https://github.com/NVIDIA/elements/commit/d29d5e6670b0fac0742b60e18d3efd01373bd0e0))
+* **core:** bundle treeshaking ([e3e80be](https://github.com/NVIDIA/elements/commit/e3e80bee5ca61f36ca5532ba55a9213fd1f8899a))
+* **core:** control message metadata ([1abec58](https://github.com/NVIDIA/elements/commit/1abec58e758c1cf02ba4e9587066bafe677f896a))
+* **core:** format bytes ([385fd83](https://github.com/NVIDIA/elements/commit/385fd83e9a7874aa2daecb400770a752b835b1fb))
+* **core:** gauge fill alignment ([2bef645](https://github.com/NVIDIA/elements/commit/2bef645a8526d8153c8f0de871a0ad89f8933223))
+* **core:** improve viewport height bounds for nve-page ([7c3b839](https://github.com/NVIDIA/elements/commit/7c3b839915c76c08090306534f4166cf36949635))
+* **core:** missing animation timing for progress-bar ([05150d4](https://github.com/NVIDIA/elements/commit/05150d4c97a500f0f728d9a9d9aea3f468a2b8aa))
+* **core:** pointer solid icon ([bf3ff31](https://github.com/NVIDIA/elements/commit/bf3ff31efa313a54130d0aca68176bf5b34dca88))
+* **core:** restore tree keyboard navigation ([e024c11](https://github.com/NVIDIA/elements/commit/e024c114f69e8396a6f451273254c5ed24ce4dc5))
+* **core:** support solid icon variants and icon registry aliases ([e455331](https://github.com/NVIDIA/elements/commit/e455331f87033755667fd6c5d253c5dd2b58823c)), closes [PR#264](https://github.com/NVIDIA/PR/issues/264)
+* **core:** update icon build script ([ad3d51c](https://github.com/NVIDIA/elements/commit/ad3d51cb44a385695ab5d5efe84bfb6f78a4b707))
+* **core:** update icons with aspect ratios ([2021d95](https://github.com/NVIDIA/elements/commit/2021d9596a8e525a3351f6ce0c4d32604ac196ae))
+* **docs:** align card presentation ([f811f0a](https://github.com/NVIDIA/elements/commit/f811f0a685ffcb95c68c6bd2bb48129cf8349561))
+* **docs:** align card title typography ([056404a](https://github.com/NVIDIA/elements/commit/056404a2a6717e325106cd78bda82983e2f76d90))
+* **docs:** correct jsdelivr bundle urls ([c7432be](https://github.com/NVIDIA/elements/commit/c7432be0394225f3d9d7b2c193b7e491c751c9a9))
+* **docs:** make page title weights consistent ([07bc98b](https://github.com/NVIDIA/elements/commit/07bc98b12a646f4050d2cc873d7ed3a00b8304f7))
+* **docs:** refine navigation group titles ([2e3c3e0](https://github.com/NVIDIA/elements/commit/2e3c3e089e07c0b2f261a58bd966bf2f772333a9))
+* **docs:** update responsive pattern icon ([6126e1c](https://github.com/NVIDIA/elements/commit/6126e1c2bc9fff2a222ce81c88f51de47149cad7))
+* **docs:** use canvas background for component headers ([5547c47](https://github.com/NVIDIA/elements/commit/5547c473f0f20dffe29ac8de8a24513126c56f99))
+* **lint:** allow external svg icon sources ([c55f4df](https://github.com/NVIDIA/elements/commit/c55f4df9771a15f9a183d221f2af361dfe9ba04c))
+* **lint:** no-excessive-primary-actions rule to handle popover elements ([398c0df](https://github.com/NVIDIA/elements/commit/398c0df6a2987e8ece663d8c2994d1626a1b2596))
+* **lint:** suggest removing slot="default" when unnamed slot is not first ([84372f1](https://github.com/NVIDIA/elements/commit/84372f1d1173473bc6f89f89e870c0080c226f46))
+* **media:** since version release ([583f6bc](https://github.com/NVIDIA/elements/commit/583f6bcd5384e4d4c5ca953b2f9e74cfbb313750))
+* **starters:** update @angular/* to 22.1.4 ([3370f7d](https://github.com/NVIDIA/elements/commit/3370f7de561dd44723ca8a96b61fd18f65a99841))
+* **starters:** update angular to 22.1.3 ([273d4e9](https://github.com/NVIDIA/elements/commit/273d4e9fc1e2ae425a7276e9daf064d1ee53ca02))
+* **starters:** update nuxt to 4.5.2 ([0862866](https://github.com/NVIDIA/elements/commit/08628664a6e01d455c6c349902ee244026bd12f2))
+* **starters:** update solid-js to 1.9.15 ([1753732](https://github.com/NVIDIA/elements/commit/17537324b004ef58566b8da43b588d3010d9f022))
+* **styles:** native text-box support ([d562bb2](https://github.com/NVIDIA/elements/commit/d562bb2eb5b487eb9a42713848a1a43eaf772d0d))
+* **themes:** update default status contrast ([52af067](https://github.com/NVIDIA/elements/commit/52af0677b6b63c85353b77ca624a29c1c8d9b05a))
+
+## 0.0.0
+
+Initial release.

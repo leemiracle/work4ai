@@ -1,0 +1,166 @@
+# CI test pools
+
+The nodewright chainsaw e2e suite (`k8s-tests/chainsaw/nodewright/`) is split into labeled pools that run as parallel CI jobs to keep wall-clock per matrix row under ~18 min.
+
+## Pools
+
+Every test under `k8s-tests/chainsaw/nodewright/*/chainsaw-test.yaml` has a top-level `metadata.labels.pool: <name>`:
+
+- `core` — fast smoke and feature tests; **also the fallback for any
+  test missing a `pool:` label**.
+- `interrupt` — cordon/drain/taint/runtime-required flows.
+- `uninstall` — uninstall, upgrade, downgrade lifecycle.
+- `lifecycle` — pause/disable/delete/finalizer/state.
+
+## Running locally
+
+```bash
+# All tests (default — same as before pools existed):
+make e2e-tests
+
+# A single pool:
+POOL=interrupt make e2e-tests
+```
+
+The `POOL` variable is honored by `operator/Makefile`'s `e2e-tests`
+target. `POOL=core` uses a `pool notin (...)` selector so unlabeled
+tests still run.
+
+## Suites that are not pools
+
+Not every matrix row is a chainsaw pool. Pools only subdivide
+`k8s-tests/chainsaw/nodewright/`; the other rows in the `tests` matrix are
+separate suites selected by `test-suite` and run via their own make target
+(`unit-tests`, `helm-tests`, `cli-e2e`, `deployment-policy`, `migration`).
+
+Two of them, `helm-tests` and `migration`, build their cluster with
+`make create-kind-cluster` (ctlptl) rather than `helm/kind-action`, because they
+need ctlptl's local image registry to serve the operator image under test. The
+three cluster-setup steps key off a shared list, so adding another registry-needing
+suite means adding its name to that list in all three places.
+
+Both also start from the same `v0.17.1` pre-rename baseline: `migration` for the API
+group rename, `helm-tests`' `helm-upgrade-rollback-test` for the in-cluster resource
+name rename. `migration` materializes that chart with `git archive chart/v0.17.1`, so
+it needs **full history with tags** (`fetch-depth: 0`, `fetch-tags: true`, already set
+for the whole `tests` job) and fails early with an explicit message rather than a bare
+git error when the tag is missing. `helm-upgrade-rollback-test` pulls the published
+chart from the registry instead, and only reads git tags when asked to resolve the
+newest release rather than a pinned one.
+
+### `operator-agent`
+
+Runs `k8s-tests/operator-agent/` — the only suite that exercises the **real agent** rather than
+the `agentless` package image, so the only one that proves a package's scripts run on the host.
+
+It covers `apply`, `config`, `interrupt`, `post-interrupt` and `uninstall`, each with its `-check`
+counterpart, plus log retention, `SKYHOOK_AGENT_WRITE_LOGS=false`, and the `check_results` /
+`<stage>_ALL_CHECKED` summary artifacts. `sigterm_grace` covers pod teardown mid-step: it deletes
+the package pod while `apply.sh` is running and asserts the step finishes inside the package's
+`gracefulShutdown` rather than being killed, and that the retry then skips it. `service_restart`
+runs the `service` interrupt for real: kind nodes run systemd, so the agent's chrooted
+`systemctl daemon-reload` and `systemctl restart` act on a unit the scenario installs, and the
+unit is installed in two definitions with no reload between them so that the restart can only
+write the expected marker if the agent's `daemon-reload` reached the manager. It is the only
+interrupt type the suite currently executes rather than `noop`: a `reboot` would terminate the
+kind node container, so that path stays unit-tested, and `restart_all_services` is untested on
+the kind image either way. `upgrade` is **not**
+covered: the `shellscript` package these scenarios use declares no `upgrade` mode in any published
+version, so an upgrade scenario needs a package that supports one.
+
+`agent-ci.yaml` already runs it when the *agent* changes (`agent/**`, `containers/agent.Dockerfile`
+or `k8s-tests/operator-agent/**`), against the image that run just built. This row covers the other
+direction: the operator is what builds the pod the agent runs in — its args, mounts, copy dir and
+`config.json` — and until this row existed, an operator change could break that contract without
+any suite noticing.
+
+The scenarios are shared between the two workflows, never forked: a scenario is the behaviour the
+operator depends on. The suite ran against both the Python and the Go agent through the rewrite,
+so it is also what proved the Go agent honours the same on-node state; the Python agent is gone
+since the cutover (#222), but state written by an `agent/v6.x` node is still exercised by the
+flag-compatibility unit tests in `agent/internal/flags`.
+
+Both workflows dump agent pod logs and the agent's on-node state under `/var/lib/skyhook` and
+`/var/log/skyhook` on failure, via `.github/actions/dump-operator-agent-diagnostics`, so a failure
+is diagnosed from the same evidence wherever it runs.
+
+It resolves `AGENT_IMAGE` from `chart/values.yaml` rather than pinning a version in the workflow,
+so bumping the agent in one place cannot leave this row testing an older one. The suite refuses to
+run without an explicit `AGENT_IMAGE`: `operator/Makefile` gives `AGENT_IMAGE` no global
+default, so the guard fails loudly instead of falling back to the `agentless` image and
+passing every case while executing nothing.
+
+### `migration`
+
+Runs `k8s-tests/migration/run.sh`: installs the last pre-rename release
+(`chart/v0.17.1` at operator `v0.17.0`) and upgrades to the commit under test,
+asserting per-node state migrates and no package re-runs. See
+`k8s-tests/migration/README.md`.
+
+Two requirements it does not share with the other suites:
+
+- **Full history with tags.** It materializes the old chart with
+  `git archive chart/v0.17.1`, so the checkout needs `fetch-depth: 0` and
+  `fetch-tags: true` (both already set for the whole `tests` job). Without them
+  the run fails early with an explicit message rather than a bare git error.
+- **A clean cluster.** Phase 1 refuses to run if `nodewright.nvidia.com` CRDs
+  already exist, since a pre-rename baseline is the point. It gets a fresh
+  cluster per run, so this only bites when running locally against a reused one.
+
+It runs on the primary Kind node image only. The upgrade path it exercises is the
+operator's own, not Kubernetes-version sensitive, and the run is long enough
+(cluster create, two helm installs, a real package rollout, a prune, two operator
+restarts) that a matrix over every supported version would not pay for itself.
+This row is the longest in the matrix and exceeds the ~18 min per-row target the
+pools are sized against.
+
+## Adding a new pool
+
+Three-file change, no branch-protection edits:
+
+1. Add `pool: <newpool>` to the relevant `chainsaw-test.yaml` files' `metadata.labels` block.
+2. Append `<newpool>` to the `pool:` matrix list in `.github/workflows/operator-ci.yaml`.
+3. Append `<newpool>` to `POOL_NON_DEFAULT` in `operator/Makefile` so the `core` pool's `notin (...)` selector excludes it.
+
+Worst case if step 3 is forgotten: the new pool's tests run twice (once in their pool, once in `core`). Noisy but not silently broken.
+
+## Code coverage
+
+Per-row coverage artifacts are named `operator-coverage-<test-suite>[-<pool>]-k8s-<version>`; the `operator-` prefix keeps agent-ci's coverage artifact out, since on a pull request both workflows run inside the same Merge Gate run. The `upload-coverage` job globs `operator-coverage-*` and concatenates the per-row `cover.out` files (Go covdata `mode: set` format auto-deduplicates lines), producing a single combined profile uploaded to Coveralls — equivalent to the pre-pool combined profile.
+
+### Excluded paths
+
+`COVERAGE_EXCLUDE` in `operator/Makefile` lists paths whose statements are dropped before the total is reported. It currently holds one entry: `zz_generated.deepcopy.go`.
+
+**Why exclude it:** controller-gen writes those files and nobody should hand-write a test for `DeepCopyInto`, but they are ~916 statements — about a quarter of all uncovered code in the repo — so counting them costs roughly 4 points and obscures the coverage of code people actually write. The legacy `api/v1alpha1` copy sits near 29% purely because that CRD is read-only.
+
+**Why it lives in the Makefile:** Coveralls has no exclusion mechanism for Go profiles. There is no `.coveralls.yml` key for it and the `coverallsapp/github-action` has no such input — it counts whatever profile it is handed. So the filtering has to happen before upload, and `COVERAGE_EXCLUDE` is the single definition. `make merge-coverage` applies it to each per-suite artifact, and the `upload-coverage` job calls `make filter-coverage` again on the combined profile so a suite that starts uploading a raw profile cannot quietly reintroduce the generated files.
+
+**What does not belong here:** hand-written code. An exclusion moves the number without changing what is tested. If a piece of code is genuinely not worth testing, say so in a comment where it lives; do not hide it from the total.
+
+**If you edit `COVERAGE_EXCLUDE`,** note that `filter-coverage` refuses any pattern that leaves nothing behind — an invalid expression, or one broad enough to match every line — and leaves `cover.out` untouched rather than uploading an empty profile that would report 0%. Setting it to empty is allowed and simply reports the unfiltered profile.
+
+## Gate jobs
+
+The `main` ruleset requires one check from pull request CI: **`ci-gate`**, the last job in `.github/workflows/merge-gate.yaml`. Commit linting is required separately, as **`Git commit linting`**, because it also reruns when a PR's title or body is edited and nothing else should.
+
+Apart from commit linting, `merge-gate.yaml` is the only workflow whose results gate merge. A few others still run on `pull_request` as advisory checks, outside `ci-gate`: `actionlint.yaml`, `fern-docs-ci.yml`, `fern-docs-preview-build.yml` and `vuln-scan-images.yaml`. Merge Gate's `check-paths` job decides from the changed files which component workflows are needed, and calls each one through `workflow_call` as a real job paired with a `-skip` job whose `if:` is the inverse:
+
+| Job | Workflow | Runs when |
+| --- | --- | --- |
+| `lint` | `lint-ci.yaml` | every PR |
+| `operator-ci` | `operator-ci.yaml` | `operator` filter |
+| `agent-ci` | `agent-ci.yaml` | `agent` filter |
+| `tools-ci` | `tools-ci.yaml` | `tools` filter |
+| `checkov` | `security-checkov.yaml` | `chart` filter |
+| `agentless` | `agentless-container.yaml` | `agentless` filter |
+
+The component workflows keep their own `push` and tag triggers, so release builds and the cosign identities that name them are unchanged. For a pull request, the path filters live in `check-paths`; each mirrors the workflow's `push` paths, plus the workflow file and `merge-gate.yaml`.
+
+A called workflow reports a single result to its caller that rolls up every job inside it, matrix legs included. That is why the Kubernetes versions `operator-ci.yaml` expands at runtime need no listing anywhere: one failed leg fails `operator-ci`, and that fails `ci-gate`.
+
+`ci-gate` passes when `check-paths` succeeded and every other job it needs is `success` or `skipped`. Both conditions matter. A skip is safe only because every real job and its `-skip` twin depend on `check-paths` alone, so once it has succeeded exactly one of each pair runs. If `check-paths` fails, both are skipped, which is why it is checked on its own.
+
+To add a gating check, add a path filter output to `check-paths` (none for a check that always runs), add the real job and, unless the check always runs, a `-skip` twin, and add them to `ci-gate`'s `needs:`. No ruleset change is needed. Do not give a gating workflow its own `pull_request` trigger or a job named `ci-gate`: one required name cannot tell several same-named checks apart, a workflow filtered out by its own `paths:` posts no check at all, and a slow workflow's gate does not exist until its `needs:` finish, while a fast one's is already green.
+
+`agent-ci.yaml` keeps one gate of its own, `agent-gate`. The roll-up fails `ci-gate` when a job fails, but not when a job is skipped, and `create-manifest` and `operator-agent-tests` skip on fork PRs because they need GHCR write. `operator-agent-tests` is the contract check the whole workflow exists for, so `agent-gate` asserts both jobs in both directions: `success` when `PUSH_TO_REGISTRY` is true, `skipped` when it is false. A run that should have happened and silently didn't fails it.

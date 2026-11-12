@@ -1,0 +1,30 @@
+# DeepWiki 索引 — NVIDIA/DALI
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 25 页 · 全文 582634 字符
+
+- [1 Overview](1-overview.md)
+- [2 Core Architecture](2-core-architecture.md)
+  - [2.1 Pipeline System](2.1-pipeline-system.md)
+  - [2.2 Data Structures](2.2-data-structures.md)
+  - [2.3 Operator System](2.3-operator-system.md)
+- [3 Python API](3-python-api.md)
+  - [3.1 Pipeline API (fn and ops)](3.1-pipeline-api-fn-and-ops.md)
+  - [3.2 Dynamic API](3.2-dynamic-api.md)
+  - [3.3 External Source](3.3-external-source.md)
+  - [3.4 Debug Mode](3.4-debug-mode.md)
+- [4 Framework Integration](4-framework-integration.md)
+  - [4.1 PyTorch Integration](4.1-pytorch-integration.md)
+  - [4.2 TensorFlow Integration](4.2-tensorflow-integration.md)
+  - [4.3 Other Frameworks](4.3-other-frameworks.md)
+- [5 Data Loading and Processing](5-data-loading-and-processing.md)
+  - [5.1 Data Readers](5.1-data-readers.md)
+  - [5.2 Common Pipeline Patterns](5.2-common-pipeline-patterns.md)
+  - [5.3 Framework Iterators](5.3-framework-iterators.md)
+- [6 Advanced Topics](6-advanced-topics.md)
+  - [6.1 Memory Management and Interoperability](6.1-memory-management-and-interoperability.md)
+  - [6.2 C API](6.2-c-api.md)
+- [7 Build and Development](7-build-and-development.md)
+  - [7.1 Build System](7.1-build-system.md)
+  - [7.2 Dependencies](7.2-dependencies.md)
+  - [7.3 Testing Infrastructure](7.3-testing-infrastructure.md)

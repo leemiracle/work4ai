@@ -1,0 +1,33 @@
+# DeepWiki 索引 — huggingface/nanowhale
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 157015 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Project Background & Goals](1.1-project-background-goals.md)
+  - [1.2 Getting Started](1.2-getting-started.md)
+- [2 Model Architecture](2-model-architecture.md)
+  - [2.1 Configuration System (DeepseekV4Config)](2.1-configuration-system-deepseekv4config.md)
+  - [2.2 Hyper-Connections](2.2-hyper-connections.md)
+  - [2.3 Multi-Head Latent Attention (MLA / CSA)](2.3-multi-head-latent-attention-mla-csa.md)
+  - [2.4 Mixture-of-Experts (MoE)](2.4-mixture-of-experts-moe.md)
+  - [2.5 Multi-Token Prediction (MTP)](2.5-multi-token-prediction-mtp.md)
+- [3 Configuration Files](3-configuration-files.md)
+  - [3.1 Main 100M Configuration (main_100m.yaml)](3.1-main-100m-configuration-main-100m.yaml.md)
+  - [3.2 Debug Configuration (debug.yaml)](3.2-debug-configuration-debug.yaml.md)
+  - [3.3 Fallback Under-1B Configuration (fallback_under_1b.yaml)](3.3-fallback-under-1b-configuration-fallback-under-1b.yaml.md)
+- [4 Training Pipeline](4-training-pipeline.md)
+  - [4.1 Data Preparation](4.1-data-preparation.md)
+  - [4.2 Pretraining (train_pretrain.py)](4.2-pretraining-train-pretrain.py.md)
+  - [4.3 Supervised Fine-Tuning (train_sft.py)](4.3-supervised-fine-tuning-train-sft.py.md)
+- [5 Tokenizer](5-tokenizer.md)
+  - [5.1 Tokenizer Configuration](5.1-tokenizer-configuration.md)
+  - [5.2 Vocabulary & Tokenizer Artifacts](5.2-vocabulary-tokenizer-artifacts.md)
+- [6 Inference & Evaluation](6-inference-evaluation.md)
+  - [6.1 Interactive Chat CLI (chat.py)](6.1-interactive-chat-cli-chat.py.md)
+  - [6.2 Smoke Evaluation (eval_smoke.py)](6.2-smoke-evaluation-eval-smoke.py.md)
+- [7 Developer Utilities](7-developer-utilities.md)
+  - [7.1 Parameter Counting (count_params.py)](7.1-parameter-counting-count-params.py.md)
+  - [7.2 Architecture Inspection (inspect_deepseek_v4.py)](7.2-architecture-inspection-inspect-deepseek-v4.py.md)
+  - [7.3 Hub Upload (upload_to_hub.py)](7.3-hub-upload-upload-to-hub.py.md)
+- [8 Glossary](8-glossary.md)

@@ -1,0 +1,41 @@
+---
+{
+  title: 'Data Grid Column Alignment',
+  description: 'Align column content in NVIDIA Elements Data Grid: left, right, and center alignment for headers and cells.',
+  layout: 'docs.11ty.js',
+  tag: 'nve-grid',
+  hideStatus: true
+}
+---
+
+```html
+<nve-grid>
+  <nve-grid-header>
+    <nve-grid-column column-align="start">Column 1</nve-grid-column>
+    <nve-grid-column column-align="end">Column 2</nve-grid-column>
+    <nve-grid-column column-align="center">Column 3</nve-grid-column>
+    <nve-grid-column>Column 4</nve-grid-column>
+  </nve-grid-header>
+  <nve-grid-row>
+    <nve-grid-cell>cell 1-1</nve-grid-cell>
+    <nve-grid-cell>cell 1-2</nve-grid-cell>
+    <nve-grid-cell>cell 1-3</nve-grid-cell>
+    <nve-grid-cell>cell 1-4</nve-grid-cell>
+  </nve-grid-row>
+  ...
+</nve-grid>
+```
+
+{% api 'nve-grid-column', 'property', 'columnAlign' %}
+
+## Column Align Center
+
+{% example '@nvidia-elements/core/grid/grid.examples.json' 'ColumnAlignCenter' %}
+
+## Column Align End
+
+{% example '@nvidia-elements/core/grid/grid.examples.json' 'ColumnAlignEnd' %}
+
+## Column Align Start
+
+{% example '@nvidia-elements/core/grid/grid.examples.json' 'ColumnAlignStart' %}

@@ -1,322 +1,357 @@
+<!-- source: DeepWiki mcp.deepwiki.com · repo vllm-project/vllm · page 13 Glossary · fetched 2026-10-28 -->
+
 # Glossary
 
-> 来源: https://deepwiki.com/vllm-project/vllm/13-glossary 抓取日期: 2026-09-02
-> 章节: 第 13 章 术语表
+<details>
+<summary>Relevant source files</summary>
+
+The following files were used as context for generating this wiki page:
+
+- [cmake/external_projects/triton_kernels.cmake](cmake/external_projects/triton_kernels.cmake)
+- [docs/features/automatic_prefix_caching.md](docs/features/automatic_prefix_caching.md)
+- [docs/features/speculative_decoding/dynamic_speculative_decoding.md](docs/features/speculative_decoding/dynamic_speculative_decoding.md)
+- [docs/models/supported_models.md](docs/models/supported_models.md)
+- [tests/config/test_config_utils.py](tests/config/test_config_utils.py)
+- [tests/config/test_model_arch_config.py](tests/config/test_model_arch_config.py)
+- [tests/engine/test_arg_utils.py](tests/engine/test_arg_utils.py)
+- [tests/kernels/attention/test_deepgemm_attention.py](tests/kernels/attention/test_deepgemm_attention.py)
+- [tests/kernels/attention/test_kimi_k3_mla_fused_epilogue.py](tests/kernels/attention/test_kimi_k3_mla_fused_epilogue.py)
+- [tests/kernels/attention/test_kimi_k3_mla_key_concat_kv_cache.py](tests/kernels/attention/test_kimi_k3_mla_key_concat_kv_cache.py)
+- [tests/kernels/attention/test_triton_decode_attention.py](tests/kernels/attention/test_triton_decode_attention.py)
+- [tests/kernels/moe/test_gpt_oss_triton_kernels.py](tests/kernels/moe/test_gpt_oss_triton_kernels.py)
+- [tests/kernels/moe/test_ocp_mx_moe.py](tests/kernels/moe/test_ocp_mx_moe.py)
+- [tests/kernels/quantization/test_mxfp4_triton_ep.py](tests/kernels/quantization/test_mxfp4_triton_ep.py)
+- [tests/models/kimi_k3/test_mla_prefill_context.py](tests/models/kimi_k3/test_mla_prefill_context.py)
+- [tests/models/multimodal/generation/test_common.py](tests/models/multimodal/generation/test_common.py)
+- [tests/models/multimodal/generation/vlm_utils/model_utils.py](tests/models/multimodal/generation/vlm_utils/model_utils.py)
+- [tests/models/quantization/test_gpt_oss.py](tests/models/quantization/test_gpt_oss.py)
+- [tests/models/quantization/test_mimo_v2_w4a16_routing.py](tests/models/quantization/test_mimo_v2_w4a16_routing.py)
+- [tests/models/registry.py](tests/models/registry.py)
+- [tests/quantization/test_gfx950_moe.py](tests/quantization/test_gfx950_moe.py)
+- [tests/quantization/test_modelopt.py](tests/quantization/test_modelopt.py)
+- [tests/test_config.py](tests/test_config.py)
+- [tests/v1/attention/test_flashmla_nope_sm90_backend_selection.py](tests/v1/attention/test_flashmla_nope_sm90_backend_selection.py)
+- [tests/v1/attention/test_indexer_deepseek_v4_slot_mapping.py](tests/v1/attention/test_indexer_deepseek_v4_slot_mapping.py)
+- [tests/v1/attention/test_indexer_native_next_n.py](tests/v1/attention/test_indexer_native_next_n.py)
+- [tests/v1/attention/test_mla_backends.py](tests/v1/attention/test_mla_backends.py)
+- [tests/v1/attention/test_sparse_mla_backends.py](tests/v1/attention/test_sparse_mla_backends.py)
+- [tests/v1/core/prefix_cache/test_mamba_eagle_resume_checkpoint.py](tests/v1/core/prefix_cache/test_mamba_eagle_resume_checkpoint.py)
+- [tests/v1/core/prefix_cache/test_partial_prefix_cache_hits.py](tests/v1/core/prefix_cache/test_partial_prefix_cache_hits.py)
+- [tests/v1/core/test_async_scheduler.py](tests/v1/core/test_async_scheduler.py)
+- [tests/v1/core/test_contiguous_kv_packing.py](tests/v1/core/test_contiguous_kv_packing.py)
+- [tests/v1/core/test_deferred_block_free.py](tests/v1/core/test_deferred_block_free.py)
+- [tests/v1/core/test_kv_cache_utils.py](tests/v1/core/test_kv_cache_utils.py)
+- [tests/v1/core/test_mamba_align_chunk_split.py](tests/v1/core/test_mamba_align_chunk_split.py)
+- [tests/v1/core/test_prefix_caching.py](tests/v1/core/test_prefix_caching.py)
+- [tests/v1/core/test_scheduler.py](tests/v1/core/test_scheduler.py)
+- [tests/v1/core/test_single_type_kv_cache_manager.py](tests/v1/core/test_single_type_kv_cache_manager.py)
+- [tests/v1/core/utils.py](tests/v1/core/utils.py)
+- [tests/v1/e2e/general/test_pooling_chunked_prefill.py](tests/v1/e2e/general/test_pooling_chunked_prefill.py)
+- [tests/v1/spec_decode/test_dynamic_sd.py](tests/v1/spec_decode/test_dynamic_sd.py)
+- [tests/v1/spec_decode/test_ngram.py](tests/v1/spec_decode/test_ngram.py)
+- [vllm/config/attention.py](vllm/config/attention.py)
+- [vllm/config/cache.py](vllm/config/cache.py)
+- [vllm/config/model.py](vllm/config/model.py)
+- [vllm/config/model_arch.py](vllm/config/model_arch.py)
+- [vllm/config/parallel.py](vllm/config/parallel.py)
+- [vllm/config/scheduler.py](vllm/config/scheduler.py)
+- [vllm/config/speculative.py](vllm/config/speculative.py)
+- [vllm/config/utils.py](vllm/config/utils.py)
+- [vllm/config/vllm.py](vllm/config/vllm.py)
+- [vllm/engine/arg_utils.py](vllm/engine/arg_utils.py)
+- [vllm/model_executor/layers/attention/mla_attention.py](vllm/model_executor/layers/attention/mla_attention.py)
+- [vllm/model_executor/layers/attention/sparse_mla_attention.py](vllm/model_executor/layers/attention/sparse_mla_attention.py)
+- [vllm/model_executor/layers/fused_moe/config.py](vllm/model_executor/layers/fused_moe/config.py)
+- [vllm/model_executor/layers/fused_moe/experts/aiter_mxfp4_w4a16_moe.py](vllm/model_executor/layers/fused_moe/experts/aiter_mxfp4_w4a16_moe.py)
+- [vllm/model_executor/layers/fused_moe/experts/aiter_mxfp4_w4a8_moe.py](vllm/model_executor/layers/fused_moe/experts/aiter_mxfp4_w4a8_moe.py)
+- [vllm/model_executor/layers/fused_moe/experts/gpt_oss_triton_kernels_moe.py](vllm/model_executor/layers/fused_moe/experts/gpt_oss_triton_kernels_moe.py)
+- [vllm/model_executor/layers/fused_moe/experts/rocm_aiter_moe.py](vllm/model_executor/layers/fused_moe/experts/rocm_aiter_moe.py)
+- [vllm/model_executor/layers/fused_moe/experts/xpu_moe.py](vllm/model_executor/layers/fused_moe/experts/xpu_moe.py)
+- [vllm/model_executor/layers/fused_moe/layer.py](vllm/model_executor/layers/fused_moe/layer.py)
+- [vllm/model_executor/layers/fused_moe/oracle/fp8.py](vllm/model_executor/layers/fused_moe/oracle/fp8.py)
+- [vllm/model_executor/layers/fused_moe/oracle/mxfp4.py](vllm/model_executor/layers/fused_moe/oracle/mxfp4.py)
+- [vllm/model_executor/layers/fused_moe/oracle/nvfp4.py](vllm/model_executor/layers/fused_moe/oracle/nvfp4.py)
+- [vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py](vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py)
+- [vllm/model_executor/layers/quantization/fp8.py](vllm/model_executor/layers/quantization/fp8.py)
+- [vllm/model_executor/layers/quantization/modelopt.py](vllm/model_executor/layers/quantization/modelopt.py)
+- [vllm/model_executor/layers/quantization/mxfp4.py](vllm/model_executor/layers/quantization/mxfp4.py)
+- [vllm/model_executor/layers/quantization/quark/quark_moe.py](vllm/model_executor/layers/quantization/quark/quark_moe.py)
+- [vllm/model_executor/layers/quantization/utils/mxfp4_utils.py](vllm/model_executor/layers/quantization/utils/mxfp4_utils.py)
+- [vllm/model_executor/layers/sparse_attn_indexer.py](vllm/model_executor/layers/sparse_attn_indexer.py)
+- [vllm/model_executor/models/config.py](vllm/model_executor/models/config.py)
+- [vllm/model_executor/models/registry.py](vllm/model_executor/models/registry.py)
+- [vllm/models/hy_v4/nvidia/flashmla_sparse.py](vllm/models/hy_v4/nvidia/flashmla_sparse.py)
+- [vllm/models/inkling/common/mm_preprocess.py](vllm/models/inkling/common/mm_preprocess.py)
+- [vllm/models/kimi_k3/nvidia/mla.py](vllm/models/kimi_k3/nvidia/mla.py)
+- [vllm/models/kimi_k3/nvidia/ops/fused_mla_key_concat_kv_cache.py](vllm/models/kimi_k3/nvidia/ops/fused_mla_key_concat_kv_cache.py)
+- [vllm/transformers_utils/config.py](vllm/transformers_utils/config.py)
+- [vllm/transformers_utils/configs/__init__.py](vllm/transformers_utils/configs/__init__.py)
+- [vllm/transformers_utils/model_arch_config_convertor.py](vllm/transformers_utils/model_arch_config_convertor.py)
+- [vllm/transformers_utils/processors/__init__.py](vllm/transformers_utils/processors/__init__.py)
+- [vllm/utils/deep_gemm.py](vllm/utils/deep_gemm.py)
+- [vllm/v1/attention/backends/mla/cutlass_mla.py](vllm/v1/attention/backends/mla/cutlass_mla.py)
+- [vllm/v1/attention/backends/mla/flashattn_mla.py](vllm/v1/attention/backends/mla/flashattn_mla.py)
+- [vllm/v1/attention/backends/mla/flashattn_mla_sparse.py](vllm/v1/attention/backends/mla/flashattn_mla_sparse.py)
+- [vllm/v1/attention/backends/mla/flashinfer_mla.py](vllm/v1/attention/backends/mla/flashinfer_mla.py)
+- [vllm/v1/attention/backends/mla/flashinfer_mla_sparse.py](vllm/v1/attention/backends/mla/flashinfer_mla_sparse.py)
+- [vllm/v1/attention/backends/mla/flashmla.py](vllm/v1/attention/backends/mla/flashmla.py)
+- [vllm/v1/attention/backends/mla/flashmla_sparse.py](vllm/v1/attention/backends/mla/flashmla_sparse.py)
+- [vllm/v1/attention/backends/mla/indexer.py](vllm/v1/attention/backends/mla/indexer.py)
+- [vllm/v1/attention/backends/mla/tokenspeed_mla.py](vllm/v1/attention/backends/mla/tokenspeed_mla.py)
+- [vllm/v1/attention/backends/mla/triton_mla.py](vllm/v1/attention/backends/mla/triton_mla.py)
+- [vllm/v1/attention/ops/metadata.py](vllm/v1/attention/ops/metadata.py)
+- [vllm/v1/attention/ops/triton_decode_attention.py](vllm/v1/attention/ops/triton_decode_attention.py)
+- [vllm/v1/core/kv_cache_coordinator.py](vllm/v1/core/kv_cache_coordinator.py)
+- [vllm/v1/core/kv_cache_manager.py](vllm/v1/core/kv_cache_manager.py)
+- [vllm/v1/core/kv_cache_utils.py](vllm/v1/core/kv_cache_utils.py)
+- [vllm/v1/core/sched/scheduler.py](vllm/v1/core/sched/scheduler.py)
+- [vllm/v1/core/single_type_kv_cache_manager.py](vllm/v1/core/single_type_kv_cache_manager.py)
+- [vllm/v1/kv_cache_interface.py](vllm/v1/kv_cache_interface.py)
+- [vllm/v1/spec_decode/llm_base_proposer.py](vllm/v1/spec_decode/llm_base_proposer.py)
+
+</details>
+
+
+
+This wiki page defines codebase-specific terms, jargon, abbreviations, and domain concepts essential for onboarding engineers working on vLLM. It bridges high-level architectural concepts with concrete code entities, files, and classes across the repository.
 
 ---
-
-Relevant source files
-
-  * [cmake/external_projects/vllm_flash_attn.cmake](https://github.com/vllm-project/vllm/blob/185cada3/cmake/external_projects/vllm_flash_attn.cmake)
-  * [csrc/cpu/spec_decode_utils.cpp](https://github.com/vllm-project/vllm/blob/185cada3/csrc/cpu/spec_decode_utils.cpp)
-  * [docs/design/attention_backends.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/design/attention_backends.md?plain=1)
-  * [docs/models/supported_models.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/models/supported_models.md?plain=1)
-  * [tests/compile/test_aot_compile.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/compile/test_aot_compile.py)
-  * [tests/compile/test_codegen.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/compile/test_codegen.py)
-  * [tests/compile/test_compile_ranges.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/compile/test_compile_ranges.py)
-  * [tests/compile/test_config.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/compile/test_config.py)
-  * [tests/compile/test_dynamic_shapes_compilation.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/compile/test_dynamic_shapes_compilation.py)
-  * [tests/compile/test_graph_partition.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/compile/test_graph_partition.py)
-  * [tests/compile/test_structured_logging.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/compile/test_structured_logging.py)
-  * [tests/config/test_config_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/config/test_config_utils.py)
-  * [tests/distributed/eplb_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/distributed/eplb_utils.py)
-  * [tests/distributed/test_eplb_algo.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/distributed/test_eplb_algo.py)
-  * [tests/distributed/test_eplb_execute.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/distributed/test_eplb_execute.py)
-  * [tests/distributed/test_eplb_fused_moe_layer.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/distributed/test_eplb_fused_moe_layer.py)
-  * [tests/entrypoints/serve/utils/test_api_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/entrypoints/serve/utils/test_api_utils.py)
-  * [tests/kernels/moe/test_cutlass_moe.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/kernels/moe/test_cutlass_moe.py)
-  * [tests/kernels/moe/test_flashinfer.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/kernels/moe/test_flashinfer.py)
-  * [tests/kernels/moe/test_moe.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/kernels/moe/test_moe.py)
-  * [tests/kernels/moe/test_unquantized_backend_selection.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/kernels/moe/test_unquantized_backend_selection.py)
-  * [tests/models/multimodal/generation/test_common.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/models/multimodal/generation/test_common.py)
-  * [tests/models/multimodal/generation/vlm_utils/model_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/models/multimodal/generation/vlm_utils/model_utils.py)
-  * [tests/models/registry.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/models/registry.py)
-  * [tests/quantization/test_blackwell_moe.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/quantization/test_blackwell_moe.py)
-  * [tests/quantization/test_fp8.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/quantization/test_fp8.py)
-  * [tests/test_config.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/test_config.py)
-  * [tests/test_envs.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/test_envs.py)
-  * [tests/transformers_utils/test_dspark_mla_config.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/transformers_utils/test_dspark_mla_config.py)
-  * [tests/v1/attention/test_attention_backends.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/attention/test_attention_backends.py)
-  * [tests/v1/attention/test_mla_backends.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/attention/test_mla_backends.py)
-  * [tests/v1/attention/test_sparse_mla_backends.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/attention/test_sparse_mla_backends.py)
-  * [tests/v1/core/test_async_scheduler.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/test_async_scheduler.py)
-  * [tests/v1/core/test_contiguous_kv_packing.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/test_contiguous_kv_packing.py)
-  * [tests/v1/core/test_kv_cache_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/test_kv_cache_utils.py)
-  * [tests/v1/core/test_prefix_caching.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/test_prefix_caching.py)
-  * [tests/v1/core/test_scheduler.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/test_scheduler.py)
-  * [tests/v1/core/test_single_type_kv_cache_manager.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/test_single_type_kv_cache_manager.py)
-  * [tests/v1/core/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/utils.py)
-  * [tests/v1/distributed/test_async_llm_dp.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/distributed/test_async_llm_dp.py)
-  * [tests/v1/engine/test_engine_args.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/engine/test_engine_args.py)
-  * [tests/v1/engine/test_engine_core_client.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/engine/test_engine_core_client.py)
-  * [tests/v1/kv_connector/unit/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/kv_connector/unit/utils.py)
-  * [tests/v1/spec_decode/test_dflash_prepare_inputs.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/spec_decode/test_dflash_prepare_inputs.py)
-  * [tests/v1/spec_decode/test_eagle.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/spec_decode/test_eagle.py)
-  * [tests/v1/spec_decode/test_eagle_step_kernel.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/spec_decode/test_eagle_step_kernel.py)
-  * [tests/v1/spec_decode/test_max_len.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/spec_decode/test_max_len.py)
-  * [tests/v1/spec_decode/test_mtp.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/spec_decode/test_mtp.py)
-  * [tests/v1/worker/test_gpu_model_runner.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/worker/test_gpu_model_runner.py)
-  * [tests/v1/worker/test_kv_block_zeroer.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/worker/test_kv_block_zeroer.py)
-  * [vllm/_aiter_ops.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/_aiter_ops.py)
-  * [vllm/compilation/backends.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/compilation/backends.py)
-  * [vllm/compilation/caching.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/compilation/caching.py)
-  * [vllm/compilation/codegen.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/compilation/codegen.py)
-  * [vllm/compilation/compiler_interface.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/compilation/compiler_interface.py)
-  * [vllm/compilation/counter.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/compilation/counter.py)
-  * [vllm/compilation/decorators.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/compilation/decorators.py)
-  * [vllm/compilation/monitor.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/compilation/monitor.py)
-  * [vllm/compilation/piecewise_backend.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/compilation/piecewise_backend.py)
-  * [vllm/compilation/wrapper.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/compilation/wrapper.py)
-  * [vllm/config/cache.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/cache.py)
-  * [vllm/config/compilation.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/compilation.py)
-  * [vllm/config/model.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/model.py)
-  * [vllm/config/parallel.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/parallel.py)
-  * [vllm/config/scheduler.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/scheduler.py)
-  * [vllm/config/speculative.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/speculative.py)
-  * [vllm/config/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/utils.py)
-  * [vllm/config/vllm.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/vllm.py)
-  * [vllm/distributed/elastic_ep/elastic_execute.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/elastic_ep/elastic_execute.py)
-  * [vllm/distributed/elastic_ep/elastic_state.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/elastic_ep/elastic_state.py)
-  * [vllm/distributed/eplb/__init__.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/eplb/__init__.py)
-  * [vllm/distributed/eplb/async_worker.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/eplb/async_worker.py)
-  * [vllm/distributed/eplb/eplb_communicator.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/eplb/eplb_communicator.py)
-  * [vllm/distributed/eplb/eplb_state.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/eplb/eplb_state.py)
-  * [vllm/distributed/eplb/eplb_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/eplb/eplb_utils.py)
-  * [vllm/distributed/eplb/policy/__init__.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/eplb/policy/__init__.py)
-  * [vllm/distributed/eplb/policy/abstract.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/eplb/policy/abstract.py)
-  * [vllm/distributed/eplb/policy/default.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/eplb/policy/default.py)
-  * [vllm/distributed/eplb/rebalance_execute.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/eplb/rebalance_execute.py)
-  * [vllm/distributed/kv_transfer/kv_connector/v1/nixl/__init__.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/kv_transfer/kv_connector/v1/nixl/__init__.py)
-  * [vllm/distributed/kv_transfer/kv_connector/v1/nixl/stats.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/kv_transfer/kv_connector/v1/nixl/stats.py)
-  * [vllm/distributed/kv_transfer/kv_connector/v1/nixl/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/kv_transfer/kv_connector/v1/nixl/utils.py)
-  * [vllm/distributed/nixl_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/nixl_utils.py)
-  * [vllm/distributed/parallel_state.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/parallel_state.py)
-  * [vllm/distributed/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/distributed/utils.py)
-  * [vllm/engine/arg_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/engine/arg_utils.py)
-  * [vllm/engine/protocol.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/engine/protocol.py)
-  * [vllm/entrypoints/cli/serve.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/cli/serve.py)
-  * [vllm/entrypoints/llm.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/llm.py)
-  * [vllm/entrypoints/serve/utils/api_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/serve/utils/api_utils.py)
-  * [vllm/envs.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/envs.py)
-  * [vllm/model_executor/layers/attention/attention.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/attention/attention.py)
-  * [vllm/model_executor/layers/attention/mla_attention.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/attention/mla_attention.py)
-  * [vllm/model_executor/layers/fused_moe/config.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/config.py)
-  * [vllm/model_executor/layers/fused_moe/experts/cutlass_moe.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/experts/cutlass_moe.py)
-  * [vllm/model_executor/layers/fused_moe/experts/rocm_aiter_moe.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/experts/rocm_aiter_moe.py)
-  * [vllm/model_executor/layers/fused_moe/experts/xpu_moe.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/experts/xpu_moe.py)
-  * [vllm/model_executor/layers/fused_moe/fused_moe.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/fused_moe.py)
-  * [vllm/model_executor/layers/fused_moe/fused_moe_method_base.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/fused_moe_method_base.py)
-  * [vllm/model_executor/layers/fused_moe/fused_moe_modular_method.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/fused_moe_modular_method.py)
-  * [vllm/model_executor/layers/fused_moe/layer.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/layer.py)
-  * [vllm/model_executor/layers/fused_moe/modular_kernel.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/modular_kernel.py)
-  * [vllm/model_executor/layers/fused_moe/oracle/fp8.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/oracle/fp8.py)
-  * [vllm/model_executor/layers/fused_moe/oracle/mxfp4.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/oracle/mxfp4.py)
-  * [vllm/model_executor/layers/fused_moe/oracle/nvfp4.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/oracle/nvfp4.py)
-  * [vllm/model_executor/layers/fused_moe/oracle/unquantized.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/oracle/unquantized.py)
-  * [vllm/model_executor/layers/fused_moe/oracle/w4a8.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/oracle/w4a8.py)
-  * [vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/topk_weight_and_reduce.py)
-  * [vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/unquantized_fused_moe_method.py)
-  * [vllm/model_executor/layers/fused_moe/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/utils.py)
-  * [vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a4_mxfp4.py)
-  * [vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_fp8.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/compressed_tensors/compressed_tensors_moe/compressed_tensors_moe_w4a8_fp8.py)
-  * [vllm/model_executor/layers/quantization/fp8.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/fp8.py)
-  * [vllm/model_executor/layers/quantization/modelopt.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/modelopt.py)
-  * [vllm/model_executor/layers/quantization/mxfp4.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/mxfp4.py)
-  * [vllm/model_executor/layers/quantization/quark/quark_moe.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/quark/quark_moe.py)
-  * [vllm/model_executor/layers/quantization/utils/flashinfer_fp4_moe.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/utils/flashinfer_fp4_moe.py)
-  * [vllm/model_executor/layers/quantization/utils/flashinfer_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/utils/flashinfer_utils.py)
-  * [vllm/model_executor/models/config.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/config.py)
-  * [vllm/model_executor/models/hunyuan_v1.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/hunyuan_v1.py)
-  * [vllm/model_executor/models/hunyuan_vision.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/hunyuan_vision.py)
-  * [vllm/model_executor/models/registry.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/registry.py)
-  * [vllm/model_executor/warmup/qwen_triton_warmup.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/warmup/qwen_triton_warmup.py)
-  * [vllm/transformers_utils/config.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/transformers_utils/config.py)
-  * [vllm/transformers_utils/configs/__init__.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/transformers_utils/configs/__init__.py)
-  * [vllm/transformers_utils/configs/hunyuan_vl.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/transformers_utils/configs/hunyuan_vl.py)
-  * [vllm/transformers_utils/model_arch_config_convertor.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/transformers_utils/model_arch_config_convertor.py)
-  * [vllm/transformers_utils/processors/__init__.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/transformers_utils/processors/__init__.py)
-  * [vllm/utils/cpu_triton_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/utils/cpu_triton_utils.py)
-  * [vllm/v1/attention/backend.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backend.py)
-  * [vllm/v1/attention/backends/fa_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/fa_utils.py)
-  * [vllm/v1/attention/backends/flash_attn.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/flash_attn.py)
-  * [vllm/v1/attention/backends/flashinfer.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/flashinfer.py)
-  * [vllm/v1/attention/backends/mla/cutlass_mla.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/mla/cutlass_mla.py)
-  * [vllm/v1/attention/backends/mla/flashattn_mla.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/mla/flashattn_mla.py)
-  * [vllm/v1/attention/backends/mla/flashattn_mla_sparse.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/mla/flashattn_mla_sparse.py)
-  * [vllm/v1/attention/backends/mla/flashinfer_mla.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/mla/flashinfer_mla.py)
-  * [vllm/v1/attention/backends/mla/flashinfer_mla_sparse.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/mla/flashinfer_mla_sparse.py)
-  * [vllm/v1/attention/backends/mla/flashmla.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/mla/flashmla.py)
-  * [vllm/v1/attention/backends/mla/flashmla_sparse.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/mla/flashmla_sparse.py)
-  * [vllm/v1/attention/backends/mla/tokenspeed_mla.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/mla/tokenspeed_mla.py)
-  * [vllm/v1/attention/backends/mla/triton_mla.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/mla/triton_mla.py)
-  * [vllm/v1/attention/backends/mla/xpu_mla_sparse.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/mla/xpu_mla_sparse.py)
-  * [vllm/v1/attention/backends/registry.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/registry.py)
-  * [vllm/v1/attention/backends/rocm_aiter_fa.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/rocm_aiter_fa.py)
-  * [vllm/v1/attention/backends/rocm_aiter_unified_attn.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/rocm_aiter_unified_attn.py)
-  * [vllm/v1/attention/backends/rocm_attn.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/rocm_attn.py)
-  * [vllm/v1/attention/backends/triton_attn.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/triton_attn.py)
-  * [vllm/v1/attention/backends/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/utils.py)
-  * [vllm/v1/core/block_pool.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/block_pool.py)
-  * [vllm/v1/core/kv_cache_coordinator.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/kv_cache_coordinator.py)
-  * [vllm/v1/core/kv_cache_manager.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/kv_cache_manager.py)
-  * [vllm/v1/core/kv_cache_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/kv_cache_utils.py)
-  * [vllm/v1/core/sched/async_scheduler.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/async_scheduler.py)
-  * [vllm/v1/core/sched/interface.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/interface.py)
-  * [vllm/v1/core/sched/scheduler.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py)
-  * [vllm/v1/core/single_type_kv_cache_manager.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/single_type_kv_cache_manager.py)
-  * [vllm/v1/engine/__init__.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/__init__.py)
-  * [vllm/v1/engine/async_llm.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/async_llm.py)
-  * [vllm/v1/engine/coordinator.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/coordinator.py)
-  * [vllm/v1/engine/core.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py)
-  * [vllm/v1/engine/core_client.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core_client.py)
-  * [vllm/v1/engine/input_processor.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/input_processor.py)
-  * [vllm/v1/engine/llm_engine.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/llm_engine.py)
-  * [vllm/v1/engine/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/utils.py)
-  * [vllm/v1/kv_cache_interface.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/kv_cache_interface.py)
-  * [vllm/v1/request.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/request.py)
-  * [vllm/v1/spec_decode/dflash.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/spec_decode/dflash.py)
-  * [vllm/v1/spec_decode/draft_model.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/spec_decode/draft_model.py)
-  * [vllm/v1/spec_decode/eagle.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/spec_decode/eagle.py)
-  * [vllm/v1/spec_decode/llm_base_proposer.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/spec_decode/llm_base_proposer.py)
-  * [vllm/v1/spec_decode/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/spec_decode/utils.py)
-  * [vllm/v1/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/utils.py)
-  * [vllm/v1/worker/cpu/shm.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/cpu/shm.py)
-  * [vllm/v1/worker/cpu_model_runner.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/cpu_model_runner.py)
-  * [vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/gpu/spec_decode/gemma4/speculator.py)
-  * [vllm/v1/worker/gpu_model_runner.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/gpu_model_runner.py)
-  * [vllm/v1/worker/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/utils.py)
-  * [vllm/vllm_flash_attn/flash_attn_interface.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/vllm_flash_attn/flash_attn_interface.py)
-
-This glossary provides definitions for codebase-specific terms, jargon, and domain concepts used throughout vLLM. It is intended for onboarding engineers to bridge the gap between high-level concepts and their technical implementation.
-
-* * *
 
 ## A
 
 ### Attention Backend
+The specific implementation of the attention mechanism (e.g., FlashAttention, FlashInfer, Triton, or custom ROCm AITER/MLA kernels). vLLM selects an attention backend based on hardware platform, model architecture, and optimization configuration.
 
-The specific implementation of the attention mechanism (e.g., FlashAttention, FlashInfer, Triton). vLLM selects a backend based on hardware (CUDA vs. ROCm), model architecture, and optimization settings.
+- **Implementation**: Managed via the `AttentionBackend` and metadata builders such as `CommonAttentionMetadata` [vllm/v1/worker/gpu_model_runner.py:124-131]().
+- **Registry**: Backends are selected through the `AttentionBackendEnum` mapping [vllm/config/model.py:55]().
+- **Integration**: Dispatches underlying hardware-accelerated attention operations during model execution.
 
-  * **Implementation** : Defined by the `AttentionBackend` interface [vllm/v1/worker/gpu_model_runner.py139](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/gpu_model_runner.py#L139-L139)
-  * **Registry** : Backends are registered and selected via `AttentionBackendEnum` [vllm/config/model.py55](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/model.py#L55-L55)
-  * **V1 Backends** : Includes specialized implementations like `FlashInfer` [vllm/v1/attention/backends/flashinfer.py1](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/flashinfer.py#L1-L1) `FlashAttention` [vllm/v1/attention/backends/flash_attn.py1](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/flash_attn.py#L1-L1) and `TritonAttention` [vllm/v1/attention/backends/triton_attn.py1](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/triton_attn.py#L1-L1)
+Sources: [vllm/config/model.py:55](), [vllm/v1/worker/gpu_model_runner.py:124-131]()
 
-Sources: [vllm/config/model.py55](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/model.py#L55-L55) [vllm/v1/worker/gpu_model_runner.py139](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/gpu_model_runner.py#L139-L139) [vllm/v1/attention/backends/flashinfer.py1](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/flashinfer.py#L1-L1) [vllm/v1/attention/backends/flash_attn.py1](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/flash_attn.py#L1-L1) [vllm/v1/attention/backends/triton_attn.py1](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/attention/backends/triton_attn.py#L1-L1)
+---
 
 ## B
 
 ### BlockPool
+The physical memory manager responsible for allocating, recycling, and tracking fixed-size Key-Value (KV) cache blocks across devices (GPU, CPU offload tiers, or disk).
 
-The physical memory management unit for KV caches. It manages a pool of fixed-size memory blocks allocated on the GPU or CPU.
+- **Implementation**: Backed by `BlockPool` and specialized managers like `SingleTypeKVCacheManager` [vllm/v1/core/single_type_kv_cache_manager.py:11-48]().
+- **Block Representation**: Individual memory segments are tracked via `KVCacheBlock` instances holding block IDs and reference counts [vllm/v1/core/kv_cache_utils.py:175-182]().
 
-  * **Implementation** : Managed within `KVCacheManager` in the V1 core [vllm/v1/core/sched/scheduler.py38](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L38-L38)
-  * **V1 Interface** : Individual blocks are represented by `KVCacheBlock` [vllm/v1/core/sched/scheduler.py40](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L40-L40)
-  * **Configuration** : Governed by `CacheConfig` [vllm/config/vllm.py31](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/vllm.py#L31-L31)
+Sources: [vllm/v1/core/single_type_kv_cache_manager.py:11-48](), [vllm/v1/core/kv_cache_utils.py:175-182]()
 
-Sources: [vllm/v1/core/sched/scheduler.py38-40](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L38-L40) [vllm/config/vllm.py31](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/vllm.py#L31-L31)
+---
 
 ## C
 
 ### CompilationConfig
+Configuration structure governing PyTorch's `torch.compile` (Dynamo + Inductor) pipeline, operator fusion passes, and CUDA graph capture scopes.
 
-A configuration object that controls how `torch.compile` and Dynamo are applied to the model. It defines optimization levels (O0-O3) and custom operator fusions.
+- **Definition**: Defined in `CompilationConfig` [vllm/config/vllm.py:33]().
+- **Optimization Levels**: Controlled via `OptimizationLevel` (ranging from `O0` for no compilation/instant startup to `O2`/`O3` for full piecewise and complete CUDA graph capture) [vllm/config/vllm.py:124-137]().
 
-  * **Definition** : `CompilationConfig` class [vllm/config/vllm.py32](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/vllm.py#L32-L32)
-  * **Optimization Levels** : `OptimizationLevel` enum (O0-O3) determines whether compilation, cudagraphs, and custom fusions are enabled [vllm/config/vllm.py130-143](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/vllm.py#L130-L143)
-  * **Modes** : Approaches include `DYNAMO_TRACE_ONCE` and `VLLM_COMPILE` [vllm/config/compilation.py37-51](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/compilation.py#L37-L51)
-
-Sources: [vllm/config/vllm.py32-143](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/vllm.py#L32-L143) [vllm/config/compilation.py37-51](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/compilation.py#L37-L51)
+Sources: [vllm/config/vllm.py:33](), [vllm/config/vllm.py:124-137]()
 
 ### CUDA Graph
+An optimization technique that records sequences of CUDA kernel launches on the host and replays them with minimal CPU overhead during token decoding.
 
-A feature that allows capturing a sequence of CUDA kernels and replaying them with minimal CPU overhead. vLLM uses "Piecewise" and "Full" CUDA graphs to accelerate the decode phase.
+- **Modes**: Governed by `CUDAGraphMode` supporting `NONE`, `PIECEWISE`, and `FULL` execution semantics [vllm/config/compilation.py:53-61]().
+- **Manager**: Coordinated via `CudaGraphManager` handling batch execution descriptors, memory pools, and multi-Lora dispatch trees [vllm/v1/worker/gpu/cudagraph_utils.py:66-81](), [vllm/v1/worker/gpu/cudagraph_utils.py:145-175]().
 
-  * **Modes** : Defined in `CUDAGraphMode` (NONE, PIECEWISE, FULL) [vllm/config/compilation.py53-64](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/compilation.py#L53-L64)
-  * **V1 Core** : Integrated into the scheduler for managing `CUDAGraphStat` [vllm/v1/core/sched/scheduler.py10](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L10-L10)
-  * **Wrapper** : Handled via `CUDAGraphWrapper` and `BreakableCUDAGraphWrapper` [vllm/v1/worker/gpu_model_runner.py24-29](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/gpu_model_runner.py#L24-L29)
+Sources: [vllm/config/compilation.py:53-61](), [vllm/v1/worker/gpu/cudagraph_utils.py:66-81](), [vllm/v1/worker/gpu/cudagraph_utils.py:145-175]()
 
-Sources: [vllm/config/compilation.py53-64](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/compilation.py#L53-L64) [vllm/v1/core/sched/scheduler.py10](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L10-L10) [vllm/v1/worker/gpu_model_runner.py24-29](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/gpu_model_runner.py#L24-L29)
+---
+
+## D
+
+### DSpark
+A speculative decoding method specifically designed for Qwen3-Omni models. It utilizes a standalone draft checkpoint with a particular architecture (`Qwen3OmniDSparkModel`) and requires `num_speculative_tokens` to match the `block_size` trained into the draft model.
+
+- **Validation**: `_validate_qwen3_omni_dspark` [vllm/config/speculative.py:146-150]() ensures the target model is a Qwen3-Omni variant and the draft model adheres to the DSpark contract, including matching `block_size` and `num_speculative_tokens`.
+- **Configuration**: `SpeculativeConfig` [vllm/config/speculative.py:81-82]() defines `DSparkModelTypes` and `SpeculativeMethod` to enable this feature.
+
+Sources: [vllm/config/speculative.py:81-82](), [vllm/config/speculative.py:146-150]()
+
+---
 
 ## E
 
 ### EngineCore
+The core asynchronous execution orchestrator in vLLM's V1 engine architecture. It manages request queues, scheduling rounds, block allocation, and coordinates model runners.
 
-The central orchestration layer in V1 that coordinates the scheduler, executors, and output processing.
+- **Scheduler Integration**: Works tightly with `Scheduler` to admit, schedule, and preempt requests [vllm/v1/core/sched/scheduler.py:84-100]().
+- **Request Lifecycle**: Processes request state transitions from waiting to running and finished.
 
-  * **Implementation** : Defined in `EngineCore` [vllm/v1/engine/core.py105](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L105-L105)
-  * **Outputs** : Produces `EngineCoreOutput` containing generated tokens and metadata [vllm/v1/engine/core.py63](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L63-L63)
-  * **Lifecycle** : Manages events via `EngineCoreEventType` [vllm/v1/engine/core.py55](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L55-L55)
-
-Sources: [vllm/v1/engine/core.py55-105](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L55-L105)
+Sources: [vllm/v1/core/sched/scheduler.py:84-100]()
 
 ### EPLB (Expert Placement Load Balancing)
+A specialized load-balancing subsystem for Mixture-of-Experts (MoE) models that redistributes experts across data-parallel ranks to prevent computational hot-spotting.
 
-A mechanism to balance the workload across experts in Mixture-of-Experts (MoE) models by distributing experts across data-parallel ranks.
+- **Controller**: Managed via `EPLBController` and state structures within worker execution loops [vllm/v1/worker/gpu/model_runner.py:114]().
 
-  * **State** : Tracked via `EplbState` [vllm/v1/worker/gpu_model_runner.py43](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/gpu_model_runner.py#L43-L43) and `EplbLayerState` [vllm/model_executor/layers/fused_moe/layer.py16](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/layer.py#L16-L16)
-  * **Config** : Defined in `EPLBConfig` [vllm/engine/arg_utils.py45](https://github.com/vllm-project/vllm/blob/185cada3/vllm/engine/arg_utils.py#L45-L45)
+Sources: [vllm/v1/worker/gpu/model_runner.py:114]()
 
-Sources: [vllm/v1/worker/gpu_model_runner.py43](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/gpu_model_runner.py#L43-L43) [vllm/model_executor/layers/fused_moe/layer.py16](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/layer.py#L16-L16) [vllm/engine/arg_utils.py45](https://github.com/vllm-project/vllm/blob/185cada3/vllm/engine/arg_utils.py#L45-L45)
+---
 
 ## F
 
 ### FusedMoE
+An optimized implementation of Mixture-of-Experts layers that fuses the router dispatch logic and expert GEMM operations into high-performance custom kernels.
 
-An optimized implementation of the Mixture-of-Experts layer that fuses router and GEMM operations to reduce kernel launch overhead.
+- **Integration**: Invoked via model definition layers and configuration options [vllm/config/vllm.py:39]().
 
-  * **Factory** : `FusedMoEFactory` function creates the execution pipeline [vllm/model_executor/layers/fused_moe/layer.py88-138](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/layer.py#L88-L138)
-  * **Components** : Comprised of `FusedMoERouter`, `RoutedExperts`, and `MoERunner` [vllm/model_executor/layers/fused_moe/layer.py27-35](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/layer.py#L27-L35)
-  * **Optimization** : Supports specialized backends like `Fp8MoeBackend` [vllm/model_executor/layers/quantization/modelopt.py28](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/modelopt.py#L28-L28)
+Sources: [vllm/config/vllm.py:39]()
 
-Sources: [vllm/model_executor/layers/fused_moe/layer.py27-138](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/fused_moe/layer.py#L27-L138) [vllm/model_executor/layers/quantization/modelopt.py28](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/modelopt.py#L28-L28)
+---
 
 ## K
 
 ### KV Cache Manager
+The subsystem coordinating KV cache layout, allocation strategies, prefix caching hashing, and block tables.
 
-The subsystem managing the allocation and sharing of Key-Value cache blocks.
+- **Manager**: Implemented through `KVCacheManager` and `SingleTypeKVCacheManager` [vllm/v1/core/single_type_kv_cache_manager.py:48-52]().
+- **Utilities**: Employs block hash indexing via `BlockHash` and `KVCacheBlock` metadata [vllm/v1/core/kv_cache_utils.py:58-62](), [vllm/v1/core/kv_cache_utils.py:175-182]().
 
-  * **Core Logic** : `KVCacheManager` handles logical to physical block mapping [vllm/v1/core/kv_cache_manager.py38](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/kv_cache_manager.py#L38-L38)
-  * **Metrics** : Collected via `KVCacheMetricsCollector` [vllm/v1/core/sched/scheduler.py98-102](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L98-L102)
-  * **Transfer** : `KVConnector` handles remote KV transfers for disaggregated serving (e.g., Prefill/Decode separation) [vllm/v1/core/sched/scheduler.py149-153](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L149-L153)
+Sources: [vllm/v1/core/single_type_kv_cache_manager.py:48-52](), [vllm/v1/core/kv_cache_utils.py:58-62](), [vllm/v1/core/kv_cache_utils.py:175-182]()
 
-Sources: [vllm/v1/core/sched/scheduler.py38-153](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L38-L153) [vllm/v1/core/kv_cache_manager.py38](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/kv_cache_manager.py#L38-L38)
+---
 
-* * *
+## M
+
+### MLA (Multi-Latent Attention)
+An attention architecture used in models like DeepSeek-V3/V4 that compresses Key-Value representations into lower-dimensional latent vectors to drastically reduce memory footprint and bandwidth during prefill and decode.
+
+- **Implementation**: Common components are defined in `mla_attention.py` [vllm/model_executor/layers/attention/mla_attention.py:1-172]().
+- **Metadata & Backends**: Supported by specialized attention metadata builders and flashinfer/sparse MLA backends [vllm/v1/worker/gpu_model_runner.py:133-136]().
+
+Sources: [vllm/model_executor/layers/attention/mla_attention.py:1-172](), [vllm/v1/worker/gpu_model_runner.py:133-136]()
+
+### ModelConfig
+The core configuration container specifying model weights, tokenizer settings, runner types, and architecture flags.
+
+- **Definition**: Encapsulated by `ModelConfig` [vllm/config/model.py:150-155]().
+- **Model Registry**: `_TEXT_GENERATION_MODELS` [vllm/model_executor/models/registry.py:73-75]() maps Hugging Face model architecture names to their vLLM implementations.
+- **Transformers Backend**: Allows using models implemented in Hugging Face Transformers directly, configurable via `model_impl="transformers"` [docs/models/supported_models.md:43-46]().
+
+Sources: [vllm/config/model.py:150-155](), [vllm/model_executor/models/registry.py:73-75](), [docs/models/supported_models.md:43-46]()
+
+---
+
+## O
+
+### OptimizationLevel
+An enumeration defining different levels of optimization applied to the vLLM engine, primarily affecting compilation and CUDA graph usage.
+
+- **Levels**:
+    - `O0`: No optimization, immediate startup [vllm/config/vllm.py:131-132]().
+    - `O1`: Quick optimizations, Dynamo+Inductor compilation, piecewise CUDA graphs [vllm/config/vllm.py:134-135]().
+    - `O2`: Full optimizations, includes `O1` plus full and piecewise CUDA graphs [vllm/config/vllm.py:137-138]().
+    - `O3`: Currently same as `O2` [vllm/config/vllm.py:140]().
+- **Definition**: `OptimizationLevel` [vllm/config/vllm.py:128-141]().
+
+Sources: [vllm/config/vllm.py:128-141]()
+
+---
+
+## P
+
+### PerformanceMode
+A literal type defining high-level performance profiles for the vLLM engine.
+
+- **Modes**:
+    - `"balanced"`: A general-purpose mode.
+    - `"interactivity"`: Prioritizes low latency for interactive use cases.
+    - `"throughput"`: Optimizes for maximum token generation rate.
+- **Definition**: `PerformanceMode` [vllm/config/vllm.py:143]().
+
+Sources: [vllm/config/vllm.py:143]()
+
+---
+
+## S
+
+### Scheduler
+The core component responsible for managing the lifecycle of requests, allocating KV cache blocks, and determining which requests run in each iteration.
+
+- **Initialization**: `Scheduler` [vllm/v1/core/sched/scheduler.py:84-100]() is initialized with various configuration objects like `VllmConfig`, `KVCacheConfig`, and `StructuredOutputManager`.
+- **Request Queues**: Manages `waiting`, `running`, and `swapped` request queues [vllm/v1/core/sched/scheduler.py:50-54]().
+- **Scheduling Logic**: Implements policies for preemption, token budget management, and handling multimodal inputs [vllm/v1/core/sched/scheduler.py:128-141]().
+
+Sources: [vllm/v1/core/sched/scheduler.py:50-54](), [vllm/v1/core/sched/scheduler.py:84-100](), [vllm/v1/core/sched/scheduler.py:128-141]()
+
+### Speculative Decoding
+A technique to accelerate LLM inference by using a smaller, faster draft model to predict a sequence of tokens, which are then verified by the larger target model.
+
+- **Configuration**: `SpeculativeConfig` [vllm/config/vllm.py:53]() defines parameters such as the method (`ngram`, `draft_model`, `dspark`, `eagle`, etc.), number of speculative tokens, and rejection sampling strategy.
+- **Methods**: Various methods are supported, including `MTPModelTypes`, `NgramGPUTypes`, `DFlashModelTypes`, `DSparkModelTypes`, and `EagleModelTypes` [vllm/config/speculative.py:38-73]().
+- **Adaptive Verification**: Can be enabled to dynamically adjust verification strategies [tests/test_config.py:98-106]().
+
+Sources: [vllm/config/vllm.py:53](), [vllm/config/speculative.py:38-73](), [tests/test_config.py:98-106]()
+
+---
 
 ## Diagrams: Mapping Concepts to Code
 
-### Request Flow: Natural Language to Execution
+### Request Pipeline Mapping
+Bridging the natural language prompt input to its concrete code entity lifecycle across the scheduler and GPU runner.
 
-This diagram bridges the conceptual "Request" to the specific code entities that handle it through the pipeline.
+```mermaid
+graph TD
+    subgraph "NaturalLanguageSpace"
+        UserPrompt["UserPromptInput"]
+    end
 
-Title: "Request Pipeline Mapping"
+    subgraph "CodeEntitySpace"
+        ReqObj["Request (vllm/v1/request.py)"]
+        Sched["Scheduler (vllm/v1/core/sched/scheduler.py)"]
+        Runner["GPUModelRunner (vllm/v1/worker/gpu_model_runner.py)"]
+    end
 
-Sources: [vllm/v1/request.py64](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/request.py#L64-L64) [vllm/v1/core/sched/scheduler.py73](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L73-L73) [vllm/model_executor/models/registry.py72](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/registry.py#L72-L72) [vllm/v1/worker/gpu_model_runner.py1](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/gpu_model_runner.py#L1-L1)
+    UserPrompt -->|"Instantiates"| ReqObj
+    ReqObj -->|"Queued&Scheduled"| Sched
+    Sched -->|"BatchedForward"| Runner
+```
 
-### Memory Management: Concepts to Entities
+Sources: [vllm/v1/core/sched/scheduler.py:84-100](), [vllm/v1/worker/gpu_model_runner.py:124-135]()
 
-This diagram maps the abstract concept of "KV Memory" to the actual classes and configurations that manage it.
+---
 
-Title: "KV Cache Architecture"
+### KV Cache Architecture
+Relating logical caching concepts to the physical block pool and management classes.
 
-Sources: [vllm/config/vllm.py31](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/vllm.py#L31-L31) [vllm/v1/core/sched/scheduler.py38](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L38-L38) [vllm/v1/kv_cache_interface.py59-65](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/kv_cache_interface.py#L59-L65)
+```mermaid
+graph LR
+    subgraph "ConceptualMemory"
+        LogicalCache["LogicalKVCache"]
+        PhysicalMem["PhysicalGPUBlocks"]
+    end
 
-* * *
+    subgraph "CodeEntities"
+        CacheCfg["CacheConfig (vllm/config/cache.py)"]
+        Mgr["SingleTypeKVCacheManager (vllm/v1/core/single_type_kv_cache_manager.py)"]
+        Block["KVCacheBlock (vllm/v1/core/kv_cache_utils.py)"]
+    end
+
+    CacheCfg -->|"Configures"| Mgr
+    Mgr -->|"Allocates"| Block
+    LogicalCache -.-> Mgr
+    PhysicalMem -.-> Block
+```
+
+Sources: [vllm/config/cache.py:1](), [vllm/v1/core/single_type_kv_cache_manager.py:48-52](), [vllm/v1/core/kv_cache_utils.py:175-182]()
+
+---
 
 ## Technical Terms Table
 
-Term| Definition| Code Pointer  
----|---|---  
-**TP (Tensor Parallelism)**|  Sharding weights across GPUs within a node.| `ParallelConfig.tensor_parallel_size` [vllm/config/parallel.py46](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/parallel.py#L46-L46)  
-**PP (Pipeline Parallelism)**|  Splitting model layers across multiple GPUs.| `ParallelConfig.pipeline_parallel_size` [vllm/config/parallel.py46](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/parallel.py#L46-L46)  
-**LoRA (Low-Rank Adaptation)**|  Dynamic adapter loading and management for fine-tuned models.| `LoRAConfig` [vllm/config/vllm.py41](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/vllm.py#L41-L41)  
-**VllmConfig**|  Root configuration object containing all sub-configs (Model, Parallel, Cache, etc.).| `VllmConfig` class [vllm/config/vllm.py124](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/vllm.py#L124-L124)  
-**MLA (Multi-Latent Attention)**|  Efficient attention mechanism used in DeepSeek models to reduce KV cache size.| `MLAAttention` [vllm/model_executor/layers/attention.py18](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/attention.py#L18-L18)  
-**EngineArgs**|  CLI/API initialization arguments parsed from the user.| `vllm/engine/arg_utils.py` [vllm/engine/arg_utils.py1](https://github.com/vllm-project/vllm/blob/185cada3/vllm/engine/arg_utils.py#L1-L1)  
-**Transformers Backend**|  Loading models using the Transformers library logic for non-native architectures.| `model_impl="transformers"` [vllm/config/model.py109](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/model.py#L109-L109)  
-**QuantizationConfig**|  Base class for various quantization schemes (FP8, AWQ, GPTQ, etc).| `QuantizationConfig` [vllm/model_executor/layers/quantization/base_config.py54](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/base_config.py#L54-L54)  
-**GCN Arch**|  Graphics Core Next architecture identifier for AMD GPUs (e.g., `gfx942`).| `_get_gcn_arch` [vllm/platforms/rocm.py199](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/rocm.py#L199-L199)  
-**ModelOpt**|  NVIDIA's library for model optimization, integrated for FP8 and NVFP4 support.| `vllm/model_executor/layers/quantization/modelopt.py` [vllm/model_executor/layers/quantization/modelopt.py1](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/modelopt.py#L1-L1)  
-  
-Sources: [vllm/config/vllm.py41-124](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/vllm.py#L41-L124) [vllm/model_executor/layers/attention.py18](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/attention.py#L18-L18) [vllm/engine/arg_utils.py1](https://github.com/vllm-project/vllm/blob/185cada3/vllm/engine/arg_utils.py#L1-L1) [vllm/config/model.py109](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/model.py#L109-L109) [vllm/model_executor/layers/quantization/modelopt.py1-54](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/layers/quantization/modelopt.py#L1-L54) [vllm/platforms/rocm.py199](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/rocm.py#L199-L199)
+| Term | Definition | Code Pointer |
+|---|---|---|
+| **TP (Tensor Parallelism)** | Sharding weights across multiple devices horizontally. | `ParallelConfig` [vllm/config/vllm.py:49]() |
+| **PP (Pipeline Parallelism)** | Partitioning layers sequentially across devices. | `ParallelConfig` [vllm/config/vllm.py:49]() |
+| **VllmConfig** | Root configuration object unifying all sub-configs. | `VllmConfig` [vllm/config/vllm.py:36]() |
+| **CompilationMode** | Strategy for `torch.compile` integration (`NONE`, `VLLM_COMPILE`, etc.). | `CompilationMode` [vllm/config/compilation.py:37-51]() |
+| **CUDAGraphMode** | Granularity of CUDA graph capture (`NONE`, `PIECEWISE`, `FULL`). | `CUDAGraphMode` [vllm/config/compilation.py:53-61]() |
+| **Scheduler** | Core token scheduler managing admission and batches. | `Scheduler` [vllm/v1/core/sched/scheduler.py:84-100]() |
+| **GPUModelRunner** | Coordinates execution pipeline, attention, and sampling on GPU. | `GPUModelRunner` [vllm/v1/worker/gpu_model_runner.py:124-135]() |
+
+Sources: [vllm/config/vllm.py:36](), [vllm/config/vllm.py:49](), [vllm/config/compilation.py:37-61](), [vllm/v1/core/sched/scheduler.py:84-100](), [vllm/v1/worker/gpu_model_runner.py:124-135]()

@@ -1,190 +1,212 @@
+<!-- source: DeepWiki mcp.deepwiki.com · repo vllm-project/vllm · page 1 Overview · fetched 2026-10-28 -->
+
 # Overview
 
-> 来源: https://deepwiki.com/vllm-project/vllm/1-overview 抓取日期: 2026-09-02
-> 章节: 第 1 章 概述
+<details>
+<summary>Relevant source files</summary>
 
----
+The following files were used as context for generating this wiki page:
 
-Relevant source files
+- [.buildkite/image_build/image_build.yaml](.buildkite/image_build/image_build.yaml)
+- [README.md](README.md)
+- [docker/Dockerfile.cpu](docker/Dockerfile.cpu)
+- [docker/Dockerfile.xpu](docker/Dockerfile.xpu)
+- [docker/entrypoints/test_vllm_nonroot_entrypoint.sh](docker/entrypoints/test_vllm_nonroot_entrypoint.sh)
+- [docker/entrypoints/vllm-nonroot-entrypoint.sh](docker/entrypoints/vllm-nonroot-entrypoint.sh)
+- [docs/assets/models/pooling_models/cheat_sheet.svg](docs/assets/models/pooling_models/cheat_sheet.svg)
+- [docs/assets/models/pooling_models/pooling_types.svg](docs/assets/models/pooling_models/pooling_types.svg)
+- [docs/assets/models/pooling_models/score_types.svg](docs/assets/models/pooling_models/score_types.svg)
+- [docs/benchmarking/README.md](docs/benchmarking/README.md)
+- [docs/configuration/README.md](docs/configuration/README.md)
+- [docs/configuration/serve_args.md](docs/configuration/serve_args.md)
+- [docs/deployment/docker.md](docs/deployment/docker.md)
+- [docs/features/structured_outputs.md](docs/features/structured_outputs.md)
+- [docs/getting_started/installation/README.md](docs/getting_started/installation/README.md)
+- [docs/getting_started/installation/gpu.apple.inc.md](docs/getting_started/installation/gpu.apple.inc.md)
+- [docs/getting_started/installation/gpu.md](docs/getting_started/installation/gpu.md)
+- [docs/getting_started/installation/gpu.rocm.inc.md](docs/getting_started/installation/gpu.rocm.inc.md)
+- [docs/getting_started/installation/gpu.xpu.inc.md](docs/getting_started/installation/gpu.xpu.inc.md)
+- [docs/getting_started/quickstart.md](docs/getting_started/quickstart.md)
+- [docs/models/generative_models.md](docs/models/generative_models.md)
+- [docs/models/supported_models.md](docs/models/supported_models.md)
+- [docs/usage/troubleshooting.md](docs/usage/troubleshooting.md)
+- [requirements/xpu.txt](requirements/xpu.txt)
+- [tests/config/test_model_arch_config.py](tests/config/test_model_arch_config.py)
+- [tests/cuda/test_cuda_compatibility_path.py](tests/cuda/test_cuda_compatibility_path.py)
+- [tests/engine/test_arg_utils.py](tests/engine/test_arg_utils.py)
+- [tests/entrypoints/launchers/api_server/test_api_server_process_manager.py](tests/entrypoints/launchers/api_server/test_api_server_process_manager.py)
+- [tests/entrypoints/serve/utils/test_api_utils.py](tests/entrypoints/serve/utils/test_api_utils.py)
+- [tests/models/multimodal/generation/test_common.py](tests/models/multimodal/generation/test_common.py)
+- [tests/models/multimodal/generation/vlm_utils/model_utils.py](tests/models/multimodal/generation/vlm_utils/model_utils.py)
+- [tests/models/registry.py](tests/models/registry.py)
+- [tests/test_config.py](tests/test_config.py)
+- [tests/v1/distributed/test_async_llm_dp.py](tests/v1/distributed/test_async_llm_dp.py)
+- [tests/v1/engine/test_core_engine_actor_manager.py](tests/v1/engine/test_core_engine_actor_manager.py)
+- [tests/v1/engine/test_dp_world_group_port.py](tests/v1/engine/test_dp_world_group_port.py)
+- [tests/v1/engine/test_engine_core.py](tests/v1/engine/test_engine_core.py)
+- [tests/v1/engine/test_engine_core_client.py](tests/v1/engine/test_engine_core_client.py)
+- [tests/v1/engine/test_startup_watch_processes.py](tests/v1/engine/test_startup_watch_processes.py)
+- [vllm/config/cache.py](vllm/config/cache.py)
+- [vllm/config/model.py](vllm/config/model.py)
+- [vllm/config/model_arch.py](vllm/config/model_arch.py)
+- [vllm/config/parallel.py](vllm/config/parallel.py)
+- [vllm/config/speculative.py](vllm/config/speculative.py)
+- [vllm/config/vllm.py](vllm/config/vllm.py)
+- [vllm/engine/arg_utils.py](vllm/engine/arg_utils.py)
+- [vllm/engine/protocol.py](vllm/engine/protocol.py)
+- [vllm/entrypoints/cli/serve.py](vllm/entrypoints/cli/serve.py)
+- [vllm/entrypoints/llm.py](vllm/entrypoints/llm.py)
+- [vllm/entrypoints/serve/utils/api_utils.py](vllm/entrypoints/serve/utils/api_utils.py)
+- [vllm/model_executor/models/config.py](vllm/model_executor/models/config.py)
+- [vllm/model_executor/models/registry.py](vllm/model_executor/models/registry.py)
+- [vllm/models/inkling/common/mm_preprocess.py](vllm/models/inkling/common/mm_preprocess.py)
+- [vllm/transformers_utils/config.py](vllm/transformers_utils/config.py)
+- [vllm/transformers_utils/configs/__init__.py](vllm/transformers_utils/configs/__init__.py)
+- [vllm/transformers_utils/model_arch_config_convertor.py](vllm/transformers_utils/model_arch_config_convertor.py)
+- [vllm/transformers_utils/processors/__init__.py](vllm/transformers_utils/processors/__init__.py)
+- [vllm/v1/core/sched/interface.py](vllm/v1/core/sched/interface.py)
+- [vllm/v1/engine/__init__.py](vllm/v1/engine/__init__.py)
+- [vllm/v1/engine/async_llm.py](vllm/v1/engine/async_llm.py)
+- [vllm/v1/engine/coordinator.py](vllm/v1/engine/coordinator.py)
+- [vllm/v1/engine/core.py](vllm/v1/engine/core.py)
+- [vllm/v1/engine/core_client.py](vllm/v1/engine/core_client.py)
+- [vllm/v1/engine/llm_engine.py](vllm/v1/engine/llm_engine.py)
+- [vllm/v1/engine/utils.py](vllm/v1/engine/utils.py)
+- [vllm/v1/spec_decode/llm_base_proposer.py](vllm/v1/spec_decode/llm_base_proposer.py)
+- [vllm/v1/utils.py](vllm/v1/utils.py)
 
-  * [README.md](https://github.com/vllm-project/vllm/blob/185cada3/README.md?plain=1)
-  * [csrc/cpu/spec_decode_utils.cpp](https://github.com/vllm-project/vllm/blob/185cada3/csrc/cpu/spec_decode_utils.cpp)
-  * [docker/Dockerfile.xpu](https://github.com/vllm-project/vllm/blob/185cada3/docker/Dockerfile.xpu)
-  * [docs/README.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/README.md?plain=1)
-  * [docs/community/meetups.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/community/meetups.md?plain=1)
-  * [docs/community/sponsors.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/community/sponsors.md?plain=1)
-  * [docs/contributing/model/basic.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/contributing/model/basic.md?plain=1)
-  * [docs/deployment/docker.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/deployment/docker.md?plain=1)
-  * [docs/getting_started/installation/.nav.yml](https://github.com/vllm-project/vllm/blob/185cada3/docs/getting_started/installation/.nav.yml)
-  * [docs/getting_started/installation/README.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/getting_started/installation/README.md?plain=1)
-  * [docs/getting_started/installation/gpu.apple.inc.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/getting_started/installation/gpu.apple.inc.md?plain=1)
-  * [docs/getting_started/installation/gpu.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/getting_started/installation/gpu.md?plain=1)
-  * [docs/getting_started/installation/gpu.rocm.inc.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/getting_started/installation/gpu.rocm.inc.md?plain=1)
-  * [docs/getting_started/installation/gpu.xpu.inc.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/getting_started/installation/gpu.xpu.inc.md?plain=1)
-  * [docs/getting_started/installation/python_env_setup.inc.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/getting_started/installation/python_env_setup.inc.md?plain=1)
-  * [docs/getting_started/quickstart.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/getting_started/quickstart.md?plain=1)
-  * [docs/models/supported_models.md](https://github.com/vllm-project/vllm/blob/185cada3/docs/models/supported_models.md?plain=1)
-  * [requirements/xpu.txt](https://github.com/vllm-project/vllm/blob/185cada3/requirements/xpu.txt)
-  * [tests/config/test_config_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/config/test_config_utils.py)
-  * [tests/models/multimodal/generation/test_common.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/models/multimodal/generation/test_common.py)
-  * [tests/models/multimodal/generation/vlm_utils/model_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/models/multimodal/generation/vlm_utils/model_utils.py)
-  * [tests/models/registry.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/models/registry.py)
-  * [tests/test_config.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/test_config.py)
-  * [tests/v1/core/test_async_scheduler.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/test_async_scheduler.py)
-  * [tests/v1/core/test_contiguous_kv_packing.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/test_contiguous_kv_packing.py)
-  * [tests/v1/core/test_kv_cache_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/test_kv_cache_utils.py)
-  * [tests/v1/core/test_prefix_caching.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/test_prefix_caching.py)
-  * [tests/v1/core/test_scheduler.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/test_scheduler.py)
-  * [tests/v1/core/test_single_type_kv_cache_manager.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/test_single_type_kv_cache_manager.py)
-  * [tests/v1/core/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/core/utils.py)
-  * [tests/v1/distributed/test_async_llm_dp.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/distributed/test_async_llm_dp.py)
-  * [tests/v1/engine/test_engine_args.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/engine/test_engine_args.py)
-  * [tests/v1/engine/test_engine_core_client.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/engine/test_engine_core_client.py)
-  * [tests/v1/kv_connector/unit/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/kv_connector/unit/utils.py)
-  * [tests/v1/spec_decode/test_eagle.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/spec_decode/test_eagle.py)
-  * [tests/v1/spec_decode/test_eagle_step_kernel.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/spec_decode/test_eagle_step_kernel.py)
-  * [tests/v1/spec_decode/test_max_len.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/spec_decode/test_max_len.py)
-  * [tests/v1/spec_decode/test_mtp.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/spec_decode/test_mtp.py)
-  * [tests/v1/worker/test_gpu_model_runner.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/worker/test_gpu_model_runner.py)
-  * [tests/v1/worker/test_kv_block_zeroer.py](https://github.com/vllm-project/vllm/blob/185cada3/tests/v1/worker/test_kv_block_zeroer.py)
-  * [vllm/config/cache.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/cache.py)
-  * [vllm/config/model.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/model.py)
-  * [vllm/config/scheduler.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/scheduler.py)
-  * [vllm/config/speculative.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/speculative.py)
-  * [vllm/config/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/utils.py)
-  * [vllm/config/vllm.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/vllm.py)
-  * [vllm/engine/arg_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/engine/arg_utils.py)
-  * [vllm/engine/protocol.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/engine/protocol.py)
-  * [vllm/entrypoints/cli/serve.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/cli/serve.py)
-  * [vllm/entrypoints/llm.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/llm.py)
-  * [vllm/model_executor/models/config.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/config.py)
-  * [vllm/model_executor/models/hunyuan_v1.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/hunyuan_v1.py)
-  * [vllm/model_executor/models/hunyuan_vision.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/hunyuan_vision.py)
-  * [vllm/model_executor/models/registry.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/registry.py)
-  * [vllm/model_executor/warmup/qwen_triton_warmup.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/warmup/qwen_triton_warmup.py)
-  * [vllm/transformers_utils/config.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/transformers_utils/config.py)
-  * [vllm/transformers_utils/configs/__init__.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/transformers_utils/configs/__init__.py)
-  * [vllm/transformers_utils/configs/hunyuan_vl.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/transformers_utils/configs/hunyuan_vl.py)
-  * [vllm/transformers_utils/model_arch_config_convertor.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/transformers_utils/model_arch_config_convertor.py)
-  * [vllm/transformers_utils/processors/__init__.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/transformers_utils/processors/__init__.py)
-  * [vllm/utils/cpu_triton_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/utils/cpu_triton_utils.py)
-  * [vllm/v1/core/block_pool.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/block_pool.py)
-  * [vllm/v1/core/kv_cache_coordinator.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/kv_cache_coordinator.py)
-  * [vllm/v1/core/kv_cache_manager.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/kv_cache_manager.py)
-  * [vllm/v1/core/kv_cache_utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/kv_cache_utils.py)
-  * [vllm/v1/core/sched/async_scheduler.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/async_scheduler.py)
-  * [vllm/v1/core/sched/interface.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/interface.py)
-  * [vllm/v1/core/sched/scheduler.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py)
-  * [vllm/v1/core/single_type_kv_cache_manager.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/single_type_kv_cache_manager.py)
-  * [vllm/v1/engine/__init__.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/__init__.py)
-  * [vllm/v1/engine/async_llm.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/async_llm.py)
-  * [vllm/v1/engine/coordinator.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/coordinator.py)
-  * [vllm/v1/engine/core.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py)
-  * [vllm/v1/engine/core_client.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core_client.py)
-  * [vllm/v1/engine/input_processor.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/input_processor.py)
-  * [vllm/v1/engine/llm_engine.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/llm_engine.py)
-  * [vllm/v1/engine/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/utils.py)
-  * [vllm/v1/kv_cache_interface.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/kv_cache_interface.py)
-  * [vllm/v1/request.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/request.py)
-  * [vllm/v1/spec_decode/dflash.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/spec_decode/dflash.py)
-  * [vllm/v1/spec_decode/draft_model.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/spec_decode/draft_model.py)
-  * [vllm/v1/spec_decode/eagle.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/spec_decode/eagle.py)
-  * [vllm/v1/spec_decode/llm_base_proposer.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/spec_decode/llm_base_proposer.py)
-  * [vllm/v1/spec_decode/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/spec_decode/utils.py)
-  * [vllm/v1/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/utils.py)
-  * [vllm/v1/worker/cpu/shm.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/cpu/shm.py)
-  * [vllm/v1/worker/cpu_model_runner.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/cpu_model_runner.py)
-  * [vllm/v1/worker/gpu_model_runner.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/gpu_model_runner.py)
-  * [vllm/v1/worker/utils.py](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/utils.py)
+</details>
 
-This page provides a high-level introduction to vLLM's architecture, core components, and design principles. It serves as an entry point for understanding how vLLM orchestrates large language model inference across multiple hardware platforms with optimized memory management and execution.
 
-vLLM V1 represents a significant re-architecture of the core engine (scheduler, KV cache manager, worker, and sampler) to provide a cohesive, modular, and high-performance framework while retaining the stable model implementations and kernels from V0.
 
-* * *
+## Purpose and scope
+
+This page introduces vLLM’s major components, the V1 engine’s high-level request path, and the repository areas an engineer will encounter. It is an orientation page; detailed installation, usage, and deployment guidance is covered by the child pages. The V1 engine’s `EngineCore` coordinates model execution, KV-cache initialization, and scheduler setup [vllm/v1/engine/core.py:117-184](). `VllmConfig` brings together configuration for model, cache, compilation, parallel execution, scheduling, and other subsystems [vllm/config/vllm.py:30-57]().
+
+Sources: [vllm/v1/engine/core.py:117-184](), [vllm/config/vllm.py:30-57]()
 
 ## What is vLLM
 
-vLLM is a fast and easy-to-use library for LLM inference and serving. It optimizes throughput and memory efficiency through several key technologies:
+vLLM is an inference and serving codebase for generative and pooling models. Its supported-model documentation describes both native vLLM implementations and a Transformers modeling backend, and lists language, embedding, vision-language, and audio-language use cases [docs/models/supported_models.md:3-24](). At a high level, the system combines configuration, request processing, scheduling, KV-cache management, and model execution; the V1 `EngineCore` initializes the executor and cache before constructing its scheduler [vllm/v1/engine/core.py:145-184]().
 
-  * **PagedAttention** : Efficient management of attention key and value memory that eliminates fragmentation.
-  * **Continuous Batching** : Dynamic request scheduling and iteration-level batching.
-  * **Chunked Prefill** : Processes large prefills in smaller chunks to balance compute and eliminate pipeline bubbles [vllm/v1/engine/core.py153-157](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L153-L157)
-  * **Speculative Decoding** : Support for n-gram, suffix, EAGLE, Medusa, and DFlash to accelerate generation [vllm/config/vllm.py49-51](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/vllm.py#L49-L51) [vllm/v1/worker/gpu_model_runner.py197-203](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/gpu_model_runner.py#L197-L203)
-  * **Multi-platform Support** : Support for NVIDIA GPUs (CUDA), AMD GPUs (ROCm), Intel GPUs (XPU), TPUs (XLA), and CPUs [vllm/platforms/__init__.py28-36](https://github.com/vllm-project/vllm/blob/185cada3/vllm/platforms/__init__.py#L28-L36)
-  * **Torch Compilation** : Integration with `torch.compile` and custom Inductor-based backends for kernel fusion and graph optimization [vllm/config/vllm.py31-38](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/vllm.py#L31-L38)
+The configuration includes optimization levels `O0` through `O3`; the documented descriptions distinguish no optimization, quick optimizations, and fuller CUDA-graph optimizations [vllm/config/vllm.py:128-141](). For details on installation and hardware prerequisites, see [Getting Started and Installation](#1.1). For example workflows, see [Examples and Usage Patterns](#1.2), and for per-model deployment guidance, see [Model Recipes and Deployment Guides](#1.3).
 
-* * *
+Sources: [docs/models/supported_models.md:3-24](), [vllm/v1/engine/core.py:145-184](), [vllm/config/vllm.py:128-141]()
 
 ## System Architecture
 
-vLLM follows a layered architecture with a clear separation of concerns. The V1 engine introduces a decoupled execution model where the `EngineCore` runs in a separate process from the API frontend to minimize CPU overhead and Python GIL contention [vllm/v1/engine/core.py104-113](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L104-L113)
+V1 separates the user-facing engine client from the `EngineCore` inner loop. `AsyncLLM` builds a renderer and `InputProcessor`, while `EngineCore` owns the executor, initializes KV caches, and constructs the scheduler [vllm/v1/engine/async_llm.py:93-111](), [vllm/v1/engine/async_llm.py:167-171](), [vllm/v1/engine/core.py:117-184](). The client can also be configured with externally launched engine addresses, which reflects the client/core boundary without requiring a particular process arrangement [vllm/v1/engine/async_llm.py:120-125]().
 
-### High-Level System Components
+### High-level system components
 
-Title: "vLLM System Architecture (Natural Language to Code Entities)"
+**Diagram: vLLM concepts mapped to code entities**
 
-Sources: [vllm/engine/arg_utils.py35-67](https://github.com/vllm-project/vllm/blob/185cada3/vllm/engine/arg_utils.py#L35-L67) [vllm/config/vllm.py30-53](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/vllm.py#L30-L53) [vllm/config/model.py124-167](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/model.py#L124-L167) [vllm/v1/engine/core.py104-113](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L104-L113) [vllm/v1/core/sched/scheduler.py73-84](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L73-L84) [vllm/v1/worker/gpu_model_runner.py280-300](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/gpu_model_runner.py#L280-L300) [vllm/v1/kv_cache_interface.py160-173](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/kv_cache_interface.py#L160-L173)
+```mermaid
+flowchart LR
+    User["User-facing asynchronous engine"] --> AsyncLLM["AsyncLLM"]
+    AsyncLLM --> Renderer["renderer_from_config"]
+    AsyncLLM --> InputProcessor["InputProcessor"]
+    InputProcessor --> Request["EngineCoreRequest"]
+    AsyncLLM --> Client["EngineCoreClient"]
+    Client --> Core["EngineCore"]
+    Core --> Executor["Executor"]
+    Core --> Cache["KV cache initialization"]
+    Core --> Scheduler["SchedulerInterface"]
+    Scheduler --> Output["SchedulerOutput"]
+```
 
-**Layered Architecture Overview**
+Sources: [vllm/v1/engine/async_llm.py:93-111](), [vllm/v1/engine/async_llm.py:167-171](), [vllm/v1/engine/async_llm.py:56-64](), [vllm/v1/engine/core.py:117-184]()
 
-Layer| Purpose| Key Components  
----|---|---  
-**External Interface**|  Entry points for users| `LLM`, `AsyncLLM`, OpenAI API server [vllm/entrypoints/llm.py67](https://github.com/vllm-project/vllm/blob/185cada3/vllm/entrypoints/llm.py#L67-L67) [vllm/v1/engine/async_llm.py72](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/async_llm.py#L72-L72)  
-**Configuration**|  Argument parsing and config assembly| `EngineArgs`, `VllmConfig`, `ModelConfig`, `ParallelConfig` [vllm/engine/arg_utils.py35](https://github.com/vllm-project/vllm/blob/185cada3/vllm/engine/arg_utils.py#L35-L35) [vllm/config/vllm.py124](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/vllm.py#L124-L124)  
-**Engine Orchestration**|  Request lifecycle and IPC coordination| `EngineCore`, `InputProcessor` [vllm/v1/engine/core.py104](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L104-L104) [vllm/v1/engine/input_processor.py20](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/input_processor.py#L20-L20)  
-**Scheduling & Memory**| Resource allocation and KV management| `Scheduler`, `KVCacheManager`, `BlockPool` [vllm/v1/core/sched/scheduler.py73](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L73-L73) [vllm/v1/core/kv_cache_manager.py25](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/kv_cache_manager.py#L25-L25)  
-**Execution**|  Model forward passes on hardware| `Executor`, `GPUModelRunner`, `Sampler` [vllm/v1/worker/gpu_model_runner.py280](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/gpu_model_runner.py#L280-L280) [vllm/v1/sample/sampler.py25](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/sample/sampler.py#L25-L25)  
-  
-Sources: [vllm/v1/engine/core.py104-169](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L104-L169) [vllm/engine/arg_utils.py35-120](https://github.com/vllm-project/vllm/blob/185cada3/vllm/engine/arg_utils.py#L35-L120) [vllm/config/vllm.py124-213](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/vllm.py#L124-L213) [vllm/v1/core/sched/scheduler.py73-106](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L73-L106)
+**Diagram: configuration concepts mapped to code entities**
 
-* * *
+```mermaid
+flowchart LR
+    Arguments["Engine arguments and CLI options"] --> EngineArgs["EngineArgs and AsyncEngineArgs"]
+    EngineArgs --> Config["VllmConfig"]
+    Config --> ModelConfig["ModelConfig"]
+    Config --> ParallelConfig["ParallelConfig"]
+    Config --> CacheConfig["CacheConfig"]
+    Config --> SchedulerConfig["SchedulerConfig"]
+    Config --> CompilationConfig["CompilationConfig"]
+    Config --> Runtime["EngineCore initialization"]
+```
 
-## Core Components
+`arg_utils.py` imports the configuration types used by the argument layer, including `VllmConfig`, `ModelConfig`, `ParallelConfig`, `CacheConfig`, `SchedulerConfig`, and `CompilationConfig` [vllm/engine/arg_utils.py:36-73](). The `VllmConfig` module imports these subsystem configurations [vllm/config/vllm.py:30-57](), and `EngineCore` receives a `VllmConfig` at initialization [vllm/v1/engine/core.py:120-146]().
 
-### EngineCore: The Central Serving Loop
+Sources: [vllm/engine/arg_utils.py:36-73](), [vllm/config/vllm.py:30-57](), [vllm/v1/engine/core.py:120-146]()
 
-`EngineCore` is the high-performance inner loop of vLLM. It manages the `SchedulerInterface` and the `Executor` [vllm/v1/engine/core.py104-133](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L104-L133) It initializes specialized configurations and hardware-specific optimizations.
+### Layered architecture overview
 
-**Key responsibilities:**
+| Area | Role at a glance | Representative code entities |
+|---|---|---|
+| User-facing engine | Exposes asynchronous inference through an engine client | `AsyncLLM` [vllm/v1/engine/async_llm.py:93-111]() |
+| Input preparation | Creates a renderer and converts engine inputs toward core requests | `renderer_from_config`, `InputProcessor` [vllm/v1/engine/async_llm.py:167-171]() |
+| Engine coordination | Owns the executor and brings up cache and scheduling components | `EngineCore`, `Executor`, `SchedulerInterface` [vllm/v1/engine/core.py:117-184]() |
+| Configuration | Collects subsystem settings used by engine initialization | `VllmConfig`, `ModelConfig`, `ParallelConfig`, `CompilationConfig` [vllm/config/vllm.py:30-57]() |
+| Model support | Maps Hugging Face architectures to vLLM implementations and exposes capability queries | `_TEXT_GENERATION_MODELS`, model interfaces [vllm/model_executor/models/registry.py:46-73]() |
 
-  * **Initialization** : Profiles GPU memory, initializes KV caches via `_initialize_kv_caches`, and sets up the model executor and scheduler [vllm/v1/engine/core.py133-169](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L133-L169)
-  * **Request Handling** : Processes `EngineCoreRequest` objects containing prompt token IDs, multimodal features, and sampling parameters [vllm/v1/engine/core.py64-67](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L64-L67)
-  * **Iteration Loop** : Orchestrates the model forward pass and output collection via `step()` [vllm/v1/engine/core.py326-340](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L326-L340)
-  * **Structured Output** : Manages guided decoding and structured grammars via `StructuredOutputManager` [vllm/v1/engine/core.py146](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L146-L146)
+Sources: [vllm/v1/engine/async_llm.py:93-111](), [vllm/v1/engine/async_llm.py:167-171](), [vllm/v1/engine/core.py:117-184](), [vllm/config/vllm.py:30-57](), [vllm/model_executor/models/registry.py:46-73]()
 
-Sources: [vllm/v1/engine/core.py104-194](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L104-L194)
+## Repository Layout
 
-### Model Registry and Support
+The repository’s top-level areas include `vllm/`, `rust/`, `csrc/`, `tests/`, `examples/`, and `recipes/`. At a high level, `vllm/` contains the Python package, including configuration, engine, and model-support code; `tests/` includes model registry and configuration tests [vllm/config/vllm.py:30-57](), [vllm/v1/engine/core.py:117-184](), [vllm/model_executor/models/registry.py:73-100](), [tests/models/registry.py:16-39](), [tests/test_config.py:20-50](). The other top-level areas provide useful entry points for Rust frontend work, native extensions, examples, and deployment recipes; their detailed contents are outside this page’s scope.
 
-vLLM supports a wide array of architectures through a native registry that maps HuggingFace `model_type` to optimized vLLM implementations [vllm/model_executor/models/registry.py72-164](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/registry.py#L72-L164)
+For installation and platform-specific setup, see [Getting Started and Installation](#1.1). For the examples tree, see [Examples and Usage Patterns](#1.2). For the recipes tree and sweep tooling, see [Model Recipes and Deployment Guides](#1.3).
 
-  * **Native vLLM Models** : Highly optimized implementations using custom kernels (e.g., `LlamaForCausalLM`, `DeepseekV3ForCausalLM`) [vllm/model_executor/models/registry.py92-153](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/registry.py#L92-L153)
-  * **Transformers Backend** : Fallback for models without native support, enabling compatibility with any HF-compatible model [docs/models/supported_models.md16-18](https://github.com/vllm-project/vllm/blob/185cada3/docs/models/supported_models.md?plain=1#L16-L18)
-  * **Multimodal Support** : Interfaces for vision-language and audio models (e.g., `Qwen2VL`, `HunyuanVision`) [docs/models/supported_models.md22](https://github.com/vllm-project/vllm/blob/185cada3/docs/models/supported_models.md?plain=1#L22-L22) [vllm/model_executor/models/hunyuan_vision.py20](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/hunyuan_vision.py#L20-L20)
-
-Sources: [vllm/model_executor/models/registry.py72-164](https://github.com/vllm-project/vllm/blob/185cada3/vllm/model_executor/models/registry.py#L72-L164) [docs/models/supported_models.md9-70](https://github.com/vllm-project/vllm/blob/185cada3/docs/models/supported_models.md?plain=1#L9-L70)
-
-* * *
+Sources: [vllm/config/vllm.py:30-57](), [vllm/v1/engine/core.py:117-184](), [vllm/model_executor/models/registry.py:73-100](), [tests/models/registry.py:16-39](), [tests/test_config.py:20-50]()
 
 ## Request Processing Flow
 
-The flow below demonstrates how a user request traverses the system from a high-level API call to GPU execution.
+The following diagram summarizes the principal request-path concepts. `AsyncLLM` creates its renderer and `InputProcessor`; `EngineCore` initializes the executor and KV caches, then selects and constructs a scheduler [vllm/v1/engine/async_llm.py:167-171](), [vllm/v1/engine/core.py:145-184](). This is a high-level orientation, not a complete account of all message and output-processing steps.
 
-Title: "vLLM V1 Request Lifecycle (Code Entity Space)"
+**Diagram: V1 request-path concepts mapped to code entities**
 
-Sources: [vllm/v1/engine/core.py161-169](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L161-L169) [vllm/v1/engine/core.py326-340](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/engine/core.py#L326-L340) [vllm/v1/core/sched/scheduler.py73-106](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/core/sched/scheduler.py#L73-L106) [vllm/v1/worker/gpu_model_runner.py280-300](https://github.com/vllm-project/vllm/blob/185cada3/vllm/v1/worker/gpu_model_runner.py#L280-L300)
+```mermaid
+sequenceDiagram
+    participant Caller as "Caller"
+    participant AsyncLLM as "AsyncLLM"
+    participant InputProcessor as "InputProcessor"
+    participant Client as "EngineCoreClient"
+    participant Core as "EngineCore"
+    participant Scheduler as "SchedulerInterface"
+    participant Executor as "Executor"
+    Caller->>AsyncLLM: "Submit engine input"
+    AsyncLLM->>InputProcessor: "Prepare input"
+    InputProcessor-->>AsyncLLM: "EngineCoreRequest"
+    AsyncLLM->>Client: "Send request"
+    Client->>Core: "Deliver request"
+    Core->>Scheduler: "Schedule work"
+    Scheduler-->>Core: "SchedulerOutput"
+    Core->>Executor: "Run model work"
+    Executor-->>Core: "ModelRunnerOutput"
+    Core-->>Client: "EngineCoreOutputs"
+    Client-->>AsyncLLM: "Return outputs"
+    AsyncLLM-->>Caller: "Deliver response"
+```
 
-* * *
+Sources: [vllm/v1/engine/async_llm.py:56-64](), [vllm/v1/engine/async_llm.py:93-111](), [vllm/v1/engine/async_llm.py:167-171](), [vllm/v1/engine/core.py:117-184]()
 
-## Optimization and Serving Modes
+## Getting Started and Installation
 
-vLLM V1 is designed for extreme scale and performance:
+For pip wheels, source builds, Docker installation, quickstart guidance, hardware requirements, and platform-specific installation instructions, see [Getting Started and Installation](#1.1).
 
-  * **Distributed Execution** : Supports Tensor, Pipeline, and Data Parallelism configured via `ParallelConfig` [vllm/config/parallel.py98-104](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/parallel.py#L98-L104)
-  * **Compilation & CUDA Graphs**: Support for `torch.compile` and CUDA graph capture modes (`CUDAGraphMode`) to minimize kernel launch overhead [vllm/config/compilation.py32-33](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/compilation.py#L32-L33)
-  * **Optimization Levels** : Pre-defined levels (O0-O3) that automatically configure compilation, CUDA graphs, and fusion passes [vllm/config/vllm.py130-143](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/vllm.py#L130-L143)
-  * **Prefix Caching** : Automatic prefix caching to reuse KV cache for common prompt prefixes [vllm/config/cache.py76-81](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/cache.py#L76-L81)
-  * **Quantization** : Support for FP8, AWQ, GPTQ, and other low-precision formats to reduce memory footprint [vllm/engine/arg_utils.py98-104](https://github.com/vllm-project/vllm/blob/185cada3/vllm/engine/arg_utils.py#L98-L104) [vllm/config/model.py25](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/model.py#L25-L25)
+Sources: [README.md:1-1]()
 
-Sources: [vllm/config/vllm.py130-143](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/vllm.py#L130-L143) [vllm/config/compilation.py31-38](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/compilation.py#L31-L38) [vllm/config/parallel.py98-105](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/parallel.py#L98-L105) [vllm/config/cache.py70-81](https://github.com/vllm-project/vllm/blob/185cada3/vllm/config/cache.py#L70-L81)
+## Examples and Usage Patterns
+
+For a tour of `examples/`—including offline inference, serving, disaggregated serving, pooling, weight transfer, speech-to-text, tool calling, and observability—see [Examples and Usage Patterns](#1.2).
+
+Sources: [README.md:1-1]()
+
+## Model Recipes and Deployment Guides
+
+For the `recipes/models/` tree, recipe tooling, and the relationship between deployment recipes, supported models, and benchmarks, see [Model Recipes and Deployment Guides](#1.3).
+
+Sources: [docs/models/supported_models.md:8-18]()
+
+This page is the high-level entry point to vLLM’s codebase. Its child pages cover installation, examples, and model deployment recipes; the remaining wiki sections expand on configuration, engine internals, GPU execution, model support, serving, optimizations, distributed execution, platforms, builds, and testing. vLLM’s model registry maps architecture names to implementations, while the supported-model documentation distinguishes native implementations from the Transformers modeling backend [vllm/model_executor/models/registry.py:73-100](), [docs/models/supported_models.md:8-24]().
+
+Sources: [vllm/model_executor/models/registry.py:73-100](), [docs/models/supported_models.md:8-24]()
+
+---
+

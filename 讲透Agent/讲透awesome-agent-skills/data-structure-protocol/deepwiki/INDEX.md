@@ -1,0 +1,33 @@
+# DeepWiki 索引 — k-kolomeitsev/data-structure-protocol
+
+> 通道 mcp.deepwiki.com API（网页端被 Vercel 盾，MCP 直连可用）· 抓取 2026-10-26
+> 结构 28 页 · 全文 190704 字符
+
+- [1 Overview](1-overview.md)
+  - [1.1 Getting Started](1.1-getting-started.md)
+  - [1.2 Core Concepts and Architecture](1.2-core-concepts-and-architecture.md)
+- [2 DSP CLI Reference](2-dsp-cli-reference.md)
+  - [2.1 Entity Management Commands](2.1-entity-management-commands.md)
+  - [2.2 Graph Traversal and Query Commands](2.2-graph-traversal-and-query-commands.md)
+  - [2.3 Diagnostics and Health Checks](2.3-diagnostics-and-health-checks.md)
+- [3 Storage Format](3-storage-format.md)
+  - [3.1 Entity Directory Structure](3.1-entity-directory-structure.md)
+  - [3.2 Table of Contents (TOC) Files](3.2-table-of-contents-toc-files.md)
+- [4 Bootstrap Procedure](4-bootstrap-procedure.md)
+  - [4.1 Brownfield Workflow](4.1-brownfield-workflow.md)
+  - [4.2 Greenfield Workflow](4.2-greenfield-workflow.md)
+- [5 Agent Integrations](5-agent-integrations.md)
+  - [5.1 Cursor Integration](5.1-cursor-integration.md)
+  - [5.2 Claude Code Integration](5.2-claude-code-integration.md)
+  - [5.3 Codex Integration](5.3-codex-integration.md)
+- [6 Git Hooks and CI](6-git-hooks-and-ci.md)
+  - [6.1 Pre-commit and Pre-push Hooks](6.1-pre-commit-and-pre-push-hooks.md)
+  - [6.2 Agent-Assisted Review Hook](6.2-agent-assisted-review-hook.md)
+  - [6.3 GitHub Actions CI Workflow](6.3-github-actions-ci-workflow.md)
+- [7 Installation](7-installation.md)
+  - [7.1 Skill Installation (install.sh / install.ps1)](7.1-skill-installation-install.sh-install.ps1.md)
+  - [7.2 Hook Installation (install-hooks.sh / install-hooks.ps1)](7.2-hook-installation-install-hooks.sh-install-hooks.ps1.md)
+- [8 Comparisons and Design Rationale](8-comparisons-and-design-rationale.md)
+  - [8.1 DSP vs GSD](8.1-dsp-vs-gsd.md)
+  - [8.2 DSP vs Superpowers](8.2-dsp-vs-superpowers.md)
+- [9 Glossary](9-glossary.md)

@@ -1,148 +1,220 @@
-> 来源: [https://deepwiki.com/deepseek-ai/DeepSeek-OCR-2/1-overview](https://deepwiki.com/deepseek-ai/DeepSeek-OCR-2/1-overview)
-> DeepWiki deepseek-ai/DeepSeek-OCR-2
+<!-- source: DeepWiki mcp.deepwiki.com · repo deepseek-ai/DeepSeek-OCR-2 · page 1 Overview · fetched 2026-10-30 -->
 
 # Overview
 
-  Relevant source files 
- - [README.md](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1)
- - [deep_ep/__init__.py](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py)
- 
-  
-## Purpose and Scope
+<details>
+<summary>Relevant source files</summary>
 
- DeepEP (DeepEveryParallel) is a high-performance communication library tailored for modern machine learning training and inference, specifically optimized for **Mixture-of-Experts (MoE) expert parallelism**. It provides high-throughput and low-latency all-to-all GPU kernels for MoE dispatch and combine operations, supporting low-precision formats like FP8 [README.md1-5](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L1-L5)
+The following files were used as context for generating this wiki page:
 
- The library features a lightweight **Just-In-Time (JIT)** compilation system, allowing it to run without pre-compilation of CUDA kernels during installation [README.md3-5](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L3-L5) DeepEP V2 introduces a significant architectural shift from the NVSHMEM-based V1 to a more efficient **NCCL Gin backend**, achieving up to 1.3x peak performance while reducing SM occupancy by up to 4x [README.md9-57](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L9-L57)
+- [DeepSeek_OCR2_paper.pdf](DeepSeek_OCR2_paper.pdf)
+- [README.md](README.md)
 
- **Sources:** [README.md1-17](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L1-L17) [deep_ep/__init__.py71-84](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L71-L84)
+</details>
 
- 
+
+
+This page introduces DeepSeek-OCR-2, its core architectural concept, primary capabilities, and the top-level structure of the repository. For installation steps, see [Getting Started](#2). For detailed documentation of either inference backend, see [Inference Backends](#3). For the internal model architecture, see [Core Architecture](#4).
+
 ---
 
- 
-## Architectural Evolution: V1 to V2
+## What is DeepSeek-OCR-2?
 
- DeepEP V2 represents a complete refactoring of the communication layer. The transition from V1 to V2 involves several major shifts in backend technology and resource management:
+DeepSeek-OCR-2 is a multimodal OCR model built on the concept of **Visual Causal Flow** — an approach to visual encoding that processes image regions in a sequential, causally-dependent manner rather than treating all patches as independent tokens. The model converts document images into structured text output, primarily Markdown.
 
- 
-| Feature | V1 (Legacy) | V2 (Elastic) |
+The model is published as `deepseek-ai/DeepSeek-OCR-2` on HuggingFace Hub and supports two primary task modes controlled by the prompt:
+
+| Task | Prompt | Output |
 |---|---|---|
-| Backend | NVSHMEM (IBGDA/Symmetric Heap) | NCCL Gin (Header-only, lightweight) |
-| Interface | Buffer class | ElasticBuffer & EPHandle |
-| Resource Allocation | Manual tuning (num_sms, Config) | Analytical calculation via formulas |
-| Domain Scale | Limited scale-out | Up to EP2048 |
-| SM Occupancy | High (e.g., 24 SMs) | Low (e.g., 4-6 SMs) |
-| JIT Pipeline | Partial / Pre-compiled | Fully JIT (NVRTC-based) |
+| Document to Markdown (with layout) | `<image>\n<|grounding|>Convert the document to markdown.` | Markdown with bounding-box grounding tags |
+| Free OCR (text only, no layout) | `<image>\nFree OCR.` | Plain extracted text |
 
- **Sources:** [README.md9-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L9-L25) [README.md115-116](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L116) [deep_ep/buffers/elastic.py16-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L30)
+See [README.md:135-138]() for the canonical prompt definitions.
 
- 
 ---
 
- 
-## System Architecture and Code Entities
+## Visual Causal Flow
 
- The following diagram maps the high-level system components to their corresponding code entities and files, illustrating the bridge between the Python user space and the CUDA kernel implementations.
+The "Visual Causal Flow" concept, described in the paper `DeepSeek_OCR2_paper.pdf`, drives the vision encoder design. Rather than encoding all image patches in parallel, the model uses a **Qwen2 decoder operating as an encoder** with learnable query embeddings. This hybrid causal/non-causal attention mechanism allows image tokens to attend to each other in a structured sequence, producing richer contextual visual features than purely parallel ViT encoding.
 
- 
-```
+This is implemented in the `deepencoderv2/` package within the vLLM path. The key components are `ImageEncoderViT` (a SAM-ViT-B backbone) followed by `Qwen2Decoder2Encoder`. For full details, see [Vision Encoders](#5).
 
-```
-
- **Diagram: DeepEP V2 Code Entity Mapping**
-
- **Sources:** [deep_ep/__init__.py87-97](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L87-L97) [deep_ep/buffers/elastic.py16-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L30) [README.md13-17](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L13-L17) [csrc/python_api.cpp1-39](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/python_api.cpp#L1-L39)
-
- 
 ---
 
- 
-## Core Abstractions: ElasticBuffer and EPHandle
+## Core Capabilities
 
- 
-### ElasticBuffer
+- **Dynamic resolution**: A single image is split into 0–6 local tiles at 768×768 pixels plus one global thumbnail at 1024×1024 pixels, producing between 256 and 1,120 visual tokens total. The tile count is determined per image based on aspect ratio.
+- **Grounding output**: The document-to-markdown prompt causes the model to emit `<|ref|>...<|/ref|>` and `<|det|>...<|/det|>` tags that encode bounding box coordinates alongside text.
+- **Structured document output**: Tables (using `<td>`, `</td>`, `<tr>`, `</tr>` tokens), formulas, and headings are preserved in the Markdown output.
 
- The `ElasticBuffer` is the primary interface in V2. It manages a single contiguous GPU buffer that serves as a symmetric memory window across the communication group [README.md115-116](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L116) It uses `NCCLSymmetricMemoryContext` to handle cross-GPU memory registration and RDMA window management [csrc/kernels/backend/nccl.cu10-50](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/kernels/backend/nccl.cu#L10-L50) It supports both standard EP operations and experimental features like PP and Engram.
+For a full explanation of the dynamic resolution system, see [Dynamic Resolution System](#6). For special tokens, see [Special Tokens](#7.1).
 
- 
-### EPHandle
-
- The `EPHandle` is a metadata object produced during the dispatch phase. It caches critical routing information, including:
-
- 
- - **Expert Alignment**: Padding information for memory efficiency [deep_ep/buffers/elastic.py32-40](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L32-L40)
- - **Token Counts**: `psum_num_recv_tokens_per_expert` and `num_recv_tokens` [deep_ep/buffers/elastic.py45-55](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L45-L55)
- - **Routing Metadata**: `topk_idx` and `recv_src_metadata` for the combine phase [deep_ep/buffers/elastic.py42-50](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L42-L50)
- 
- This handle can be reused for subsequent `combine` operations or cached during inference decoding to eliminate redundant metadata calculation [README.md18-20](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L18-L20)
-
- **Sources:** [deep_ep/buffers/elastic.py16-110](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L16-L110) [README.md115-130](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L115-L130)
-
- 
 ---
 
- 
-## Supported Communication Modes
+## Repository Structure
 
- DeepEP V2 provides a unified interface for several high-performance primitives, executed via the NCCL Gin backend:
+The repository contains two independent inference paths and one shared model package, all pointing to the same HuggingFace checkpoint.
 
- 
- - **EP Dispatch/Combine**: The core MoE all-to-all kernels. Supports `do_expand` for GEMM layout optimization and `expert_alignment` for memory efficiency [deep_ep/buffers/elastic.py134-210](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L134-L210)
- - **Engram (Remote Memory Access)**: Zero-SM RDMA-based remote memory fetching (e.g., for KV cache). Uses `engram_write` and `engram_fetch` (returning a hook) to access remote memory with minimal compute overhead [README.md23-31](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L23-L31)
- - **Pipeline Parallelism (PP)**: Experimental zero-SM RDMA primitives (`pp_send`, `pp_recv`) for point-to-point communication between pipeline stages [README.md24-100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L24-L100)
- - **All-Gather Reduce-Scatter (AGRS)**: Experimental primitives for data and tensor parallelism, including `all_gather` updates [README.md37-98](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L37-L98)
- 
- 
-```
+**Repository layout:**
 
 ```
+DeepSeek-OCR-2/
+├── DeepSeek-OCR2-vllm/          # High-throughput vLLM path
+│   ├── config.py                # Central configuration
+│   ├── run_dpsk_ocr2_image.py   # Single image, async streaming
+│   ├── run_dpsk_ocr2_pdf.py     # PDF batch processing
+│   ├── run_dpsk_ocr2_eval_batch.py  # OmniDocBench evaluation
+│   ├── deepseek_ocr2.py         # DeepseekOCR2ForCausalLM (vLLM plugin)
+│   ├── process/                 # DeepseekOCR2Processor
+│   └── deepencoderv2/           # Vision encoder package
+│
+├── DeepSeek-OCR2-hf/            # HuggingFace Transformers path
+│   └── run_dpsk_ocr2.py         # Script entrypoint
+│
+├── requirements.txt
+├── README.md
+└── DeepSeek_OCR2_paper.pdf
+```
 
- **Diagram: V2 Dispatch Execution Flow**
+Sources: [README.md:55-129]()
 
- **Sources:** [deep_ep/buffers/elastic.py113-400](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L113-L400) [README.md97-101](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L97-L101) [csrc/kernels/backend/nccl.cu60-100](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/csrc/kernels/backend/nccl.cu#L60-L100)
-
- 
 ---
 
- 
-## Resource Allocation and Topology
+## High-Level System Architecture
 
- V2 eliminates the need for manual auto-tuning by using analytical formulas to determine optimal resource usage.
+The following diagram maps the two inference paths to the code entities that implement them.
 
- 
-### Analytical SM Tuning
+**Diagram: Repository-Level Component Map**
 
- The method `get_theoretical_num_sms` calculates the required SM count based on hardware performance characteristics:
+```mermaid
+graph TD
+    HUB["deepseek-ai/DeepSeek-OCR-2\n(HuggingFace Model Hub)"]
 
- 
- - **Bandwidth Modeling**: Considers `sm_read_gbs`, `sm_write_gbs`, `rdma_gbs`, and `nvlink_gbs` [deep_ep/buffers/elastic.py441-450](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L441-L450)
- - **Overlap**: Adjusts counts based on the `prefer_overlap_with_compute` flag to allow communication to hide behind computation [deep_ep/buffers/elastic.py121-125](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L121-L125)
- 
- 
-### Topology Domains
+    subgraph vllm_path["DeepSeek-OCR2-vllm/"]
+        CFG["config.py"]
+        RUN_IMG["run_dpsk_ocr2_image.py"]
+        RUN_PDF["run_dpsk_ocr2_pdf.py"]
+        RUN_EVAL["run_dpsk_ocr2_eval_batch.py"]
+        MODEL["deepseek_ocr2.py\nDeepseekOCR2ForCausalLM"]
+        PROC["process/\nDeepseekOCR2Processor"]
+        ENC["deepencoderv2/\nImageEncoderViT\nQwen2Decoder2Encoder\nMlpProjector"]
+        CFG --> RUN_IMG
+        CFG --> RUN_PDF
+        CFG --> RUN_EVAL
+        RUN_IMG --> MODEL
+        RUN_PDF --> MODEL
+        RUN_EVAL --> MODEL
+        MODEL --> ENC
+        RUN_IMG --> PROC
+        RUN_PDF --> PROC
+        RUN_EVAL --> PROC
+    end
 
- DeepEP models the cluster as a logical grid of ranks:
+    subgraph hf_path["DeepSeek-OCR2-hf/"]
+        RUN_HF["run_dpsk_ocr2.py"]
+        AUTO["AutoModel / AutoTokenizer\ntrust_remote_code=True"]
+        INFER["model.infer()"]
+        RUN_HF --> AUTO --> INFER
+    end
 
- 
- - **Scale-up Domain**: Communication via NVLink (Intra-node/Intra-LSA) [deep_ep/utils/envs.py10-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L10-L25)
- - **Scale-out Domain**: Communication via RDMA (Inter-node/Rail-only) [deep_ep/utils/envs.py10-25](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L10-L25)
- - **Hybrid Mode**: When `allow_hybrid_mode=True`, the library uses a hierarchical approach, combining NVLink and RDMA to maximize throughput in large clusters [deep_ep/buffers/elastic.py120-121](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L120-L121)
- 
- **Sources:** [deep_ep/buffers/elastic.py113-470](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/buffers/elastic.py#L113-L470) [README.md18-22](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L18-L22) [deep_ep/utils/envs.py7-30](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/utils/envs.py#L7-L30)
+    HUB -->|"weights + remote code"| AUTO
+    HUB -->|"weights via LLM engine"| MODEL
+    INFER --> OUT1["Markdown / text output"]
+    MODEL --> OUT2[".mmd, _det.mmd\n_layouts.pdf\nannotated images"]
+```
 
- 
+Sources: [README.md:86-129]()
+
 ---
 
- 
-## Hardware and Software Requirements
+## Inference Backends
 
- To utilize DeepEP V2, the following environment is required:
+Two independent inference backends are provided. They share the same model checkpoint but differ significantly in deployment complexity and throughput.
 
- 
- - **GPU Architecture**: NVIDIA Hopper (SM90) or newer (e.g., Blackwell/SM100) [README.md63-65](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L63-L65)
- - **CUDA**: 12.3 or above for SM90 support [README.md67-68](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L67-L68)
- - **NCCL**: 2.30.4 or above (recommended via `nvidia-nccl-cu13` pip package) [README.md70-79](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L70-L79)
- - **Interconnect**: NVLink for intra-node; RDMA (InfiniBand/RoCE) for inter-node [README.md71-72](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L71-L72)
- - **Python**: 3.8+ with PyTorch 2.10+ [README.md66-69](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L66-L69)
- 
- **Sources:** [README.md63-72](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/README.md?plain=1#L63-L72) [deep_ep/__init__.py46-70](https://github.com/deepseek-ai/DeepEP/blob/01dc3aaa/deep_ep/__init__.py#L46-L70)
+| Property | Transformers (`DeepSeek-OCR2-hf/`) | vLLM (`DeepSeek-OCR2-vllm/`) |
+|---|---|---|
+| Primary class | `AutoModel` (remote code) | `DeepseekOCR2ForCausalLM` |
+| Engine | HuggingFace `transformers` | vLLM `AsyncLLMEngine` / `LLM` |
+| Invocation | `model.infer(...)` | `run_dpsk_ocr2_*.py` scripts |
+| Concurrency | Single-request | `MAX_CONCURRENCY` slots, `NUM_WORKERS` CPU threads |
+| PDF support | No | Yes (`run_dpsk_ocr2_pdf.py`) |
+| Bounding box annotation | Yes | Yes |
+| Benchmark eval | No | Yes (`run_dpsk_ocr2_eval_batch.py`) |
+| Flash Attention | Required (`flash_attention_2`) | Optional |
+
+For the Transformers path, see [Transformers Inference](#3.1). For the vLLM path, see [vLLM Inference](#3.2).
+
+---
+
+## End-to-End Inference Flow
+
+**Diagram: Image to Text — Key Code Entities**
+
+```mermaid
+flowchart LR
+    IMG["Raw Image\nPIL Image"]
+
+    subgraph proc["process/\nDeepseekOCR2Processor"]
+        DYN["dynamic_preprocess()\nfind_closest_aspect_ratio()"]
+        XFORM["ImageTransform\nToTensor + Normalize"]
+        DYN --> XFORM
+    end
+
+    subgraph enc["deepencoderv2/"]
+        SAM["ImageEncoderViT\nbuild_sam_vit_b()"]
+        Q2["Qwen2Decoder2Encoder\nbuild_qwen2_decoder_as_encoder()"]
+        PROJ["MlpProjector"]
+        SAM --> Q2 --> PROJ
+    end
+
+    subgraph lm["deepseek_ocr2.py\nDeepseekOCR2ForCausalLM"]
+        EMBED["get_input_embeddings()\nreplace image_token_id"]
+        FWD["DeepseekV3ForCausalLM\nforward()"]
+        EMBED --> FWD
+    end
+
+    IMG --> proc
+    proc -->|"pixel_values\nimages_crop\nimages_spatial_crop"| enc
+    PROJ -->|"vision embeddings"| EMBED
+    FWD -->|"tokens with ref/det tags"| POST["re_match()\nclean_formula()\ndraw_bounding_boxes()"]
+    POST --> OUT["Output Files\n.mmd / _det.mmd\nannotated images"]
+```
+
+Sources: [README.md:86-138]()
+
+---
+
+## Dynamic Resolution Summary
+
+The default resolution mode is documented in [README.md:131-133]():
+
+- **Local tiles**: 0–6 crops at 768×768 pixels → 0–864 visual tokens (144 per tile)
+- **Global thumbnail**: 1 view at 1024×1024 pixels → 256 visual tokens
+- **Total token budget**: 256 + (N × 144), where N ∈ [0, 6]
+
+The tiling count N is chosen per image based on aspect ratio matching. Configuration parameters `MIN_CROPS`, `MAX_CROPS`, `CROP_MODE`, `BASE_SIZE`, and `IMAGE_SIZE` in `config.py` control this budget. For a full explanation, see [Dynamic Resolution System](#6).
+
+---
+
+## Key Configuration Parameters
+
+All vLLM-path configuration lives in a single file. The table below summarizes the most important parameters.
+
+| Parameter | Default | Purpose |
+|---|---|---|
+| `MODEL_PATH` | `deepseek-ai/DeepSeek-OCR-2` | HuggingFace model identifier |
+| `BASE_SIZE` | `1024` | Global thumbnail resolution |
+| `IMAGE_SIZE` | `768` | Local tile resolution |
+| `CROP_MODE` | `True` | Enable/disable local tiling |
+| `MIN_CROPS` | `2` | Minimum number of tiles |
+| `MAX_CROPS` | `6` | Maximum number of tiles |
+| `MAX_CONCURRENCY` | `100` | Concurrent GPU inference slots |
+| `NUM_WORKERS` | `64` | CPU preprocessing threads |
+| `SKIP_REPEAT` | — | Skip already-processed outputs |
+
+For full parameter documentation, see [vLLM Configuration](#3.2.1).
+
+Sources: [README.md:64-138]()
+
+---
+

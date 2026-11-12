@@ -1,0 +1,2073 @@
+{
+ "nodes": [
+  {
+   "id": "document:packages/session-query/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/session-query/README.md",
+   "summary": "session-query 包组总览：会话历史读取、检索、追踪与导出的查询服务族（session-query 引擎抽象 + sqlite 后端 + session-log-export Web 导出）。",
+   "tags": [
+    "documentation",
+    "package-group",
+    "query",
+    "overview"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/session-query/session-log-export/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/session-query/session-log-export/README.md",
+   "summary": "dsh-session-log-export 文档：Web 会话完整历史导出——Session Header 菜单的 Copy as Markdown 与 Download session log、/export 命令；ZIP 含会话+子会话+附件；包拥有两个认证 Host 路由、Markdown 格式化器与浏览器控件。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "export",
+    "web"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/session-query/session-log-export/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/session-query/session-log-export/package.json",
+   "summary": "@deepseek-ai/dsh-session-log-export 清单：Web Session-log ZIP 导出与 Markdown 拷贝。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "export"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/session-query/session-log-export/tsconfig.client.json",
+   "type": "config",
+   "name": "tsconfig.client.json",
+   "filePath": "packages/session-query/session-log-export/tsconfig.client.json",
+   "summary": "Client 编译面 tsconfig：extends tsconfig.base.client.json，files 圈定 client/ 下组件与 locales、routes 及 css-modules 声明。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "client-face"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:packages/session-query/session-log-export/tsconfig.host.json",
+   "type": "config",
+   "name": "tsconfig.host.json",
+   "filePath": "packages/session-query/session-log-export/tsconfig.host.json",
+   "summary": "Host 编译面 tsconfig：extends base，与 Client 面分立的编译程序。",
+   "tags": [
+    "configuration",
+    "typescript",
+    "host-face"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:packages/session-query/session-query/README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "packages/session-query/session-query/README.md",
+   "summary": "dsh-session-query 文档：统一的 live 优先会话查询服务——精确读取/过滤/追踪是后端无关的具体行为，后端实现全文检索与查询执行于同一 ctx.sessionQuery 服务。",
+   "tags": [
+    "documentation",
+    "package-reference",
+    "query-service",
+    "live-preferred"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:packages/session-query/session-query/package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "packages/session-query/session-query/package.json",
+   "summary": "@deepseek-ai/dsh-session-query 清单。",
+   "tags": [
+    "configuration",
+    "package-manifest",
+    "query"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session-query/session-log-export/src/archive.ts",
+   "type": "file",
+   "name": "archive.ts",
+   "filePath": "packages/session-query/session-log-export/src/archive.ts",
+   "summary": "Host 侧会话日志 ZIP 流式导出：经 persistence 读句柄把每个会话序列化为规范 JSONL（header+逐事件行，后端无关一致），附件按内容寻址收入 media/ 与 files/；fflate 流式 Zip 增量产字节，64KiB 响应队列高水位背压，请求中止与消费端取消共享一个生产者信号。",
+   "tags": [
+    "export",
+    "zip-streaming",
+    "jsonl",
+    "backpressure",
+    "attachments"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session-query/session-log-export/src/archive.ts:sessionLogExportDeps",
+   "type": "function",
+   "name": "sessionLogExportDeps",
+   "filePath": "packages/session-query/session-log-export/src/archive.ts",
+   "lineRange": [
+    63,
+    70
+   ],
+   "summary": "用 ctx.get 收集导出所需的 sessionQuery/sessionPersistence/attachments/sessions 服务（未装配的部署返回 undefined）。",
+   "tags": [
+    "service-lookup",
+    "deps"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session-query/session-log-export/src/archive.ts:flushLiveSessionLog",
+   "type": "function",
+   "name": "flushLiveSessionLog",
+   "filePath": "packages/session-query/session-log-export/src/archive.ts",
+   "lineRange": [
+    80,
+    92
+   ],
+   "summary": "读活会话日志前经 SessionStore 权威持久化屏障冲刷内存日志；冷会话或不存在 id 无需屏障，abort 前后都观察。",
+   "tags": [
+    "flush",
+    "durability-barrier",
+    "live-session"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session-query/session-log-export/src/archive.ts:serializeSessionLog",
+   "type": "function",
+   "name": "serializeSessionLog",
+   "filePath": "packages/session-query/session-log-export/src/archive.ts",
+   "lineRange": [
+    110,
+    136
+   ],
+   "summary": "把一个会话的逻辑日志序列化为规范 JSONL 文本：header 行+每事件一行+尾换行；刻意镜像 JSONL 后端的 toHeaderLine（v2 物理头）但不依赖后端实现。",
+   "tags": [
+    "serialization",
+    "jsonl",
+    "canonical"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session-query/session-log-export/src/archive.ts:readSessionLogText",
+   "type": "function",
+   "name": "readSessionLogText",
+   "filePath": "packages/session-query/session-log-export/src/archive.ts",
+   "lineRange": [
+    148,
+    169
+   ],
+   "summary": "经 persistence 读句柄读一个会话的完整日志文本，观察取消信号；读不到（不存在）返回 undefined。",
+   "tags": [
+    "read",
+    "persistence-handle"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session-query/session-log-export/src/archive.ts:collectAttachmentRefs",
+   "type": "function",
+   "name": "collectAttachmentRefs",
+   "filePath": "packages/session-query/session-log-export/src/archive.ts",
+   "lineRange": [
+    204,
+    222
+   ],
+   "summary": "从事件流收集导出要附带的附件引用（图片/通用文件），供内容寻址去重收入归档。",
+   "tags": [
+    "attachments",
+    "collection",
+    "dedupe"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session-query/session-log-export/src/archive.ts:collectEventAttachmentRefs",
+   "type": "function",
+   "name": "collectEventAttachmentRefs",
+   "filePath": "packages/session-query/session-log-export/src/archive.ts",
+   "lineRange": [
+    231,
+    281
+   ],
+   "summary": "扫描单条会话事件里引用的附件（消息内容、工具结果、生成物），逐类提取引用对象。",
+   "tags": [
+    "event-scan",
+    "attachments",
+    "extraction"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:packages/session-query/session-log-export/src/archive.ts:ResponseCapacityGate",
+   "type": "class",
+   "name": "ResponseCapacityGate",
+   "filePath": "packages/session-query/session-log-export/src/archive.ts",
+   "lineRange": [
+    416,
+    446
+   ],
+   "summary": "响应容量闸：到达字节高水位即等待消费端拉取（暂停生产），背压把累积限制在固定 64KiB 队列加一次同步 fflate push。",
+   "tags": [
+    "backpressure",
+    "high-water-mark",
+    "flow-control"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session-query/session-log-export/src/archive.ts:streamSessionLogZip",
+   "type": "function",
+   "name": "streamSessionLogZip",
+   "filePath": "packages/session-query/session-log-export/src/archive.ts",
+   "lineRange": [
+    545,
+    616
+   ],
+   "summary": "流式产出整个 ZIP：根日志 session[.vN].jsonl、subagents/<id>/ 子会话、media/ 内容寻址图片、files/ 摘要路径通用附件；共用一个取消信号终止压缩器。",
+   "tags": [
+    "zip",
+    "streaming",
+    "layout",
+    "cancellation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/session-query/session-log-export/src/client/CopyToast.tsx",
+   "type": "file",
+   "name": "CopyToast.tsx",
+   "filePath": "packages/session-query/session-log-export/src/client/CopyToast.tsx",
+   "summary": "Markdown 拷贝结果的根 overlay toast 组件：绑定拷贝状态快照与 dismiss 动作，展示 success/preparationFailed/clipboardFailed 三态通知。",
+   "tags": [
+    "component",
+    "toast",
+    "client",
+    "feedback"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session-query/session-log-export/src/client/CopyToast.tsx:SessionMarkdownCopyToast",
+   "type": "function",
+   "name": "SessionMarkdownCopyToast",
+   "filePath": "packages/session-query/session-log-export/src/client/CopyToast.tsx",
+   "lineRange": [
+    25,
+    40
+   ],
+   "summary": "渲染拷贝通知 toast：读注入的 ObservableSnapshot 状态，按 notice 序号重启动画。",
+   "tags": [
+    "component",
+    "toast",
+    "snapshot"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session-query/session-log-export/src/client/Dialog.tsx",
+   "type": "file",
+   "name": "Dialog.tsx",
+   "filePath": "packages/session-query/session-log-export/src/client/Dialog.tsx",
+   "summary": "下载进度共享模态组件：展示 downloading/success/error 三相状态并提供 dismiss，状态来自 SessionLogDownloadController 的快照。",
+   "tags": [
+    "component",
+    "modal",
+    "download-state",
+    "client"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session-query/session-log-export/src/client/Dialog.tsx:SessionLogDownloadDialog",
+   "type": "function",
+   "name": "SessionLogDownloadDialog",
+   "filePath": "packages/session-query/session-log-export/src/client/Dialog.tsx",
+   "lineRange": [
+    25,
+    50
+   ],
+   "summary": "按注入的下载状态渲染模态：downloading 转圈、success/error 文案与关闭按钮。",
+   "tags": [
+    "component",
+    "modal",
+    "states"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session-query/session-log-export/src/client/HeaderAction.tsx",
+   "type": "file",
+   "name": "HeaderAction.tsx",
+   "filePath": "packages/session-query/session-log-export/src/client/HeaderAction.tsx",
+   "summary": "Session Header 更多操作菜单组件：Copy Session as Markdown 与 Download session log 两项动作，分别接拷贝控制器与下载控制器，附带下载模态挂载。",
+   "tags": [
+    "component",
+    "header-action",
+    "menu",
+    "client"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session-query/session-log-export/src/client/HeaderAction.tsx:SessionLogDownloadHeaderAction",
+   "type": "function",
+   "name": "SessionLogDownloadHeaderAction",
+   "filePath": "packages/session-query/session-log-export/src/client/HeaderAction.tsx",
+   "lineRange": [
+    47,
+    93
+   ],
+   "summary": "渲染 Header 更多菜单（复制/下载图标项），触发对应控制器并在菜单内嵌下载模态。",
+   "tags": [
+    "component",
+    "menu",
+    "actions"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/session-query/session-log-export/src/client/controller.ts",
+   "type": "file",
+   "name": "controller.ts",
+   "filePath": "packages/session-query/session-log-export/src/client/controller.ts",
+   "summary": "浏览器下载状态控制器：Header 按钮与 /export 命令共享；每会话一次在途下载（AbortController+done Promise），快照 store 驱动模态，浏览器选目的地。",
+   "tags": [
+    "controller",
+    "download",
+    "snapshot-store",
+    "client"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session-query/session-log-export/src/client/controller.ts:downloadUrl",
+   "type": "function",
+   "name": "downloadUrl",
+   "filePath": "packages/session-query/session-log-export/src/client/controller.ts",
+   "lineRange": [
+    43,
+    48
+   ],
+   "summary": "把 Host 下载路由交给浏览器下载管理器：临时 <a download> 点击，URL 按文档 base 解析。",
+   "tags": [
+    "browser-download",
+    "dom"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:packages/session-query/session-log-export/src/client/controller.ts:SessionLogDownloadController",
+   "type": "class",
+   "name": "SessionLogDownloadController",
+   "filePath": "packages/session-query/session-log-export/src/client/controller.ts",
+   "lineRange": [
+    55,
+    134
+   ],
+   "summary": "每会话一个在途下载的所有者：按 sessionId 记 abort/done，uSES 安全快照 store 发布模态状态，dispose 后拒绝新请求。",
+   "tags": [
+    "controller",
+    "per-session",
+    "abort",
+    "lifecycle"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/session-query/session-log-export/src/client/copy-controller.ts",
+   "type": "file",
+   "name": "copy-controller.ts",
+   "filePath": "packages/session-query/session-log-export/src/client/copy-controller.ts",
+   "summary": "Markdown 拷贝控制器：剪贴板是浏览器级目的地，单插件实例只允许一个 pending 拷贝（后来的请求并入而非竞速）；支持 ClipboardItem 延迟写的宿主在点击的激活窗口内同步启动写。",
+   "tags": [
+    "controller",
+    "clipboard",
+    "user-activation",
+    "single-flight"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/session-query/session-log-export/src/client/copy-controller.ts:SessionMarkdownCopyController",
+   "type": "class",
+   "name": "SessionMarkdownCopyController",
+   "filePath": "packages/session-query/session-log-export/src/client/copy-controller.ts",
+   "lineRange": [
+    75,
+    201
+   ],
+   "summary": "唯一 pending 拷贝的所有者：优先延迟写（promised Blob 保住用户激活），否则备好文本后 writeClipboard；dispose 中止读取，notice 序号驱动 toast。",
+   "tags": [
+    "controller",
+    "clipboard",
+    "deferred-write",
+    "abort"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/session-query/session-log-export/src/client/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/session-query/session-log-export/src/client/index.ts",
+   "summary": "浏览器插件入口：提供 sessionLogDownload 控制器、注册 8 语言词典、监听 command/executed 触发下载，向 shell.overlay 注入 toast、向 Header 注入两动作；feedbackUi 可选注入。",
+   "tags": [
+    "entry-point",
+    "client-plugin",
+    "slots",
+    "i18n"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session-query/session-log-export/src/client/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/session-query/session-log-export/src/client/index.ts",
+   "lineRange": [
+    39,
+    82
+   ],
+   "summary": "装配浏览器侧：provide 控制器+dispose 效果、注册 locale、监听 /export 命令成功即触发下载、注入 overlay/Header 两个 slot 贡献。",
+   "tags": [
+    "plugin-apply",
+    "slots",
+    "lifecycle"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/session-query/session-log-export/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/session-query/session-log-export/src/index.ts",
+   "summary": "session-log-export Host 插件入口（name session-log-download）：注册 /export 人命令与两条认证 fetch 路由（ZIP 下载/Markdown 拷贝），Config 只含 DEFLATE 压缩级；失败响应不回显错误防绝对路径泄漏。",
+   "tags": [
+    "entry-point",
+    "host-plugin",
+    "routes",
+    "command"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session-query/session-log-export/src/index.ts:apply",
+   "type": "function",
+   "name": "apply",
+   "filePath": "packages/session-query/session-log-export/src/index.ts",
+   "lineRange": [
+    80,
+    115
+   ],
+   "summary": "注册 /export 命令（拒绝路径参数）与 GET/HEAD 两条路由（HEAD 复用 GET 后取消 body）；经 connection.fetch.register 挂接。",
+   "tags": [
+    "plugin-apply",
+    "command-registration",
+    "routes"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session-query/session-log-export/src/index.ts:sessionMarkdownResponse",
+   "type": "function",
+   "name": "sessionMarkdownResponse",
+   "filePath": "packages/session-query/session-log-export/src/index.ts",
+   "lineRange": [
+    132,
+    160
+   ],
+   "summary": "Markdown 导出路由处理：校验 sessionId 查询参数，经 sessionQuery.readSession 分离式观察读取（不建 Agent 不留会话），按稳定错误码 SESSION_QUERY_SESSION_NOT_FOUND 映射 404，其余失败保持不透明。",
+   "tags": [
+    "route-handler",
+    "markdown",
+    "error-mapping"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session-query/session-log-export/src/index.ts:sessionLogExportResponse",
+   "type": "function",
+   "name": "sessionLogExportResponse",
+   "filePath": "packages/session-query/session-log-export/src/index.ts",
+   "lineRange": [
+    173,
+    234
+   ],
+   "summary": "ZIP 导出路由处理：flush 活会话→读根日志→404/500 语义分流，成功则 Response 直接携带 streamSessionLogZip 流与 attachment 文件名头。",
+   "tags": [
+    "route-handler",
+    "zip",
+    "streaming-response"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:packages/session-query/session-log-export/src/markdown.ts",
+   "type": "file",
+   "name": "markdown.ts",
+   "filePath": "packages/session-query/session-log-export/src/markdown.ts",
+   "summary": "纯后端 Markdown 转换器：把完整已提交会话日志渲染为 Markdown——原始日志是权威（压缩面替换不删早期消息、fork 继承历史只出现一次），推理/系统/开发者消息/请求头/运行时记录全部省略；含围栏感知的包装标签转义。",
+   "tags": [
+    "markdown",
+    "pure-function",
+    "transcript",
+    "sanitization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session-query/session-log-export/src/markdown.ts:formatSessionMarkdown",
+   "type": "function",
+   "name": "formatSessionMarkdown",
+   "filePath": "packages/session-query/session-log-export/src/markdown.ts",
+   "lineRange": [
+    65,
+    96
+   ],
+   "summary": "主转换：最新 session/title 事件做标题，按回合收集段落——用户消息引用、助手/工具段折叠区、最终回复明文，恰好一个尾换行。",
+   "tags": [
+    "formatting",
+    "turns",
+    "title"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session-query/session-log-export/src/markdown.ts:collectTurns",
+   "type": "function",
+   "name": "collectTurns",
+   "filePath": "packages/session-query/session-log-export/src/markdown.ts",
+   "lineRange": [
+    103,
+    164
+   ],
+   "summary": "把事件流折叠为回合段（用户段/助手段/工具段），工具调用以 id 配对结果。",
+   "tags": [
+    "fold",
+    "turns",
+    "pairing"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session-query/session-log-export/src/markdown.ts:scanMarkdown",
+   "type": "function",
+   "name": "scanMarkdown",
+   "filePath": "packages/session-query/session-log-export/src/markdown.ts",
+   "lineRange": [
+    305,
+    332
+   ],
+   "summary": "逐行扫描 Markdown 跟踪围栏开闭状态，供围栏感知的包装标签转义使用。",
+   "tags": [
+    "scanner",
+    "fences",
+    "state-machine"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session-query/session-log-export/src/markdown.ts:escapeWrapperTagsOutsideFences",
+   "type": "function",
+   "name": "escapeWrapperTagsOutsideFences",
+   "filePath": "packages/session-query/session-log-export/src/markdown.ts",
+   "lineRange": [
+    359,
+    363
+   ],
+   "summary": "仅在代码围栏之外转义包装标签，围栏内内容保持原样。",
+   "tags": [
+    "escaping",
+    "fence-aware"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session-query/session-log-export/src/routes.ts",
+   "type": "file",
+   "name": "routes.ts",
+   "filePath": "packages/session-query/session-log-export/src/routes.ts",
+   "summary": "路由常量模块：ZIP 导出与 Markdown 导出的 path/route 四常量，Host 与 Client 共享引用。",
+   "tags": [
+    "routes",
+    "constants",
+    "shared"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session-query/session-query/src/cold-read.ts",
+   "type": "file",
+   "name": "cold-read.ts",
+   "filePath": "packages/session-query/session-query/src/cold-read.ts",
+   "summary": "一次性冷会话读取：经句柄式 persistence seam 读存储日志，为被打断的最终回合补确定性内存闭合事件（本地拥有、不回写）。",
+   "tags": [
+    "cold-read",
+    "persistence-handle",
+    "synthetic-closers"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session-query/session-query/src/cold-read.ts:readColdSessionLog",
+   "type": "function",
+   "name": "readColdSessionLog",
+   "filePath": "packages/session-query/session-query/src/cold-read.ts",
+   "lineRange": [
+    31,
+    57
+   ],
+   "summary": "打开读句柄取 header 与事件窗口，套用 interruptedTurnClosers 合成闭合事件，返回自洽的 ColdSessionLog。",
+   "tags": [
+    "cold-read",
+    "closers",
+    "one-shot"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session-query/session-query/src/corpus.ts",
+   "type": "file",
+   "name": "corpus.ts",
+   "filePath": "packages/session-query/session-query/src/corpus.ts",
+   "summary": "live 优先的逻辑语料解析：SessionCorpus 经可选注入持有 sessionPersistence（fiber 效果管理生命周期），列出/检视/快照会话时 live 记录优先合并克隆 header，兼容性断言防混源。",
+   "tags": [
+    "corpus",
+    "live-preferred",
+    "optional-inject",
+    "merge"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/session-query/session-query/src/corpus.ts:SessionCorpus",
+   "type": "class",
+   "name": "SessionCorpus",
+   "filePath": "packages/session-query/session-query/src/corpus.ts",
+   "lineRange": [
+    36,
+    232
+   ],
+   "summary": "逻辑会话语料所有者：inject(['sessionPersistence']) 可选绑定（带陈旧服务防护 disposer），listSessions/inspect/快照按 live 优先合并持久化记录，输出克隆 header 的确定性 newest-first 序。",
+   "tags": [
+    "corpus",
+    "optional-service",
+    "deterministic-order"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/session-query/session-query/src/documents.ts",
+   "type": "file",
+   "name": "documents.ts",
+   "filePath": "packages/session-query/session-query/src/documents.ts",
+   "summary": "共享事件元数据与语义文档投影：把原始日志投为轻量 surface 感知事件记录与全文检索文档（消费 message-projections 目录的当前投影）。",
+   "tags": [
+    "projection",
+    "documents",
+    "search",
+    "metadata"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session-query/session-query/src/documents.ts:buildSessionEventRecords",
+   "type": "function",
+   "name": "buildSessionEventRecords",
+   "filePath": "packages/session-query/session-query/src/documents.ts",
+   "lineRange": [
+    16,
+    28
+   ],
+   "summary": "把原始日志投为每事件一条的轻量记录（seq 升序），带 surface 分类。",
+   "tags": [
+    "records",
+    "projection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session-query/session-query/src/documents.ts:buildSessionEventSearchDocuments",
+   "type": "function",
+   "name": "buildSessionEventSearchDocuments",
+   "filePath": "packages/session-query/session-query/src/documents.ts",
+   "lineRange": [
+    36,
+    55
+   ],
+   "summary": "投影全文检索文档：每事件产出带语义文本（经 extractSessionEventText）的检索文档。",
+   "tags": [
+    "search-documents",
+    "projection"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session-query/session-query/src/documents.ts:classifySurface",
+   "type": "function",
+   "name": "classifySurface",
+   "filePath": "packages/session-query/session-query/src/documents.ts",
+   "lineRange": [
+    57,
+    75
+   ],
+   "summary": "按 foldSurface 判定事件的 surface 归类，驱动记录与文档的可见性元数据。",
+   "tags": [
+    "classification",
+    "surface"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session-query/session-query/src/extraction.ts",
+   "type": "file",
+   "name": "extraction.ts",
+   "filePath": "packages/session-query/session-query/src/extraction.ts",
+   "summary": "一方事件语义文本提取：user/message、turn 结束、todo 等事件产出可检索文本；结构边界、原始流、请求封套与未知合并事件不贡献文本。",
+   "tags": [
+    "text-extraction",
+    "semantic",
+    "first-party"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session-query/session-query/src/extraction.ts:extractSessionEventText",
+   "type": "function",
+   "name": "extractSessionEventText",
+   "filePath": "packages/session-query/session-query/src/extraction.ts",
+   "lineRange": [
+    15,
+    44
+   ],
+   "summary": "按事件类型 switch 提取语义文本，不可检索事件返回空串。",
+   "tags": [
+    "extraction",
+    "event-switch"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session-query/session-query/src/extraction.ts:turnEndText",
+   "type": "function",
+   "name": "turnEndText",
+   "filePath": "packages/session-query/session-query/src/extraction.ts",
+   "lineRange": [
+    46,
+    62
+   ],
+   "summary": "提取回合结束事件的语义文本（含最终回复可索引内容）。",
+   "tags": [
+    "extraction",
+    "turn-end"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session-query/session-query/src/index.ts",
+   "type": "file",
+   "name": "index.ts",
+   "filePath": "packages/session-query/session-query/src/index.ts",
+   "summary": "dsh-session-query 服务入口：抽象 SessionQueryEngine（ctx.sessionQuery）定义统一 live 优先查询面——精确读/过滤/追踪为具体行为，searchSessions/searchEvents 为后端抽象方法；构造器校验 readWindowMax/并发/缓存配置。",
+   "tags": [
+    "entry-point",
+    "service-definition",
+    "abstract-engine",
+    "query"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/session-query/session-query/src/index.ts:SessionQueryEngine",
+   "type": "class",
+   "name": "SessionQueryEngine",
+   "filePath": "packages/session-query/session-query/src/index.ts",
+   "lineRange": [
+    98,
+    407
+   ],
+   "summary": "统一 live 优先会话查询服务（Service Definition，abstract——tree-sitter 漏提手工补）：组合 SessionCorpus 与 SessionObservationReader；observeSession/listSessions/readSession/readTitle(Snapshots)/filterSessions/listEvents/filterEvents/readSurface/traceSession/traceEvent/readEvent 为具体方法，searchSessions/searchEvents 留给后端（如 sqlite）。",
+   "tags": [
+    "service-definition",
+    "abstract",
+    "facade",
+    "live-preferred"
+   ],
+   "complexity": "complex",
+   "languageNotes": "abstract class extends Service，声明 merging 扩充 ctx.sessionQuery。"
+  },
+  {
+   "id": "file:packages/session-query/session-query/src/observation.ts",
+   "type": "file",
+   "name": "observation.ts",
+   "filePath": "packages/session-query/session-query/src/observation.ts",
+   "summary": "Session 页与生命周期消费者共享的观察读取：SessionObservationReader 以 LRU 式准备缓存保留冷会话切面，活会话直读；观察是调用方读生存期内不可变的精确切面（Disposable 租约）。",
+   "tags": [
+    "observation",
+    "prepared-cache",
+    "lease",
+    "snapshot"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:packages/session-query/session-query/src/observation.ts:SessionObservationReader",
+   "type": "class",
+   "name": "SessionObservationReader",
+   "filePath": "packages/session-query/session-query/src/observation.ts",
+   "lineRange": [
+    79,
+    326
+   ],
+   "summary": "观察读取器：活会话优先直读、冷会话经 prepared 缓存（容量可配）复用切面；把持久化失败映射为稳定 SessionQueryError，abort 贯穿读取。",
+   "tags": [
+    "reader",
+    "cache",
+    "error-mapping",
+    "abort"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:packages/session-query/session-query/src/sources.ts",
+   "type": "file",
+   "name": "sources.ts",
+   "filePath": "packages/session-query/session-query/src/sources.ts",
+   "summary": "逻辑会话源的不可变 header 兼容检查：id/createdAt/cwd/parentSession/isSeeded/delegationDepth 任一不符即拒绝混源观察。",
+   "tags": [
+    "validation",
+    "headers",
+    "invariants"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:packages/session-query/session-query/src/sources.ts:assertSessionHeadersCompatible",
+   "type": "function",
+   "name": "assertSessionHeadersCompatible",
+   "filePath": "packages/session-query/session-query/src/sources.ts",
+   "lineRange": [
+    11,
+    25
+   ],
+   "summary": "比对两个 header 观察是否指向同一逻辑源，不兼容抛 SessionQueryError。",
+   "tags": [
+    "assert",
+    "header-compat"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:packages/session-query/session-query/src/tracing.ts",
+   "type": "file",
+   "name": "tracing.ts",
+   "filePath": "packages/session-query/session-query/src/tracing.ts",
+   "summary": "一次性会话血统与事件关系追踪：把日志分析成 SessionLineageTrace（祖先/后代树）与 SessionEventTrace（事件来源、投影关系），消费 surface 事件与消息投影。",
+   "tags": [
+    "tracing",
+    "lineage",
+    "event-relations"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:packages/session-query/session-query/src/tracing.ts:traceEvent",
+   "type": "function",
+   "name": "traceEvent",
+   "filePath": "packages/session-query/session-query/src/tracing.ts",
+   "lineRange": [
+    71,
+    111
+   ],
+   "summary": "追踪单个事件的来源与关系切面，产出事件级 trace 观察。",
+   "tags": [
+    "trace",
+    "event"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session-query/session-query/src/tracing.ts:traceSession",
+   "type": "function",
+   "name": "traceSession",
+   "filePath": "packages/session-query/session-query/src/tracing.ts",
+   "lineRange": [
+    119,
+    179
+   ],
+   "summary": "构建会话血统追踪：从记录出发走 parent 链与后代树，输出完整 lineage trace。",
+   "tags": [
+    "lineage",
+    "trace",
+    "tree"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session-query/session-query/src/tracing.ts:analyzeEventLog",
+   "type": "function",
+   "name": "analyzeEventLog",
+   "filePath": "packages/session-query/session-query/src/tracing.ts",
+   "lineRange": [
+    181,
+    220
+   ],
+   "summary": "分析事件日志建立事件间关系（来源、配对、投影依赖）。",
+   "tags": [
+    "analysis",
+    "relations"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:packages/session-query/session-query/src/tracing.ts:buildDescendants",
+   "type": "function",
+   "name": "buildDescendants",
+   "filePath": "packages/session-query/session-query/src/tracing.ts",
+   "lineRange": [
+    226,
+    250
+   ],
+   "summary": "由 parent 关系构建后代树节点集合。",
+   "tags": [
+    "descendants",
+    "tree"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:packages/session-query/session-log-export/src/archive.ts",
+   "target": "file:packages/attachment/attachment/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/archive.ts",
+   "target": "file:packages/session-query/session-query/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/archive.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/archive.ts",
+   "target": "file:packages/session/session-format/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/archive.ts",
+   "target": "file:packages/session/session-persistence/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/CopyToast.tsx",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/CopyToast.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/CopyToast.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/CopyToast.tsx",
+   "target": "file:packages/client/ui-layout/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/CopyToast.tsx",
+   "target": "file:packages/session-query/session-log-export/src/client/copy-controller.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/CopyToast.tsx",
+   "target": "file:packages/session-query/session-log-export/src/client/locales.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/Dialog.tsx",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/Dialog.tsx",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/Dialog.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/Dialog.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/Dialog.tsx",
+   "target": "file:packages/session-query/session-log-export/src/client/controller.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/Dialog.tsx",
+   "target": "file:packages/session-query/session-log-export/src/client/locales.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/HeaderAction.tsx",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/HeaderAction.tsx",
+   "target": "file:packages/client/ui-slots/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/HeaderAction.tsx",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/HeaderAction.tsx",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/HeaderAction.tsx",
+   "target": "file:packages/session-query/session-log-export/src/client/Dialog.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/HeaderAction.tsx",
+   "target": "file:packages/session-query/session-log-export/src/client/copy-controller.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/HeaderAction.tsx",
+   "target": "file:packages/session-query/session-log-export/src/client/HeaderAction.module.css",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/controller.ts",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/controller.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/controller.ts",
+   "target": "file:packages/session-query/session-log-export/src/routes.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/copy-controller.ts",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/copy-controller.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/copy-controller.ts",
+   "target": "file:packages/client/ui-primitives/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/copy-controller.ts",
+   "target": "file:packages/session-query/session-log-export/src/routes.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/index.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/index.ts",
+   "target": "file:packages/client/locale/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/index.ts",
+   "target": "file:packages/client/ui-commands/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/index.ts",
+   "target": "file:packages/client/ui-conversation/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/index.ts",
+   "target": "file:packages/client/ui-renderer/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/index.ts",
+   "target": "file:packages/client/ui-session/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/index.ts",
+   "target": "file:packages/client/ui-message-feedback/src/client/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/index.ts",
+   "target": "file:packages/client/store/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/index.ts",
+   "target": "file:packages/session-query/session-log-export/src/client/controller.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/index.ts",
+   "target": "file:packages/session-query/session-log-export/src/client/copy-controller.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/index.ts",
+   "target": "file:packages/session-query/session-log-export/src/client/CopyToast.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/index.ts",
+   "target": "file:packages/session-query/session-log-export/src/client/HeaderAction.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/index.ts",
+   "target": "file:packages/session-query/session-log-export/src/client/locales.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/index.ts",
+   "target": "file:packages/session-query/session-log-export/src/client/Dialog.tsx",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/index.ts",
+   "target": "file:packages/interaction/commands/src/brand.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/index.ts",
+   "target": "file:packages/util/brand/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/index.ts",
+   "target": "file:packages/attachment/attachment/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/index.ts",
+   "target": "file:packages/interaction/commands/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/index.ts",
+   "target": "file:packages/core/session/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/index.ts",
+   "target": "file:packages/session-query/session-log-export/src/archive.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/index.ts",
+   "target": "file:packages/session-query/session-log-export/src/markdown.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/index.ts",
+   "target": "file:packages/session-query/session-log-export/src/routes.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/markdown.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/markdown.ts",
+   "target": "file:packages/session/session-title/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/markdown.ts",
+   "target": "file:packages/attachment/attachment/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/cold-read.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/cold-read.ts",
+   "target": "file:packages/session/session-persistence/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/corpus.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/corpus.ts",
+   "target": "file:packages/session/session-persistence/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/corpus.ts",
+   "target": "file:packages/session-query/session-query/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/corpus.ts",
+   "target": "file:packages/session-query/session-query/src/config.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/corpus.ts",
+   "target": "file:packages/session-query/session-query/src/cold-read.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/corpus.ts",
+   "target": "file:packages/session-query/session-query/src/sources.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/documents.ts",
+   "target": "file:packages/session/session-format-catalog/src/message-projections.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/documents.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/documents.ts",
+   "target": "file:packages/session-query/session-query/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/documents.ts",
+   "target": "file:packages/session-query/session-query/src/config.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/documents.ts",
+   "target": "file:packages/session-query/session-query/src/extraction.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/extraction.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/extraction.ts",
+   "target": "file:packages/todo/tool-todo/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/index.ts",
+   "target": "file:packages/session/session-format-catalog/src/message-projections.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/index.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/index.ts",
+   "target": "file:packages/session/session-title/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/index.ts",
+   "target": "file:packages/session-query/session-query/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/index.ts",
+   "target": "file:packages/session-query/session-query/src/config.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/index.ts",
+   "target": "file:packages/session-query/session-query/src/corpus.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/index.ts",
+   "target": "file:packages/session-query/session-query/src/observation.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/index.ts",
+   "target": "file:packages/session-query/session-query/src/documents.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/index.ts",
+   "target": "file:packages/session-query/session-query/src/filters.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/index.ts",
+   "target": "file:packages/session-query/session-query/src/tracing.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/index.ts",
+   "target": "file:packages/session-query/session-query/src/cursor.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/index.ts",
+   "target": "file:packages/session-query/session-query/src/cold-read.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/index.ts",
+   "target": "file:packages/session-query/session-query/src/extraction.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/index.ts",
+   "target": "file:packages/session-query/session-query/src/sources.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/observation.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/observation.ts",
+   "target": "file:packages/session/session-persistence/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/observation.ts",
+   "target": "file:packages/session/session-projection/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/observation.ts",
+   "target": "file:packages/session/session-projection-cache/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/observation.ts",
+   "target": "file:packages/session-query/session-query/src/config.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/observation.ts",
+   "target": "file:packages/session-query/session-query/src/cold-read.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/sources.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/sources.ts",
+   "target": "file:packages/session-query/session-query/src/config.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/tracing.ts",
+   "target": "file:packages/session/session-format-catalog/src/message-projections.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/tracing.ts",
+   "target": "file:packages/core/session/src/index.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/tracing.ts",
+   "target": "file:packages/session-query/session-query/src/config.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/tracing.ts",
+   "target": "file:packages/session-query/session-query/src/types.ts",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/archive.ts",
+   "target": "class:packages/session-query/session-log-export/src/archive.ts:ResponseCapacityGate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/archive.ts",
+   "target": "function:packages/session-query/session-log-export/src/archive.ts:sessionLogExportDeps",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/archive.ts",
+   "target": "function:packages/session-query/session-log-export/src/archive.ts:flushLiveSessionLog",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/archive.ts",
+   "target": "function:packages/session-query/session-log-export/src/archive.ts:serializeSessionLog",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/archive.ts",
+   "target": "function:packages/session-query/session-log-export/src/archive.ts:readSessionLogText",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/archive.ts",
+   "target": "function:packages/session-query/session-log-export/src/archive.ts:collectAttachmentRefs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/archive.ts",
+   "target": "function:packages/session-query/session-log-export/src/archive.ts:collectEventAttachmentRefs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/archive.ts",
+   "target": "function:packages/session-query/session-log-export/src/archive.ts:streamSessionLogZip",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/CopyToast.tsx",
+   "target": "function:packages/session-query/session-log-export/src/client/CopyToast.tsx:SessionMarkdownCopyToast",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/Dialog.tsx",
+   "target": "function:packages/session-query/session-log-export/src/client/Dialog.tsx:SessionLogDownloadDialog",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/HeaderAction.tsx",
+   "target": "function:packages/session-query/session-log-export/src/client/HeaderAction.tsx:SessionLogDownloadHeaderAction",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/controller.ts",
+   "target": "class:packages/session-query/session-log-export/src/client/controller.ts:SessionLogDownloadController",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/controller.ts",
+   "target": "function:packages/session-query/session-log-export/src/client/controller.ts:downloadUrl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/copy-controller.ts",
+   "target": "class:packages/session-query/session-log-export/src/client/copy-controller.ts:SessionMarkdownCopyController",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/index.ts",
+   "target": "function:packages/session-query/session-log-export/src/client/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/index.ts",
+   "target": "function:packages/session-query/session-log-export/src/index.ts:apply",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/index.ts",
+   "target": "function:packages/session-query/session-log-export/src/index.ts:sessionMarkdownResponse",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/index.ts",
+   "target": "function:packages/session-query/session-log-export/src/index.ts:sessionLogExportResponse",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/markdown.ts",
+   "target": "function:packages/session-query/session-log-export/src/markdown.ts:formatSessionMarkdown",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/markdown.ts",
+   "target": "function:packages/session-query/session-log-export/src/markdown.ts:collectTurns",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/markdown.ts",
+   "target": "function:packages/session-query/session-log-export/src/markdown.ts:scanMarkdown",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/markdown.ts",
+   "target": "function:packages/session-query/session-log-export/src/markdown.ts:escapeWrapperTagsOutsideFences",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/cold-read.ts",
+   "target": "function:packages/session-query/session-query/src/cold-read.ts:readColdSessionLog",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/corpus.ts",
+   "target": "class:packages/session-query/session-query/src/corpus.ts:SessionCorpus",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/documents.ts",
+   "target": "function:packages/session-query/session-query/src/documents.ts:buildSessionEventRecords",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/documents.ts",
+   "target": "function:packages/session-query/session-query/src/documents.ts:buildSessionEventSearchDocuments",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/documents.ts",
+   "target": "function:packages/session-query/session-query/src/documents.ts:classifySurface",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/extraction.ts",
+   "target": "function:packages/session-query/session-query/src/extraction.ts:extractSessionEventText",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/extraction.ts",
+   "target": "function:packages/session-query/session-query/src/extraction.ts:turnEndText",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/index.ts",
+   "target": "class:packages/session-query/session-query/src/index.ts:SessionQueryEngine",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/observation.ts",
+   "target": "class:packages/session-query/session-query/src/observation.ts:SessionObservationReader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/sources.ts",
+   "target": "function:packages/session-query/session-query/src/sources.ts:assertSessionHeadersCompatible",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/tracing.ts",
+   "target": "function:packages/session-query/session-query/src/tracing.ts:traceEvent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/tracing.ts",
+   "target": "function:packages/session-query/session-query/src/tracing.ts:traceSession",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/tracing.ts",
+   "target": "function:packages/session-query/session-query/src/tracing.ts:analyzeEventLog",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/tracing.ts",
+   "target": "function:packages/session-query/session-query/src/tracing.ts:buildDescendants",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/archive.ts",
+   "target": "function:packages/session-query/session-log-export/src/archive.ts:sessionLogExportDeps",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/archive.ts",
+   "target": "function:packages/session-query/session-log-export/src/archive.ts:flushLiveSessionLog",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/archive.ts",
+   "target": "function:packages/session-query/session-log-export/src/archive.ts:serializeSessionLog",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/archive.ts",
+   "target": "function:packages/session-query/session-log-export/src/archive.ts:readSessionLogText",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/archive.ts",
+   "target": "function:packages/session-query/session-log-export/src/archive.ts:streamSessionLogZip",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/CopyToast.tsx",
+   "target": "function:packages/session-query/session-log-export/src/client/CopyToast.tsx:SessionMarkdownCopyToast",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/Dialog.tsx",
+   "target": "function:packages/session-query/session-log-export/src/client/Dialog.tsx:SessionLogDownloadDialog",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/HeaderAction.tsx",
+   "target": "function:packages/session-query/session-log-export/src/client/HeaderAction.tsx:SessionLogDownloadHeaderAction",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/controller.ts",
+   "target": "function:packages/session-query/session-log-export/src/client/controller.ts:downloadUrl",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/copy-controller.ts",
+   "target": "class:packages/session-query/session-log-export/src/client/copy-controller.ts:SessionMarkdownCopyController",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/client/index.ts",
+   "target": "function:packages/session-query/session-log-export/src/client/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/index.ts",
+   "target": "function:packages/session-query/session-log-export/src/index.ts:apply",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-log-export/src/markdown.ts",
+   "target": "function:packages/session-query/session-log-export/src/markdown.ts:formatSessionMarkdown",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/cold-read.ts",
+   "target": "function:packages/session-query/session-query/src/cold-read.ts:readColdSessionLog",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/corpus.ts",
+   "target": "class:packages/session-query/session-query/src/corpus.ts:SessionCorpus",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/documents.ts",
+   "target": "function:packages/session-query/session-query/src/documents.ts:buildSessionEventRecords",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/documents.ts",
+   "target": "function:packages/session-query/session-query/src/documents.ts:buildSessionEventSearchDocuments",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/extraction.ts",
+   "target": "function:packages/session-query/session-query/src/extraction.ts:extractSessionEventText",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/index.ts",
+   "target": "class:packages/session-query/session-query/src/index.ts:SessionQueryEngine",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/observation.ts",
+   "target": "class:packages/session-query/session-query/src/observation.ts:SessionObservationReader",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:packages/session-query/session-query/src/sources.ts",
+   "target": "function:packages/session-query/session-query/src/sources.ts:assertSessionHeadersCompatible",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "document:packages/session-query/session-log-export/README.md",
+   "target": "file:packages/session-query/session-log-export/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:packages/session-query/session-query/README.md",
+   "target": "file:packages/session-query/session-query/src/index.ts",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "config:packages/session-query/session-log-export/package.json",
+   "target": "file:packages/session-query/session-log-export/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/session-query/session-query/package.json",
+   "target": "file:packages/session-query/session-query/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/session-query/session-log-export/tsconfig.client.json",
+   "target": "file:packages/session-query/session-log-export/src/client/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:packages/session-query/session-log-export/tsconfig.host.json",
+   "target": "file:packages/session-query/session-log-export/src/index.ts",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  }
+ ]
+}

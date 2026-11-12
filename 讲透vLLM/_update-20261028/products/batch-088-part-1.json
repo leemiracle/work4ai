@@ -1,0 +1,1582 @@
+{
+ "nodes": [
+  {
+   "id": "document:vllm/reasoning/AGENTS.md",
+   "type": "document",
+   "name": "AGENTS.md",
+   "filePath": "vllm/reasoning/AGENTS.md",
+   "summary": "reasoning 包设计文档：每个 --reasoning-parser 名字在此解析；双消费者（ParserManager 组合 + 结构化输出管理器每 decode 步调 is_reasoning_end 决定 grammar bitmask 何时生效）；ReasoningParser 接口为 legacy 兼容保留而非新基类。",
+   "tags": [
+    "documentation",
+    "reasoning",
+    "agents",
+    "layout"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/reasoning/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/reasoning/__init__.py",
+   "summary": "reasoning 包注册表：_REASONING_PARSERS_TO_REGISTER 名字→(文件,类) 惰性注册表与 register_lazy_reasoning_parsers。",
+   "tags": [
+    "registry",
+    "lazy",
+    "reasoning",
+    "init"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/reasoning/abs_reasoning_parsers.py",
+   "type": "file",
+   "name": "abs_reasoning_parsers.py",
+   "filePath": "vllm/reasoning/abs_reasoning_parsers.py",
+   "summary": "ReasoningParser 抽象（15 方法：extract_reasoning/streaming/is_reasoning_end 等）与 ReasoningParserManager 中央注册（急切/惰性双模式）。",
+   "tags": [
+    "abstract",
+    "reasoning",
+    "registry",
+    "manager"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/reasoning/basic_parsers.py",
+   "type": "file",
+   "name": "basic_parsers.py",
+   "filePath": "vllm/reasoning/basic_parsers.py",
+   "summary": "BaseThinkingReasoningParser：thinking token 类解析器的公共基类（11 方法）。",
+   "tags": [
+    "base-class",
+    "thinking-tokens",
+    "common"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/reasoning/beam_reasoning_parser.py",
+   "type": "file",
+   "name": "beam_reasoning_parser.py",
+   "filePath": "vllm/reasoning/beam_reasoning_parser.py",
+   "summary": "Beam 推理解析器（7 行惰性再导出）。",
+   "tags": [
+    "beam",
+    "lazy-reexport",
+    "thin"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/reasoning/cohere_command_reasoning_parser.py",
+   "type": "file",
+   "name": "cohere_command_reasoning_parser.py",
+   "filePath": "vllm/reasoning/cohere_command_reasoning_parser.py",
+   "summary": "Cohere Command 推理基类（is_reasoning_end 暴露给结构化输出引擎）与 Command3/Command4 两别名。",
+   "tags": [
+    "cohere",
+    "structural-output",
+    "aliases"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/reasoning/deepseek_r1_reasoning_parser.py",
+   "type": "file",
+   "name": "deepseek_r1_reasoning_parser.py",
+   "filePath": "vllm/reasoning/deepseek_r1_reasoning_parser.py",
+   "summary": "DeepSeek R1 推理解析器：<think>...</think> token 包裹。",
+   "tags": [
+    "deepseek",
+    "r1",
+    "think-tokens"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/reasoning/deepseek_v3_reasoning_parser.py",
+   "type": "file",
+   "name": "deepseek_v3_reasoning_parser.py",
+   "filePath": "vllm/reasoning/deepseek_v3_reasoning_parser.py",
+   "summary": "DeepSeek V3 双模解析：按 reasoning_enabled 委托 R1 或 Identity；WithThinking 变体默认开思考。",
+   "tags": [
+    "deepseek",
+    "v3",
+    "dual-mode",
+    "delegate"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/reasoning/deepseek_v41_engine_reasoning_parser.py",
+   "type": "file",
+   "name": "deepseek_v41_engine_reasoning_parser.py",
+   "filePath": "vllm/reasoning/deepseek_v41_engine_reasoning_parser.py",
+   "summary": "DeepSeek V4.1 引擎推理解析器（7 行惰性再导出）。",
+   "tags": [
+    "deepseek",
+    "v41",
+    "lazy-reexport"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/reasoning/ernie45_reasoning_parser.py",
+   "type": "file",
+   "name": "ernie45_reasoning_parser.py",
+   "filePath": "vllm/reasoning/ernie45_reasoning_parser.py",
+   "summary": "Ernie45 思考模型推理解析器。",
+   "tags": [
+    "ernie",
+    "thinking",
+    "parser"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/reasoning/gemma4_utils.py",
+   "type": "file",
+   "name": "gemma4_utils.py",
+   "filePath": "vllm/reasoning/gemma4_utils.py",
+   "summary": "Gemma4 思考输出解析工具：parse_thinking_output、thought 标签剥离与尾部哨兵清理。",
+   "tags": [
+    "gemma4",
+    "thinking",
+    "utils",
+    "sentinels"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/reasoning/gptoss_reasoning_parser.py",
+   "type": "file",
+   "name": "gptoss_reasoning_parser.py",
+   "filePath": "vllm/reasoning/gptoss_reasoning_parser.py",
+   "summary": "GptOSS 推理解析器（harmony 格式提取 reasoning）。",
+   "tags": [
+    "gptoss",
+    "harmony",
+    "reasoning"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/reasoning/granite_reasoning_parser.py",
+   "type": "file",
+   "name": "granite_reasoning_parser.py",
+   "filePath": "vllm/reasoning/granite_reasoning_parser.py",
+   "summary": "IBM Granite 推理解析器（Here is my thought process... 格式，373 行）。",
+   "tags": [
+    "granite",
+    "ibm",
+    "thought-process"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/reasoning/granite_thinking_engine_reasoning_parser.py",
+   "type": "file",
+   "name": "granite_thinking_engine_reasoning_parser.py",
+   "filePath": "vllm/reasoning/granite_thinking_engine_reasoning_parser.py",
+   "summary": "Granite thinking 引擎推理解析器（9 行惰性再导出）。",
+   "tags": [
+    "granite",
+    "engine",
+    "lazy-reexport"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/reasoning/hunyuan_a13b_reasoning_parser.py",
+   "type": "file",
+   "name": "hunyuan_a13b_reasoning_parser.py",
+   "filePath": "vllm/reasoning/hunyuan_a13b_reasoning_parser.py",
+   "summary": "Hunyuan A13B 推理解析器。",
+   "tags": [
+    "hunyuan",
+    "a13b",
+    "reasoning"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/reasoning/hy_v3_reasoning_parser.py",
+   "type": "file",
+   "name": "hy_v3_reasoning_parser.py",
+   "filePath": "vllm/reasoning/hy_v3_reasoning_parser.py",
+   "summary": "HY V3 解析：BaseThinking 双模（thinking 开关委托）。",
+   "tags": [
+    "hy",
+    "v3",
+    "dual-mode"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/reasoning/hy_v4_reasoning_parser.py",
+   "type": "file",
+   "name": "hy_v4_reasoning_parser.py",
+   "filePath": "vllm/reasoning/hy_v4_reasoning_parser.py",
+   "summary": "HY V4 推理解析（324 行）：ReasoningDelta TypedDict、纯数据 HYV4ReasoningExtractor（thinking 三态）与 vLLM 适配器、token 后缀探测。",
+   "tags": [
+    "hy",
+    "v4",
+    "extractor",
+    "adapter"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/reasoning/identity_reasoning_parser.py",
+   "type": "file",
+   "name": "identity_reasoning_parser.py",
+   "filePath": "vllm/reasoning/identity_reasoning_parser.py",
+   "summary": "Identity 推理解析器：不解析不剥离（全 content）。",
+   "tags": [
+    "identity",
+    "passthrough",
+    "noop"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:vllm/reasoning/k2_horizon_reasoning_parser.py",
+   "type": "file",
+   "name": "k2_horizon_reasoning_parser.py",
+   "filePath": "vllm/reasoning/k2_horizon_reasoning_parser.py",
+   "summary": "K2 Horizon 推理解析器（R1 子类扩展，160 行）。",
+   "tags": [
+    "k2",
+    "horizon",
+    "r1-subclass"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/reasoning/kimi_k3_reasoning_parser.py",
+   "type": "file",
+   "name": "kimi_k3_reasoning_parser.py",
+   "filePath": "vllm/reasoning/kimi_k3_reasoning_parser.py",
+   "summary": "Kimi K3（XTML think channel）推理解析器（469 行，17 方法）：最新 marker 定位与流式状态机。",
+   "tags": [
+    "kimi",
+    "k3",
+    "xtml",
+    "streaming"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/reasoning/mimo_engine_reasoning_parser.py",
+   "type": "file",
+   "name": "mimo_engine_reasoning_parser.py",
+   "filePath": "vllm/reasoning/mimo_engine_reasoning_parser.py",
+   "summary": "MiMo 引擎推理解析器（7 行惰性再导出）。",
+   "tags": [
+    "mimo",
+    "engine",
+    "lazy-reexport"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/reasoning/abs_reasoning_parsers.py:ReasoningParser",
+   "type": "class",
+   "name": "ReasoningParser",
+   "filePath": "vllm/reasoning/abs_reasoning_parsers.py",
+   "summary": "推理解析抽象（15 方法）。",
+   "tags": [
+    "abstract",
+    "reasoning",
+    "interface"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    25,
+    222
+   ]
+  },
+  {
+   "id": "class:vllm/reasoning/abs_reasoning_parsers.py:ReasoningParserManager",
+   "type": "class",
+   "name": "ReasoningParserManager",
+   "filePath": "vllm/reasoning/abs_reasoning_parsers.py",
+   "summary": "推理解析器中央注册（急切/惰性双模式，7 方法）。",
+   "tags": [
+    "registry",
+    "manager",
+    "dual-mode"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    225,
+    373
+   ]
+  },
+  {
+   "id": "class:vllm/reasoning/basic_parsers.py:BaseThinkingReasoningParser",
+   "type": "class",
+   "name": "BaseThinkingReasoningParser",
+   "filePath": "vllm/reasoning/basic_parsers.py",
+   "summary": "thinking token 类解析器的公共基类（11 方法）。",
+   "tags": [
+    "base-class",
+    "thinking",
+    "tokens"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    18,
+    196
+   ]
+  },
+  {
+   "id": "class:vllm/reasoning/cohere_command_reasoning_parser.py:BaseCohereCommandReasoningParser",
+   "type": "class",
+   "name": "BaseCohereCommandReasoningParser",
+   "filePath": "vllm/reasoning/cohere_command_reasoning_parser.py",
+   "summary": "把 is_reasoning_end 暴露给结构化输出引擎（4 方法）。",
+   "tags": [
+    "cohere",
+    "structural-output",
+    "expose"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    15,
+    52
+   ]
+  },
+  {
+   "id": "class:vllm/reasoning/cohere_command_reasoning_parser.py:CohereCommand3ReasoningParser",
+   "type": "class",
+   "name": "CohereCommand3ReasoningParser",
+   "filePath": "vllm/reasoning/cohere_command_reasoning_parser.py",
+   "summary": "Command3 别名。",
+   "tags": [
+    "cohere",
+    "command3",
+    "alias"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    55,
+    56
+   ]
+  },
+  {
+   "id": "class:vllm/reasoning/cohere_command_reasoning_parser.py:CohereCommand4ReasoningParser",
+   "type": "class",
+   "name": "CohereCommand4ReasoningParser",
+   "filePath": "vllm/reasoning/cohere_command_reasoning_parser.py",
+   "summary": "Command4 别名。",
+   "tags": [
+    "cohere",
+    "command4",
+    "alias"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    59,
+    60
+   ]
+  },
+  {
+   "id": "class:vllm/reasoning/deepseek_r1_reasoning_parser.py:DeepSeekR1ReasoningParser",
+   "type": "class",
+   "name": "DeepSeekR1ReasoningParser",
+   "filePath": "vllm/reasoning/deepseek_r1_reasoning_parser.py",
+   "summary": "R1：<think>...</think> token 包裹（3 方法）。",
+   "tags": [
+    "deepseek",
+    "r1",
+    "think-wrap"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    10,
+    66
+   ]
+  },
+  {
+   "id": "class:vllm/reasoning/deepseek_v3_reasoning_parser.py:DeepSeekV3ReasoningParser",
+   "type": "class",
+   "name": "DeepSeekV3ReasoningParser",
+   "filePath": "vllm/reasoning/deepseek_v3_reasoning_parser.py",
+   "summary": "按 reasoning_enabled 委托 R1/Identity（9 方法）。",
+   "tags": [
+    "deepseek",
+    "v3",
+    "delegate"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    20,
+    82
+   ]
+  },
+  {
+   "id": "class:vllm/reasoning/deepseek_v3_reasoning_parser.py:DeepSeekV3ReasoningWithThinkingParser",
+   "type": "class",
+   "name": "DeepSeekV3ReasoningWithThinkingParser",
+   "filePath": "vllm/reasoning/deepseek_v3_reasoning_parser.py",
+   "summary": "默认 thinking 的变体。",
+   "tags": [
+    "deepseek",
+    "v3",
+    "default-thinking"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    85,
+    96
+   ]
+  },
+  {
+   "id": "class:vllm/reasoning/ernie45_reasoning_parser.py:Ernie45ReasoningParser",
+   "type": "class",
+   "name": "Ernie45ReasoningParser",
+   "filePath": "vllm/reasoning/ernie45_reasoning_parser.py",
+   "summary": "Ernie45 思考格式（5 方法）。",
+   "tags": [
+    "ernie",
+    "thinking",
+    "format"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    17,
+    157
+   ]
+  },
+  {
+   "id": "class:vllm/reasoning/gptoss_reasoning_parser.py:GptOssReasoningParser",
+   "type": "class",
+   "name": "GptOssReasoningParser",
+   "filePath": "vllm/reasoning/gptoss_reasoning_parser.py",
+   "summary": "harmony 格式 reasoning 提取（6 方法）。",
+   "tags": [
+    "gptoss",
+    "harmony",
+    "extraction"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    16,
+    62
+   ]
+  },
+  {
+   "id": "class:vllm/reasoning/granite_reasoning_parser.py:GraniteReasoningParser",
+   "type": "class",
+   "name": "GraniteReasoningParser",
+   "filePath": "vllm/reasoning/granite_reasoning_parser.py",
+   "summary": "Granite thought process 格式（9 方法）。",
+   "tags": [
+    "granite",
+    "thought-process",
+    "parser"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    18,
+    372
+   ]
+  },
+  {
+   "id": "class:vllm/reasoning/hunyuan_a13b_reasoning_parser.py:HunyuanA13BReasoningParser",
+   "type": "class",
+   "name": "HunyuanA13BReasoningParser",
+   "filePath": "vllm/reasoning/hunyuan_a13b_reasoning_parser.py",
+   "summary": "Hunyuan A13B 格式（5 方法）。",
+   "tags": [
+    "hunyuan",
+    "a13b",
+    "parser"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    18,
+    226
+   ]
+  },
+  {
+   "id": "class:vllm/reasoning/hy_v3_reasoning_parser.py:HYV3ReasoningParser",
+   "type": "class",
+   "name": "HYV3ReasoningParser",
+   "filePath": "vllm/reasoning/hy_v3_reasoning_parser.py",
+   "summary": "BaseThinking 双模（8 方法）。",
+   "tags": [
+    "hy",
+    "v3",
+    "dual-mode"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    20,
+    143
+   ]
+  },
+  {
+   "id": "class:vllm/reasoning/hy_v4_reasoning_parser.py:ReasoningDelta",
+   "type": "class",
+   "name": "ReasoningDelta",
+   "filePath": "vllm/reasoning/hy_v4_reasoning_parser.py",
+   "summary": "一条流式推理 delta（TypedDict）。",
+   "tags": [
+    "delta",
+    "typeddict",
+    "streaming"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    26,
+    30
+   ]
+  },
+  {
+   "id": "class:vllm/reasoning/hy_v4_reasoning_parser.py:HYV4ReasoningExtractor",
+   "type": "class",
+   "name": "HYV4ReasoningExtractor",
+   "filePath": "vllm/reasoning/hy_v4_reasoning_parser.py",
+   "summary": "纯数据推理提取器（thinking 三态，7 方法）。",
+   "tags": [
+    "hy",
+    "extractor",
+    "data-only"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    75,
+    236
+   ]
+  },
+  {
+   "id": "class:vllm/reasoning/hy_v4_reasoning_parser.py:HYV4ReasoningParser",
+   "type": "class",
+   "name": "HYV4ReasoningParser",
+   "filePath": "vllm/reasoning/hy_v4_reasoning_parser.py",
+   "summary": "vLLM 适配器（按请求 reasoning_config 决定 thinking，9 方法）。",
+   "tags": [
+    "hy",
+    "adapter",
+    "request-driven"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    247,
+    323
+   ]
+  },
+  {
+   "id": "class:vllm/reasoning/identity_reasoning_parser.py:IdentityReasoningParser",
+   "type": "class",
+   "name": "IdentityReasoningParser",
+   "filePath": "vllm/reasoning/identity_reasoning_parser.py",
+   "summary": "不解析不剥离（全 content，8 方法）。",
+   "tags": [
+    "identity",
+    "noop",
+    "passthrough"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    17,
+    72
+   ]
+  },
+  {
+   "id": "class:vllm/reasoning/k2_horizon_reasoning_parser.py:K2HorizonReasoningParser",
+   "type": "class",
+   "name": "K2HorizonReasoningParser",
+   "filePath": "vllm/reasoning/k2_horizon_reasoning_parser.py",
+   "summary": "R1 子类扩展（11 方法）。",
+   "tags": [
+    "k2",
+    "horizon",
+    "extended"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    14,
+    159
+   ]
+  },
+  {
+   "id": "class:vllm/reasoning/kimi_k3_reasoning_parser.py:KimiK3ReasoningParser",
+   "type": "class",
+   "name": "KimiK3ReasoningParser",
+   "filePath": "vllm/reasoning/kimi_k3_reasoning_parser.py",
+   "summary": "K3 XTML think channel（17 方法，流式状态机+最新 marker）。",
+   "tags": [
+    "kimi",
+    "k3",
+    "streaming",
+    "markers"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    80,
+    468
+   ]
+  },
+  {
+   "id": "function:vllm/reasoning/__init__.py:register_lazy_reasoning_parsers",
+   "type": "function",
+   "name": "register_lazy_reasoning_parsers",
+   "filePath": "vllm/reasoning/__init__.py",
+   "summary": "惰性注册全部内置推理解析器。",
+   "tags": [
+    "register",
+    "lazy",
+    "builtin"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    195,
+    198
+   ]
+  },
+  {
+   "id": "function:vllm/reasoning/gemma4_utils.py:parse_thinking_output",
+   "type": "function",
+   "name": "parse_thinking_output",
+   "filePath": "vllm/reasoning/gemma4_utils.py",
+   "summary": "解析解码后的 Gemma4 输出。",
+   "tags": [
+    "gemma4",
+    "parse",
+    "decoded"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    45,
+    104
+   ]
+  },
+  {
+   "id": "function:vllm/reasoning/gemma4_utils.py:_strip_thought_label",
+   "type": "function",
+   "name": "_strip_thought_label",
+   "filePath": "vllm/reasoning/gemma4_utils.py",
+   "summary": "剥离开头多余 thought 标签。",
+   "tags": [
+    "strip",
+    "thought-label",
+    "gemma4"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    107,
+    115
+   ]
+  },
+  {
+   "id": "function:vllm/reasoning/gemma4_utils.py:_clean_answer",
+   "type": "function",
+   "name": "_clean_answer",
+   "filePath": "vllm/reasoning/gemma4_utils.py",
+   "summary": "清理答案文本尾部哨兵 token。",
+   "tags": [
+    "clean",
+    "sentinels",
+    "answer"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    118,
+    131
+   ]
+  },
+  {
+   "id": "function:vllm/reasoning/hy_v4_reasoning_parser.py:detect_token_suffix",
+   "type": "function",
+   "name": "detect_token_suffix",
+   "filePath": "vllm/reasoning/hy_v4_reasoning_parser.py",
+   "summary": "探测 Hunyuan 序列使用的逐 checkpoint 后缀。",
+   "tags": [
+    "token-suffix",
+    "detect",
+    "per-checkpoint"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    35,
+    72
+   ]
+  },
+  {
+   "id": "function:vllm/reasoning/hy_v4_reasoning_parser.py:build_reasoning_extractor",
+   "type": "function",
+   "name": "build_reasoning_extractor",
+   "filePath": "vllm/reasoning/hy_v4_reasoning_parser.py",
+   "summary": "构建推理提取器工厂。",
+   "tags": [
+    "factory",
+    "extractor",
+    "build"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    239,
+    244
+   ]
+  },
+  {
+   "id": "function:vllm/reasoning/kimi_k3_reasoning_parser.py:_newest_marker",
+   "type": "function",
+   "name": "_newest_marker",
+   "filePath": "vllm/reasoning/kimi_k3_reasoning_parser.py",
+   "summary": "报告 a/b 哪个在 haystack 中最后出现。",
+   "tags": [
+    "marker",
+    "newest",
+    "locate"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    61,
+    77
+   ]
+  },
+  {
+   "id": "function:vllm/reasoning/kimi_k3_reasoning_parser.py:_subseq_index",
+   "type": "function",
+   "name": "_subseq_index",
+   "filePath": "vllm/reasoning/kimi_k3_reasoning_parser.py",
+   "summary": "needle 最后出现位置。",
+   "tags": [
+    "subsequence",
+    "index",
+    "search"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    49,
+    58
+   ]
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/reasoning/__init__.py",
+   "target": "file:vllm/reasoning/abs_reasoning_parsers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/abs_reasoning_parsers.py",
+   "target": "file:vllm/entrypoints/mcp/tool_server.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/abs_reasoning_parsers.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/abs_reasoning_parsers.py",
+   "target": "file:vllm/utils/collection_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/abs_reasoning_parsers.py",
+   "target": "file:vllm/utils/import_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/basic_parsers.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/basic_parsers.py",
+   "target": "file:vllm/reasoning/abs_reasoning_parsers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/basic_parsers.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/beam_reasoning_parser.py",
+   "target": "file:vllm/parser/beam.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/cohere_command_reasoning_parser.py",
+   "target": "file:vllm/reasoning/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/deepseek_r1_reasoning_parser.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/deepseek_r1_reasoning_parser.py",
+   "target": "file:vllm/reasoning/basic_parsers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/deepseek_v3_reasoning_parser.py",
+   "target": "file:vllm/reasoning/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/deepseek_v3_reasoning_parser.py",
+   "target": "file:vllm/reasoning/deepseek_r1_reasoning_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/deepseek_v3_reasoning_parser.py",
+   "target": "file:vllm/reasoning/identity_reasoning_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/deepseek_v41_engine_reasoning_parser.py",
+   "target": "file:vllm/parser/engine/registered_adapters.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/ernie45_reasoning_parser.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/ernie45_reasoning_parser.py",
+   "target": "file:vllm/reasoning/basic_parsers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/gptoss_reasoning_parser.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/gptoss_reasoning_parser.py",
+   "target": "file:vllm/reasoning/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/granite_reasoning_parser.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/granite_reasoning_parser.py",
+   "target": "file:vllm/reasoning/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/granite_thinking_engine_reasoning_parser.py",
+   "target": "file:vllm/parser/engine/registered_adapters.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/hunyuan_a13b_reasoning_parser.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/hunyuan_a13b_reasoning_parser.py",
+   "target": "file:vllm/reasoning/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v3_reasoning_parser.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v3_reasoning_parser.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v3_reasoning_parser.py",
+   "target": "file:vllm/reasoning/basic_parsers.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v3_reasoning_parser.py",
+   "target": "file:vllm/reasoning/identity_reasoning_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v3_reasoning_parser.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v4_reasoning_parser.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v4_reasoning_parser.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v4_reasoning_parser.py",
+   "target": "file:vllm/reasoning/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v4_reasoning_parser.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/identity_reasoning_parser.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/identity_reasoning_parser.py",
+   "target": "file:vllm/reasoning/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/k2_horizon_reasoning_parser.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/k2_horizon_reasoning_parser.py",
+   "target": "file:vllm/entrypoints/openai/chat_completion/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/k2_horizon_reasoning_parser.py",
+   "target": "file:vllm/entrypoints/openai/responses/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/k2_horizon_reasoning_parser.py",
+   "target": "file:vllm/reasoning/deepseek_r1_reasoning_parser.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/k2_horizon_reasoning_parser.py",
+   "target": "file:vllm/tokenizers/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/k2_horizon_reasoning_parser.py",
+   "target": "file:vllm/tool_parsers/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/kimi_k3_reasoning_parser.py",
+   "target": "file:vllm/entrypoints/generate/base/protocol.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/kimi_k3_reasoning_parser.py",
+   "target": "file:vllm/reasoning/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/mimo_engine_reasoning_parser.py",
+   "target": "file:vllm/parser/engine/registered_adapters.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/reasoning/abs_reasoning_parsers.py",
+   "target": "class:vllm/reasoning/abs_reasoning_parsers.py:ReasoningParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/abs_reasoning_parsers.py",
+   "target": "class:vllm/reasoning/abs_reasoning_parsers.py:ReasoningParserManager",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/basic_parsers.py",
+   "target": "class:vllm/reasoning/basic_parsers.py:BaseThinkingReasoningParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/cohere_command_reasoning_parser.py",
+   "target": "class:vllm/reasoning/cohere_command_reasoning_parser.py:BaseCohereCommandReasoningParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/cohere_command_reasoning_parser.py",
+   "target": "class:vllm/reasoning/cohere_command_reasoning_parser.py:CohereCommand3ReasoningParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/cohere_command_reasoning_parser.py",
+   "target": "class:vllm/reasoning/cohere_command_reasoning_parser.py:CohereCommand4ReasoningParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/deepseek_r1_reasoning_parser.py",
+   "target": "class:vllm/reasoning/deepseek_r1_reasoning_parser.py:DeepSeekR1ReasoningParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/deepseek_v3_reasoning_parser.py",
+   "target": "class:vllm/reasoning/deepseek_v3_reasoning_parser.py:DeepSeekV3ReasoningParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/deepseek_v3_reasoning_parser.py",
+   "target": "class:vllm/reasoning/deepseek_v3_reasoning_parser.py:DeepSeekV3ReasoningWithThinkingParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/ernie45_reasoning_parser.py",
+   "target": "class:vllm/reasoning/ernie45_reasoning_parser.py:Ernie45ReasoningParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/gptoss_reasoning_parser.py",
+   "target": "class:vllm/reasoning/gptoss_reasoning_parser.py:GptOssReasoningParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/granite_reasoning_parser.py",
+   "target": "class:vllm/reasoning/granite_reasoning_parser.py:GraniteReasoningParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/hunyuan_a13b_reasoning_parser.py",
+   "target": "class:vllm/reasoning/hunyuan_a13b_reasoning_parser.py:HunyuanA13BReasoningParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v3_reasoning_parser.py",
+   "target": "class:vllm/reasoning/hy_v3_reasoning_parser.py:HYV3ReasoningParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v4_reasoning_parser.py",
+   "target": "class:vllm/reasoning/hy_v4_reasoning_parser.py:ReasoningDelta",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v4_reasoning_parser.py",
+   "target": "class:vllm/reasoning/hy_v4_reasoning_parser.py:HYV4ReasoningExtractor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v4_reasoning_parser.py",
+   "target": "class:vllm/reasoning/hy_v4_reasoning_parser.py:HYV4ReasoningParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v4_reasoning_parser.py",
+   "target": "function:vllm/reasoning/hy_v4_reasoning_parser.py:detect_token_suffix",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v4_reasoning_parser.py",
+   "target": "function:vllm/reasoning/hy_v4_reasoning_parser.py:build_reasoning_extractor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/identity_reasoning_parser.py",
+   "target": "class:vllm/reasoning/identity_reasoning_parser.py:IdentityReasoningParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/k2_horizon_reasoning_parser.py",
+   "target": "class:vllm/reasoning/k2_horizon_reasoning_parser.py:K2HorizonReasoningParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/kimi_k3_reasoning_parser.py",
+   "target": "class:vllm/reasoning/kimi_k3_reasoning_parser.py:KimiK3ReasoningParser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/kimi_k3_reasoning_parser.py",
+   "target": "function:vllm/reasoning/kimi_k3_reasoning_parser.py:_newest_marker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/kimi_k3_reasoning_parser.py",
+   "target": "function:vllm/reasoning/kimi_k3_reasoning_parser.py:_subseq_index",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/__init__.py",
+   "target": "function:vllm/reasoning/__init__.py:register_lazy_reasoning_parsers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/gemma4_utils.py",
+   "target": "function:vllm/reasoning/gemma4_utils.py:parse_thinking_output",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/gemma4_utils.py",
+   "target": "function:vllm/reasoning/gemma4_utils.py:_strip_thought_label",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/gemma4_utils.py",
+   "target": "function:vllm/reasoning/gemma4_utils.py:_clean_answer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/reasoning/abs_reasoning_parsers.py",
+   "target": "class:vllm/reasoning/abs_reasoning_parsers.py:ReasoningParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/abs_reasoning_parsers.py",
+   "target": "class:vllm/reasoning/abs_reasoning_parsers.py:ReasoningParserManager",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/basic_parsers.py",
+   "target": "class:vllm/reasoning/basic_parsers.py:BaseThinkingReasoningParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/cohere_command_reasoning_parser.py",
+   "target": "class:vllm/reasoning/cohere_command_reasoning_parser.py:BaseCohereCommandReasoningParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/cohere_command_reasoning_parser.py",
+   "target": "class:vllm/reasoning/cohere_command_reasoning_parser.py:CohereCommand3ReasoningParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/cohere_command_reasoning_parser.py",
+   "target": "class:vllm/reasoning/cohere_command_reasoning_parser.py:CohereCommand4ReasoningParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/deepseek_r1_reasoning_parser.py",
+   "target": "class:vllm/reasoning/deepseek_r1_reasoning_parser.py:DeepSeekR1ReasoningParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/deepseek_v3_reasoning_parser.py",
+   "target": "class:vllm/reasoning/deepseek_v3_reasoning_parser.py:DeepSeekV3ReasoningParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/deepseek_v3_reasoning_parser.py",
+   "target": "class:vllm/reasoning/deepseek_v3_reasoning_parser.py:DeepSeekV3ReasoningWithThinkingParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/ernie45_reasoning_parser.py",
+   "target": "class:vllm/reasoning/ernie45_reasoning_parser.py:Ernie45ReasoningParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/gptoss_reasoning_parser.py",
+   "target": "class:vllm/reasoning/gptoss_reasoning_parser.py:GptOssReasoningParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/granite_reasoning_parser.py",
+   "target": "class:vllm/reasoning/granite_reasoning_parser.py:GraniteReasoningParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/hunyuan_a13b_reasoning_parser.py",
+   "target": "class:vllm/reasoning/hunyuan_a13b_reasoning_parser.py:HunyuanA13BReasoningParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v3_reasoning_parser.py",
+   "target": "class:vllm/reasoning/hy_v3_reasoning_parser.py:HYV3ReasoningParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v4_reasoning_parser.py",
+   "target": "class:vllm/reasoning/hy_v4_reasoning_parser.py:ReasoningDelta",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v4_reasoning_parser.py",
+   "target": "class:vllm/reasoning/hy_v4_reasoning_parser.py:HYV4ReasoningExtractor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v4_reasoning_parser.py",
+   "target": "class:vllm/reasoning/hy_v4_reasoning_parser.py:HYV4ReasoningParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v4_reasoning_parser.py",
+   "target": "function:vllm/reasoning/hy_v4_reasoning_parser.py:detect_token_suffix",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/hy_v4_reasoning_parser.py",
+   "target": "function:vllm/reasoning/hy_v4_reasoning_parser.py:build_reasoning_extractor",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/identity_reasoning_parser.py",
+   "target": "class:vllm/reasoning/identity_reasoning_parser.py:IdentityReasoningParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/k2_horizon_reasoning_parser.py",
+   "target": "class:vllm/reasoning/k2_horizon_reasoning_parser.py:K2HorizonReasoningParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/kimi_k3_reasoning_parser.py",
+   "target": "class:vllm/reasoning/kimi_k3_reasoning_parser.py:KimiK3ReasoningParser",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/__init__.py",
+   "target": "function:vllm/reasoning/__init__.py:register_lazy_reasoning_parsers",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/reasoning/gemma4_utils.py",
+   "target": "function:vllm/reasoning/gemma4_utils.py:parse_thinking_output",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/reasoning/basic_parsers.py:BaseThinkingReasoningParser",
+   "target": "class:vllm/reasoning/abs_reasoning_parsers.py:ReasoningParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/reasoning/cohere_command_reasoning_parser.py:BaseCohereCommandReasoningParser",
+   "target": "class:vllm/reasoning/abs_reasoning_parsers.py:ReasoningParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/reasoning/cohere_command_reasoning_parser.py:CohereCommand3ReasoningParser",
+   "target": "class:vllm/reasoning/cohere_command_reasoning_parser.py:BaseCohereCommandReasoningParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/reasoning/cohere_command_reasoning_parser.py:CohereCommand4ReasoningParser",
+   "target": "class:vllm/reasoning/cohere_command_reasoning_parser.py:BaseCohereCommandReasoningParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/reasoning/deepseek_r1_reasoning_parser.py:DeepSeekR1ReasoningParser",
+   "target": "class:vllm/reasoning/basic_parsers.py:BaseThinkingReasoningParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/reasoning/deepseek_v3_reasoning_parser.py:DeepSeekV3ReasoningParser",
+   "target": "class:vllm/reasoning/abs_reasoning_parsers.py:ReasoningParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/reasoning/deepseek_v3_reasoning_parser.py:DeepSeekV3ReasoningWithThinkingParser",
+   "target": "class:vllm/reasoning/deepseek_v3_reasoning_parser.py:DeepSeekV3ReasoningParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/reasoning/ernie45_reasoning_parser.py:Ernie45ReasoningParser",
+   "target": "class:vllm/reasoning/basic_parsers.py:BaseThinkingReasoningParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/reasoning/gptoss_reasoning_parser.py:GptOssReasoningParser",
+   "target": "class:vllm/reasoning/abs_reasoning_parsers.py:ReasoningParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/reasoning/granite_reasoning_parser.py:GraniteReasoningParser",
+   "target": "class:vllm/reasoning/abs_reasoning_parsers.py:ReasoningParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/reasoning/hunyuan_a13b_reasoning_parser.py:HunyuanA13BReasoningParser",
+   "target": "class:vllm/reasoning/abs_reasoning_parsers.py:ReasoningParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/reasoning/hy_v3_reasoning_parser.py:HYV3ReasoningParser",
+   "target": "class:vllm/reasoning/basic_parsers.py:BaseThinkingReasoningParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/reasoning/hy_v4_reasoning_parser.py:HYV4ReasoningParser",
+   "target": "class:vllm/reasoning/abs_reasoning_parsers.py:ReasoningParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/reasoning/identity_reasoning_parser.py:IdentityReasoningParser",
+   "target": "class:vllm/reasoning/abs_reasoning_parsers.py:ReasoningParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/reasoning/k2_horizon_reasoning_parser.py:K2HorizonReasoningParser",
+   "target": "class:vllm/reasoning/deepseek_r1_reasoning_parser.py:DeepSeekR1ReasoningParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/reasoning/kimi_k3_reasoning_parser.py:KimiK3ReasoningParser",
+   "target": "class:vllm/reasoning/abs_reasoning_parsers.py:ReasoningParser",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/reasoning/deepseek_v3_reasoning_parser.py:DeepSeekV3ReasoningParser",
+   "target": "class:vllm/reasoning/deepseek_r1_reasoning_parser.py:DeepSeekR1ReasoningParser",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/reasoning/deepseek_v3_reasoning_parser.py:DeepSeekV3ReasoningParser",
+   "target": "class:vllm/reasoning/identity_reasoning_parser.py:IdentityReasoningParser",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/reasoning/hy_v4_reasoning_parser.py:HYV4ReasoningParser",
+   "target": "class:vllm/reasoning/hy_v4_reasoning_parser.py:HYV4ReasoningExtractor",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "function:vllm/reasoning/hy_v4_reasoning_parser.py:build_reasoning_extractor",
+   "target": "class:vllm/reasoning/hy_v4_reasoning_parser.py:HYV4ReasoningExtractor",
+   "type": "calls",
+   "direction": "forward",
+   "weight": 0.8
+  }
+ ]
+}

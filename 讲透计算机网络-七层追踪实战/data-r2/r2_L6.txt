@@ -1,0 +1,19 @@
+### L6 表示层 —— 编码/压缩/加密（本层无独立协议，由 TLS/HTTP 编码承担）
+
+-- r2 实验: TLS 会话协商观察（python ssl 标准库）
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+  File "/usr/lib64/python3.11/socket.py", line 863, in create_connection
+    raise exceptions[0]
+  File "/usr/lib64/python3.11/socket.py", line 848, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+-- 实验 2: 网络字节序（大端）——sniffer 所有 !H/!I 解析的铁律
+  以端口号 8080=0x1F90 为例: 网络序字节 1f 90；x86 小端内存则 90 1f —— 逐字段解析必须显式转换
+
+-- 实验 3: r2 轮的表示层状态
+  r2: TLS 加密——应用数据 payload 全为不可读密文; 握手 ClientHello 里
+  只有 SNI(服务器名指示)等协商字段是明文（sniffer ascii dump 可直接看到）:
+"payload": "....A...=....k.........xW..F.........;Q..~F u.T...|........oA.\\!..IL..y...pI.D.......,.0.........+./...$.(.k.#.'.g.....9.....3.....=.<.5......./...............netlab.local.........................).#....(+126B)"
+  （密码套件协商必须明文可见，密钥交换用 ECDHE 前向保密——见 03 文档）

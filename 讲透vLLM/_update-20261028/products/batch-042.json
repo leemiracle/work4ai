@@ -1,0 +1,1786 @@
+{
+ "nodes": [
+  {
+   "id": "file:vllm/models/hy_v4/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/hy_v4/__init__.py",
+   "summary": "hy_v4 包入口：按平台注册 nvidia/amd 的 HYV4ForCausalLM 与 HYV4MTP。",
+   "tags": [
+    "barrel",
+    "entry-point",
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/hy_v4/amd/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "vllm/models/hy_v4/amd/__init__.py",
+   "summary": "amd 平台子包入口（空占位）。",
+   "tags": [
+    "barrel",
+    "package-init"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/hy_v4/amd/hc.py",
+   "type": "file",
+   "name": "hc.py",
+   "filePath": "vllm/models/hy_v4/amd/hc.py",
+   "summary": "AMD 版 iHC（independent Hyper-Connections）层（390 行）：用 hc_mult 条并行残差通道替代单残差流——PreLayer 收缩通道→子块→PostLayer 散回通道，HeadLayer 在输出 norm 前合并；HPC 单 kernel 优先，Triton 回退，eager 兜底。",
+   "tags": [
+    "hyper-connections",
+    "residual",
+    "rocm",
+    "module"
+   ],
+   "complexity": "complex",
+   "languageNotes": "iHC 三步（pre/post/head）各有 HPC 可选 kernel 与 in-tree Triton 回退；amd 版 import 自本平台 triton_ihc。"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/amd/hc.py:HYV4HCPreLayer",
+   "type": "class",
+   "name": "HYV4HCPreLayer",
+   "filePath": "vllm/models/hy_v4/amd/hc.py",
+   "lineRange": [
+    31,
+    154
+   ],
+   "summary": "iHC 前处理层：把 [tokens, hc*d] 输入 RMS norm 后收缩为单通道隐状态。",
+   "tags": [
+    "hyper-connections",
+    "pre"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/amd/hc.py:HYV4HCPostLayer",
+   "type": "class",
+   "name": "HYV4HCPostLayer",
+   "filePath": "vllm/models/hy_v4/amd/hc.py",
+   "lineRange": [
+    157,
+    204
+   ],
+   "summary": "iHC 后处理层：把子块输出散回 hc 条残差通道。",
+   "tags": [
+    "hyper-connections",
+    "post"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/amd/hc.py:HYV4HCHeadLayer",
+   "type": "class",
+   "name": "HYV4HCHeadLayer",
+   "filePath": "vllm/models/hy_v4/amd/hc.py",
+   "lineRange": [
+    207,
+    296
+   ],
+   "summary": "iHC 头层：最终 norm 前把多通道合并为单隐状态。",
+   "tags": [
+    "hyper-connections",
+    "head"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/amd/hc.py:HYV4HCLayer",
+   "type": "class",
+   "name": "HYV4HCLayer",
+   "filePath": "vllm/models/hy_v4/amd/hc.py",
+   "lineRange": [
+    299,
+    390
+   ],
+   "summary": "iHC 完整包装：按可用性分派 HPC/Triton/eager 三级实现。",
+   "tags": [
+    "hyper-connections",
+    "dispatch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/hy_v4/amd/model.py",
+   "type": "file",
+   "name": "model.py",
+   "filePath": "vllm/models/hy_v4/amd/model.py",
+   "summary": "AMD 版 HY V4 模型（735 行）：decoder 层组合 MLA 注意力（复用 nvidia attention 的 Indexer）+MoE+iHC 残差；含 torch.compile decorators 与配置归一化。",
+   "tags": [
+    "model",
+    "moe",
+    "mla",
+    "rocm"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/hy_v4/amd/model.py:_normalize_hyv4_config",
+   "type": "function",
+   "name": "_normalize_hyv4_config",
+   "filePath": "vllm/models/hy_v4/amd/model.py",
+   "lineRange": [
+    81,
+    88
+   ],
+   "summary": "HF 配置字段归一化（层型/索引器参数缺省补全）。",
+   "tags": [
+    "configuration",
+    "normalization"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/amd/model.py:HYV4DecoderLayer",
+   "type": "class",
+   "name": "HYV4DecoderLayer",
+   "filePath": "vllm/models/hy_v4/amd/model.py",
+   "lineRange": [
+    91,
+    233
+   ],
+   "summary": "解码层：attention/linear 子块按层型分派+iHC pre/post 包裹。",
+   "tags": [
+    "decoder-layer",
+    "hybrid"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/amd/model.py:HYV4Model",
+   "type": "class",
+   "name": "HYV4Model",
+   "filePath": "vllm/models/hy_v4/amd/model.py",
+   "lineRange": [
+    237,
+    633
+   ],
+   "summary": "主干（8 方法）：embedding+层栈+iHC head+PP 中间张量。",
+   "tags": [
+    "backbone",
+    "pipeline-parallel"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/amd/model.py:HYV4ForCausalLM",
+   "type": "class",
+   "name": "HYV4ForCausalLM",
+   "filePath": "vllm/models/hy_v4/amd/model.py",
+   "lineRange": [
+    636,
+    735
+   ],
+   "summary": "causal LM 封装（SupportsPP+SupportsLoRA）：lm_head/权重加载/logits。",
+   "tags": [
+    "causal-lm",
+    "wrapper"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/hy_v4/amd/triton_ihc.py",
+   "type": "file",
+   "name": "triton_ihc.py",
+   "filePath": "vllm/models/hy_v4/amd/triton_ihc.py",
+   "summary": "AMD 版 iHC triton kernel（550 行）：pre/post 双 kernel + AMD 特有的 post+pre RMS norm 跨层融合（两阶段 kernel），供 hc.py 在 HPC 不可用时回退。",
+   "tags": [
+    "triton",
+    "hyper-connections",
+    "rocm",
+    "fusion"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/hy_v4/amd/triton_ihc.py:triton_ihc_pre",
+   "type": "function",
+   "name": "triton_ihc_pre",
+   "filePath": "vllm/models/hy_v4/amd/triton_ihc.py",
+   "lineRange": [
+    184,
+    258
+   ],
+   "summary": "iHC pre 的 triton 实现（双阶段 kernel 组合）。",
+   "tags": [
+    "triton",
+    "pre"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/hy_v4/amd/triton_ihc.py:triton_ihc_post_pre_rms_norm",
+   "type": "function",
+   "name": "triton_ihc_post_pre_rms_norm",
+   "filePath": "vllm/models/hy_v4/amd/triton_ihc.py",
+   "lineRange": [
+    415,
+    518
+   ],
+   "summary": "AMD 特有：post 与下一层 pre 的 RMS norm 跨层融合 kernel（两阶段）。",
+   "tags": [
+    "triton",
+    "cross-layer-fusion"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/hy_v4/amd/triton_ihc.py:triton_ihc_post",
+   "type": "function",
+   "name": "triton_ihc_post",
+   "filePath": "vllm/models/hy_v4/amd/triton_ihc.py",
+   "lineRange": [
+    521,
+    550
+   ],
+   "summary": "iHC post 的 triton 实现。",
+   "tags": [
+    "triton",
+    "post"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/hy_v4/amd/triton_ihc.py:triton_ihc_supported",
+   "type": "function",
+   "name": "triton_ihc_supported",
+   "filePath": "vllm/models/hy_v4/amd/triton_ihc.py",
+   "lineRange": [
+    23,
+    30
+   ],
+   "summary": "平台/形状支持判定。",
+   "tags": [
+    "capability"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "type": "file",
+   "name": "attention.py",
+   "filePath": "vllm/models/hy_v4/nvidia/attention.py",
+   "summary": "HY V4 MLA 注意力与 lightning indexer（775 行，双平台共用）：Indexer（FP8 索引 cache）+HYV4MLAAttention（eager MLA 路径+HPC gated GEMM 可选+attn_sink 经 flashmla_sparse 透传），compute_skip_topk_layers 支持部分层跳过 topk 稀疏化。",
+   "tags": [
+    "mla",
+    "attention",
+    "indexer",
+    "sparse-attention"
+   ],
+   "complexity": "complex",
+   "languageNotes": "模块头钉版 TODO：fused MLA 预处理 wrapper 未落地暂走 eager；HPC gated-MLA GEMM 已接线（VLLM_ENABLE_HPC_OPS=1）。"
+  },
+  {
+   "id": "function:vllm/models/hy_v4/nvidia/attention.py:compute_skip_topk_layers",
+   "type": "function",
+   "name": "compute_skip_topk_layers",
+   "filePath": "vllm/models/hy_v4/nvidia/attention.py",
+   "lineRange": [
+    61,
+    113
+   ],
+   "summary": "按配置/权重推断哪些层跳过 topk 稀疏索引（走 dense 注意力）。",
+   "tags": [
+    "sparse-attention",
+    "configuration"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/nvidia/attention.py:Indexer",
+   "type": "class",
+   "name": "Indexer",
+   "filePath": "vllm/models/hy_v4/nvidia/attention.py",
+   "lineRange": [
+    134,
+    272
+   ],
+   "summary": "lightning 索引器模块（FP8 cache、per-head sink 支持）。",
+   "tags": [
+    "indexer",
+    "module"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/nvidia/attention.py:HYV4MLAAttention",
+   "type": "class",
+   "name": "HYV4MLAAttention",
+   "filePath": "vllm/models/hy_v4/nvidia/attention.py",
+   "lineRange": [
+    275,
+    775
+   ],
+   "summary": "MLA 注意力（7 方法）：eager 预处理+HPC 可选 gated GEMM+sink 透传，被 amd/nvidia 两平台模型复用。",
+   "tags": [
+    "mla",
+    "attention",
+    "shared"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/hy_v4/nvidia/flashmla_sparse.py",
+   "type": "file",
+   "name": "flashmla_sparse.py",
+   "filePath": "vllm/models/hy_v4/nvidia/flashmla_sparse.py",
+   "summary": "FlashMLA sparse 后端的 HY V4 特化（295 行）：子类化平台 sparse MLA 后端/实现以透传 per-head learnable attn_sink（注意力汇聚偏置），workspace 管理。",
+   "tags": [
+    "flashmla",
+    "sparse-attention",
+    "sink",
+    "subclass"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/nvidia/flashmla_sparse.py:HYV4FlashMLASparseImpl",
+   "type": "class",
+   "name": "HYV4FlashMLASparseImpl",
+   "filePath": "vllm/models/hy_v4/nvidia/flashmla_sparse.py",
+   "lineRange": [
+    45,
+    279
+   ],
+   "summary": "sparse MLA 实现子类：前向额外传 attn_sink per-head 张量。",
+   "tags": [
+    "flashmla",
+    "impl",
+    "sink"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/nvidia/flashmla_sparse.py:HYV4FlashMLASparseBackend",
+   "type": "class",
+   "name": "HYV4FlashMLASparseBackend",
+   "filePath": "vllm/models/hy_v4/nvidia/flashmla_sparse.py",
+   "lineRange": [
+    282,
+    295
+   ],
+   "summary": "sparse MLA backend 子类：工厂返回 HY V4 实现。",
+   "tags": [
+    "flashmla",
+    "backend"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:vllm/models/hy_v4/nvidia/hc.py",
+   "type": "file",
+   "name": "hc.py",
+   "filePath": "vllm/models/hy_v4/nvidia/hc.py",
+   "summary": "NVIDIA 版 iHC 层（与 AMD 版同构，390 行）：HPC 单 kernel 优先（HpcIHCPre/Post/Head），in-tree Triton 回退，eager 兜底；TODO 注释钉版 cross-layer post+pre 融合待移植。",
+   "tags": [
+    "hyper-connections",
+    "residual",
+    "cuda",
+    "module"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/nvidia/hc.py:HYV4HCPreLayer",
+   "type": "class",
+   "name": "HYV4HCPreLayer",
+   "filePath": "vllm/models/hy_v4/nvidia/hc.py",
+   "lineRange": [
+    31,
+    154
+   ],
+   "summary": "iHC pre 层（通道收缩）。",
+   "tags": [
+    "hyper-connections",
+    "pre"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/nvidia/hc.py:HYV4HCLayer",
+   "type": "class",
+   "name": "HYV4HCLayer",
+   "filePath": "vllm/models/hy_v4/nvidia/hc.py",
+   "lineRange": [
+    299,
+    390
+   ],
+   "summary": "iHC 完整包装（HPC/Triton/eager 三级分派）。",
+   "tags": [
+    "hyper-connections",
+    "dispatch"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/hy_v4/nvidia/model.py",
+   "type": "file",
+   "name": "model.py",
+   "filePath": "vllm/models/hy_v4/nvidia/model.py",
+   "summary": "NVIDIA 版 HY V4 模型（696 行）：MLA+sparse indexer 注意力层、HYV4MoEFused 前馈与 iHC 残差的组合；GPT-NeoX 系改编，SupportsPP+SupportsLoRA。",
+   "tags": [
+    "model",
+    "moe",
+    "mla",
+    "cuda"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/hy_v4/nvidia/model.py:_normalize_hyv4_config",
+   "type": "function",
+   "name": "_normalize_hyv4_config",
+   "filePath": "vllm/models/hy_v4/nvidia/model.py",
+   "lineRange": [
+    75,
+    82
+   ],
+   "summary": "HF 配置归一化（层型缺省补全）。",
+   "tags": [
+    "configuration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/nvidia/model.py:HYV4DecoderLayer",
+   "type": "class",
+   "name": "HYV4DecoderLayer",
+   "filePath": "vllm/models/hy_v4/nvidia/model.py",
+   "lineRange": [
+    85,
+    207
+   ],
+   "summary": "解码层：attention+feedforward 子块+iHC pre/post。",
+   "tags": [
+    "decoder-layer"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/nvidia/model.py:HYV4Model",
+   "type": "class",
+   "name": "HYV4Model",
+   "filePath": "vllm/models/hy_v4/nvidia/model.py",
+   "lineRange": [
+    210,
+    597
+   ],
+   "summary": "主干（7 方法）：层栈+iHC head+权重映射。",
+   "tags": [
+    "backbone"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/nvidia/model.py:HYV4ForCausalLM",
+   "type": "class",
+   "name": "HYV4ForCausalLM",
+   "filePath": "vllm/models/hy_v4/nvidia/model.py",
+   "lineRange": [
+    600,
+    696
+   ],
+   "summary": "causal LM 封装（SupportsPP+SupportsLoRA）。",
+   "tags": [
+    "causal-lm",
+    "wrapper"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/hy_v4/nvidia/moe.py",
+   "type": "file",
+   "name": "moe.py",
+   "filePath": "vllm/models/hy_v4/nvidia/moe.py",
+   "summary": "HY V4 前馈层（190 行）：HYV4FeedForward（dense）与 HYV4MoEFused（fused MoE：路由+fused expert+shared expert 组合），双平台模型共用。",
+   "tags": [
+    "moe",
+    "feedforward",
+    "fused",
+    "shared"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/nvidia/moe.py:HYV4FeedForward",
+   "type": "class",
+   "name": "HYV4FeedForward",
+   "filePath": "vllm/models/hy_v4/nvidia/moe.py",
+   "lineRange": [
+    23,
+    66
+   ],
+   "summary": "dense 前馈（gate/up/down SiluAndMul）。",
+   "tags": [
+    "feedforward",
+    "dense"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/nvidia/moe.py:HYV4MoEFused",
+   "type": "class",
+   "name": "HYV4MoEFused",
+   "filePath": "vllm/models/hy_v4/nvidia/moe.py",
+   "lineRange": [
+    69,
+    190
+   ],
+   "summary": "fused MoE 层：路由+FusedMoE+可选 shared expert 串并联。",
+   "tags": [
+    "moe",
+    "fused"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "type": "file",
+   "name": "mtp.py",
+   "filePath": "vllm/models/hy_v4/nvidia/mtp.py",
+   "summary": "HY V4 MTP 投机解码头（923 行）：四层结构（SharedHead/Layer/Predictor/MTP），内嵌 V1 Sampler 直采（投机路径不回引擎采样器）；特色是 MTP 专家的 FP8 量化配置动态构造与 exclusion 重映射（ignored_layers/exclude_modules 双属性兼容）。",
+   "tags": [
+    "mtp",
+    "spec-decode",
+    "quantization",
+    "sampler"
+   ],
+   "complexity": "complex",
+   "languageNotes": "MTP 直接 import v1.sample.Sampler 在 draft 路径内采样；_MTP_QUANT_EXCLUSION_ATTRS 兼容 Fp8Config/GPTQ/ModelOpt 系的排除列表属性名。"
+  },
+  {
+   "id": "function:vllm/models/hy_v4/nvidia/mtp.py:_remap_mtp_quant_exclusions",
+   "type": "function",
+   "name": "_remap_mtp_quant_exclusions",
+   "filePath": "vllm/models/hy_v4/nvidia/mtp.py",
+   "lineRange": [
+    216,
+    294
+   ],
+   "summary": "把 MTP 权重名映射进量化配置的排除列表（按前缀规则展开重写）。",
+   "tags": [
+    "quantization",
+    "remapping"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/hy_v4/nvidia/mtp.py:_create_mtp_quant_config",
+   "type": "function",
+   "name": "_create_mtp_quant_config",
+   "filePath": "vllm/models/hy_v4/nvidia/mtp.py",
+   "lineRange": [
+    145,
+    213
+   ],
+   "summary": "为 MTP 动态构造量化配置（拷贝主配置并裁剪作用域）。",
+   "tags": [
+    "quantization",
+    "configuration"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/nvidia/mtp.py:HYV4SharedHead",
+   "type": "class",
+   "name": "HYV4SharedHead",
+   "filePath": "vllm/models/hy_v4/nvidia/mtp.py",
+   "lineRange": [
+    297,
+    320
+   ],
+   "summary": "与目标模型共享的输出头封装。",
+   "tags": [
+    "mtp",
+    "shared-head"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/nvidia/mtp.py:HYV4MultiTokenPredictorLayer",
+   "type": "class",
+   "name": "HYV4MultiTokenPredictorLayer",
+   "filePath": "vllm/models/hy_v4/nvidia/mtp.py",
+   "lineRange": [
+    323,
+    388
+   ],
+   "summary": "MTP 单层（块+eh norm 变体）。",
+   "tags": [
+    "mtp",
+    "layer"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/nvidia/mtp.py:HYV4MultiTokenPredictor",
+   "type": "class",
+   "name": "HYV4MultiTokenPredictor",
+   "filePath": "vllm/models/hy_v4/nvidia/mtp.py",
+   "lineRange": [
+    401,
+    517
+   ],
+   "summary": "MTP 层栈与 embedding 共享管理（5 方法）。",
+   "tags": [
+    "mtp",
+    "stack"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "class:vllm/models/hy_v4/nvidia/mtp.py:HYV4MTP",
+   "type": "class",
+   "name": "HYV4MTP",
+   "filePath": "vllm/models/hy_v4/nvidia/mtp.py",
+   "lineRange": [
+    520,
+    923
+   ],
+   "summary": "MTP 对外封装（9 方法）：权重加载（含 FP8 expert scale 准备）、内嵌采样与 eagle 前向接口。",
+   "tags": [
+    "mtp",
+    "spec-decode",
+    "wrapper"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:vllm/models/hy_v4/nvidia/triton_ihc.py",
+   "type": "file",
+   "name": "triton_ihc.py",
+   "filePath": "vllm/models/hy_v4/nvidia/triton_ihc.py",
+   "summary": "NVIDIA 版 iHC triton kernel（313 行）：pre/post 双 kernel（AMD 特有的跨层 post+pre 融合不在此版）。",
+   "tags": [
+    "triton",
+    "hyper-connections",
+    "cuda"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:vllm/models/hy_v4/nvidia/triton_ihc.py:triton_ihc_pre",
+   "type": "function",
+   "name": "triton_ihc_pre",
+   "filePath": "vllm/models/hy_v4/nvidia/triton_ihc.py",
+   "lineRange": [
+    199,
+    274
+   ],
+   "summary": "iHC pre 的 triton 实现。",
+   "tags": [
+    "triton",
+    "pre"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:vllm/models/hy_v4/nvidia/triton_ihc.py:triton_ihc_post",
+   "type": "function",
+   "name": "triton_ihc_post",
+   "filePath": "vllm/models/hy_v4/nvidia/triton_ihc.py",
+   "lineRange": [
+    277,
+    313
+   ],
+   "summary": "iHC post 的 triton 实现。",
+   "tags": [
+    "triton",
+    "post"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:vllm/models/hy_v4/nvidia/triton_ihc.py:triton_ihc_supported",
+   "type": "function",
+   "name": "triton_ihc_supported",
+   "filePath": "vllm/models/hy_v4/nvidia/triton_ihc.py",
+   "lineRange": [
+    19,
+    27
+   ],
+   "summary": "平台/形状支持判定。",
+   "tags": [
+    "capability"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:vllm/models/hy_v4/__init__.py",
+   "target": "file:vllm/models/hy_v4/amd/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/__init__.py",
+   "target": "file:vllm/models/hy_v4/nvidia/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/__init__.py",
+   "target": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/__init__.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/hc.py",
+   "target": "file:vllm/model_executor/layers/hpc/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/hc.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/hc.py",
+   "target": "file:vllm/models/hy_v4/amd/triton_ihc.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/hc.py",
+   "target": "class:vllm/models/hy_v4/amd/hc.py:HYV4HCPreLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/hc.py",
+   "target": "class:vllm/models/hy_v4/amd/hc.py:HYV4HCPostLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/hc.py",
+   "target": "class:vllm/models/hy_v4/amd/hc.py:HYV4HCHeadLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/hc.py",
+   "target": "class:vllm/models/hy_v4/amd/hc.py:HYV4HCLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/hc.py",
+   "target": "class:vllm/models/hy_v4/amd/hc.py:HYV4HCLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "file:vllm/compilation/decorators.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "file:vllm/models/hy_v4/amd/hc.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "file:vllm/models/hy_v4/amd/triton_ihc.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "file:vllm/models/hy_v4/nvidia/moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "function:vllm/models/hy_v4/amd/model.py:_normalize_hyv4_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "class:vllm/models/hy_v4/amd/model.py:HYV4DecoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "class:vllm/models/hy_v4/amd/model.py:HYV4Model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "class:vllm/models/hy_v4/amd/model.py:HYV4ForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/model.py",
+   "target": "class:vllm/models/hy_v4/amd/model.py:HYV4ForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/triton_ihc.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/triton_ihc.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/triton_ihc.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/triton_ihc.py",
+   "target": "function:vllm/models/hy_v4/amd/triton_ihc.py:triton_ihc_pre",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/triton_ihc.py",
+   "target": "function:vllm/models/hy_v4/amd/triton_ihc.py:triton_ihc_post_pre_rms_norm",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/triton_ihc.py",
+   "target": "function:vllm/models/hy_v4/amd/triton_ihc.py:triton_ihc_post",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/triton_ihc.py",
+   "target": "function:vllm/models/hy_v4/amd/triton_ihc.py:triton_ihc_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/triton_ihc.py",
+   "target": "function:vllm/models/hy_v4/amd/triton_ihc.py:triton_ihc_pre",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/triton_ihc.py",
+   "target": "function:vllm/models/hy_v4/amd/triton_ihc.py:triton_ihc_post",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/hy_v4/amd/triton_ihc.py",
+   "target": "function:vllm/models/hy_v4/amd/triton_ihc.py:triton_ihc_supported",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/compilation/breakable_cudagraph.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/config/cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/model_executor/layers/attention/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/model_executor/layers/hpc/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/model_executor/layers/quantization/utils/fp8_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/model_executor/layers/rotary_embedding/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/model_executor/layers/sparse_attn_indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/models/hy_v4/nvidia/flashmla_sparse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/v1/attention/backend.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/v1/attention/backends/mla/indexer.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "file:vllm/v1/attention/selector.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "function:vllm/models/hy_v4/nvidia/attention.py:compute_skip_topk_layers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "class:vllm/models/hy_v4/nvidia/attention.py:Indexer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "class:vllm/models/hy_v4/nvidia/attention.py:HYV4MLAAttention",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "target": "class:vllm/models/hy_v4/nvidia/attention.py:HYV4MLAAttention",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/flashmla_sparse.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/flashmla_sparse.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/flashmla_sparse.py",
+   "target": "file:vllm/v1/attention/backends/mla/flashmla_sparse.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/flashmla_sparse.py",
+   "target": "file:vllm/v1/attention/ops/flashmla.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/flashmla_sparse.py",
+   "target": "file:vllm/v1/worker/workspace.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/flashmla_sparse.py",
+   "target": "class:vllm/models/hy_v4/nvidia/flashmla_sparse.py:HYV4FlashMLASparseImpl",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/flashmla_sparse.py",
+   "target": "class:vllm/models/hy_v4/nvidia/flashmla_sparse.py:HYV4FlashMLASparseBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/flashmla_sparse.py",
+   "target": "class:vllm/models/hy_v4/nvidia/flashmla_sparse.py:HYV4FlashMLASparseBackend",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/hy_v4/nvidia/flashmla_sparse.py:HYV4FlashMLASparseImpl",
+   "target": "class:vllm/v1/attention/backends/mla/flashmla_sparse.py:FlashMLASparseImpl",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/hy_v4/nvidia/flashmla_sparse.py:HYV4FlashMLASparseBackend",
+   "target": "class:vllm/v1/attention/backends/mla/flashmla_sparse.py:FlashMLASparseBackend",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/hc.py",
+   "target": "file:vllm/model_executor/layers/hpc/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/hc.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/hc.py",
+   "target": "file:vllm/models/hy_v4/nvidia/triton_ihc.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/hc.py",
+   "target": "class:vllm/models/hy_v4/nvidia/hc.py:HYV4HCPreLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/hc.py",
+   "target": "class:vllm/models/hy_v4/nvidia/hc.py:HYV4HCLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/hc.py",
+   "target": "class:vllm/models/hy_v4/nvidia/hc.py:HYV4HCLayer",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/models/interfaces.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "file:vllm/models/hy_v4/nvidia/attention.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "file:vllm/models/hy_v4/nvidia/hc.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "file:vllm/models/hy_v4/nvidia/moe.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "function:vllm/models/hy_v4/nvidia/model.py:_normalize_hyv4_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "class:vllm/models/hy_v4/nvidia/model.py:HYV4DecoderLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "class:vllm/models/hy_v4/nvidia/model.py:HYV4Model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "class:vllm/models/hy_v4/nvidia/model.py:HYV4ForCausalLM",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/model.py",
+   "target": "class:vllm/models/hy_v4/nvidia/model.py:HYV4ForCausalLM",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/moe.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/moe.py",
+   "target": "file:vllm/distributed/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/moe.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/moe.py",
+   "target": "file:vllm/model_executor/layers/activation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/moe.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/moe.py",
+   "target": "file:vllm/model_executor/layers/linear.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/moe.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/moe.py",
+   "target": "class:vllm/models/hy_v4/nvidia/moe.py:HYV4FeedForward",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/moe.py",
+   "target": "class:vllm/models/hy_v4/nvidia/moe.py:HYV4MoEFused",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/moe.py",
+   "target": "class:vllm/models/hy_v4/nvidia/moe.py:HYV4MoEFused",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "file:vllm/config/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "file:vllm/logger.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/fused_moe/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/layernorm.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/logits_processor.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/quantization/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/quantization/fp8.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/quantization/kv_cache.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/layers/vocab_parallel_embedding.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/model_loader/weight_utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/models/deepseek_v2.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "file:vllm/model_executor/models/utils.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "file:vllm/models/hy_v4/nvidia/model.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "file:vllm/sequence.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "file:vllm/v1/outputs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "file:vllm/v1/sample/metadata.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "file:vllm/v1/sample/sampler.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "function:vllm/models/hy_v4/nvidia/mtp.py:_remap_mtp_quant_exclusions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "function:vllm/models/hy_v4/nvidia/mtp.py:_create_mtp_quant_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "class:vllm/models/hy_v4/nvidia/mtp.py:HYV4SharedHead",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "class:vllm/models/hy_v4/nvidia/mtp.py:HYV4MultiTokenPredictorLayer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "class:vllm/models/hy_v4/nvidia/mtp.py:HYV4MultiTokenPredictor",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "class:vllm/models/hy_v4/nvidia/mtp.py:HYV4MTP",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/mtp.py",
+   "target": "class:vllm/models/hy_v4/nvidia/mtp.py:HYV4MTP",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/triton_ihc.py",
+   "target": "file:vllm/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/triton_ihc.py",
+   "target": "file:vllm/platforms/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/triton_ihc.py",
+   "target": "file:vllm/triton_utils/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/triton_ihc.py",
+   "target": "function:vllm/models/hy_v4/nvidia/triton_ihc.py:triton_ihc_pre",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/triton_ihc.py",
+   "target": "function:vllm/models/hy_v4/nvidia/triton_ihc.py:triton_ihc_post",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/triton_ihc.py",
+   "target": "function:vllm/models/hy_v4/nvidia/triton_ihc.py:triton_ihc_supported",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/triton_ihc.py",
+   "target": "function:vllm/models/hy_v4/nvidia/triton_ihc.py:triton_ihc_pre",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "file:vllm/models/hy_v4/nvidia/triton_ihc.py",
+   "target": "function:vllm/models/hy_v4/nvidia/triton_ihc.py:triton_ihc_post",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.8
+  },
+  {
+   "source": "class:vllm/models/hy_v4/nvidia/model.py:HYV4ForCausalLM",
+   "target": "class:vllm/models/hy_v4/nvidia/model.py:HYV4Model",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  },
+  {
+   "source": "class:vllm/models/hy_v4/amd/model.py:HYV4ForCausalLM",
+   "target": "class:vllm/models/hy_v4/amd/model.py:HYV4Model",
+   "type": "inherits",
+   "direction": "forward",
+   "weight": 0.9
+  }
+ ]
+}
